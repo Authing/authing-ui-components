@@ -59,7 +59,9 @@ const swSrc = paths.swSrc
 const cssRegex = /\.css$/
 const cssModuleRegex = /\.module\.css$/
 const sassRegex = /\.(scss|sass)$/
+const lessRegex = /\.(less)$/
 const sassModuleRegex = /\.module\.(scss|sass)$/
+const lessModuleRegex = /\.module\.(less)$/
 
 const hasJsxRuntime = (() => {
   if (process.env.DISABLE_NEW_JSX_TRANSFORM === 'true') {
@@ -148,6 +150,13 @@ module.exports = function (webpackEnv) {
           loader: require.resolve(preProcessor),
           options: {
             sourceMap: true,
+            lessOptions: {
+              javascriptEnabled: true,
+              modifyVars: {
+                '@primary-color': '#396aff',
+                '@link-color': '#396aff',
+              },
+            },
           },
         }
       )
@@ -415,7 +424,7 @@ module.exports = function (webpackEnv) {
                     'import',
                     {
                       libraryName: 'antd',
-                      style: "css", // or 'css'
+                      style: true, // or 'css'
                     },
                   ],
                   isEnvDevelopment &&
@@ -508,6 +517,24 @@ module.exports = function (webpackEnv) {
                     : isEnvDevelopment,
                 },
                 'sass-loader'
+              ),
+              // Don't consider CSS imports dead code even if the
+              // containing package claims to have no side effects.
+              // Remove this when webpack adds a warning or an error for this.
+              // See https://github.com/webpack/webpack/issues/6571
+              sideEffects: true,
+            },
+            {
+              test: lessRegex,
+              exclude: lessModuleRegex,
+              use: getStyleLoaders(
+                {
+                  importLoaders: 3,
+                  sourceMap: isEnvProduction
+                    ? shouldUseSourceMap
+                    : isEnvDevelopment,
+                },
+                'less-loader'
               ),
               // Don't consider CSS imports dead code even if the
               // containing package claims to have no side effects.
