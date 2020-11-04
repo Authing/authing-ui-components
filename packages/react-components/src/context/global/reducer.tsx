@@ -1,6 +1,12 @@
+import { GuardConfig } from "@/components/AuthingGuard/types/GuardConfig";
+import { AuthenticationClient } from "authing-js-sdk";
 import { IBaseAction } from "../base";
 
-export type IState = Record<string, any>
+export type IState = {
+  [index: string]: any
+  config: GuardConfig
+  authClient: AuthenticationClient
+}
 
 const handlers: any = {
   // eslint-disable-next-line
