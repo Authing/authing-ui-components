@@ -4,9 +4,5 @@
   "devDependencies": {
     "lerna": "^3.22.1"
   },
-  "dependencies": {
-    "@ant-design/icons": "^4.2.2",
-    "antd": "^4.8.0",
-    "authing-js-sdk": "^4.3.2"
-  }
+  "dependencies": {}
 }
