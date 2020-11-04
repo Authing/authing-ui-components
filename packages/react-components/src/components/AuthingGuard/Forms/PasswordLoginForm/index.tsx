@@ -3,8 +3,9 @@ import { Input, Form, Alert } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { User } from 'authing-js-sdk'
 import { useGlobalContext } from '@/context/global/context'
-import { validate } from '@/utils'
+import { getRequiredRules, validate } from '@/utils'
 import { FormInstance } from 'antd/lib/form'
+import { NEED_CAPTCHA } from '@/components/AuthingGuard/constants'
 
 export interface PasswordLoginFormProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -23,7 +24,7 @@ export const PasswordLoginForm = forwardRef<
   const { state } = useGlobalContext()
   const { config, authClient } = state
   const [rawForm] = Form.useForm()
-  const [needVerifyCode, setNeedVerifyCode] = useState(false)
+  const [needCaptcha, setNeedCaptcha] = useState(false)
   const [verifyCodeUrl, setVerifyCodeUrl] = useState<string | null>(null)
   const autoRegister = config.autoRegister
 
@@ -51,10 +52,9 @@ export const PasswordLoginForm = forwardRef<
       onSuccess && onSuccess(user)
     } catch (error) {
       onFail && onFail(error)
-      console.log(error.code)
 
-      if (error.code === 2000 && verifyCodeUrl === null) {
-        setNeedVerifyCode(true)
+      if (error.code === NEED_CAPTCHA && verifyCodeUrl === null) {
+        setNeedCaptcha(true)
         setVerifyCodeUrl(getCaptchaUrl())
       }
     }
@@ -62,11 +62,51 @@ export const PasswordLoginForm = forwardRef<
 
   useImperativeHandle(ref, () => rawForm)
 
-  // TODO: 细化表单校验规则
-  const rules = [
+  const formItems = [
     {
-      required: true,
-      message: '不能为空！',
+      component: (
+        <Input
+          autoComplete="email,username,tel"
+          size="large"
+          placeholder="请输入邮箱、用户名或手机号"
+          prefix={<UserOutlined style={{ color: '#ddd' }} />}
+        />
+      ),
+      name: 'identity',
+      rules: getRequiredRules('账号不能为空'),
+    },
+    {
+      component: (
+        <Input.Password
+          autoComplete="current-password"
+          size="large"
+          visibilityToggle={false}
+          placeholder="请输入登录密码"
+          prefix={<LockOutlined style={{ color: '#ddd' }} />}
+        />
+      ),
+      name: 'password',
+      rules: getRequiredRules('密码不能为空'),
+    },
+    {
+      component: (
+        <Input
+          autoComplete="one-time-code"
+          size="large"
+          placeholder="请输入图形验证码"
+          addonAfter={
+            <img
+              src={verifyCodeUrl ?? ''}
+              alt="图形验证码"
+              style={{ height: '2em', cursor: 'pointer' }}
+              onClick={() => setVerifyCodeUrl(getCaptchaUrl())}
+            />
+          }
+        />
+      ),
+      name: 'captchaCode',
+      rules: getRequiredRules('密码不能为空'),
+      hide: !needCaptcha,
     },
   ]
 
@@ -81,43 +121,15 @@ export const PasswordLoginForm = forwardRef<
             style={{ marginBottom: 24 }}
           />
         )}
-        <Form.Item name="identity" rules={rules}>
-          <Input
-            autoComplete="email,username,tel"
-            size="large"
-            placeholder="请输入邮箱、用户名或手机号"
-            prefix={<UserOutlined style={{ color: '#ddd' }} />}
-          />
-        </Form.Item>
-        <Form.Item name="password" rules={rules}>
-          <Input.Password
-            autoComplete="current-password"
-            size="large"
-            visibilityToggle={false}
-            placeholder="请输入登录密码"
-            prefix={<LockOutlined style={{ color: '#ddd' }} />}
-          />
-        </Form.Item>
-        {needVerifyCode && (
-          <Form.Item name="captchaCode" rules={rules}>
-            <Input
-              autoComplete="one-time-code"
-              size="large"
-              placeholder="请输入图形验证码"
-              addonAfter={
-                <img
-                  src={verifyCodeUrl ?? ''}
-                  alt="图形验证码"
-                  style={{ height: '2em', cursor: 'pointer' }}
-                  onClick={() => setVerifyCodeUrl(getCaptchaUrl())}
-                />
-              }
-            />
-          </Form.Item>
+        {formItems.map(
+          (item) =>
+            !item.hide && (
+              <Form.Item key={item.name} name={item.name} rules={item.rules}>
+                {item.component}
+              </Form.Item>
+            )
         )}
       </>
     </Form>
   )
 })
-
-// export const PasswordLoginForm = forwardRef<FormInstance, PasswordLoginFormProps>(InternalPasswordLoginForm);

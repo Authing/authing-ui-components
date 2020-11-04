@@ -10,3 +10,12 @@ export const PATTERN = {
 export const validate = (type: keyof typeof PATTERN, val: string) => {
   return PATTERN[type].test(val)
 }
+
+export const getRequiredRules = (msg: string) => {
+  return [
+    {
+      required: true,
+      message: msg,
+    },
+  ]
+}
