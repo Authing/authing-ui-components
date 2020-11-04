@@ -1,13 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { AuthingGuard } from './components/AuthingGuard'
-import { GuardConfig } from './components/AuthingGuard/types/GuardConfig'
+import { GuardConfig, LoginMethods } from './components/AuthingGuard/types/GuardConfig'
 import reportWebVitals from './reportWebVitals'
 
 const App = () => {
   const config: GuardConfig = {
     apiHost: 'https://core.authing.cn',
-    autoRegister: true,
+    loginMethods: Object.values(LoginMethods),
+    // autoRegister: true,
   }
   return <AuthingGuard userPoolId="5f9c5f558551cad742475514" config={config} />
 }

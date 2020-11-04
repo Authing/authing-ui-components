@@ -6,6 +6,9 @@ export enum Mode {
 export enum LoginMethods {
   PhoneCode = 'phone-code',
   Password = 'password',
+  WxMinQr = 'wechat-miniprogram-qrcode',
+  AppQr = 'app-qrcode',
+  LDAP = 'ldap',
 }
 
 export enum SocialConnections {

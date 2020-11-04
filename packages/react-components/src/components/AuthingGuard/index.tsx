@@ -7,6 +7,8 @@ import { GuardConfig } from '@/components/AuthingGuard/types/GuardConfig'
 import { NEED_MFA_CODE } from '@/components/AuthingGuard/constants'
 import { GuardLayout } from '@/components/AuthingGuard/GuardLayout'
 
+import './style.less'
+
 interface AuthingGuardProps {
   userPoolId: string
   config?: GuardConfig

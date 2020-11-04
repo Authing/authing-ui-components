@@ -1,4 +1,4 @@
-import { GuardConfig } from "@/components/AuthingGuard/types/GuardConfig";
+import { GuardConfig } from "@/components/AuthingGuard/types";
 import { AuthenticationClient } from "authing-js-sdk";
 import { IBaseAction } from "../base";
 

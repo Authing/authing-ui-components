@@ -1,18 +1,11 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
 import { Input, Form, Alert } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import { User } from 'authing-js-sdk'
 import { useGlobalContext } from '@/context/global/context'
 import { getRequiredRules, validate } from '@/utils'
 import { FormInstance } from 'antd/lib/form'
 import { NEED_CAPTCHA } from '@/components/AuthingGuard/constants'
-
-export interface PasswordLoginFormProps
-  extends React.HTMLAttributes<HTMLDivElement> {
-  onSubmit?: () => void
-  onSuccess?: (user: User) => void
-  onFail?: (error: any) => void
-}
+import { PasswordLoginFormProps } from '@/components/AuthingGuard/types'
 
 const captchaUrl = '/api/v2/security/captcha'
 const getCaptchaUrl = () => `${captchaUrl}?r=${+new Date()}`
@@ -20,7 +13,7 @@ const getCaptchaUrl = () => `${captchaUrl}?r=${+new Date()}`
 export const PasswordLoginForm = forwardRef<
   FormInstance,
   PasswordLoginFormProps
->(({ onSubmit, onSuccess, onFail }, ref) => {
+>(({ onSuccess, onValidateFail, onFail }, ref) => {
   const { state } = useGlobalContext()
   const { config, authClient } = state
   const [rawForm] = Form.useForm()
@@ -78,9 +71,7 @@ export const PasswordLoginForm = forwardRef<
     {
       component: (
         <Input.Password
-          autoComplete="current-password"
           size="large"
-          visibilityToggle={false}
           placeholder="请输入登录密码"
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
         />
@@ -111,9 +102,7 @@ export const PasswordLoginForm = forwardRef<
   ]
 
   return (
-    <Form form={rawForm} onSubmitCapture={onSubmit} onFinish={onFinish}>
-      <button type="submit" hidden></button>
-
+    <Form form={rawForm} onFinishFailed={onValidateFail} onFinish={onFinish}>
       <>
         {autoRegister && (
           <Alert
