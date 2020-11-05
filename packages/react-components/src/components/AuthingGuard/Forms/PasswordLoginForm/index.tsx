@@ -1,9 +1,10 @@
-import React, { forwardRef, useImperativeHandle, useState } from 'react'
 import { Input, Form, Alert } from 'antd'
-import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import { useGlobalContext } from '@/context/global/context'
-import { getRequiredRules, validate } from '@/utils'
 import { FormInstance } from 'antd/lib/form'
+import { UserOutlined, LockOutlined } from '@ant-design/icons'
+import React, { forwardRef, useImperativeHandle, useState } from 'react'
+
+import { getRequiredRules, validate } from '@/utils'
+import { useGlobalContext } from '@/context/global/context'
 import { NEED_CAPTCHA } from '@/components/AuthingGuard/constants'
 import { PasswordLoginFormProps } from '@/components/AuthingGuard/types'
 

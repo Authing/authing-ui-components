@@ -6,6 +6,7 @@ import React, { useRef, useState } from 'react'
 import { useGlobalContext } from '@/context/global/context'
 import {
   LdapLoginForm,
+  QrCodeLoginForm,
   PasswordLoginForm,
   PhoneCodeLoginForm,
 } from '@/components/AuthingGuard/Forms'
@@ -77,16 +78,10 @@ const useNormalLoginTabs = (activeTab: LoginMethods) => {
       />
     ),
     [LoginMethods.AppQr]: (
-      <PasswordLoginForm
-        {...formProps}
-        ref={(v) => (formRef.current[LoginMethods.AppQr] = v!)}
-      />
+      <QrCodeLoginForm type={LoginMethods.AppQr} {...formProps} />
     ),
     [LoginMethods.WxMinQr]: (
-      <PasswordLoginForm
-        {...formProps}
-        ref={(v) => (formRef.current[LoginMethods.WxMinQr] = v!)}
-      />
+      <QrCodeLoginForm type={LoginMethods.WxMinQr} {...formProps} />
     ),
     [LoginMethods.LDAP]: (
       <LdapLoginForm
