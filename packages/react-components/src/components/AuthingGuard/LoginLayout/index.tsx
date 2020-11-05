@@ -1,7 +1,7 @@
 import { Tabs } from 'antd'
 import { User } from 'authing-js-sdk'
 import { FormInstance } from 'antd/lib/form'
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 
 import { useGuardContext } from '@/context/global/context'
 import {

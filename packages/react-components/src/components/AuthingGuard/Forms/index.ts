@@ -1,3 +1,4 @@
+export * from './ResetPwdForm'
 export * from './LdapLoginForm'
 export * from './QrCodeLoginForm'
 export * from './EmailRegisterForm'

@@ -5,6 +5,7 @@ import { GuardScenes } from '@/components/AuthingGuard/types'
 import { GuardHeader } from '@/components/AuthingGuard/Header'
 import { LoginLayout } from '@/components/AuthingGuard/LoginLayout'
 import { RegisterLayout } from '@/components/AuthingGuard/RegisterLayout'
+import { ResetPwdLayout } from '@/components/AuthingGuard/ResetPwdLayout'
 
 import './style.less'
 
@@ -16,7 +17,7 @@ export const GuardLayout = () => {
   const layoutMap = {
     [GuardScenes.Login]: <LoginLayout />,
     [GuardScenes.Register]: <RegisterLayout />,
-    [GuardScenes.RestPassword]: '重置密码',
+    [GuardScenes.RestPassword]: <ResetPwdLayout />,
     [GuardScenes.Mfa]: 'MFA',
   }
   return (

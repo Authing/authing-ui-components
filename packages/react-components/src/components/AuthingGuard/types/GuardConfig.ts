@@ -23,6 +23,11 @@ export enum GuardScenes {
   Mfa,
 }
 
+export enum ResetPwdMethods {
+  Email = 'email',
+  Phone = 'phone'
+}
+
 export enum SocialConnections {
   WxMinQr = 'wechat:miniprogram:qrconnect',
   WxMinApp = 'wechat:miniprogram:app-launch',
