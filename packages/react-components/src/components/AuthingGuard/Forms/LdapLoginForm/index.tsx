@@ -1,5 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
-import { Input, Form, Alert } from 'antd'
+import { Input, Form } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { useGlobalContext } from '@/context/global/context'
 import { getRequiredRules, validate } from '@/utils'
@@ -10,7 +10,7 @@ import { PasswordLoginFormProps } from '@/components/AuthingGuard/types'
 const captchaUrl = '/api/v2/security/captcha'
 const getCaptchaUrl = () => `${captchaUrl}?r=${+new Date()}`
 
-export const PasswordLoginForm = forwardRef<
+export const LdapLoginForm = forwardRef<
   FormInstance,
   PasswordLoginFormProps
 >(({ onSuccess, onValidateFail, onFail }, ref) => {
@@ -59,20 +59,20 @@ export const PasswordLoginForm = forwardRef<
     {
       component: (
         <Input
-          autoComplete="email,username,tel"
+          autoComplete="ldap,username"
           size="large"
-          placeholder="请输入邮箱、用户名或手机号"
+          placeholder="请输入 LDAP 用户名"
           prefix={<UserOutlined style={{ color: '#ddd' }} />}
         />
       ),
       name: 'identity',
-      rules: getRequiredRules('账号不能为空'),
+      rules: getRequiredRules('LDAP 账号不能为空'),
     },
     {
       component: (
         <Input.Password
           size="large"
-          placeholder="请输入登录密码"
+          placeholder="请输入 LDAP 密码"
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
         />
       ),
@@ -103,22 +103,14 @@ export const PasswordLoginForm = forwardRef<
 
   return (
     <Form form={rawForm} onFinishFailed={onValidateFail} onFinish={onFinish}>
-      <>
-        {autoRegister && (
-          <Alert
-            message="输入帐号密码登录，如果您没有帐号，我们会自动创建。"
-            style={{ marginBottom: 24 }}
-          />
-        )}
-        {formItems.map(
-          (item) =>
-            !item.hide && (
-              <Form.Item key={item.name} name={item.name} rules={item.rules}>
-                {item.component}
-              </Form.Item>
-            )
-        )}
-      </>
+      {formItems.map(
+        (item) =>
+          !item.hide && (
+            <Form.Item key={item.name} name={item.name} rules={item.rules}>
+              {item.component}
+            </Form.Item>
+          )
+      )}
     </Form>
   )
 })

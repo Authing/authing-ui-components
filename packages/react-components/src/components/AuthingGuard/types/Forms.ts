@@ -9,3 +9,5 @@ export interface BaseFormProps extends React.HTMLAttributes<HTMLDivElement> {
 export interface PasswordLoginFormProps extends BaseFormProps {}
 
 export interface PhoneCodeLoginFormProps extends BaseFormProps {}
+
+export interface LdapLoginFormProps extends BaseFormProps {}

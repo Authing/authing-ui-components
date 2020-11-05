@@ -1,5 +1,12 @@
-import React, { FC, useState, useRef, useEffect, useMemo } from 'react'
+import React, {
+  FC,
+  useState,
+  useRef,
+  useEffect,
+  useMemo,
+} from 'react'
 
+const TIME = 60
 export interface SendCodeProps {
   beforeSend: () => Promise<boolean>
 }
@@ -9,19 +16,24 @@ const useSentCounter = () => {
   const timerRef = useRef<any>(0)
 
   useEffect(() => {
-    clearInterval(timerRef.current)
+    return () => clearInterval(timerRef.current)
   }, [])
+
+  useEffect(() => {
+    if (countDown <= 0) {
+      clearInterval(timerRef.current)
+    }
+  }, [countDown])
 
   const enabled = useMemo(() => countDown <= 0, [countDown])
 
   const send = () => {
-    setCountDown(60)
-    timerRef.current = setInterval(() => {
-      setCountDown(countDown - 1)
+    setCountDown(TIME)
 
-      if (countDown <= 0) {
-        clearInterval(timerRef.current)
-      }
+    timerRef.current = setInterval(() => {
+      setCountDown((prev) => {
+        return prev - 1
+      })
     }, 1000)
   }
 

@@ -5,9 +5,11 @@ import React, { useRef, useState } from 'react'
 
 import { useGlobalContext } from '@/context/global/context'
 import {
+  LdapLoginForm,
   PasswordLoginForm,
   PhoneCodeLoginForm,
 } from '@/components/AuthingGuard/Forms'
+import { GuardHeader } from '@/components/AuthingGuard/Header'
 import { LOGIN_METHODS_MAP } from '@/components/AuthingGuard/constants'
 
 import './style.less'
@@ -87,7 +89,7 @@ const useNormalLoginTabs = (activeTab: LoginMethods) => {
       />
     ),
     [LoginMethods.LDAP]: (
-      <PasswordLoginForm
+      <LdapLoginForm
         {...formProps}
         ref={(v) => (formRef.current[LoginMethods.LDAP] = v!)}
       />
@@ -113,12 +115,20 @@ const useNormalLoginTabs = (activeTab: LoginMethods) => {
 }
 
 export const GuardLayout = () => {
-  const [activeTab, setActiveTab] = useState(LoginMethods.Password)
+  const {
+    state: {
+      config: { defaultLoginMethod },
+    },
+  } = useGlobalContext()
+
+  const [activeTab, setActiveTab] = useState(defaultLoginMethod!)
   const { tabs, loading, handleLogin } = useNormalLoginTabs(activeTab)
 
   return (
     <div className="authing-guard-layout">
       <div className="authing-guard-container">
+        <GuardHeader />
+
         <Tabs
           onTabClick={(t) => setActiveTab(t as LoginMethods)}
           activeKey={activeTab}

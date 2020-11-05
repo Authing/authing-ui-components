@@ -8,6 +8,9 @@ const App = () => {
   const config: GuardConfig = {
     apiHost: 'https://core.authing.cn',
     loginMethods: Object.values(LoginMethods),
+    logo: "https://files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png",
+    title: "Authing",
+    defaultLoginMethod: LoginMethods.LDAP,
     // autoRegister: true,
   }
   return <AuthingGuard userPoolId="5f9c5f558551cad742475514" config={config} />
