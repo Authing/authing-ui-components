@@ -1,4 +1,4 @@
-import { Button, Tabs } from 'antd'
+import { Tabs } from 'antd'
 import { User } from 'authing-js-sdk'
 import { FormInstance } from 'antd/lib/form'
 import React, { useRef, useState } from 'react'
@@ -16,50 +16,29 @@ import { LOGIN_METHODS_MAP } from '@/components/AuthingGuard/constants'
 import './style.less'
 import { LoginMethods } from '../types/GuardConfig'
 
-const useFormActions = (activeTab: LoginMethods) => {
-  const formRef = useRef<Record<LoginMethods, FormInstance>>(
-    {} as Record<LoginMethods, FormInstance>
-  )
-  const [loading, setLoading] = useState(false)
-
+const useFormActions = () => {
   const onSuccess = (user: User) => {
     console.log('登录成功', user)
-    setLoading(false)
   }
 
   const onFail = (error: any) => {
-    setLoading(false)
-  }
-
-  const onValidateFail = () => setLoading(false)
-
-  const handleLogin = () => {
-    setLoading(true)
-    formRef.current[activeTab]!.submit()
+    console.log('登录失败')
   }
 
   return {
-    formRef,
-    loading,
     onFail,
     onSuccess,
-    handleLogin,
-    onValidateFail,
   }
 }
 
-const useNormalLoginTabs = (activeTab: LoginMethods) => {
-  const {
-    formRef,
-    loading,
-    onFail,
-    onSuccess,
-    onValidateFail,
-    handleLogin,
-  } = useFormActions(activeTab)
+const useNormalLoginTabs = () => {
+  const { onFail, onSuccess } = useFormActions()
+
+  const formRef = useRef<Record<LoginMethods, FormInstance>>(
+    {} as Record<LoginMethods, FormInstance>
+  )
 
   const formProps = {
-    onValidateFail,
     onFail,
     onSuccess,
   }
@@ -104,8 +83,6 @@ const useNormalLoginTabs = (activeTab: LoginMethods) => {
 
   return {
     tabs,
-    loading,
-    handleLogin,
   }
 }
 
@@ -117,7 +94,7 @@ export const GuardLayout = () => {
   } = useGlobalContext()
 
   const [activeTab, setActiveTab] = useState(defaultLoginMethod!)
-  const { tabs, loading, handleLogin } = useNormalLoginTabs(activeTab)
+  const { tabs } = useNormalLoginTabs()
 
   return (
     <div className="authing-guard-layout">
@@ -137,16 +114,6 @@ export const GuardLayout = () => {
             )
           })}
         </Tabs>
-
-        <Button
-          size="large"
-          type="primary"
-          loading={loading}
-          onClick={handleLogin}
-          block
-        >
-          登录
-        </Button>
       </div>
     </div>
   )

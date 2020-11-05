@@ -7,15 +7,15 @@ export interface BaseFormProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export interface PasswordLoginFormProps extends BaseFormProps {
-  onValidateFail: (error: any) => void
+  onValidateFail?: (error: any) => void
 }
 
 export interface PhoneCodeLoginFormProps extends BaseFormProps {
-  onValidateFail: (error: any) => void
+  onValidateFail?: (error: any) => void
 }
 
 export interface LdapLoginFormProps extends BaseFormProps {
-  onValidateFail: (error: any) => void
+  onValidateFail?: (error: any) => void
 }
 
 export interface QrLoginFormProps extends BaseFormProps {

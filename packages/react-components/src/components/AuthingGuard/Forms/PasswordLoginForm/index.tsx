@@ -7,6 +7,7 @@ import { getRequiredRules, validate } from '@/utils'
 import { useGlobalContext } from '@/context/global/context'
 import { NEED_CAPTCHA } from '@/components/AuthingGuard/constants'
 import { PasswordLoginFormProps } from '@/components/AuthingGuard/types'
+import { LoginFormFooter } from '@/components/AuthingGuard/Forms/LoginFormFooter'
 
 const captchaUrl = '/api/v2/security/captcha'
 const getCaptchaUrl = () => `${captchaUrl}?r=${+new Date()}`
@@ -17,10 +18,18 @@ export const PasswordLoginForm = forwardRef<
 >(({ onSuccess, onValidateFail, onFail }, ref) => {
   const { state } = useGlobalContext()
   const { config, authClient } = state
+  const autoRegister = config.autoRegister
+
   const [rawForm] = Form.useForm()
+
   const [needCaptcha, setNeedCaptcha] = useState(false)
   const [verifyCodeUrl, setVerifyCodeUrl] = useState<string | null>(null)
-  const autoRegister = config.autoRegister
+  const [loading, setLoading] = useState(false)
+
+  const onFinishFailed = (errorInfo: any) => {
+    setLoading(false)
+    onValidateFail && onValidateFail(errorInfo)
+  }
 
   const onFinish = async (values: any) => {
     try {
@@ -51,6 +60,8 @@ export const PasswordLoginForm = forwardRef<
         setNeedCaptcha(true)
         setVerifyCodeUrl(getCaptchaUrl())
       }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -103,23 +114,26 @@ export const PasswordLoginForm = forwardRef<
   ]
 
   return (
-    <Form form={rawForm} onFinishFailed={onValidateFail} onFinish={onFinish}>
-      <>
-        {autoRegister && (
-          <Alert
-            message="输入帐号密码登录，如果您没有帐号，我们会自动创建。"
-            style={{ marginBottom: 24 }}
-          />
-        )}
-        {formItems.map(
-          (item) =>
-            !item.hide && (
-              <Form.Item key={item.name} name={item.name} rules={item.rules}>
-                {item.component}
-              </Form.Item>
-            )
-        )}
-      </>
+    <Form form={rawForm} onFinishFailed={onFinishFailed} onFinish={onFinish}>
+      {autoRegister && (
+        <Alert
+          message="输入帐号密码登录，如果您没有帐号，我们会自动创建。"
+          style={{ marginBottom: 24 }}
+        />
+      )}
+      {formItems.map(
+        (item) =>
+          !item.hide && (
+            <Form.Item key={item.name} name={item.name} rules={item.rules}>
+              {item.component}
+            </Form.Item>
+          )
+      )}
+
+      <LoginFormFooter
+        onLogin={() => setLoading(true)}
+        loading={loading}
+      ></LoginFormFooter>
     </Form>
   )
 })

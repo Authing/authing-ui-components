@@ -7,6 +7,7 @@ import { getRequiredRules, VALIDATE_PATTERN } from '@/utils'
 import { useGlobalContext } from '@/context/global/context'
 import { PhoneCodeLoginFormProps } from '@/components/AuthingGuard/types'
 import { SendPhoneCode } from '@/components/AuthingGuard/Forms/PhoneCodeLoginForm/SendPhoneCode'
+import { LoginFormFooter } from '@/components/AuthingGuard/Forms/LoginFormFooter'
 
 import './style.less'
 
@@ -22,11 +23,19 @@ export const PhoneCodeLoginForm = forwardRef<
   FormInstance,
   PhoneCodeLoginFormProps
 >(({ onSuccess, onFail, onValidateFail }, ref) => {
-  const [rawForm] = Form.useForm()
-  const [phone, setPhone] = useState('')
   const {
     state: { authClient, config },
   } = useGlobalContext()
+
+  const [rawForm] = Form.useForm()
+
+  const [phone, setPhone] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const onFinishFailed = (errorInfo: any) => {
+    setLoading(false)
+    onValidateFail && onValidateFail(errorInfo)
+  }
 
   const onFinish = async (values: any) => {
     try {
@@ -35,41 +44,46 @@ export const PhoneCodeLoginForm = forwardRef<
       onSuccess && onSuccess(user)
     } catch (error) {
       onFail && onFail(error)
+    } finally {
+      setLoading(false)
     }
   }
 
   useImperativeHandle(ref, () => rawForm)
 
   return (
-    <Form form={rawForm} onFinishFailed={onValidateFail} onFinish={onFinish}>
-      <>
-        {config.autoRegister && (
-          <Alert
-            message="输入手机号验证码登录，如果您没有帐号，我们会自动创建。"
-            style={{ marginBottom: 24 }}
-          />
-        )}
-        <Form.Item name="phone" rules={rulesMap.phone}>
-          <Input
-            autoComplete="tel"
-            onChange={(e) => {
-              setPhone(e.target.value)
-            }}
-            size="large"
-            placeholder="请输入手机号"
-            prefix={<UserOutlined style={{ color: '#ddd' }} />}
-          />
-        </Form.Item>
-        <Form.Item name="code" rules={rulesMap.code}>
-          <Input
-            autoComplete="off"
-            size="large"
-            placeholder="请输入 4 位验证码"
-            prefix={<SafetyOutlined style={{ color: '#ddd' }} />}
-            addonAfter={<SendPhoneCode phone={phone} />}
-          />
-        </Form.Item>
-      </>
+    <Form form={rawForm} onFinishFailed={onFinishFailed} onFinish={onFinish}>
+      {config.autoRegister && (
+        <Alert
+          message="输入手机号验证码登录，如果您没有帐号，我们会自动创建。"
+          style={{ marginBottom: 24 }}
+        />
+      )}
+      <Form.Item name="phone" rules={rulesMap.phone}>
+        <Input
+          autoComplete="tel"
+          onChange={(e) => {
+            setPhone(e.target.value)
+          }}
+          size="large"
+          placeholder="请输入手机号"
+          prefix={<UserOutlined style={{ color: '#ddd' }} />}
+        />
+      </Form.Item>
+      <Form.Item name="code" rules={rulesMap.code}>
+        <Input
+          autoComplete="off"
+          size="large"
+          placeholder="请输入 4 位验证码"
+          prefix={<SafetyOutlined style={{ color: '#ddd' }} />}
+          addonAfter={<SendPhoneCode phone={phone} />}
+        />
+      </Form.Item>
+
+      <LoginFormFooter
+        onLogin={() => setLoading(true)}
+        loading={loading}
+      ></LoginFormFooter>
     </Form>
   )
 })
