@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Avatar } from 'antd'
 
-import { useGlobalContext } from '@/context/global/context'
+import { useGuardContext } from '@/context/global/context'
 
 import './style.less'
 
@@ -12,7 +12,7 @@ export const GuardHeader: FC<HeaderProps> = (props) => {
     state: {
       config: { logo, title },
     },
-  } = useGlobalContext()
+  } = useGuardContext()
 
   return (
     <div className="authing-guard-header">

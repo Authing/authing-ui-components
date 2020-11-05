@@ -4,7 +4,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
 
 import { getRequiredRules, validate } from '@/utils'
-import { useGlobalContext } from '@/context/global/context'
+import { useGuardContext } from '@/context/global/context'
 import { NEED_CAPTCHA } from '@/components/AuthingGuard/constants'
 import { PasswordLoginFormProps } from '@/components/AuthingGuard/types'
 import { LoginFormFooter } from '@/components/AuthingGuard/Forms/LoginFormFooter'
@@ -16,7 +16,7 @@ export const PasswordLoginForm = forwardRef<
   FormInstance,
   PasswordLoginFormProps
 >(({ onSuccess, onValidateFail, onFail }, ref) => {
-  const { state } = useGlobalContext()
+  const { state } = useGuardContext()
   const { config, authClient } = state
   const autoRegister = config.autoRegister
 

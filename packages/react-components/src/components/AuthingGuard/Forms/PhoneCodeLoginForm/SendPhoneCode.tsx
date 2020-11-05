@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 
 import { SendCodeBtn } from './SendCodeBtn'
 import { validate } from '@/utils'
-import { useGlobalContext } from '@/context/global/context'
+import { useGuardContext } from '@/context/global/context'
 
 export interface SendPhoneCodeProps {
   phone: string
@@ -12,7 +12,7 @@ export interface SendPhoneCodeProps {
 export const SendPhoneCode: FC<SendPhoneCodeProps> = ({ phone }) => {
   const {
     state: { authClient },
-  } = useGlobalContext()
+  } = useGuardContext()
 
   return (
     <SendCodeBtn

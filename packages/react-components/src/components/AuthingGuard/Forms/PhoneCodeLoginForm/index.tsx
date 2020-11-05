@@ -4,7 +4,7 @@ import { Alert, Form, Input } from 'antd'
 import { UserOutlined, SafetyOutlined } from '@ant-design/icons'
 
 import { getRequiredRules, VALIDATE_PATTERN } from '@/utils'
-import { useGlobalContext } from '@/context/global/context'
+import { useGuardContext } from '@/context/global/context'
 import { PhoneCodeLoginFormProps } from '@/components/AuthingGuard/types'
 import { SendPhoneCode } from '@/components/AuthingGuard/Forms/PhoneCodeLoginForm/SendPhoneCode'
 import { LoginFormFooter } from '@/components/AuthingGuard/Forms/LoginFormFooter'
@@ -25,7 +25,7 @@ export const PhoneCodeLoginForm = forwardRef<
 >(({ onSuccess, onFail, onValidateFail }, ref) => {
   const {
     state: { authClient, config },
-  } = useGlobalContext()
+  } = useGuardContext()
 
   const [rawForm] = Form.useForm()
 

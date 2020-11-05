@@ -12,7 +12,7 @@ export interface IGlobalContext extends IBaseContext<IState> {
 // 实例化上下文，这里避免了为空检查
 const [Context, useBaseContext] = createBaseContext<IGlobalContext>();
 
-export function useGlobalContext(): IGlobalContext {
+export function useGuardContext(): IGlobalContext {
   const globalContext = useBaseContext();
   // TODO: custom some
   return globalContext;

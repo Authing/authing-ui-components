@@ -3,7 +3,7 @@ import { User } from 'authing-js-sdk'
 import { FormInstance } from 'antd/lib/form'
 import React, { useRef, useState } from 'react'
 
-import { useGlobalContext } from '@/context/global/context'
+import { useGuardContext } from '@/context/global/context'
 import {
   LdapLoginForm,
   QrCodeLoginForm,
@@ -72,7 +72,7 @@ const useNormalLoginTabs = () => {
 
   const {
     state: { config },
-  } = useGlobalContext()
+  } = useGuardContext()
   const { loginMethods = [] } = config
 
   const tabs = loginMethods.map((item) => ({
@@ -91,7 +91,7 @@ export const GuardLayout = () => {
     state: {
       config: { defaultLoginMethod },
     },
-  } = useGlobalContext()
+  } = useGuardContext()
 
   const [activeTab, setActiveTab] = useState(defaultLoginMethod!)
   const { tabs } = useNormalLoginTabs()
@@ -102,9 +102,11 @@ export const GuardLayout = () => {
         <GuardHeader />
 
         <Tabs
+          size="large"
           onTabClick={(t) => setActiveTab(t as LoginMethods)}
           activeKey={activeTab}
           centered
+          className="authing-guard-tabs"
         >
           {tabs.map((item) => {
             return (

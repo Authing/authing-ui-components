@@ -1,7 +1,7 @@
 import { Spin } from 'antd'
 import React, { FC, useEffect, useMemo } from 'react'
 
-import { useGlobalContext } from '@/context/global/context'
+import { useGuardContext } from '@/context/global/context'
 import { LoginMethods, QrLoginFormProps } from '@/components/AuthingGuard/types'
 
 import './style.less'
@@ -14,7 +14,7 @@ export const QrCodeLoginForm: FC<QrLoginFormProps> = ({
 }) => {
   const {
     state: { authClient },
-  } = useGlobalContext()
+  } = useGuardContext()
 
   const client = useMemo(() => {
     return {
