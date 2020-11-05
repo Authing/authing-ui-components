@@ -3,7 +3,7 @@ import { message } from 'antd'
 import { AuthenticationClient } from 'authing-js-sdk'
 
 import { GuardContext } from '@/context/global/context'
-import { GuardState } from '@/components/AuthingGuard/types'
+import { GuardScenes } from '@/components/AuthingGuard/types'
 import { NEED_MFA_CODE } from '@/components/AuthingGuard/constants'
 import { GuardLayout } from '@/components/AuthingGuard/GuardLayout'
 import { GuardConfig } from '@/components/AuthingGuard/types/GuardConfig'
@@ -19,7 +19,13 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
   userPoolId,
   config = {},
 }) => {
-  const { apiHost, appId } = config
+  const {
+    apiHost,
+    appId,
+    defaultLoginMethod,
+    defaultScenes,
+    defaultRegisterMethod,
+  } = config
 
   const authClient = new AuthenticationClient({
     userPoolId,
@@ -37,8 +43,15 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
     },
   })
 
+  const activeTabs = {
+    [GuardScenes.Login]: defaultLoginMethod,
+    [GuardScenes.Register]: defaultRegisterMethod,
+  }
+
   return (
-    <GuardContext value={{ authClient, config, guardState: GuardState.Login }}>
+    <GuardContext
+      value={{ authClient, config, guardScenes: defaultScenes, activeTabs }}
+    >
       <GuardLayout />
     </GuardContext>
   )

@@ -16,9 +16,11 @@ export enum RegisterMethods {
   Phone = 'phone',
 }
 
-export enum Scenes {
-  Register = 'register',
-  Login = 'login',
+export enum GuardScenes {
+  Login,
+  Register,
+  RestPassword,
+  Mfa,
 }
 
 export enum SocialConnections {
@@ -68,5 +70,5 @@ export interface GuardConfig {
   scope?: string
   useSelfWxapp?: boolean
   apiHost?: string
-  defaultScenes?: Scenes
+  defaultScenes?: GuardScenes
 }

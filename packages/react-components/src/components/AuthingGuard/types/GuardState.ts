@@ -1,6 +1,7 @@
-export enum GuardState {
-  Login,
-  Register,
-  RestPassword,
-  Mfa,
+import { LoginMethods, RegisterMethods } from './GuardConfig'
+import { GuardScenes } from '@/components/AuthingGuard/types'
+
+export interface ActiveTabs {
+  [GuardScenes.Login]: LoginMethods
+  [GuardScenes.Register]: RegisterMethods
 }

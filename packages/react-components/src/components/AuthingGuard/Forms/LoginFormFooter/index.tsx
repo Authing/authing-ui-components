@@ -1,7 +1,7 @@
 import { Button } from 'antd'
 import React, { FC } from 'react'
 import { useGuardContext } from '@/context/global/context'
-import { GuardState } from '@/components/AuthingGuard/types'
+import { GuardScenes } from '@/components/AuthingGuard/types'
 
 import './style.less'
 
@@ -33,7 +33,7 @@ export const LoginFormFooter: FC<LoginFormFooterProps> = ({
       <div className="authing-guard-form-actions">
         {needRestPwd && (
           <Button
-            onClick={() => setValue('guardState', GuardState.RestPassword)}
+            onClick={() => setValue('guardScenes', GuardScenes.RestPassword)}
             className="authing-guard-text-btn"
             type="text"
           >
@@ -44,7 +44,7 @@ export const LoginFormFooter: FC<LoginFormFooterProps> = ({
           <div className="authing-guard-tip-btn-comb">
             <span className="authing-guard-tip">还没有账号，</span>
             <Button
-              onClick={() => setValue('guardState', GuardState.Register)}
+              onClick={() => setValue('guardScenes', GuardScenes.Register)}
               className="authing-guard-text-btn"
               type="text"
             >

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { useGuardContext } from '@/context/global/context'
-import { GuardState } from '@/components/AuthingGuard/types'
+import { GuardScenes } from '@/components/AuthingGuard/types'
 import { GuardHeader } from '@/components/AuthingGuard/Header'
 import { LoginLayout } from '@/components/AuthingGuard/LoginLayout'
 import { RegisterLayout } from '@/components/AuthingGuard/RegisterLayout'
@@ -10,20 +10,20 @@ import './style.less'
 
 export const GuardLayout = () => {
   const {
-    state: { guardState },
+    state: { guardScenes },
   } = useGuardContext()
 
   const layoutMap = {
-    [GuardState.Login]: <LoginLayout />,
-    [GuardState.Register]: <RegisterLayout />,
-    [GuardState.RestPassword]: '重置密码',
-    [GuardState.Mfa]: 'MFA',
+    [GuardScenes.Login]: <LoginLayout />,
+    [GuardScenes.Register]: <RegisterLayout />,
+    [GuardScenes.RestPassword]: '重置密码',
+    [GuardScenes.Mfa]: 'MFA',
   }
   return (
     <div className="authing-guard-layout">
       <div className="authing-guard-container">
         <GuardHeader />
-        {layoutMap[guardState]}
+        {layoutMap[guardScenes]}
       </div>
     </div>
   )

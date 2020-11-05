@@ -1,4 +1,4 @@
-import { GuardConfig, GuardState } from "@/components/AuthingGuard/types";
+import { GuardConfig, ActiveTabs, GuardScenes } from "@/components/AuthingGuard/types";
 import { AuthenticationClient } from "authing-js-sdk";
 import { IBaseAction } from "../base";
 
@@ -6,7 +6,8 @@ export type IState = {
   [index: string]: any
   config: GuardConfig
   authClient: AuthenticationClient
-  guardState: GuardState
+  activeTabs: ActiveTabs
+  guardScenes: GuardScenes
 }
 
 const handlers: any = {

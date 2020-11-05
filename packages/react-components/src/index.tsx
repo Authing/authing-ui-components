@@ -5,7 +5,7 @@ import {
   GuardConfig,
   LoginMethods,
   RegisterMethods,
-  Scenes,
+  GuardScenes,
 } from './components/AuthingGuard/types/GuardConfig'
 import reportWebVitals from './reportWebVitals'
 
@@ -19,7 +19,7 @@ const App = () => {
     defaultLoginMethod: LoginMethods.LDAP,
     registerMethods: Object.values(RegisterMethods),
     defaultRegisterMethod: RegisterMethods.Email,
-    defaultScenes: Scenes.Login,
+    defaultScenes: GuardScenes.Login,
     // autoRegister: true,
   }
   return <AuthingGuard userPoolId="5f9c5f558551cad742475514" config={config} />

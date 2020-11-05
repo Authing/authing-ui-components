@@ -14,7 +14,7 @@ import { LOGIN_METHODS_MAP } from '@/components/AuthingGuard/constants'
 import { AuthingTabs } from '@/components/AuthingGuard/AuthingTabs'
 
 import './style.less'
-import { LoginMethods } from '../types/GuardConfig'
+import { GuardScenes, LoginMethods } from '../types/GuardConfig'
 
 const useFormActions = () => {
   const onSuccess = (user: User) => {
@@ -89,18 +89,21 @@ const useNormalLoginTabs = () => {
 export const LoginLayout = () => {
   const {
     state: {
-      config: { defaultLoginMethod },
+      activeTabs
     },
+    setValue
   } = useGuardContext()
 
-  const [activeTab, setActiveTab] = useState(defaultLoginMethod!)
   const { tabs } = useNormalLoginTabs()
 
   return (
     <AuthingTabs
       size="large"
-      onTabClick={(t) => setActiveTab(t as LoginMethods)}
-      activeKey={activeTab}
+      onTabClick={(t) => setValue('activeTabs', {
+        ...activeTabs,
+        [GuardScenes.Login]: t,
+      })}
+      activeKey={activeTabs[GuardScenes.Login]}
       centered
       className="authing-guard-tabs"
     >

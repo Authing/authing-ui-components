@@ -1,9 +1,13 @@
 import { Tabs } from 'antd'
 import { User } from 'authing-js-sdk'
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 
 import { useGuardContext } from '@/context/global/context'
-import { RegisterMethods } from '@/components/AuthingGuard/types'
+import {
+  GuardScenes,
+  LoginMethods,
+  RegisterMethods,
+} from '@/components/AuthingGuard/types'
 import { AuthingTabs } from '@/components/AuthingGuard/AuthingTabs'
 import { REGISTER_METHODS_MAP } from '@/components/AuthingGuard/constants'
 import {
@@ -14,11 +18,11 @@ import {
 export const RegisterLayout: FC = () => {
   const {
     state: {
-      config: { registerMethods, defaultRegisterMethod },
+      config: { registerMethods },
+      activeTabs,
     },
+    setValue,
   } = useGuardContext()
-
-  const [activeTab, setActiveTab] = useState(defaultRegisterMethod!)
 
   const onSuccess = (user: User) => {
     console.log('注册成功', user)
@@ -31,6 +35,25 @@ export const RegisterLayout: FC = () => {
   const formProps = {
     onSuccess,
     onFail,
+  }
+
+  const onTabClick = (t: string) => {
+    const next = {
+      ...activeTabs,
+      [GuardScenes.Register]: t,
+    }
+    switch (t) {
+      case RegisterMethods.Email:
+        next[GuardScenes.Login] = LoginMethods.Password
+        break
+      case RegisterMethods.Phone:
+        next[GuardScenes.Login] = LoginMethods.PhoneCode
+        break
+      default:
+        break
+    }
+
+    setValue('activeTabs', next)
   }
 
   const REGISTER_FORM_MAP = {
@@ -47,8 +70,8 @@ export const RegisterLayout: FC = () => {
   return (
     <AuthingTabs
       size="large"
-      onTabClick={(t) => setActiveTab(t as RegisterMethods)}
-      activeKey={activeTab}
+      activeKey={activeTabs[GuardScenes.Register]}
+      onTabClick={onTabClick}
       centered
       className="authing-guard-tabs"
     >
