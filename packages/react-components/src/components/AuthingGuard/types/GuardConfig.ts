@@ -11,6 +11,16 @@ export enum LoginMethods {
   LDAP = 'ldap',
 }
 
+export enum RegisterMethods {
+  Email = 'email',
+  Phone = 'phone',
+}
+
+export enum Scenes {
+  Register = 'register',
+  Login = 'login',
+}
+
 export enum SocialConnections {
   WxMinQr = 'wechat:miniprogram:qrconnect',
   WxMinApp = 'wechat:miniprogram:app-launch',
@@ -43,9 +53,11 @@ export interface GuardConfig {
   logo?: string
   contentCss?: string
   loginMethods?: LoginMethods[]
+  registerMethods?: RegisterMethods[]
   socialConnections?: SocialConnections[]
   enterpriseConnections?: string[]
   defaultLoginMethod?: LoginMethods
+  defaultRegisterMethod?: RegisterMethods
   autoRegister?: boolean
   clickCloseable?: boolean
   escCloseAble?: boolean
@@ -56,4 +68,5 @@ export interface GuardConfig {
   scope?: string
   useSelfWxapp?: boolean
   apiHost?: string
+  defaultScenes?: Scenes
 }

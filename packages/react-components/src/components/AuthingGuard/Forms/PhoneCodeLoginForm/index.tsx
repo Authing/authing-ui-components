@@ -6,10 +6,8 @@ import { UserOutlined, SafetyOutlined } from '@ant-design/icons'
 import { getRequiredRules, VALIDATE_PATTERN } from '@/utils'
 import { useGuardContext } from '@/context/global/context'
 import { PhoneCodeLoginFormProps } from '@/components/AuthingGuard/types'
-import { SendPhoneCode } from '@/components/AuthingGuard/Forms/PhoneCodeLoginForm/SendPhoneCode'
+import { SendPhoneCode } from '@/components/AuthingGuard/Forms/SendPhoneCode'
 import { LoginFormFooter } from '@/components/AuthingGuard/Forms/LoginFormFooter'
-
-import './style.less'
 
 const rulesMap: Record<string, Rule[]> = {
   phone: getRequiredRules('请输入手机号码').concat({
@@ -52,7 +50,12 @@ export const PhoneCodeLoginForm = forwardRef<
   useImperativeHandle(ref, () => rawForm)
 
   return (
-    <Form form={rawForm} onFinishFailed={onFinishFailed} onFinish={onFinish}>
+    <Form
+      form={rawForm}
+      onSubmitCapture={() => setLoading(true)}
+      onFinishFailed={onFinishFailed}
+      onFinish={onFinish}
+    >
       {config.autoRegister && (
         <Alert
           message="输入手机号验证码登录，如果您没有帐号，我们会自动创建。"
@@ -80,10 +83,7 @@ export const PhoneCodeLoginForm = forwardRef<
         />
       </Form.Item>
 
-      <LoginFormFooter
-        onLogin={() => setLoading(true)}
-        loading={loading}
-      ></LoginFormFooter>
+      <LoginFormFooter needRegister loading={loading}></LoginFormFooter>
     </Form>
   )
 })

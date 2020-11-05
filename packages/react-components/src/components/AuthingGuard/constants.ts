@@ -1,4 +1,4 @@
-import { LoginMethods } from '@/components/AuthingGuard/types'
+import { LoginMethods, RegisterMethods } from '@/components/AuthingGuard/types'
 
 // 当需要 MFA 认证时，登录返回的 error code
 export const NEED_MFA_CODE = 1635
@@ -12,4 +12,9 @@ export const LOGIN_METHODS_MAP = {
   [LoginMethods.AppQr]: 'APP 扫码登录',
   [LoginMethods.WxMinQr]: '扫码登录',
   [LoginMethods.LDAP]: 'LDAP 登录',
+}
+
+export const REGISTER_METHODS_MAP = {
+  [RegisterMethods.Email]: '邮箱注册',
+  [RegisterMethods.Phone]: '手机号注册',
 }

@@ -1,17 +1,23 @@
 import { Button } from 'antd'
 import React, { FC } from 'react'
+import { useGuardContext } from '@/context/global/context'
+import { GuardState } from '@/components/AuthingGuard/types'
 
 import './style.less'
 
 export interface LoginFormFooterProps {
   loading: boolean
-  onLogin: (evt: React.MouseEvent) => void
+  needRestPwd?: boolean
+  needRegister?: boolean
 }
 
 export const LoginFormFooter: FC<LoginFormFooterProps> = ({
   loading,
-  onLogin,
+  needRestPwd = false,
+  needRegister = false,
 }) => {
+  const { setValue } = useGuardContext()
+
   return (
     <>
       <Button
@@ -19,18 +25,33 @@ export const LoginFormFooter: FC<LoginFormFooterProps> = ({
         size="large"
         type="primary"
         loading={loading}
-        onClick={onLogin}
         block
       >
         登录
       </Button>
 
-      <div className="authing-guard-login-actions">
-        <Button className="authing-guard-text-btn" type="text">忘记密码？</Button>
-        <div className="authing-guard-go-register">
-          <span className="authing-guard-go-register-tip">还没有账号，</span>
-          <Button className="authing-guard-text-btn" type="text">立即注册</Button>
-        </div>
+      <div className="authing-guard-form-actions">
+        {needRestPwd && (
+          <Button
+            onClick={() => setValue('guardState', GuardState.RestPassword)}
+            className="authing-guard-text-btn"
+            type="text"
+          >
+            忘记密码？
+          </Button>
+        )}
+        {needRegister && (
+          <div className="authing-guard-tip-btn-comb">
+            <span className="authing-guard-tip">还没有账号，</span>
+            <Button
+              onClick={() => setValue('guardState', GuardState.Register)}
+              className="authing-guard-text-btn"
+              type="text"
+            >
+              立即注册
+            </Button>
+          </div>
+        )}
       </div>
     </>
   )

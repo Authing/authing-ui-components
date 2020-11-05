@@ -2,10 +2,11 @@ import React, { FC } from 'react'
 import { message } from 'antd'
 import { AuthenticationClient } from 'authing-js-sdk'
 
-import { GlobalContext } from '@/context/global/context'
-import { GuardConfig } from '@/components/AuthingGuard/types/GuardConfig'
+import { GuardContext } from '@/context/global/context'
+import { GuardState } from '@/components/AuthingGuard/types'
 import { NEED_MFA_CODE } from '@/components/AuthingGuard/constants'
 import { GuardLayout } from '@/components/AuthingGuard/GuardLayout'
+import { GuardConfig } from '@/components/AuthingGuard/types/GuardConfig'
 
 import './style.less'
 
@@ -37,8 +38,8 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
   })
 
   return (
-    <GlobalContext value={{ authClient, config }}>
+    <GuardContext value={{ authClient, config, guardState: GuardState.Login }}>
       <GuardLayout />
-    </GlobalContext>
+    </GuardContext>
   )
 }

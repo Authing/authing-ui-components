@@ -114,7 +114,12 @@ export const PasswordLoginForm = forwardRef<
   ]
 
   return (
-    <Form form={rawForm} onFinishFailed={onFinishFailed} onFinish={onFinish}>
+    <Form
+      form={rawForm}
+      onSubmitCapture={() => setLoading(true)}
+      onFinishFailed={onFinishFailed}
+      onFinish={onFinish}
+    >
       {autoRegister && (
         <Alert
           message="输入帐号密码登录，如果您没有帐号，我们会自动创建。"
@@ -131,7 +136,8 @@ export const PasswordLoginForm = forwardRef<
       )}
 
       <LoginFormFooter
-        onLogin={() => setLoading(true)}
+        needRegister
+        needRestPwd
         loading={loading}
       ></LoginFormFooter>
     </Form>

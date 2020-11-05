@@ -4,7 +4,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
 
 import { getRequiredRules, validate } from '@/utils'
-import { useGuardContext} from '@/context/global/context'
+import { useGuardContext } from '@/context/global/context'
 import { NEED_CAPTCHA } from '@/components/AuthingGuard/constants'
 import { PasswordLoginFormProps } from '@/components/AuthingGuard/types'
 import { LoginFormFooter } from '@/components/AuthingGuard/Forms/LoginFormFooter'
@@ -112,7 +112,12 @@ export const LdapLoginForm = forwardRef<FormInstance, PasswordLoginFormProps>(
     ]
 
     return (
-      <Form form={rawForm} onFinishFailed={onFinishFailed} onFinish={onFinish}>
+      <Form
+        form={rawForm}
+        onSubmitCapture={() => setLoading(true)}
+        onFinishFailed={onFinishFailed}
+        onFinish={onFinish}
+      >
         {formItems.map(
           (item) =>
             !item.hide && (
@@ -122,10 +127,7 @@ export const LdapLoginForm = forwardRef<FormInstance, PasswordLoginFormProps>(
             )
         )}
 
-        <LoginFormFooter
-          onLogin={() => setLoading(true)}
-          loading={loading}
-        ></LoginFormFooter>
+        <LoginFormFooter loading={loading}></LoginFormFooter>
       </Form>
     )
   }

@@ -21,3 +21,11 @@ export interface LdapLoginFormProps extends BaseFormProps {
 export interface QrLoginFormProps extends BaseFormProps {
   type: LoginMethods.AppQr | LoginMethods.WxMinQr
 }
+
+export interface EmailRegisterFormProps extends BaseFormProps {
+  onValidateFail?: (error: any) => void
+}
+
+export interface PhoneRegisterFormProps extends BaseFormProps {
+  onValidateFail?: (error: any) => void
+}

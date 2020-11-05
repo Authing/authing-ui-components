@@ -1,4 +1,6 @@
 export * from './LdapLoginForm'
 export * from './QrCodeLoginForm'
+export * from './EmailRegisterForm'
+export * from './PhoneRegisterForm'
 export * from './PasswordLoginForm'
 export * from './PhoneCodeLoginForm'
