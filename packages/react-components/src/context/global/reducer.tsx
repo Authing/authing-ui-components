@@ -3,7 +3,6 @@ import { AuthenticationClient } from "authing-js-sdk";
 import { IBaseAction } from "../base";
 
 export type IState = {
-  [index: string]: any
   config: GuardConfig
   authClient: AuthenticationClient
   activeTabs: ActiveTabs

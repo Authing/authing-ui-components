@@ -42,6 +42,7 @@ export const ResetPasswordStep2: FC<ResetPasswordStep2Props> = ({
   return (
     <Form
       form={rawForm}
+      onFinishFailed={() => setLoading(false)}
       onSubmitCapture={() => setLoading(true)}
       onFinish={onStep2Finish}
     >
@@ -102,17 +103,16 @@ export const ResetPasswordStep2: FC<ResetPasswordStep2Props> = ({
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
         />
       </Form.Item>
-      <Form.Item>
-        <Button
-          block
-          loading={loading}
-          type="primary"
-          size="large"
-          htmlType="submit"
-        >
-          重置密码
-        </Button>
-      </Form.Item>
+      <Button
+        className="authing-reset-pwd-btn"
+        block
+        loading={loading}
+        type="primary"
+        size="large"
+        htmlType="submit"
+      >
+        重置密码
+      </Button>
     </Form>
   )
 }

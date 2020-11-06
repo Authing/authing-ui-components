@@ -61,6 +61,7 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
 
       <Form
         form={rawForm}
+        onFinishFailed={() => setReseting(false)}
         onSubmitCapture={() => setReseting(true)}
         onFinish={onStep3Finish}
       >
@@ -110,6 +111,7 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
         </Form.Item>
         <Form.Item>
           <Button
+            className="authing-reset-pwd-btn"
             block
             loading={reseting}
             type="primary"
@@ -119,18 +121,16 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
             重置密码
           </Button>
         </Form.Item>
-        <Form.Item>
-          <Button
-            block
-            type="primary"
-            ghost
-            loading={sending}
-            size="large"
-            onClick={onSendResetMail}
-          >
-            重发密码重置邮件
-          </Button>
-        </Form.Item>
+        <Button
+          block
+          type="primary"
+          ghost
+          loading={sending}
+          size="large"
+          onClick={onSendResetMail}
+        >
+          重发密码重置邮件
+        </Button>
       </Form>
     </>
   )

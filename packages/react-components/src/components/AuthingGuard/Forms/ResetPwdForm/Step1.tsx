@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react'
 import { Form, Input, Button, message } from 'antd'
 
-import { getRequiredRules, validate } from '@/utils'
+import { validate } from '@/utils'
 import {
   ResetPasswordStep1Props,
   ResetPwdMethods,
@@ -65,17 +65,16 @@ export const ResetPasswordStep1: FC<ResetPasswordStep1Props> = ({
           placeholder="请输入手机号或邮箱"
         />
       </Form.Item>
-      <Form.Item>
-        <Button
-          block
-          type="primary"
-          size="large"
-          htmlType="submit"
-          loading={loading}
-        >
-          重置密码
-        </Button>
-      </Form.Item>
+      <Button
+        className="authing-reset-pwd-btn"
+        block
+        type="primary"
+        size="large"
+        htmlType="submit"
+        loading={loading}
+      >
+        重置密码
+      </Button>
     </Form>
   )
 }

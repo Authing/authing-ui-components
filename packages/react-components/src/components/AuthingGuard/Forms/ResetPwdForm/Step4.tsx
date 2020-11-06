@@ -33,7 +33,6 @@ export const ResetPasswordStep4: FC = () => {
       <h3
         style={{
           fontSize: 20,
-          fontFamily: 'PingFangSC-Medium',
           marginBottom: 0,
         }}
       >
