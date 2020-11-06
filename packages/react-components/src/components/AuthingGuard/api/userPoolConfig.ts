@@ -56,15 +56,6 @@ export interface ISamlConnectionConfig {
 export interface ICasConnectionConfig {
   casConnectionLoginUrl: string
 }
-
-export interface OidcClientMetadata {
-  grant_types: string[]
-  client_id: string
-  redirect_uris: string[]
-  scope: string
-  response_types: ResponseType[]
-}
-
 export interface SocialConnectionItem {
   name: string
   logo: string

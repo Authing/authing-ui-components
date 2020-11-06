@@ -82,7 +82,7 @@ export interface GuardConfig {
   defaultRegisterMethod?: RegisterMethods
   autoRegister?: boolean
   clickCloseable?: boolean
-  escCloseAble?: boolean
+  escCloseable?: boolean
   isSSO?: boolean
   appId?: string
   appDomain?: string
