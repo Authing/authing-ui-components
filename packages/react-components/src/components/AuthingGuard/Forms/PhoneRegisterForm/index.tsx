@@ -77,7 +77,6 @@ export const PhoneRegisterForm = forwardRef<
         <Input.Password
           autoComplete="off"
           size="large"
-          visibilityToggle={false}
           placeholder="设置密码"
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
         />
@@ -90,7 +89,6 @@ export const PhoneRegisterForm = forwardRef<
         <Input.Password
           autoComplete="off"
           size="large"
-          visibilityToggle={false}
           placeholder="再输入一次密码"
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
         />

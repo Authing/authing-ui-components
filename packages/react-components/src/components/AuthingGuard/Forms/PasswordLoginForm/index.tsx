@@ -54,12 +54,12 @@ export const PasswordLoginForm = forwardRef<
 
       onSuccess && onSuccess(user)
     } catch (error) {
-      onFail && onFail(error)
-
       if (error.code === NEED_CAPTCHA && verifyCodeUrl === null) {
         setNeedCaptcha(true)
         setVerifyCodeUrl(getCaptchaUrl())
       }
+
+      onFail && onFail(error)
     } finally {
       setLoading(false)
     }
@@ -84,6 +84,7 @@ export const PasswordLoginForm = forwardRef<
       component: (
         <Input.Password
           size="large"
+          autoComplete="password"
           placeholder="请输入登录密码"
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
         />

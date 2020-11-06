@@ -1,0 +1,50 @@
+import React, { FC } from 'react'
+
+import { Button, Checkbox, Form, Typography } from 'antd'
+
+const { Paragraph } = Typography
+
+export interface MfaResetStep2Props {
+  recoverCode: string
+  onFinish: () => void
+}
+
+export const MfaResetStep2: FC<MfaResetStep2Props> = ({
+  recoverCode,
+  onFinish,
+}) => (
+  <Form onFinish={onFinish}>
+    <Paragraph className="authing-guard-secret-block" copyable>
+      {recoverCode}
+    </Paragraph>
+    <Form.Item
+      valuePropName="checked"
+      rules={[
+        {
+          validateTrigger: [],
+          validator(r, v) {
+            return new Promise((resolve, reject) => {
+              if (!v) {
+                reject('请确保您已保存密钥')
+              }
+              resolve()
+            })
+          },
+        },
+      ]}
+      name="MfaCopyRecoverCode"
+    >
+      <Checkbox>已经安全地记录了这段密钥</Checkbox>
+    </Form.Item>
+
+    <Button
+      className="authing-guard-mfa-confirm-btn"
+      htmlType="submit"
+      block
+      type="primary"
+      size="large"
+    >
+      确定
+    </Button>
+  </Form>
+)

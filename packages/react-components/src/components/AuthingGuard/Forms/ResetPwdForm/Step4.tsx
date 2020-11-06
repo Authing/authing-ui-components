@@ -26,13 +26,15 @@ export const ResetPasswordStep4: FC = () => {
 
       setValue('guardScenes', GuardScenes.Login)
     }
-  }, [countDown, setValue])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [countDown])
 
   return (
     <div style={{ textAlign: 'center' }}>
       <h3
         style={{
           fontSize: 20,
+          fontFamily: 'PingFangSC-Medium',
           marginBottom: 0,
         }}
       >

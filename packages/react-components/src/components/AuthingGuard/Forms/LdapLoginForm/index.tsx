@@ -3,7 +3,7 @@ import { FormInstance } from 'antd/lib/form'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
 
-import { getRequiredRules, validate } from '@/utils'
+import { getRequiredRules } from '@/utils'
 import { useGuardContext } from '@/context/global/context'
 import { NEED_CAPTCHA } from '@/components/AuthingGuard/constants'
 import { PasswordLoginFormProps } from '@/components/AuthingGuard/types'
@@ -35,29 +35,27 @@ export const LdapLoginForm = forwardRef<FormInstance, PasswordLoginFormProps>(
         const password = values.password && values.password.trim()
         const captchaCode = values.captchaCode && values.captchaCode.trim()
 
-        const user = validate('phone', identity)
-          ? await authClient.loginByPhonePassword(identity, password, {
-              autoRegister,
-              captchaCode,
-            })
-          : validate('email', identity)
-          ? await authClient.loginByEmail(identity, password, {
-              autoRegister,
-              captchaCode,
-            })
-          : await authClient.loginByUsername(identity, password, {
-              autoRegister,
-              captchaCode,
-            })
-
+        const user = await authClient.loginByLdap(identity, password, {
+          autoRegister,
+          captchaCode,
+        })
         onSuccess && onSuccess(user)
       } catch (error) {
-        onFail && onFail(error)
+        if (typeof error.message === 'string') {
+          // js sdk httpclient 的报错，这里只有一种情况就是用户开启了 mfa 的报错
+          try {
+            const errorData = JSON.parse(error.message)
+            onFail && onFail(errorData)
+            return
+          } catch (_) {}
+        }
 
         if (error.code === NEED_CAPTCHA && verifyCodeUrl === null) {
           setNeedCaptcha(true)
           setVerifyCodeUrl(getCaptchaUrl())
         }
+
+        onFail && onFail(error)
       } finally {
         setLoading(false)
       }

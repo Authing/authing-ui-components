@@ -44,3 +44,13 @@ export interface ResetPasswordStep3Props {
   email: string
   onSuccess: () => void
 }
+
+export interface SocialAndIdpLoginProps extends BaseFormProps {}
+
+export interface MfaVerifyForm extends BaseFormProps {
+  goReset: () => void
+}
+
+export interface MfaResetForm extends BaseFormProps {
+    goVerify: () => void
+}

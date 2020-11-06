@@ -1,17 +1,37 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 
 import { ResetPasswordStep1 } from './Step1'
 import { ResetPasswordStep2 } from './Step2'
 import { ResetPasswordStep3 } from './Step3'
 import { ResetPasswordStep4 } from './Step4'
 import { ResetPwdFormFooter } from './Footer'
+import { useGuardContext } from '@/context/global/context'
 
 import './style.less'
 
 export const ResetPasswordForm: FC = () => {
+  const { setValue } = useGuardContext()
+
   const [step, setStep] = useState(1)
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
+
+  useEffect(() => {
+    switch (step) {
+      case 1:
+        setValue('guardTitle', '找回密码')
+        break
+      case 2:
+      case 3:
+      case 4:
+        setValue('guardTitle', '重置密码')
+        break
+      default:
+        setValue('guardTitle', '找回密码')
+        break
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step])
 
   const onStep1Finish = async (type: string, value: string) => {
     if (type === 'phone') {

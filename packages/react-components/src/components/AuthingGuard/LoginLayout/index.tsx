@@ -7,21 +7,35 @@ import { useGuardContext } from '@/context/global/context'
 import {
   LdapLoginForm,
   QrCodeLoginForm,
+  SocialAndIdpLogin,
   PasswordLoginForm,
   PhoneCodeLoginForm,
 } from '@/components/AuthingGuard/Forms'
-import { LOGIN_METHODS_MAP } from '@/components/AuthingGuard/constants'
+import {
+  LOGIN_METHODS_MAP,
+  NEED_MFA_CODE,
+} from '@/components/AuthingGuard/constants'
 import { AuthingTabs } from '@/components/AuthingGuard/AuthingTabs'
+import {
+  BaseFormProps,
+  GuardScenes,
+  LoginMethods,
+} from '@/components/AuthingGuard/types'
 
 import './style.less'
-import { GuardScenes, LoginMethods } from '../types/GuardConfig'
 
 const useFormActions = () => {
+  const { setValue } = useGuardContext()
+
   const onSuccess = (user: User) => {
     console.log('登录成功', user)
   }
 
   const onFail = (error: any) => {
+    if (error?.code === NEED_MFA_CODE) {
+      setValue('mfaToken', error.data.mfaToken)
+      setValue('guardScenes', GuardScenes.MfaVerify)
+    }
     console.log('登录失败')
   }
 
@@ -31,9 +45,7 @@ const useFormActions = () => {
   }
 }
 
-const useNormalLoginTabs = () => {
-  const { onFail, onSuccess } = useFormActions()
-
+const useNormalLoginTabs = ({ onSuccess, onFail }: BaseFormProps) => {
   const formRef = useRef<Record<LoginMethods, FormInstance>>(
     {} as Record<LoginMethods, FormInstance>
   )
@@ -88,32 +100,37 @@ const useNormalLoginTabs = () => {
 
 export const LoginLayout = () => {
   const {
-    state: {
-      activeTabs
-    },
-    setValue
+    state: { activeTabs },
+    setValue,
   } = useGuardContext()
 
-  const { tabs } = useNormalLoginTabs()
+  const { onFail, onSuccess } = useFormActions()
+  const { tabs } = useNormalLoginTabs({ onSuccess, onFail })
 
   return (
-    <AuthingTabs
-      size="large"
-      onTabClick={(t) => setValue('activeTabs', {
-        ...activeTabs,
-        [GuardScenes.Login]: t,
-      })}
-      activeKey={activeTabs[GuardScenes.Login]}
-      centered
-      className="authing-guard-tabs"
-    >
-      {tabs.map((item) => {
-        return (
-          <Tabs.TabPane key={item.key} tab={item.label}>
-            {item.component}
-          </Tabs.TabPane>
-        )
-      })}
-    </AuthingTabs>
+    <>
+      <AuthingTabs
+        size="large"
+        onTabClick={(t) =>
+          setValue('activeTabs', {
+            ...activeTabs,
+            [GuardScenes.Login]: t,
+          })
+        }
+        activeKey={activeTabs[GuardScenes.Login]}
+        centered
+        className="authing-guard-tabs"
+      >
+        {tabs.map((item) => {
+          return (
+            <Tabs.TabPane key={item.key} tab={item.label}>
+              {item.component}
+            </Tabs.TabPane>
+          )
+        })}
+      </AuthingTabs>
+
+      <SocialAndIdpLogin onFail={onFail} onSuccess={onSuccess} />
+    </>
   )
 }

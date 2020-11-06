@@ -1,3 +1,8 @@
+import {
+  EnterpriseConnectionItem,
+  SocialConnectionItem,
+} from '@/components/AuthingGuard/api'
+
 export enum Mode {
   Normal = 'normal',
   Modal = 'modal',
@@ -20,12 +25,12 @@ export enum GuardScenes {
   Login,
   Register,
   RestPassword,
-  Mfa,
+  MfaVerify,
 }
 
 export enum ResetPwdMethods {
   Email = 'email',
-  Phone = 'phone'
+  Phone = 'phone',
 }
 
 export enum SocialConnections {
@@ -49,6 +54,16 @@ export enum SocialConnections {
 export enum AppType {
   OAUTH = 'oauth',
   OIDC = 'oidc',
+}
+
+export enum Protocol {
+  OIDC = "oidc",
+  OAUTH = "oauth",
+  SAML = "saml",
+  LDAP = "ldap",
+  AD = "ad",
+  CAS = "cas",
+  AZURE_AD = "azure-ad",
 }
 
 export interface GuardConfig {
@@ -76,4 +91,9 @@ export interface GuardConfig {
   useSelfWxapp?: boolean
   apiHost?: string
   defaultScenes?: GuardScenes
+}
+
+export interface ProcessedGuardConfig extends GuardConfig {
+  enterpriseConnectionObjs: EnterpriseConnectionItem[]
+  socialConnectionObjs: SocialConnectionItem[]
 }

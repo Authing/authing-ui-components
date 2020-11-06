@@ -85,7 +85,6 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
             name="password"
             size="large"
             autoComplete="off"
-            visibilityToggle={false}
             placeholder="新密码"
             prefix={<LockOutlined style={{ color: '#ddd' }} />}
           />
@@ -104,7 +103,6 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
             name="repeat-password"
             size="large"
             autoComplete="off"
-            visibilityToggle={false}
             placeholder="再输入一次密码"
             prefix={<LockOutlined style={{ color: '#ddd' }} />}
           />
