@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { Rule } from 'antd/lib/form'
+import { useGuardContext } from '@/context/global/context'
 
 export * from './popupCenter'
 
@@ -46,4 +48,45 @@ export function getDeviceName() {
   }
 
   return os
+}
+
+/**
+ * 传对象 {'background-color': 'red'}
+ * 传字符串 "CSS 样式"
+ */
+export const insertStyles = (styles: string | any) => {
+  let styleElt, styleSheet
+  if ((document as any).createStyleSheet) {
+    // IE
+    styleSheet = (document as any).createStyleSheet()
+  } else {
+    let head = document.getElementsByTagName('head')[0]
+    styleElt = document.createElement('style')
+    head.appendChild(styleElt)
+    styleSheet = document.styleSheets[document.styleSheets.length - 1]
+  }
+  if (typeof styles === 'string') {
+    if (styleElt) styleElt.innerHTML = styles
+    else styleSheet.cssText = styles // IE
+  } else {
+    let i = 0
+    for (let selector in styles) {
+      if (styleSheet.insertRule) {
+        let rule = selector + ' {' + styles[selector] + '}'
+        styleSheet.insertRule(rule, i++)
+      } else {
+        styleSheet.addRule(selector, styles[selector], i++)
+      }
+    }
+  }
+}
+
+export const useTitle = (title: string, prefix?: string) => {
+  const {
+    state: { config },
+  } = useGuardContext()
+
+  useEffect(() => {
+    document.title = `${prefix ?? `${config.title} `} ${title}`
+  }, [config.title, prefix, title])
 }

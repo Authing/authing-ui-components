@@ -98,6 +98,11 @@ const useNormalLoginTabs = ({ onSuccess, onFail }: BaseFormProps) => {
   }
 }
 
+const SHOW_SOCIAL_LOGIN_TAB = [
+  LoginMethods.LDAP,
+  LoginMethods.Password,
+  LoginMethods.PhoneCode,
+]
 export const LoginLayout = () => {
   const {
     state: { activeTabs },
@@ -130,7 +135,9 @@ export const LoginLayout = () => {
         })}
       </AuthingTabs>
 
-      <SocialAndIdpLogin onFail={onFail} onSuccess={onSuccess} />
+      {SHOW_SOCIAL_LOGIN_TAB.includes(activeTabs[GuardScenes.Login]) && (
+        <SocialAndIdpLogin onFail={onFail} onSuccess={onSuccess} />
+      )}
     </>
   )
 }

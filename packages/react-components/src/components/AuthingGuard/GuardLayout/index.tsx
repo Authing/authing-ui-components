@@ -1,6 +1,7 @@
 import { Spin } from 'antd'
 import React, { useEffect, useMemo, useState } from 'react'
 
+import { insertStyles } from '@/utils'
 import { useGuardContext } from '@/context/global/context'
 import { GuardHeader } from '@/components/AuthingGuard/Header'
 import { MfaLayout } from '@/components/AuthingGuard/MfaLayout'
@@ -21,6 +22,13 @@ import {
 } from '@/components/AuthingGuard/types'
 
 import './style.less'
+
+const handleAppConfig = (appConfig?: Partial<ApplicationConfig>) => {
+  //   插入自动义样式
+  if (appConfig?.css) {
+    insertStyles(appConfig?.css)
+  }
+}
 
 const useProcessConfig = () => {
   const {
@@ -64,6 +72,10 @@ const useProcessConfig = () => {
       setAppConfig(res.data!)
     })
   }, [userConfig.appId])
+
+  useEffect(() => {
+    handleAppConfig(appConfig)
+  }, [appConfig])
 
   const processedConfig = useMemo<GuardConfig>(() => {
     /**
@@ -135,9 +147,7 @@ const useProcessConfig = () => {
       defaultRegisterMethod,
       enterpriseConnectionObjs,
     } as unknown) as GuardConfig
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userConfig, userPoolConfig])
+  }, [userConfig, userPoolConfig, appConfig])
 
   return {
     loading,
@@ -157,6 +167,10 @@ export const GuardLayout = () => {
 
   useEffect(() => {
     setValue('config', processedConfig)
+    setValue('activeTabs', {
+      [GuardScenes.Login]: processedConfig.defaultLoginMethod,
+      [GuardScenes.Register]: processedConfig.defaultRegisterMethod,
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [processedConfig])
 

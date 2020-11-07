@@ -13,16 +13,17 @@ import reportWebVitals from './reportWebVitals'
 const App = () => {
   const config: UserConfig = {
     apiHost: 'http://console.authing.localhost:3000',
-    loginMethods: Object.values(LoginMethods),
+    // loginMethods: Object.values(LoginMethods),
     logo:
       'https://files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png',
     title: 'Authing',
-    defaultLoginMethod: LoginMethods.LDAP,
-    registerMethods: Object.values(RegisterMethods),
-    defaultRegisterMethod: RegisterMethods.Email,
+    // defaultLoginMethod: LoginMethods.LDAP,
+    // registerMethods: Object.values(RegisterMethods),
+    // defaultRegisterMethod: RegisterMethods.Email,
     defaultScenes: GuardScenes.Login,
-    socialConnections: Object.values(SocialConnections),
-    enterpriseConnections: ["oidc1"]
+    // socialConnections: Object.values(SocialConnections),
+    // enterpriseConnections: ["oidc1"],
+    appId: "5fa5053e252697ad5302ce7e"
     // autoRegister: true,
   }
   return <AuthingGuard userPoolId="59f86b4832eb28071bdd9214" config={config} />

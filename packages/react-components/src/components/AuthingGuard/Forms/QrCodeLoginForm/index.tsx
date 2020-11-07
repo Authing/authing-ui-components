@@ -1,5 +1,6 @@
 import { Spin } from 'antd'
 import React, { FC, useEffect, useMemo } from 'react'
+import { QRCodeUserInfo } from 'authing-js-sdk/build/main/lib/authentication/types'
 
 import { useGuardContext } from '@/context/global/context'
 import { LoginMethods, QrLoginFormProps } from '@/components/AuthingGuard/types'
@@ -13,7 +14,7 @@ export const QrCodeLoginForm: FC<QrLoginFormProps> = ({
   type,
 }) => {
   const {
-    state: { authClient },
+    state: { authClient, config },
   } = useGuardContext()
 
   const client = useMemo(() => {
@@ -25,23 +26,32 @@ export const QrCodeLoginForm: FC<QrLoginFormProps> = ({
 
   useEffect(() => {
     const onScanningSuccess = async (
-      userInfo: Partial<User>,
+      userInfo: QRCodeUserInfo,
       ticket: string
     ) => {
+      config.qrCodeScanOptions?.onSuccess?.(userInfo as QRCodeUserInfo, ticket)
+
       const { token } = userInfo
+      let fullUserInfo: User
       if (!token) {
         // 轮询接口不会返回完整用户信息，需要使用 ticket 换取
-        userInfo = await client.exchangeUserInfo(ticket)
+        fullUserInfo = (await client.exchangeUserInfo(ticket)) as User
+      } else {
+        fullUserInfo = userInfo as User
       }
-      onSuccess && onSuccess(userInfo as User)
+      onSuccess && onSuccess(fullUserInfo)
     }
 
     client.startScanning('authingGuardQrcode', {
-      // onCodeShow:
+      ...config.qrCodeScanOptions,
       onSuccess: onScanningSuccess,
-      onError: (message) => onFail && onFail(`${message}`),
+      onError: (message) => {
+        config.qrCodeScanOptions?.onError?.(message)
+
+        onFail && onFail(`${message}`)
+      },
     })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

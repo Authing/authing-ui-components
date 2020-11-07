@@ -1,19 +1,21 @@
+import { QrCodeAuthenticationClient } from 'authing-js-sdk/build/main/lib/authentication/QrCodeAuthenticationClient'
+
 import {
-  EnterpriseConnectionItem,
   SocialConnectionItem,
+  EnterpriseConnectionItem,
 } from '@/components/AuthingGuard/api'
 
 export enum Mode {
-  Normal = 'normal',
   Modal = 'modal',
+  Normal = 'normal',
 }
 
 export enum LoginMethods {
-  PhoneCode = 'phone-code',
-  Password = 'password',
-  WxMinQr = 'wechat-miniprogram-qrcode',
-  AppQr = 'app-qrcode',
   LDAP = 'ldap',
+  AppQr = 'app-qrcode',
+  Password = 'password',
+  PhoneCode = 'phone-code',
+  WxMinQr = 'wechat-miniprogram-qrcode',
 }
 
 export enum RegisterMethods {
@@ -24,8 +26,8 @@ export enum RegisterMethods {
 export enum GuardScenes {
   Login,
   Register,
-  RestPassword,
   MfaVerify,
+  RestPassword,
 }
 
 export enum ResetPwdMethods {
@@ -34,21 +36,21 @@ export enum ResetPwdMethods {
 }
 
 export enum SocialConnections {
-  WxMinQr = 'wechat:miniprogram:qrconnect',
-  WxMinApp = 'wechat:miniprogram:app-launch',
+  Qq = 'qq',
+  Weibo = 'weibo',
+  Alipay = 'alipay',
+  Github = 'github',
+  Google = 'google',
+  WxPc = 'wechat:pc',
+  Dingtalk = 'dingtalk',
+  WxMobile = 'wechat:mobile',
   WxWCorpQr = 'wechatwork:corp:qrconnect',
+  WxMinQr = 'wechat:miniprogram:qrconnect',
+  WxWebAuth = 'wechat:webpage-authorization',
+  WxMinApp = 'wechat:miniprogram:app-launch',
+  WxMinDefault = 'wechat:miniprogram:default',
   WxWSPQr = 'wechatwork:service-provider:qrconnect',
   WxWSPAuth = 'wechatwork:service-provider:authorization',
-  WxMobile = 'wechat:mobile',
-  WxMinDefault = 'wechat:miniprogram:default',
-  Alipay = 'alipay',
-  WxWebAuth = 'wechat:webpage-authorization',
-  Dingtalk = 'dingtalk',
-  Weibo = 'weibo',
-  Qq = 'qq',
-  WxPc = 'wechat:pc',
-  Google = 'google',
-  Github = 'github',
 }
 
 export enum AppType {
@@ -57,43 +59,43 @@ export enum AppType {
 }
 
 export enum Protocol {
-  OIDC = "oidc",
-  OAUTH = "oauth",
-  SAML = "saml",
-  LDAP = "ldap",
-  AD = "ad",
-  CAS = "cas",
-  AZURE_AD = "azure-ad",
+  AD = 'ad',
+  CAS = 'cas',
+  LDAP = 'ldap',
+  OIDC = 'oidc',
+  SAML = 'saml',
+  OAUTH = 'oauth',
+  AZURE_AD = 'azure-ad',
 }
 
 export interface UserConfig {
-  target?: string | HTMLElement
   mode?: Mode
-  nonce?: number
-  timestamp?: number
-  title?: string
   logo?: string
+  nonce?: number
+  appId?: string
+  scope?: string
+  title?: string
+  isSSO?: boolean
+  apiHost?: string
+  appType?: AppType
+  timestamp?: number
+  appDomain?: string
   contentCss?: string
-  loginMethods?: LoginMethods[]
-  registerMethods?: RegisterMethods[]
-  socialConnections?: SocialConnections[]
-  enterpriseConnections?: string[]
-  defaultLoginMethod?: LoginMethods
-  defaultRegisterMethod?: RegisterMethods
+  escCloseable?: boolean
   autoRegister?: boolean
   clickCloseable?: boolean
-  escCloseable?: boolean
-  isSSO?: boolean
-  appId?: string
-  appDomain?: string
-  appType?: AppType
-  scope?: string
-  useSelfWxapp?: boolean
-  apiHost?: string
   defaultScenes?: GuardScenes
+  loginMethods?: LoginMethods[]
+  target?: string | HTMLElement
+  enterpriseConnections?: string[]
+  defaultLoginMethod?: LoginMethods
+  registerMethods?: RegisterMethods[]
+  socialConnections?: SocialConnections[]
+  defaultRegisterMethod?: RegisterMethods
+  qrCodeScanOptions?: Parameters<QrCodeAuthenticationClient['startScanning']>[1]
 }
 
 export interface GuardConfig extends UserConfig {
-  enterpriseConnectionObjs: EnterpriseConnectionItem[]
   socialConnectionObjs: SocialConnectionItem[]
+  enterpriseConnectionObjs: EnterpriseConnectionItem[]
 }
