@@ -1,3 +1,4 @@
+import { AuthenticationClient, CommonMessage, User } from 'authing-js-sdk'
 import { QrCodeAuthenticationClient } from 'authing-js-sdk/build/main/lib/authentication/QrCodeAuthenticationClient'
 
 import {
@@ -68,17 +69,78 @@ export enum Protocol {
   AZURE_AD = 'azure-ad',
 }
 
+// export enum GuardEvents {
+//   // 加载完成，userPool 配置和应用配置（如果有 appId）加载完成
+//   Load = 'onLoad',
+//   // 加载失败
+//   LoadError = 'onLoadError',
+//   // 用户登录成功
+//   Login = 'onLogin',
+//   // 用户登录失败
+//   LoginError = 'onLoginError',
+//   // 注册成功
+//   Register = 'onRegister',
+//   // 注册失败
+//   RegisterError = 'onRegisterError',
+//   // 忘记密码邮件发送成功
+//   PwdEmailSend = 'onPwdEmailSend',
+//   // 忘记密码邮件发送失败
+//   PwdEmailSendError = 'onPwdEmailSendError',
+//   // 忘记密码手机验证码发送成功
+//   PwdPhoneSend = 'onPwdPhoneSend',
+//   // 忘记密码手机验证码发送失败
+//   PwdPhoneSendError = 'onPwdPhoneSendError',
+//   // 重置密码成功
+//   PwdReset = 'onPwdReset',
+//   // 重置密码失败
+//   PwdResetError = 'onPwdResetError',
+//   // 表单关闭事件
+//   Close = 'onClose',
+// }
+
+export interface GuardEventsHandler {
+  onLoad?: (authClient: AuthenticationClient) => void
+  onLoadError?: (error: CommonMessage) => void
+  onLogin?: (user: User, authClient: AuthenticationClient) => void
+  onLoginError?: (
+    user: User,
+    authClient: AuthenticationClient
+  ) => void
+  onRegister?: (
+    user: User,
+    authClient: AuthenticationClient
+  ) => void
+  onRegisterError?: (
+    user: User,
+    authClient: AuthenticationClient
+  ) => void
+  onPwdEmailSend?: (authClient: AuthenticationClient) => void
+  onPwdEmailSendError?: (
+    error: CommonMessage,
+    authClient: AuthenticationClient
+  ) => void
+  onPwdPhoneSend?: (authClient: AuthenticationClient) => void
+  onPwdPhoneSendError?: (
+    error: CommonMessage,
+    authClient: AuthenticationClient
+  ) => void
+  onPwdReset?: (authClient: AuthenticationClient) => void
+  onPwdResetError?: (
+    error: CommonMessage,
+    authClient: AuthenticationClient
+  ) => void
+  onClose?: () => void
+}
+
 export interface UserConfig {
   mode?: Mode
   logo?: string
-  nonce?: number
   appId?: string
   scope?: string
   title?: string
   isSSO?: boolean
   apiHost?: string
   appType?: AppType
-  timestamp?: number
   appDomain?: string
   contentCss?: string
   escCloseable?: boolean

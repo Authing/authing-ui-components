@@ -23,10 +23,17 @@ const App = () => {
     defaultScenes: GuardScenes.Login,
     // socialConnections: Object.values(SocialConnections),
     // enterpriseConnections: ["oidc1"],
-    appId: "5fa5053e252697ad5302ce7e"
+    appId: '5fa5053e252697ad5302ce7e',
     // autoRegister: true,
   }
-  return <AuthingGuard userPoolId="59f86b4832eb28071bdd9214" config={config} />
+  return (
+    <AuthingGuard
+      onPwdResetError={(e) => console.log(e)}
+      onLoad={() => console.log('fuck>>>>>>>>>>>')}
+      userPoolId="59f86b4832eb28071bdd9214"
+      config={config}
+    />
+  )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))

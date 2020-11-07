@@ -3,6 +3,7 @@ import {
   ActiveTabs,
   GuardScenes,
   UserConfig,
+  GuardEventsHandler,
 } from '@/components/AuthingGuard/types'
 import { AuthenticationClient } from 'authing-js-sdk'
 import { IBaseAction } from '../base'
@@ -16,6 +17,7 @@ export type IState = {
   guardTitle: string
   mfaToken: string // 需要 mfa 登录时返回的 token
   userPoolId: string
+  guardEvents: GuardEventsHandler
 }
 
 const handlers: any = {

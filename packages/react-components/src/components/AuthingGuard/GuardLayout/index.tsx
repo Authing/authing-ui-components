@@ -30,54 +30,72 @@ const handleAppConfig = (appConfig?: Partial<ApplicationConfig>) => {
   }
 }
 
-const useProcessConfig = () => {
+const useGuardConfig = () => {
   const {
     state: { userPoolId, userConfig },
   } = useGuardContext()
 
-  const [loading, setLoading] = useState(true)
+  const [loadingUserPool, setLoadingUserPool] = useState(true)
+  const [loadingApp, setLoadingApp] = useState(true)
   const [userPoolConfig, setUserPoolConfig] = useState<Partial<UserPoolConfig>>(
     {}
   )
 
   const [appConfig, setAppConfig] = useState<Partial<ApplicationConfig>>({})
   const [errorMsg, setErrorMsg] = useState('')
+  const [errorDetail, setErrorDetail] = useState<any>()
 
   useEffect(() => {
     fetchUserPoolConfig(userPoolId)
       .then((res) => {
         if (res.code !== 200) {
           setErrorMsg(res.message!)
+          setErrorDetail(res)
           return
         }
         setUserPoolConfig(res.data!)
       })
       .catch((e: any) => {
         setErrorMsg(JSON.stringify(e))
+        setErrorDetail(e)
       })
       .finally(() => {
-        setLoading(false)
+        setLoadingUserPool(false)
       })
   }, [userPoolId])
 
   useEffect(() => {
     if (!userConfig.appId) {
+      setLoadingApp(false)
       return
     }
-    fetchAppConfig(userConfig.appId).then((res) => {
-      if (res.code !== 200) {
-        setErrorMsg(res.message!)
-        return
-      }
-      setAppConfig(res.data!)
-    })
+    fetchAppConfig(userConfig.appId)
+      .then((res) => {
+        if (res.code !== 200) {
+          setErrorMsg(res.message!)
+          setErrorDetail(res)
+          return
+        }
+        setAppConfig(res.data!)
+      })
+      .catch((e: any) => {
+        setErrorDetail(e)
+        setErrorMsg(JSON.stringify(e))
+      })
+      .finally(() => {
+        setLoadingApp(false)
+      })
   }, [userConfig.appId])
 
   useEffect(() => {
     handleAppConfig(appConfig)
   }, [appConfig])
 
-  const processedConfig = useMemo<GuardConfig>(() => {
+  const loading = useMemo(() => {
+    return loadingApp || loadingUserPool
+  }, [loadingUserPool, loadingApp])
+
+  const guardConfig = useMemo<GuardConfig>(() => {
     /**
      * 将应用配置与用户手动传入的配置合并，手动传入的优先
      */
@@ -152,27 +170,39 @@ const useProcessConfig = () => {
   return {
     loading,
     errorMsg,
+    guardConfig,
+    errorDetail,
     userPoolConfig,
-    processedConfig,
   }
 }
 
 export const GuardLayout = () => {
   const {
-    state: { guardScenes },
+    state: { guardScenes, authClient, guardEvents },
     setValue,
   } = useGuardContext()
 
-  const { loading, errorMsg, processedConfig } = useProcessConfig()
+  const { loading, errorMsg, guardConfig, errorDetail } = useGuardConfig()
 
   useEffect(() => {
-    setValue('config', processedConfig)
+    if (loading) {
+      return
+    }
+    if (errorDetail) {
+      guardEvents.onLoadError?.(errorDetail)
+      return
+    }
+    guardEvents.onLoad?.(authClient)
+  }, [authClient, errorDetail, guardEvents, loading])
+
+  useEffect(() => {
+    setValue('config', guardConfig)
     setValue('activeTabs', {
-      [GuardScenes.Login]: processedConfig.defaultLoginMethod,
-      [GuardScenes.Register]: processedConfig.defaultRegisterMethod,
+      [GuardScenes.Login]: guardConfig.defaultLoginMethod,
+      [GuardScenes.Register]: guardConfig.defaultRegisterMethod,
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [processedConfig])
+  }, [guardConfig])
 
   const layoutMap = {
     [GuardScenes.Login]: <LoginLayout />,

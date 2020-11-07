@@ -20,16 +20,18 @@ export const RegisterLayout: FC = () => {
     state: {
       config: { registerMethods },
       activeTabs,
+      guardEvents,
+      authClient,
     },
     setValue,
   } = useGuardContext()
 
   const onSuccess = (user: User) => {
-    console.log('注册成功', user)
+    guardEvents.onRegister?.(user, authClient)
   }
 
   const onFail = (error: any) => {
-    console.log(error)
+    guardEvents.onRegisterError?.(error, authClient)
   }
 
   const formProps = {

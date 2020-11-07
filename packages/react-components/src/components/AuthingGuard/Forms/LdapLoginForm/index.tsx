@@ -90,7 +90,6 @@ export const LdapLoginForm = forwardRef<FormInstance, PasswordLoginFormProps>(
       {
         component: (
           <Input
-            autoComplete="off"
             size="large"
             placeholder="请输入图形验证码"
             addonAfter={

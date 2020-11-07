@@ -6,10 +6,11 @@ import { ResetPasswordStep3 } from './Step3'
 import { ResetPasswordStep4 } from './Step4'
 import { ResetPwdFormFooter } from './Footer'
 import { useGuardContext } from '@/context/global/context'
+import { ResetPasswordFormProps } from '@/components/AuthingGuard/types'
 
 import './style.less'
 
-export const ResetPasswordForm: FC = () => {
+export const ResetPasswordForm: FC<ResetPasswordFormProps> = ({onSuccess, onFail}) => {
   const { setValue } = useGuardContext()
 
   const [step, setStep] = useState(1)
@@ -45,6 +46,11 @@ export const ResetPasswordForm: FC = () => {
 
   const onStep2OrStep3Finish = () => {
     setStep(4)
+    onSuccess?.()
+  }
+  
+  const onStep2OrStep3Fail = (error: any) => {
+    onFail?.(error)
   }
 
   const getForm = () => {
@@ -57,6 +63,7 @@ export const ResetPasswordForm: FC = () => {
         return (
           <ResetPasswordStep2
             phone={phone}
+            onFail={onStep2OrStep3Fail}
             onSuccess={onStep2OrStep3Finish}
           ></ResetPasswordStep2>
         )
@@ -64,6 +71,7 @@ export const ResetPasswordForm: FC = () => {
         return (
           <ResetPasswordStep3
             email={email}
+            onFail={onStep2OrStep3Fail}
             onSuccess={onStep2OrStep3Finish}
           ></ResetPasswordStep3>
         )

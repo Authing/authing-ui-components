@@ -75,7 +75,6 @@ export const PhoneCodeLoginForm = forwardRef<
       </Form.Item>
       <Form.Item name="code" rules={rulesMap.code}>
         <Input
-          autoComplete="off"
           size="large"
           placeholder="请输入 4 位验证码"
           prefix={<SafetyOutlined style={{ color: '#ddd' }} />}

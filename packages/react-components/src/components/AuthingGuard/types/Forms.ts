@@ -31,6 +31,11 @@ export interface PhoneRegisterFormProps extends BaseFormProps {
   onValidateFail?: (error: any) => void
 }
 
+export interface ResetPasswordFormProps {
+  onSuccess?: () => void
+  onFail?: (error: any) => void
+}
+
 export interface ResetPasswordStep1Props {
   onSuccess: (resetMethod: ResetPwdMethods, val: string) => void
 }
@@ -38,11 +43,13 @@ export interface ResetPasswordStep1Props {
 export interface ResetPasswordStep2Props {
   phone: string
   onSuccess: () => void
+  onFail?: (error: any) => void
 }
 
 export interface ResetPasswordStep3Props {
   email: string
   onSuccess: () => void
+  onFail?: (error: any) => void
 }
 
 export interface SocialAndIdpLoginProps extends BaseFormProps {}
@@ -52,5 +59,5 @@ export interface MfaVerifyForm extends BaseFormProps {
 }
 
 export interface MfaResetForm extends BaseFormProps {
-    goVerify: () => void
+  goVerify: () => void
 }

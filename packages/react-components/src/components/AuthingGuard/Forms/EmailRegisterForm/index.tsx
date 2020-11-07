@@ -68,7 +68,6 @@ export const EmailRegisterForm = forwardRef<
     {
       component: (
         <Input.Password
-          autoComplete="off"
           size="large"
           placeholder="设置密码"
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
@@ -80,7 +79,6 @@ export const EmailRegisterForm = forwardRef<
     {
       component: (
         <Input.Password
-          autoComplete="off"
           size="large"
           placeholder="再输入一次密码"
           prefix={<LockOutlined style={{ color: '#ddd' }} />}

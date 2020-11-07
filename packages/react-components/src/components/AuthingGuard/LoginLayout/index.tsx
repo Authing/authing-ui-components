@@ -25,10 +25,13 @@ import {
 import './style.less'
 
 const useFormActions = () => {
-  const { setValue } = useGuardContext()
+  const {
+    setValue,
+    state: { guardEvents, authClient },
+  } = useGuardContext()
 
   const onSuccess = (user: User) => {
-    console.log('登录成功', user)
+    guardEvents.onLogin?.(user, authClient)
   }
 
   const onFail = (error: any) => {
@@ -36,7 +39,7 @@ const useFormActions = () => {
       setValue('mfaToken', error.data.mfaToken)
       setValue('guardScenes', GuardScenes.MfaVerify)
     }
-    console.log('登录失败')
+    guardEvents.onLoginError?.(error, authClient)
   }
 
   return {

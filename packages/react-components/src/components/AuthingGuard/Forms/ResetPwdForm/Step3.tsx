@@ -10,9 +10,10 @@ import { ResetPasswordStep3Props } from '@/components/AuthingGuard/types'
 export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
   email,
   onSuccess = () => {},
+  onFail,
 }) => {
   const {
-    state: { authClient },
+    state: { authClient, guardEvents },
   } = useGuardContext()
   const [rawForm] = Form.useForm()
 
@@ -24,6 +25,9 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
     try {
       await authClient.sendEmail(email, EmailScene.ResetPassword)
       message.success('邮件发送成功')
+      guardEvents.onPwdEmailSend?.(authClient)
+    } catch(e) {
+      guardEvents.onPwdEmailSendError?.(e, authClient)
     } finally {
       setSending(false)
     }
@@ -38,11 +42,9 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
         code,
         password
       )
-      if (res.code === 200) {
-        onSuccess()
-      } else {
-        message.error(res.message)
-      }
+      onSuccess()
+    } catch (error) {
+      onFail?.(error)
     } finally {
       setReseting(false)
     }
@@ -75,7 +77,6 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
           <Input
             name="code"
             size="large"
-            autoComplete="off"
             placeholder="4 位验证码"
             prefix={<SafetyOutlined style={{ color: '#ddd' }} />}
           />
@@ -84,7 +85,6 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
           <Input.Password
             name="password"
             size="large"
-            autoComplete="off"
             placeholder="新密码"
             prefix={<LockOutlined style={{ color: '#ddd' }} />}
           />
@@ -102,7 +102,6 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
           <Input.Password
             name="repeat-password"
             size="large"
-            autoComplete="off"
             placeholder="再输入一次密码"
             prefix={<LockOutlined style={{ color: '#ddd' }} />}
           />

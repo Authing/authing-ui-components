@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react'
-import { Form, Input, Button, message } from 'antd'
+import { Form, Input, Button } from 'antd'
 import { SafetyOutlined, LockOutlined, UserOutlined } from '@ant-design/icons'
 
 import { getRequiredRules } from '@/utils'
@@ -10,13 +10,14 @@ import { SendPhoneCode } from '@/components/AuthingGuard/Forms/SendPhoneCode'
 export const ResetPasswordStep2: FC<ResetPasswordStep2Props> = ({
   phone,
   onSuccess,
+  onFail,
 }) => {
   const [rawForm] = Form.useForm()
 
   const [loading, setLoading] = useState(false)
 
   const {
-    state: { authClient },
+    state: { authClient, guardEvents },
   } = useGuardContext()
 
   const onStep2Finish = async (values: any) => {
@@ -24,16 +25,14 @@ export const ResetPasswordStep2: FC<ResetPasswordStep2Props> = ({
     const password = values.password
 
     try {
-      const res = await authClient.resetPasswordByPhoneCode(
+      await authClient.resetPasswordByPhoneCode(
         phone,
         code,
         password
       )
-      if (res.code === 200) {
-        onSuccess()
-      } else {
-        message.error(res.message)
-      }
+      onSuccess()
+    } catch(e) {
+      onFail?.(e)
     } finally {
       setLoading(false)
     }
@@ -70,17 +69,23 @@ export const ResetPasswordStep2: FC<ResetPasswordStep2Props> = ({
         <Input
           name="code"
           size="large"
-          autoComplete="off"
           placeholder="4 位验证码"
           prefix={<SafetyOutlined style={{ color: '#ddd' }} />}
-          suffix={<SendPhoneCode phone={phone} />}
+          suffix={
+            <SendPhoneCode
+              onError={(error) =>
+                guardEvents.onPwdPhoneSendError?.(error, authClient)
+              }
+              onSend={() => guardEvents.onPwdPhoneSend?.(authClient)}
+              phone={phone}
+            />
+          }
         />
       </Form.Item>
       <Form.Item name="password" rules={getRequiredRules('新密码不能为空')}>
         <Input.Password
           name="password"
           size="large"
-          autoComplete="off"
           placeholder="新密码"
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
         />
@@ -98,7 +103,6 @@ export const ResetPasswordStep2: FC<ResetPasswordStep2Props> = ({
         <Input.Password
           name="repeat-password"
           size="large"
-          autoComplete="off"
           placeholder="再输入一次密码"
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
         />

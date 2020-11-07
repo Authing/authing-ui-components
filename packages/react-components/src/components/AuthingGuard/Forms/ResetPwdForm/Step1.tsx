@@ -13,7 +13,7 @@ export const ResetPasswordStep1: FC<ResetPasswordStep1Props> = ({
   onSuccess,
 }) => {
   const {
-    state: { authClient },
+    state: { authClient, guardEvents },
   } = useGuardContext()
 
   const [loading, setLoading] = useState(false)
@@ -25,8 +25,12 @@ export const ResetPasswordStep1: FC<ResetPasswordStep1Props> = ({
       try {
         setLoading(true)
         await authClient.sendEmail(value, EmailScene.ResetPassword)
+
+        guardEvents.onPwdEmailSend?.(authClient)
         message.success('邮件发送成功')
         onSuccess(ResetPwdMethods.Email, value)
+      } catch (e) {
+        guardEvents.onPwdEmailSendError?.(e, authClient)
       } finally {
         setLoading(false)
       }

@@ -84,7 +84,6 @@ export const PasswordLoginForm = forwardRef<
       component: (
         <Input.Password
           size="large"
-          autoComplete="password"
           placeholder="请输入登录密码"
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
         />
@@ -95,7 +94,6 @@ export const PasswordLoginForm = forwardRef<
     {
       component: (
         <Input
-          autoComplete="off"
           size="large"
           placeholder="请输入图形验证码"
           addonAfter={

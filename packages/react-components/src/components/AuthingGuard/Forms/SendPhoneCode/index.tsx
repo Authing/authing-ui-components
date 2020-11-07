@@ -1,5 +1,6 @@
 import { message } from 'antd'
 import React, { FC } from 'react'
+import { CommonMessage } from 'authing-js-sdk'
 
 import { SendCodeBtn } from './SendCodeBtn'
 import { validate } from '@/utils'
@@ -9,9 +10,15 @@ import './style.less'
 
 export interface SendPhoneCodeProps {
   phone: string
+  onSend?: () => void
+  onError?: (error: CommonMessage) => void
 }
 
-export const SendPhoneCode: FC<SendPhoneCodeProps> = ({ phone }) => {
+export const SendPhoneCode: FC<SendPhoneCodeProps> = ({
+  phone,
+  onSend,
+  onError,
+}) => {
   const {
     state: { authClient },
   } = useGuardContext()
@@ -29,9 +36,10 @@ export const SendPhoneCode: FC<SendPhoneCodeProps> = ({ phone }) => {
         }
         try {
           await authClient.sendSmsCode(phone)
+          onSend?.()
           return true
         } catch (error) {
-          message.error(error.message)
+          onError?.(error)
           return false
         }
       }}

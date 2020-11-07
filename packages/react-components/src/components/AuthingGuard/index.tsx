@@ -7,12 +7,12 @@ import { GuardScenes } from '@/components/AuthingGuard/types'
 import { requestClient } from '@/components/AuthingGuard/api/http'
 import { NEED_MFA_CODE } from '@/components/AuthingGuard/constants'
 import { GuardLayout } from '@/components/AuthingGuard/GuardLayout'
-import { UserConfig } from '@/components/AuthingGuard/types/GuardConfig'
+import { GuardEventsHandler, UserConfig } from '@/components/AuthingGuard/types/GuardConfig'
 
 import './style.less'
 import './assets/iconfont.css'
 
-interface AuthingGuardProps {
+interface AuthingGuardProps extends GuardEventsHandler {
   userPoolId: string
   config?: UserConfig
 }
@@ -20,6 +20,7 @@ interface AuthingGuardProps {
 export const AuthingGuard: FC<AuthingGuardProps> = ({
   userPoolId,
   config = {},
+  ...guardEvents
 }) => {
   const {
     apiHost = 'https://core.auting.cn',
@@ -63,6 +64,7 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
         guardTitle: config.title,
         mfaToken: '',
         userPoolId,
+        guardEvents,
       }}
     >
       <GuardLayout />

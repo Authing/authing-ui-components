@@ -1,23 +1,30 @@
+import { User } from 'authing-js-sdk'
 import React, { FC, useState } from 'react'
+
+import { Steps } from './Steps'
 import {
   MfaResetCodeForm,
   MFAVerifyForm,
 } from '@/components/AuthingGuard/Forms'
-import { Steps } from './Steps'
+import { useGuardContext } from '@/context/global/context'
 
 import './style.less'
-import { User } from 'authing-js-sdk'
 
 export interface MfaLayoutProps {}
 
 export const MfaLayout: FC<MfaLayoutProps> = () => {
+  const {
+    state: { guardEvents, authClient },
+  } = useGuardContext()
+
   const [step, setStep] = useState(Steps.Verify)
 
   const onSuccess = (user: User) => {
-    console.log('登录成功', user)
+    guardEvents.onLogin?.(user, authClient)
   }
+
   const onFail = (error: any) => {
-    console.log('登录失败', error)
+    guardEvents.onLoginError?.(error, authClient)
   }
 
   const formProps = {
