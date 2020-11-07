@@ -24,7 +24,6 @@ export const MfaResetCodeForm: FC<MfaResetForm> = ({
   const onReset = (user: User & {
     recoveryCode: string
   }) => {
-    console.log(user)
     setStep(2)
     setUser(user)
     setRecoverCode(user.recoveryCode)
