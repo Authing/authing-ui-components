@@ -66,7 +66,7 @@ export enum Protocol {
   AZURE_AD = "azure-ad",
 }
 
-export interface GuardConfig {
+export interface UserConfig {
   target?: string | HTMLElement
   mode?: Mode
   nonce?: number
@@ -93,7 +93,7 @@ export interface GuardConfig {
   defaultScenes?: GuardScenes
 }
 
-export interface ProcessedGuardConfig extends GuardConfig {
+export interface GuardConfig extends UserConfig {
   enterpriseConnectionObjs: EnterpriseConnectionItem[]
   socialConnectionObjs: SocialConnectionItem[]
 }

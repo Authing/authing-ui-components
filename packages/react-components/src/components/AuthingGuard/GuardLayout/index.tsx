@@ -16,7 +16,7 @@ import {
 } from '@/components/AuthingGuard/api'
 import {
   GuardScenes,
-  ProcessedGuardConfig,
+  GuardConfig,
   Protocol,
 } from '@/components/AuthingGuard/types'
 
@@ -65,7 +65,7 @@ const useProcessConfig = () => {
     })
   }, [userConfig.appId])
 
-  const processedConfig = useMemo<ProcessedGuardConfig>(() => {
+  const processedConfig = useMemo<GuardConfig>(() => {
     /**
      * 将应用配置与用户手动传入的配置合并，手动传入的优先
      */
@@ -134,7 +134,7 @@ const useProcessConfig = () => {
       socialConnectionObjs,
       defaultRegisterMethod,
       enterpriseConnectionObjs,
-    } as unknown) as ProcessedGuardConfig
+    } as unknown) as GuardConfig
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userConfig, userPoolConfig])

@@ -1,15 +1,15 @@
 import {
-  ProcessedGuardConfig,
+  GuardConfig,
   ActiveTabs,
   GuardScenes,
-  GuardConfig,
+  UserConfig,
 } from '@/components/AuthingGuard/types'
 import { AuthenticationClient } from 'authing-js-sdk'
 import { IBaseAction } from '../base'
 
 export type IState = {
-  config: ProcessedGuardConfig // 处理后的 Guard 配置
-  userConfig: GuardConfig // 用户传入的配置
+  config: GuardConfig // 处理后的 Guard 配置
+  userConfig: UserConfig // 用户传入的配置
   authClient: AuthenticationClient
   activeTabs: ActiveTabs // 登录、注册方式
   guardScenes: GuardScenes // 当前在哪个界面

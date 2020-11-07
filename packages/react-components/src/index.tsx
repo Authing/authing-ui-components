@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { AuthingGuard } from './components/AuthingGuard'
 import {
-  GuardConfig,
+  UserConfig,
   LoginMethods,
   RegisterMethods,
   GuardScenes,
@@ -11,7 +11,7 @@ import {
 import reportWebVitals from './reportWebVitals'
 
 const App = () => {
-  const config: GuardConfig = {
+  const config: UserConfig = {
     apiHost: 'http://console.authing.localhost:3000',
     loginMethods: Object.values(LoginMethods),
     logo:

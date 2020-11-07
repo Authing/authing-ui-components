@@ -1,3 +1,5 @@
+import qs from 'qs'
+
 export const requestClient = async (...rest: Parameters<typeof fetch>) => {
   const res = await fetch(...rest)
   return res.json()
@@ -10,17 +12,15 @@ export interface AuthingResponse<T=any> {
 }
 
 requestClient.get = async <T>(path: string, query: Record<string, any> = {}): Promise<AuthingResponse<T>> => {
-  const queryStr = Object.entries(query)
-    .map((item) => item.join('='))
-    .join('&')
-  const res = await fetch(`${requestClient.baseUrl}${path}?${queryStr}`)
+  const res = await fetch(`${requestClient.baseUrl}${path}?${qs.stringify(query)}`)
 
   return res.json()
 }
 
-requestClient.post = async <T>(path: string, data: Record<string, any>): Promise<AuthingResponse<T>> => {
+requestClient.post = async <T>(path: string, data: any): Promise<AuthingResponse<T>> => {
   const res = await fetch(`${requestClient.baseUrl}${path}`, {
     method: 'POST',
+    body: data,
   })
 
   return res.json()

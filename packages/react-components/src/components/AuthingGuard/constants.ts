@@ -1,6 +1,6 @@
 import {
   AppType,
-  GuardConfig,
+  UserConfig,
   GuardScenes,
   LoginMethods,
   Mode,
@@ -26,7 +26,7 @@ export const REGISTER_METHODS_MAP = {
   [RegisterMethods.Phone]: '手机号注册',
 }
 
-export const defaultGuardConfig: Partial<GuardConfig> = {
+export const defaultGuardConfig: Partial<UserConfig> = {
   loginMethods: [LoginMethods.Password, LoginMethods.PhoneCode],
   defaultLoginMethod: LoginMethods.Password,
   registerMethods: [RegisterMethods.Email, RegisterMethods.Phone],

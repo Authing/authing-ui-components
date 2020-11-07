@@ -7,14 +7,14 @@ import { GuardScenes } from '@/components/AuthingGuard/types'
 import { requestClient } from '@/components/AuthingGuard/api/http'
 import { NEED_MFA_CODE } from '@/components/AuthingGuard/constants'
 import { GuardLayout } from '@/components/AuthingGuard/GuardLayout'
-import { GuardConfig } from '@/components/AuthingGuard/types/GuardConfig'
+import { UserConfig } from '@/components/AuthingGuard/types/GuardConfig'
 
 import './style.less'
 import './assets/iconfont.css'
 
 interface AuthingGuardProps {
   userPoolId: string
-  config?: GuardConfig
+  config?: UserConfig
 }
 
 export const AuthingGuard: FC<AuthingGuardProps> = ({
