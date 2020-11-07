@@ -26,7 +26,7 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
       await authClient.sendEmail(email, EmailScene.ResetPassword)
       message.success('邮件发送成功')
       guardEvents.onPwdEmailSend?.(authClient)
-    } catch(e) {
+    } catch (e) {
       guardEvents.onPwdEmailSendError?.(e, authClient)
     } finally {
       setSending(false)
@@ -37,11 +37,7 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
     const code = values.code
     const password = values.password
     try {
-      const res = await authClient.resetPasswordByEmailCode(
-        email,
-        code,
-        password
-      )
+      await authClient.resetPasswordByEmailCode(email, code, password)
       onSuccess()
     } catch (error) {
       onFail?.(error)
