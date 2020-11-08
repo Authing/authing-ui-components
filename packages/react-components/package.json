@@ -80,6 +80,7 @@
   "scripts": {
     "start": "PORT=3006 node scripts/start.js",
     "build": "node scripts/build.js",
+    "lib": "node scripts/lib.js",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {

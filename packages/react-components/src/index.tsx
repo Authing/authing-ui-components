@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { AuthingGuard } from './components/AuthingGuard'
+// import { AuthingGuard } from './components/AuthingGuard'
 import {
   UserConfig,
   LoginMethods,
@@ -9,7 +9,9 @@ import {
   SocialConnections,
 } from './components/AuthingGuard/types/GuardConfig'
 import reportWebVitals from './reportWebVitals'
-
+const fuck = require('./fuck')
+const { AuthingGuard } = fuck
+console.log(fuck)
 const App = () => {
   const config: UserConfig = {
     apiHost: 'http://console.authing.localhost:3000',
@@ -28,7 +30,7 @@ const App = () => {
   }
   return (
     <AuthingGuard
-      onPwdResetError={(e) => console.log(e)}
+      // onPwdResetError={(e) => console.log(e)}
       onLoad={() => console.log('fuck>>>>>>>>>>>')}
       userPoolId="59f86b4832eb28071bdd9214"
       config={config}
