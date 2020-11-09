@@ -85,7 +85,6 @@
     "start": "PORT=3006 node scripts/start.js",
     "build": "node scripts/build.js",
     "build:lib": "node scripts/lib.js",
-    "build:types": "tsc --emitDeclarationOnly",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
