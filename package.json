@@ -1,9 +1,14 @@
 {
   "name": "root",
   "private": true,
+  "workspaces": [
+    "packages/react-components",
+    "packages/native-js"
+  ],
   "devDependencies": {
     "lerna": "^3.22.1",
     "ts-declaration-webpack-plugin": "^1.2.3"
   },
+  "npmClient": "yarn",
   "dependencies": {}
 }

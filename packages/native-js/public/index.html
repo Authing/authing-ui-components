@@ -24,11 +24,41 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
+    <link rel="stylesheet" href="../lib/index.css" />
     <title>React App</title>
   </head>
   <body>
+    <script src="../lib/index.js"></script>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+
+    <script>
+      window.onload = () => {
+        const fuck = new window.AuthingReactUIComponents.AuthingGuard(
+          '59f86b4832eb28071bdd9214',
+          {
+            target: '#root',
+
+            apiHost: 'http://console.authing.localhost:3000',
+            // loginMethods: Object.values(LoginMethods),
+            logo:
+              'https://files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png',
+            title: 'Authing',
+            // defaultLoginMethod: LoginMethods.LDAP,
+            // registerMethods: Object.values(RegisterMethods),
+            // defaultRegisterMethod: RegisterMethods.Email,
+            defaultScenes: 'login',
+            // socialConnections: Object.values(SocialConnections),
+            // enterpriseConnections: ["oidc1"],
+            appId: '5fa5053e252697ad5302ce7e',
+            // autoRegister: true,
+          }
+        )
+        fuck.onLoad = (e) => {
+          console.log(e)
+        }
+      }
+    </script>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
