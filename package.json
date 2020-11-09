@@ -2,7 +2,8 @@
   "name": "root",
   "private": true,
   "devDependencies": {
-    "lerna": "^3.22.1"
+    "lerna": "^3.22.1",
+    "ts-declaration-webpack-plugin": "^1.2.3"
   },
   "dependencies": {}
 }

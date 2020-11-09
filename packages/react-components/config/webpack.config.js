@@ -24,6 +24,7 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin')
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin')
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter')
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
+const NpmDtsWebpackPlugin = require('npm-dts-webpack-plugin')
 
 const postcssNormalize = require('postcss-normalize')
 
@@ -73,6 +74,29 @@ const hasJsxRuntime = (() => {
     return false
   }
 })()
+
+// 获取组件库所有组件入口，
+function getEntries() {
+  function isDir(dir) {
+    return fs.lstatSync(dir).isDirectory()
+  }
+
+  const entries = {
+    index: path.join(__dirname, `../src/index.tsx`),
+  }
+  const dir = path.join(__dirname, '../src/components')
+  const files = fs.readdirSync(dir)
+  files.forEach((file) => {
+    const absolutePath = path.join(dir, file)
+    if (isDir(absolutePath)) {
+      entries[file] = path.join(
+        __dirname,
+        `../src/components/${file}/index.tsx`
+      )
+    }
+  })
+  return entries
+}
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
@@ -179,7 +203,8 @@ module.exports = function (webpackEnv) {
     // These are the "entry points" to our application.
     // This means they will be the "root" imports that are included in JS bundle.
     entry: isEnvLib
-      ? paths.componentsIndexJs
+      ? // ? getEntries()
+        paths.componentsIndexJs
       : isEnvDevelopment && !shouldUseReactRefresh
       ? [
           // Include an alternative client for WebpackDevServer. A client's job is to
@@ -217,11 +242,18 @@ module.exports = function (webpackEnv) {
       pathinfo: isEnvDevelopment,
       // There will be one main bundle, and one file per asynchronous chunk.
       // In development, it does not produce real files.
-      filename: isEnvLib
-        ? '[name]/index.js'
-        : isEnvProduction
-        ? 'static/js/[name].[contenthash:8].js'
-        : isEnvDevelopment && 'static/js/bundle.js',
+      filename: (chunkData) => {
+        if (isEnvLib) {
+          // return chunkData.chunk.name === 'index'
+          //   ? '[name].js'
+          //   : 'components/[name]/index.js'
+          return 'index.js'
+        }
+        return isEnvProduction
+          ? 'static/js/[name].[contenthash:8].js'
+          : isEnvDevelopment && 'static/js/bundle.js'
+      },
+
       // TODO: remove this when upgrading to webpack 5
       futureEmitAssets: true,
       // There are also additional JS chunk files if you use code splitting.
@@ -695,7 +727,12 @@ module.exports = function (webpackEnv) {
         new MiniCssExtractPlugin({
           // Options similar to the same options in webpackOptions.output
           // both options are optional
-          filename: '[name]/index.css',
+          filename: 'index.css',
+          // filename: (chunkData) => {
+          //   return chunkData.chunk.name === 'index'
+          //     ? '[name].css'
+          //     : 'components/[name]/index.css'
+          // },
         }),
       // Generate an asset manifest file with the following content:
       // - "files" key: Mapping of all asset filenames to their corresponding
@@ -785,6 +822,9 @@ module.exports = function (webpackEnv) {
             }),
           },
         },
+      }),
+      new NpmDtsWebpackPlugin({
+        output: 'lib/index.d.ts',
       }),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
