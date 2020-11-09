@@ -825,6 +825,7 @@ module.exports = function (webpackEnv) {
       }),
       new NpmDtsWebpackPlugin({
         output: 'lib/index.d.ts',
+        entry: 'components/index',
       }),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.

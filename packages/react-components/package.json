@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "main": "lib/index.js",
-  "types": "lib/components/index.d.ts",
+  "typings": "lib/index.d.ts",
   "dependencies": {
     "@ant-design/icons": "^4.2.2",
     "@babel/core": "7.12.3",
