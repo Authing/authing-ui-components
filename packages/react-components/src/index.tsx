@@ -1,17 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-// import { AuthingGuard } from './components/AuthingGuard'
+import { AuthingGuard } from './components/AuthingGuard'
 import {
   UserConfig,
-  LoginMethods,
-  RegisterMethods,
+  // LoginMethods,
+  // RegisterMethods,
   GuardScenes,
-  SocialConnections,
+  // SocialConnections,
 } from './components/AuthingGuard/types/GuardConfig'
 import reportWebVitals from './reportWebVitals'
-const fuck = require('./fuck')
-const { AuthingGuard } = fuck
-console.log(fuck)
+
 const App = () => {
   const config: UserConfig = {
     apiHost: 'http://console.authing.localhost:3000',
@@ -29,6 +27,7 @@ const App = () => {
     // autoRegister: true,
   }
   return (
+    // eslint-disable-next-line react/jsx-no-undef
     <AuthingGuard
       // onPwdResetError={(e) => console.log(e)}
       onLoad={() => console.log('fuck>>>>>>>>>>>')}

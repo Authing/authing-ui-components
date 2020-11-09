@@ -2,6 +2,7 @@
   "name": "react-components",
   "version": "0.1.0",
   "private": true,
+  "main": "lib/main/index.js",
   "dependencies": {
     "@ant-design/icons": "^4.2.2",
     "@babel/core": "7.12.3",
@@ -56,10 +57,8 @@
     "postcss-preset-env": "6.7.0",
     "postcss-safe-parser": "5.0.2",
     "qs": "^6.9.4",
-    "react": "^17.0.1",
     "react-app-polyfill": "^2.0.0",
     "react-dev-utils": "^11.0.0",
-    "react-dom": "^17.0.1",
     "react-refresh": "^0.8.3",
     "resolve": "1.18.1",
     "resolve-url-loader": "^3.1.2",
@@ -76,6 +75,10 @@
     "webpack-dev-server": "3.11.0",
     "webpack-manifest-plugin": "2.2.0",
     "workbox-webpack-plugin": "5.1.4"
+  },
+  "peerDependencies": {
+    "react": ">=17.0.1",
+    "react-dom": ">=17.0.1"
   },
   "scripts": {
     "start": "PORT=3006 node scripts/start.js",
@@ -166,6 +169,9 @@
     "eslint-plugin-prettier": "^3.1.4",
     "less": "^3.12.2",
     "less-loader": "^7.0.2",
-    "prettier": "^2.1.2"
+    "prettier": "^2.1.2",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "webpack-bundle-analyzer": "^4.1.0"
   }
 }

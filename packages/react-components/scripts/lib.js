@@ -17,7 +17,7 @@ const chalk = require('react-dev-utils/chalk')
 const fs = require('fs-extra')
 const bfj = require('bfj')
 const webpack = require('webpack')
-const configFactory = require('../config/lib.webpack.config')
+const configFactory = require('../config/webpack.config')
 const paths = require('../config/paths')
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles')
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages')
@@ -44,7 +44,7 @@ const argv = process.argv.slice(2)
 const writeStatsJson = argv.indexOf('--stats') !== -1
 
 // Generate configuration
-const config = configFactory('production')
+const config = configFactory('lib')
 
 // We require that you explicitly set browsers and do not fall back to
 // browserslist defaults.
