@@ -3,11 +3,11 @@
   "private": true,
   "workspaces": [
     "packages/react-components",
+    "packages/vue-components",
     "packages/native-js"
   ],
   "devDependencies": {
-    "lerna": "^3.22.1",
-    "ts-declaration-webpack-plugin": "^1.2.3"
+    "lerna": "^3.22.1"
   },
   "npmClient": "yarn",
   "dependencies": {}
