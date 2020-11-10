@@ -34,7 +34,7 @@
 
     <script>
       window.onload = () => {
-        const fuck = new window.AuthingReactUIComponents.AuthingGuard(
+        const guard = new window.AuthingReactUIComponents.AuthingGuard(
           '59f86b4832eb28071bdd9214',
           {
             target: '#root',
@@ -54,9 +54,9 @@
             // autoRegister: true,
           }
         )
-        fuck.onLoad = (e) => {
-          console.log(e)
-        }
+        guard.on('load', (a) => {
+          console.log('加载完成', a)
+        })
       }
     </script>
     <!--

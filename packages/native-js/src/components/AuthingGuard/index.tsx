@@ -98,7 +98,6 @@ export class AuthingGuard {
     ).reduce((acc, [reactEvt, nativeEvt]) => {
       return Object.assign({}, acc, {
         [reactEvt]: (...rest: any) => {
-          console.log('fffffffffffffffff')
           this.eventListeners[nativeEvt].forEach((item: any) => {
             item(...rest)
           })
@@ -106,11 +105,9 @@ export class AuthingGuard {
       })
     }, {} as GuardEventsHandler)
 
-    console.log(evts)
-
     return ReactDOM.render(
       <ReactAuthingGuard
-        // {...evts}
+        {...evts}
         userPoolId={this.userPoolId}
         config={this.config}
       />,

@@ -17,10 +17,7 @@
     "isolatedModules": true,
     "declaration": true,
     "noEmit": false,
-    "jsx": "react",
-    "paths": {
-      "@/*": ["src/*"]
-    }
+    "jsx": "react"
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.json"],
   "exclude": ["node_modules", "lib", "build"]
