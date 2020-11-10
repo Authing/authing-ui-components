@@ -9,7 +9,9 @@ export interface RegisterFormFooterProps {
   loading: boolean
 }
 
-export const RegisterFormFooter: FC<RegisterFormFooterProps> = ({ loading }) => {
+export const RegisterFormFooter: FC<RegisterFormFooterProps> = ({
+  loading,
+}) => {
   const { setValue } = useGuardContext()
 
   return (

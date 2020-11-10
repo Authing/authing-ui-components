@@ -10,7 +10,10 @@ import { ResetPasswordFormProps } from '@/components/AuthingGuard/types'
 
 import './style.less'
 
-export const ResetPasswordForm: FC<ResetPasswordFormProps> = ({onSuccess, onFail}) => {
+export const ResetPasswordForm: FC<ResetPasswordFormProps> = ({
+  onSuccess,
+  onFail,
+}) => {
   const { setValue } = useGuardContext()
 
   const [step, setStep] = useState(1)
@@ -31,7 +34,7 @@ export const ResetPasswordForm: FC<ResetPasswordFormProps> = ({onSuccess, onFail
         setValue('guardTitle', '找回密码')
         break
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step])
 
   const onStep1Finish = async (type: string, value: string) => {
@@ -48,7 +51,7 @@ export const ResetPasswordForm: FC<ResetPasswordFormProps> = ({onSuccess, onFail
     setStep(4)
     onSuccess?.()
   }
-  
+
   const onStep2OrStep3Fail = (error: any) => {
     onFail?.(error)
   }

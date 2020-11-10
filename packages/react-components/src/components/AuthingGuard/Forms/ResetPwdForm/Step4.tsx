@@ -26,7 +26,7 @@ export const ResetPasswordStep4: FC = () => {
 
       setValue('guardScenes', GuardScenes.Login)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countDown])
 
   return (

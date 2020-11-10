@@ -21,9 +21,11 @@ export const MfaResetCodeForm: FC<MfaResetForm> = ({
   const [user, setUser] = useState<User | null>(null)
   const [recoverCode, setRecoverCode] = useState('')
 
-  const onReset = (user: User & {
-    recoveryCode: string
-  }) => {
+  const onReset = (
+    user: User & {
+      recoveryCode: string
+    }
+  ) => {
     setStep(2)
     setUser(user)
     setRecoverCode(user.recoveryCode)

@@ -7,7 +7,10 @@ import { GuardScenes } from '@/components/AuthingGuard/types'
 import { requestClient } from '@/components/AuthingGuard/api/http'
 import { NEED_MFA_CODE } from '@/components/AuthingGuard/constants'
 import { GuardLayout } from '@/components/AuthingGuard/GuardLayout'
-import { GuardEventsHandler, UserConfig } from '@/components/AuthingGuard/types/GuardConfig'
+import {
+  GuardEventsHandler,
+  UserConfig,
+} from '@/components/AuthingGuard/types/GuardConfig'
 
 import './style.less'
 import './assets/iconfont.css'
@@ -57,7 +60,7 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
     <GuardContext
       value={{
         authClient,
-        config: {...config},
+        config: { ...config },
         userConfig: config,
         guardScenes: defaultScenes,
         activeTabs,

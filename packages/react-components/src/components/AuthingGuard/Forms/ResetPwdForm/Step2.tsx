@@ -25,13 +25,9 @@ export const ResetPasswordStep2: FC<ResetPasswordStep2Props> = ({
     const password = values.password
 
     try {
-      await authClient.resetPasswordByPhoneCode(
-        phone,
-        code,
-        password
-      )
+      await authClient.resetPasswordByPhoneCode(phone, code, password)
       onSuccess()
-    } catch(e) {
+    } catch (e) {
       onFail?.(e)
     } finally {
       setLoading(false)
