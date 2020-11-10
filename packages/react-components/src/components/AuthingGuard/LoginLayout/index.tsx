@@ -3,24 +3,24 @@ import { User } from 'authing-js-sdk'
 import { FormInstance } from 'antd/lib/form'
 import React, { useRef } from 'react'
 
-import { useGuardContext } from '@/context/global/context'
+import { useGuardContext } from '../../../context/global/context'
 import {
   LdapLoginForm,
   QrCodeLoginForm,
   SocialAndIdpLogin,
   PasswordLoginForm,
   PhoneCodeLoginForm,
-} from '@/components/AuthingGuard/Forms'
+} from '../../../components/AuthingGuard/Forms'
 import {
   LOGIN_METHODS_MAP,
   NEED_MFA_CODE,
-} from '@/components/AuthingGuard/constants'
-import { AuthingTabs } from '@/components/AuthingGuard/AuthingTabs'
+} from '../../../components/AuthingGuard/constants'
+import { AuthingTabs } from '../../../components/AuthingGuard/AuthingTabs'
 import {
   BaseFormProps,
   GuardScenes,
   LoginMethods,
-} from '@/components/AuthingGuard/types'
+} from '../../../components/AuthingGuard/types'
 
 import './style.less'
 

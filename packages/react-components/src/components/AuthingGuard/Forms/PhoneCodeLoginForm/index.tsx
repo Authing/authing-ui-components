@@ -3,11 +3,11 @@ import { FormInstance, Rule } from 'antd/lib/form'
 import { Alert, Form, Input } from 'antd'
 import { UserOutlined, SafetyOutlined } from '@ant-design/icons'
 
-import { getRequiredRules, VALIDATE_PATTERN } from '@/utils'
-import { useGuardContext } from '@/context/global/context'
-import { PhoneCodeLoginFormProps } from '@/components/AuthingGuard/types'
-import { SendPhoneCode } from '@/components/AuthingGuard/Forms/SendPhoneCode'
-import { LoginFormFooter } from '@/components/AuthingGuard/Forms/LoginFormFooter'
+import { getRequiredRules, VALIDATE_PATTERN } from '../../../../utils'
+import { useGuardContext } from '../../../../context/global/context'
+import { PhoneCodeLoginFormProps } from '../../../../components/AuthingGuard/types'
+import { SendPhoneCode } from '../../../../components/AuthingGuard/Forms/SendPhoneCode'
+import { LoginFormFooter } from '../../../../components/AuthingGuard/Forms/LoginFormFooter'
 
 const rulesMap: Record<string, Rule[]> = {
   phone: getRequiredRules('请输入手机号码').concat({

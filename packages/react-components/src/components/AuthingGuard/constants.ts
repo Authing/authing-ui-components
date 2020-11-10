@@ -5,7 +5,7 @@ import {
   LoginMethods,
   Mode,
   RegisterMethods,
-} from '@/components/AuthingGuard/types'
+} from '../../components/AuthingGuard/types'
 
 // 当需要 MFA 认证时，登录返回的 error code
 export const NEED_MFA_CODE = 1635

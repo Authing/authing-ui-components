@@ -1,15 +1,17 @@
 import { Input, Form, Button } from 'antd'
 import React, { FC, useState } from 'react'
 import { LockOutlined } from '@ant-design/icons'
-import { getRequiredRules } from '@/utils'
-import { useGuardContext } from '@/context/global/context'
+import { getRequiredRules } from '../../../../utils'
+import { useGuardContext } from '../../../../context/global/context'
 import { User } from 'authing-js-sdk'
 
 export const MfaResetStep1: FC<{
   mfaToken: string
-  onSuccess: (user: User & {
-    recoveryCode: string
-  }) => void
+  onSuccess: (
+    user: User & {
+      recoveryCode: string
+    }
+  ) => void
   goVerify: () => void
   onFail?: (error: any) => void
 }> = ({ mfaToken, onSuccess, goVerify, onFail }) => {
@@ -25,9 +27,11 @@ export const MfaResetStep1: FC<{
         recoveryCode: values.recoverCode,
         mfaToken,
       })
-      onSuccess(user as User & {
-        recoveryCode: string
-      })
+      onSuccess(
+        user as User & {
+          recoveryCode: string
+        }
+      )
     } catch (e) {
       onFail?.(e)
     } finally {

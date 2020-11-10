@@ -5,8 +5,8 @@ import { Steps } from './Steps'
 import {
   MfaResetCodeForm,
   MFAVerifyForm,
-} from '@/components/AuthingGuard/Forms'
-import { useGuardContext } from '@/context/global/context'
+} from '../../../components/AuthingGuard/Forms'
+import { useGuardContext } from '../../../context/global/context'
 
 import './style.less'
 

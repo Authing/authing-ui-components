@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Rule } from 'antd/lib/form'
-import { useGuardContext } from '@/context/global/context'
+import { useGuardContext } from '../context/global/context'
 
 export * from './popupCenter'
 

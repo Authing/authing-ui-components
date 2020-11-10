@@ -2,8 +2,11 @@ import { Spin } from 'antd'
 import React, { FC, useEffect, useMemo } from 'react'
 import { QRCodeUserInfo } from 'authing-js-sdk/build/main/lib/authentication/types'
 
-import { useGuardContext } from '@/context/global/context'
-import { LoginMethods, QrLoginFormProps } from '@/components/AuthingGuard/types'
+import { useGuardContext } from '../../../../context/global/context'
+import {
+  LoginMethods,
+  QrLoginFormProps,
+} from '../../../../components/AuthingGuard/types'
 
 import './style.less'
 import { User } from 'authing-js-sdk'

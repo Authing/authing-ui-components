@@ -1,8 +1,8 @@
 import React from 'react'
 import { Button } from 'antd'
 
-import { useGuardContext } from '@/context/global/context'
-import { GuardScenes } from '@/components/AuthingGuard/types'
+import { useGuardContext } from '../../../../context/global/context'
+import { GuardScenes } from '../../../../components/AuthingGuard/types'
 
 export const ResetPwdFormFooter = () => {
   const { setValue } = useGuardContext()

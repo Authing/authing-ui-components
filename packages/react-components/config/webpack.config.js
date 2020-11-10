@@ -392,7 +392,6 @@ module.exports = function (webpackEnv) {
         // Support React Native Web
         // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
         'react-native': 'react-native-web',
-        '@': 'src',
         // Allows for better profiling with ReactDevTools
         ...(isEnvProductionProfile && {
           'react-dom$': 'react-dom/profiling',
@@ -823,10 +822,11 @@ module.exports = function (webpackEnv) {
           },
         },
       }),
-      new NpmDtsWebpackPlugin({
-        output: 'lib/index.d.ts',
-        entry: 'components/index',
-      }),
+      isEnvLib &&
+        new NpmDtsWebpackPlugin({
+          output: 'lib/index.d.ts',
+          entry: 'components/index',
+        }),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell webpack to provide empty mocks for them so importing them works.

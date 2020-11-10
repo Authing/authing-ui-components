@@ -5,8 +5,8 @@ import { ResetPasswordStep2 } from './Step2'
 import { ResetPasswordStep3 } from './Step3'
 import { ResetPasswordStep4 } from './Step4'
 import { ResetPwdFormFooter } from './Footer'
-import { useGuardContext } from '@/context/global/context'
-import { ResetPasswordFormProps } from '@/components/AuthingGuard/types'
+import { useGuardContext } from '../../../../context/global/context'
+import { ResetPasswordFormProps } from '../../../../components/AuthingGuard/types'
 
 import './style.less'
 

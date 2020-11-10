@@ -4,7 +4,7 @@ import { QrCodeAuthenticationClient } from 'authing-js-sdk/build/main/lib/authen
 import {
   SocialConnectionItem,
   EnterpriseConnectionItem,
-} from '@/components/AuthingGuard/api'
+} from '../../../components/AuthingGuard/api'
 
 export enum Mode {
   Modal = 'modal',

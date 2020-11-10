@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { useGuardContext } from '@/context/global/context'
-import { ResetPasswordForm } from '@/components/AuthingGuard/Forms'
+import { useGuardContext } from '../../../context/global/context'
+import { ResetPasswordForm } from '../../../components/AuthingGuard/Forms'
 
 export const ResetPwdLayout = () => {
   const {

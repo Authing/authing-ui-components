@@ -4,19 +4,19 @@ import shortid from 'shortid'
 import React, { FC, useEffect } from 'react'
 import { Button, Avatar, Space, Tooltip, message } from 'antd'
 
-import { popupCenter } from '@/utils'
-import { useGuardContext } from '@/context/global/context'
-import { NEED_MFA_CODE } from '@/components/AuthingGuard/constants'
+import { popupCenter } from '../../../../utils'
+import { useGuardContext } from '../../../../context/global/context'
+import { NEED_MFA_CODE } from '../../../../components/AuthingGuard/constants'
 import {
   Protocol,
   SocialAndIdpLoginProps,
-} from '@/components/AuthingGuard/types'
+} from '../../../../components/AuthingGuard/types'
 import {
   OIDCConnectionConfig,
   ICasConnectionConfig,
   ISamlConnectionConfig,
   IAzureAdConnectionConfig,
-} from '@/components/AuthingGuard/api'
+} from '../../../../components/AuthingGuard/api'
 
 import './style.less'
 

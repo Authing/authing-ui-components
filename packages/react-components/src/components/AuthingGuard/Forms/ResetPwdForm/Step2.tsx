@@ -2,10 +2,10 @@ import React, { FC, useState } from 'react'
 import { Form, Input, Button } from 'antd'
 import { SafetyOutlined, LockOutlined, UserOutlined } from '@ant-design/icons'
 
-import { getRequiredRules } from '@/utils'
-import { useGuardContext } from '@/context/global/context'
-import { ResetPasswordStep2Props } from '@/components/AuthingGuard/types'
-import { SendPhoneCode } from '@/components/AuthingGuard/Forms/SendPhoneCode'
+import { getRequiredRules } from '../../../../utils'
+import { useGuardContext } from '../../../../context/global/context'
+import { ResetPasswordStep2Props } from '../../../../components/AuthingGuard/types'
+import { SendPhoneCode } from '../../../../components/AuthingGuard/Forms/SendPhoneCode'
 
 export const ResetPasswordStep2: FC<ResetPasswordStep2Props> = ({
   phone,

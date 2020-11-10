@@ -1,7 +1,7 @@
-import { useGuardContext } from '@/context/global/context'
+import { useGuardContext } from '../../../../context/global/context'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
-import { GuardScenes } from '@/components/AuthingGuard/types'
+import { GuardScenes } from '../../../../components/AuthingGuard/types'
 
 const TIME = 3
 export const ResetPasswordStep4: FC = () => {

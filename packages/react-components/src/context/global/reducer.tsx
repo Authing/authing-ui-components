@@ -4,7 +4,7 @@ import {
   GuardScenes,
   UserConfig,
   GuardEventsHandler,
-} from '@/components/AuthingGuard/types'
+} from '../../components/AuthingGuard/types'
 import { AuthenticationClient } from 'authing-js-sdk'
 import { IBaseAction } from '../base'
 

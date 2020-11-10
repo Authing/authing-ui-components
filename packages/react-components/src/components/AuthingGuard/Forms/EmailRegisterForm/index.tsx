@@ -3,10 +3,14 @@ import { Input, Form } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 
-import { getDeviceName, getRequiredRules, VALIDATE_PATTERN } from '@/utils'
-import { useGuardContext } from '@/context/global/context'
-import { EmailRegisterFormProps } from '@/components/AuthingGuard/types'
-import { RegisterFormFooter } from '@/components/AuthingGuard/Forms/RegisterFormFooter'
+import {
+  getDeviceName,
+  getRequiredRules,
+  VALIDATE_PATTERN,
+} from '../../../../utils'
+import { useGuardContext } from '../../../../context/global/context'
+import { EmailRegisterFormProps } from '../../../../components/AuthingGuard/types'
+import { RegisterFormFooter } from '../../../../components/AuthingGuard/Forms/RegisterFormFooter'
 
 export const EmailRegisterForm = forwardRef<
   FormInstance,

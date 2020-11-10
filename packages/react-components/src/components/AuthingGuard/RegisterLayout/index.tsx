@@ -2,18 +2,18 @@ import { Tabs } from 'antd'
 import { User } from 'authing-js-sdk'
 import React, { FC } from 'react'
 
-import { useGuardContext } from '@/context/global/context'
+import { useGuardContext } from '../../../context/global/context'
 import {
   GuardScenes,
   LoginMethods,
   RegisterMethods,
-} from '@/components/AuthingGuard/types'
-import { AuthingTabs } from '@/components/AuthingGuard/AuthingTabs'
-import { REGISTER_METHODS_MAP } from '@/components/AuthingGuard/constants'
+} from '../../../components/AuthingGuard/types'
+import { AuthingTabs } from '../../../components/AuthingGuard/AuthingTabs'
+import { REGISTER_METHODS_MAP } from '../../../components/AuthingGuard/constants'
 import {
   EmailRegisterForm,
   PhoneRegisterForm,
-} from '@/components/AuthingGuard/Forms'
+} from '../../../components/AuthingGuard/Forms'
 
 export const RegisterLayout: FC = () => {
   const {

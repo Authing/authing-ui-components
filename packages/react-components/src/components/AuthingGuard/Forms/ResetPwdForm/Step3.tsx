@@ -3,9 +3,9 @@ import { Form, Button, Input, message } from 'antd'
 import { SafetyOutlined, LockOutlined } from '@ant-design/icons'
 import { EmailScene } from 'authing-js-sdk'
 
-import { getRequiredRules } from '@/utils'
-import { useGuardContext } from '@/context/global/context'
-import { ResetPasswordStep3Props } from '@/components/AuthingGuard/types'
+import { getRequiredRules } from '../../../../utils'
+import { useGuardContext } from '../../../../context/global/context'
+import { ResetPasswordStep3Props } from '../../../../components/AuthingGuard/types'
 
 export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
   email,

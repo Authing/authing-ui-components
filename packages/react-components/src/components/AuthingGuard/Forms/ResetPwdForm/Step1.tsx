@@ -1,12 +1,12 @@
 import React, { FC, useState } from 'react'
 import { Form, Input, Button, message } from 'antd'
 
-import { validate } from '@/utils'
+import { validate } from '../../../../utils'
 import {
   ResetPasswordStep1Props,
   ResetPwdMethods,
-} from '@/components/AuthingGuard/types'
-import { useGuardContext } from '@/context/global/context'
+} from '../../../../components/AuthingGuard/types'
+import { useGuardContext } from '../../../../context/global/context'
 import { EmailScene } from 'authing-js-sdk'
 
 export const ResetPasswordStep1: FC<ResetPasswordStep1Props> = ({

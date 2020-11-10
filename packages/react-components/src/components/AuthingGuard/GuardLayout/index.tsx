@@ -1,25 +1,25 @@
 import { Spin } from 'antd'
 import React, { useEffect, useMemo, useState } from 'react'
 
-import { insertStyles } from '@/utils'
-import { useGuardContext } from '@/context/global/context'
-import { GuardHeader } from '@/components/AuthingGuard/Header'
-import { MfaLayout } from '@/components/AuthingGuard/MfaLayout'
-import { LoginLayout } from '@/components/AuthingGuard/LoginLayout'
-import { defaultGuardConfig } from '@/components/AuthingGuard/constants'
-import { RegisterLayout } from '@/components/AuthingGuard/RegisterLayout'
-import { ResetPwdLayout } from '@/components/AuthingGuard/ResetPwdLayout'
+import { insertStyles } from '../../../utils'
+import { useGuardContext } from '../../../context/global/context'
+import { GuardHeader } from '../../../components/AuthingGuard/Header'
+import { MfaLayout } from '../../../components/AuthingGuard/MfaLayout'
+import { LoginLayout } from '../../../components/AuthingGuard/LoginLayout'
+import { defaultGuardConfig } from '../../../components/AuthingGuard/constants'
+import { RegisterLayout } from '../../../components/AuthingGuard/RegisterLayout'
+import { ResetPwdLayout } from '../../../components/AuthingGuard/ResetPwdLayout'
 import {
   UserPoolConfig,
   fetchAppConfig,
   fetchUserPoolConfig,
   ApplicationConfig,
-} from '@/components/AuthingGuard/api'
+} from '../../../components/AuthingGuard/api'
 import {
   GuardScenes,
   GuardConfig,
   Protocol,
-} from '@/components/AuthingGuard/types'
+} from '../../../components/AuthingGuard/types'
 
 import './style.less'
 

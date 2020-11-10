@@ -1,5 +1,8 @@
 import { requestClient } from './http'
-import { SocialConnections, Protocol } from '@/components/AuthingGuard/types'
+import {
+  SocialConnections,
+  Protocol,
+} from '../../../components/AuthingGuard/types'
 
 export interface OIDCConnectionConfig {
   issuerUrl: string

@@ -3,11 +3,15 @@ import { FormInstance } from 'antd/lib/form'
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
 import { UserOutlined, LockOutlined, SafetyOutlined } from '@ant-design/icons'
 
-import { useGuardContext } from '@/context/global/context'
-import { PhoneRegisterFormProps } from '@/components/AuthingGuard/types'
-import { getDeviceName, getRequiredRules, VALIDATE_PATTERN } from '@/utils'
-import { SendPhoneCode } from '@/components/AuthingGuard/Forms/SendPhoneCode'
-import { RegisterFormFooter } from '@/components/AuthingGuard/Forms/RegisterFormFooter'
+import { useGuardContext } from '../../../../context/global/context'
+import { PhoneRegisterFormProps } from '../../../../components/AuthingGuard/types'
+import {
+  getDeviceName,
+  getRequiredRules,
+  VALIDATE_PATTERN,
+} from '../../../../utils'
+import { SendPhoneCode } from '../../../../components/AuthingGuard/Forms/SendPhoneCode'
+import { RegisterFormFooter } from '../../../../components/AuthingGuard/Forms/RegisterFormFooter'
 
 export const PhoneRegisterForm = forwardRef<
   FormInstance,

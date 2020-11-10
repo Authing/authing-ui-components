@@ -1,7 +1,7 @@
 import { Button } from 'antd'
 import React, { FC } from 'react'
-import { useGuardContext } from '@/context/global/context'
-import { GuardScenes } from '@/components/AuthingGuard/types'
+import { useGuardContext } from '../../../../context/global/context'
+import { GuardScenes } from '../../../../components/AuthingGuard/types'
 
 import './style.less'
 

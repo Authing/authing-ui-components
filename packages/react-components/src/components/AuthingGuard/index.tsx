@@ -2,15 +2,15 @@ import { message } from 'antd'
 import React, { FC } from 'react'
 import { AuthenticationClient } from 'authing-js-sdk'
 
-import { GuardContext } from '@/context/global/context'
-import { GuardScenes } from '@/components/AuthingGuard/types'
-import { requestClient } from '@/components/AuthingGuard/api/http'
-import { NEED_MFA_CODE } from '@/components/AuthingGuard/constants'
-import { GuardLayout } from '@/components/AuthingGuard/GuardLayout'
+import { GuardContext } from '../../context/global/context'
+import { GuardScenes } from '../../components/AuthingGuard/types'
+import { requestClient } from '../../components/AuthingGuard/api/http'
+import { NEED_MFA_CODE } from '../../components/AuthingGuard/constants'
+import { GuardLayout } from '../../components/AuthingGuard/GuardLayout'
 import {
   GuardEventsHandler,
   UserConfig,
-} from '@/components/AuthingGuard/types/GuardConfig'
+} from '../../components/AuthingGuard/types/GuardConfig'
 
 import './style.less'
 import './assets/iconfont.css'

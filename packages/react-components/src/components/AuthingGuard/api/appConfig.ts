@@ -1,5 +1,5 @@
 import { requestClient } from './http'
-import { Protocol } from '@/components/AuthingGuard/types'
+import { Protocol } from '../../../components/AuthingGuard/types'
 import {
   IAzureAdConnectionConfig,
   ICasConnectionConfig,

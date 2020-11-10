@@ -3,11 +3,11 @@ import { FormInstance } from 'antd/lib/form'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
 
-import { getRequiredRules } from '@/utils'
-import { useGuardContext } from '@/context/global/context'
-import { NEED_CAPTCHA } from '@/components/AuthingGuard/constants'
-import { PasswordLoginFormProps } from '@/components/AuthingGuard/types'
-import { LoginFormFooter } from '@/components/AuthingGuard/Forms/LoginFormFooter'
+import { getRequiredRules } from '../../../../utils'
+import { useGuardContext } from '../../../../context/global/context'
+import { NEED_CAPTCHA } from '../../../../components/AuthingGuard/constants'
+import { PasswordLoginFormProps } from '../../../../components/AuthingGuard/types'
+import { LoginFormFooter } from '../../../../components/AuthingGuard/Forms/LoginFormFooter'
 
 const captchaUrl = '/api/v2/security/captcha'
 const getCaptchaUrl = () => `${captchaUrl}?r=${+new Date()}`
