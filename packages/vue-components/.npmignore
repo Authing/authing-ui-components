@@ -1,0 +1,6 @@
+docs/
+docs-src/
+public/
+.babelrc
+.eslintrc
+.postcssrc
