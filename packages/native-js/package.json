@@ -1,7 +1,9 @@
 {
   "name": "native-js",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "dependencies": {
     "@babel/core": "7.12.3",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.2",
