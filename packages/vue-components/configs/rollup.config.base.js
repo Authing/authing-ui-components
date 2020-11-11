@@ -9,7 +9,7 @@ import fs from 'fs'
 import CleanCSS from 'clean-css'
 import autoprefixer from 'autoprefixer'
 import css from 'rollup-plugin-css-only'
-
+const postcss = require('rollup-plugin-postcss');
 
 const config = require('../package.json')
 
@@ -29,6 +29,9 @@ export default {
       style: {
         postcssPlugins: [autoprefixer],
       },
+    }),
+    postcss({
+      extract: true,
     }),
     css({
       output: styles => {

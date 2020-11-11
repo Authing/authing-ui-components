@@ -4,8 +4,9 @@
 
 <script>
 import { AuthingGuard as NativeAuthingGuard } from 'native-js'
+import 'native-js/lib/index.css'
 
-export default AuthingGuard = {
+export default {
   name: 'AuthingGuard',
   mounted () {
     const guard = new NativeAuthingGuard('59f86b4832eb28071bdd9214', {

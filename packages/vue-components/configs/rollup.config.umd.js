@@ -1,4 +1,5 @@
 import base from './rollup.config.base'
+import { terser } from 'rollup-plugin-terser'
 
 const config = Object.assign({}, base, {
   output: {
@@ -8,5 +9,7 @@ const config = Object.assign({}, base, {
     format: 'umd',
   },
 })
+
+config.plugins.push(terser())
 
 export default config
