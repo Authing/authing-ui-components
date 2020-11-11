@@ -27,6 +27,7 @@ export const REGISTER_METHODS_MAP = {
 }
 
 export const defaultGuardConfig: Partial<UserConfig> = {
+  apiHost: 'https://core.auting.cn',
   loginMethods: [LoginMethods.Password, LoginMethods.PhoneCode],
   defaultLoginMethod: LoginMethods.Password,
   registerMethods: [RegisterMethods.Email, RegisterMethods.Phone],

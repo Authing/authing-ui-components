@@ -5,7 +5,7 @@ import { AuthenticationClient } from 'authing-js-sdk'
 import { GuardContext } from '../../context/global/context'
 import { GuardScenes } from '../../components/AuthingGuard/types'
 import { requestClient } from '../../components/AuthingGuard/api/http'
-import { NEED_MFA_CODE } from '../../components/AuthingGuard/constants'
+import { defaultGuardConfig, NEED_MFA_CODE } from '../../components/AuthingGuard/constants'
 import { GuardLayout } from '../../components/AuthingGuard/GuardLayout'
 import {
   GuardEventsHandler,
@@ -26,11 +26,11 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
   ...guardEvents
 }) => {
   const {
-    apiHost = 'https://core.auting.cn',
+    apiHost = defaultGuardConfig.apiHost!,
     appId,
-    defaultLoginMethod,
-    defaultScenes,
-    defaultRegisterMethod,
+    defaultLoginMethod = defaultGuardConfig.defaultLoginMethod,
+    defaultScenes = defaultGuardConfig.defaultScenes,
+    defaultRegisterMethod = defaultGuardConfig.defaultRegisterMethod,
   } = config
 
   requestClient.setBaseUrl(apiHost)
