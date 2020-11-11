@@ -4,7 +4,8 @@
   "workspaces": [
     "packages/react-components",
     "packages/vue-components",
-    "packages/native-js"
+    "packages/native-js",
+    "packages/angular-components"
   ],
   "devDependencies": {
     "lerna": "^3.22.1"
