@@ -66,7 +66,9 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
             value={verifyCode[index]}
             onChange={(evt) => handleChange(evt.target.value, index)}
           />
-          {index === Math.floor(length / 2 - 1) && <Divider className="authing-code-input-divider" />}
+          {index === Math.floor(length / 2 - 1) && (
+            <Divider className="authing-code-input-divider" />
+          )}
         </Fragment>
       ))}
     </div>

@@ -1,10 +1,4 @@
-import React, {
-  FC,
-  useState,
-  useRef,
-  useEffect,
-  useMemo,
-} from 'react'
+import React, { FC, useState, useRef, useEffect, useMemo } from 'react'
 
 const TIME = 60
 export interface SendCodeProps {
