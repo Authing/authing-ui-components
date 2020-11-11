@@ -5,7 +5,7 @@ import {
   UserConfig,
   // LoginMethods,
   // RegisterMethods,
-  GuardScenes,
+  // GuardScenes,
   // SocialConnections,
 } from './components/AuthingGuard/types/GuardConfig'
 import reportWebVitals from './reportWebVitals'
@@ -20,7 +20,7 @@ const App = () => {
     // defaultLoginMethod: LoginMethods.LDAP,
     // registerMethods: Object.values(RegisterMethods),
     // defaultRegisterMethod: RegisterMethods.Email,
-    defaultScenes: GuardScenes.Login,
+    // defaultScenes: GuardScenes.Login,
     // socialConnections: Object.values(SocialConnections),
     // enterpriseConnections: ["oidc1"],
     appId: '5fa5053e252697ad5302ce7e',
@@ -30,7 +30,6 @@ const App = () => {
     // eslint-disable-next-line react/jsx-no-undef
     <AuthingGuard
       // onPwdResetError={(e) => console.log(e)}
-      onLoad={() => console.log('fuck>>>>>>>>>>>')}
       userPoolId="59f86b4832eb28071bdd9214"
       config={config}
     />
