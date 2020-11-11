@@ -5,7 +5,7 @@ import {
   UserConfig,
   GuardEventsHandler,
   GuardEventsHandlerKebab,
-} from 'react-components/components/AuthingGuard/types/index'
+} from 'react-components'
 import 'react-components/lib/index.css'
 
 export type EventListeners = {
