@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { AuthingGuard } from './components/AuthingGuard'
 import {
@@ -28,7 +28,11 @@ const App = () => {
     mode: GuardMode.Modal,
     // autoRegister: true,
   }
-  const [visible, setVisible] = useState(true)
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    setTimeout(() => setVisible(true), 3000)
+  }, [])
 
   return (
     // eslint-disable-next-line react/jsx-no-undef

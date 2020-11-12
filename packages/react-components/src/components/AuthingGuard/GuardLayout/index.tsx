@@ -190,6 +190,9 @@ const useModal = (visible?: boolean) => {
   const [localVisible, setLocalVisible] = useState(
     isModal && isControlled ? visible : true
   )
+
+  // 懒渲染
+  const [rendered, setRendered] = useState(false)
   const toggleLocalVisible = () => {
     setLocalVisible((v) => !v)
   }
@@ -198,8 +201,15 @@ const useModal = (visible?: boolean) => {
     return isControlled ? visible : localVisible
   }, [isControlled, localVisible, visible])
 
+  useEffect(() => {
+    if (realVisible) {
+      setRendered(true)
+    }
+  }, [realVisible])
+
   return {
     isModal,
+    rendered,
     realVisible,
     isControlled,
     toggleLocalVisible,
@@ -216,7 +226,9 @@ export const GuardLayout: FC<{
 
   const { loading, errorMsg, guardConfig, errorDetail } = useGuardConfig()
 
-  const { realVisible, isControlled, toggleLocalVisible } = useModal(visible)
+  const { rendered, realVisible, isControlled, toggleLocalVisible } = useModal(
+    visible
+  )
 
   useEffect(() => {
     if (loading) {
@@ -254,29 +266,33 @@ export const GuardLayout: FC<{
         !realVisible ? ' authing-guard-layout__hidden' : ''
       }`}
     >
-      {isModal && (
-        <button
-          onClick={() => {
-            if (!isControlled) {
-              toggleLocalVisible()
-            }
-            guardEvents.onClose?.()
-          }}
-          className="authing-guard-close-btn"
-        >
-          <i className="authing-icon authing-guanbi"></i>
-        </button>
+      {rendered && (
+        <>
+          {isModal && (
+            <button
+              onClick={() => {
+                if (!isControlled) {
+                  toggleLocalVisible()
+                }
+                guardEvents.onClose?.()
+              }}
+              className="authing-guard-close-btn"
+            >
+              <i className="authing-icon authing-guanbi"></i>
+            </button>
+          )}
+          <div className="authing-guard-container">
+            <GuardHeader />
+            {loading ? (
+              <Spin size="large" className="authing-guard-loading" />
+            ) : errorMsg ? (
+              <div className="authing-guard-load-error">{errorMsg}</div>
+            ) : (
+              layoutMap[guardScenes]
+            )}
+          </div>
+        </>
       )}
-      <div className="authing-guard-container">
-        <GuardHeader />
-        {loading ? (
-          <Spin size="large" className="authing-guard-loading" />
-        ) : errorMsg ? (
-          <div className="authing-guard-load-error">{errorMsg}</div>
-        ) : (
-          layoutMap[guardScenes]
-        )}
-      </div>
     </div>
   )
 }
