@@ -6,6 +6,8 @@ import {
   EnterpriseConnectionItem,
 } from '../../../components/AuthingGuard/api'
 
+export type { AuthenticationClient, CommonMessage, User } from 'authing-js-sdk'
+
 export enum Mode {
   Modal = 'modal',
   Normal = 'normal',
@@ -180,7 +182,7 @@ export interface GuardEventsHandlerKebab {
   // 重置密码成功
   'pwd-reset': GuardEventsHandler['onPwdReset']
   // 重置密码失败
-  'pwd-reset-error': GuardEventsHandler['onPwdReset']
+  'pwd-reset-error': GuardEventsHandler['onPwdResetError']
   // 表单关闭事件
   close: GuardEventsHandler['onClose']
 }

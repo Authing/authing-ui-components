@@ -1,3 +1,1 @@
-import { AuthingGuard } from './AuthingGuard'
-
-export { AuthingGuard }
+export * from './AuthingGuard'

@@ -1,33 +1,110 @@
-import { Component, OnInit } from '@angular/core'
-import { AuthingGuard } from 'native-js'
+import {
+  OnInit,
+  Output,
+  Component,
+  EventEmitter,
+  ViewEncapsulation,
+  Input,
+} from '@angular/core'
+import {
+  Mode,
+  User,
+  UserConfig,
+  GuardScenes,
+  AuthingGuard,
+  LoginMethods,
+  CommonMessage,
+  RegisterMethods,
+  GuardEventsHandler,
+  AuthenticationClient,
+  GuardEventsHandlerKebab,
+} from 'native-js'
+
+export type {
+  User,
+  UserConfig,
+  CommonMessage,
+  GuardEventsHandler,
+  AuthenticationClient,
+  GuardEventsHandlerKebab,
+}
+
+export { Mode, GuardScenes, LoginMethods, RegisterMethods }
 
 @Component({
-  selector: 'lib-AuthingGuard',
-  template: ` <div id="authing_guard_container"></div> `,
+  selector: 'authing-guard',
+  template: `<div id="authing_guard_container"></div>`,
   styles: [],
+  styleUrls: ['./authing-guard.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class AuthingGuardComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
 
-  ngAfterViewInit() {
-    const guard = new AuthingGuard('59f86b4832eb28071bdd9214', {
-      target: '#root',
+  @Input() userPoolId: string
+  @Input() config?: UserConfig
 
-      apiHost: 'http://console.authing.localhost:3000',
-      // loginMethods: Object.values(LoginMethods),
-      logo:
-        'https://files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png',
-      title: 'Authing',
-      // defaultLoginMethod: LoginMethods.LDAP,
-      // registerMethods: Object.values(RegisterMethods),
-      // defaultRegisterMethod: RegisterMethods.Email,
-      defaultScenes: 'login',
-      // socialConnections: Object.values(SocialConnections),
-      // enterpriseConnections: ["oidc1"],
-      appId: '5fa5053e252697ad5302ce7e',
-      // autoRegister: true,
-    })
+  @Output() onLoad = new EventEmitter<
+    Parameters<GuardEventsHandler['onLoad']>
+  >()
+  @Output() onLoadError = new EventEmitter<
+    Parameters<GuardEventsHandler['onLoadError']>
+  >()
+  @Output() onLogin = new EventEmitter<
+    Parameters<GuardEventsHandler['onLogin']>
+  >()
+  @Output() onLoginError = new EventEmitter<
+    Parameters<GuardEventsHandler['onLoginError']>
+  >()
+  @Output() onRegister = new EventEmitter<
+    Parameters<GuardEventsHandler['onRegister']>
+  >()
+  @Output() onRegisterError = new EventEmitter<
+    Parameters<GuardEventsHandler['onRegisterError']>
+  >()
+  @Output() onPwdEmailSend = new EventEmitter<
+    Parameters<GuardEventsHandler['onPwdEmailSend']>
+  >()
+  @Output() onPwdEmailSendError = new EventEmitter<
+    Parameters<GuardEventsHandler['onPwdEmailSendError']>
+  >()
+  @Output() onPwdPhoneSend = new EventEmitter<
+    Parameters<GuardEventsHandler['onPwdPhoneSend']>
+  >()
+  @Output() onPwdPhoneSendError = new EventEmitter<
+    Parameters<GuardEventsHandler['onPwdPhoneSendError']>
+  >()
+  @Output() onPwdReset = new EventEmitter<
+    Parameters<GuardEventsHandler['onPwdReset']>
+  >()
+  @Output() onPwdResetError = new EventEmitter<
+    Parameters<GuardEventsHandler['onPwdResetError']>
+  >()
+  @Output() onClose = new EventEmitter<
+    Parameters<GuardEventsHandler['onClose']>
+  >()
+
+  ngAfterViewInit() {
+    const guard = new AuthingGuard(this.userPoolId, this.config)
+
+    guard.on('load', (...rest) => this.onLoad.emit(rest))
+    guard.on('load-error', (...rest) => this.onLoadError.emit(rest))
+    guard.on('login', (...rest) => this.onLogin.emit(rest))
+    guard.on('login-error', (...rest) => this.onLoginError.emit(rest))
+    guard.on('register', (...rest) => this.onRegister.emit(rest))
+    guard.on('register-error', (...rest) => this.onRegisterError.emit(rest))
+    guard.on('pwd-email-send', (...rest) => this.onPwdEmailSend.emit(rest))
+    guard.on('pwd-email-send-error', (...rest) =>
+      this.onPwdEmailSendError.emit(rest)
+    )
+    guard.on('pwd-phone-send', (...rest) => this.onPwdPhoneSend.emit(rest))
+    guard.on('pwd-phone-send-error', (...rest) =>
+      this.onPwdPhoneSendError.emit(rest)
+    )
+    guard.on('pwd-reset', (...rest) => this.onPwdReset.emit(rest))
+    guard.on('pwd-reset-error', (...rest) => this.onPwdResetError.emit(rest))
+    guard.on('close', (...rest) => this.onClose.emit(rest))
   }
 }
