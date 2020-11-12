@@ -4,7 +4,7 @@ import { terser } from 'rollup-plugin-terser'
 const config = Object.assign({}, base, {
   output: {
     exports: 'named',
-    name: 'AuthingVueUiComponents',
+    name: 'AuthingVueUIComponents',
     file: 'lib/index.js',
     format: 'umd',
   },
