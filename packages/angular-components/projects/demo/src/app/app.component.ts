@@ -1,5 +1,9 @@
 import { Component } from '@angular/core'
-import { CommonMessage, AuthenticationClient, GuardScenes } from 'authing-guard'
+import {
+  CommonMessage,
+  AuthenticationClient,
+  GuardScenes,
+} from 'ng-ui-components'
 
 @Component({
   selector: 'app-root',

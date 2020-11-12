@@ -3,43 +3,43 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "AuthingGuard": {
+    "NgUIComponent": {
       "projectType": "library",
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
         }
       },
-      "root": "projects/authing-guard",
-      "sourceRoot": "projects/authing-guard/src",
+      "root": "projects/ng-ui-components",
+      "sourceRoot": "projects/ng-ui-components/src",
       "prefix": "authing",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "tsConfig": "projects/authing-guard/tsconfig.lib.json",
-            "project": "projects/authing-guard/ng-package.json"
+            "tsConfig": "projects/ng-ui-components/tsconfig.lib.json",
+            "project": "projects/ng-ui-components/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/authing-guard/tsconfig.lib.prod.json"
+              "tsConfig": "projects/ng-ui-components/tsconfig.lib.prod.json"
             }
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/authing-guard/src/test.ts",
-            "tsConfig": "projects/authing-guard/tsconfig.spec.json",
-            "karmaConfig": "projects/authing-guard/karma.conf.js"
+            "main": "projects/ng-ui-components/src/test.ts",
+            "tsConfig": "projects/ng-ui-components/tsconfig.spec.json",
+            "karmaConfig": "projects/ng-ui-components/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/authing-guard/tsconfig.lib.json",
-              "projects/authing-guard/tsconfig.spec.json"
+              "projects/ng-ui-components/tsconfig.lib.json",
+              "projects/ng-ui-components/tsconfig.spec.json"
             ],
             "exclude": ["**/node_modules/**"]
           }
@@ -162,5 +162,5 @@
       }
     }
   },
-  "defaultProject": "AuthingGuard"
+  "defaultProject": "NgUIComponent"
 }

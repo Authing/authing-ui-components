@@ -14,9 +14,9 @@
     "module": "es2020",
     "lib": ["es2018", "dom"],
     "paths": {
-      "authing-guard": [
-        "dist/authing-guard/authing-guard",
-        "dist/authing-guard"
+      "ng-ui-components": [
+        "dist/ng-ui-components/ng-ui-components",
+        "dist/ng-ui-components"
       ]
     }
   },

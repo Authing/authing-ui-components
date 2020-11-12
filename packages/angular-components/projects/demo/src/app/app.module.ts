@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser'
 import { NgModule } from '@angular/core'
-import { AuthingGuardModule } from 'authing-guard'
+import { AuthingGuardModule } from 'ng-ui-components'
 
 import { AppComponent } from './app.component'
 

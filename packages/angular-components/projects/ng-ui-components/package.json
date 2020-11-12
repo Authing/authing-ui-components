@@ -1,11 +1,12 @@
 {
-  "name": "authing-guard",
+  "name": "ng-ui-components",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^10.2.0",
     "@angular/core": "^10.2.0"
   },
   "dependencies": {
-    "tslib": "^2.0.0"
+    "tslib": "^2.0.0",
+    "native-js": "0.1.0"
   }
 }
