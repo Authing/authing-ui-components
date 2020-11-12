@@ -4,7 +4,7 @@
 node_modules
 build
 lib
-!packages/angular-components/projects/authing-guard/src/lib
+!*/**/src/lib
 .pnp
 .pnp.js
 
