@@ -25,6 +25,7 @@ const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpack
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter')
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const NpmDtsWebpackPlugin = require('npm-dts-webpack-plugin')
+const WebpackBundleAnalyzer = require('webpack-bundle-analyzer')
 
 const postcssNormalize = require('postcss-normalize')
 
@@ -827,6 +828,8 @@ module.exports = function (webpackEnv) {
           output: 'lib/index.d.ts',
           entry: 'components/index',
         }),
+      // 包大小分析
+      // new WebpackBundleAnalyzer.BundleAnalyzerPlugin(),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell webpack to provide empty mocks for them so importing them works.

@@ -2,8 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { AuthingGuard as ReactAuthingGuard } from 'react-components'
 import {
-  Mode,
   User,
+  GuardMode,
   UserConfig,
   GuardScenes,
   LoginMethods,
@@ -24,7 +24,7 @@ export type {
   GuardEventsHandlerKebab,
 }
 
-export { Mode, GuardScenes, LoginMethods, RegisterMethods }
+export { GuardMode, GuardScenes, LoginMethods, RegisterMethods }
 
 export type EventListeners = {
   [key in keyof GuardEventsHandlerKebab]: Exclude<

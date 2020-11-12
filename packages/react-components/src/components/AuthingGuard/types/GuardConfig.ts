@@ -8,7 +8,7 @@ import {
 
 export type { AuthenticationClient, CommonMessage, User } from 'authing-js-sdk'
 
-export enum Mode {
+export enum GuardMode {
   Modal = 'modal',
   Normal = 'normal',
 }
@@ -213,12 +213,12 @@ export interface GuardEventsHandler {
 }
 
 export interface UserConfig {
-  mode?: Mode
   logo?: string
   appId?: string
   scope?: string
   title?: string
   isSSO?: boolean
+  mode?: GuardMode
   apiHost?: string
   appType?: AppType
   appDomain?: string

@@ -4,6 +4,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  opacity: 1;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transform: translateY(0);
+}
+
+.authing-guard-layout__hidden {
+  opacity: 0;
+  transform: translateY(2000px);
 }
 
 .authing-guard-loading,
@@ -12,4 +21,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.authing-guard-close-btn {
+  position: absolute;
+  right: 40px;
+  top: 40px;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background-color: #fff;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 20px;
+  cursor: pointer;
+  &:focus {
+    outline: none;
+    border: none;
+    box-shadow: none;
+  }
+  &:hover {
+    color: #396aff;
+  }
 }

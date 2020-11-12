@@ -1,4 +1,4 @@
-import { Tabs } from 'antd'
+import { message, Tabs } from 'antd'
 import { User } from 'authing-js-sdk'
 import { FormInstance } from 'antd/lib/form'
 import React, { useRef } from 'react'
@@ -31,6 +31,7 @@ const useFormActions = () => {
   } = useGuardContext()
 
   const onSuccess = (user: User) => {
+    message.success('登录成功')
     guardEvents.onLogin?.(user, authClient)
   }
 

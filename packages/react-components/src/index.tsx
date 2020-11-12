@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 import { AuthingGuard } from './components/AuthingGuard'
 import {
+  GuardMode,
   UserConfig,
   // LoginMethods,
   // RegisterMethods,
@@ -24,11 +25,18 @@ const App = () => {
     // socialConnections: Object.values(SocialConnections),
     // enterpriseConnections: ["oidc1"],
     appId: '5fa5053e252697ad5302ce7e',
+    mode: GuardMode.Modal,
     // autoRegister: true,
   }
+  const [visible, setVisible] = useState(true)
+
   return (
     // eslint-disable-next-line react/jsx-no-undef
     <AuthingGuard
+      visible={visible}
+      onClose={() => {
+        setVisible(false)
+      }}
       // onPwdResetError={(e) => console.log(e)}
       userPoolId="59f86b4832eb28071bdd9214"
       config={config}

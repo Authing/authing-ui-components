@@ -1,3 +1,4 @@
+import { message } from 'antd'
 import { User } from 'authing-js-sdk'
 import React, { FC, useState } from 'react'
 
@@ -20,6 +21,7 @@ export const MfaLayout: FC<MfaLayoutProps> = () => {
   const [step, setStep] = useState(Steps.Verify)
 
   const onSuccess = (user: User) => {
+    message.success('登录成功')
     guardEvents.onLogin?.(user, authClient)
   }
 

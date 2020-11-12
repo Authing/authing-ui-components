@@ -11,8 +11,8 @@ import {
 } from '../../components/AuthingGuard/constants'
 import { GuardLayout } from '../../components/AuthingGuard/GuardLayout'
 import {
-  GuardEventsHandler,
   UserConfig,
+  GuardEventsHandler,
 } from '../../components/AuthingGuard/types/GuardConfig'
 
 import './style.less'
@@ -21,11 +21,13 @@ import './assets/iconfont.css'
 interface AuthingGuardProps extends GuardEventsHandler {
   userPoolId: string
   config?: UserConfig
+  visible?: boolean
 }
 
 export const AuthingGuard: FC<AuthingGuardProps> = ({
   userPoolId,
   config = {},
+  visible,
   ...guardEvents
 }) => {
   const {
@@ -73,7 +75,7 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
         guardEvents,
       }}
     >
-      <GuardLayout />
+      <GuardLayout visible={visible} />
     </GuardContext>
   )
 }

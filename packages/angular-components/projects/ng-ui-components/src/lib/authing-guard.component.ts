@@ -7,8 +7,8 @@ import {
   Input,
 } from '@angular/core'
 import {
-  Mode,
   User,
+  GuardMode,
   UserConfig,
   GuardScenes,
   AuthingGuard,
@@ -29,7 +29,7 @@ export type {
   GuardEventsHandlerKebab,
 }
 
-export { Mode, GuardScenes, LoginMethods, RegisterMethods }
+export { GuardMode, GuardScenes, LoginMethods, RegisterMethods }
 
 @Component({
   selector: 'authing-guard',

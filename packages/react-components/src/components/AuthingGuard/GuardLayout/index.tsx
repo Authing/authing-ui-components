@@ -1,5 +1,5 @@
 import { Spin } from 'antd'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 
 import { insertStyles } from '../../../utils'
 import { useGuardContext } from '../../../context/global/context'
@@ -16,9 +16,10 @@ import {
   ApplicationConfig,
 } from '../../../components/AuthingGuard/api'
 import {
+  Protocol,
+  GuardMode,
   GuardScenes,
   GuardConfig,
-  Protocol,
 } from '../../../components/AuthingGuard/types'
 
 import './style.less'
@@ -176,13 +177,46 @@ const useGuardConfig = () => {
   }
 }
 
-export const GuardLayout = () => {
+const useModal = (visible?: boolean) => {
+  const {
+    state: { userConfig },
+  } = useGuardContext()
+
+  const isModal = userConfig.mode === GuardMode.Modal
+  // 传入了 visible 则为受控组件
+  const isControlled = typeof visible !== 'undefined'
+
+  // modal 模式，没传 visible，默认为 true
+  const [localVisible, setLocalVisible] = useState(
+    isModal && isControlled ? visible : true
+  )
+  const toggleLocalVisible = () => {
+    setLocalVisible((v) => !v)
+  }
+
+  const realVisible = useMemo(() => {
+    return isControlled ? visible : localVisible
+  }, [isControlled, localVisible, visible])
+
+  return {
+    isModal,
+    realVisible,
+    isControlled,
+    toggleLocalVisible,
+  }
+}
+
+export const GuardLayout: FC<{
+  visible?: boolean
+}> = ({ visible }) => {
   const {
     state: { guardScenes, authClient, guardEvents },
     setValue,
   } = useGuardContext()
 
   const { loading, errorMsg, guardConfig, errorDetail } = useGuardConfig()
+
+  const { realVisible, isControlled, toggleLocalVisible } = useModal(visible)
 
   useEffect(() => {
     if (loading) {
@@ -204,6 +238,10 @@ export const GuardLayout = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guardConfig])
 
+  const isModal = useMemo(() => guardConfig.mode === GuardMode.Modal, [
+    guardConfig,
+  ])
+
   const layoutMap = {
     [GuardScenes.Login]: <LoginLayout />,
     [GuardScenes.Register]: <RegisterLayout />,
@@ -211,7 +249,24 @@ export const GuardLayout = () => {
     [GuardScenes.MfaVerify]: <MfaLayout />,
   }
   return (
-    <div className="authing-guard-layout">
+    <div
+      className={`authing-guard-layout${
+        !realVisible ? ' authing-guard-layout__hidden' : ''
+      }`}
+    >
+      {isModal && (
+        <button
+          onClick={() => {
+            if (!isControlled) {
+              toggleLocalVisible()
+            }
+            guardEvents.onClose?.()
+          }}
+          className="authing-guard-close-btn"
+        >
+          <i className="authing-icon authing-guanbi"></i>
+        </button>
+      )}
       <div className="authing-guard-container">
         <GuardHeader />
         {loading ? (

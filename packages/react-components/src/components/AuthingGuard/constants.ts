@@ -1,9 +1,9 @@
 import {
   AppType,
+  GuardMode,
   UserConfig,
   GuardScenes,
   LoginMethods,
-  Mode,
   RegisterMethods,
 } from '../../components/AuthingGuard/types'
 
@@ -32,7 +32,7 @@ export const defaultGuardConfig: Partial<UserConfig> = {
   defaultLoginMethod: LoginMethods.Password,
   registerMethods: [RegisterMethods.Email, RegisterMethods.Phone],
   defaultRegisterMethod: RegisterMethods.Email,
-  mode: Mode.Normal,
+  mode: GuardMode.Normal,
   title: 'Authing',
   logo:
     'https://files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png',
