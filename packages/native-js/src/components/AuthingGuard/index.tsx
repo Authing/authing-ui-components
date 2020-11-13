@@ -12,6 +12,7 @@ import {
   GuardEventsHandler,
   AuthenticationClient,
   GuardEventsHandlerKebab,
+  GuardEventsCamelToKebabMap,
 } from 'react-components'
 import 'react-components/lib/index.css'
 
@@ -40,25 +41,6 @@ export class AuthingGuard {
     }
   }
 
-  static reactEvtMapNative: Record<
-    keyof GuardEventsHandler,
-    keyof GuardEventsHandlerKebab
-  > = {
-    onLoad: 'load',
-    onLoadError: 'load-error',
-    onLogin: 'login',
-    onLoginError: 'login-error',
-    onRegister: 'register',
-    onRegisterError: 'register-error',
-    onPwdEmailSend: 'pwd-email-send',
-    onPwdEmailSendError: 'pwd-email-send-error',
-    onPwdPhoneSend: 'pwd-phone-send',
-    onPwdPhoneSendError: 'pwd-phone-send-error',
-    onPwdReset: 'pwd-reset',
-    onPwdResetError: 'pwd-reset-error',
-    onClose: 'close',
-  }
-
   static getGuardContainer(selector?: string | HTMLElement) {
     const defaultId = 'authing_guard_container'
 
@@ -81,7 +63,7 @@ export class AuthingGuard {
     return selector
   }
 
-  private eventListeners = Object.values(AuthingGuard.reactEvtMapNative).reduce(
+  private eventListeners = Object.values(GuardEventsCamelToKebabMap).reduce(
     (acc, evtName) => {
       return Object.assign({}, acc, {
         [evtName]: [],
@@ -92,7 +74,7 @@ export class AuthingGuard {
 
   render() {
     const evts: GuardEventsHandler = Object.entries(
-      AuthingGuard.reactEvtMapNative
+      GuardEventsCamelToKebabMap
     ).reduce((acc, [reactEvt, nativeEvt]) => {
       return Object.assign({}, acc, {
         [reactEvt]: (...rest: any) => {
@@ -105,6 +87,7 @@ export class AuthingGuard {
 
     return ReactDOM.render(
       <ReactAuthingGuard
+        id="fuck"
         {...evts}
         userPoolId={this.userPoolId}
         config={this.config}

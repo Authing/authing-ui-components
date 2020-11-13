@@ -22,12 +22,16 @@ interface AuthingGuardProps extends GuardEventsHandler {
   userPoolId: string
   config?: UserConfig
   visible?: boolean
+  className?: string
+  id?: string
 }
 
 export const AuthingGuard: FC<AuthingGuardProps> = ({
   userPoolId,
   config = {},
   visible,
+  className,
+  id,
   ...guardEvents
 }) => {
   const {
@@ -75,7 +79,7 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
         guardEvents,
       }}
     >
-      <GuardLayout visible={visible} />
+      <GuardLayout id={id} className={className} visible={visible} />
     </GuardContext>
   )
 }

@@ -158,6 +158,22 @@ export enum Protocol {
 //   Close = 'onClose',
 // }
 
+export const GuardEventsCamelToKebabMap = {
+  onLoad: 'load',
+  onLoadError: 'load-error',
+  onLogin: 'login',
+  onLoginError: 'login-error',
+  onRegister: 'register',
+  onRegisterError: 'register-error',
+  onPwdEmailSend: 'pwd-email-send',
+  onPwdEmailSendError: 'pwd-email-send-error',
+  onPwdPhoneSend: 'pwd-phone-send',
+  onPwdPhoneSendError: 'pwd-phone-send-error',
+  onPwdReset: 'pwd-reset',
+  onPwdResetError: 'pwd-reset-error',
+  onClose: 'close',
+} as const
+
 export interface GuardEventsHandlerKebab {
   // 加载完成，userPool 配置和应用配置（如果有 appId）加载完成
   load: GuardEventsHandler['onLoad']

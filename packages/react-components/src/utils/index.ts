@@ -90,3 +90,7 @@ export const useTitle = (title: string, prefix?: string) => {
     document.title = `${prefix ?? `${config.title} `} ${title}`
   }, [config.title, prefix, title])
 }
+
+export const getClassnames = (classnames: (string | boolean | undefined)[]) => {
+  return classnames.filter(Boolean).join(' ')
+}

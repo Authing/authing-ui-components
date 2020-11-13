@@ -232,7 +232,7 @@ module.exports = function (webpackEnv) {
       : paths.appIndexJs,
     output: {
       // The build folder.
-      library: isEnvLib ? 'AuthingNativeJsUIComponents' : undefined,
+      library: isEnvLib ? 'AuthingReactUIComponents' : undefined,
       libraryTarget: isEnvLib ? 'umd' : undefined,
       path: isEnvLib
         ? paths.libBuild

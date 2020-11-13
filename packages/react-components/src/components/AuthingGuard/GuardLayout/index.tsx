@@ -1,7 +1,7 @@
 import { Spin } from 'antd'
 import React, { FC, useEffect, useMemo, useState } from 'react'
 
-import { insertStyles } from '../../../utils'
+import { getClassnames, insertStyles } from '../../../utils'
 import { useGuardContext } from '../../../context/global/context'
 import { GuardHeader } from '../../../components/AuthingGuard/Header'
 import { MfaLayout } from '../../../components/AuthingGuard/MfaLayout'
@@ -231,7 +231,9 @@ const useModal = (visible?: boolean) => {
 
 export const GuardLayout: FC<{
   visible?: boolean
-}> = ({ visible }) => {
+  className?: string
+  id?: string
+}> = ({ visible, id, className }) => {
   const {
     state: { guardScenes, authClient, guardEvents },
     setValue,
@@ -275,11 +277,15 @@ export const GuardLayout: FC<{
     [GuardScenes.RestPassword]: <ResetPwdLayout />,
     [GuardScenes.MfaVerify]: <MfaLayout />,
   }
+
   return (
     <div
-      className={`authing-guard-layout${
-        !realVisible ? ' authing-guard-layout__hidden' : ''
-      }`}
+      id={id}
+      className={getClassnames([
+        'authing-guard-layout',
+        !realVisible && 'authing-guard-layout__hidden',
+        className,
+      ])}
     >
       {rendered && (
         <>
