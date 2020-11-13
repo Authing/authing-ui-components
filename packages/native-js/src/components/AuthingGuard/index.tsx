@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { AuthingGuard as ReactAuthingGuard } from 'react-components'
+import { AuthingGuard as ReactAuthingGuard } from '@authing/react-ui-components'
 import {
   User,
   GuardMode,
@@ -13,8 +13,8 @@ import {
   AuthenticationClient,
   GuardEventsHandlerKebab,
   GuardEventsCamelToKebabMap,
-} from 'react-components'
-import 'react-components/lib/index.css'
+} from '@authing/react-ui-components'
+import '@authing/react-ui-components/lib/index.css'
 
 export type {
   User,

@@ -18,7 +18,7 @@ import {
   GuardEventsHandler,
   AuthenticationClient,
   GuardEventsHandlerKebab,
-} from 'native-js'
+} from '@authing/native-js-ui-components'
 
 export type {
   User,

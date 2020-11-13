@@ -1,6 +1,6 @@
 {
-  "name": "native-js",
-  "version": "0.1.0",
+  "name": "@authing/native-js-ui-components",
+  "version": "0.0.1",
   "private": false,
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -56,7 +56,7 @@
     "postcss-safe-parser": "5.0.2",
     "react": "^17.0.1",
     "react-app-polyfill": "^2.0.0",
-    "react-components": "0.1.0",
+    "@authing/react-ui-components": "0.0.1",
     "react-dev-utils": "^11.0.0",
     "react-dom": "^17.0.1",
     "react-refresh": "^0.8.3",

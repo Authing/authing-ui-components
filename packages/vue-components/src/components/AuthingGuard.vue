@@ -3,12 +3,12 @@
 </template>
 
 <script>
-import { AuthingGuard as NativeAuthingGuard } from 'native-js'
-import 'native-js/lib/index.css'
+import { AuthingGuard as NativeAuthingGuard } from '@authing/native-js-ui-components'
+import '@authing/native-js-ui-components/lib/index.css'
 
 export default {
   name: 'AuthingGuard',
-  mounted () {
+  mounted() {
     const guard = new NativeAuthingGuard('59f86b4832eb28071bdd9214', {
       target: '#authing_guard_container',
 
@@ -51,7 +51,7 @@ export default {
       })
     }, {})
 
-    evts.forEach(evtName => guard.on(evtName, listeners[evtName]))
+    evts.forEach((evtName) => guard.on(evtName, listeners[evtName]))
   },
 }
 </script>

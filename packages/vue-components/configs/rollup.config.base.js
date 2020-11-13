@@ -9,7 +9,7 @@ import fs from 'fs'
 import CleanCSS from 'clean-css'
 import autoprefixer from 'autoprefixer'
 import css from 'rollup-plugin-css-only'
-const postcss = require('rollup-plugin-postcss');
+const postcss = require('rollup-plugin-postcss')
 
 const config = require('../package.json')
 
@@ -34,7 +34,7 @@ export default {
       extract: true,
     }),
     css({
-      output: styles => {
+      output: (styles) => {
         fs.writeFileSync('lib/index.css', new CleanCSS().minify(styles).styles)
       },
     }),
@@ -43,9 +43,9 @@ export default {
       runtimeHelpers: true,
     }),
     cjs({
-      namedExports: { 
-        'native-js': ['AuthingGuard'],
-        '../native-js/lib/index.js': ['AuthingGuard']
+      namedExports: {
+        '@authing/native-js-ui-components': ['AuthingGuard'],
+        '../native-js/lib/index.js': ['AuthingGuard'],
       },
     }),
     requireContext(),
