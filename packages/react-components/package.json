@@ -17,6 +17,7 @@
     "start": "PORT=3006 node scripts/start.js",
     "build": "node scripts/build.js",
     "build:lib": "node scripts/lib.js",
+    "publish:lib": "yarn build:lib && npm publish --access public",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
