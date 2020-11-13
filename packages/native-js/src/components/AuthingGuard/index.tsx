@@ -40,6 +40,25 @@ export class AuthingGuard {
     }
   }
 
+  static reactEvtMapNative: Record<
+    keyof GuardEventsHandler,
+    keyof GuardEventsHandlerKebab
+  > = {
+    onLoad: 'load',
+    onLoadError: 'load-error',
+    onLogin: 'login',
+    onLoginError: 'login-error',
+    onRegister: 'register',
+    onRegisterError: 'register-error',
+    onPwdEmailSend: 'pwd-email-send',
+    onPwdEmailSendError: 'pwd-email-send-error',
+    onPwdPhoneSend: 'pwd-phone-send',
+    onPwdPhoneSendError: 'pwd-phone-send-error',
+    onPwdReset: 'pwd-reset',
+    onPwdResetError: 'pwd-reset-error',
+    onClose: 'close',
+  }
+
   static getGuardContainer(selector?: string | HTMLElement) {
     const defaultId = 'authing_guard_container'
 
@@ -62,53 +81,14 @@ export class AuthingGuard {
     return selector
   }
 
-  private eventListeners: EventListeners = {
-    // 加载完成，userPool 配置和应用配置（如果有 appId）加载完成
-    load: [],
-    // 加载失败
-    'load-error': [],
-    // 用户登录成功
-    login: [],
-    // 用户登录失败
-    'login-error': [],
-    // 注册成功
-    register: [],
-    // 注册失败
-    'register-error': [],
-    // 忘记密码邮件发送成功
-    'pwd-email-send': [],
-    // 忘记密码邮件发送失败
-    'pwd-email-send-error': [],
-    // 忘记密码手机验证码发送成功
-    'pwd-phone-send': [],
-    // 忘记密码手机验证码发送失败
-    'pwd-phone-send-error': [],
-    // 重置密码成功
-    'pwd-reset': [],
-    // 重置密码失败
-    'pwd-reset-error': [],
-    // 表单关闭事件
-    close: [],
-  }
-
-  static reactEvtMapNative: Record<
-    keyof GuardEventsHandler,
-    keyof GuardEventsHandlerKebab
-  > = {
-    onLoad: 'load',
-    onLoadError: 'load-error',
-    onLogin: 'login',
-    onLoginError: 'login-error',
-    onRegister: 'register',
-    onRegisterError: 'register-error',
-    onPwdEmailSend: 'pwd-email-send',
-    onPwdEmailSendError: 'pwd-email-send-error',
-    onPwdPhoneSend: 'pwd-phone-send',
-    onPwdPhoneSendError: 'pwd-phone-send-error',
-    onPwdReset: 'pwd-reset',
-    onPwdResetError: 'pwd-reset-error',
-    onClose: 'close',
-  }
+  private eventListeners = Object.values(AuthingGuard.reactEvtMapNative).reduce(
+    (acc, evtName) => {
+      return Object.assign({}, acc, {
+        [evtName]: [],
+      })
+    },
+    {} as EventListeners
+  )
 
   render() {
     const evts: GuardEventsHandler = Object.entries(
