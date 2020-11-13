@@ -25,7 +25,7 @@ import {
 import './style.less'
 
 const handleAppConfig = (appConfig?: Partial<ApplicationConfig>) => {
-  //   插入自动义样式
+  //   插入自定义样式
   if (appConfig?.css) {
     insertStyles(appConfig?.css)
   }
@@ -46,6 +46,7 @@ const useGuardConfig = (rendered: boolean) => {
   const [errorMsg, setErrorMsg] = useState('')
   const [errorDetail, setErrorDetail] = useState<any>()
 
+  // 获取用户池配置
   useEffect(() => {
     if (!rendered) {
       return
@@ -70,6 +71,7 @@ const useGuardConfig = (rendered: boolean) => {
       })
   }, [userPoolId, rendered])
 
+  // 获取应用配置
   useEffect(() => {
     if (!rendered) {
       return
@@ -108,7 +110,8 @@ const useGuardConfig = (rendered: boolean) => {
 
   const guardConfig = useMemo<GuardConfig>(() => {
     /**
-     * 将应用配置与用户手动传入的配置合并，手动传入的优先
+     * 将用户池配置、应用配置与用户手动传入的配置合并
+     * 优先级：用户传入 > 应用 > 用户池
      */
 
     // 社会化登录
