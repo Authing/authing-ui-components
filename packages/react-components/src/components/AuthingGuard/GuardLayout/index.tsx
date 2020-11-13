@@ -31,7 +31,7 @@ const handleAppConfig = (appConfig?: Partial<ApplicationConfig>) => {
   }
 }
 
-const useGuardConfig = () => {
+const useGuardConfig = (rendered: boolean) => {
   const {
     state: { userPoolId, userConfig },
   } = useGuardContext()
@@ -47,6 +47,11 @@ const useGuardConfig = () => {
   const [errorDetail, setErrorDetail] = useState<any>()
 
   useEffect(() => {
+    if (!rendered) {
+      return
+    }
+
+    setLoadingUserPool(true)
     fetchUserPoolConfig(userPoolId)
       .then((res) => {
         if (res.code !== 200) {
@@ -63,9 +68,14 @@ const useGuardConfig = () => {
       .finally(() => {
         setLoadingUserPool(false)
       })
-  }, [userPoolId])
+  }, [userPoolId, rendered])
 
   useEffect(() => {
+    if (!rendered) {
+      return
+    }
+    setLoadingApp(true)
+
     if (!userConfig.appId) {
       setLoadingApp(false)
       return
@@ -86,7 +96,7 @@ const useGuardConfig = () => {
       .finally(() => {
         setLoadingApp(false)
       })
-  }, [userConfig.appId])
+  }, [userConfig.appId, rendered])
 
   useEffect(() => {
     handleAppConfig(appConfig)
@@ -224,10 +234,12 @@ export const GuardLayout: FC<{
     setValue,
   } = useGuardContext()
 
-  const { loading, errorMsg, guardConfig, errorDetail } = useGuardConfig()
-
   const { rendered, realVisible, isControlled, toggleLocalVisible } = useModal(
     visible
+  )
+
+  const { loading, errorMsg, guardConfig, errorDetail } = useGuardConfig(
+    rendered
   )
 
   useEffect(() => {

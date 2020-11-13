@@ -41,6 +41,7 @@ const App = () => {
       onClose={() => {
         setVisible(false)
       }}
+      onLoad={(a) => console.log(a)}
       // onPwdResetError={(e) => console.log(e)}
       userPoolId="59f86b4832eb28071bdd9214"
       config={config}
