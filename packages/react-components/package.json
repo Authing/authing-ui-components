@@ -1,6 +1,6 @@
 {
   "name": "@authing/react-ui-components",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -17,7 +17,6 @@
     "start": "PORT=3006 node scripts/start.js",
     "build": "node scripts/build.js",
     "build:lib": "node scripts/lib.js",
-    "publish:lib": "yarn build:lib && npm publish --access public",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
