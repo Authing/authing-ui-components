@@ -37,16 +37,26 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
   const {
     apiHost = defaultGuardConfig.apiHost!,
     appId,
+    appDomain,
+    isSSO,
     defaultLoginMethod = defaultGuardConfig.defaultLoginMethod,
     defaultScenes = defaultGuardConfig.defaultScenes,
     defaultRegisterMethod = defaultGuardConfig.defaultRegisterMethod,
   } = config
 
-  requestClient.setBaseUrl(apiHost)
+  let host = apiHost
+  if (appDomain && isSSO) {
+    const parsedUrl = new URL(apiHost)
+    host = `${parsedUrl.protocol}//${appDomain}${
+      parsedUrl.port ? ':' + parsedUrl.port : ''
+    }`
+  }
+
+  requestClient.setBaseUrl(host)
 
   const authClient = new AuthenticationClient({
     userPoolId,
-    host: apiHost,
+    host,
     appId,
     onError: (code, msg: any) => {
       if (code === 2020) {

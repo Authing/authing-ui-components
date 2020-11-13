@@ -1,4 +1,4 @@
-import { Spin } from 'antd'
+import { message, Spin } from 'antd'
 import React, { FC, useEffect, useMemo, useState } from 'react'
 
 import { getClassnames, insertStyles } from '../../../utils'
@@ -10,10 +10,12 @@ import { defaultGuardConfig } from '../../../components/AuthingGuard/constants'
 import { RegisterLayout } from '../../../components/AuthingGuard/RegisterLayout'
 import { ResetPwdLayout } from '../../../components/AuthingGuard/ResetPwdLayout'
 import {
+  SessionData,
+  trackSession,
   UserPoolConfig,
   fetchAppConfig,
-  fetchUserPoolConfig,
   ApplicationConfig,
+  fetchUserPoolConfig,
 } from '../../../components/AuthingGuard/api'
 import {
   Protocol,
@@ -23,6 +25,7 @@ import {
 } from '../../../components/AuthingGuard/types'
 
 import './style.less'
+import { userInfo } from 'os'
 
 const handleAppConfig = (appConfig?: Partial<ApplicationConfig>) => {
   //   插入自定义样式
@@ -256,7 +259,18 @@ export const GuardLayout: FC<{
       return
     }
     guardEvents.onLoad?.(authClient)
-  }, [authClient, errorDetail, guardEvents, loading])
+
+    if (guardConfig.isSSO) {
+      trackSession().then((sessionData) => {
+        // 这个接口没有 code, data, 直接返回了数据
+        let typedData = (sessionData as unknown) as SessionData
+        if (typedData.userInfo) {
+          message.success('登录成功')
+          guardEvents.onLogin?.(typedData.userInfo, authClient)
+        }
+      })
+    }
+  }, [authClient, errorDetail, guardEvents, loading, guardConfig])
 
   useEffect(() => {
     setValue('config', guardConfig)

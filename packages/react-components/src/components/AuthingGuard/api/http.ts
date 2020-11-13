@@ -13,10 +13,12 @@ export interface AuthingResponse<T = any> {
 
 requestClient.get = async <T>(
   path: string,
-  query: Record<string, any> = {}
+  query: Record<string, any> = {},
+  init?: RequestInit
 ): Promise<AuthingResponse<T>> => {
   const res = await fetch(
-    `${requestClient.baseUrl}${path}?${qs.stringify(query)}`
+    `${requestClient.baseUrl}${path}?${qs.stringify(query)}`,
+    init
   )
 
   return res.json()

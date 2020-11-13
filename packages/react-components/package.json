@@ -19,7 +19,7 @@
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
     "antd": "^4.8.0",
-    "authing-js-sdk": "^4.3.2",
+    "authing-js-sdk": "^4.5.1",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.6.0",
     "babel-loader": "8.1.0",

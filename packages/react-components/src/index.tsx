@@ -13,7 +13,7 @@ import reportWebVitals from './reportWebVitals'
 
 const App = () => {
   const config: UserConfig = {
-    apiHost: 'http://console.authing.localhost:3000',
+    apiHost: 'https://console.authing.localhost',
     // loginMethods: Object.values(LoginMethods),
     logo:
       'https://files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png',
@@ -24,15 +24,17 @@ const App = () => {
     // defaultScenes: GuardScenes.Login,
     // socialConnections: Object.values(SocialConnections),
     // enterpriseConnections: ["oidc1"],
-    appId: '5fa5053e252697ad5302ce7e',
+    // appId: '5fa5053e252697ad5302ce7e',
+    appDomain: 'oidc1.authing.cn',
+    isSSO: true,
     mode: GuardMode.Modal,
     // autoRegister: true,
   }
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(true)
 
-  useEffect(() => {
-    setTimeout(() => setVisible(true), 3000)
-  }, [])
+  // useEffect(() => {
+  //   setTimeout(() => setVisible(true), 3000)
+  // }, [])
 
   return (
     // eslint-disable-next-line react/jsx-no-undef
@@ -43,7 +45,7 @@ const App = () => {
       }}
       onLoad={(a) => console.log(a)}
       // onPwdResetError={(e) => console.log(e)}
-      userPoolId="59f86b4832eb28071bdd9214"
+      userPoolId="5c95905578fce5000166f853"
       config={config}
     />
   )
