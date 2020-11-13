@@ -71,6 +71,7 @@ export class AuthingGuard {
       if (!container) {
         container = document.createElement('div')
         container.id = defaultId
+        document.body.appendChild(container)
       }
 
       container.innerHTML = ''
