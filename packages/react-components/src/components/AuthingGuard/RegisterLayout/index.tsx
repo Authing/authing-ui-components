@@ -1,4 +1,4 @@
-import { Tabs } from 'antd'
+import { message, Tabs } from 'antd'
 import { User } from 'authing-js-sdk'
 import React, { FC } from 'react'
 
@@ -27,6 +27,8 @@ export const RegisterLayout: FC = () => {
   } = useGuardContext()
 
   const onSuccess = (user: User) => {
+    message.success('注册成功')
+    setValue('guardScenes', GuardScenes.Login)
     guardEvents.onRegister?.(user, authClient)
   }
 
