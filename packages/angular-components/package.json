@@ -1,11 +1,12 @@
 {
   "name": "angular-components",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:lib": "ng build NgUIComponent",
+    "build:lib": "ng build NgUIComponent --prod",
+    "publish:lib": "cd dist/ng-ui-components && npm publish --access public",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
