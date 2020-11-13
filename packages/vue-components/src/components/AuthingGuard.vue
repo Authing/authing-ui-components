@@ -3,30 +3,28 @@
 </template>
 
 <script>
-import { AuthingGuard as NativeAuthingGuard } from '@authing/native-js-ui-components'
+import {
+  AuthingGuard as NativeAuthingGuard,
+  // GuardEventsCamelToKebabMap,
+} from '@authing/native-js-ui-components'
 import '@authing/native-js-ui-components/lib/index.css'
 
 export default {
   name: 'AuthingGuard',
+  props: {
+    userPoolId: {
+      type: String,
+      required: true,
+    },
+    config: {
+      type: Object,
+      required: false,
+    },
+  },
   mounted() {
-    const guard = new NativeAuthingGuard('59f86b4832eb28071bdd9214', {
-      target: '#authing_guard_container',
+    const guard = new NativeAuthingGuard(this.userPoolId, this.config)
 
-      apiHost: 'http://console.authing.localhost:3000',
-      // loginMethods: Object.values(LoginMethods),
-      logo:
-        'https://files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png',
-      title: 'Authing',
-      // defaultLoginMethod: LoginMethods.LDAP,
-      // registerMethods: Object.values(RegisterMethods),
-      // defaultRegisterMethod: RegisterMethods.Email,
-      defaultScenes: 'login',
-      // socialConnections: Object.values(SocialConnections),
-      // enterpriseConnections: ["oidc1"],
-      appId: '5fa5053e252697ad5302ce7e',
-      // autoRegister: true,
-    })
-
+    // const evts = Object.values(GuardEventsCamelToKebabMap)
     const evts = [
       'load',
       'load-error',

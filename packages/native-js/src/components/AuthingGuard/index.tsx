@@ -25,7 +25,13 @@ export type {
   GuardEventsHandlerKebab,
 }
 
-export { GuardMode, GuardScenes, LoginMethods, RegisterMethods }
+export {
+  GuardMode,
+  GuardScenes,
+  LoginMethods,
+  RegisterMethods,
+  GuardEventsCamelToKebabMap,
+}
 
 export type EventListeners = {
   [key in keyof GuardEventsHandlerKebab]: Exclude<

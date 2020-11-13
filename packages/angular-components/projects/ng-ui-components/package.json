@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "tslib": "^2.0.0",
-    "@authing/native-js-ui-components": "0.0.1"
+    "@authing/native-js-ui-components": "0.0.4"
   },
   "bundledDependencies": [
     "@authing/native-js-ui-components"
