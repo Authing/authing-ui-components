@@ -28,36 +28,36 @@
     <title>React App</title>
   </head>
   <body>
-    <script src="../lib/index.js"></script>
+    <!-- <script src="../lib/index.js"></script> -->
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
 
     <script>
-      window.onload = () => {
-        const guard = new window.AuthingNativeJsUIComponents.AuthingGuard(
-          '59f86b4832eb28071bdd9214',
-          {
-            target: '#root',
+      // window.onload = () => {
+      //   const guard = new window.AuthingNativeJsUIComponents.AuthingGuard(
+      //     '59f86b4832eb28071bdd9214',
+      //     {
+      //       target: '#root',
 
-            apiHost: 'http://console.authing.localhost:3000',
-            // loginMethods: Object.values(LoginMethods),
-            logo:
-              'https://files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png',
-            title: 'Authing',
-            // defaultLoginMethod: LoginMethods.LDAP,
-            // registerMethods: Object.values(RegisterMethods),
-            // defaultRegisterMethod: RegisterMethods.Email,
-            defaultScenes: 'login',
-            // socialConnections: Object.values(SocialConnections),
-            // enterpriseConnections: ["oidc1"],
-            appId: '5fa5053e252697ad5302ce7e',
-            // autoRegister: true,
-          }
-        )
-        guard.on('load', (a) => {
-          console.log('加载完成', a)
-        })
-      }
+      //       apiHost: 'http://console.authing.localhost:3000',
+      //       // loginMethods: Object.values(LoginMethods),
+      //       logo:
+      //         'https://files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png',
+      //       title: 'Authing',
+      //       // defaultLoginMethod: LoginMethods.LDAP,
+      //       // registerMethods: Object.values(RegisterMethods),
+      //       // defaultRegisterMethod: RegisterMethods.Email,
+      //       defaultScenes: 'login',
+      //       // socialConnections: Object.values(SocialConnections),
+      //       // enterpriseConnections: ["oidc1"],
+      //       appId: '5fa5053e252697ad5302ce7e',
+      //       // autoRegister: true,
+      //     }
+      //   )
+      //   guard.on('load', (a) => {
+      //     console.log('加载完成', a)
+      //   })
+      // }
     </script>
     <!--
       This HTML file is a template.

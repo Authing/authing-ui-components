@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react'
+import './App.css'
+import { AuthingGuard, GuardMode } from './components'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  useEffect(() => {
+    const guard = new AuthingGuard('59f86b4832eb28071bdd9214', {
+      target: '.App',
+      apiHost: 'http://console.authing.localhost:3000',
+      mode: GuardMode.Modal,
+    })
+
+    // @ts-ignore
+    window.guard = guard
+
+    guard.show()
+
+    guard.on('load', (e) => {
+      console.log('load', e)
+    })
+
+    guard.on('close', () => {
+      console.log('关闭')
+    })
+  }, [])
+
+  return <div className="App"></div>
 }
 
-export default App;
+export default App
