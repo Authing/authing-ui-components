@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "prepublishOnly": "yarn run build:lib && cd dist/ng-ui-components"
+    "prepublishOnly": "yarn run build:lib"
   },
   "private": false,
   "dependencies": {
