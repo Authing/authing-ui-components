@@ -6,10 +6,10 @@
     "start": "ng serve",
     "build": "ng build",
     "build:lib": "ng build NgUIComponent --prod",
-    "publish:lib": "cd dist/ng-ui-components && npm publish --access public",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "prepublishOnly": "yarn run build:lib && cd dist/ng-ui-components"
   },
   "private": false,
   "dependencies": {
