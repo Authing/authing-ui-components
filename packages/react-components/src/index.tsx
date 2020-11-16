@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { AuthingGuard } from './components/AuthingGuard'
+
 import {
   GuardMode,
   UserConfig,
@@ -13,7 +14,7 @@ import reportWebVitals from './reportWebVitals'
 
 const App = () => {
   const config: UserConfig = {
-    apiHost: 'https://console.authing.localhost',
+    apiHost: 'http://console.authing.localhost:3000',
     // loginMethods: Object.values(LoginMethods),
     // logo:
     //   'https://files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png',
@@ -25,8 +26,8 @@ const App = () => {
     // socialConnections: Object.values(SocialConnections),
     // enterpriseConnections: ["oidc1"],
     // appId: '5fa5053e252697ad5302ce7e',
-    appDomain: 'oidc1.authing.cn',
-    appId: '5f17a529f64fb009b794a2ff',
+    // appDomain: 'oidc1.authing.cn',
+    // appId: '5f17a529f64fb009b794a2ff',
     isSSO: true,
     mode: GuardMode.Modal,
     // autoRegister: true,
@@ -39,16 +40,18 @@ const App = () => {
 
   return (
     // eslint-disable-next-line react/jsx-no-undef
-    <AuthingGuard
-      visible={visible}
-      onClose={() => {
-        setVisible(false)
-      }}
-      onLoad={(a) => console.log(a)}
-      // onPwdResetError={(e) => console.log(e)}
-      userPoolId="5c95905578fce5000166f853"
-      config={config}
-    />
+    <>
+      <AuthingGuard
+        visible={visible}
+        onClose={() => {
+          setVisible(false)
+        }}
+        onLoad={(a) => console.log(a)}
+        // onPwdResetError={(e) => console.log(e)}
+        userPoolId="59f86b4832eb28071bdd9214"
+        config={config}
+      />
+    </>
   )
 }
 
