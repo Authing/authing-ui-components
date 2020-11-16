@@ -17,7 +17,9 @@ requestClient.get = async <T>(
   init?: RequestInit
 ): Promise<AuthingResponse<T>> => {
   const res = await fetch(
-    `${requestClient.baseUrl}${path}?${qs.stringify(query)}`,
+    `${requestClient.baseUrl}${path}${qs.stringify(query, {
+      addQueryPrefix: true,
+    })}`,
     init
   )
 

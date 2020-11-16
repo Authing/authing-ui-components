@@ -26,6 +26,7 @@ const App = () => {
     // enterpriseConnections: ["oidc1"],
     // appId: '5fa5053e252697ad5302ce7e',
     appDomain: 'oidc1.authing.cn',
+    appId: '1f3958a5b8165dbb35159f58bb2a29d9',
     isSSO: true,
     mode: GuardMode.Modal,
     // autoRegister: true,
