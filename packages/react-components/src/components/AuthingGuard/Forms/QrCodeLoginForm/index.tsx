@@ -54,8 +54,7 @@ export const QrCodeLoginForm: FC<QrLoginFormProps> = ({
         onFail && onFail(`${message}`)
       },
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [client, config.qrCodeScanOptions, onFail, onSuccess])
 
   return (
     <div className="authing-guard-qr-form">
