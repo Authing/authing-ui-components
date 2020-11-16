@@ -15,6 +15,20 @@ export interface OIDCConnectionConfig {
   redirectUri: string
 }
 
+export interface IOAuthConnectionConfig {
+  authEndPoint: string
+  tokenEndPoint: string
+  scope: string
+  clientId: string
+  clientSecret: string
+  authUrlTemplate: string
+  codeToTokenScript: string
+  tokenToUserInfoScript: string
+  tokenToUserInfoScriptFuncId: string
+  codeToTokenScriptFuncId: string
+  authUrl?: string // 根据模板拼接出来的授权 url
+}
+
 export interface IAzureAdConnectionConfig {
   microsoftAzureAdDomain: string
   clientId: string
@@ -82,6 +96,7 @@ export interface EnterpriseConnectionItem {
     | ISamlConnectionConfig
     | ICasConnectionConfig
     | IAzureAdConnectionConfig
+    | IOAuthConnectionConfig
 }
 
 export interface UserPoolConfig {

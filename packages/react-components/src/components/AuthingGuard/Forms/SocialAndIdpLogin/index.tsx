@@ -15,6 +15,7 @@ import {
   ICasConnectionConfig,
   ISamlConnectionConfig,
   IAzureAdConnectionConfig,
+  IOAuthConnectionConfig,
 } from '../../../../components/AuthingGuard/api'
 import { requestClient } from '../../api/http'
 
@@ -130,6 +131,23 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
           icon={<Avatar size={20} src={i.logo} style={{ marginRight: 8 }} />}
           onClick={async () => {
             popupCenter(config.casConnectionLoginUrl!)
+          }}
+        >
+          使用 {i.displayName} 登录
+        </Button>
+      )
+    } else if (i.protocol === Protocol.OAUTH) {
+      const config = i.config as IOAuthConnectionConfig
+
+      return (
+        <Button
+          key={i.identifier}
+          className="authing-guard-third-login-btn"
+          block
+          size="large"
+          icon={<Avatar size={20} src={i.logo} style={{ marginRight: 8 }} />}
+          onClick={async () => {
+            popupCenter(config.authUrl!)
           }}
         >
           使用 {i.displayName} 登录
