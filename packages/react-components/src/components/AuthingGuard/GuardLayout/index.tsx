@@ -127,13 +127,17 @@ const useGuardConfig = (rendered: boolean) => {
     )
 
     // 企业身份源
-    let enterpriseConnectionObjs: ApplicationConfig['identityProviders'] = []
-    // 企业身份源都要绑定 AppId
-    if (userConfig.appId && userConfig.enterpriseConnections) {
+    let enterpriseConnectionObjs: ApplicationConfig['identityProviders']
+    if (!userConfig.appId) {
+      // 企业身份源都要绑定 AppId
+      enterpriseConnectionObjs = []
+    } else if (userConfig.enterpriseConnections) {
       enterpriseConnectionObjs =
         appConfig.identityProviders?.filter?.((item) =>
           userConfig.enterpriseConnections!.includes(item.identifier)
         ) || []
+    } else {
+      enterpriseConnectionObjs = appConfig.identityProviders || []
     }
 
     // 登录方式
