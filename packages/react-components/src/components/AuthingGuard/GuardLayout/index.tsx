@@ -18,7 +18,6 @@ import {
   fetchUserPoolConfig,
 } from '../../../components/AuthingGuard/api'
 import {
-  Protocol,
   GuardMode,
   GuardScenes,
   GuardConfig,
