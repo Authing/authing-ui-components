@@ -842,7 +842,8 @@ module.exports = function (webpackEnv) {
       net: 'empty',
       tls: 'empty',
       child_process: 'empty',
-      // crypto: 'empty',
+      crypto: 'empty', // authing-js-sdk 里面用到了，webpack 加的 polyfill 太大，手动传入 encryptFunction
+      Buffer: false,
     },
     // Turn off performance processing because we utilize
     // our own hints via the FileSizeReporter
