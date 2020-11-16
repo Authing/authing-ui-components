@@ -44,8 +44,22 @@ export default {
     }),
     cjs({
       namedExports: {
-        '@authing/native-js-ui-components': ['AuthingGuard'],
-        '../native-js/lib/index.js': ['AuthingGuard'],
+        '@authing/native-js-ui-components': [
+          'AuthingGuard',
+          'GuardEventsCamelToKebabMap',
+          'GuardMode',
+          'GuardScenes',
+          'LoginMethods',
+          'RegisterMethods',
+        ],
+        '../native-js/lib/index.js': [
+          'AuthingGuard',
+          'GuardEventsCamelToKebabMap',
+          'GuardMode',
+          'GuardScenes',
+          'LoginMethods',
+          'RegisterMethods',
+        ],
       },
     }),
     requireContext(),

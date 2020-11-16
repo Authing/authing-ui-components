@@ -1,5 +1,4 @@
 import AuthingGuard from './AuthingGuard.vue'
 
-export {
-  AuthingGuard
-}
+export * from './AuthingGuard.vue'
+export { AuthingGuard }

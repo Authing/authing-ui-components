@@ -5,9 +5,15 @@
 <script>
 import {
   AuthingGuard as NativeAuthingGuard,
-  // GuardEventsCamelToKebabMap,
+  GuardEventsCamelToKebabMap,
+  GuardMode,
+  GuardScenes,
+  LoginMethods,
+  RegisterMethods,
 } from '@authing/native-js-ui-components'
 import '@authing/native-js-ui-components/lib/index.css'
+
+export { GuardMode, GuardScenes, LoginMethods, RegisterMethods }
 
 export default {
   name: 'AuthingGuard',
@@ -24,22 +30,7 @@ export default {
   mounted() {
     const guard = new NativeAuthingGuard(this.userPoolId, this.config)
 
-    // const evts = Object.values(GuardEventsCamelToKebabMap)
-    const evts = [
-      'load',
-      'load-error',
-      'login',
-      'login-error',
-      'register',
-      'register-error',
-      'pwd-email-send',
-      'pwd-email-send-error',
-      'pwd-phone-send',
-      'pwd-phone-send-error',
-      'pwd-reset',
-      'pwd-reset-error',
-      'close',
-    ]
+    const evts = Object.values(GuardEventsCamelToKebabMap)
 
     const listeners = evts.reduce((acc, evtName) => {
       return Object.assign({}, acc, {
