@@ -322,6 +322,7 @@ export const GuardLayout: FC<{
           )}
           <div className="authing-guard-container">
             <GuardHeader />
+
             {loading ? (
               <Spin size="large" className="authing-guard-loading" />
             ) : errorMsg ? (

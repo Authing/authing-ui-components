@@ -1,8 +1,7 @@
 import React, { FC } from 'react'
 
-import { Button, Checkbox, Form, Typography } from 'antd'
-
-const { Paragraph } = Typography
+import { Button, Checkbox, Form } from 'antd'
+import { CopyAbleText } from '../../../../common/CopyAbleText'
 
 export interface MfaResetStep2Props {
   recoverCode: string
@@ -14,9 +13,9 @@ export const MfaResetStep2: FC<MfaResetStep2Props> = ({
   onFinish,
 }) => (
   <Form onFinish={onFinish}>
-    <Paragraph className="authing-guard-secret-block" copyable>
+    <CopyAbleText className="authing-guard-secret-block">
       {recoverCode}
-    </Paragraph>
+    </CopyAbleText>
     <Form.Item
       valuePropName="checked"
       rules={[

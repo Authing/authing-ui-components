@@ -26,3 +26,39 @@
 .authing-guard-full-width-space {
   width: 100%;
 }
+
+.authing-data-tips {
+  position: relative;
+  &::after {
+    content: attr(data-tips);
+    position: absolute;
+    white-space: nowrap;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(6px);
+    display: none;
+    background-color: rgba(0, 0, 0, 0.75);
+    font-size: 12px;
+    padding: 12px;
+    z-index: 500;
+    border-radius: 4px;
+    color: #fff;
+  }
+  &:hover {
+    &::after {
+      display: block;
+    }
+  }
+}
+.authing-data-tips__top {
+  position: relative;
+  &::after {
+    top: auto;
+    bottom: 100%;
+    transform: translateX(-50%) translateY(-6px);
+  }
+}
+
+.authing-guard-pointer {
+  cursor: pointer;
+}

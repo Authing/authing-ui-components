@@ -3,6 +3,7 @@ import { Rule } from 'antd/lib/form'
 import { useGuardContext } from '../context/global/context'
 
 export * from './popupCenter'
+export * from './clipboard'
 
 export const VALIDATE_PATTERN = {
   // https://emailregex.com/
