@@ -4,6 +4,7 @@ import { AuthingGuard } from './components/AuthingGuard'
 
 import {
   GuardMode,
+  LoginMethods,
   UserConfig,
   // LoginMethods,
   // RegisterMethods,
@@ -14,6 +15,7 @@ import reportWebVitals from './reportWebVitals'
 
 const App = () => {
   const config: UserConfig = {
+    // apiHost: 'https://console.authing.localhost',
     apiHost: 'http://console.authing.localhost:3000',
     // loginMethods: Object.values(LoginMethods),
     // logo:
@@ -25,10 +27,10 @@ const App = () => {
     // defaultScenes: GuardScenes.Login,
     // socialConnections: Object.values(SocialConnections),
     // enterpriseConnections: ["oidc1"],
-    // appId: '5fa5053e252697ad5302ce7e',
+    appId: '5fa5053e252697ad5302ce7e',
     // appDomain: 'oidc1.authing.cn',
     // appId: '5f17a529f64fb009b794a2ff',
-    isSSO: true,
+    // isSSO: true,
     mode: GuardMode.Modal,
     // autoRegister: true,
   }

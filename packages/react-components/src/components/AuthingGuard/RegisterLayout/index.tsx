@@ -1,4 +1,4 @@
-import { message, Tabs } from 'antd'
+import { message } from 'antd'
 import { User } from 'authing-js-sdk'
 import React, { FC } from 'react'
 
@@ -8,7 +8,7 @@ import {
   LoginMethods,
   RegisterMethods,
 } from '../../../components/AuthingGuard/types'
-import { AuthingTabs } from '../../../components/AuthingGuard/AuthingTabs'
+import { AuthingTabs } from '../../../common/AuthingTabs'
 import { REGISTER_METHODS_MAP } from '../../../components/AuthingGuard/constants'
 import {
   EmailRegisterForm,
@@ -73,19 +73,9 @@ export const RegisterLayout: FC = () => {
 
   return (
     <AuthingTabs
-      size="large"
       activeKey={activeTabs[GuardScenes.Register]}
       onTabClick={onTabClick}
-      centered
-      className="authing-guard-tabs"
-    >
-      {tabs.map((item) => {
-        return (
-          <Tabs.TabPane key={item.key} tab={item.label}>
-            {item.component}
-          </Tabs.TabPane>
-        )
-      })}
-    </AuthingTabs>
+      tabs={tabs}
+    ></AuthingTabs>
   )
 }

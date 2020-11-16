@@ -1,4 +1,4 @@
-import { message, Tabs } from 'antd'
+import { message } from 'antd'
 import { User } from 'authing-js-sdk'
 import { FormInstance } from 'antd/lib/form'
 import React, { useRef } from 'react'
@@ -15,7 +15,7 @@ import {
   LOGIN_METHODS_MAP,
   NEED_MFA_CODE,
 } from '../../../components/AuthingGuard/constants'
-import { AuthingTabs } from '../../../components/AuthingGuard/AuthingTabs'
+import { AuthingTabs } from '../../../common/AuthingTabs'
 import {
   BaseFormProps,
   GuardScenes,
@@ -119,7 +119,7 @@ export const LoginLayout = () => {
   return (
     <>
       <AuthingTabs
-        size="large"
+        tabs={tabs}
         onTabClick={(t) =>
           setValue('activeTabs', {
             ...activeTabs,
@@ -127,17 +127,7 @@ export const LoginLayout = () => {
           })
         }
         activeKey={activeTabs[GuardScenes.Login]}
-        centered
-        className="authing-guard-tabs"
-      >
-        {tabs.map((item) => {
-          return (
-            <Tabs.TabPane key={item.key} tab={item.label}>
-              {item.component}
-            </Tabs.TabPane>
-          )
-        })}
-      </AuthingTabs>
+      ></AuthingTabs>
 
       {SHOW_SOCIAL_LOGIN_TAB.includes(activeTabs[GuardScenes.Login]) && (
         <SocialAndIdpLogin onFail={onFail} onSuccess={onSuccess} />
