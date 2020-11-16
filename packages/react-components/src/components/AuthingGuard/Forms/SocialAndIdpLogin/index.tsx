@@ -1,5 +1,4 @@
 import qs from 'qs'
-import axios from 'axios'
 import shortid from 'shortid'
 import React, { FC, useEffect } from 'react'
 import { Button, Avatar, Space, Tooltip, message } from 'antd'
@@ -17,6 +16,7 @@ import {
   ISamlConnectionConfig,
   IAzureAdConnectionConfig,
 } from '../../../../components/AuthingGuard/api'
+import { requestClient } from '../../api/http'
 
 import './style.less'
 
@@ -85,14 +85,17 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
           size="large"
           icon={<Avatar size={20} src={i.logo} style={{ marginRight: 8 }} />}
           onClick={async () => {
-            await axios.post('/api/v2/connections/oidc/start-interaction', {
-              state,
-              protocol: i.protocol,
-              userPoolId,
-              appId: config.appId,
-              referer: window.location.href,
-              connection: { providerIentifier: i.identifier },
-            })
+            await requestClient.post(
+              '/api/v2/connections/oidc/start-interaction',
+              {
+                state,
+                protocol: i.protocol,
+                userPoolId,
+                appId: config.appId,
+                referer: window.location.href,
+                connection: { providerIentifier: i.identifier },
+              }
+            )
             popupCenter(url)
           }}
         >

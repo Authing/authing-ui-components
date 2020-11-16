@@ -15,9 +15,9 @@ const App = () => {
   const config: UserConfig = {
     apiHost: 'https://console.authing.localhost',
     // loginMethods: Object.values(LoginMethods),
-    logo:
-      'https://files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png',
-    title: 'Authing',
+    // logo:
+    //   'https://files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png',
+    // title: 'Authing',
     // defaultLoginMethod: LoginMethods.LDAP,
     // registerMethods: Object.values(RegisterMethods),
     // defaultRegisterMethod: RegisterMethods.Email,
@@ -26,7 +26,7 @@ const App = () => {
     // enterpriseConnections: ["oidc1"],
     // appId: '5fa5053e252697ad5302ce7e',
     appDomain: 'oidc1.authing.cn',
-    appId: '1f3958a5b8165dbb35159f58bb2a29d9',
+    appId: '5f17a529f64fb009b794a2ff',
     isSSO: true,
     mode: GuardMode.Modal,
     // autoRegister: true,

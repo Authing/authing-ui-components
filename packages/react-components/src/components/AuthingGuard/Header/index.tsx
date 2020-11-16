@@ -10,15 +10,14 @@ export interface HeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 export const GuardHeader: FC<HeaderProps> = (props) => {
   const {
     state: {
-      config: { logo },
-      guardTitle,
+      config: { logo, title },
     },
   } = useGuardContext()
 
   return (
     <div className="authing-guard-header">
       <Avatar className="authing-guard-logo" src={logo} size={50}></Avatar>
-      <div className="authing-guard-title">{guardTitle}</div>
+      <div className="authing-guard-title">{title}</div>
     </div>
   )
 }

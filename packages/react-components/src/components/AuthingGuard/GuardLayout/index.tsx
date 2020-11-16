@@ -25,7 +25,6 @@ import {
 } from '../../../components/AuthingGuard/types'
 
 import './style.less'
-import { userInfo } from 'os'
 
 const handleAppConfig = (appConfig?: Partial<ApplicationConfig>) => {
   //   插入自定义样式
@@ -92,6 +91,7 @@ const useGuardConfig = (rendered: boolean) => {
           setErrorDetail(res)
           return
         }
+
         setAppConfig(res.data!)
       })
       .catch((e: any) => {
@@ -127,14 +127,14 @@ const useGuardConfig = (rendered: boolean) => {
     )
 
     // 企业身份源
-    const enterprises =
-      userConfig.enterpriseConnections ||
-      appConfig.identityProviders?.map?.((item) => item.identifier) ||
-      []
-    const enterpriseConnectionObjs = userPoolConfig.enterpriseConnections
-      ?.filter?.((item) => enterprises.includes(item.identifier))
-      //   OIDC 必须要有 appId
-      .filter((item) => item.protocol !== Protocol.OIDC || userConfig.appId)
+    let enterpriseConnectionObjs: ApplicationConfig['identityProviders'] = []
+    // 企业身份源都要绑定 AppId
+    if (userConfig.appId && userConfig.enterpriseConnections) {
+      enterpriseConnectionObjs =
+        appConfig.identityProviders?.filter?.((item) =>
+          userConfig.enterpriseConnections!.includes(item.identifier)
+        ) || []
+    }
 
     // 登录方式
     const loginMethods =
@@ -160,6 +160,7 @@ const useGuardConfig = (rendered: boolean) => {
 
     // 应用名
     const title = userConfig.title || appConfig.name || defaultGuardConfig.title
+
     // 应用 logo
     const logo = userConfig.logo || appConfig.logo || defaultGuardConfig.logo
 
