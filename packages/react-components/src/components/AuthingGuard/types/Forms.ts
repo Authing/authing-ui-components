@@ -11,6 +11,10 @@ export interface PasswordLoginFormProps extends BaseFormProps {
   onValidateFail?: (error: any) => void
 }
 
+export interface ADLoginFormProps extends BaseFormProps {
+  onValidateFail?: (error: any) => void
+}
+
 export interface PhoneCodeLoginFormProps extends BaseFormProps {
   onValidateFail?: (error: any) => void
 }

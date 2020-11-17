@@ -19,6 +19,7 @@ export enum LoginMethods {
   Password = 'password',
   PhoneCode = 'phone-code',
   WxMinQr = 'wechat-miniprogram-qrcode', // 对应社会化登录的 wechat:miniprogram:qrconnect(小程序扫码登录)
+  AD = 'ad', // 对应企业身份源的 Windows AD 登录
 }
 
 export enum RegisterMethods {

@@ -18,6 +18,7 @@ export const LOGIN_METHODS_MAP = {
   [LoginMethods.AppQr]: 'APP 扫码登录',
   [LoginMethods.WxMinQr]: '扫码登录',
   [LoginMethods.LDAP]: 'LDAP 登录',
+  [LoginMethods.AD]: 'AD 登录',
 }
 
 export const REGISTER_METHODS_MAP = {

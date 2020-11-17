@@ -5,6 +5,7 @@ import React, { useRef } from 'react'
 
 import { useGuardContext } from '../../../context/global/context'
 import {
+  ADLoginForm,
   LdapLoginForm,
   QrCodeLoginForm,
   SocialAndIdpLogin,
@@ -82,6 +83,12 @@ const useNormalLoginTabs = ({ onSuccess, onFail }: BaseFormProps) => {
       <LdapLoginForm
         {...formProps}
         ref={(v) => (formRef.current[LoginMethods.LDAP] = v!)}
+      />
+    ),
+    [LoginMethods.AD]: (
+      <ADLoginForm
+        {...formProps}
+        ref={(v) => (formRef.current[LoginMethods.AD] = v!)}
       />
     ),
   }
