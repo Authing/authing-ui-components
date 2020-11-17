@@ -53,6 +53,9 @@ export default {
         }
 
         if (val) {
+          this.show()
+        } else {
+          this.hide()
         }
       },
     },
@@ -75,6 +78,9 @@ export default {
 
     evts.forEach((evtName) => guard.on(evtName, listeners[evtName]))
 
+    if (this.localVisible) {
+      guard.show()
+    }
     this.$guard = guard
   },
   methods: {
