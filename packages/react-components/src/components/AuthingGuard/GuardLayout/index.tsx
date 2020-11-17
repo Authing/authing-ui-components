@@ -1,5 +1,5 @@
 import { message, Spin } from 'antd'
-import React, { FC, useEffect, useMemo, useState } from 'react'
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { getClassnames, insertStyles } from '../../../utils'
 import { useGuardContext } from '../../../context/global/context'
@@ -315,6 +315,13 @@ export const GuardLayout: FC<{
     rendered
   )
 
+  const closeHandler = useCallback(() => {
+    if (!isControlled) {
+      toggleLocalVisible()
+    }
+    guardEvents.onClose?.()
+  }, [isControlled, guardEvents])
+
   useEffect(() => {
     if (loading) {
       return
@@ -350,6 +357,18 @@ export const GuardLayout: FC<{
     guardConfig,
   ])
 
+  // 监听 esc 关闭 modal
+  useEffect(() => {
+    const handler = (evt: KeyboardEvent) => {
+      if (evt.keyCode === 27 && guardConfig.escCloseable) {
+        closeHandler()
+      }
+    }
+
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [closeHandler, guardConfig])
+
   const layoutMap = {
     [GuardScenes.Login]: <LoginLayout />,
     [GuardScenes.Register]: <RegisterLayout />,
@@ -369,16 +388,8 @@ export const GuardLayout: FC<{
     >
       {rendered && (
         <>
-          {isModal && (
-            <button
-              onClick={() => {
-                if (!isControlled) {
-                  toggleLocalVisible()
-                }
-                guardEvents.onClose?.()
-              }}
-              className="authing-guard-close-btn"
-            >
+          {isModal && guardConfig.clickCloseable && (
+            <button onClick={closeHandler} className="authing-guard-close-btn">
               <i className="authing-icon authing-guanbi"></i>
             </button>
           )}
