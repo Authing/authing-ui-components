@@ -363,6 +363,7 @@ export const GuardLayout: FC<{
       className={getClassnames([
         'authing-guard-layout',
         !realVisible && 'authing-guard-layout__hidden',
+        isModal && 'authing-guard-layout__modal',
         className,
       ])}
     >
