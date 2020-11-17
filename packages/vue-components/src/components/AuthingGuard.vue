@@ -26,6 +26,36 @@ export default {
       type: Object,
       required: false,
     },
+    visible: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      localVisible: false,
+      $guard: null,
+    }
+  },
+  watch: {
+    visible: {
+      immediate: true,
+      handler(val) {
+        if (val !== this.localVisible) {
+          this.localVisible = val
+        }
+      },
+    },
+    localVisible: {
+      handler(val) {
+        if (val !== this.visible) {
+          this.$emit('update:visible', val)
+        }
+
+        if (val) {
+        }
+      },
+    },
   },
   mounted() {
     const guard = new NativeAuthingGuard(this.userPoolId, this.config)
@@ -35,12 +65,25 @@ export default {
     const listeners = evts.reduce((acc, evtName) => {
       return Object.assign({}, acc, {
         [evtName]: (...rest) => {
+          if (evtName === 'close') {
+            this.localVisible = false
+          }
           this.$emit(evtName, ...rest)
         },
       })
     }, {})
 
     evts.forEach((evtName) => guard.on(evtName, listeners[evtName]))
+
+    this.$guard = guard
+  },
+  methods: {
+    show() {
+      this.$guard.show()
+    },
+    hide() {
+      this.$guard.hide()
+    },
   },
 }
 </script>
