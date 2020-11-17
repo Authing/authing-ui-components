@@ -197,18 +197,20 @@ const useGuardConfig = (rendered: boolean) => {
       defaultGuardConfig.defaultRegisterMethod
 
     // 应用名
-    const title =
-      userConfig.title ||
-      appConfig.name ||
-      userPoolConfig.name ||
-      defaultGuardConfig.title
+    const title = loading
+      ? ''
+      : userConfig.title ??
+        appConfig.name ??
+        userPoolConfig.name ??
+        defaultGuardConfig.title
 
     // 应用 logo
-    const logo =
-      userConfig.logo ||
-      appConfig.logo ||
-      userPoolConfig.logo ||
-      defaultGuardConfig.logo
+    const logo = loading
+      ? ''
+      : userConfig.logo ??
+        appConfig.logo ??
+        userPoolConfig.logo ??
+        defaultGuardConfig.logo
 
     // 是否自动注册
     const autoRegister =
@@ -247,7 +249,23 @@ const useGuardConfig = (rendered: boolean) => {
       defaultRegisterMethod,
       enterpriseConnectionObjs,
     } as unknown) as GuardConfig
-  }, [userConfig, userPoolConfig, appConfig])
+  }, [
+    userConfig,
+    appConfig.socialConnections,
+    appConfig.loginTabs?.list,
+    appConfig.loginTabs?.default,
+    appConfig.registerTabs?.list,
+    appConfig.registerTabs?.default,
+    appConfig.name,
+    appConfig.logo,
+    appConfig.ssoPageComponentDisplay?.autoRegisterThenLoginHintInfo,
+    appConfig.ssoPageComponentDisplay?.registerBtn,
+    appConfig.identityProviders,
+    loading,
+    userPoolConfig.name,
+    userPoolConfig.logo,
+    userPoolConfig.socialConnections,
+  ])
 
   return {
     loading,
@@ -315,12 +333,18 @@ export const GuardLayout: FC<{
     rendered
   )
 
+  // 动画完成后完全隐藏 dom
+  const [hidden, setHidden] = useState(false)
+  useEffect(() => {
+    setHidden(false)
+  }, [realVisible])
+
   const closeHandler = useCallback(() => {
     if (!isControlled) {
       toggleLocalVisible()
     }
     guardEvents.onClose?.()
-  }, [isControlled, guardEvents])
+  }, [isControlled, guardEvents, toggleLocalVisible])
 
   useEffect(() => {
     if (loading) {
@@ -383,17 +407,40 @@ export const GuardLayout: FC<{
         'authing-guard-layout',
         !realVisible && 'authing-guard-layout__hidden',
         isModal && 'authing-guard-layout__modal',
+        hidden && 'authing-guard-layout__dis-none',
         className,
       ])}
+      onTransitionEnd={() => {
+        if (!realVisible) {
+          setHidden(true)
+        }
+      }}
     >
       {rendered && (
         <>
-          {isModal && guardConfig.clickCloseable && (
-            <button onClick={closeHandler} className="authing-guard-close-btn">
-              <i className="authing-icon authing-guanbi"></i>
-            </button>
+          {isModal && (
+            <div
+              className={getClassnames([
+                'authing-guard-mask',
+                !realVisible && 'authing-guard-mask__hidden',
+              ])}
+            ></div>
           )}
-          <div className="authing-guard-container">
+          <div
+            className={getClassnames([
+              'authing-guard-container',
+              !realVisible && 'authing-guard-container__hidden',
+            ])}
+          >
+            {isModal && guardConfig.clickCloseable && (
+              <button
+                onClick={closeHandler}
+                className="authing-guard-close-btn"
+              >
+                <i className="authing-icon authing-guanbi"></i>
+              </button>
+            )}
+
             <GuardHeader />
 
             {loading ? (
