@@ -53,7 +53,7 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
         if (code === 200) {
           onSuccess(data)
         } else {
-          message.error(errMsg)
+          message.error(JSON.stringify(errMsg))
         }
       }
     }

@@ -16,7 +16,10 @@ export const LoginFormFooter: FC<LoginFormFooterProps> = ({
   needRestPwd = false,
   needRegister = false,
 }) => {
-  const { setValue } = useGuardContext()
+  const {
+    setValue,
+    state: { config },
+  } = useGuardContext()
 
   return (
     <>
@@ -31,7 +34,7 @@ export const LoginFormFooter: FC<LoginFormFooterProps> = ({
       </Button>
 
       <div className="authing-guard-form-actions">
-        {needRestPwd && (
+        {needRestPwd && !config.disableResetPwd && (
           <Button
             onClick={() => setValue('guardScenes', GuardScenes.RestPassword)}
             className="authing-guard-text-btn"
@@ -40,7 +43,7 @@ export const LoginFormFooter: FC<LoginFormFooterProps> = ({
             忘记密码？
           </Button>
         )}
-        {needRegister && (
+        {needRegister && !config.disableRegister && (
           <div className="authing-guard-tip-btn-comb">
             <span className="authing-guard-tip">还没有账号，</span>
             <Button

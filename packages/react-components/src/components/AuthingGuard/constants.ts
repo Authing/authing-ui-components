@@ -1,5 +1,4 @@
 import {
-  AppType,
   GuardMode,
   UserConfig,
   GuardScenes,
@@ -27,20 +26,20 @@ export const REGISTER_METHODS_MAP = {
 }
 
 export const defaultGuardConfig: Partial<UserConfig> = {
-  apiHost: 'https://core.authing.cn',
-  loginMethods: [LoginMethods.Password, LoginMethods.PhoneCode],
-  defaultLoginMethod: LoginMethods.Password,
-  registerMethods: [RegisterMethods.Email, RegisterMethods.Phone],
-  defaultRegisterMethod: RegisterMethods.Email,
-  mode: GuardMode.Normal,
+  isSSO: false,
   title: 'Authing',
-  logo:
-    'https://files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png',
-  defaultScenes: GuardScenes.Login,
+  escCloseable: true,
   autoRegister: false,
   clickCloseable: true,
-  escCloseable: true,
-  isSSO: false,
-  appType: AppType.OIDC,
-  scope: 'openid profile email phone',
+  mode: GuardMode.Normal,
+  disableRegister: false,
+  disableResetPwd: false,
+  defaultScenes: GuardScenes.Login,
+  apiHost: 'https://core.authing.cn',
+  defaultLoginMethod: LoginMethods.Password,
+  defaultRegisterMethod: RegisterMethods.Email,
+  loginMethods: [LoginMethods.Password, LoginMethods.PhoneCode],
+  registerMethods: [RegisterMethods.Email, RegisterMethods.Phone],
+  logo:
+    'https://files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png',
 }

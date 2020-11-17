@@ -18,7 +18,7 @@ export enum LoginMethods {
   AppQr = 'app-qrcode',
   Password = 'password',
   PhoneCode = 'phone-code',
-  WxMinQr = 'wechat-miniprogram-qrcode',
+  WxMinQr = 'wechat-miniprogram-qrcode', // 对应社会化登录的 wechat:miniprogram:qrconnect(小程序扫码登录)
 }
 
 export enum RegisterMethods {
@@ -48,17 +48,12 @@ export enum SocialConnections {
   Dingtalk = 'dingtalk',
   WxMobile = 'wechat:mobile',
   WxWCorpQr = 'wechatwork:corp:qrconnect',
-  WxMinQr = 'wechat:miniprogram:qrconnect',
+  // WxMinQr = 'wechat:miniprogram:qrconnect',
   WxWebAuth = 'wechat:webpage-authorization',
   WxMinApp = 'wechat:miniprogram:app-launch',
   WxMinDefault = 'wechat:miniprogram:default',
   WxWSPQr = 'wechatwork:service-provider:qrconnect',
   WxWSPAuth = 'wechatwork:service-provider:authorization',
-}
-
-export enum AppType {
-  OAUTH = 'oauth',
-  OIDC = 'oidc',
 }
 
 export enum Protocol {
@@ -231,17 +226,17 @@ export interface GuardEventsHandler {
 export interface UserConfig {
   logo?: string
   appId?: string
-  scope?: string
   title?: string
   isSSO?: boolean
   mode?: GuardMode
   apiHost?: string
-  appType?: AppType
   appDomain?: string
   contentCss?: string
   escCloseable?: boolean
   autoRegister?: boolean
   clickCloseable?: boolean
+  disableResetPwd?: boolean
+  disableRegister?: boolean
   defaultScenes?: GuardScenes
   loginMethods?: LoginMethods[]
   target?: string | HTMLElement

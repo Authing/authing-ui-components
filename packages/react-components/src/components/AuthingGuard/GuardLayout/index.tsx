@@ -16,19 +16,23 @@ import {
   fetchAppConfig,
   ApplicationConfig,
   fetchUserPoolConfig,
+  SocialConnectionItem,
 } from '../../../components/AuthingGuard/api'
 import {
   GuardMode,
   GuardScenes,
   GuardConfig,
+  UserConfig,
 } from '../../../components/AuthingGuard/types'
 
 import './style.less'
 
-const handleAppConfig = (appConfig?: Partial<ApplicationConfig>) => {
-  //   插入自定义样式
-  if (appConfig?.css) {
-    insertStyles(appConfig?.css)
+const checkConfig = (userPoolId: string, config: UserConfig) => {
+  if (!userPoolId) {
+    throw new Error('请传入用户池 ID')
+  }
+  if (config.isSSO && (!config.appDomain || !config.appId)) {
+    throw new Error('SSO 模式请传入 appDomain 和 appId 字段')
   }
 }
 
@@ -47,6 +51,16 @@ const useGuardConfig = (rendered: boolean) => {
   const [errorMsg, setErrorMsg] = useState('')
   const [errorDetail, setErrorDetail] = useState<any>()
 
+  useEffect(() => {
+    try {
+      checkConfig(userPoolId, userConfig)
+    } catch (e: any) {
+      setErrorDetail(e)
+      setErrorMsg(e.message)
+      console.error(e)
+    }
+  }, [userPoolId, userConfig])
+
   // 获取用户池配置
   useEffect(() => {
     if (!rendered) {
@@ -54,6 +68,12 @@ const useGuardConfig = (rendered: boolean) => {
     }
 
     setLoadingUserPool(true)
+
+    if (!userPoolId) {
+      setLoadingUserPool(false)
+      return
+    }
+
     fetchUserPoolConfig(userPoolId)
       .then((res) => {
         if (res.code !== 200) {
@@ -61,6 +81,14 @@ const useGuardConfig = (rendered: boolean) => {
           setErrorDetail(res)
           return
         }
+        // 某些社会化登录会在 tabs 中显示，所以底部不显示了
+        const hideSocials = ['wechat:miniprogram:qrconnect']
+        if (res.data) {
+          res.data.socialConnections = res.data?.socialConnections.filter(
+            (item) => !hideSocials.includes(item.provider)
+          )
+        }
+
         setUserPoolConfig(res.data!)
       })
       .catch((e: any) => {
@@ -103,8 +131,9 @@ const useGuardConfig = (rendered: boolean) => {
   }, [userConfig.appId, rendered])
 
   useEffect(() => {
-    handleAppConfig(appConfig)
-  }, [appConfig])
+    insertStyles(appConfig?.css)
+    insertStyles(userConfig.contentCss)
+  }, [appConfig, userConfig])
 
   const loading = useMemo(() => {
     return loadingApp || loadingUserPool
@@ -117,13 +146,19 @@ const useGuardConfig = (rendered: boolean) => {
      */
 
     // 社会化登录
-    const socials =
-      userConfig.socialConnections ||
-      appConfig.socialConnections?.map?.((item) => item.provider) ||
-      []
-    const socialConnectionObjs = userPoolConfig.socialConnections?.filter?.(
-      (item) => socials.includes(item.provider)
-    )
+    let socialConnectionObjs: SocialConnectionItem[] | undefined
+    // 默认展示所有社会化登录
+    if (!userConfig.socialConnections && !appConfig.socialConnections) {
+      socialConnectionObjs = [...(userPoolConfig.socialConnections || [])]
+    } else {
+      const socials =
+        userConfig.socialConnections ||
+        appConfig.socialConnections?.map?.((item) => item.provider) ||
+        []
+      socialConnectionObjs = userPoolConfig.socialConnections?.filter?.(
+        (item) => socials.includes(item.provider)
+      )
+    }
 
     // 企业身份源
     let enterpriseConnectionObjs: ApplicationConfig['identityProviders']
@@ -162,16 +197,40 @@ const useGuardConfig = (rendered: boolean) => {
       defaultGuardConfig.defaultRegisterMethod
 
     // 应用名
-    const title = userConfig.title || appConfig.name || defaultGuardConfig.title
+    const title =
+      userConfig.title ||
+      appConfig.name ||
+      userPoolConfig.name ||
+      defaultGuardConfig.title
 
     // 应用 logo
-    const logo = userConfig.logo || appConfig.logo || defaultGuardConfig.logo
+    const logo =
+      userConfig.logo ||
+      appConfig.logo ||
+      userPoolConfig.logo ||
+      defaultGuardConfig.logo
 
     // 是否自动注册
     const autoRegister =
       userConfig.autoRegister ??
       appConfig.ssoPageComponentDisplay?.autoRegisterThenLoginHintInfo ??
       defaultGuardConfig.autoRegister
+
+    // 禁止注册
+    const disableRegister =
+      userConfig.disableRegister ??
+      !(
+        appConfig.ssoPageComponentDisplay?.registerBtn ??
+        !defaultGuardConfig.disableRegister
+      )
+
+    // 禁止重置密码
+    const disableResetPwd =
+      userConfig.disableResetPwd ??
+      !(
+        appConfig.ssoPageComponentDisplay?.registerBtn ??
+        !defaultGuardConfig.disableResetPwd
+      )
 
     return ({
       ...defaultGuardConfig,
@@ -180,6 +239,8 @@ const useGuardConfig = (rendered: boolean) => {
       title,
       autoRegister,
       loginMethods,
+      disableRegister,
+      disableResetPwd,
       registerMethods,
       defaultLoginMethod,
       socialConnectionObjs,

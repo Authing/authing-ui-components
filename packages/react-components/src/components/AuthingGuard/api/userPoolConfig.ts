@@ -100,6 +100,8 @@ export interface EnterpriseConnectionItem {
 }
 
 export interface UserPoolConfig {
+  name: string
+  logo: string
   socialConnections: SocialConnectionItem[]
   enterpriseConnections: EnterpriseConnectionItem[]
 }
