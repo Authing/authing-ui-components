@@ -32,6 +32,11 @@ const App = () => {
     // appId: '5f17a529f64fb009b794a2ff',
     // isSSO: true,
     mode: GuardMode.Modal,
+    contentCss: `
+      html, body {
+        background-color: #fff;
+      }
+    `,
     // autoRegister: true,
   }
   const [visible, setVisible] = useState(true)
@@ -47,12 +52,16 @@ const App = () => {
         visible={visible}
         onClose={() => {
           setVisible(false)
+          setTimeout(() => {
+            setVisible(true)
+          }, 2000)
         }}
         onLoad={(a) => console.log(a)}
         // onPwdResetError={(e) => console.log(e)}
         userPoolId="59f86b4832eb28071bdd9214"
         config={config}
       />
+      jsdlflkdsk sdjfl
     </>
   )
 }
