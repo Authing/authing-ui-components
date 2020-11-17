@@ -12,8 +12,10 @@
 <authing-guard
   [userPoolId]="userPoolId"
   [config]="config"
+  [visible]="visible"
   (onLoginError)="onLoginError($event)"
   (onLoad)="onLoad($event)"
+  (onClose)="onClose($event)"
 ></authing-guard>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->

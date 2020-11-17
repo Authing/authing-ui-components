@@ -1,9 +1,9 @@
-import { Component } from '@angular/core'
+import { Component } from '@angular/core';
 import {
   CommonMessage,
   AuthenticationClient,
   GuardScenes,
-} from 'ng-ui-components'
+} from 'ng-ui-components';
 
 @Component({
   selector: 'app-root',
@@ -11,11 +11,12 @@ import {
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'demo'
-
-  userPoolId = '59f86b4832eb28071bdd9214'
+  title = 'demo';
+  visible = true;
+  userPoolId = '59f86b4832eb28071bdd9214';
   config = {
     target: '#authing_guard_container',
+    mode: 'modal',
 
     apiHost: 'http://console.authing.localhost:3000',
     // loginMethods: Object.values(LoginMethods),
@@ -30,13 +31,17 @@ export class AppComponent {
     // enterpriseConnections: ["oidc1"],
     appId: '5fa5053e252697ad5302ce7e',
     // autoRegister: true,
-  }
+  };
 
   onLoad(e: AuthenticationClient) {
-    console.log('ffffff', e)
+    console.log('ffffff', e);
   }
 
   onLoginError([msg]: [msg: CommonMessage, client: AuthenticationClient]) {
-    console.log(msg)
+    console.log(msg);
+  }
+
+  onClose() {
+    this.visible = false;
   }
 }
