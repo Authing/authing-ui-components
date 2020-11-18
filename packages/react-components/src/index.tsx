@@ -61,7 +61,6 @@ const App = () => {
         userPoolId="59f86b4832eb28071bdd9214"
         config={config}
       />
-      jsdlflkdsk sdjfl
     </>
   )
 }
