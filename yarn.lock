@@ -279,25 +279,6 @@
     lodash "^4.17.15"
     resize-observer-polyfill "^1.5.0"
 
-"@authing/native-js-ui-components@0.0.7", "@authing/native-js-ui-components@^0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@authing/native-js-ui-components/-/native-js-ui-components-0.0.7.tgz#d3e8dc8c0ec26469fe1b95f437d06579c8ff616c"
-  integrity sha512-PVus5akP+aM1OISeUgOIWv47UDJ3r5opJNiYoMN1GBemFn+Tlv5vui/UPpW8+MQFaRMEp3Jy+HtLFpxyxQ1fxA==
-  dependencies:
-    "@authing/react-ui-components" "0.0.6"
-    react "^17.0.1"
-    react-dom "^17.0.1"
-
-"@authing/react-ui-components@0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@authing/react-ui-components/-/react-ui-components-0.0.6.tgz#7aff90d8016fa4a290533f407519237e6059b7c9"
-  integrity sha512-y3xE3XnI3ATRgZDRFYmEPX0Vf1tw7vTrUdUBqFPPO83fRsZbGYnQfuXIsZ7vfDZ9yUDM30X5Czu1nd1MHE8/zA==
-  dependencies:
-    antd "^4.8.0"
-    authing-js-sdk "^4.6.1"
-    jsencrypt "^3.0.0-rc.1"
-    qs "^6.9.4"
-
 "@ava/babel@^1.0.1":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@ava/babel/-/babel-1.0.1.tgz#9f005bc0118eee4639827df798c75b77fa5fe35d"
@@ -4549,15 +4530,6 @@ atob@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
-
-authing-js-sdk@^4.6.1:
-  version "4.6.1"
-  resolved "https://registry.yarnpkg.com/authing-js-sdk/-/authing-js-sdk-4.6.1.tgz#d322b49de7b37ed84aab3cabe503ba6bb97ed21f"
-  integrity sha512-+7KjCwBpIfaEnIU2FonG2ZCYu3/WLCe7mKaM+iHOTJ5lKcqnjxMsQPicTt9W3kX5iSf6BdE8VTipy8ggqsrJ1g==
-  dependencies:
-    axios "^0.19.2"
-    jsencrypt "^3.0.0-rc.1"
-    jwt-decode "^2.2.0"
 
 authing-js-sdk@^4.6.2:
   version "4.6.2"
