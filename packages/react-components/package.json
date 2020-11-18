@@ -2,7 +2,7 @@
   "name": "@authing/react-ui-components",
   "version": "0.0.9",
   "private": false,
-  "main": "lib/index.js",
+  "main": "lib/index.min.js",
   "typings": "lib/index.d.ts",
   "dependencies": {
     "antd": "^4.8.0",

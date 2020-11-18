@@ -14,7 +14,7 @@ import {
   GuardEventsHandlerKebab,
   GuardEventsCamelToKebabMap,
 } from '@authing/react-ui-components'
-import '@authing/react-ui-components/lib/index.css'
+import '@authing/react-ui-components/lib/index.min.css'
 
 export type {
   User,

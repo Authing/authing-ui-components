@@ -249,7 +249,7 @@ module.exports = function (webpackEnv) {
           // return chunkData.chunk.name === 'index'
           //   ? '[name].js'
           //   : 'components/[name]/index.js'
-          return 'index.js'
+          return 'index.min.js'
         }
         return isEnvProduction
           ? 'static/js/[name].[contenthash:8].js'
@@ -728,7 +728,7 @@ module.exports = function (webpackEnv) {
         new MiniCssExtractPlugin({
           // Options similar to the same options in webpackOptions.output
           // both options are optional
-          filename: 'index.css',
+          filename: 'index.min.css',
           // filename: (chunkData) => {
           //   return chunkData.chunk.name === 'index'
           //     ? '[name].css'

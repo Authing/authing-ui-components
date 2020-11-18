@@ -11,7 +11,7 @@ import {
   LoginMethods,
   RegisterMethods,
 } from '@authing/native-js-ui-components'
-import '@authing/native-js-ui-components/lib/index.css'
+import '@authing/native-js-ui-components/lib/index.min.css'
 
 export { GuardMode, GuardScenes, LoginMethods, RegisterMethods }
 

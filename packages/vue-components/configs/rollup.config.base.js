@@ -35,7 +35,10 @@ export default {
     }),
     css({
       output: (styles) => {
-        fs.writeFileSync('lib/index.css', new CleanCSS().minify(styles).styles)
+        fs.writeFileSync(
+          'lib/index.min.css',
+          new CleanCSS().minify(styles).styles
+        )
       },
     }),
     babel({
@@ -52,7 +55,7 @@ export default {
           'LoginMethods',
           'RegisterMethods',
         ],
-        '../native-js/lib/index.js': [
+        '../native-js/lib/index.min.js': [
           'AuthingGuard',
           'GuardEventsCamelToKebabMap',
           'GuardMode',

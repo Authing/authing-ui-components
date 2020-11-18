@@ -5,7 +5,7 @@ const config = Object.assign({}, base, {
   output: {
     exports: 'named',
     name: 'AuthingVueUIComponents',
-    file: 'lib/index.js',
+    file: 'lib/index.min.js',
     format: 'umd',
   },
 })
