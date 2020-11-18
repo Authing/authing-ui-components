@@ -181,6 +181,7 @@ module.exports = function (webpackEnv) {
               modifyVars: {
                 '@primary-color': '#396aff',
                 '@link-color': '#396aff',
+                '@ant-prefix': 'authing-ant',
               },
             },
           },

@@ -1,4 +1,4 @@
-import { message } from 'antd'
+import { ConfigProvider, message } from 'antd'
 import React, { FC } from 'react'
 import jsencrypt from 'jsencrypt'
 import { AuthenticationClient } from 'authing-js-sdk'
@@ -82,20 +82,22 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
   }
 
   return (
-    <GuardContext
-      value={{
-        authClient,
-        config: { ...config },
-        userConfig: config,
-        guardScenes: defaultScenes,
-        activeTabs,
-        guardTitle: config.title,
-        mfaToken: '',
-        userPoolId,
-        guardEvents,
-      }}
-    >
-      <GuardLayout id={id} className={className} visible={visible} />
-    </GuardContext>
+    <ConfigProvider prefixCls="authing-ant">
+      <GuardContext
+        value={{
+          authClient,
+          config: { ...config },
+          userConfig: config,
+          guardScenes: defaultScenes,
+          activeTabs,
+          guardTitle: config.title,
+          mfaToken: '',
+          userPoolId,
+          guardEvents,
+        }}
+      >
+        <GuardLayout id={id} className={className} visible={visible} />
+      </GuardContext>
+    </ConfigProvider>
   )
 }
