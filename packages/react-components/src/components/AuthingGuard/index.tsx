@@ -59,6 +59,7 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
     userPoolId,
     host,
     appId,
+    requestFrom: 'ui-components',
     encryptFunction: (text, publicKey) => {
       const encrypt = new jsencrypt() // 实例化加密对象
       encrypt.setPublicKey(publicKey) // 设置公钥
