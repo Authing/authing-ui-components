@@ -1,7 +1,7 @@
 {
   "name": "@authing/vue-ui-components",
   "description": "Authing Vue UI components",
-  "version": "2.0.3",
+  "version": "2.0.5",
   "keywords": [
     "vue",
     "vuejs",
@@ -19,7 +19,7 @@
     "build:browser": "rollup --config configs/rollup.config.browser.js",
     "build:es": "rollup --config configs/rollup.config.es.js",
     "build:umd": "rollup --config configs/rollup.config.umd.js",
-    "prepublishOnly": "yarn run build:lib"
+    "prepublishOnly": "npm run build:lib"
   },
   "repository": {
     "type": "git",
@@ -33,7 +33,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@authing/native-js-ui-components": "2.0.3"
+    "@authing/native-js-ui-components": "2.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
