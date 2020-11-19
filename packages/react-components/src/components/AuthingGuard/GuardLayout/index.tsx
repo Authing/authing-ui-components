@@ -28,10 +28,13 @@ import {
 import './style.less'
 
 const checkConfig = (userPoolId: string, config: UserConfig) => {
+  // 不要去掉 console.warn，不然 vue 版打包出来每次都会 throw error，估计是 rollup 打包有问题
   if (!userPoolId) {
+    console.warn('用户池 ID: ', userPoolId)
     throw new Error('请传入用户池 ID')
   }
   if (config.isSSO && (!config.appDomain || !config.appId)) {
+    console.warn('config 配置: ', config)
     throw new Error('SSO 模式请传入 appDomain 和 appId 字段')
   }
 }
