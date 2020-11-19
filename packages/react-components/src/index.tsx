@@ -39,11 +39,11 @@ const App = () => {
     `,
     // autoRegister: true,
   }
-  const [visible, setVisible] = useState(true)
+  const [visible, setVisible] = useState(false)
 
-  // useEffect(() => {
-  //   setTimeout(() => setVisible(true), 3000)
-  // }, [])
+  useEffect(() => {
+    setTimeout(() => setVisible(true), 3000)
+  }, [])
 
   return (
     // eslint-disable-next-line react/jsx-no-undef
@@ -56,7 +56,7 @@ const App = () => {
             setVisible(true)
           }, 2000)
         }}
-        onLoad={(a) => console.log(a)}
+        onLoad={(a) => console.log(a, '加载完成')}
         // onPwdResetError={(e) => console.log(e)}
         userPoolId="59f86b4832eb28071bdd9214"
         config={config}

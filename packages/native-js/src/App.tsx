@@ -13,14 +13,17 @@ function App() {
     // @ts-ignore
     window.guard = guard
 
-    guard.show()
+    // guard.show()
 
     guard.on('load', (e) => {
-      console.log('load', e)
+      console.log('加载啊', e)
     })
 
     guard.on('close', () => {
       console.log('关闭')
+      setTimeout(() => {
+        guard.show()
+      }, 2000)
     })
   }, [])
 

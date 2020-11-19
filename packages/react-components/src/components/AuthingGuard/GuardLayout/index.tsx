@@ -54,6 +54,9 @@ const useGuardConfig = () => {
   useEffect(() => {
     try {
       checkConfig(userPoolId, userConfig)
+
+      setErrorDetail(null)
+      setErrorMsg('')
     } catch (e: any) {
       setErrorDetail(e)
       setErrorMsg(e.message)
