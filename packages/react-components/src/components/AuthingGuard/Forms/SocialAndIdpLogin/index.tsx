@@ -237,12 +237,14 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
 
   return (
     <>
-      <div
-        style={{
-          flex: 1,
-          minHeight: 26,
-        }}
-      ></div>
+      {!noForm && (
+        <div
+          style={{
+            flex: 1,
+            minHeight: 26,
+          }}
+        ></div>
+      )}
       <Space
         size={12}
         direction="vertical"
