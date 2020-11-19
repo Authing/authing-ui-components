@@ -42,32 +42,8 @@ export type EventListeners = {
 
 export class AuthingGuard {
   constructor(private userPoolId: string, private config?: UserConfig) {
-    this.render(() => {
-      if (config?.mode === GuardMode.Modal) {
-        const prevVisible = this.visible
-
-        // modal 模式默认不展示
-        this.hide()
-
-        /**
-         * 为了 modal 模式
-         *
-         * const guard = new AuthingGuard(...)
-         * guard.show()
-         *
-         * 时也有出场动画
-         */
-        setTimeout(() => {
-          if (prevVisible) {
-            this.show()
-          }
-        })
-      }
-    })
+    this.render()
   }
-
-  static guardId = 'authing_guard_layout'
-  static hiddenClassName = 'authing-guard-layout__hidden'
 
   static getGuardContainer(selector?: string | HTMLElement) {
     const defaultId = 'authing_guard_container'
@@ -92,7 +68,7 @@ export class AuthingGuard {
     return selector
   }
 
-  private visible = false
+  private visible = this.config?.mode === GuardMode.Modal ? false : true
 
   private eventListeners = Object.values(GuardEventsCamelToKebabMap).reduce(
     (acc, evtName) => {
@@ -114,10 +90,7 @@ export class AuthingGuard {
           })
 
           if (nativeEvt === 'close') {
-            // 与 react 里面的状态管理冲突了
-            setTimeout(() => {
-              this.hide()
-            })
+            this.hide()
           }
         },
       })
@@ -125,18 +98,14 @@ export class AuthingGuard {
 
     return ReactDOM.render(
       <ReactAuthingGuard
-        id={`${AuthingGuard.guardId}`}
         {...evts}
         userPoolId={this.userPoolId}
         config={this.config}
+        visible={this.visible}
       />,
       AuthingGuard.getGuardContainer(this.config?.target),
       cb
     )
-  }
-
-  private getGuardDom() {
-    return document.querySelector(`#${AuthingGuard.guardId}`)
   }
 
   on<T extends keyof GuardEventsHandlerKebab>(
@@ -148,11 +117,11 @@ export class AuthingGuard {
 
   show() {
     this.visible = true
-    this.getGuardDom()?.classList.remove(AuthingGuard.hiddenClassName)
+    this.render()
   }
 
   hide() {
     this.visible = false
-    this.getGuardDom()?.classList.add(AuthingGuard.hiddenClassName)
+    this.render()
   }
 }
