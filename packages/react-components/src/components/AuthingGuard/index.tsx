@@ -19,6 +19,12 @@ import {
 import './style.less'
 import './assets/iconfont.css'
 
+const PREFIX_CLS = 'authing-ant'
+
+message.config({
+  prefixCls: `${PREFIX_CLS}-message`,
+})
+
 interface AuthingGuardProps extends GuardEventsHandler {
   userPoolId: string
   config?: UserConfig
@@ -83,7 +89,7 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
   }
 
   return (
-    <ConfigProvider prefixCls="authing-ant">
+    <ConfigProvider prefixCls={PREFIX_CLS}>
       <GuardContext
         value={{
           authClient,
