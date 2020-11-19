@@ -36,7 +36,7 @@ const checkConfig = (userPoolId: string, config: UserConfig) => {
   }
 }
 
-const useGuardConfig = (rendered: boolean) => {
+const useGuardConfig = () => {
   const {
     state: { userPoolId, userConfig },
   } = useGuardContext()
@@ -63,10 +63,6 @@ const useGuardConfig = (rendered: boolean) => {
 
   // 获取用户池配置
   useEffect(() => {
-    if (!rendered) {
-      return
-    }
-
     setLoadingUserPool(true)
 
     if (!userPoolId) {
@@ -98,13 +94,10 @@ const useGuardConfig = (rendered: boolean) => {
       .finally(() => {
         setLoadingUserPool(false)
       })
-  }, [userPoolId, rendered])
+  }, [userPoolId])
 
   // 获取应用配置
   useEffect(() => {
-    if (!rendered) {
-      return
-    }
     setLoadingApp(true)
 
     if (!userConfig.appId) {
@@ -128,7 +121,7 @@ const useGuardConfig = (rendered: boolean) => {
       .finally(() => {
         setLoadingApp(false)
       })
-  }, [userConfig.appId, rendered])
+  }, [userConfig.appId])
 
   useEffect(() => {
     insertStyles(appConfig?.css)
@@ -290,8 +283,6 @@ const useModal = (visible?: boolean) => {
     isModal && isControlled ? visible : true
   )
 
-  // 懒渲染
-  const [rendered, setRendered] = useState(false)
   const toggleLocalVisible = () => {
     setLocalVisible((v) => !v)
   }
@@ -300,15 +291,8 @@ const useModal = (visible?: boolean) => {
     return isControlled ? visible : localVisible
   }, [isControlled, localVisible, visible])
 
-  useEffect(() => {
-    if (realVisible) {
-      setRendered(true)
-    }
-  }, [realVisible])
-
   return {
     isModal,
-    rendered,
     realVisible,
     isControlled,
     toggleLocalVisible,
@@ -325,13 +309,9 @@ export const GuardLayout: FC<{
     setValue,
   } = useGuardContext()
 
-  const { rendered, realVisible, isControlled, toggleLocalVisible } = useModal(
-    visible
-  )
+  const { realVisible, isControlled, toggleLocalVisible } = useModal(visible)
 
-  const { loading, errorMsg, guardConfig, errorDetail } = useGuardConfig(
-    rendered
-  )
+  const { loading, errorMsg, guardConfig, errorDetail } = useGuardConfig()
 
   // 动画完成后完全隐藏 dom
   const [hidden, setHidden] = useState(false)
@@ -354,6 +334,7 @@ export const GuardLayout: FC<{
       guardEvents.onLoadError?.(errorDetail)
       return
     }
+
     guardEvents.onLoad?.(authClient)
 
     if (guardConfig.isSSO) {
@@ -416,43 +397,38 @@ export const GuardLayout: FC<{
         }
       }}
     >
-      {rendered && (
-        <>
-          {isModal && (
-            <div
-              className={getClassnames([
-                'authing-guard-mask',
-                !realVisible && 'authing-guard-mask__hidden',
-              ])}
-            ></div>
-          )}
+      <>
+        {isModal && (
           <div
             className={getClassnames([
-              'authing-guard-container',
-              !realVisible && 'authing-guard-container__hidden',
+              'authing-guard-mask',
+              !realVisible && 'authing-guard-mask__hidden',
             ])}
-          >
-            {isModal && guardConfig.clickCloseable && (
-              <button
-                onClick={closeHandler}
-                className="authing-guard-close-btn"
-              >
-                <i className="authing-icon authing-guanbi"></i>
-              </button>
-            )}
+          ></div>
+        )}
+        <div
+          className={getClassnames([
+            'authing-guard-container',
+            !realVisible && 'authing-guard-container__hidden',
+          ])}
+        >
+          {isModal && guardConfig.clickCloseable && (
+            <button onClick={closeHandler} className="authing-guard-close-btn">
+              <i className="authing-icon authing-guanbi"></i>
+            </button>
+          )}
 
-            <GuardHeader />
+          <GuardHeader />
 
-            {loading ? (
-              <Spin size="large" className="authing-guard-loading" />
-            ) : errorMsg ? (
-              <div className="authing-guard-load-error">{errorMsg}</div>
-            ) : (
-              layoutMap[guardScenes]
-            )}
-          </div>
-        </>
-      )}
+          {loading ? (
+            <Spin size="large" className="authing-guard-loading" />
+          ) : errorMsg ? (
+            <div className="authing-guard-load-error">{errorMsg}</div>
+          ) : (
+            layoutMap[guardScenes]
+          )}
+        </div>
+      </>
     </div>
   )
 }
