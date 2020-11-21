@@ -18,8 +18,7 @@
     "start": "PORT=3006 node scripts/start.js",
     "build": "node scripts/build.js",
     "build:lib": "node scripts/lib.js",
-    "test": "node scripts/test.js",
-    "prepublishOnly": "yarn run build:lib"
+    "test": "node scripts/test.js"
   },
   "publishConfig": {
     "access": "public"
@@ -180,5 +179,6 @@
     "webpack-dev-server": "3.11.0",
     "webpack-manifest-plugin": "2.2.0",
     "workbox-webpack-plugin": "5.1.4"
-  }
+  },
+  "gitHead": "bb98409e0880ea02b3ee0a614806763c0a6c03f7"
 }

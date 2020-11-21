@@ -14,6 +14,7 @@
   ],
   "publishConfig": {
     "access": "public",
-    "directory": "../../dist"
-  }
+    "directory": "../../dist/ng-ui-components"
+  },
+  "gitHead": "bb98409e0880ea02b3ee0a614806763c0a6c03f7"
 }
