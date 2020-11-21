@@ -6,7 +6,6 @@
   "typings": "lib/index.d.ts",
   "dependencies": {
     "react": "^17.0.1",
-    "@authing/react-ui-components": "2.0.6",
     "react-dom": "^17.0.1"
   },
   "scripts": {
