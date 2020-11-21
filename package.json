@@ -1,8 +1,11 @@
 {
   "name": "root",
   "private": true,
+  "scripts": {
+    "build:lib": "lerna run build --stream"
+  },
   "workspaces": [
-    "packages/angular-components",
+    "packages/angular-components/projects/ng-ui-components",
     "packages/react-components",
     "packages/vue-components",
     "packages/native-js"

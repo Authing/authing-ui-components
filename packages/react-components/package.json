@@ -21,6 +21,9 @@
     "test": "node scripts/test.js",
     "prepublishOnly": "yarn run build:lib"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
