@@ -1,6 +1,6 @@
 {
   "packages": [
-    "packages/angular-components",
+    "packages/angular-components/projects/ng-ui-components",
     "packages/react-components",
     "packages/vue-components",
     "packages/native-js"
