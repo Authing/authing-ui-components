@@ -4,8 +4,7 @@
   "scripts": {
     "build:lib": "lerna run build:lib --stream",
     "publish:lib": "lerna publish from-package",
-    "clean": "lerna clean",
-    "prepublishOnly": "lerna version && yarn build:lib"
+    "clean": "lerna clean"
   },
   "workspaces": [
     "packages/angular-components/projects/ng-ui-components",
