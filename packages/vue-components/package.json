@@ -1,7 +1,7 @@
 {
   "name": "@authing/vue-ui-components",
   "description": "Authing Vue UI components",
-  "version": "2.0.6-beta",
+  "version": "2.0.6-beta.0",
   "keywords": [
     "vue",
     "vuejs",
@@ -33,7 +33,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@authing/native-js-ui-components": "^2.0.6-beta"
+    "@authing/native-js-ui-components": "^2.0.6-beta.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
