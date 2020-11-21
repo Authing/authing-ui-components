@@ -13,6 +13,7 @@
     "@authing/native-js-ui-components"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "directory": "../../dist/ng-ui-components"
   }
 }

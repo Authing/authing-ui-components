@@ -13,8 +13,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "build:lib": "node scripts/lib.js",
-    "test": "node scripts/test.js",
-    "prepublishOnly": "yarn run build:lib"
+    "test": "node scripts/test.js"
   },
   "publishConfig": {
     "access": "public"

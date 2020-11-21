@@ -2,7 +2,9 @@
   "name": "root",
   "private": true,
   "scripts": {
-    "build:lib": "lerna run build:lib --stream"
+    "build:lib": "lerna run build:lib --stream",
+    "publish:lib": "lerna version && yarn build:lib && lerna publish from-package",
+    "clean": "lerna clean"
   },
   "workspaces": [
     "packages/angular-components/projects/ng-ui-components",
