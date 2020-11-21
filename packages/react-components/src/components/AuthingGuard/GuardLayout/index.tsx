@@ -83,8 +83,16 @@ const useGuardConfig = () => {
           setErrorDetail(res)
           return
         }
-        // 某些社会化登录会在 tabs 中显示，所以底部不显示了
-        const hideSocials = ['wechat:miniprogram:qrconnect']
+        // 某些社会化登录会在 tabs 中显示，或者无法在 Guard 中使用，所以底部不显示了
+        const hideSocials = [
+          'wechat:miniprogram:app-launch',
+          'wechat:miniprogram:qrconnect',
+          'wechat:webpage-authorization',
+          'wechat:miniprogram:default',
+          'wechatwork:addressbook',
+          'wechat:mobile',
+          'alipay',
+        ]
         if (res.data) {
           res.data.socialConnections = res.data?.socialConnections.filter(
             (item) => !hideSocials.includes(item.provider)
