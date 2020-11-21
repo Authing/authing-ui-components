@@ -6,7 +6,7 @@ import {
   ViewEncapsulation,
   Input,
   OnChanges,
-} from '@angular/core';
+} from '@angular/cored';
 import {
   User,
   GuardMode,
