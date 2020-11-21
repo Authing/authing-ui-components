@@ -5,8 +5,8 @@
   "main": "lib/index.min.js",
   "typings": "lib/index.d.ts",
   "dependencies": {
+    "@authing/react-ui-components": "^2.0.6",
     "react": "^17.0.1",
-    "@authing/react-ui-components": "2.0.6",
     "react-dom": "^17.0.1"
   },
   "scripts": {
@@ -95,9 +95,6 @@
     ]
   },
   "devDependencies": {
-    "babel-plugin-import": "^1.13.1",
-    "less": "^3.12.2",
-    "less-loader": "^7.0.2",
     "@babel/core": "7.12.3",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.2",
     "@svgr/webpack": "5.4.0",
@@ -113,6 +110,7 @@
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.6.0",
     "babel-loader": "8.1.0",
+    "babel-plugin-import": "^1.13.1",
     "babel-plugin-named-asset-import": "^0.3.7",
     "babel-preset-react-app": "^10.0.0",
     "bfj": "^7.0.2",
@@ -139,7 +137,10 @@
     "jest-circus": "26.6.0",
     "jest-resolve": "26.6.0",
     "jest-watch-typeahead": "0.6.1",
+    "less": "^3.12.2",
+    "less-loader": "^7.0.2",
     "mini-css-extract-plugin": "0.11.3",
+    "npm-dts-webpack-plugin": "^1.3.5",
     "optimize-css-assets-webpack-plugin": "5.0.4",
     "pnp-webpack-plugin": "1.6.4",
     "postcss-flexbugs-fixes": "4.2.1",
@@ -147,7 +148,8 @@
     "postcss-normalize": "8.0.1",
     "postcss-preset-env": "6.7.0",
     "postcss-safe-parser": "5.0.2",
-    "npm-dts-webpack-plugin": "^1.3.5",
+    "react-app-polyfill": "^2.0.0",
+    "react-dev-utils": "^11.0.0",
     "react-refresh": "^0.8.3",
     "resolve": "1.18.1",
     "resolve-url-loader": "^3.1.2",
@@ -162,8 +164,6 @@
     "webpack": "4.44.2",
     "webpack-dev-server": "3.11.0",
     "webpack-manifest-plugin": "2.2.0",
-    "workbox-webpack-plugin": "5.1.4",
-    "react-app-polyfill": "^2.0.0",
-    "react-dev-utils": "^11.0.0"
+    "workbox-webpack-plugin": "5.1.4"
   }
 }

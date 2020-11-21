@@ -6,8 +6,8 @@
     "@angular/core": "^10.2.0"
   },
   "dependencies": {
-    "tslib": "^2.0.0",
-    "@authing/native-js-ui-components": "2.0.6"
+    "@authing/native-js-ui-components": "^2.0.6",
+    "tslib": "^2.0.0"
   },
   "bundledDependencies": [
     "@authing/native-js-ui-components"
