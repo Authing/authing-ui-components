@@ -32,7 +32,9 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@authing/native-js-ui-components": "^2.0.6"
+  },
   "devDependencies": {
     "@babel/core": "^7.4.0",
     "@babel/plugin-transform-runtime": "7.4.0",
