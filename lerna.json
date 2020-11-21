@@ -1,5 +1,10 @@
 {
-  "packages": ["packages/*"],
-  "version": "independent",
-  "useWorkspaces": true
+  "packages": [
+    "packages/angular-components",
+    "packages/react-components",
+    "packages/vue-components",
+    "packages/native-js"
+  ],
+  "useWorkspaces": true,
+  "version": "0.0.0"
 }
