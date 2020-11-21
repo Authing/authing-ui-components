@@ -1,31 +1,33 @@
-# Vue UI Framework
+# Authing Vue UI Components
 
-[![npm](https://img.shields.io/npm/v/@vue/ui.svg)](https://www.npmjs.com/package/@vue/ui)
-[![vue2](https://img.shields.io/badge/vue-2.5.13-brightgreen.svg)](https://vuejs.org/)
+[Authing](https://authing.cn) 是一个企业级身份认证提供商，其集成了 OAuth、LDAP、OIDC 等多种身份认证和授权解决方案。此仓库包含了 Authing 提供的一些 Vue UI 组件。
 
-This is a collection of components and styles meant to be used across all official Vue.js apps.
+## Guard
 
-## Installation
+Guard 是一种可嵌入的登录表单，可根据你的需求进行配置，建议用于单页面应用程序。 它使你可以轻松添加各种社会化登录方式，以便你的用户可以无缝登录，并且在不同平台拥有一致的登录体验。  
+Guard 拥有以下基本功能：
 
-Install the `@vue/ui` package:
+- 登录：
+  - 账号密码登录（包括手机号 + 密码、邮箱 + 密码、用户名 + 密码）；
+  - 手机验证码登录；
+  - 微信小程序扫码登录（需先在后台配置）；
+  - APP 扫码登录（需要接入 APP 扫码登录）；
+  - 小程序扫码登录（需先在后台配置）；
+  - 社会化登录（需要配置社会化登录）；
+  - 企业身份源登录（需要配置企业身份源）；
+- 注册：
+  - 账号密码注册；
+  - 手机验证码注册；
+- 忘记密码以及重置密码；
+- MFA 认证；
+- 响应式特性（兼容移动端和 PC 端）；
+- 完整的 UI 自定义功能；
+- 兼容主流前端 UI 库：
+  - 原生 JavaScript 调用；
+  - Vue 组件；
+  - React 组件；
+  - Angular 组件。
 
-```
-npm i -S @vue/ui
-```
+![Guard Demo](./static/images/guard-demo.jpg)
 
-Install the Vue plugin:
-
-```js
-import Vue from 'vue'
-import VueUi from '@vue/ui'
-
-Vue.use(VueUi)
-```
-
-Import the CSS:
-
-```js
-import '@vue/ui/dist/vue-ui.css'
-```
-
-**Documentation is Work In Progress**
+详细使用文档请查看 [Guard for Web](https://docs.authing.cn/sdk/guard/#guard-for-vue)

@@ -1,25 +1,33 @@
-# NgUIComponent
+# Authing Angular UI Components
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.2.0.
+[Authing](https://authing.cn) 是一个企业级身份认证提供商，其集成了 OAuth、LDAP、OIDC 等多种身份认证和授权解决方案。此仓库包含了 Authing 提供的一些 Angular UI 组件。
 
-## Code scaffolding
+## Guard
 
-Run `ng generate component component-name --project NgUIComponent` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project NgUIComponent`.
+Guard 是一种可嵌入的登录表单，可根据你的需求进行配置，建议用于单页面应用程序。 它使你可以轻松添加各种社会化登录方式，以便你的用户可以无缝登录，并且在不同平台拥有一致的登录体验。  
+Guard 拥有以下基本功能：
 
-> Note: Don't forget to add `--project NgUIComponent` or else it will be added to the default project in your `angular.json` file.
+- 登录：
+  - 账号密码登录（包括手机号 + 密码、邮箱 + 密码、用户名 + 密码）；
+  - 手机验证码登录；
+  - 微信小程序扫码登录（需先在后台配置）；
+  - APP 扫码登录（需要接入 APP 扫码登录）；
+  - 小程序扫码登录（需先在后台配置）；
+  - 社会化登录（需要配置社会化登录）；
+  - 企业身份源登录（需要配置企业身份源）；
+- 注册：
+  - 账号密码注册；
+  - 手机验证码注册；
+- 忘记密码以及重置密码；
+- MFA 认证；
+- 响应式特性（兼容移动端和 PC 端）；
+- 完整的 UI 自定义功能；
+- 兼容主流前端 UI 库：
+  - 原生 JavaScript 调用；
+  - Vue 组件；
+  - React 组件；
+  - Angular 组件。
 
-## Build
+![Guard Demo](./static/images/guard-demo.jpg)
 
-Run `ng build NgUIComponent` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Publishing
-
-After building your library with `ng build NgUIComponent`, go to the dist folder `cd dist/ng-ui-components` and run `npm publish`.
-
-## Running unit tests
-
-Run `ng test NgUIComponent` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+详细使用文档请查看 [Guard for Web](https://docs.authing.cn/sdk/guard/#guard-for-angular)
