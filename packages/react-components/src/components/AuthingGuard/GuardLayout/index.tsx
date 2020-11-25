@@ -334,11 +334,11 @@ export const GuardLayout: FC<{
   }, [realVisible])
 
   const closeHandler = useCallback(() => {
-    if (!isControlled) {
+    if (!isControlled && realVisible) {
       toggleLocalVisible()
     }
     guardEvents.onClose?.()
-  }, [isControlled, guardEvents, toggleLocalVisible])
+  }, [isControlled, guardEvents, toggleLocalVisible, realVisible])
 
   useEffect(() => {
     if (loading) {
