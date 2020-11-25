@@ -379,14 +379,14 @@ export const GuardLayout: FC<{
   // 监听 esc 关闭 modal
   useEffect(() => {
     const handler = (evt: KeyboardEvent) => {
-      if (evt.keyCode === 27 && guardConfig.escCloseable) {
+      if (evt.keyCode === 27 && isModal && guardConfig.escCloseable) {
         closeHandler()
       }
     }
 
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  }, [closeHandler, guardConfig])
+  }, [closeHandler, guardConfig, isModal])
 
   const layoutMap = {
     [GuardScenes.Login]: <LoginLayout />,
