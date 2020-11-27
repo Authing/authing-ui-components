@@ -103,8 +103,6 @@ const useGuardConfig = () => {
      * 优先级：用户传入 > 应用 > 用户池
      */
 
-    // 某些社会化登录会在 tabs 中显示，或者无法在 Guard 中使用，所以底部不显示了
-
     // 社会化登录
     let socialConnectionObjs: SocialConnectionItem[] | undefined
     // 默认展示所有社会化登录
@@ -125,6 +123,7 @@ const useGuardConfig = () => {
       'wechat:mobile',
       'alipay',
     ]
+    // 某些社会化登录会在 tabs 中显示，或者无法在 Guard 中使用，所以底部不显示了
     socialConnectionObjs = socialConnectionObjs?.filter(
       (item) => !hideSocials.includes(item.provider)
     )
