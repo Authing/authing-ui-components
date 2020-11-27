@@ -41,7 +41,7 @@ export type EventListeners = {
 }
 
 export class AuthingGuard {
-  constructor(private userPoolId: string, private config?: UserConfig) {
+  constructor(private appId: string, private config?: UserConfig) {
     this.render()
   }
 
@@ -99,7 +99,7 @@ export class AuthingGuard {
     return ReactDOM.render(
       <ReactAuthingGuard
         {...evts}
-        userPoolId={this.userPoolId}
+        appId={this.appId}
         config={this.config}
         visible={this.visible}
       />,

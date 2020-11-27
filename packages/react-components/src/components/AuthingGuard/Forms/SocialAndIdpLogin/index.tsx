@@ -26,7 +26,7 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
   onSuccess = () => {},
 }) => {
   const {
-    state: { config, userPoolId },
+    state: { config, userPoolId, appId },
   } = useGuardContext()
 
   const noForm = !config.loginMethods?.length
@@ -92,7 +92,7 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
                 state,
                 protocol: i.protocol,
                 userPoolId,
-                appId: config.appId,
+                appId,
                 referer: window.location.href,
                 connection: { providerIentifier: i.identifier },
               }

@@ -12,10 +12,8 @@ import { ResetPwdLayout } from '../../../components/AuthingGuard/ResetPwdLayout'
 import {
   SessionData,
   trackSession,
-  UserPoolConfig,
   fetchAppConfig,
   ApplicationConfig,
-  fetchUserPoolConfig,
   SocialConnectionItem,
 } from '../../../components/AuthingGuard/api'
 import {
@@ -27,28 +25,25 @@ import {
 
 import './style.less'
 
-const checkConfig = (userPoolId: string, config: UserConfig) => {
+const checkConfig = (appId: string, config: UserConfig) => {
   // 不要去掉 console.warn，不然 vue 版打包出来每次都会 throw error，估计是 rollup 打包有问题
-  if (!userPoolId) {
-    console.warn('用户池 ID: ', userPoolId)
-    throw new Error('请传入用户池 ID')
+  if (!appId) {
+    console.warn('APP ID: ', appId)
+    throw new Error('请传入应用 ID')
   }
-  if (config.isSSO && (!config.appDomain || !config.appId)) {
+  if (config.isSSO && !config.appDomain) {
     console.warn('config 配置: ', config)
-    throw new Error('SSO 模式请传入 appDomain 和 appId 字段')
+    throw new Error('SSO 模式请传入 appDomain 字段')
   }
 }
 
 const useGuardConfig = () => {
   const {
-    state: { userPoolId, userConfig },
+    state: { appId, userConfig },
+    setValue,
   } = useGuardContext()
 
-  const [loadingUserPool, setLoadingUserPool] = useState(true)
-  const [loadingApp, setLoadingApp] = useState(true)
-  const [userPoolConfig, setUserPoolConfig] = useState<Partial<UserPoolConfig>>(
-    {}
-  )
+  const [loading, setLoading] = useState(true)
 
   const [appConfig, setAppConfig] = useState<Partial<ApplicationConfig>>({})
   const [errorMsg, setErrorMsg] = useState('')
@@ -56,7 +51,7 @@ const useGuardConfig = () => {
 
   useEffect(() => {
     try {
-      checkConfig(userPoolId, userConfig)
+      checkConfig(appId, userConfig)
 
       setErrorDetail(null)
       setErrorMsg('')
@@ -65,60 +60,17 @@ const useGuardConfig = () => {
       setErrorMsg(e.message)
       console.error(e)
     }
-  }, [userPoolId, userConfig])
-
-  // 获取用户池配置
-  useEffect(() => {
-    setLoadingUserPool(true)
-
-    if (!userPoolId) {
-      setLoadingUserPool(false)
-      return
-    }
-
-    fetchUserPoolConfig(userPoolId)
-      .then((res) => {
-        if (res.code !== 200) {
-          setErrorMsg(res.message!)
-          setErrorDetail(res)
-          return
-        }
-        // 某些社会化登录会在 tabs 中显示，或者无法在 Guard 中使用，所以底部不显示了
-        const hideSocials = [
-          'wechat:miniprogram:app-launch',
-          'wechat:miniprogram:qrconnect',
-          'wechat:webpage-authorization',
-          'wechat:miniprogram:default',
-          'wechatwork:addressbook',
-          'wechat:mobile',
-          'alipay',
-        ]
-        if (res.data) {
-          res.data.socialConnections = res.data?.socialConnections.filter(
-            (item) => !hideSocials.includes(item.provider)
-          )
-        }
-
-        setUserPoolConfig(res.data!)
-      })
-      .catch((e: any) => {
-        setErrorMsg(JSON.stringify(e))
-        setErrorDetail(e)
-      })
-      .finally(() => {
-        setLoadingUserPool(false)
-      })
-  }, [userPoolId])
+  }, [appId, userConfig])
 
   // 获取应用配置
   useEffect(() => {
-    setLoadingApp(true)
+    setLoading(true)
 
-    if (!userConfig.appId) {
-      setLoadingApp(false)
+    if (!appId) {
+      setLoading(false)
       return
     }
-    fetchAppConfig(userConfig.appId)
+    fetchAppConfig(appId)
       .then((res) => {
         if (res.code !== 200) {
           setErrorMsg(res.message!)
@@ -127,52 +79,60 @@ const useGuardConfig = () => {
         }
 
         setAppConfig(res.data!)
+        setValue('userPoolId', res.data?.userPoolId)
       })
       .catch((e: any) => {
         setErrorDetail(e)
         setErrorMsg(JSON.stringify(e))
       })
       .finally(() => {
-        setLoadingApp(false)
+        setLoading(false)
       })
-  }, [userConfig.appId])
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [appId])
 
   useEffect(() => {
     insertStyles(appConfig?.css)
     insertStyles(userConfig.contentCss)
   }, [appConfig, userConfig])
 
-  const loading = useMemo(() => {
-    return loadingApp || loadingUserPool
-  }, [loadingUserPool, loadingApp])
-
   const guardConfig = useMemo<GuardConfig>(() => {
     /**
-     * 将用户池配置、应用配置与用户手动传入的配置合并
+     * 将用应用配置与用户手动传入的配置合并
      * 优先级：用户传入 > 应用 > 用户池
      */
+
+    // 某些社会化登录会在 tabs 中显示，或者无法在 Guard 中使用，所以底部不显示了
 
     // 社会化登录
     let socialConnectionObjs: SocialConnectionItem[] | undefined
     // 默认展示所有社会化登录
-    if (!userConfig.socialConnections && !appConfig.socialConnections) {
-      socialConnectionObjs = [...(userPoolConfig.socialConnections || [])]
+    if (!userConfig.socialConnections) {
+      socialConnectionObjs = [...(appConfig.socialConnections || [])]
     } else {
-      const socials =
-        userConfig.socialConnections ||
-        appConfig.socialConnections?.map?.((item) => item.provider) ||
-        []
-      socialConnectionObjs = userPoolConfig.socialConnections?.filter?.(
-        (item) => socials.includes(item.provider)
+      const socials = userConfig.socialConnections
+      socialConnectionObjs = appConfig.socialConnections?.filter?.((item) =>
+        socials.includes(item.provider)
       )
     }
+    const hideSocials = [
+      'wechat:miniprogram:app-launch',
+      'wechat:miniprogram:qrconnect',
+      'wechat:webpage-authorization',
+      'wechat:miniprogram:default',
+      'wechatwork:addressbook',
+      'wechat:mobile',
+      'alipay',
+    ]
+    socialConnectionObjs = socialConnectionObjs?.filter(
+      (item) => !hideSocials.includes(item.provider)
+    )
 
     // 企业身份源
     let enterpriseConnectionObjs: ApplicationConfig['identityProviders']
-    if (!userConfig.appId) {
-      // 企业身份源都要绑定 AppId
-      enterpriseConnectionObjs = []
-    } else if (userConfig.enterpriseConnections) {
+
+    if (userConfig.enterpriseConnections) {
       enterpriseConnectionObjs =
         appConfig.identityProviders?.filter?.((item) =>
           userConfig.enterpriseConnections!.includes(item.identifier)
@@ -206,18 +166,12 @@ const useGuardConfig = () => {
     // 应用名
     const title = loading
       ? ''
-      : userConfig.title ??
-        appConfig.name ??
-        userPoolConfig.name ??
-        defaultGuardConfig.title
+      : userConfig.title ?? appConfig.name ?? defaultGuardConfig.title
 
     // 应用 logo
     const logo = loading
       ? ''
-      : userConfig.logo ??
-        appConfig.logo ??
-        userPoolConfig.logo ??
-        defaultGuardConfig.logo
+      : userConfig.logo ?? appConfig.logo ?? defaultGuardConfig.logo
 
     // 是否自动注册
     const autoRegister =
@@ -269,9 +223,6 @@ const useGuardConfig = () => {
     appConfig.ssoPageComponentDisplay?.registerBtn,
     appConfig.identityProviders,
     loading,
-    userPoolConfig.name,
-    userPoolConfig.logo,
-    userPoolConfig.socialConnections,
   ])
 
   return {
@@ -279,7 +230,6 @@ const useGuardConfig = () => {
     errorMsg,
     guardConfig,
     errorDetail,
-    userPoolConfig,
   }
 }
 

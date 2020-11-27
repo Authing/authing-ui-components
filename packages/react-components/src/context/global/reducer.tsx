@@ -17,6 +17,7 @@ export type IState = {
   guardTitle: string
   mfaToken: string // 需要 mfa 登录时返回的 token
   userPoolId: string
+  appId: string
   guardEvents: GuardEventsHandler
 }
 

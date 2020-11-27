@@ -18,7 +18,7 @@ export { GuardMode, GuardScenes, LoginMethods, RegisterMethods }
 export default {
   name: 'AuthingGuard',
   props: {
-    userPoolId: {
+    appId: {
       type: String,
       required: true,
     },
@@ -61,7 +61,7 @@ export default {
     },
   },
   mounted() {
-    const guard = new NativeAuthingGuard(this.userPoolId, this.config)
+    const guard = new NativeAuthingGuard(this.appId, this.config)
 
     const evts = Object.values(GuardEventsCamelToKebabMap)
 

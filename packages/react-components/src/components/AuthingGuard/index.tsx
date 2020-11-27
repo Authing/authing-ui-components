@@ -26,7 +26,7 @@ message.config({
 })
 
 interface AuthingGuardProps extends GuardEventsHandler {
-  userPoolId: string
+  appId: string
   config?: UserConfig
   visible?: boolean
   className?: string
@@ -34,7 +34,7 @@ interface AuthingGuardProps extends GuardEventsHandler {
 }
 
 export const AuthingGuard: FC<AuthingGuardProps> = ({
-  userPoolId,
+  appId,
   config = {},
   visible,
   className,
@@ -43,7 +43,6 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
 }) => {
   const {
     apiHost = defaultGuardConfig.apiHost!,
-    appId,
     appDomain,
     isSSO,
     defaultLoginMethod = defaultGuardConfig.defaultLoginMethod,
@@ -62,7 +61,6 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
   requestClient.setBaseUrl(host)
 
   const authClient = new AuthenticationClient({
-    userPoolId,
     host,
     appId,
     requestFrom: 'ui-components',
@@ -95,11 +93,11 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
           authClient,
           config: { ...config },
           userConfig: config,
+          appId,
           guardScenes: defaultScenes,
           activeTabs,
           guardTitle: config.title,
           mfaToken: '',
-          userPoolId,
           guardEvents,
         }}
       >

@@ -226,7 +226,6 @@ export interface GuardEventsHandler {
 
 export interface UserConfig {
   logo?: string
-  appId?: string
   title?: string
   isSSO?: boolean
   mode?: GuardMode

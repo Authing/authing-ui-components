@@ -4,7 +4,6 @@ import { AuthingGuard } from './components/AuthingGuard'
 
 import {
   GuardMode,
-  LoginMethods,
   UserConfig,
   // LoginMethods,
   // RegisterMethods,
@@ -27,7 +26,6 @@ const App = () => {
     // defaultScenes: GuardScenes.Login,
     // socialConnections: Object.values(SocialConnections),
     // enterpriseConnections: ["oidc1"],
-    appId: '5fa5053e252697ad5302ce7e',
     // appDomain: 'oidc1.authing.cn',
     // appId: '5f17a529f64fb009b794a2ff',
     // isSSO: true,
@@ -58,7 +56,7 @@ const App = () => {
         }}
         onLoad={(a) => console.log(a, '加载完成')}
         // onPwdResetError={(e) => console.log(e)}
-        userPoolId="59f86b4832eb28071bdd9214"
+        appId="5fa5053e252697ad5302ce7e"
         config={config}
       />
     </>

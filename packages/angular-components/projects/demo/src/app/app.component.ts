@@ -13,7 +13,7 @@ import {
 export class AppComponent {
   title = 'demo';
   visible = true;
-  userPoolId = '59f86b4832eb28071bdd9214';
+  appId = '5fa5053e252697ad5302ce7e';
   config = {
     target: '#authing_guard_container',
     mode: 'modal',
@@ -29,7 +29,6 @@ export class AppComponent {
     defaultScenes: GuardScenes.Login,
     // socialConnections: Object.values(SocialConnections),
     // enterpriseConnections: ["oidc1"],
-    appId: '5fa5053e252697ad5302ce7e',
     // autoRegister: true,
   };
 
