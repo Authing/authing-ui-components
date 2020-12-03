@@ -58,6 +58,7 @@ const App = () => {
     <>
       <AuthingGuard
         visible={visible}
+        onTabChange={(v) => console.log(v)}
         onClose={() => {
           setVisible(false)
           setTimeout(() => {

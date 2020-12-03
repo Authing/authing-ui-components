@@ -267,13 +267,19 @@ export const GuardLayout: FC<{
   style?: React.CSSProperties
 }> = ({ visible, id, className, style }) => {
   const {
-    state: { guardScenes, authClient, guardEvents },
+    state: { guardScenes, authClient, guardEvents, activeTabs },
     setValue,
   } = useGuardContext()
 
   const { realVisible, isControlled, toggleLocalVisible } = useModal(visible)
 
   const { loading, errorMsg, guardConfig, errorDetail } = useGuardConfig()
+
+  useEffect(() => {
+    if (!loading) {
+      guardEvents.onTabChange?.(activeTabs)
+    }
+  }, [activeTabs, loading, guardEvents])
 
   // 动画完成后完全隐藏 dom
   const [hidden, setHidden] = useState(false)

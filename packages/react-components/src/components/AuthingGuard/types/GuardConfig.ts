@@ -5,6 +5,7 @@ import {
   SocialConnectionItem,
   EnterpriseConnectionItem,
 } from '../../../components/AuthingGuard/api'
+import { ActiveTabs } from './GuardState'
 
 export type { AuthenticationClient, CommonMessage, User } from 'authing-js-sdk'
 
@@ -168,6 +169,7 @@ export const GuardEventsCamelToKebabMap = {
   onPwdReset: 'pwd-reset',
   onPwdResetError: 'pwd-reset-error',
   onClose: 'close',
+  onTabChange: 'tab-change',
 } as const
 
 export interface GuardEventsHandlerKebab {
@@ -197,6 +199,8 @@ export interface GuardEventsHandlerKebab {
   'pwd-reset-error': GuardEventsHandler['onPwdResetError']
   // 表单关闭事件
   close: GuardEventsHandler['onClose']
+  // 登录或注册的 tab 切换
+  'tab-change': GuardEventsHandler['onTabChange']
 }
 
 export interface GuardEventsHandler {
@@ -222,6 +226,7 @@ export interface GuardEventsHandler {
     authClient: AuthenticationClient
   ) => void
   onClose?: () => void
+  onTabChange?: (activeTabs: ActiveTabs) => void
 }
 
 export interface UserConfig {
