@@ -96,11 +96,11 @@ const useNormalLoginTabs = ({ onSuccess, onFail }: BaseFormProps) => {
   const {
     state: { config },
   } = useGuardContext()
-  const { loginMethods = [] } = config
+  const { loginMethods = [], loginMethodsText } = config
 
   const tabs = loginMethods.map((item) => ({
     key: item,
-    label: LOGIN_METHODS_MAP[item],
+    label: loginMethodsText?.[item] || LOGIN_METHODS_MAP[item],
     component: LOGIN_FORM_MAP[item],
   }))
 

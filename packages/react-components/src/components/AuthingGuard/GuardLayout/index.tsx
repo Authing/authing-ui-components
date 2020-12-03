@@ -261,7 +261,8 @@ export const GuardLayout: FC<{
   visible?: boolean
   className?: string
   id?: string
-}> = ({ visible, id, className }) => {
+  style?: React.CSSProperties
+}> = ({ visible, id, className, style }) => {
   const {
     state: { guardScenes, authClient, guardEvents },
     setValue,
@@ -342,6 +343,10 @@ export const GuardLayout: FC<{
   return (
     <div
       id={id}
+      style={{
+        ...style,
+        zIndex: guardConfig.zIndex || 100,
+      }}
       className={getClassnames([
         'authing-guard-layout',
         !realVisible && 'authing-guard-layout__hidden',

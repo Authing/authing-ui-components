@@ -4,6 +4,7 @@ import { AuthingGuard } from './components/AuthingGuard'
 
 import {
   GuardMode,
+  LoginMethods,
   UserConfig,
   // LoginMethods,
   // RegisterMethods,
@@ -29,6 +30,10 @@ const App = () => {
     // appDomain: 'oidc1.authing.cn',
     // appId: '5f17a529f64fb009b794a2ff',
     // isSSO: true,
+    zIndex: 300,
+    loginMethodsText: {
+      [LoginMethods.Password]: '密码登录一下',
+    },
     mode: GuardMode.Modal,
     contentCss: `
       html, body {

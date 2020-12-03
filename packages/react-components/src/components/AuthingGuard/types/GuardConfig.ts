@@ -227,6 +227,7 @@ export interface GuardEventsHandler {
 export interface UserConfig {
   logo?: string
   title?: string
+  zIndex?: number
   isSSO?: boolean
   mode?: GuardMode
   apiHost?: string
@@ -245,6 +246,7 @@ export interface UserConfig {
   registerMethods?: RegisterMethods[]
   socialConnections?: SocialConnections[]
   defaultRegisterMethod?: RegisterMethods
+  loginMethodsText?: Partial<Record<LoginMethods, string>>
   qrCodeScanOptions?: Parameters<QrCodeAuthenticationClient['startScanning']>[1]
 }
 
