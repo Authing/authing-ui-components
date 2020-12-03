@@ -30,7 +30,9 @@ export const LoginFormFooter: FC<LoginFormFooterProps> = ({
         loading={loading}
         block
       >
-        登录
+        {loading
+          ? config.text?.loginBtn?.normal
+          : config.text?.loginBtn?.loading}
       </Button>
 
       <div className="authing-guard-form-actions">

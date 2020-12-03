@@ -39,6 +39,17 @@ export const HIDE_SOCIALS = [
 export const defaultGuardConfig: Partial<UserConfig> = {
   isSSO: false,
   title: 'Authing',
+  text: {
+    loginTabs: LOGIN_METHODS_MAP,
+    loginBtn: {
+      normal: '登录',
+      loading: '登录',
+    },
+    registerBtn: {
+      normal: '注册',
+      loading: '注册',
+    },
+  },
   escCloseable: true,
   autoRegister: false,
   clickCloseable: true,

@@ -233,6 +233,18 @@ export interface UserConfig {
   apiHost?: string
   appDomain?: string
   contentCss?: string
+  text?: {
+    loginBtn?: {
+      normal?: string
+      loading?: string
+    }
+    registerBtn?: {
+      normal?: string
+      loading?: string
+    }
+    // 登录 tab
+    loginTabs?: Partial<Record<LoginMethods, string>>
+  }
   escCloseable?: boolean
   autoRegister?: boolean
   clickCloseable?: boolean
@@ -246,7 +258,6 @@ export interface UserConfig {
   registerMethods?: RegisterMethods[]
   socialConnections?: SocialConnections[]
   defaultRegisterMethod?: RegisterMethods
-  loginMethodsText?: Partial<Record<LoginMethods, string>>
   qrCodeScanOptions?: Parameters<QrCodeAuthenticationClient['startScanning']>[1]
 }
 

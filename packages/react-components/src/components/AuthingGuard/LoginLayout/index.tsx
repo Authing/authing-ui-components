@@ -12,10 +12,7 @@ import {
   PasswordLoginForm,
   PhoneCodeLoginForm,
 } from '../../../components/AuthingGuard/Forms'
-import {
-  LOGIN_METHODS_MAP,
-  NEED_MFA_CODE,
-} from '../../../components/AuthingGuard/constants'
+import { NEED_MFA_CODE } from '../../../components/AuthingGuard/constants'
 import { AuthingTabs } from '../../../common/AuthingTabs'
 import {
   BaseFormProps,
@@ -96,11 +93,11 @@ const useNormalLoginTabs = ({ onSuccess, onFail }: BaseFormProps) => {
   const {
     state: { config },
   } = useGuardContext()
-  const { loginMethods = [], loginMethodsText } = config
+  const { loginMethods = [], text } = config
 
   const tabs = loginMethods.map((item) => ({
     key: item,
-    label: loginMethodsText?.[item] || LOGIN_METHODS_MAP[item],
+    label: text?.loginTabs?.[item]!,
     component: LOGIN_FORM_MAP[item],
   }))
 

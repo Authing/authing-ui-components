@@ -12,7 +12,10 @@ export interface RegisterFormFooterProps {
 export const RegisterFormFooter: FC<RegisterFormFooterProps> = ({
   loading,
 }) => {
-  const { setValue } = useGuardContext()
+  const {
+    setValue,
+    state: { config },
+  } = useGuardContext()
 
   return (
     <>
@@ -23,7 +26,9 @@ export const RegisterFormFooter: FC<RegisterFormFooterProps> = ({
         loading={loading}
         block
       >
-        注册
+        {loading
+          ? config.text?.registerBtn?.loading
+          : config.text?.registerBtn?.normal}
       </Button>
 
       <div className="authing-guard-form-actions">

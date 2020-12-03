@@ -189,9 +189,7 @@ const useGuardConfig = () => {
         !defaultGuardConfig.disableResetPwd
       )
 
-    return ({
-      ...defaultGuardConfig,
-      ...userConfig,
+    return Object.assign({}, defaultGuardConfig, userConfig, {
       logo,
       title,
       autoRegister,
