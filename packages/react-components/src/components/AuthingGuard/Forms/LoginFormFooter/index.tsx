@@ -31,8 +31,8 @@ export const LoginFormFooter: FC<LoginFormFooterProps> = ({
         block
       >
         {loading
-          ? config.text?.loginBtn?.normal
-          : config.text?.loginBtn?.loading}
+          ? config.text?.loginBtn?.loading
+          : config.text?.loginBtn?.normal}
       </Button>
 
       <div className="authing-guard-form-actions">

@@ -1,7 +1,7 @@
 import { message, Spin } from 'antd'
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react'
 
-import { getClassnames, insertStyles } from '../../../utils'
+import { getClassnames, insertStyles, deepMerge } from '../../../utils'
 import { useGuardContext } from '../../../context/global/context'
 import { GuardHeader } from '../../../components/AuthingGuard/Header'
 import { MfaLayout } from '../../../components/AuthingGuard/MfaLayout'
@@ -189,19 +189,24 @@ const useGuardConfig = () => {
         !defaultGuardConfig.disableResetPwd
       )
 
-    return Object.assign({}, defaultGuardConfig, userConfig, {
-      logo,
-      title,
-      autoRegister,
-      loginMethods,
-      disableRegister,
-      disableResetPwd,
-      registerMethods,
-      defaultLoginMethod,
-      socialConnectionObjs,
-      defaultRegisterMethod,
-      enterpriseConnectionObjs,
-    } as unknown) as GuardConfig
+    return deepMerge<GuardConfig>(
+      {} as GuardConfig,
+      defaultGuardConfig,
+      userConfig,
+      {
+        logo,
+        title,
+        autoRegister,
+        loginMethods,
+        disableRegister,
+        disableResetPwd,
+        registerMethods,
+        defaultLoginMethod,
+        socialConnectionObjs,
+        defaultRegisterMethod,
+        enterpriseConnectionObjs,
+      }
+    )
   }, [
     userConfig,
     appConfig.socialConnections,

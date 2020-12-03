@@ -95,3 +95,44 @@ export const useTitle = (title: string, prefix?: string) => {
 export const getClassnames = (classnames: (string | boolean | undefined)[]) => {
   return classnames.filter(Boolean).join(' ')
 }
+
+/**
+ * https://www.itranslater.com/qa/details/2115518846294557696
+ * Simple object check.
+ * @param item
+ * @returns {boolean}
+ */
+export function isObject(item: any) {
+  return item && typeof item === 'object' && !Array.isArray(item)
+}
+
+/**
+ * https://www.itranslater.com/qa/details/2115518846294557696
+ * Deep merge two objects.
+ * @param target
+ * @param ...sources
+ */
+export function deepMerge<T extends any = any>(
+  target: T,
+  ...sources: any[]
+): T {
+  if (!sources.length) return target
+  const source = sources.shift()
+
+  if (isObject(target) && isObject(source)) {
+    for (const key in source) {
+      if (isObject(source[key])) {
+        // @ts-ignore
+        if (!target[key]) {
+          Object.assign(target, { [key]: {} })
+        }
+        // @ts-ignore
+        deepMerge(target[key], source[key])
+      } else {
+        Object.assign(target, { [key]: source[key] })
+      }
+    }
+  }
+
+  return deepMerge(target, ...sources)
+}

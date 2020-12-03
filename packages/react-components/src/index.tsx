@@ -35,6 +35,9 @@ const App = () => {
       loginTabs: {
         [LoginMethods.Password]: '密码登录一下',
       },
+      loginBtn: {
+        loading: 'fuck',
+      },
     },
     mode: GuardMode.Modal,
     contentCss: `
