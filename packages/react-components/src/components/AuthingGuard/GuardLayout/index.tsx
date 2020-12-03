@@ -6,7 +6,10 @@ import { useGuardContext } from '../../../context/global/context'
 import { GuardHeader } from '../../../components/AuthingGuard/Header'
 import { MfaLayout } from '../../../components/AuthingGuard/MfaLayout'
 import { LoginLayout } from '../../../components/AuthingGuard/LoginLayout'
-import { defaultGuardConfig } from '../../../components/AuthingGuard/constants'
+import {
+  defaultGuardConfig,
+  HIDE_SOCIALS,
+} from '../../../components/AuthingGuard/constants'
 import { RegisterLayout } from '../../../components/AuthingGuard/RegisterLayout'
 import { ResetPwdLayout } from '../../../components/AuthingGuard/ResetPwdLayout'
 import {
@@ -114,18 +117,10 @@ const useGuardConfig = () => {
         socials.includes(item.provider)
       )
     }
-    const hideSocials = [
-      'wechat:miniprogram:app-launch',
-      'wechat:miniprogram:qrconnect',
-      'wechat:webpage-authorization',
-      'wechat:miniprogram:default',
-      'wechatwork:addressbook',
-      'wechat:mobile',
-      'alipay',
-    ]
+
     // 某些社会化登录会在 tabs 中显示，或者无法在 Guard 中使用，所以底部不显示了
     socialConnectionObjs = socialConnectionObjs?.filter(
-      (item) => !hideSocials.includes(item.provider)
+      (item) => !HIDE_SOCIALS.includes(item.provider)
     )
 
     // 企业身份源

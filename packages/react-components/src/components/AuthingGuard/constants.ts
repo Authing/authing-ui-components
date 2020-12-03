@@ -26,6 +26,16 @@ export const REGISTER_METHODS_MAP = {
   [RegisterMethods.Phone]: '手机号注册',
 }
 
+// 某些社会化登录会在 tabs 中显示，或者无法在 Guard 中使用，所以底部不显示了
+export const HIDE_SOCIALS = [
+  'wechat:miniprogram:app-launch',
+  'wechat:miniprogram:qrconnect',
+  'wechat:webpage-authorization',
+  'wechat:miniprogram:default',
+  'wechatwork:addressbook',
+  'wechat:mobile',
+]
+
 export const defaultGuardConfig: Partial<UserConfig> = {
   isSSO: false,
   title: 'Authing',
