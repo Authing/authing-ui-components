@@ -32,11 +32,17 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
   const noForm = !config.loginMethods?.length
 
   useEffect(() => {
-    const onMessage = (event: MessageEvent) => {
+    const onMessage = (evt: MessageEvent) => {
       // TODO: event.origin是指发送的消息源，一定要进行验证！！！
 
-      const { code, message: errMsg, data } = event.data
-      // TODO: 和前端约定
+      const { code, message: errMsg, data, event } = evt.data
+
+      const { source, eventType } = event || {}
+
+      // 社会化登录是用 authing-js-sdk 实现的，不用再在这里回调了
+      if (source === 'authing' && eventType === 'socialLogin') {
+        return
+      }
 
       try {
         const parsedMsg = JSON.parse(errMsg)
@@ -54,7 +60,7 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
           localStorage.setItem('_authing_token', data?.token)
           onSuccess(data)
         } else {
-          message.error(JSON.stringify(errMsg))
+          message.error(errMsg)
         }
       }
     }
@@ -181,6 +187,20 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
       authClient.social.authorize(item.provider, {
         onSuccess(user) {
           onSuccess(user)
+        },
+        onError(code, msg) {
+          try {
+            const parsedMsg = JSON.parse(msg)
+            const { code: authingCode } = parsedMsg
+            if (authingCode === NEED_MFA_CODE) {
+              onFail(parsedMsg)
+              return
+            }
+          } catch (e) {
+            // do nothing...
+          }
+
+          message.error(msg)
         },
       })
     }
