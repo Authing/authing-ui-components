@@ -1,11 +1,11 @@
 {
   "name": "@authing/native-js-ui-components",
-  "version": "2.1.8",
+  "version": "2.1.9",
   "private": false,
   "main": "lib/index.min.js",
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@authing/react-ui-components": "^2.1.8",
+    "@authing/react-ui-components": "^2.1.9",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   },
