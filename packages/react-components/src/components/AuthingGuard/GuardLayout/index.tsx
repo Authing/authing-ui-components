@@ -277,9 +277,14 @@ export const GuardLayout: FC<{
 
   useEffect(() => {
     if (!loading) {
-      guardEvents.onTabChange?.(activeTabs)
+      guardEvents.onLoginTabChange?.(activeTabs.login)
     }
-  }, [activeTabs, loading, guardEvents])
+  }, [activeTabs.login, loading, guardEvents])
+  useEffect(() => {
+    if (!loading) {
+      guardEvents.onRegisterTabChange?.(activeTabs.register)
+    }
+  }, [activeTabs.register, loading, guardEvents])
 
   // 动画完成后完全隐藏 dom
   const [hidden, setHidden] = useState(false)

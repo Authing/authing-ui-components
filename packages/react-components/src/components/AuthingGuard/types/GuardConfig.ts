@@ -169,7 +169,8 @@ export const GuardEventsCamelToKebabMap = {
   onPwdReset: 'pwd-reset',
   onPwdResetError: 'pwd-reset-error',
   onClose: 'close',
-  onTabChange: 'tab-change',
+  onLoginTabChange: 'login-tab-change',
+  onRegisterTabChange: 'register-tab-change',
 } as const
 
 export interface GuardEventsHandlerKebab {
@@ -199,8 +200,10 @@ export interface GuardEventsHandlerKebab {
   'pwd-reset-error': GuardEventsHandler['onPwdResetError']
   // 表单关闭事件
   close: GuardEventsHandler['onClose']
-  // 登录或注册的 tab 切换
-  'tab-change': GuardEventsHandler['onTabChange']
+  // 登录的 tab 切换
+  'login-tab-change': GuardEventsHandler['onLoginTabChange']
+  // 注册的 tab 切换
+  'register-tab-change': GuardEventsHandler['onRegisterTabChange']
 }
 
 export interface GuardEventsHandler {
@@ -226,7 +229,8 @@ export interface GuardEventsHandler {
     authClient: AuthenticationClient
   ) => void
   onClose?: () => void
-  onTabChange?: (activeTabs: ActiveTabs) => void
+  onLoginTabChange?: (activeTab: LoginMethods) => void
+  onRegisterTabChange?: (activeTab: RegisterMethods) => void
 }
 
 export interface UserConfig {
