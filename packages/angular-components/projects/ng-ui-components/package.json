@@ -14,6 +14,7 @@
   ],
   "publishConfig": {
     "access": "public",
-    "directory": "../../dist/ng-ui-components"
+    "directory": "../../dist/ng-ui-components",
+    "registry": "https://registry.npmjs.org"
   }
 }

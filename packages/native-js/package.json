@@ -16,7 +16,8 @@
     "test": "node scripts/test.js"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
   "eslintConfig": {
     "extends": [

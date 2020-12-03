@@ -29,7 +29,8 @@
   },
   "homepage": "",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
   "dependencies": {
     "@authing/native-js-ui-components": "^2.1.2"
