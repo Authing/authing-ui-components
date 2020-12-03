@@ -26,7 +26,7 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
   onSuccess = () => {},
 }) => {
   const {
-    state: { config, userPoolId, appId },
+    state: { config, userPoolId, appId, authClient },
   } = useGuardContext()
 
   const noForm = !config.loginMethods?.length
@@ -51,6 +51,7 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
 
       if (code !== undefined) {
         if (code === 200) {
+          localStorage.setItem('_authing_token', data?.token)
           onSuccess(data)
         } else {
           message.error(JSON.stringify(errMsg))
@@ -175,8 +176,14 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
   })
 
   const socialLoginButtons = config.socialConnectionObjs.map((item) => {
-    const url = item.authorizationUrl + '?from_guard=1'
     const cls = `authing-icon authing-${item.provider.replace(/:/g, '-')}`
+    const onLogin = () => {
+      authClient.social.authorize(item.provider, {
+        onSuccess(user) {
+          onSuccess(user)
+        },
+      })
+    }
 
     return noForm ? (
       <Button
@@ -185,18 +192,13 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
         size="large"
         className="authing-guard-third-login-btn"
         icon={<i className={cls} style={{ fontSize: 20, marginRight: 8 }} />}
-        onClick={async () => {
-          popupCenter(url)
-        }}
+        onClick={onLogin}
       >
         {item.name}
       </Button>
     ) : (
       <Tooltip key={item.provider} title={item.name}>
-        <div
-          className="authing-social-login-item"
-          onClick={() => popupCenter(url)}
-        >
+        <div className="authing-social-login-item" onClick={onLogin}>
           <i className={cls} />
         </div>
       </Tooltip>
