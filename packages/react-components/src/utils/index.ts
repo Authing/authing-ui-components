@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Rule } from 'antd/lib/form'
 import { useGuardContext } from '../context/global/context'
+import qs from 'qs'
 
 export * from './popupCenter'
 export * from './clipboard'
@@ -135,4 +136,14 @@ export function deepMerge<T extends any = any>(
   }
 
   return deepMerge(target, ...sources)
+}
+
+export const getUserRegisterParams = () => {
+  const query = qs.parse(window.location.search, {
+    ignoreQueryPrefix: true,
+  })
+  return Object.keys(query).map((key) => ({
+    key,
+    value: query[key],
+  }))
 }

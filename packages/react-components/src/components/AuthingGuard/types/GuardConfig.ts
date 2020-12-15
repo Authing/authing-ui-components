@@ -5,7 +5,6 @@ import {
   SocialConnectionItem,
   EnterpriseConnectionItem,
 } from '../../../components/AuthingGuard/api'
-import { ActiveTabs } from './GuardState'
 
 export type { AuthenticationClient, CommonMessage, User } from 'authing-js-sdk'
 

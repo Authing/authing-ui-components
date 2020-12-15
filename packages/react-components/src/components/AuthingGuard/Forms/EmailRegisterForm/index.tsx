@@ -6,6 +6,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import {
   getDeviceName,
   getRequiredRules,
+  getUserRegisterParams,
   VALIDATE_PATTERN,
 } from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
@@ -41,7 +42,10 @@ export const EmailRegisterForm = forwardRef<
           browser: navigator.userAgent,
           device: getDeviceName(),
         },
-        { generateToken: true }
+        {
+          generateToken: true,
+          params: getUserRegisterParams(),
+        }
       )
       onSuccess && onSuccess(user)
     } catch (error) {

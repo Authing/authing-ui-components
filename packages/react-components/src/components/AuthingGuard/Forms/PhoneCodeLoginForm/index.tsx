@@ -3,7 +3,11 @@ import { FormInstance, Rule } from 'antd/lib/form'
 import { Alert, Form, Input } from 'antd'
 import { UserOutlined, SafetyOutlined } from '@ant-design/icons'
 
-import { getRequiredRules, VALIDATE_PATTERN } from '../../../../utils'
+import {
+  getRequiredRules,
+  getUserRegisterParams,
+  VALIDATE_PATTERN,
+} from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
 import { PhoneCodeLoginFormProps } from '../../../../components/AuthingGuard/types'
 import { SendPhoneCode } from '../../../../components/AuthingGuard/Forms/SendPhoneCode'
@@ -38,7 +42,9 @@ export const PhoneCodeLoginForm = forwardRef<
   const onFinish = async (values: any) => {
     try {
       const { phone, code } = values
-      const user = await authClient.loginByPhoneCode(phone, code)
+      const user = await authClient.loginByPhoneCode(phone, code, {
+        params: getUserRegisterParams(),
+      })
       onSuccess && onSuccess(user)
     } catch (error) {
       onFail && onFail(error)

@@ -26,7 +26,7 @@ export const MfaResetStep2: FC<MfaResetStep2Props> = ({
               if (!v) {
                 reject('请确保您已保存密钥')
               }
-              resolve()
+              resolve(true)
             })
           },
         },

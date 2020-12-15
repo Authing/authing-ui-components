@@ -3,7 +3,11 @@ import { FormInstance } from 'antd/lib/form'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
 
-import { getRequiredRules, validate } from '../../../../utils'
+import {
+  getRequiredRules,
+  getUserRegisterParams,
+  validate,
+} from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
 import { NEED_CAPTCHA } from '../../../../components/AuthingGuard/constants'
 import { PasswordLoginFormProps } from '../../../../components/AuthingGuard/types'
@@ -41,15 +45,18 @@ export const PasswordLoginForm = forwardRef<
         ? await authClient.loginByPhonePassword(identity, password, {
             autoRegister,
             captchaCode,
+            params: getUserRegisterParams(),
           })
         : validate('email', identity)
         ? await authClient.loginByEmail(identity, password, {
             autoRegister,
             captchaCode,
+            params: getUserRegisterParams(),
           })
         : await authClient.loginByUsername(identity, password, {
             autoRegister,
             captchaCode,
+            params: getUserRegisterParams(),
           })
 
       onSuccess && onSuccess(user)

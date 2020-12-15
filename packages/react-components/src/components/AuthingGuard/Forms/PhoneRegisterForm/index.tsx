@@ -8,6 +8,7 @@ import { PhoneRegisterFormProps } from '../../../../components/AuthingGuard/type
 import {
   getDeviceName,
   getRequiredRules,
+  getUserRegisterParams,
   VALIDATE_PATTERN,
 } from '../../../../utils'
 import { SendPhoneCode } from '../../../../components/AuthingGuard/Forms/SendPhoneCode'
@@ -45,6 +46,7 @@ export const PhoneRegisterForm = forwardRef<
         },
         {
           generateToken: true,
+          params: getUserRegisterParams(),
         }
       )
       onSuccess && onSuccess(user)
