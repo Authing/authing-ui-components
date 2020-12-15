@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "build:lib": "lerna run build:lib --stream",
-    "publish:lib": "lerna version && yarn build:lib && lerna publish from-package",
+    "publish:lib": "lerna publish from-package",
+    "publish:build": "lerna version && yarn build:lib && yarn publish:lib",
     "clean": "lerna clean"
   },
   "workspaces": [
