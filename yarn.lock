@@ -4604,10 +4604,10 @@ atob@^2.1.2:
   resolved "https://registry.npm.taobao.org/atob/download/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha1-bZUX654DDSQ2ZmZR6GvZ9vE1M8k=
 
-authing-js-sdk@^4.8.1-alpha.1:
-  version "4.8.1-alpha.1"
-  resolved "https://registry.npm.taobao.org/authing-js-sdk/download/authing-js-sdk-4.8.1-alpha.1.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fauthing-js-sdk%2Fdownload%2Fauthing-js-sdk-4.8.1-alpha.1.tgz#5a1441bfd47c3739e5992054ba46a36bef7d9c14"
-  integrity sha1-WhRBv9R8NznlmSBUukaja+99nBQ=
+authing-js-sdk@^4.8.1:
+  version "4.8.1"
+  resolved "https://registry.npm.taobao.org/authing-js-sdk/download/authing-js-sdk-4.8.1.tgz?cache=0&sync_timestamp=1608039285427&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fauthing-js-sdk%2Fdownload%2Fauthing-js-sdk-4.8.1.tgz#f91567dcfff504e5a33d1d58288e1a25f3a351e9"
+  integrity sha1-+RVn3P/1BOWjPR1YKI4aJfOjUek=
   dependencies:
     axios "^0.19.2"
     jsencrypt "^3.0.0-rc.1"
