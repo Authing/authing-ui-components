@@ -27,6 +27,7 @@ import {
 } from '../../../components/AuthingGuard/types'
 
 import './style.less'
+import { CompleteUserInfoLayout } from '../CompleteUserInfoLayout'
 
 const checkConfig = (appId: string, config: UserConfig) => {
   // 不要去掉 console.warn，不然 vue 版打包出来每次都会 throw error，估计是 rollup 打包有问题
@@ -198,6 +199,7 @@ const useGuardConfig = () => {
         title,
         autoRegister,
         loginMethods,
+        extendsFields: appConfig.extendsFields,
         disableRegister,
         disableResetPwd,
         registerMethods,
@@ -209,7 +211,6 @@ const useGuardConfig = () => {
     )
   }, [
     userConfig,
-    appConfig.socialConnections,
     appConfig.loginTabs?.list,
     appConfig.loginTabs?.default,
     appConfig.registerTabs?.list,
@@ -218,6 +219,8 @@ const useGuardConfig = () => {
     appConfig.logo,
     appConfig.ssoPageComponentDisplay?.autoRegisterThenLoginHintInfo,
     appConfig.ssoPageComponentDisplay?.registerBtn,
+    appConfig.extendsFields,
+    appConfig.socialConnections,
     appConfig.identityProviders,
     loading,
   ])
@@ -352,6 +355,7 @@ export const GuardLayout: FC<{
     [GuardScenes.Register]: <RegisterLayout />,
     [GuardScenes.RestPassword]: <ResetPwdLayout />,
     [GuardScenes.MfaVerify]: <MfaLayout />,
+    [GuardScenes.CompleteUserInfo]: <CompleteUserInfoLayout />,
   }
 
   return (

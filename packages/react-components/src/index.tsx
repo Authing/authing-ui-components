@@ -15,8 +15,8 @@ import reportWebVitals from './reportWebVitals'
 
 const App = () => {
   const config: UserConfig = {
-    // apiHost: 'https://console.authing.localhost',
-    apiHost: 'http://192.168.50.57:3000',
+    apiHost: 'http://console.authing.localhost:3000',
+    // apiHost: 'http://192.168.50.57:3000',
     // loginMethods: Object.values(LoginMethods),
     // logo:
     //   'https://files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png',
@@ -57,7 +57,7 @@ const App = () => {
     // eslint-disable-next-line react/jsx-no-undef
     <>
       <AuthingGuard
-        visible={visible}
+        // visible={visible}
         onLoginTabChange={(v) => console.log(v)}
         onRegisterTabChange={(v) => console.log(v)}
         onClose={() => {
@@ -68,8 +68,8 @@ const App = () => {
         }}
         onLoad={(a) => console.log(a, '加载完成')}
         // onPwdResetError={(e) => console.log(e)}
-        // appId="5fa5053e252697ad5302ce7e"
-        appId="5fd877fb0ba0421962eced94"
+        appId="5fdc1d8e7cf94ddfc191ecf8"
+        // appId="5fd877fb0ba0421962eced94"
         config={config}
       />
     </>

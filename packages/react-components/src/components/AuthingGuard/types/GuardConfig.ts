@@ -4,6 +4,7 @@ import { QrCodeAuthenticationClient } from 'authing-js-sdk/build/main/lib/authen
 import {
   SocialConnectionItem,
   EnterpriseConnectionItem,
+  ApplicationConfig,
 } from '../../../components/AuthingGuard/api'
 
 export type { AuthenticationClient, CommonMessage, User } from 'authing-js-sdk'
@@ -32,6 +33,7 @@ export enum GuardScenes {
   Register = 'register',
   MfaVerify = 'mfaVerify',
   RestPassword = 'restPassword',
+  CompleteUserInfo = 'completeUserInfo',
 }
 
 export enum ResetPwdMethods {
@@ -170,6 +172,8 @@ export const GuardEventsCamelToKebabMap = {
   onClose: 'close',
   onLoginTabChange: 'login-tab-change',
   onRegisterTabChange: 'register-tab-change',
+  onRegisterInfoCompleted: 'register-info-completed',
+  onRegisterInfoCompletedError: 'register-info-completed-error',
 } as const
 
 export interface GuardEventsHandlerKebab {
@@ -203,6 +207,10 @@ export interface GuardEventsHandlerKebab {
   'login-tab-change': GuardEventsHandler['onLoginTabChange']
   // 注册的 tab 切换
   'register-tab-change': GuardEventsHandler['onRegisterTabChange']
+  // 注册信息补充完毕
+  'register-info-completed': GuardEventsHandler['onRegisterInfoCompleted']
+  // 注册信息补充失败
+  'register-info-completed-error': GuardEventsHandler['onRegisterInfoCompletedError']
 }
 
 export interface GuardEventsHandler {
@@ -230,6 +238,22 @@ export interface GuardEventsHandler {
   onClose?: () => void
   onLoginTabChange?: (activeTab: LoginMethods) => void
   onRegisterTabChange?: (activeTab: RegisterMethods) => void
+  onRegisterInfoCompleted?: (
+    user: User,
+    udfs: {
+      definition: any
+      value: any
+    }[],
+    authClient: AuthenticationClient
+  ) => void
+  onRegisterInfoCompletedError?: (
+    error: CommonMessage,
+    udfs: {
+      definition: any
+      value: any
+    }[],
+    authClient: AuthenticationClient
+  ) => void
 }
 
 export interface UserConfig {
@@ -272,4 +296,5 @@ export interface UserConfig {
 export interface GuardConfig extends UserConfig {
   socialConnectionObjs: SocialConnectionItem[]
   enterpriseConnectionObjs: EnterpriseConnectionItem[]
+  extendsFields: ApplicationConfig['extendsFields']
 }

@@ -18,7 +18,7 @@ import {
 export const RegisterLayout: FC = () => {
   const {
     state: {
-      config: { registerMethods },
+      config: { registerMethods, extendsFields },
       activeTabs,
       guardEvents,
       authClient,
@@ -28,7 +28,11 @@ export const RegisterLayout: FC = () => {
 
   const onSuccess = (user: User) => {
     message.success('注册成功')
-    setValue('guardScenes', GuardScenes.Login)
+    if (extendsFields?.length > 0) {
+      setValue('guardScenes', GuardScenes.CompleteUserInfo)
+    } else {
+      setValue('guardScenes', GuardScenes.Login)
+    }
     guardEvents.onRegister?.(user, authClient)
   }
 

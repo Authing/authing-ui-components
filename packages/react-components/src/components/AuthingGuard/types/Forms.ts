@@ -7,6 +7,8 @@ export interface BaseFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onFail?: (error: any) => void
 }
 
+export interface CompleteUserInfoFormProps extends BaseFormProps {}
+
 export interface PasswordLoginFormProps extends BaseFormProps {
   onValidateFail?: (error: any) => void
 }
