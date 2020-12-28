@@ -28,6 +28,7 @@ import {
 
 import './style.less'
 import { CompleteUserInfoLayout } from '../CompleteUserInfoLayout'
+import { AppMfaLayout } from '../AppMFALayout'
 
 const checkConfig = (appId: string, config: UserConfig) => {
   // 不要去掉 console.warn，不然 vue 版打包出来每次都会 throw error，估计是 rollup 打包有问题
@@ -356,6 +357,7 @@ export const GuardLayout: FC<{
     [GuardScenes.RestPassword]: <ResetPwdLayout />,
     [GuardScenes.MfaVerify]: <MfaLayout />,
     [GuardScenes.CompleteUserInfo]: <CompleteUserInfoLayout />,
+    [GuardScenes.AppMfaVerify]: <AppMfaLayout />,
   }
 
   return (

@@ -14,7 +14,9 @@ export const MfaResetCodeForm: FC<MfaResetForm> = ({
   onFail,
 }) => {
   const {
-    state: { mfaToken },
+    state: {
+      mfaData: { mfaToken },
+    },
   } = useGuardContext()
 
   const [step, setStep] = useState(1)

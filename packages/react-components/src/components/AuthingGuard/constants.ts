@@ -6,8 +6,10 @@ import {
   RegisterMethods,
 } from '../../components/AuthingGuard/types'
 
-// 当需要 MFA 认证时，登录返回的 error code
-export const NEED_MFA_CODE = 1635
+// 个人版 OTP MFA 的 error code
+export const OTP_MFA_CODE = 1635
+// 企业版手机和短信验证吗 MFA 的 error code
+export const APP_MFA_CODE = 1636
 
 // 需要验证吗
 export const NEED_CAPTCHA = 2000
@@ -35,6 +37,15 @@ export const HIDE_SOCIALS = [
   'wechatwork:addressbook',
   'wechat:mobile',
 ]
+
+// 企业版 MFA 支持的方式
+export enum ApplicationMfaType {
+  SMS = 'SMS',
+  EMAIL = 'EMAIL',
+  // OTP = 'OTP',
+  // FACE = 'FACE',
+  // FINGERPRINT = 'FINGERPRINT',
+}
 
 export const defaultGuardConfig: Partial<UserConfig> = {
   isSSO: false,

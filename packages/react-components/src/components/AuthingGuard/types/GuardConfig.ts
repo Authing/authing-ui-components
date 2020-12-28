@@ -32,6 +32,7 @@ export enum GuardScenes {
   Login = 'login',
   Register = 'register',
   MfaVerify = 'mfaVerify',
+  AppMfaVerify = 'appMfaVerify',
   RestPassword = 'restPassword',
   CompleteUserInfo = 'completeUserInfo',
 }

@@ -12,7 +12,10 @@ import {
   PasswordLoginForm,
   PhoneCodeLoginForm,
 } from '../../../components/AuthingGuard/Forms'
-import { NEED_MFA_CODE } from '../../../components/AuthingGuard/constants'
+import {
+  OTP_MFA_CODE,
+  APP_MFA_CODE,
+} from '../../../components/AuthingGuard/constants'
 import { AuthingTabs } from '../../../common/AuthingTabs'
 import {
   BaseFormProps,
@@ -34,9 +37,13 @@ const useFormActions = () => {
   }
 
   const onFail = (error: any) => {
-    if (error?.code === NEED_MFA_CODE) {
-      setValue('mfaToken', error.data.mfaToken)
+    if (OTP_MFA_CODE === error?.code) {
+      setValue('mfaData', error.data)
       setValue('guardScenes', GuardScenes.MfaVerify)
+    }
+    if (APP_MFA_CODE === error?.code) {
+      setValue('mfaData', error.data)
+      setValue('guardScenes', GuardScenes.AppMfaVerify)
     }
     guardEvents.onLoginError?.(error, authClient)
   }

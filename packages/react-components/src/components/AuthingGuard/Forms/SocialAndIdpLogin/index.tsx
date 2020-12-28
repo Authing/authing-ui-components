@@ -5,7 +5,10 @@ import { Button, Avatar, Space, Tooltip, message } from 'antd'
 
 import { popupCenter } from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
-import { NEED_MFA_CODE } from '../../../../components/AuthingGuard/constants'
+import {
+  APP_MFA_CODE,
+  OTP_MFA_CODE,
+} from '../../../../components/AuthingGuard/constants'
 import {
   Protocol,
   SocialAndIdpLoginProps,
@@ -47,7 +50,7 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
       try {
         const parsedMsg = JSON.parse(errMsg)
         const { code: authingCode } = parsedMsg
-        if (authingCode === NEED_MFA_CODE) {
+        if ([OTP_MFA_CODE, APP_MFA_CODE].includes(authingCode)) {
           onFail(parsedMsg)
           return
         }
@@ -192,7 +195,7 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
           try {
             const parsedMsg = JSON.parse(msg)
             const { code: authingCode } = parsedMsg
-            if (authingCode === NEED_MFA_CODE) {
+            if ([OTP_MFA_CODE, APP_MFA_CODE].includes(authingCode)) {
               onFail(parsedMsg)
               return
             }

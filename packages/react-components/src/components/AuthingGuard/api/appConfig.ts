@@ -8,6 +8,13 @@ import {
   SocialConnectionItem,
 } from './userPoolConfig'
 
+export enum ApplicationMfaType {
+  SMS = 'SMS',
+  EMAIL = 'EMAIL',
+  // OTP = 'OTP',
+  // FACE = 'FACE',
+  // FINGERPRINT = 'FINGERPRINT',
+}
 export interface OidcClientMetadata {
   grant_types: string[]
   client_id: string

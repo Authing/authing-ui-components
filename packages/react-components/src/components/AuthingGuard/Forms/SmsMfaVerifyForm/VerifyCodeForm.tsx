@@ -4,34 +4,37 @@ import { Button, Form } from 'antd'
 
 import { VerifyCodeInput } from '../../../../common/VerifyCodeInput'
 import { useGuardContext } from '../../../../context/global/context'
-import { MfaVerifyForm } from '../../../../components/AuthingGuard/types'
+import { SmsMFAVerifyFormProps } from '../../../../components/AuthingGuard/types'
 
 import './style.less'
+import { SendCodeBtn } from '../SendPhoneCode/SendCodeBtn'
 
-const CODE_LEN = 6
+const CODE_LEN = 4
 
-export const MFAVerifyForm: FC<MfaVerifyForm> = ({
+export const VerifyCodeForm: FC<SmsMFAVerifyFormProps> = ({
   onSuccess,
   onFail,
-  goReset,
+  phone,
+  mfaToken,
+  sendCodeRef,
 }) => {
   const {
-    state: {
-      authClient,
-      mfaData: { mfaToken },
-    },
+    state: { authClient },
   } = useGuardContext()
 
   const [rawForm] = Form.useForm()
 
   const [MfaCode, setMFACode] = useState(new Array(CODE_LEN).fill(''))
   const [loading, setLoading] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [sent, setSent] = useState(false)
 
   const onFinish = async (values: any) => {
     try {
-      const user: User = await authClient.mfa.verifyTotpMfa({
+      const user: User = await authClient.mfa.verifyAppSmsMfa({
         mfaToken,
-        totp: MfaCode.join(''),
+        phone: phone!,
+        code: MfaCode.join(''),
       })
       onSuccess && onSuccess(user)
     } catch (e) {
@@ -41,11 +44,28 @@ export const MFAVerifyForm: FC<MfaVerifyForm> = ({
     }
   }
 
+  const sendVerifyCode = async () => {
+    setSending(true)
+    try {
+      await authClient.sendSmsCode(phone!)
+      setSent(true)
+      return true
+    } catch (e) {
+      return false
+    } finally {
+      setSending(false)
+    }
+  }
+
   return (
     <>
-      <h3 className="authing-guard-mfa-title">账号登录验证</h3>
+      <h3 className="authing-guard-mfa-title">请输入手机验证码</h3>
       <p className="authing-guard-mfa-tips">
-        请输入获取的 6 位数字安全码验证登录
+        {sending
+          ? '验证码发送中'
+          : sent
+          ? `验证码已发送至 ${phone}`
+          : `点击按钮发送验证码`}
       </p>
       <Form
         form={rawForm}
@@ -67,8 +87,14 @@ export const MFAVerifyForm: FC<MfaVerifyForm> = ({
             },
           ]}
         >
-          <VerifyCodeInput verifyCode={MfaCode} setVerifyCode={setMFACode} />
+          <VerifyCodeInput
+            length={CODE_LEN}
+            verifyCode={MfaCode}
+            setVerifyCode={setMFACode}
+          />
         </Form.Item>
+
+        <SendCodeBtn btnRef={sendCodeRef} beforeSend={() => sendVerifyCode()} />
 
         <Button
           className="authing-guard-mfa-confirm-btn"
@@ -80,20 +106,6 @@ export const MFAVerifyForm: FC<MfaVerifyForm> = ({
         >
           确定
         </Button>
-
-        <div className="authing-guard-form-actions">
-          <div className="authing-guard-tip-btn-comb">
-            <span className="authing-guard-tip">安全码丢失？</span>
-            <Button
-              htmlType="button"
-              onClick={goReset}
-              className="authing-guard-text-btn"
-              type="text"
-            >
-              使用恢复码
-            </Button>
-          </div>
-        </div>
       </Form>
     </>
   )

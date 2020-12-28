@@ -8,7 +8,8 @@ import { GuardScenes } from '../../components/AuthingGuard/types'
 import { requestClient } from '../../components/AuthingGuard/api/http'
 import {
   defaultGuardConfig,
-  NEED_MFA_CODE,
+  OTP_MFA_CODE,
+  APP_MFA_CODE,
 } from '../../components/AuthingGuard/constants'
 import { GuardLayout } from '../../components/AuthingGuard/GuardLayout'
 import {
@@ -73,7 +74,7 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
       if (code === 2020) {
         return
       }
-      if (code === NEED_MFA_CODE) {
+      if ([OTP_MFA_CODE, APP_MFA_CODE].includes(code)) {
         message.info(msg)
         return
       }
@@ -97,7 +98,9 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
           guardScenes: defaultScenes,
           activeTabs,
           guardTitle: config.title,
-          mfaToken: '',
+          mfaData: {
+            mfaToken: '',
+          },
           guardEvents,
         }}
       >
