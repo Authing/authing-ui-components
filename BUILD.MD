@@ -8,7 +8,7 @@
 
 ### 发包
 
-在根目录执行 `yarn publish:build`，会先选择版本号，然后 build，然后推送到 npm
+在根目录执行 `yarn build:publish`，会先选择版本号，然后 build，然后推送到 npm
 
 ### 更新包
 
