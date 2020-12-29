@@ -8,7 +8,7 @@ import {
   SmsMfaVerifyForm,
 } from '../../../components/AuthingGuard/Forms'
 import { useGuardContext } from '../../../context/global/context'
-import { ApplicationMfaType } from '../api'
+import { ApplicationMfaType, ApplicationMfaTypeLabel } from '../api'
 
 import './style.less'
 
@@ -16,7 +16,7 @@ export interface MfaLayoutProps {}
 
 export const AppMfaLayout: FC<MfaLayoutProps> = () => {
   const {
-    state: { guardEvents, authClient },
+    state: { guardEvents, authClient, mfaData },
   } = useGuardContext()
 
   const [type, setType] = useState(ApplicationMfaType.SMS)
@@ -40,30 +40,28 @@ export const AppMfaLayout: FC<MfaLayoutProps> = () => {
     [ApplicationMfaType.SMS]: <SmsMfaVerifyForm {...formProps} />,
   }
 
+  const availableMfaType = mfaData.applicationMfa
+    ?.filter((item) => item.status)
+    ?.sort((a, b) => a.sort - b.sort)
+    ?.map((item) => ({
+      label: ApplicationMfaTypeLabel[item.mfaPolicy],
+      key: item.mfaPolicy,
+      onClick() {
+        setType(item.mfaPolicy)
+      },
+    }))
+
   return (
     <div className="authing-text-center">
       {formMap[type]}
-      <AuthingDropdown
-        className="toggle-mfa-dropdown"
-        menus={[
-          {
-            label: '短信验证码验证',
-            key: ApplicationMfaType.SMS,
-            onClick() {
-              setType(ApplicationMfaType.SMS)
-            },
-          },
-          {
-            label: '电子邮箱验证',
-            key: ApplicationMfaType.EMAIL,
-            onClick() {
-              setType(ApplicationMfaType.EMAIL)
-            },
-          },
-        ]}
-      >
-        <span className="authing-toggle-mfa">其他验证方式</span>
-      </AuthingDropdown>
+      {(availableMfaType?.length || 0 > 1) && (
+        <AuthingDropdown
+          className="toggle-mfa-dropdown"
+          menus={availableMfaType!}
+        >
+          <span className="authing-toggle-mfa">其他验证方式</span>
+        </AuthingDropdown>
+      )}
     </div>
   )
 }

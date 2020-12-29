@@ -15,6 +15,12 @@ export enum ApplicationMfaType {
   // FACE = 'FACE',
   // FINGERPRINT = 'FINGERPRINT',
 }
+
+export const ApplicationMfaTypeLabel: Record<ApplicationMfaType, string> = {
+  [ApplicationMfaType.SMS]: '短信验证码验证',
+  [ApplicationMfaType.EMAIL]: '电子邮箱验证',
+}
+
 export interface OidcClientMetadata {
   grant_types: string[]
   client_id: string
