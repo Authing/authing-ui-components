@@ -56,8 +56,6 @@ export class AuthingGuard {
         document.body.appendChild(container)
       }
 
-      ReactDOM.unmountComponentAtNode(container)
-
       return container
     }
 
