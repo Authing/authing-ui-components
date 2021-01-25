@@ -5,6 +5,7 @@ import { AuthingGuard } from './components/AuthingGuard'
 import {
   GuardMode,
   LoginMethods,
+  SocialConnections,
   UserConfig,
   // LoginMethods,
   // RegisterMethods,
@@ -15,7 +16,7 @@ import reportWebVitals from './reportWebVitals'
 
 const App = () => {
   const config: UserConfig = {
-    apiHost: 'http://console.authing.localhost:3000',
+    // apiHost: 'http://console.authing.localhost:3000',
     // apiHost: 'http://192.168.50.57:3000',
     // loginMethods: Object.values(LoginMethods),
     // logo:
@@ -30,22 +31,23 @@ const App = () => {
     // appDomain: 'oidc1.authing.cn',
     // appId: '5f17a529f64fb009b794a2ff',
     // isSSO: true,
-    zIndex: 300,
-    text: {
-      loginTabs: {
-        [LoginMethods.Password]: '密码登录一下',
-      },
-      loginBtn: {
-        loading: 'fuck',
-      },
-    },
-    mode: GuardMode.Modal,
-    contentCss: `
-      html, body {
-        background-color: #fff;
-      }
-    `,
+    // zIndex: 300,
+    // text: {
+    //   loginTabs: {
+    //     [LoginMethods.Password]: '密码登录一下',
+    //   },
+    //   loginBtn: {
+    //     loading: 'fuck',
+    //   },
+    // },
+    // mode: GuardMode.Modal,
+    // contentCss: `
+    //   html, body {
+    //     background-color: #fff;
+    //   }
+    // `,
     // autoRegister: true,
+    socialConnections: [SocialConnections.AppleWeb],
   }
   const [visible, setVisible] = useState(false)
 
@@ -58,17 +60,17 @@ const App = () => {
     <>
       <AuthingGuard
         // visible={visible}
-        onLoginTabChange={(v) => console.log(v)}
-        onRegisterTabChange={(v) => console.log(v)}
-        onClose={() => {
-          setVisible(false)
-          setTimeout(() => {
-            setVisible(true)
-          }, 2000)
-        }}
-        onLoad={(a) => console.log(a, '加载完成')}
+        // onLoginTabChange={(v) => console.log(v)}
+        // onRegisterTabChange={(v) => console.log(v)}
+        // onClose={() => {
+        //   setVisible(false)
+        //   setTimeout(() => {
+        //     setVisible(true)
+        //   }, 2000)
+        // }}
+        // onLoad={(a) => console.log(a, '加载完成')}
         // onPwdResetError={(e) => console.log(e)}
-        appId="5fe95b657cb45742809d1dcf"
+        appId="60053b7416478de2e88fab43"
         // appId="5fd877fb0ba0421962eced94"
         config={config}
       />

@@ -45,19 +45,16 @@ export enum ResetPwdMethods {
 export enum SocialConnections {
   Qq = 'qq',
   Weibo = 'weibo',
-  // Alipay = 'alipay',
   Github = 'github',
   Google = 'google',
   WxPc = 'wechat:pc',
   Dingtalk = 'dingtalk',
-  // WxMobile = 'wechat:mobile',
   WxWCorpQr = 'wechatwork:corp:qrconnect',
-  // WxMinQr = 'wechat:miniprogram:qrconnect',
-  // WxWebAuth = 'wechat:webpage-authorization',
-  // WxMinApp = 'wechat:miniprogram:app-launch',
-  // WxMinDefault = 'wechat:miniprogram:default',
   WxWSPQr = 'wechatwork:service-provider:qrconnect',
   WxWSPAuth = 'wechatwork:service-provider:authorization',
+  AlipayWeb = 'alipay:web',
+  AppleWeb = 'apple:web',
+  Baidu = 'baidu',
 }
 
 export enum Protocol {
