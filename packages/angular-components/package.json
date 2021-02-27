@@ -8,8 +8,7 @@
     "build:lib": "ng build NgUIComponent --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "postinstall": "node ../../scripts/postintall.js"
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
