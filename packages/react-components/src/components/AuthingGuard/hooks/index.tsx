@@ -5,7 +5,7 @@ import {
 import JSEncrypt from 'jsencrypt'
 import { defaultGuardConfig } from '../constants'
 
-export let authClient: AuthenticationClient | null = null
+let authClient: AuthenticationClient | null = null
 
 export interface AuthClientConfig extends AuthenticationClientOptions {
   appDomain?: string
@@ -39,6 +39,10 @@ export const initAuthClient = (config: AuthClientConfig) => {
 }
 
 export const useAuthing = (config?: AuthClientConfig) => {
+  return { authClient: getAuthClient(config) }
+}
+
+export const getAuthClient = (config?: AuthClientConfig) => {
   if (!authClient && !config) {
     throw new Error(
       'Please `initAuthClient` first or pass `AuthClientConfig` to useAuthing.'
@@ -49,5 +53,5 @@ export const useAuthing = (config?: AuthClientConfig) => {
     initAuthClient(config)
   }
 
-  return { authClient }
+  return authClient
 }

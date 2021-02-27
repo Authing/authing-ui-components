@@ -59,9 +59,6 @@ const App = () => {
   initAuthClient({
     appId: '60053b7416478de2e88fab43',
   })
-  const { authClient } = useAuthing()
-  // @ts-ignore
-  window.fuck = authClient
 
   return (
     // eslint-disable-next-line react/jsx-no-undef

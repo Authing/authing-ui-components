@@ -5,9 +5,9 @@ import {
   User,
   GuardMode,
   UserConfig,
-  authClient,
   GuardScenes,
   LoginMethods,
+  getAuthClient,
   CommonMessage,
   initAuthClient,
   RegisterMethods,
@@ -31,9 +31,9 @@ export type {
 
 export {
   GuardMode,
-  authClient,
   GuardScenes,
   LoginMethods,
+  getAuthClient,
   initAuthClient,
   RegisterMethods,
   GuardEventsCamelToKebabMap,

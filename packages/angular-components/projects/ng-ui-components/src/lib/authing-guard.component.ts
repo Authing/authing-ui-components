@@ -10,11 +10,11 @@ import {
 import {
   User,
   GuardMode,
-  authClient,
   UserConfig,
   GuardScenes,
   AuthingGuard,
   LoginMethods,
+  getAuthClient,
   CommonMessage,
   initAuthClient,
   RegisterMethods,
@@ -36,9 +36,9 @@ export type {
 
 export {
   GuardMode,
-  authClient,
   GuardScenes,
   LoginMethods,
+  getAuthClient,
   initAuthClient,
   RegisterMethods,
 };

@@ -4,7 +4,7 @@
 
 <script>
 import {
-  authClient,
+  getAuthClient,
   initAuthClient,
   AuthingGuard as NativeAuthingGuard,
   GuardEventsCamelToKebabMap,
@@ -16,7 +16,7 @@ import {
 import '@authing/native-js-ui-components/lib/index.min.css'
 
 export {
-  authClient,
+  getAuthClient,
   initAuthClient,
   GuardMode,
   GuardScenes,
