@@ -10,15 +10,18 @@ import {
 import {
   User,
   GuardMode,
+  authClient,
   UserConfig,
   GuardScenes,
   AuthingGuard,
   LoginMethods,
   CommonMessage,
+  initAuthClient,
   RegisterMethods,
   GuardEventsHandler,
   AuthenticationClient,
   GuardEventsHandlerKebab,
+  AuthenticationClientOptions,
 } from '@authing/native-js-ui-components';
 
 export type {
@@ -28,9 +31,17 @@ export type {
   GuardEventsHandler,
   AuthenticationClient,
   GuardEventsHandlerKebab,
+  AuthenticationClientOptions,
 };
 
-export { GuardMode, GuardScenes, LoginMethods, RegisterMethods };
+export {
+  GuardMode,
+  authClient,
+  GuardScenes,
+  LoginMethods,
+  initAuthClient,
+  RegisterMethods,
+};
 
 @Component({
   selector: 'authing-guard',

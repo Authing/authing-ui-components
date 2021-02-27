@@ -4,6 +4,8 @@
 
 <script>
 import {
+  authClient,
+  initAuthClient,
   AuthingGuard as NativeAuthingGuard,
   GuardEventsCamelToKebabMap,
   GuardMode,
@@ -13,7 +15,14 @@ import {
 } from '@authing/native-js-ui-components'
 import '@authing/native-js-ui-components/lib/index.min.css'
 
-export { GuardMode, GuardScenes, LoginMethods, RegisterMethods }
+export {
+  authClient,
+  initAuthClient,
+  GuardMode,
+  GuardScenes,
+  LoginMethods,
+  RegisterMethods,
+}
 
 export default {
   name: 'AuthingGuard',

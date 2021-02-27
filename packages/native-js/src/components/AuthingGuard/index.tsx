@@ -5,14 +5,17 @@ import {
   User,
   GuardMode,
   UserConfig,
+  authClient,
   GuardScenes,
   LoginMethods,
   CommonMessage,
+  initAuthClient,
   RegisterMethods,
   GuardEventsHandler,
   AuthenticationClient,
   GuardEventsHandlerKebab,
   GuardEventsCamelToKebabMap,
+  AuthenticationClientOptions,
 } from '@authing/react-ui-components'
 import '@authing/react-ui-components/lib/index.min.css'
 
@@ -23,12 +26,15 @@ export type {
   GuardEventsHandler,
   AuthenticationClient,
   GuardEventsHandlerKebab,
+  AuthenticationClientOptions,
 }
 
 export {
   GuardMode,
+  authClient,
   GuardScenes,
   LoginMethods,
+  initAuthClient,
   RegisterMethods,
   GuardEventsCamelToKebabMap,
 }

@@ -18,7 +18,6 @@ import {
 } from '../../components/AuthingGuard/types/GuardConfig'
 
 import './style.less'
-import './assets/iconfont.css'
 
 const PREFIX_CLS = 'authing-ant'
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
+import { initAuthClient, useAuthing } from './components'
 import { AuthingGuard } from './components/AuthingGuard'
 
 import {
@@ -54,6 +55,13 @@ const App = () => {
   useEffect(() => {
     setTimeout(() => setVisible(true), 3000)
   }, [])
+
+  initAuthClient({
+    appId: '60053b7416478de2e88fab43',
+  })
+  const { authClient } = useAuthing()
+  // @ts-ignore
+  window.fuck = authClient
 
   return (
     // eslint-disable-next-line react/jsx-no-undef
