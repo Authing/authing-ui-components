@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import './iconfont'
-import './style.css'
+import './style.less'
 
 export const IconFont: FC<{
   type: string
