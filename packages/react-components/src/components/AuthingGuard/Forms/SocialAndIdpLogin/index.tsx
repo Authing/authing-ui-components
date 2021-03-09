@@ -23,6 +23,7 @@ import {
 import { requestClient } from '../../api/http'
 
 import './style.less'
+import { IconFont } from '../../IconFont'
 
 export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
   onFail = () => {},
@@ -185,7 +186,8 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
   })
 
   const socialLoginButtons = config.socialConnectionObjs.map((item) => {
-    const cls = `authing-icon authing-${item.provider.replace(/:/g, '-')}`
+    const iconType = `authing-${item.provider.replace(/:/g, '-')}`
+
     const onLogin = () => {
       authClient.social.authorize(item.provider, {
         onSuccess(user) {
@@ -214,7 +216,9 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
         block
         size="large"
         className="authing-guard-third-login-btn"
-        icon={<i className={cls} style={{ fontSize: 20, marginRight: 8 }} />}
+        icon={
+          <IconFont type={iconType} style={{ fontSize: 20, marginRight: 8 }} />
+        }
         onClick={onLogin}
       >
         {item.name}
@@ -222,7 +226,7 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
     ) : (
       <Tooltip key={item.provider} title={item.name}>
         <div className="authing-social-login-item" onClick={onLogin}>
-          <i className={cls} />
+          <IconFont type={iconType} />
         </div>
       </Tooltip>
     )

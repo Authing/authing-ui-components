@@ -17,6 +17,7 @@ import reportWebVitals from './reportWebVitals'
 
 const App = () => {
   const config: UserConfig = {
+    mode: GuardMode.Modal,
     // apiHost: 'http://console.authing.localhost:3000',
     // apiHost: 'http://192.168.50.57:3000',
     // loginMethods: Object.values(LoginMethods),

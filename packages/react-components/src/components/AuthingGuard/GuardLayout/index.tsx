@@ -29,6 +29,7 @@ import {
 import './style.less'
 import { CompleteUserInfoLayout } from '../CompleteUserInfoLayout'
 import { AppMfaLayout } from '../AppMFALayout'
+import { IconFont } from '../IconFont'
 
 const checkConfig = (appId: string, config: UserConfig) => {
   // 不要去掉 console.warn，不然 vue 版打包出来每次都会 throw error，估计是 rollup 打包有问题
@@ -397,7 +398,7 @@ export const GuardLayout: FC<{
         >
           {isModal && guardConfig.clickCloseable && (
             <button onClick={closeHandler} className="authing-guard-close-btn">
-              <i className="authing-icon authing-guanbi"></i>
+              <IconFont type="authing-guanbi" />
             </button>
           )}
 
