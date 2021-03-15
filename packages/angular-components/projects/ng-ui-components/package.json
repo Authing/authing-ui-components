@@ -1,12 +1,12 @@
 {
   "name": "@authing/ng-ui-components",
-  "version": "2.2.8",
+  "version": "2.2.9",
   "peerDependencies": {
     "@angular/common": "^10.2.0",
     "@angular/core": "^10.2.0"
   },
   "dependencies": {
-    "@authing/native-js-ui-components": "^2.2.8",
+    "@authing/native-js-ui-components": "^2.2.9",
     "tslib": "^2.0.0"
   },
   "bundledDependencies": [
