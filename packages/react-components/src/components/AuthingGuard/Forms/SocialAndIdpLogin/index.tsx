@@ -35,6 +35,8 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
 
   const noForm = !config.loginMethods?.length
 
+  const [screenSize] = useScreenSize()
+
   useEffect(() => {
     const onMessage = (evt: MessageEvent) => {
       // TODO: event.origin是指发送的消息源，一定要进行验证！！！
@@ -206,6 +208,9 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
           }
 
           message.error(msg)
+        },
+        authorization_params: {
+          display: screenSize,
         },
       })
     }
