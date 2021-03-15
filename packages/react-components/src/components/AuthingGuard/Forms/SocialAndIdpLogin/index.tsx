@@ -24,6 +24,7 @@ import { requestClient } from '../../api/http'
 
 import './style.less'
 import { IconFont } from '../../IconFont'
+import { useScreenSize } from '../../hooks/useScreenSize'
 
 export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
   onFail = () => {},
