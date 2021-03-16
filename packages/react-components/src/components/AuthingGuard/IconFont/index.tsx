@@ -1,13 +1,18 @@
 import React, { FC } from 'react'
+import { getClassnames } from '../../../utils'
 import './iconfont'
 import './style.less'
 
 export const IconFont: FC<{
   type: string
   style?: React.CSSProperties
-}> = ({ type, style }) => {
+  className?: string
+}> = ({ type, style, className }) => {
   return (
-    <svg style={{ ...style }} className="authing-icon">
+    <svg
+      style={{ ...style }}
+      className={getClassnames(['authing-icon', className])}
+    >
       <use xlinkHref={`#${type}`}></use>
     </svg>
   )
