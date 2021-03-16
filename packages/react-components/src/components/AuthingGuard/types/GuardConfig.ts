@@ -1,4 +1,9 @@
-import { AuthenticationClient, CommonMessage, User } from 'authing-js-sdk'
+import {
+  AuthenticationClient,
+  CommonMessage,
+  SocialConnectionProvider,
+  User,
+} from 'authing-js-sdk'
 import { QrCodeAuthenticationClient } from 'authing-js-sdk/build/main/lib/authentication/QrCodeAuthenticationClient'
 
 import {
@@ -286,7 +291,7 @@ export interface UserConfig {
   enterpriseConnections?: string[]
   defaultLoginMethod?: LoginMethods
   registerMethods?: RegisterMethods[]
-  socialConnections?: SocialConnections[]
+  socialConnections?: (SocialConnections | SocialConnectionProvider)[]
   defaultRegisterMethod?: RegisterMethods
   qrCodeScanOptions?: Parameters<QrCodeAuthenticationClient['startScanning']>[1]
 }
