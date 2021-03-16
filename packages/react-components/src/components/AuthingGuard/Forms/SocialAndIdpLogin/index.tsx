@@ -3,7 +3,7 @@ import shortid from 'shortid'
 import React, { FC, useEffect } from 'react'
 import { Button, Avatar, Space, Tooltip, message } from 'antd'
 
-import { popupCenter } from '../../../../utils'
+import { isWechatBrowser, popupCenter } from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
 import {
   APP_MFA_CODE,
@@ -25,6 +25,7 @@ import { requestClient } from '../../api/http'
 import './style.less'
 import { IconFont } from '../../IconFont'
 import { useScreenSize } from '../../hooks/useScreenSize'
+import { SocialConnectionProvider } from 'authing-js-sdk'
 
 export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
   onFail = () => {},
@@ -188,55 +189,64 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
     }
   })
 
-  const socialLoginButtons = config.socialConnectionObjs.map((item) => {
-    const iconType = `authing-${item.provider.replace(/:/g, '-')}`
-
-    const onLogin = () => {
-      authClient.social.authorize(item.provider, {
-        onSuccess(user) {
-          onSuccess(user)
-        },
-        onError(code, msg) {
-          try {
-            const parsedMsg = JSON.parse(msg)
-            const { code: authingCode } = parsedMsg
-            if ([OTP_MFA_CODE, APP_MFA_CODE].includes(authingCode)) {
-              onFail(parsedMsg)
-              return
-            }
-          } catch (e) {
-            // do nothing...
-          }
-
-          message.error(msg)
-        },
-        authorization_params: {
-          display: screenSize,
-        },
-      })
-    }
-
-    return noForm ? (
-      <Button
-        key={item.provider}
-        block
-        size="large"
-        className="authing-guard-third-login-btn"
-        icon={
-          <IconFont type={iconType} style={{ fontSize: 20, marginRight: 8 }} />
-        }
-        onClick={onLogin}
-      >
-        {item.name}
-      </Button>
-    ) : (
-      <Tooltip key={item.provider} title={item.name}>
-        <div className="authing-social-login-item" onClick={onLogin}>
-          <IconFont type={iconType} />
-        </div>
-      </Tooltip>
+  const socialLoginButtons = config.socialConnectionObjs
+    .filter((item) =>
+      isWechatBrowser()
+        ? item.provider === SocialConnectionProvider.WECHATMP
+        : item.provider !== SocialConnectionProvider.WECHATMP
     )
-  })
+    .map((item) => {
+      const iconType = `authing-${item.provider.replace(/:/g, '-')}`
+
+      const onLogin = () => {
+        authClient.social.authorize(item.provider, {
+          onSuccess(user) {
+            onSuccess(user)
+          },
+          onError(code, msg) {
+            try {
+              const parsedMsg = JSON.parse(msg)
+              const { code: authingCode } = parsedMsg
+              if ([OTP_MFA_CODE, APP_MFA_CODE].includes(authingCode)) {
+                onFail(parsedMsg)
+                return
+              }
+            } catch (e) {
+              // do nothing...
+            }
+
+            message.error(msg)
+          },
+          authorization_params: {
+            display: screenSize,
+          },
+        })
+      }
+
+      return noForm ? (
+        <Button
+          key={item.provider}
+          block
+          size="large"
+          className="authing-guard-third-login-btn"
+          icon={
+            <IconFont
+              type={iconType}
+              style={{ fontSize: 20, marginRight: 8 }}
+            />
+          }
+          onClick={onLogin}
+        >
+          {item.name}
+        </Button>
+      ) : (
+        <Tooltip key={item.provider} title={item.name}>
+          <div className="authing-social-login-item" onClick={onLogin}>
+            <IconFont type={iconType} />
+          </div>
+        </Tooltip>
+      )
+    })
 
   const idp =
     config.enterpriseConnectionObjs.length > 0 ? (
@@ -253,7 +263,7 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
     ) : null
 
   const socialLogin =
-    config.socialConnectionObjs.length > 0 && noForm ? (
+    socialLoginButtons.length > 0 && noForm ? (
       <Space
         size={12}
         className="authing-guard-full-width-space"
@@ -262,7 +272,7 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
         {socialLoginButtons}
       </Space>
     ) : (
-      config.socialConnectionObjs.length > 0 && (
+      socialLoginButtons.length > 0 && (
         <>
           <div className="authing-social-login-title">第三方账号登录</div>
           <div className="authing-social-login-list">{socialLoginButtons}</div>

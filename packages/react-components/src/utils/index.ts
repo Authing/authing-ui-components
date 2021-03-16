@@ -148,3 +148,6 @@ export const getUserRegisterParams = () => {
     value: query[key],
   }))
 }
+
+export const isWechatBrowser = () =>
+  /MicroMessenger/i.test(navigator?.userAgent)

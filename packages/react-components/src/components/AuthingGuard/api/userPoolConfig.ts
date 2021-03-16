@@ -1,8 +1,6 @@
 import { requestClient } from './http'
-import {
-  SocialConnections,
-  Protocol,
-} from '../../../components/AuthingGuard/types'
+import { Protocol } from '../../../components/AuthingGuard/types'
+import { SocialConnectionProvider } from 'authing-js-sdk'
 
 export interface OIDCConnectionConfig {
   issuerUrl: string
@@ -77,7 +75,7 @@ export interface SocialConnectionItem {
   name: string
   logo: string
   description: string
-  provider: SocialConnections
+  provider: SocialConnectionProvider
   authorizationUrl: string
 }
 
