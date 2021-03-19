@@ -60,6 +60,8 @@ export enum SocialConnections {
   AlipayWeb = 'alipay:web',
   AppleWeb = 'apple:web',
   Baidu = 'baidu',
+  LarkInternalApp = 'lark-internal',
+  LarkMarketPlaceApp = 'lark-public',
 }
 
 export enum Protocol {
