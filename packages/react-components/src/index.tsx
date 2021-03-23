@@ -18,6 +18,7 @@ import reportWebVitals from './reportWebVitals'
 const App = () => {
   const config: UserConfig = {
     mode: GuardMode.Modal,
+    appHost: 'https://sample-sso.authing.cn',
     // apiHost: 'http://console.authing.localhost:3000',
     // apiHost: 'http://192.168.50.57:3000',
     // loginMethods: Object.values(LoginMethods),
@@ -58,7 +59,8 @@ const App = () => {
   }, [])
 
   initAuthClient({
-    appId: '60053b7416478de2e88fab43',
+    appId: '5d70d0e991fdd597019df70d',
+    appHost: 'https://sample-sso.authing.cn',
   })
 
   return (

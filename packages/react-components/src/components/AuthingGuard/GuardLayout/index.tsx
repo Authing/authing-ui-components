@@ -37,10 +37,6 @@ const checkConfig = (appId: string, config: UserConfig) => {
     console.warn('APP ID: ', appId)
     throw new Error('请传入应用 ID')
   }
-  if (config.isSSO && !config.appDomain) {
-    console.warn('config 配置: ', config)
-    throw new Error('SSO 模式请传入 appDomain 字段')
-  }
 }
 
 const useGuardConfig = () => {

@@ -267,8 +267,15 @@ export interface UserConfig {
   zIndex?: number
   isSSO?: boolean
   mode?: GuardMode
+  /**
+   * @deprecated 使用 appHost
+   */
   apiHost?: string
+  /**
+   * @deprecated 使用 appHost
+   */
   appDomain?: string
+  appHost?: string
   contentCss?: string
   text?: {
     loginBtn?: {

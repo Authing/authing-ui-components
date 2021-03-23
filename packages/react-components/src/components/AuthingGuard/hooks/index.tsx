@@ -8,8 +8,18 @@ import { defaultGuardConfig } from '../constants'
 let authClient: AuthenticationClient | null = null
 
 export interface AuthClientConfig extends AuthenticationClientOptions {
+  /**
+   * @deprecated 使用 appHost
+   */
   appDomain?: string
+  /**
+   * @deprecated 无需传入
+   */
   isSSO?: boolean
+  /**
+   * @deprecated 使用 appHost
+   */
+  host?: string
 }
 
 export const initAuthClient = (config: AuthClientConfig) => {
@@ -17,16 +27,25 @@ export const initAuthClient = (config: AuthClientConfig) => {
     return authClient
   }
 
-  if (!config.host) {
-    config.host = defaultGuardConfig.apiHost
-  }
+  const { appHost, appDomain, host } = config
 
-  if (config.appDomain && config.isSSO) {
-    const parsedUrl = new URL(config.host!)
-    config.host = `${parsedUrl.protocol}//${config.appDomain}${
+  /**
+   * 兼容之前的参数
+   */
+  let realHost
+  if (appHost) {
+    realHost = appHost
+  } else if (appDomain) {
+    const parsedUrl = new URL(host || defaultGuardConfig.appHost!)
+    realHost = `${parsedUrl.protocol}//${appDomain}${
       parsedUrl.port ? ':' + parsedUrl.port : ''
     }`
+  } else if (host) {
+    realHost = host
+  } else {
+    realHost = defaultGuardConfig.appHost
   }
+  config.appHost = realHost!
 
   config.encryptFunction = (text, publicKey) => {
     const encrypt = new JSEncrypt() // 实例化加密对象

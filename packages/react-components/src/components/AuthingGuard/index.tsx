@@ -42,26 +42,30 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
   ...guardEvents
 }) => {
   const {
-    apiHost = defaultGuardConfig.apiHost!,
+    apiHost,
     appDomain,
-    isSSO,
+    appHost,
     defaultLoginMethod = defaultGuardConfig.defaultLoginMethod,
     defaultScenes = defaultGuardConfig.defaultScenes,
     defaultRegisterMethod = defaultGuardConfig.defaultRegisterMethod,
   } = config
 
-  let host = apiHost
-  if (appDomain && isSSO) {
-    const parsedUrl = new URL(apiHost)
-    host = `${parsedUrl.protocol}//${appDomain}${
+  let realHost
+  if (appHost) {
+    realHost = appHost
+  } else if (appDomain) {
+    const parsedUrl = new URL(defaultGuardConfig.appHost!)
+    realHost = `${parsedUrl.protocol}//${appDomain}${
       parsedUrl.port ? ':' + parsedUrl.port : ''
     }`
+  } else {
+    realHost = apiHost || defaultGuardConfig.appHost!
   }
 
-  requestClient.setBaseUrl(host)
+  requestClient.setBaseUrl(realHost)
 
   const authClient = new AuthenticationClient({
-    host,
+    appHost: realHost!,
     appId,
     requestFrom: 'ui-components',
     encryptFunction: (text, publicKey) => {

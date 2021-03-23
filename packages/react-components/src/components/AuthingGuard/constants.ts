@@ -68,7 +68,7 @@ export const defaultGuardConfig: Partial<UserConfig> = {
   disableRegister: false,
   disableResetPwd: false,
   defaultScenes: GuardScenes.Login,
-  apiHost: 'https://core.authing.cn',
+  appHost: 'https://core.authing.cn',
   defaultLoginMethod: LoginMethods.Password,
   defaultRegisterMethod: RegisterMethods.Email,
   loginMethods: [LoginMethods.Password, LoginMethods.PhoneCode],
