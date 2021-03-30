@@ -13,6 +13,7 @@ import {
 } from '../../../../utils'
 import { SendPhoneCode } from '../../../../components/AuthingGuard/Forms/SendPhoneCode'
 import { RegisterFormFooter } from '../../../../components/AuthingGuard/Forms/RegisterFormFooter'
+import { useTranslation } from 'react-i18next'
 
 export const PhoneRegisterForm = forwardRef<
   FormInstance,
@@ -21,6 +22,7 @@ export const PhoneRegisterForm = forwardRef<
   const {
     state: { authClient },
   } = useGuardContext()
+  const { t } = useTranslation()
 
   const [rawForm] = Form.useForm()
 
@@ -68,40 +70,40 @@ export const PhoneRegisterForm = forwardRef<
             setPhone(e.target.value)
           }}
           size="large"
-          placeholder="请输入手机号"
+          placeholder={t('login.inputPhone')}
           prefix={<UserOutlined style={{ color: '#ddd' }} />}
         />
       ),
       name: 'phone',
-      rules: getRequiredRules('手机号不能为空').concat({
+      rules: getRequiredRules(t('common.phoneNotNull')).concat({
         pattern: VALIDATE_PATTERN.phone,
-        message: '手机号格式错误',
+        message: t('login.phoneError'),
       }),
     },
     {
       component: (
         <Input.Password
           size="large"
-          placeholder="设置密码"
+          placeholder={t('common.setPassword')}
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
         />
       ),
       name: 'password',
-      rules: getRequiredRules('密码不能为空'),
+      rules: getRequiredRules(t('common.passwordNotNull')),
     },
     {
       component: (
         <Input.Password
           size="large"
-          placeholder="再输入一次密码"
+          placeholder={t('login.inputPwdAgain')}
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
         />
       ),
       name: 'new-password',
-      rules: getRequiredRules('请重复密码').concat({
+      rules: getRequiredRules(t('common.repeatPassword')).concat({
         validator: (rule, value) => {
           if (value !== rawForm.getFieldValue('password')) {
-            return Promise.reject('两次密码必须一致')
+            return Promise.reject(t('common.repeatPasswordDoc'))
           } else {
             return Promise.resolve()
           }
@@ -113,13 +115,15 @@ export const PhoneRegisterForm = forwardRef<
         <Input
           autoComplete="one-time-code"
           size="large"
-          placeholder="请输入 4 位验证码"
+          placeholder={t('common.inputFourVerifyCode', {
+            length: 4,
+          })}
           prefix={<SafetyOutlined style={{ color: '#ddd' }} />}
           addonAfter={<SendPhoneCode phone={phone} />}
         />
       ),
       name: 'code',
-      rules: getRequiredRules('验证码不能为空'),
+      rules: getRequiredRules(t('common.captchaCodeNotNull')),
     },
   ]
 

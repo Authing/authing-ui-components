@@ -8,6 +8,7 @@ import { SmsMFAVerifyFormProps } from '../../../../components/AuthingGuard/types
 
 import './style.less'
 import { SendCodeBtn } from '../SendPhoneCode/SendCodeBtn'
+import { useTranslation } from 'react-i18next'
 
 const CODE_LEN = 4
 
@@ -21,6 +22,7 @@ export const VerifyCodeForm: FC<SmsMFAVerifyFormProps> = ({
   const {
     state: { authClient },
   } = useGuardContext()
+  const { t } = useTranslation()
 
   const [rawForm] = Form.useForm()
 
@@ -59,13 +61,13 @@ export const VerifyCodeForm: FC<SmsMFAVerifyFormProps> = ({
 
   return (
     <>
-      <h3 className="authing-guard-mfa-title">请输入手机验证码</h3>
+      <h3 className="authing-guard-mfa-title">{t('login.inputPhoneCode')}</h3>
       <p className="authing-guard-mfa-tips">
         {sending
-          ? '验证码发送中'
+          ? t('login.sendingVerifyCode')
           : sent
-          ? `验证码已发送至 ${phone}`
-          : `点击按钮发送验证码`}
+          ? `${t('login.verifyCodeSended')} ${phone}`
+          : t('login.clickSent')}
       </p>
       <Form
         form={rawForm}
@@ -80,7 +82,7 @@ export const VerifyCodeForm: FC<SmsMFAVerifyFormProps> = ({
               validateTrigger: [],
               validator() {
                 if (MfaCode.some((item) => !item)) {
-                  return Promise.reject('请输入完整安全码')
+                  return Promise.reject(t('login.inputFullMfaCode'))
                 }
                 return Promise.resolve()
               },
@@ -104,7 +106,7 @@ export const VerifyCodeForm: FC<SmsMFAVerifyFormProps> = ({
           type="primary"
           size="large"
         >
-          确定
+          {t('common.sure')}
         </Button>
       </Form>
     </>

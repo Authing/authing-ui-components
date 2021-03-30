@@ -12,6 +12,7 @@ import { useGuardContext } from '../../../../context/global/context'
 import { NEED_CAPTCHA } from '../../../../components/AuthingGuard/constants'
 import { PasswordLoginFormProps } from '../../../../components/AuthingGuard/types'
 import { LoginFormFooter } from '../../../../components/AuthingGuard/Forms/LoginFormFooter'
+import { useTranslation } from 'react-i18next'
 
 const captchaUrl = '/api/v2/security/captcha'
 const getCaptchaUrl = () => `${captchaUrl}?r=${+new Date()}`
@@ -21,6 +22,8 @@ export const PasswordLoginForm = forwardRef<
   PasswordLoginFormProps
 >(({ onSuccess, onValidateFail, onFail }, ref) => {
   const { state } = useGuardContext()
+  const { t } = useTranslation()
+
   const { config, authClient } = state
   const autoRegister = config.autoRegister
 
@@ -80,33 +83,33 @@ export const PasswordLoginForm = forwardRef<
         <Input
           autoComplete="email,username,tel"
           size="large"
-          placeholder="请输入邮箱、用户名或手机号"
+          placeholder={t('login.inputEmailUsernamePhone')}
           prefix={<UserOutlined style={{ color: '#ddd' }} />}
         />
       ),
       name: 'identity',
-      rules: getRequiredRules('账号不能为空'),
+      rules: getRequiredRules(t('common.accNotNull')),
     },
     {
       component: (
         <Input.Password
           size="large"
-          placeholder="请输入登录密码"
+          placeholder={t('login.inputLoginPwd')}
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
         />
       ),
       name: 'password',
-      rules: getRequiredRules('密码不能为空'),
+      rules: getRequiredRules(t('common.passwordNotNull')),
     },
     {
       component: (
         <Input
           size="large"
-          placeholder="请输入图形验证码"
+          placeholder={t('login.inputCaptchaCode')}
           addonAfter={
             <img
               src={verifyCodeUrl ?? ''}
-              alt="图形验证码"
+              alt={t('login.captchaCode')}
               style={{ height: '2em', cursor: 'pointer' }}
               onClick={() => setVerifyCodeUrl(getCaptchaUrl())}
             />
@@ -114,7 +117,7 @@ export const PasswordLoginForm = forwardRef<
         />
       ),
       name: 'captchaCode',
-      rules: getRequiredRules('验证码不能为空'),
+      rules: getRequiredRules(t('common.captchaCodeNotNull')),
       hide: !needCaptcha,
     },
   ]
@@ -127,10 +130,7 @@ export const PasswordLoginForm = forwardRef<
       onFinish={onFinish}
     >
       {autoRegister && (
-        <Alert
-          message="输入帐号密码登录，如果您没有帐号，我们会自动创建。"
-          style={{ marginBottom: 24 }}
-        />
+        <Alert message={t('login.autoRegister')} style={{ marginBottom: 24 }} />
       )}
       {formItems.map(
         (item) =>

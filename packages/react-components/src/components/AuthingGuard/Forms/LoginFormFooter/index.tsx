@@ -4,6 +4,7 @@ import { useGuardContext } from '../../../../context/global/context'
 import { GuardScenes } from '../../../../components/AuthingGuard/types'
 
 import './style.less'
+import { useTranslation } from 'react-i18next'
 
 export interface LoginFormFooterProps {
   loading: boolean
@@ -16,6 +17,8 @@ export const LoginFormFooter: FC<LoginFormFooterProps> = ({
   needRestPwd = false,
   needRegister = false,
 }) => {
+  const { t } = useTranslation()
+
   const {
     setValue,
     state: { config },
@@ -42,18 +45,18 @@ export const LoginFormFooter: FC<LoginFormFooterProps> = ({
             className="authing-guard-text-btn"
             type="text"
           >
-            忘记密码？
+            {t('common.hasForgotPwd')}
           </Button>
         )}
         {needRegister && !config.disableRegister && (
           <div className="authing-guard-tip-btn-comb">
-            <span className="authing-guard-tip">还没有账号，</span>
+            <span className="authing-guard-tip">{t('common.noAccYet')}</span>
             <Button
               onClick={() => setValue('guardScenes', GuardScenes.Register)}
               className="authing-guard-text-btn"
               type="text"
             >
-              立即注册
+              {t('common.registerImmediate')}
             </Button>
           </div>
         )}

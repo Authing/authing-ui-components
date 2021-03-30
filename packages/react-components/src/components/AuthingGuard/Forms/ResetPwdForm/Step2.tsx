@@ -6,6 +6,7 @@ import { getRequiredRules } from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
 import { ResetPasswordStep2Props } from '../../../../components/AuthingGuard/types'
 import { SendPhoneCode } from '../../../../components/AuthingGuard/Forms/SendPhoneCode'
+import { useTranslation } from 'react-i18next'
 
 export const ResetPasswordStep2: FC<ResetPasswordStep2Props> = ({
   phone,
@@ -13,6 +14,7 @@ export const ResetPasswordStep2: FC<ResetPasswordStep2Props> = ({
   onFail,
 }) => {
   const [rawForm] = Form.useForm()
+  const { t } = useTranslation()
 
   const [loading, setLoading] = useState(false)
 
@@ -44,28 +46,32 @@ export const ResetPasswordStep2: FC<ResetPasswordStep2Props> = ({
       <Form.Item
         name="phone"
         initialValue={phone}
-        rules={getRequiredRules('手机号不能为空')}
+        rules={getRequiredRules(t('common.phoneNotNull'))}
       >
         <Input
           autoComplete="tel"
           name="phone"
           readOnly
           size="large"
-          placeholder="请输入手机号"
+          placeholder={t('login.inputPhone')}
           prefix={<UserOutlined style={{ color: '#ddd' }} />}
         />
       </Form.Item>
       <Form.Item
         name="code"
-        rules={getRequiredRules('请输入验证码').concat({
+        rules={getRequiredRules(t('common.inputVerifyCode')).concat({
           len: 4,
-          message: '请输入 4 位验证码',
+          message: t('common.inputFourVerifyCode', {
+            length: 4,
+          }),
         })}
       >
         <Input
           name="code"
           size="large"
-          placeholder="4 位验证码"
+          placeholder={t('common.inputFourVerifyCode', {
+            length: 4,
+          })}
           prefix={<SafetyOutlined style={{ color: '#ddd' }} />}
           suffix={
             <SendPhoneCode
@@ -78,20 +84,23 @@ export const ResetPasswordStep2: FC<ResetPasswordStep2Props> = ({
           }
         />
       </Form.Item>
-      <Form.Item name="password" rules={getRequiredRules('新密码不能为空')}>
+      <Form.Item
+        name="password"
+        rules={getRequiredRules(t('common.passwordNotNull'))}
+      >
         <Input.Password
           name="password"
           size="large"
-          placeholder="新密码"
+          placeholder={t('user.newPwd')}
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
         />
       </Form.Item>
       <Form.Item
         name="repeat-password"
-        rules={getRequiredRules('请重复密码').concat({
+        rules={getRequiredRules(t('common.repeatPassword')).concat({
           validator: async (rule, value) => {
             if (rawForm.getFieldValue('password') !== value) {
-              throw new Error('两次输入的密码需要一致')
+              throw new Error(t('login.twoPwdNeedSame'))
             }
           },
         })}
@@ -99,7 +108,7 @@ export const ResetPasswordStep2: FC<ResetPasswordStep2Props> = ({
         <Input.Password
           name="repeat-password"
           size="large"
-          placeholder="再输入一次密码"
+          placeholder={t('login.inputPwdAgain')}
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
         />
       </Form.Item>
@@ -111,7 +120,7 @@ export const ResetPasswordStep2: FC<ResetPasswordStep2Props> = ({
         size="large"
         htmlType="submit"
       >
-        重置密码
+        {t('login.resetPwd')}
       </Button>
     </Form>
   )

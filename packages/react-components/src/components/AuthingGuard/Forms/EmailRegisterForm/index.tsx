@@ -12,11 +12,13 @@ import {
 import { useGuardContext } from '../../../../context/global/context'
 import { EmailRegisterFormProps } from '../../../../components/AuthingGuard/types'
 import { RegisterFormFooter } from '../../../../components/AuthingGuard/Forms/RegisterFormFooter'
+import { useTranslation } from 'react-i18next'
 
 export const EmailRegisterForm = forwardRef<
   FormInstance,
   EmailRegisterFormProps
 >(({ onSuccess, onFail, onValidateFail }, ref) => {
+  const { t } = useTranslation()
   const {
     state: { authClient },
   } = useGuardContext()
@@ -63,40 +65,40 @@ export const EmailRegisterForm = forwardRef<
         <Input
           autoComplete="email"
           size="large"
-          placeholder="请输入邮箱"
+          placeholder={t('login.inputEmail')}
           prefix={<UserOutlined style={{ color: '#ddd' }} />}
         />
       ),
       name: 'email',
-      rules: getRequiredRules('邮箱不能为空').concat({
+      rules: getRequiredRules(t('common.emailNotNull')).concat({
         pattern: VALIDATE_PATTERN.email,
-        message: '邮箱格式错误',
+        message: t('login.emailError'),
       }),
     },
     {
       component: (
         <Input.Password
           size="large"
-          placeholder="设置密码"
+          placeholder={t('common.setPassword')}
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
         />
       ),
       name: 'password',
-      rules: getRequiredRules('密码不能为空'),
+      rules: getRequiredRules(t('common.passwordNotNull')),
     },
     {
       component: (
         <Input.Password
           size="large"
-          placeholder="再输入一次密码"
+          placeholder={t('login.inputPwdAgain')}
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
         />
       ),
       name: 'new-password',
-      rules: getRequiredRules('请重复密码').concat({
+      rules: getRequiredRules(t('common.repeatPassword')).concat({
         validator: (rule, value) => {
           if (value !== rawForm.getFieldValue('password')) {
-            return Promise.reject('两次密码必须一致')
+            return Promise.reject(t('common.repeatPasswordDoc'))
           } else {
             return Promise.resolve()
           }

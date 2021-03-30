@@ -3,10 +3,12 @@ import { CopyOutlined, CheckOutlined } from '@ant-design/icons'
 import { copyToClipboard, getClassnames } from '../../utils'
 
 import './style.less'
+import { useTranslation } from 'react-i18next'
 
 export interface CopyTextProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const CopyAbleText: FC<CopyTextProps> = ({ children, className }) => {
+  const { t } = useTranslation()
   const divRef = useRef<HTMLDivElement>(null)
   const [copied, setCopied] = useState(false)
   const timer = useRef(-1)
@@ -38,12 +40,12 @@ export const CopyAbleText: FC<CopyTextProps> = ({ children, className }) => {
       {copied ? (
         <CheckOutlined
           className="authing-data-tips authing-data-tips__top authing-guard-pointer authing-copy-text-icon authing-copy-text-icon__success"
-          data-tips="已复制"
+          data-tips={t('common.copied')}
         />
       ) : (
         <CopyOutlined
           className="authing-data-tips authing-data-tips__top authing-guard-pointer authing-copy-text-icon"
-          data-tips="复制"
+          data-tips={t('common.copy')}
           onClick={handleCopy}
         />
       )}

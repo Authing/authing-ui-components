@@ -12,13 +12,15 @@ import { useGuardContext } from '../../../../context/global/context'
 import { PhoneCodeLoginFormProps } from '../../../../components/AuthingGuard/types'
 import { SendPhoneCode } from '../../../../components/AuthingGuard/Forms/SendPhoneCode'
 import { LoginFormFooter } from '../../../../components/AuthingGuard/Forms/LoginFormFooter'
+import { useTranslation } from 'react-i18next'
+import { i18n } from '../../locales'
 
 const rulesMap: Record<string, Rule[]> = {
-  phone: getRequiredRules('请输入手机号码').concat({
+  phone: getRequiredRules(i18n.t('login.inputPhone')).concat({
     pattern: VALIDATE_PATTERN.phone,
-    message: '手机号码格式不正确',
+    message: i18n.t('common.phoneFormateError'),
   }),
-  code: getRequiredRules('请输入验证码'),
+  code: getRequiredRules(i18n.t('common.inputVerifyCode')),
 }
 
 export const PhoneCodeLoginForm = forwardRef<
@@ -28,6 +30,7 @@ export const PhoneCodeLoginForm = forwardRef<
   const {
     state: { authClient, config },
   } = useGuardContext()
+  const { t } = useTranslation()
 
   const [rawForm] = Form.useForm()
 
@@ -64,7 +67,7 @@ export const PhoneCodeLoginForm = forwardRef<
     >
       {config.autoRegister && (
         <Alert
-          message="输入手机号验证码登录，如果您没有帐号，我们会自动创建。"
+          message={t('login.phoneAutoRegister')}
           style={{ marginBottom: 24 }}
         />
       )}
@@ -75,14 +78,16 @@ export const PhoneCodeLoginForm = forwardRef<
             setPhone(e.target.value)
           }}
           size="large"
-          placeholder="请输入手机号"
+          placeholder={t('login.inputPhone')}
           prefix={<UserOutlined style={{ color: '#ddd' }} />}
         />
       </Form.Item>
       <Form.Item name="code" rules={rulesMap.code}>
         <Input
           size="large"
-          placeholder="请输入 4 位验证码"
+          placeholder={t('common.inputFourVerifyCode', {
+            length: 4,
+          })}
           prefix={<SafetyOutlined style={{ color: '#ddd' }} />}
           addonAfter={<SendPhoneCode phone={phone} />}
         />

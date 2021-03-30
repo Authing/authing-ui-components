@@ -2,12 +2,13 @@ import { useGuardContext } from '../../../../context/global/context'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
 import { GuardScenes } from '../../../../components/AuthingGuard/types'
+import { useTranslation } from 'react-i18next'
 
 const TIME = 3
 export const ResetPasswordStep4: FC = () => {
   const [countDown, setCountDown] = useState(TIME)
   const timerRef = useRef<any>(0)
-
+  const { t } = useTranslation()
   const { setValue } = useGuardContext()
 
   useEffect(() => {
@@ -38,9 +39,13 @@ export const ResetPasswordStep4: FC = () => {
           marginBottom: 0,
         }}
       >
-        密码修改成功
+        {t('common.pwdModifySuccess')}
       </h3>
-      <p style={{ fontSize: 12 }}>{countDown}s 后自动跳转登录</p>
+      <p style={{ fontSize: 12 }}>
+        {t('common.jumpAfterCount', {
+          number: countDown,
+        })}
+      </p>
     </div>
   )
 }

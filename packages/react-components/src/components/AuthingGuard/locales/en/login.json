@@ -40,7 +40,7 @@
   "pwdLimie": "Password length is 6-20 digits",
   "releaseBind": "Unbind",
   "rememberedSecret": "This key has been safely recorded",
-  "resetEmailSent": "The password reset email has been sent to the mailbox {{email}}, and the validity period is 24 hours.",
+  "resetEmailSent": "The password reset email has been sent to the mailbox {{email}}",
   "resetPwd": "Reset password",
   "resetPwdEmail": "Resend password reset email",
   "setPwdLimit": "Set 6-20 digit password",

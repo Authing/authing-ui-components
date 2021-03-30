@@ -24,15 +24,18 @@ import {
 } from '../../../components/AuthingGuard/types'
 
 import './style.less'
+import { useTranslation } from 'react-i18next'
 
 const useFormActions = () => {
+  const { t } = useTranslation()
+
   const {
     setValue,
     state: { guardEvents, authClient },
   } = useGuardContext()
 
   const onSuccess = (user: User) => {
-    message.success('登录成功')
+    message.success(t('common.LoginSuccess'))
     guardEvents.onLogin?.(user, authClient)
   }
 

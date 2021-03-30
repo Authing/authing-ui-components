@@ -31,12 +31,14 @@ import { CompleteUserInfoLayout } from '../CompleteUserInfoLayout'
 import { AppMfaLayout } from '../AppMFALayout'
 import { IconFont } from '../IconFont'
 import { ToggleLang } from '../ToggleLang'
+import { useTranslation } from 'react-i18next'
+import i18n from 'i18next'
 
 const checkConfig = (appId: string, config: UserConfig) => {
   // 不要去掉 console.warn，不然 vue 版打包出来每次都会 throw error，估计是 rollup 打包有问题
   if (!appId) {
     console.warn('APP ID: ', appId)
-    throw new Error('请传入应用 ID')
+    throw new Error(i18n.t('common.unAppId'))
   }
 }
 
@@ -268,6 +270,7 @@ export const GuardLayout: FC<{
   id?: string
   style?: React.CSSProperties
 }> = ({ visible, id, className, style }) => {
+  const { t } = useTranslation()
   const {
     state: { guardScenes, authClient, guardEvents, activeTabs },
     setValue,
@@ -317,7 +320,7 @@ export const GuardLayout: FC<{
         // 这个接口没有 code, data, 直接返回了数据
         let typedData = (sessionData as unknown) as SessionData
         if (typedData.userInfo) {
-          message.success('登录成功')
+          message.success(t('common.LoginSuccess'))
           guardEvents.onLogin?.(typedData.userInfo, authClient)
         }
       })

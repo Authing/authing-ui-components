@@ -5,6 +5,7 @@ import {
   LoginMethods,
   RegisterMethods,
 } from '../../components/AuthingGuard/types'
+import { i18n } from './locales'
 
 // 个人版 OTP MFA 的 error code
 export const OTP_MFA_CODE = 1635
@@ -15,17 +16,17 @@ export const APP_MFA_CODE = 1636
 export const NEED_CAPTCHA = 2000
 
 export const LOGIN_METHODS_MAP = {
-  [LoginMethods.Password]: '密码登录',
-  [LoginMethods.PhoneCode]: '验证码登录',
-  [LoginMethods.AppQr]: 'APP 扫码登录',
-  [LoginMethods.WxMinQr]: '扫码登录',
-  [LoginMethods.LDAP]: 'LDAP 登录',
-  [LoginMethods.AD]: 'AD 登录',
+  [LoginMethods.Password]: i18n.t('login.pwdLogin'),
+  [LoginMethods.PhoneCode]: i18n.t('login.verifyCodeLogin'),
+  [LoginMethods.AppQr]: i18n.t('login.appScanLogin'),
+  [LoginMethods.WxMinQr]: i18n.t('login.scanLogin'),
+  [LoginMethods.LDAP]: i18n.t('login.ldapLogin'),
+  [LoginMethods.AD]: i18n.t('login.adLogin'),
 }
 
 export const REGISTER_METHODS_MAP = {
-  [RegisterMethods.Email]: '邮箱注册',
-  [RegisterMethods.Phone]: '手机号注册',
+  [RegisterMethods.Email]: i18n.t('login.emailRegister'),
+  [RegisterMethods.Phone]: i18n.t('login.phoneRegister'),
 }
 
 // 某些社会化登录会在 tabs 中显示，或者无法在 Guard 中使用，所以底部不显示了
@@ -53,12 +54,12 @@ export const defaultGuardConfig: Partial<UserConfig> = {
   text: {
     loginTabs: LOGIN_METHODS_MAP,
     loginBtn: {
-      normal: '登录',
-      loading: '登录',
+      normal: i18n.t('common.login'),
+      loading: i18n.t('common.login'),
     },
     registerBtn: {
-      normal: '注册',
-      loading: '注册',
+      normal: i18n.t('common.register'),
+      loading: i18n.t('common.register'),
     },
   },
   escCloseable: true,

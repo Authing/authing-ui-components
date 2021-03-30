@@ -6,10 +6,12 @@ import { User } from 'authing-js-sdk'
 import { UploadImage } from '../UploadImage'
 import { requestClient } from '../../api/http'
 import { CompleteUserInfoFormProps } from '../../types'
+import { useTranslation } from 'react-i18next'
 
 export const CompleteUserInfoForm: FC<CompleteUserInfoFormProps> = ({
   onSuccess,
 }) => {
+  const { t } = useTranslation()
   const [rawForm] = useForm()
   const [submitting, setSubmitting] = useState(false)
 
@@ -59,7 +61,7 @@ export const CompleteUserInfoForm: FC<CompleteUserInfoFormProps> = ({
         }
       )
 
-      message.success('保存成功')
+      message.success(t('common.saveSuccess'))
       guardEvents.onRegisterInfoCompleted?.(user, udfs, authClient)
       onSuccess?.(user)
     } catch (e) {
@@ -140,7 +142,7 @@ export const CompleteUserInfoForm: FC<CompleteUserInfoFormProps> = ({
           block
           htmlType="submit"
         >
-          提交
+          {t('common.problem.form.submit')}
         </Button>
       </Form>
     </Spin>

@@ -6,6 +6,7 @@ import { MFACheckEmailFormProps } from '../../types'
 
 import './style.less'
 import { VALIDATE_PATTERN } from '../../../../utils'
+import { useTranslation } from 'react-i18next'
 
 export const CheckEmailForm: FC<MFACheckEmailFormProps> = ({
   onSuccess,
@@ -14,6 +15,8 @@ export const CheckEmailForm: FC<MFACheckEmailFormProps> = ({
   const {
     state: { authClient },
   } = useGuardContext()
+
+  const { t } = useTranslation()
 
   const [rawForm] = Form.useForm()
 
@@ -26,7 +29,11 @@ export const CheckEmailForm: FC<MFACheckEmailFormProps> = ({
         email,
       })
       if (!bindable) {
-        message.error(`${email} 已被其他账号绑定`)
+        message.error(
+          t('common.unBindEmaileDoc', {
+            email: email,
+          })
+        )
         return
       }
       onSuccess(email!)
@@ -39,10 +46,8 @@ export const CheckEmailForm: FC<MFACheckEmailFormProps> = ({
 
   return (
     <>
-      <h3 className="authing-guard-mfa-title">绑定邮箱</h3>
-      <p className="authing-guard-mfa-tips">
-        您暂未绑定邮箱，请输入邮箱进行绑定
-      </p>
+      <h3 className="authing-guard-mfa-title">{t('common.bindEmail')}</h3>
+      <p className="authing-guard-mfa-tips">{t('common.bindEmailDoc')}</p>
       <Form
         form={rawForm}
         onSubmitCapture={() => setLoading(true)}
@@ -54,15 +59,15 @@ export const CheckEmailForm: FC<MFACheckEmailFormProps> = ({
           rules={[
             {
               required: true,
-              message: '请输入邮箱',
+              message: t('login.inputEmail'),
             },
             {
               pattern: VALIDATE_PATTERN.email,
-              message: '邮箱格式错误',
+              message: t('login.emailError'),
             },
           ]}
         >
-          <Input placeholder="请输入邮箱"></Input>
+          <Input placeholder={t('login.inputEmail')}></Input>
         </Form.Item>
 
         <Button
@@ -73,7 +78,7 @@ export const CheckEmailForm: FC<MFACheckEmailFormProps> = ({
           type="primary"
           size="large"
         >
-          确定
+          {t('common.sure')}
         </Button>
       </Form>
     </>

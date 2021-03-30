@@ -39,7 +39,7 @@
   "pwdLimie": "密码长度在 6-20 位",
   "newPwdLimit": "6-20 位新密码",
   "twoPwdNeedSame": "两次输入的密码需要一致",
-  "resetEmailSent": "重置密码邮件已发送至邮箱 {{email}}，有效期为 5 分钟。",
+  "resetEmailSent": "重置密码邮件已发送至邮箱 {{email}}",
   "emailSent": "邮件发送成功",
   "resetPwdEmail": "重发密码重置邮件",
   "confirmUnbindEmail": "确定解除绑定邮箱？",

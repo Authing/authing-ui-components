@@ -14,6 +14,7 @@ import {
   EmailRegisterForm,
   PhoneRegisterForm,
 } from '../../../components/AuthingGuard/Forms'
+import { useTranslation } from 'react-i18next'
 
 export const RegisterLayout: FC = () => {
   const {
@@ -26,8 +27,9 @@ export const RegisterLayout: FC = () => {
     setValue,
   } = useGuardContext()
 
+  const { t } = useTranslation()
   const onSuccess = (user: User) => {
-    message.success('注册成功')
+    message.success(t('common.registrationSuccess'))
     if (extendsFields?.length > 0) {
       setValue('guardScenes', GuardScenes.CompleteUserInfo)
     } else {

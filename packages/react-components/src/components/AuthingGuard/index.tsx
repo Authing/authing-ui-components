@@ -44,8 +44,6 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
   id,
   ...guardEvents
 }) => {
-  const { t } = useTranslation()
-
   const {
     apiHost,
     appDomain,
@@ -116,7 +114,6 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
         }}
       >
         <GuardLayout id={id} className={className} visible={visible} />
-        <h1>{t('common.picSizeLimit')}</h1>
       </GuardContext>
     </ConfigProvider>
   )
