@@ -15,6 +15,7 @@ import {
 import {
   OTP_MFA_CODE,
   APP_MFA_CODE,
+  LOGIN_METHODS_MAP,
 } from '../../../components/AuthingGuard/constants'
 import { AuthingTabs } from '../../../common/AuthingTabs'
 import {
@@ -103,11 +104,11 @@ const useNormalLoginTabs = ({ onSuccess, onFail }: BaseFormProps) => {
   const {
     state: { config },
   } = useGuardContext()
-  const { loginMethods = [], text } = config
+  const { loginMethods = [] } = config
 
   const tabs = loginMethods.map((item) => ({
     key: item,
-    label: text?.loginTabs?.[item]!,
+    label: LOGIN_METHODS_MAP()?.[item]!,
     component: LOGIN_FORM_MAP[item],
   }))
 

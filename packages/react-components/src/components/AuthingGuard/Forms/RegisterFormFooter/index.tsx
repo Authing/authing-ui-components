@@ -29,8 +29,14 @@ export const RegisterFormFooter: FC<RegisterFormFooterProps> = ({
         block
       >
         {loading
-          ? config.text?.registerBtn?.loading
-          : config.text?.registerBtn?.normal}
+          ? t(
+              `map.${config.text?.registerBtn?.loading}`,
+              config.text?.registerBtn?.loading
+            )
+          : t(
+              `map.${config.text?.registerBtn?.normal}`,
+              config.text?.registerBtn?.normal
+            )}
       </Button>
 
       <div className="authing-guard-form-actions">

@@ -31,6 +31,9 @@ i18n
   .use(LanguageDetector) // 监测当前浏览器语言
   .use(initReactI18next) // 初始化 i18n
   .init({
+    detection: {
+      order: [],
+    },
     resources: {
       [Lang.enUs]: {
         translation: enUsTrans,
@@ -39,7 +42,7 @@ i18n
         translation: zhCnTrans,
       },
     },
-    fallbackLng: Lang.zhCn,
+    fallbackLng: Lang.enUs,
     debug: false,
     interpolation: {
       escapeValue: false, // react already safes from xss

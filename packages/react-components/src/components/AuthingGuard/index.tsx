@@ -20,8 +20,6 @@ import {
 // import { useI18n } from './locales'
 
 import './style.less'
-import { useTranslation } from 'react-i18next'
-
 const PREFIX_CLS = 'authing-ant'
 
 message.config({

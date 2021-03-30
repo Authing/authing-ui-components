@@ -73,7 +73,7 @@ export const RegisterLayout: FC = () => {
 
   const tabs = registerMethods!.map((item) => ({
     key: item,
-    label: REGISTER_METHODS_MAP[item],
+    label: REGISTER_METHODS_MAP()[item],
     component: REGISTER_FORM_MAP[item],
   }))
 

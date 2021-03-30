@@ -1,3 +1,4 @@
+import { Button } from 'antd'
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { initAuthClient, useAuthing } from './components'
@@ -18,8 +19,8 @@ import reportWebVitals from './reportWebVitals'
 const App = () => {
   const config: UserConfig = {
     mode: GuardMode.Modal,
-    appHost: 'https://sample-sso.authing.cn',
-    // apiHost: 'http://console.authing.localhost:3000',
+    // appHost: 'https://sample-sso.authing.cn',
+    apiHost: 'http://console.authing.localhost:3000',
     // apiHost: 'http://192.168.50.57:3000',
     // loginMethods: Object.values(LoginMethods),
     // logo:
@@ -66,8 +67,15 @@ const App = () => {
   return (
     // eslint-disable-next-line react/jsx-no-undef
     <>
+      <Button
+        onClick={() => {
+          setVisible(true)
+        }}
+      >
+        开关
+      </Button>
       <AuthingGuard
-        // visible={visible}
+        visible={visible}
         // onLoginTabChange={(v) => console.log(v)}
         // onRegisterTabChange={(v) => console.log(v)}
         // onClose={() => {
@@ -76,9 +84,12 @@ const App = () => {
         //     setVisible(true)
         //   }, 2000)
         // }}
+        onClose={() => {
+          setVisible(false)
+        }}
         // onLoad={(a) => console.log(a, '加载完成')}
         // onPwdResetError={(e) => console.log(e)}
-        appId="60053b7416478de2e88fab43"
+        appId="605c53593fb7458b1ebaf272"
         // appId="5fd877fb0ba0421962eced94"
         config={config}
       />
