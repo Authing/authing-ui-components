@@ -1,5 +1,5 @@
 import { ConfigProvider, message } from 'antd'
-import React, { FC, useCallback, useEffect } from 'react'
+import React, { FC } from 'react'
 import jsencrypt from 'jsencrypt'
 import { AuthenticationClient } from 'authing-js-sdk'
 

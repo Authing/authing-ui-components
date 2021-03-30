@@ -8,7 +8,6 @@ import { MfaLayout } from '../../../components/AuthingGuard/MfaLayout'
 import { LoginLayout } from '../../../components/AuthingGuard/LoginLayout'
 import {
   defaultGuardConfig,
-  defaultLocalesConfig,
   HIDE_SOCIALS,
 } from '../../../components/AuthingGuard/constants'
 import { RegisterLayout } from '../../../components/AuthingGuard/RegisterLayout'
@@ -326,7 +325,7 @@ export const GuardLayout: FC<{
         }
       })
     }
-  }, [authClient, errorDetail, guardEvents, loading, guardConfig])
+  }, [authClient, errorDetail, guardEvents, loading, guardConfig, t])
 
   useEffect(() => {
     setValue('config', guardConfig)
