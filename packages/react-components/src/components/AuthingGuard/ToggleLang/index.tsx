@@ -10,8 +10,6 @@ export const ToggleLang: FC = () => {
   }
   const { i18n } = useTranslation()
 
-  console.log(i18n)
-
   return (
     <Dropdown
       className="authing-toggle-language"

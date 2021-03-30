@@ -20,6 +20,7 @@ import {
 
 import './style.less'
 import { Lang } from './types/Locales'
+import { i18n, initI18n } from './locales'
 const PREFIX_CLS = 'authing-ant'
 
 message.config({
@@ -49,11 +50,15 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
     defaultLoginMethod = defaultGuardConfig.defaultLoginMethod,
     defaultScenes = defaultGuardConfig.defaultScenes,
     defaultRegisterMethod = defaultGuardConfig.defaultRegisterMethod,
+    lang = Lang.zhCn,
+    localesConfig = defaultLocalesConfig,
   } = config
-  // useEffect(() => {
-  //   console.log(lang)
-  //   // i18n.changeLanguage(lang)
-  // }, [lang])
+
+  initI18n(localesConfig)
+
+  if (i18n.changeLanguage && i18n.language !== lang) {
+    i18n.changeLanguage(lang)
+  }
 
   let realHost
   if (appHost) {
@@ -110,7 +115,6 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
             mfaToken: '',
           },
           guardEvents,
-          localesConfig: config.localesConfig,
         }}
       >
         <GuardLayout id={id} className={className} visible={visible} />

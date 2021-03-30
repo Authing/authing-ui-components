@@ -83,4 +83,5 @@ export const defaultGuardConfig: Partial<UserConfig> = {
 export const defaultLocalesConfig: LocalesConfig = {
   defaultLang: Lang.zhCn,
   optional: [Lang.zhCn],
+  isShowChange: false,
 }

@@ -28,30 +28,30 @@ export const changeLang = (lang: Lang) => {
 
 export const LANGS = Object.values(Lang)
 
-const initI18n = () => {
-  console.log(i18n)
-
-  return i18n
-    .use(LanguageDetector) // 监测当前浏览器语言
-    .use(initReactI18next) // 初始化 i18n
-    .init({
-      detection: {
-        order: [],
-      },
-      resources: {
-        [Lang.enUs]: {
-          translation: enUsTrans,
+const initI18n = (localesConfig: LocalesConfig) => {
+  if (!i18n.language) {
+    i18n
+      .use(LanguageDetector) // 监测当前浏览器语言
+      .use(initReactI18next) // 初始化 i18n
+      .init({
+        detection: {
+          order: [],
         },
-        [Lang.zhCn]: {
-          translation: zhCnTrans,
+        resources: {
+          [Lang.enUs]: {
+            translation: enUsTrans,
+          },
+          [Lang.zhCn]: {
+            translation: zhCnTrans,
+          },
         },
-      },
-      fallbackLng: Lang.enUs,
-      debug: false,
-      interpolation: {
-        escapeValue: false, // react already safes from xss
-      },
-    })
+        fallbackLng: localesConfig.defaultLang,
+        debug: false,
+        interpolation: {
+          escapeValue: false, // react already safes from xss
+        },
+      })
+  }
 }
 
 export { i18n, initI18n }

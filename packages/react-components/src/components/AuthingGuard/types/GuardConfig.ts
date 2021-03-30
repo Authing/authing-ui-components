@@ -321,4 +321,5 @@ export interface LocalesConfig {
   defaultLang?: Lang
   optional?: Lang[]
   onChang?: (lang: Lang) => void
+  isShowChange?: boolean
 }
