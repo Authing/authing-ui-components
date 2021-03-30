@@ -307,7 +307,8 @@ export interface UserConfig {
   /**
    * 国际化处理
    */
-  locales?: LocalesConfig | boolean
+  localesConfig?: LocalesConfig
+  lang?: Lang
 }
 
 export interface GuardConfig extends UserConfig {

@@ -4,8 +4,10 @@ import {
   GuardScenes,
   LoginMethods,
   RegisterMethods,
+  LocalesConfig,
 } from '../../components/AuthingGuard/types'
 import { i18n } from './locales'
+import { Lang } from './types/Locales'
 
 // 个人版 OTP MFA 的 error code
 export const OTP_MFA_CODE = 1635
@@ -76,4 +78,9 @@ export const defaultGuardConfig: Partial<UserConfig> = {
   registerMethods: [RegisterMethods.Email, RegisterMethods.Phone],
   logo:
     'https://files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png',
+}
+
+export const defaultLocalesConfig: LocalesConfig = {
+  defaultLang: Lang.zhCn,
+  optional: [Lang.zhCn],
 }

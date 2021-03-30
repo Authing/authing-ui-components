@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { initAuthClient, useAuthing } from './components'
 import { AuthingGuard } from './components/AuthingGuard'
+import { Lang } from './components/AuthingGuard/locales'
 
 import {
   GuardMode,
@@ -17,6 +18,8 @@ import {
 import reportWebVitals from './reportWebVitals'
 
 const App = () => {
+  const [lang, setLang] = useState(Lang.zhCn)
+
   const config: UserConfig = {
     mode: GuardMode.Modal,
     // appHost: 'https://sample-sso.authing.cn',
@@ -52,6 +55,7 @@ const App = () => {
     // `,
     // autoRegister: true,
     socialConnections: [SocialConnections.AppleWeb],
+    lang: lang,
   }
   const [visible, setVisible] = useState(false)
 
@@ -68,11 +72,28 @@ const App = () => {
     // eslint-disable-next-line react/jsx-no-undef
     <>
       <Button
+        type="primary"
         onClick={() => {
           setVisible(true)
         }}
       >
         开关
+      </Button>
+      <Button
+        type="primary"
+        onClick={() => {
+          setLang(Lang.zhCn)
+        }}
+      >
+        中文
+      </Button>
+      <Button
+        type="primary"
+        onClick={() => {
+          setLang(Lang.enUs)
+        }}
+      >
+        English
       </Button>
       <AuthingGuard
         visible={visible}

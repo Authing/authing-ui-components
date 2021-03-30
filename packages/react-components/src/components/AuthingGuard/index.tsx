@@ -1,5 +1,5 @@
 import { ConfigProvider, message } from 'antd'
-import React, { FC } from 'react'
+import React, { FC, useCallback, useEffect } from 'react'
 import jsencrypt from 'jsencrypt'
 import { AuthenticationClient } from 'authing-js-sdk'
 
@@ -10,6 +10,7 @@ import {
   defaultGuardConfig,
   OTP_MFA_CODE,
   APP_MFA_CODE,
+  defaultLocalesConfig,
 } from '../../components/AuthingGuard/constants'
 import { GuardLayout } from '../../components/AuthingGuard/GuardLayout'
 import {
@@ -17,9 +18,8 @@ import {
   GuardEventsHandler,
 } from '../../components/AuthingGuard/types/GuardConfig'
 
-// import { useI18n } from './locales'
-
 import './style.less'
+import { Lang } from './types/Locales'
 const PREFIX_CLS = 'authing-ant'
 
 message.config({
@@ -49,10 +49,11 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
     defaultLoginMethod = defaultGuardConfig.defaultLoginMethod,
     defaultScenes = defaultGuardConfig.defaultScenes,
     defaultRegisterMethod = defaultGuardConfig.defaultRegisterMethod,
-    locales = true,
   } = config
-
-  // useI18n()
+  // useEffect(() => {
+  //   console.log(lang)
+  //   // i18n.changeLanguage(lang)
+  // }, [lang])
 
   let realHost
   if (appHost) {
@@ -109,6 +110,7 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
             mfaToken: '',
           },
           guardEvents,
+          localesConfig: config.localesConfig,
         }}
       >
         <GuardLayout id={id} className={className} visible={visible} />
