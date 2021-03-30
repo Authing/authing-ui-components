@@ -54,13 +54,13 @@ const App = () => {
   }
   const [visible, setVisible] = useState(false)
 
-  useEffect(() => {
-    setTimeout(() => setVisible(true), 3000)
-  }, [])
+  // useEffect(() => {
+  //   setTimeout(() => setVisible(true), 3000)
+  // }, [])
 
   initAuthClient({
     appId: '5d70d0e991fdd597019df70d',
-    appHost: 'https://sample-sso.authing.cn',
+    appHost: 'http://sample-sso.authing.cn',
   })
 
   return (

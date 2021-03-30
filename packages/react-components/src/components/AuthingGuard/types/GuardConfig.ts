@@ -11,6 +11,7 @@ import {
   EnterpriseConnectionItem,
   ApplicationConfig,
 } from '../../../components/AuthingGuard/api'
+import { Lang } from './Locales'
 
 export type { AuthenticationClient, CommonMessage, User } from 'authing-js-sdk'
 
@@ -303,10 +304,20 @@ export interface UserConfig {
   socialConnections?: (SocialConnections | SocialConnectionProvider)[]
   defaultRegisterMethod?: RegisterMethods
   qrCodeScanOptions?: Parameters<QrCodeAuthenticationClient['startScanning']>[1]
+  /**
+   * 国际化处理
+   */
+  locales?: LocalesConfig | boolean
 }
 
 export interface GuardConfig extends UserConfig {
   socialConnectionObjs: SocialConnectionItem[]
   enterpriseConnectionObjs: EnterpriseConnectionItem[]
   extendsFields: ApplicationConfig['extendsFields']
+}
+
+export interface LocalesConfig {
+  defaultLang?: Lang
+  optional?: Lang[]
+  onChang?: (lang: Lang) => void
 }

@@ -17,7 +17,10 @@ import {
   GuardEventsHandler,
 } from '../../components/AuthingGuard/types/GuardConfig'
 
+// import { useI18n } from './locales'
+
 import './style.less'
+import { useTranslation } from 'react-i18next'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -41,6 +44,8 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
   id,
   ...guardEvents
 }) => {
+  const { t } = useTranslation()
+
   const {
     apiHost,
     appDomain,
@@ -48,7 +53,10 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
     defaultLoginMethod = defaultGuardConfig.defaultLoginMethod,
     defaultScenes = defaultGuardConfig.defaultScenes,
     defaultRegisterMethod = defaultGuardConfig.defaultRegisterMethod,
+    locales = true,
   } = config
+
+  // useI18n()
 
   let realHost
   if (appHost) {
@@ -108,6 +116,7 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
         }}
       >
         <GuardLayout id={id} className={className} visible={visible} />
+        <h1>{t('common.picSizeLimit')}</h1>
       </GuardContext>
     </ConfigProvider>
   )
