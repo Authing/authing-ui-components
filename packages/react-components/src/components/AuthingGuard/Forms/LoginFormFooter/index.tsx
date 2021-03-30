@@ -1,8 +1,7 @@
-import { Button } from 'antd'
+import { Button, Divider } from 'antd'
 import React, { FC } from 'react'
 import { useGuardContext } from '../../../../context/global/context'
 import { GuardScenes } from '../../../../components/AuthingGuard/types'
-
 import './style.less'
 
 export interface LoginFormFooterProps {
@@ -46,9 +45,13 @@ export const LoginFormFooter: FC<LoginFormFooterProps> = ({
             忘记密码？
           </Button>
         )}
+        {needRestPwd &&
+          needRegister &&
+          !config.disableResetPwd &&
+          !config.disableRegister && <Divider type="vertical" />}
         {needRegister && !config.disableRegister && (
           <div className="authing-guard-tip-btn-comb">
-            <span className="authing-guard-tip">还没有账号，</span>
+            {/* <span className="authing-guard-tip">还没有账号，</span> */}
             <Button
               onClick={() => setValue('guardScenes', GuardScenes.Register)}
               className="authing-guard-text-btn"
