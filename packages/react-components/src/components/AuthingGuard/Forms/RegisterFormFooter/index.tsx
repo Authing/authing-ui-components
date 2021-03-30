@@ -23,6 +23,7 @@ export const RegisterFormFooter: FC<RegisterFormFooterProps> = ({
         htmlType="submit"
         size="large"
         type="primary"
+        className="authing-guard-form-register-submit-btn"
         loading={loading}
         block
       >
@@ -33,7 +34,7 @@ export const RegisterFormFooter: FC<RegisterFormFooterProps> = ({
 
       <div className="authing-guard-form-actions">
         <div className="authing-guard-tip-btn-comb">
-          {/* <span className="authing-guard-tip">已有账号，</span> */}
+          <span className="authing-guard-tip">已有账号，</span>
           <Button
             onClick={() => setValue('guardScenes', GuardScenes.Login)}
             className="authing-guard-text-btn"
