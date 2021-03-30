@@ -115,6 +115,7 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
             mfaToken: '',
           },
           guardEvents,
+          localesConfig: config.localesConfig,
         }}
       >
         <GuardLayout id={id} className={className} visible={visible} />

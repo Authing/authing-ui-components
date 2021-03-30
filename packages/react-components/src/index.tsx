@@ -56,6 +56,10 @@ const App = () => {
     // autoRegister: true,
     socialConnections: [SocialConnections.AppleWeb],
     lang: lang,
+    localesConfig: {
+      defaultLang: Lang.zhCn,
+      isShowChange: true,
+    },
   }
   const [visible, setVisible] = useState(false)
 
