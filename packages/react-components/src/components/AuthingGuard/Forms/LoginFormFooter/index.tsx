@@ -25,6 +25,7 @@ export const LoginFormFooter: FC<LoginFormFooterProps> = ({
     <>
       <Button
         htmlType="submit"
+        className="authing-guard-form-submit-btn"
         size="large"
         type="primary"
         loading={loading}

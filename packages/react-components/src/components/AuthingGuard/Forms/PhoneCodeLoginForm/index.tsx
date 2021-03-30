@@ -84,7 +84,7 @@ export const PhoneCodeLoginForm = forwardRef<
           size="large"
           placeholder="请输入 4 位验证码"
           prefix={<SafetyOutlined style={{ color: '#ddd' }} />}
-          addonAfter={<SendPhoneCode phone={phone} />}
+          suffix={<SendPhoneCode phone={phone} />}
         />
       </Form.Item>
 

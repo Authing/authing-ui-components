@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
-import { initAuthClient, useAuthing } from './components'
+import { initAuthClient } from './components'
 import { AuthingGuard } from './components/AuthingGuard'
 
 import {
   GuardMode,
-  LoginMethods,
+  // LoginMethods,
   SocialConnections,
   UserConfig,
   // LoginMethods,
@@ -18,6 +18,7 @@ import reportWebVitals from './reportWebVitals'
 const App = () => {
   const config: UserConfig = {
     mode: GuardMode.Modal,
+    //mode: GuardMode.Normal,
     appHost: 'https://sample-sso.authing.cn',
     // apiHost: 'http://console.authing.localhost:3000',
     // apiHost: 'http://192.168.50.57:3000',
@@ -52,6 +53,7 @@ const App = () => {
     // autoRegister: true,
     socialConnections: [SocialConnections.AppleWeb],
   }
+
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
