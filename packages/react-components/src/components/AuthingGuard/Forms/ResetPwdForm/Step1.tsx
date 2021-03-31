@@ -25,7 +25,6 @@ export const ResetPasswordStep1: FC<ResetPasswordStep1Props> = ({
       try {
         setLoading(true)
         await authClient.sendEmail(value, EmailScene.ResetPassword)
-
         guardEvents.onPwdEmailSend?.(authClient)
         message.success('邮件发送成功')
         onSuccess(ResetPwdMethods.Email, value)
@@ -48,6 +47,7 @@ export const ResetPasswordStep1: FC<ResetPasswordStep1Props> = ({
       <Form.Item
         name="phoneOrEmail"
         validateTrigger="onBlur"
+        className="authing-reset-phone-or-email"
         rules={[
           {
             validator: (rule, value) => {

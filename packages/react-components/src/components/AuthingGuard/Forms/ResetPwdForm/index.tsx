@@ -88,7 +88,13 @@ export const ResetPasswordForm: FC<ResetPasswordFormProps> = ({
   return (
     <div>
       {getForm()}
-      {step !== 4 && <ResetPwdFormFooter />}
+      {step !== 4 && (
+        <div className="authing-guard-form-actions">
+          <div className="authing-guard-tip-btn-comb">
+            <ResetPwdFormFooter />
+          </div>
+        </div>
+      )}
     </div>
   )
 }
