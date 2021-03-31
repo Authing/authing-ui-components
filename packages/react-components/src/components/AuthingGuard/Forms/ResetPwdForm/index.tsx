@@ -21,8 +21,8 @@ export const ResetPasswordForm: FC<ResetPasswordFormProps> = ({
   const [step, setStep] = useState(1)
   const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
-
   useEffect(() => {
+    setValue('restPassword', step)
     switch (step) {
       case 1:
         setValue('guardTitle', t('common.retrievePassword'))
@@ -91,7 +91,7 @@ export const ResetPasswordForm: FC<ResetPasswordFormProps> = ({
     <div>
       {getForm()}
       {step !== 4 && (
-        <div className="authing-guard-form-actions">
+        <div className="authing-guard-form-actions authing-guard-form-actions-m">
           <div className="authing-guard-tip-btn-comb">
             <ResetPwdFormFooter />
           </div>

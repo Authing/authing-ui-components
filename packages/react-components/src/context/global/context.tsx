@@ -22,7 +22,10 @@ export function GuardContext({
   children = null,
   value,
 }: BaseContextComponent<Record<string, any>>) {
-  const [state, dispatch] = useReducer(reducer, value)
+  const [state, dispatch] = useReducer(reducer, {
+    ...value,
+    restPassword: 1,
+  })
   const getValue = (key: keyof IState) => state[key]
   const setValue = (key: keyof IState, value: any) => {
     dispatch({ type: 'SET_VALUE', key, value })

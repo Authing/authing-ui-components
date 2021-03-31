@@ -402,7 +402,7 @@ export const GuardLayout: FC<{
             </button>
           )}
 
-          <GuardHeader />
+          <GuardHeader guardScenes={guardScenes} />
 
           {loading ? (
             <Spin size="large" className="authing-guard-loading" />

@@ -6,7 +6,9 @@ import { EmailScene } from 'authing-js-sdk'
 import { getRequiredRules } from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
 import { ResetPasswordStep3Props } from '../../../../components/AuthingGuard/types'
-import { useTranslation } from 'react-i18next'
+import { useTranslation, Trans } from 'react-i18next'
+
+import './style.less'
 
 export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
   email,
@@ -50,26 +52,22 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
 
   return (
     <>
-      <p
-        style={{
-          marginBottom: 24,
-          padding: '0 12px',
-        }}
-      >
-        {t('login.resetEmailSent', {
-          email: email,
-        })}
-      </p>
+      <div className="authing-reset-email-text">
+        <Trans i18nKey="login.resetEmailSent" values={{ email: email }}>
+          重置密码邮件已发送至邮箱 <span>{email}</span>有效期为 5 分钟。
+        </Trans>
+      </div>
 
       <Form
         form={rawForm}
         onFinishFailed={() => setReseting(false)}
         onSubmitCapture={() => setReseting(true)}
         onFinish={onStep3Finish}
+        className="authing-reset-pwd-form"
       >
         <Form.Item
           name="code"
-          rules={getRequiredRules(t('common.repeatPassword')).concat({
+          rules={getRequiredRules(t('common.captchaCodeNotNull')).concat({
             len: 4,
             message: t('common.inputFourVerifyCode', {
               length: 4,
@@ -83,6 +81,18 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
               length: 4,
             })}
             prefix={<SafetyOutlined style={{ color: '#ddd' }} />}
+            suffix={
+              <Button
+                className="authing-send-code-btn"
+                style={{ boxShadow: 'none' }}
+                type="primary"
+                ghost
+                loading={sending}
+                onClick={onSendResetMail}
+              >
+                {t('common.sendVerifyCode')}
+              </Button>
+            }
           />
         </Form.Item>
         <Form.Item
@@ -115,7 +125,7 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
         </Form.Item>
         <Form.Item>
           <Button
-            className="authing-reset-pwd-btn"
+            className="authing-reset-pwd-btn authing-reset-email"
             block
             loading={reseting}
             type="primary"
@@ -125,16 +135,6 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
             {t('login.resetPwd')}
           </Button>
         </Form.Item>
-        <Button
-          block
-          type="primary"
-          ghost
-          loading={sending}
-          size="large"
-          onClick={onSendResetMail}
-        >
-          {t('login.resetPwdEmail')}
-        </Button>
       </Form>
     </>
   )

@@ -7,6 +7,8 @@ import './style.less'
 
 export const ToggleLang: FC = () => {
   const onClick = ({ key }: any) => {
+    console.log('?????', key)
+
     i18n.changeLanguage(key)
   }
   const { i18n } = useTranslation()
@@ -14,6 +16,7 @@ export const ToggleLang: FC = () => {
   return (
     <Dropdown
       className="authing-toggle-language"
+      trigger={['click']}
       overlay={
         <Menu onClick={onClick}>
           {LANG_MAP.map((item) => (

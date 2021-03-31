@@ -32,6 +32,7 @@ export type IState = {
   appId: string
   guardEvents: GuardEventsHandler
   localesConfig: LocalesConfig
+  restPassword?: number
 }
 
 const handlers: any = {
