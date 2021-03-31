@@ -9,12 +9,14 @@ import { useGuardContext } from '../../../../context/global/context'
 import { ResetPasswordFormProps } from '../../../../components/AuthingGuard/types'
 
 import './style.less'
+import { useTranslation } from 'react-i18next'
 
 export const ResetPasswordForm: FC<ResetPasswordFormProps> = ({
   onSuccess,
   onFail,
 }) => {
   const { setValue } = useGuardContext()
+  const { t } = useTranslation()
 
   const [step, setStep] = useState(1)
   const [phone, setPhone] = useState('')
@@ -23,15 +25,15 @@ export const ResetPasswordForm: FC<ResetPasswordFormProps> = ({
   useEffect(() => {
     switch (step) {
       case 1:
-        setValue('guardTitle', '找回密码')
+        setValue('guardTitle', t('common.retrievePassword'))
         break
       case 2:
       case 3:
       case 4:
-        setValue('guardTitle', '重置密码')
+        setValue('guardTitle', t('login.resetPwd'))
         break
       default:
-        setValue('guardTitle', '找回密码')
+        setValue('guardTitle', t('common.retrievePassword'))
         break
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

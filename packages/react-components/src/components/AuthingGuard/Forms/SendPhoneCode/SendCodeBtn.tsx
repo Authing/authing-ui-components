@@ -1,4 +1,5 @@
 import React, { FC, useState, useRef, useEffect, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const TIME = 60
 export interface SendCodeProps {
@@ -42,7 +43,7 @@ const useSentCounter = () => {
 export const SendCodeBtn: FC<SendCodeProps> = ({ beforeSend, btnRef }) => {
   const { enabled, send, countDown } = useSentCounter()
   const [loading, setLoading] = useState(false)
-
+  const { t } = useTranslation()
   const disabled = useMemo(() => {
     return !enabled || loading
   }, [enabled, loading])
@@ -69,7 +70,11 @@ export const SendCodeBtn: FC<SendCodeProps> = ({ beforeSend, btnRef }) => {
       onClick={onClick}
       ref={btnRef}
     >
-      {enabled ? '发送验证码' : `${countDown} 秒后重试`}
+      {enabled
+        ? t('common.sendVerifyCode')
+        : t('common.retryAfterTime', {
+            tiem: countDown,
+          })}
     </button>
   )
 }

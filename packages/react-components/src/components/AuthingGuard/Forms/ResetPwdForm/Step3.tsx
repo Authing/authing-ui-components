@@ -6,6 +6,7 @@ import { EmailScene } from 'authing-js-sdk'
 import { getRequiredRules } from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
 import { ResetPasswordStep3Props } from '../../../../components/AuthingGuard/types'
+import { useTranslation } from 'react-i18next'
 
 export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
   email,
@@ -16,6 +17,7 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
     state: { authClient, guardEvents },
   } = useGuardContext()
   const [rawForm] = Form.useForm()
+  const { t } = useTranslation()
 
   const [reseting, setReseting] = useState(false)
   const [sending, setSending] = useState(false)
@@ -24,7 +26,7 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
     setSending(true)
     try {
       await authClient.sendEmail(email, EmailScene.ResetPassword)
-      message.success('邮件发送成功')
+      message.success(t('login.emailSent'))
       guardEvents.onPwdEmailSend?.(authClient)
     } catch (e) {
       guardEvents.onPwdEmailSendError?.(e, authClient)
@@ -54,7 +56,9 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
           padding: '0 12px',
         }}
       >
-        重置密码邮件已发送至邮箱 {email}，有效期为 24 小时。
+        {t('login.resetEmailSent', {
+          email: email,
+        })}
       </p>
 
       <Form
@@ -65,32 +69,39 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
       >
         <Form.Item
           name="code"
-          rules={getRequiredRules('请重复密码').concat({
+          rules={getRequiredRules(t('common.repeatPassword')).concat({
             len: 4,
-            message: '请输入 4 位验证码',
+            message: t('common.inputFourVerifyCode', {
+              length: 4,
+            }),
           })}
         >
           <Input
             name="code"
             size="large"
-            placeholder="4 位验证码"
+            placeholder={t('login.fourVerifyCode', {
+              length: 4,
+            })}
             prefix={<SafetyOutlined style={{ color: '#ddd' }} />}
           />
         </Form.Item>
-        <Form.Item name="password" rules={getRequiredRules('新密码不能为空')}>
+        <Form.Item
+          name="password"
+          rules={getRequiredRules(t('common.passwordNotNull'))}
+        >
           <Input.Password
             name="password"
             size="large"
-            placeholder="新密码"
+            placeholder={t('user.newPwd')}
             prefix={<LockOutlined style={{ color: '#ddd' }} />}
           />
         </Form.Item>
         <Form.Item
           name="repeat-password"
-          rules={getRequiredRules('请重复密码').concat({
+          rules={getRequiredRules(t('common.repeatPassword')).concat({
             validator: async (rule, value) => {
               if (rawForm.getFieldValue('password') !== value) {
-                throw new Error('两次输入的密码需要一致')
+                throw new Error(t('login.twoPwdNeedSame'))
               }
             },
           })}
@@ -98,7 +109,7 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
           <Input.Password
             name="repeat-password"
             size="large"
-            placeholder="再输入一次密码"
+            placeholder={t('login.inputPwdAgain')}
             prefix={<LockOutlined style={{ color: '#ddd' }} />}
           />
         </Form.Item>
@@ -111,7 +122,7 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
             size="large"
             htmlType="submit"
           >
-            重置密码
+            {t('login.resetPwd')}
           </Button>
         </Form.Item>
         <Button
@@ -122,7 +133,7 @@ export const ResetPasswordStep3: FC<ResetPasswordStep3Props> = ({
           size="large"
           onClick={onSendResetMail}
         >
-          重发密码重置邮件
+          {t('login.resetPwdEmail')}
         </Button>
       </Form>
     </>

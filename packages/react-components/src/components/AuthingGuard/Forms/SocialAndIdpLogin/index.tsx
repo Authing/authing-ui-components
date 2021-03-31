@@ -26,6 +26,7 @@ import './style.less'
 import { IconFont } from '../../IconFont'
 import { useScreenSize } from '../../hooks/useScreenSize'
 import { SocialConnectionProvider } from 'authing-js-sdk'
+import { useTranslation } from 'react-i18next'
 
 export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
   onFail = () => {},
@@ -34,6 +35,7 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
   const {
     state: { config, userPoolId, appId, authClient },
   } = useGuardContext()
+  const { t } = useTranslation()
 
   const noForm = !config.loginMethods?.length
 
@@ -115,7 +117,9 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
             popupCenter(url)
           }}
         >
-          使用 {i.displayName} 登录
+          {t('login.loginBy', {
+            name: i.displayName,
+          })}
         </Button>
       )
     } else if (i.protocol === Protocol.SAML) {
@@ -131,7 +135,9 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
             popupCenter(config.samlRequest!)
           }}
         >
-          使用 {i.displayName} 登录
+          {t('login.loginBy', {
+            name: i.displayName,
+          })}
         </Button>
       )
     } else if (i.protocol === Protocol.CAS) {
@@ -148,7 +154,9 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
             popupCenter(config.casConnectionLoginUrl!)
           }}
         >
-          使用 {i.displayName} 登录
+          {t('login.loginBy', {
+            name: i.displayName,
+          })}
         </Button>
       )
     } else if (i.protocol === Protocol.OAUTH) {
@@ -165,7 +173,9 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
             popupCenter(config.authUrl!)
           }}
         >
-          使用 {i.displayName} 登录
+          {t('login.loginBy', {
+            name: i.displayName,
+          })}
         </Button>
       )
     } else if (i.protocol === Protocol.AZURE_AD) {
@@ -181,7 +191,9 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
             popupCenter(configItem.authorizationUrl)
           }}
         >
-          使用 {i.displayName} 登录
+          {t('login.loginBy', {
+            name: i.displayName,
+          })}
         </Button>
       )
     } else {
@@ -274,7 +286,9 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
     ) : (
       socialLoginButtons.length > 0 && (
         <>
-          <div className="authing-social-login-title">第三方账号登录</div>
+          <div className="authing-social-login-title">
+            {t('login.thridAccLogin')}
+          </div>
           <div className="authing-social-login-list">{socialLoginButtons}</div>
         </>
       )

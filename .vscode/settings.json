@@ -1,0 +1,6 @@
+{
+    "i18n-ally.localesPaths": [
+        "packages",
+        "packages/react-components/src/components/AuthingGuard/locales"
+    ]
+}

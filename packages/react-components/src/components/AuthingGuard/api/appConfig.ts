@@ -7,6 +7,7 @@ import {
   OIDCConnectionConfig,
   SocialConnectionItem,
 } from './userPoolConfig'
+import { i18n } from '../locales'
 
 export enum ApplicationMfaType {
   SMS = 'SMS',
@@ -17,8 +18,8 @@ export enum ApplicationMfaType {
 }
 
 export const ApplicationMfaTypeLabel: Record<ApplicationMfaType, string> = {
-  [ApplicationMfaType.SMS]: '短信验证码验证',
-  [ApplicationMfaType.EMAIL]: '电子邮箱验证',
+  [ApplicationMfaType.SMS]: i18n.t('common.SMS'),
+  [ApplicationMfaType.EMAIL]: i18n.t('common.EmailVerification'),
 }
 
 export interface OidcClientMetadata {

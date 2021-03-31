@@ -2,6 +2,7 @@ import { PlusOutlined } from '@ant-design/icons'
 import { message, Spin, Upload } from 'antd'
 import { UploadChangeParam } from 'antd/lib/upload'
 import React, { FC, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useGuardContext } from '../../../../context/global/context'
 
 export const UploadImage: FC<{
@@ -9,7 +10,7 @@ export const UploadImage: FC<{
   onChange?: (value: string) => void
 }> = ({ value, onChange }) => {
   const [uploading, setUploading] = useState(false)
-
+  const { t } = useTranslation()
   const {
     state: {
       config: { apiHost },
@@ -33,7 +34,11 @@ export const UploadImage: FC<{
       const { url } = data
       onChange?.(url)
     } else if (status === 'error') {
-      message.error(`上传失败 ${info.file.name}`)
+      message.error(
+        t('common.uploadFail', {
+          name: info.file.name,
+        })
+      )
     }
   }
 

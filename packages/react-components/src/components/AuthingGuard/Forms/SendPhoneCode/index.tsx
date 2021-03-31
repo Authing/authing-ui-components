@@ -7,6 +7,7 @@ import { validate } from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
 
 import './style.less'
+import { useTranslation } from 'react-i18next'
 
 export interface SendPhoneCodeProps {
   phone: string
@@ -19,6 +20,7 @@ export const SendPhoneCode: FC<SendPhoneCodeProps> = ({
   onSend,
   onError,
 }) => {
+  const { t } = useTranslation()
   const {
     state: { authClient },
   } = useGuardContext()
@@ -27,11 +29,11 @@ export const SendPhoneCode: FC<SendPhoneCodeProps> = ({
     <SendCodeBtn
       beforeSend={async () => {
         if (!phone) {
-          message.error('请输入手机号')
+          message.error(t('login.inputPhone'))
           return false
         }
         if (!validate('phone', phone)) {
-          message.error('手机号格式不正确')
+          message.error(t('common.phoneFormateError'))
           return false
         }
         try {

@@ -1,7 +1,9 @@
+import { Button } from 'antd'
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { initAuthClient } from './components'
 import { AuthingGuard } from './components/AuthingGuard'
+import { Lang } from './components/AuthingGuard/locales'
 
 import {
   GuardMode,
@@ -16,9 +18,11 @@ import {
 import reportWebVitals from './reportWebVitals'
 
 const App = () => {
+  const [lang, setLang] = useState(Lang.zhCn)
+
   const config: UserConfig = {
-    //mode: GuardMode.Modal,
-    mode: GuardMode.Normal,
+    mode: GuardMode.Modal,
+    // mode: GuardMode.Normal,
     appHost: 'https://sample-sso.authing.cn',
     // apiHost: 'http://console.authing.localhost:3000',
     // apiHost: 'http://192.168.50.57:3000',
@@ -51,25 +55,54 @@ const App = () => {
     //   }
     // `,
     // autoRegister: true,
-    socialConnections: [SocialConnections.AppleWeb],
+    // socialConnections: [SocialConnections.AppleWeb],
+    lang: lang,
+    localesConfig: {
+      defaultLang: Lang.zhCn,
+      isShowChange: true,
+    },
   }
 
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    setTimeout(() => setVisible(true), 3000)
+    setTimeout(() => setVisible(true), 1000)
   }, [])
 
   initAuthClient({
-    appId: '5d70d0e991fdd597019df70d',
-    appHost: 'https://sample-sso.authing.cn',
+    appId: '60498fecaf932c12c80799b8',
+    appHost: 'http://sample-sso.authing.cn',
   })
 
   return (
     // eslint-disable-next-line react/jsx-no-undef
     <>
+      {/* <Button
+        type="primary"
+        onClick={() => {
+          setVisible(true)
+        }}
+      >
+        开关
+      </Button>
+      <Button
+        type="primary"
+        onClick={() => {
+          setLang(Lang.zhCn)
+        }}
+      >
+        中文
+      </Button>
+      <Button
+        type="primary"
+        onClick={() => {
+          setLang(Lang.enUs)
+        }}
+      >
+        English
+      </Button> */}
       <AuthingGuard
-        // visible={visible}
+        visible={visible}
         // onLoginTabChange={(v) => console.log(v)}
         // onRegisterTabChange={(v) => console.log(v)}
         // onClose={() => {
@@ -78,10 +111,13 @@ const App = () => {
         //     setVisible(true)
         //   }, 2000)
         // }}
+        onClose={() => {
+          setVisible(false)
+        }}
         // onLoad={(a) => console.log(a, '加载完成')}
         // onPwdResetError={(e) => console.log(e)}
-        appId="60053b7416478de2e88fab43"
-        // appId="5fd877fb0ba0421962eced94"
+        //appId="605c53593fb7458b1ebaf272"
+        appId="60498fecaf932c12c80799b8"
         config={config}
       />
     </>

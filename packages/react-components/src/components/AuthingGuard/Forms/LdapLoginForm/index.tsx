@@ -8,12 +8,15 @@ import { useGuardContext } from '../../../../context/global/context'
 import { NEED_CAPTCHA } from '../../../../components/AuthingGuard/constants'
 import { PasswordLoginFormProps } from '../../../../components/AuthingGuard/types'
 import { LoginFormFooter } from '../../../../components/AuthingGuard/Forms/LoginFormFooter'
+import { useTranslation } from 'react-i18next'
 
 const captchaUrl = '/api/v2/security/captcha'
 const getCaptchaUrl = () => `${captchaUrl}?r=${+new Date()}`
 
 export const LdapLoginForm = forwardRef<FormInstance, PasswordLoginFormProps>(
   ({ onSuccess, onValidateFail, onFail }, ref) => {
+    const { t } = useTranslation()
+
     const { state } = useGuardContext()
     const { config, authClient } = state
     const autoRegister = config.autoRegister
@@ -69,33 +72,33 @@ export const LdapLoginForm = forwardRef<FormInstance, PasswordLoginFormProps>(
           <Input
             autoComplete="ldap,username"
             size="large"
-            placeholder="请输入 LDAP 用户名"
+            placeholder={t('login.inputLdapUsername')}
             prefix={<UserOutlined style={{ color: '#ddd' }} />}
           />
         ),
         name: 'identity',
-        rules: getRequiredRules('LDAP 账号不能为空'),
+        rules: getRequiredRules(t('common.LDAPAccountNotNull')),
       },
       {
         component: (
           <Input.Password
             size="large"
-            placeholder="请输入 LDAP 密码"
+            placeholder={t('login.inputLdapPwd')}
             prefix={<LockOutlined style={{ color: '#ddd' }} />}
           />
         ),
         name: 'password',
-        rules: getRequiredRules('密码不能为空'),
+        rules: getRequiredRules(t('common.passwordNotNull')),
       },
       {
         component: (
           <Input
             size="large"
-            placeholder="请输入图形验证码"
+            placeholder={t('login.inputCaptchaCode')}
             addonAfter={
               <img
                 src={verifyCodeUrl ?? ''}
-                alt="图形验证码"
+                alt={t('login.captchaCode')}
                 style={{ height: '2em', cursor: 'pointer' }}
                 onClick={() => setVerifyCodeUrl(getCaptchaUrl())}
               />
@@ -103,7 +106,7 @@ export const LdapLoginForm = forwardRef<FormInstance, PasswordLoginFormProps>(
           />
         ),
         name: 'captchaCode',
-        rules: getRequiredRules('验证码不能为空'),
+        rules: getRequiredRules(t('common.captchaCodeNotNull')),
         hide: !needCaptcha,
       },
     ]

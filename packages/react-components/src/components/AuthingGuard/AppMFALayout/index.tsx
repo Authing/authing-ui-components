@@ -1,6 +1,7 @@
 import { message } from 'antd'
 import { User } from 'authing-js-sdk'
 import React, { FC, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { AuthingDropdown } from 'src/common/AuthingDropdown'
 
 import {
@@ -15,6 +16,7 @@ import './style.less'
 export interface MfaLayoutProps {}
 
 export const AppMfaLayout: FC<MfaLayoutProps> = () => {
+  const { t } = useTranslation()
   const {
     state: { guardEvents, authClient, mfaData },
   } = useGuardContext()
@@ -22,7 +24,7 @@ export const AppMfaLayout: FC<MfaLayoutProps> = () => {
   const [type, setType] = useState(ApplicationMfaType.SMS)
 
   const onSuccess = (user: User) => {
-    message.success('登录成功')
+    message.success(t('common.LoginSuccess'))
     guardEvents.onLogin?.(user, authClient)
   }
 
@@ -59,7 +61,7 @@ export const AppMfaLayout: FC<MfaLayoutProps> = () => {
           className="toggle-mfa-dropdown"
           menus={availableMfaType!}
         >
-          <span className="authing-toggle-mfa">其他验证方式</span>
+          <span className="authing-toggle-mfa">t('login.otherVerifyWay')</span>
         </AuthingDropdown>
       )}
     </div>

@@ -15,6 +15,7 @@ import {
 import {
   OTP_MFA_CODE,
   APP_MFA_CODE,
+  LOGIN_METHODS_MAP,
 } from '../../../components/AuthingGuard/constants'
 import { AuthingTabs } from '../../../common/AuthingTabs'
 import {
@@ -24,15 +25,18 @@ import {
 } from '../../../components/AuthingGuard/types'
 
 import './style.less'
+import { useTranslation } from 'react-i18next'
 
 const useFormActions = () => {
+  const { t } = useTranslation()
+
   const {
     setValue,
     state: { guardEvents, authClient },
   } = useGuardContext()
 
   const onSuccess = (user: User) => {
-    message.success('登录成功')
+    message.success(t('common.LoginSuccess'))
     guardEvents.onLogin?.(user, authClient)
   }
 
@@ -100,11 +104,11 @@ const useNormalLoginTabs = ({ onSuccess, onFail }: BaseFormProps) => {
   const {
     state: { config },
   } = useGuardContext()
-  const { loginMethods = [], text } = config
+  const { loginMethods = [] } = config
 
   const tabs = loginMethods.map((item) => ({
     key: item,
-    label: text?.loginTabs?.[item]!,
+    label: LOGIN_METHODS_MAP()?.[item]!,
     component: LOGIN_FORM_MAP[item],
   }))
 

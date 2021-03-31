@@ -7,12 +7,15 @@ import { useGuardContext } from '../../../../context/global/context'
 import { MfaResetForm } from '../../../../components/AuthingGuard/types'
 
 import './style.less'
+import { useTranslation } from 'react-i18next'
 
 export const MfaResetCodeForm: FC<MfaResetForm> = ({
   goVerify,
   onSuccess,
   onFail,
 }) => {
+  const { t } = useTranslation()
+
   const {
     state: {
       mfaData: { mfaToken },
@@ -52,10 +55,10 @@ export const MfaResetCodeForm: FC<MfaResetForm> = ({
 
   return (
     <>
-      <h2 className="authing-guard-mfa-reset-title">使用恢复代码</h2>
-      <p className="authing-guard-mfa-reset-tips">
-        成功登录后，我们将生成一个新的恢复代码
-      </p>
+      <h2 className="authing-guard-mfa-reset-title">
+        {t('common.useRecoverCode')}
+      </h2>
+      <p className="authing-guard-mfa-reset-tips">{t('login.mfaAfterReset')}</p>
       {stepMap[step]}
     </>
   )

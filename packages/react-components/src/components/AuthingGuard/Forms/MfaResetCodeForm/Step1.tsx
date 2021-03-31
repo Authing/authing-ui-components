@@ -4,6 +4,7 @@ import { LockOutlined } from '@ant-design/icons'
 import { getRequiredRules } from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
 import { User } from 'authing-js-sdk'
+import { useTranslation } from 'react-i18next'
 
 export const MfaResetStep1: FC<{
   mfaToken: string
@@ -16,6 +17,7 @@ export const MfaResetStep1: FC<{
   onFail?: (error: any) => void
 }> = ({ mfaToken, onSuccess, goVerify, onFail }) => {
   const [loading, setLoading] = useState(false)
+  const { t } = useTranslation()
 
   const {
     state: { authClient },
@@ -46,12 +48,12 @@ export const MfaResetStep1: FC<{
       onFinish={onFinish}
     >
       <Form.Item
-        rules={getRequiredRules('恢复代码不能为空')}
+        rules={getRequiredRules(t('common.recoverCodeNotNull'))}
         name="recoverCode"
       >
         <Input
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
-          placeholder="请输入恢复代码"
+          placeholder={t('login.inputRecoverCode')}
           size="large"
         ></Input>
       </Form.Item>
@@ -64,7 +66,7 @@ export const MfaResetStep1: FC<{
         type="primary"
         size="large"
       >
-        确定
+        {t('common.sure')}
       </Button>
 
       <div className="authing-guard-form-actions">
@@ -75,7 +77,7 @@ export const MfaResetStep1: FC<{
             className="authing-guard-text-btn"
             type="text"
           >
-            找到安全码直接验证
+            {t('login.findedSafetyCode')}
           </Button>
         </div>
       </div>

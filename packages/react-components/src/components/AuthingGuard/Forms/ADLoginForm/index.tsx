@@ -7,9 +7,11 @@ import { getRequiredRules } from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
 import { ADLoginFormProps } from '../../../../components/AuthingGuard/types'
 import { LoginFormFooter } from '../../../../components/AuthingGuard/Forms/LoginFormFooter'
+import { useTranslation } from 'react-i18next'
 
 export const ADLoginForm = forwardRef<FormInstance, ADLoginFormProps>(
   ({ onSuccess, onValidateFail, onFail }, ref) => {
+    const { t } = useTranslation()
     const { state } = useGuardContext()
     const { authClient } = state
 
@@ -54,20 +56,26 @@ export const ADLoginForm = forwardRef<FormInstance, ADLoginFormProps>(
         onFinishFailed={onFinishFailed}
         onFinish={onFinish}
       >
-        <Form.Item name="identity" rules={getRequiredRules('请输入 AD 用户名')}>
+        <Form.Item
+          name="identity"
+          rules={getRequiredRules(t('login.inputAdUsername'))}
+        >
           <Input
             autoComplete="email,username,tel"
             size="large"
-            placeholder="请输入 AD 用户名"
+            placeholder={t('login.inputAdUsername')}
             prefix={<UserOutlined style={{ color: '#ddd' }} />}
           />
         </Form.Item>
-        <Form.Item name="password" rules={getRequiredRules('请输入 AD 密码')}>
+        <Form.Item
+          name="password"
+          rules={getRequiredRules(t('login.inputAdPwd'))}
+        >
           <Input.Password
             autoComplete="current-password"
             size="large"
             visibilityToggle={false}
-            placeholder="请输入 AD 密码"
+            placeholder={t('login.inputAdPwd')}
             prefix={<LockOutlined style={{ color: '#ddd' }} />}
           />
         </Form.Item>

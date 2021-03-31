@@ -4,6 +4,7 @@ import {
   GuardScenes,
   UserConfig,
   GuardEventsHandler,
+  LocalesConfig,
 } from '../../components/AuthingGuard/types'
 import { AuthenticationClient } from 'authing-js-sdk'
 import { IBaseAction } from '../base'
@@ -30,6 +31,7 @@ export type IState = {
   userPoolId: string
   appId: string
   guardEvents: GuardEventsHandler
+  localesConfig: LocalesConfig
 }
 
 const handlers: any = {

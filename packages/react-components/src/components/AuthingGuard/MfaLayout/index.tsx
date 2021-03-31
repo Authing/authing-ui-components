@@ -10,10 +10,12 @@ import {
 import { useGuardContext } from '../../../context/global/context'
 
 import './style.less'
+import { useTranslation } from 'react-i18next'
 
 export interface MfaLayoutProps {}
 
 export const MfaLayout: FC<MfaLayoutProps> = () => {
+  const { t } = useTranslation()
   const {
     state: { guardEvents, authClient },
   } = useGuardContext()
@@ -21,7 +23,7 @@ export const MfaLayout: FC<MfaLayoutProps> = () => {
   const [step, setStep] = useState(Steps.Verify)
 
   const onSuccess = (user: User) => {
-    message.success('登录成功')
+    message.success(t('common.LoginSuccess'))
     guardEvents.onLogin?.(user, authClient)
   }
 

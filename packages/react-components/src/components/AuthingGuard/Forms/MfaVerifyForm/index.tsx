@@ -7,6 +7,7 @@ import { useGuardContext } from '../../../../context/global/context'
 import { MfaVerifyForm } from '../../../../components/AuthingGuard/types'
 
 import './style.less'
+import { useTranslation } from 'react-i18next'
 
 const CODE_LEN = 6
 
@@ -21,6 +22,8 @@ export const MFAVerifyForm: FC<MfaVerifyForm> = ({
       mfaData: { mfaToken },
     },
   } = useGuardContext()
+
+  const { t } = useTranslation()
 
   const [rawForm] = Form.useForm()
 
@@ -43,10 +46,10 @@ export const MFAVerifyForm: FC<MfaVerifyForm> = ({
 
   return (
     <>
-      <h3 className="authing-guard-mfa-title">账号登录验证</h3>
-      <p className="authing-guard-mfa-tips">
-        请输入获取的 6 位数字安全码验证登录
-      </p>
+      <h3 className="authing-guard-mfa-title">
+        {t('login.accPwdLoginVerify')}
+      </h3>
+      <p className="authing-guard-mfa-tips">{t('login.inputSixCode')}</p>
       <Form
         form={rawForm}
         onSubmitCapture={() => setLoading(true)}
@@ -60,7 +63,7 @@ export const MFAVerifyForm: FC<MfaVerifyForm> = ({
               validateTrigger: [],
               validator() {
                 if (MfaCode.some((item) => !item)) {
-                  return Promise.reject('请输入完整安全码')
+                  return Promise.reject(t('login.inputFullMfaCode'))
                 }
                 return Promise.resolve()
               },
@@ -78,19 +81,21 @@ export const MFAVerifyForm: FC<MfaVerifyForm> = ({
           type="primary"
           size="large"
         >
-          确定
+          {t('common.sure')}
         </Button>
 
         <div className="authing-guard-form-actions">
           <div className="authing-guard-tip-btn-comb">
-            <span className="authing-guard-tip">安全码丢失？</span>
+            <span className="authing-guard-tip">
+              {t('common.hasLooseSaftyCode')}
+            </span>
             <Button
               htmlType="button"
               onClick={goReset}
               className="authing-guard-text-btn"
               type="text"
             >
-              使用恢复码
+              {t('common.useRecoverCode')}
             </Button>
           </div>
         </div>
