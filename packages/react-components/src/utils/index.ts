@@ -149,5 +149,12 @@ export const getUserRegisterParams = () => {
   }))
 }
 
+export const getUserRegisterParamsV2 = () => {
+  const query = qs.parse(window.location.search, {
+    ignoreQueryPrefix: true,
+  })
+  return query
+}
+
 export const isWechatBrowser = () =>
   /MicroMessenger/i.test(navigator?.userAgent)

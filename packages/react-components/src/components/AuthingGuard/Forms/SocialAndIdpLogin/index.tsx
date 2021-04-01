@@ -22,6 +22,8 @@ import {
 } from '../../../../components/AuthingGuard/api'
 import { requestClient } from '../../api/http'
 
+import { getUserRegisterParamsV2 } from '../../../../utils'
+
 import './style.less'
 import { IconFont } from '../../IconFont'
 import { useScreenSize } from '../../hooks/useScreenSize'
@@ -212,6 +214,7 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
 
       const onLogin = () => {
         authClient.social.authorize(item.provider, {
+          customData: getUserRegisterParamsV2(),
           onSuccess(user) {
             onSuccess(user)
           },

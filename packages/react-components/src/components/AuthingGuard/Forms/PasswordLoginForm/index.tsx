@@ -6,6 +6,7 @@ import React, { forwardRef, useImperativeHandle, useState } from 'react'
 import {
   getRequiredRules,
   getUserRegisterParams,
+  getUserRegisterParamsV2,
   validate,
 } from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
@@ -49,17 +50,20 @@ export const PasswordLoginForm = forwardRef<
             autoRegister,
             captchaCode,
             params: getUserRegisterParams(),
+            customData: getUserRegisterParamsV2(),
           })
         : validate('email', identity)
         ? await authClient.loginByEmail(identity, password, {
             autoRegister,
             captchaCode,
             params: getUserRegisterParams(),
+            customData: getUserRegisterParamsV2(),
           })
         : await authClient.loginByUsername(identity, password, {
             autoRegister,
             captchaCode,
             params: getUserRegisterParams(),
+            customData: getUserRegisterParamsV2(),
           })
 
       onSuccess && onSuccess(user)

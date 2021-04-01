@@ -6,6 +6,7 @@ import { UserOutlined, SafetyOutlined } from '@ant-design/icons'
 import {
   getRequiredRules,
   getUserRegisterParams,
+  getUserRegisterParamsV2,
   VALIDATE_PATTERN,
 } from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
@@ -47,6 +48,7 @@ export const PhoneCodeLoginForm = forwardRef<
       const { phone, code } = values
       const user = await authClient.loginByPhoneCode(phone, code, {
         params: getUserRegisterParams(),
+        customData: getUserRegisterParamsV2(),
       })
       onSuccess && onSuccess(user)
     } catch (error) {

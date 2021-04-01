@@ -70,7 +70,7 @@ const App = () => {
   }, [])
 
   initAuthClient({
-    appId: '60498fecaf932c12c80799b8',
+    appId: '5d70d0e991fdd597019df70d',
     appHost: 'http://sample-sso.authing.cn',
   })
 
@@ -117,7 +117,7 @@ const App = () => {
         // onLoad={(a) => console.log(a, '加载完成')}
         // onPwdResetError={(e) => console.log(e)}
         //appId="605c53593fb7458b1ebaf272"
-        appId="60498fecaf932c12c80799b8"
+        appId="5d70d0e991fdd597019df70d"
         config={config}
       />
     </>

@@ -6,7 +6,7 @@ import {
   LoginMethods,
   QrLoginFormProps,
 } from '../../../../components/AuthingGuard/types'
-
+import { getUserRegisterParamsV2 } from '../../../../utils'
 import './style.less'
 import { User } from 'authing-js-sdk'
 
@@ -32,6 +32,7 @@ export const QrCodeLoginForm: FC<QrLoginFormProps> = ({
     client.startScanning('authingGuardQrcode', {
       autoExchangeUserInfo: true,
       ...config.qrCodeScanOptions,
+      customData: getUserRegisterParamsV2(),
       onStart(timer) {
         timerRef.current = timer
       },

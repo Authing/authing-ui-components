@@ -7,6 +7,7 @@ import {
   getDeviceName,
   getRequiredRules,
   getUserRegisterParams,
+  getUserRegisterParamsV2,
   VALIDATE_PATTERN,
 } from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
@@ -47,6 +48,7 @@ export const EmailRegisterForm = forwardRef<
         {
           generateToken: true,
           params: getUserRegisterParams(),
+          customData: getUserRegisterParamsV2(),
         }
       )
       onSuccess && onSuccess(user)
