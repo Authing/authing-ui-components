@@ -95,7 +95,6 @@ export const VerifyCodeForm: FC<SmsMFAVerifyFormProps> = ({
             setVerifyCode={setMFACode}
           />
         </Form.Item>
-
         <SendCodeBtn btnRef={sendCodeRef} beforeSend={() => sendVerifyCode()} />
 
         <Button

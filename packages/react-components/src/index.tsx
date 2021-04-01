@@ -1,13 +1,13 @@
 import { Button } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import { initAuthClient, useAuthing } from './components'
+import { initAuthClient } from './components'
 import { AuthingGuard } from './components/AuthingGuard'
 import { Lang } from './components/AuthingGuard/locales'
 
 import {
   GuardMode,
-  LoginMethods,
+  // LoginMethods,
   SocialConnections,
   UserConfig,
   // LoginMethods,
@@ -61,6 +61,7 @@ const App = () => {
       isShowChange: true,
     },
   }
+
   const [visible, setVisible] = useState(false)
 
   // useEffect(() => {

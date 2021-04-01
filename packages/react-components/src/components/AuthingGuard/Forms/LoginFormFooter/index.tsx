@@ -1,8 +1,7 @@
-import { Button } from 'antd'
+import { Button, Divider } from 'antd'
 import React, { FC } from 'react'
 import { useGuardContext } from '../../../../context/global/context'
 import { GuardScenes } from '../../../../components/AuthingGuard/types'
-
 import './style.less'
 import { useTranslation } from 'react-i18next'
 
@@ -28,6 +27,7 @@ export const LoginFormFooter: FC<LoginFormFooterProps> = ({
     <>
       <Button
         htmlType="submit"
+        className="authing-guard-form-submit-btn"
         size="large"
         type="primary"
         loading={loading}
@@ -54,6 +54,10 @@ export const LoginFormFooter: FC<LoginFormFooterProps> = ({
             {t('common.hasForgotPwd')}
           </Button>
         )}
+        {needRestPwd &&
+          needRegister &&
+          !config.disableResetPwd &&
+          !config.disableRegister && <Divider type="vertical" />}
         {needRegister && !config.disableRegister && (
           <div className="authing-guard-tip-btn-comb">
             <span className="authing-guard-tip">{t('common.noAccYet')}</span>

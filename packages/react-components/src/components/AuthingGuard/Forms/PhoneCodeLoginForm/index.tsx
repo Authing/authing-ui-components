@@ -89,7 +89,7 @@ export const PhoneCodeLoginForm = forwardRef<
             length: 4,
           })}
           prefix={<SafetyOutlined style={{ color: '#ddd' }} />}
-          addonAfter={<SendPhoneCode phone={phone} />}
+          suffix={<SendPhoneCode phone={phone} />}
         />
       </Form.Item>
 
