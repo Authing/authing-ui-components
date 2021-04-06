@@ -1,12 +1,12 @@
 {
   "name": "@authing/react-ui-components",
-  "version": "2.3.0",
+  "version": "2.3.2",
   "private": false,
   "main": "lib/index.min.js",
   "typings": "lib/index.d.ts",
   "dependencies": {
     "antd": "^4.8.0",
-    "authing-js-sdk": "^4.15.0",
+    "authing-js-sdk": "^4.15.4",
     "jsencrypt": "^3.0.0-rc.1",
     "qs": "^6.9.4"
   },
