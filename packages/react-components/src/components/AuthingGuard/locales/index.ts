@@ -22,8 +22,11 @@ export const LANG_MAP = [
   },
 ]
 
+let langChangeFN: (lang: Lang) => void = () => {}
+
 export const changeLang = (lang: Lang) => {
   i18n.changeLanguage(lang)
+  langChangeFN && langChangeFN(lang)
 }
 
 export const LANGS = Object.values(Lang)
@@ -51,6 +54,9 @@ const initI18n = (localesConfig: LocalesConfig) => {
           escapeValue: false, // react already safes from xss
         },
       })
+    if (localesConfig.onChange) {
+      langChangeFN = localesConfig.onChange
+    }
   }
 }
 

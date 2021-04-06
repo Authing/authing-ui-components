@@ -3,10 +3,11 @@ import { Dropdown, Menu, Space } from 'antd'
 import { LANG_MAP } from '../locales'
 import { useTranslation } from 'react-i18next'
 import { Lang } from '../types/Locales'
+import { changeLang } from '../locales'
 
 export const ToggleLang: FC = () => {
   const onClick = ({ key }: any) => {
-    i18n.changeLanguage(key)
+    changeLang(key)
   }
   const { i18n } = useTranslation()
 

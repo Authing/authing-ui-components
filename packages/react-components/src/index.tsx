@@ -59,6 +59,10 @@ const App = () => {
     localesConfig: {
       defaultLang: Lang.zhCn,
       isShowChange: true,
+      onChange: (value) => {
+        console.log('...........')
+        console.log(value)
+      },
     },
   }
 

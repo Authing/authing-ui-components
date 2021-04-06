@@ -320,4 +320,5 @@ export interface GuardConfig extends UserConfig {
 export interface LocalesConfig {
   defaultLang?: Lang
   isShowChange?: boolean
+  onChange?: (lang: Lang) => void
 }
