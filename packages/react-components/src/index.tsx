@@ -1,9 +1,8 @@
 import { Button } from 'antd'
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import { initAuthClient } from './components'
+import { initAuthClient, Lang } from './components'
 import { AuthingGuard } from './components/AuthingGuard'
-import { Lang } from './components/AuthingGuard/locales'
 
 import {
   GuardMode,
@@ -18,7 +17,7 @@ import {
 import reportWebVitals from './reportWebVitals'
 
 const App = () => {
-  const [lang, setLang] = useState(Lang.zhCn)
+  const [lang, setLang] = useState<Lang>('zh-CN')
 
   const config: UserConfig = {
     mode: GuardMode.Modal,
@@ -55,15 +54,15 @@ const App = () => {
     // `,
     // autoRegister: true,
     socialConnections: [SocialConnections.AppleWeb],
-    lang: lang,
     localesConfig: {
-      defaultLang: Lang.zhCn,
+      defaultLang: 'en-US',
       isShowChange: true,
       onChange: (value) => {
         console.log('...........')
         console.log(value)
       },
     },
+    lang: 'zh-CN',
   }
 
   const [visible, setVisible] = useState(false)
@@ -91,7 +90,7 @@ const App = () => {
       <Button
         type="primary"
         onClick={() => {
-          setLang(Lang.zhCn)
+          setLang('zh-CN')
         }}
       >
         中文
@@ -99,7 +98,7 @@ const App = () => {
       <Button
         type="primary"
         onClick={() => {
-          setLang(Lang.enUs)
+          setLang('en-US')
         }}
       >
         English
@@ -119,7 +118,7 @@ const App = () => {
         }}
         // onLoad={(a) => console.log(a, '加载完成')}
         // onPwdResetError={(e) => console.log(e)}
-        appId="605c53593fb7458b1ebaf272"
+        appId="606c761b9a0c1c4f76cd3845"
         // appId="5fd877fb0ba0421962eced94"
         config={config}
       />

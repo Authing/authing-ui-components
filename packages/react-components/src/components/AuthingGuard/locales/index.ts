@@ -4,23 +4,7 @@ import LanguageDetector from 'i18next-browser-languagedetector'
 
 import * as enUsTrans from './en'
 import * as zhCnTrans from './zh'
-import { LocalesConfig } from '../types'
-
-export enum Lang {
-  zhCn = 'zh-CN',
-  enUs = 'en-US',
-}
-
-export const LANG_MAP = [
-  {
-    label: '中文',
-    value: Lang.zhCn,
-  },
-  {
-    label: 'English',
-    value: Lang.enUs,
-  },
-]
+import { LocalesConfig, Lang } from '../types'
 
 let langChangeFN: (lang: Lang) => void = () => {}
 
@@ -29,9 +13,7 @@ export const changeLang = (lang: Lang) => {
   langChangeFN && langChangeFN(lang)
 }
 
-export const LANGS = Object.values(Lang)
-
-const initI18n = (localesConfig: LocalesConfig) => {
+const initI18n = (localesConfig: LocalesConfig, lang?: Lang) => {
   if (!i18n.language) {
     i18n
       .use(LanguageDetector) // 监测当前浏览器语言
@@ -41,14 +23,14 @@ const initI18n = (localesConfig: LocalesConfig) => {
           order: [],
         },
         resources: {
-          [Lang.enUs]: {
+          'en-US': {
             translation: enUsTrans,
           },
-          [Lang.zhCn]: {
+          'zh-CN': {
             translation: zhCnTrans,
           },
         },
-        fallbackLng: localesConfig.defaultLang,
+        fallbackLng: localesConfig.defaultLang || lang || 'zh-CN',
         debug: false,
         interpolation: {
           escapeValue: false, // react already safes from xss
