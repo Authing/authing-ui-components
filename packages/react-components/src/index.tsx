@@ -20,9 +20,9 @@ const App = () => {
   const [lang, setLang] = useState<Lang>('zh-CN')
 
   const config: UserConfig = {
-    mode: GuardMode.Modal,
+    mode: GuardMode.Normal,
     // appHost: 'https://sample-sso.authing.cn',
-    apiHost: 'http://console.authing.localhost:3000',
+    // apiHost: 'http://console.authing.localhost:3000',
     // apiHost: 'http://192.168.50.57:3000',
     // loginMethods: Object.values(LoginMethods),
     // logo:
@@ -118,7 +118,7 @@ const App = () => {
         }}
         // onLoad={(a) => console.log(a, '加载完成')}
         // onPwdResetError={(e) => console.log(e)}
-        appId="606c761b9a0c1c4f76cd3845"
+        appId="5d70d0e991fdd597019df70d"
         // appId="5fd877fb0ba0421962eced94"
         config={config}
       />

@@ -13,15 +13,6 @@ import { PhoneCodeLoginFormProps } from '../../../../components/AuthingGuard/typ
 import { SendPhoneCode } from '../../../../components/AuthingGuard/Forms/SendPhoneCode'
 import { LoginFormFooter } from '../../../../components/AuthingGuard/Forms/LoginFormFooter'
 import { useTranslation } from 'react-i18next'
-import { i18n } from '../../locales'
-
-const rulesMap: Record<string, Rule[]> = {
-  phone: getRequiredRules(i18n.t('login.inputPhone')).concat({
-    pattern: VALIDATE_PATTERN.phone,
-    message: i18n.t('common.phoneFormateError'),
-  }),
-  code: getRequiredRules(i18n.t('common.inputVerifyCode')),
-}
 
 export const PhoneCodeLoginForm = forwardRef<
   FormInstance,
@@ -31,6 +22,14 @@ export const PhoneCodeLoginForm = forwardRef<
     state: { authClient, config },
   } = useGuardContext()
   const { t } = useTranslation()
+
+  const rulesMap: Record<string, Rule[]> = {
+    phone: getRequiredRules(t('login.inputPhone')).concat({
+      pattern: VALIDATE_PATTERN.phone,
+      message: t('common.phoneFormateError'),
+    }),
+    code: getRequiredRules(t('common.inputVerifyCode')),
+  }
 
   const [rawForm] = Form.useForm()
 

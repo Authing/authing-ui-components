@@ -73,7 +73,7 @@ export const SendCodeBtn: FC<SendCodeProps> = ({ beforeSend, btnRef }) => {
       {enabled
         ? t('common.sendVerifyCode')
         : t('common.retryAfterTime', {
-            tiem: countDown,
+            time: countDown,
           })}
     </button>
   )
