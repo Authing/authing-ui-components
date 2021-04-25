@@ -210,6 +210,11 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
     .map((item) => {
       const iconType = `authing-${item.provider.replace(/:/g, '-')}`
 
+      const authorization_params: Record<string, any> = {}
+      if (item.provider === SocialConnectionProvider.BAIDU) {
+        authorization_params.display = screenSize
+      }
+
       const onLogin = () => {
         authClient.social.authorize(item.provider, {
           onSuccess(user) {
@@ -229,9 +234,7 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
 
             message.error(msg)
           },
-          authorization_params: {
-            display: screenSize,
-          },
+          authorization_params,
         })
       }
 
