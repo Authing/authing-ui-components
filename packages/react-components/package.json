@@ -11,8 +11,8 @@
     "qs": "^6.9.4"
   },
   "peerDependencies": {
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react": "16.14.0",
+    "react-dom": "16.14.0"
   },
   "scripts": {
     "start": "PORT=3006 node scripts/start.js",
@@ -163,10 +163,10 @@
     "postcss-safe-parser": "5.0.2",
     "prettier": "^2.1.2",
     "query-string": "^7.0.0",
-    "react": "^17.0.1",
+    "react": "16.14.0",
     "react-app-polyfill": "^2.0.0",
     "react-dev-utils": "^11.0.0",
-    "react-dom": "^17.0.1",
+    "react-dom": "16.14.0",
     "react-i18next": "^11.8.12",
     "react-refresh": "^0.8.3",
     "resolve": "1.18.1",
