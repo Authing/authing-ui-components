@@ -1,8 +1,7 @@
 import React, { FC } from 'react'
 import { Dropdown, Menu, Space } from 'antd'
-import { LANG_MAP } from '../locales'
+import { LANG_MAP } from '../types'
 import { useTranslation } from 'react-i18next'
-import { Lang } from '../types/Locales'
 import { changeLang } from '../locales'
 
 export const ToggleLang: FC = () => {
@@ -32,7 +31,7 @@ export const ToggleLang: FC = () => {
         }}
       >
         {
-          LANG_MAP.find((item) => item.value === (i18n.language || Lang.zhCn))
+          LANG_MAP.find((item) => item.value === (i18n.language || 'zh-CN'))
             ?.label
         }
       </Space>

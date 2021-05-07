@@ -19,7 +19,6 @@ import {
 } from '../../components/AuthingGuard/types/GuardConfig'
 
 import './style.less'
-import { Lang } from './types/Locales'
 import { i18n, initI18n } from './locales'
 const PREFIX_CLS = 'authing-ant'
 
@@ -50,13 +49,13 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
     defaultLoginMethod = defaultGuardConfig.defaultLoginMethod,
     defaultScenes = defaultGuardConfig.defaultScenes,
     defaultRegisterMethod = defaultGuardConfig.defaultRegisterMethod,
-    lang = Lang.zhCn,
+    lang,
     localesConfig = defaultLocalesConfig,
   } = config
 
-  initI18n(localesConfig)
+  initI18n(localesConfig, lang)
 
-  if (i18n.changeLanguage && i18n.language !== lang) {
+  if (lang && i18n.changeLanguage && i18n.language !== lang) {
     i18n.changeLanguage(lang)
   }
 

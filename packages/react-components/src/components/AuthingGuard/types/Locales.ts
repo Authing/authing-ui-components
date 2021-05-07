@@ -1,15 +1,12 @@
-export enum Lang {
-  zhCn = 'zh-CN',
-  enUs = 'en-US',
-}
+export type Lang = 'zh-CN' | 'en-US'
 
 export const LANG_MAP = [
   {
     label: '中文',
-    value: Lang.zhCn,
+    value: 'zh-CN',
   },
   {
     label: 'English',
-    value: Lang.enUs,
+    value: 'en-US',
   },
 ]

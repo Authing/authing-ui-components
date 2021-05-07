@@ -7,7 +7,6 @@ import {
   LocalesConfig,
 } from '../../components/AuthingGuard/types'
 import { i18n } from './locales'
-import { Lang } from './types/Locales'
 
 // 个人版 OTP MFA 的 error code
 export const OTP_MFA_CODE = 1635
@@ -81,6 +80,6 @@ export const defaultGuardConfig: Partial<UserConfig> = {
 }
 
 export const defaultLocalesConfig: LocalesConfig = {
-  defaultLang: Lang.zhCn,
+  defaultLang: 'zh-CN',
   isShowChange: false,
 }

@@ -35,8 +35,11 @@ requestClient.post = async <T>(
 ): Promise<AuthingResponse<T>> => {
   const res = await fetch(`${requestClient.baseUrl}${path}`, {
     method: 'POST',
-    body: data,
-    headers: config?.headers,
+    body: JSON.stringify(data),
+    headers: {
+      ...config?.headers,
+      'Content-Type': 'application/json',
+    },
   })
 
   return res.json()
