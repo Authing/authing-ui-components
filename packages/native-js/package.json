@@ -6,8 +6,8 @@
   "typings": "lib/index.d.ts",
   "dependencies": {
     "@authing/react-ui-components": "^2.4.0",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react": "16.14.0",
+    "react-dom": "16.14.0"
   },
   "scripts": {
     "start": "node scripts/start.js",
