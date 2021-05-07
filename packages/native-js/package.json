@@ -1,6 +1,6 @@
 {
   "name": "@authing/native-js-ui-components",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "private": false,
   "main": "lib/index.min.js",
   "typings": "lib/index.d.ts",
