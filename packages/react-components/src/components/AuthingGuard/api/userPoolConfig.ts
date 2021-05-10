@@ -104,7 +104,7 @@ export interface UserPoolConfig {
   enterpriseConnections: EnterpriseConnectionItem[]
 }
 
-export const fetchUserPoolConfig = (userPoolId: string) =>
-  requestClient.get<UserPoolConfig>(
-    `/api/v2/userpools/${userPoolId}/public-config`
-  )
+// export const fetchUserPoolConfig = (userPoolId: string) =>
+//   requestClient.get<UserPoolConfig>(
+//     `/api/v2/userpools/${userPoolId}/public-config`
+//   )
