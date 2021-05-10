@@ -44,7 +44,7 @@
   "resetPwd": "Reset password",
   "resetPwdEmail": "Resend password reset email",
   "setPwdLimit": "Set 6-20 digit password",
-  "thridAccLogin": "Continue with Github",
+  "thridAccLogin": "Continue With",
   "twoPwdNeedSame": "The two passwords must be the same",
   "pwdLogin": "Password",
   "verifyCodeLogin": "Phone",

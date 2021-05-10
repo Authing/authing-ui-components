@@ -43,10 +43,13 @@ export const AppMfaLayout: FC<MfaLayoutProps> = () => {
   }
 
   const availableMfaType = mfaData.applicationMfa
-    ?.filter((item) => item.status)
+    ?.filter(
+      (item) =>
+        item.status && Object.keys(ApplicationMfaType).includes(item.mfaPolicy)
+    )
     ?.sort((a, b) => a.sort - b.sort)
     ?.map((item) => ({
-      label: ApplicationMfaTypeLabel[item.mfaPolicy],
+      label: ApplicationMfaTypeLabel()[item.mfaPolicy],
       key: item.mfaPolicy,
       onClick() {
         setType(item.mfaPolicy)
@@ -61,7 +64,9 @@ export const AppMfaLayout: FC<MfaLayoutProps> = () => {
           className="toggle-mfa-dropdown"
           menus={availableMfaType!}
         >
-          <span className="authing-toggle-mfa">t('login.otherVerifyWay')</span>
+          <span className="authing-toggle-mfa">
+            {t('login.otherVerifyWay')}
+          </span>
         </AuthingDropdown>
       )}
     </div>

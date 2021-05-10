@@ -17,10 +17,13 @@ export enum ApplicationMfaType {
   // FINGERPRINT = 'FINGERPRINT',
 }
 
-export const ApplicationMfaTypeLabel: Record<ApplicationMfaType, string> = {
+export const ApplicationMfaTypeLabel: () => Record<
+  ApplicationMfaType,
+  string
+> = () => ({
   [ApplicationMfaType.SMS]: i18n.t('common.SMS'),
   [ApplicationMfaType.EMAIL]: i18n.t('common.EmailVerification'),
-}
+})
 
 export interface OidcClientMetadata {
   grant_types: string[]
