@@ -1,4 +1,3 @@
-import { requestClient } from './http'
 import { Protocol } from '../../../components/AuthingGuard/types'
 import { SocialConnectionProvider } from 'authing-js-sdk'
 
