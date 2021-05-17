@@ -17,7 +17,7 @@ import {
 import reportWebVitals from './reportWebVitals'
 
 const App = () => {
-  const [lang, setLang] = useState<Lang>('zh-CN')
+  const [, setLang] = useState<Lang>('zh-CN')
 
   const config: UserConfig = {
     mode: GuardMode.Normal,
