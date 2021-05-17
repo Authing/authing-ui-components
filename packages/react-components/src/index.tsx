@@ -62,7 +62,7 @@ const App = () => {
         console.log(value)
       },
     },
-    lang: 'zh-CN',
+    lang: 'en-US',
   }
 
   const [visible, setVisible] = useState(false)
@@ -118,7 +118,7 @@ const App = () => {
         }}
         // onLoad={(a) => console.log(a, '加载完成')}
         // onPwdResetError={(e) => console.log(e)}
-        appId="5d70d0e991fdd597019df70d"
+        appId="6099fb5483deda8c44a4e457"
         // appId="5fd877fb0ba0421962eced94"
         config={config}
       />

@@ -1,4 +1,5 @@
 import qs from 'qs'
+import { i18n } from '../locales'
 
 export const requestClient = async (...rest: Parameters<typeof fetch>) => {
   const res = await fetch(...rest)
@@ -20,7 +21,13 @@ requestClient.get = async <T>(
     `${requestClient.baseUrl}${path}${qs.stringify(query, {
       addQueryPrefix: true,
     })}`,
-    init
+    {
+      ...init,
+      headers: {
+        ...init?.headers,
+        'x-authing-lang': i18n.language,
+      },
+    }
   )
 
   return res.json()
@@ -39,9 +46,9 @@ requestClient.post = async <T>(
     headers: {
       ...config?.headers,
       'Content-Type': 'application/json',
+      'x-authing-lang': i18n.language,
     },
   })
-
   return res.json()
 }
 

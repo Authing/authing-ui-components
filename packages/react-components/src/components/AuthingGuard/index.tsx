@@ -20,6 +20,7 @@ import {
 
 import './style.less'
 import { i18n, initI18n } from './locales'
+import { getAuthClient } from './hooks'
 const PREFIX_CLS = 'authing-ant'
 
 message.config({
@@ -57,6 +58,8 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
 
   if (lang && i18n.changeLanguage && i18n.language !== lang) {
     i18n.changeLanguage(lang)
+    const authClient = getAuthClient()
+    authClient?.setLang(lang)
   }
 
   let realHost
