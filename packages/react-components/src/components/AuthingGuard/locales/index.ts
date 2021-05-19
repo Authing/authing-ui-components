@@ -5,16 +5,12 @@ import LanguageDetector from 'i18next-browser-languagedetector'
 import * as enUsTrans from './en'
 import * as zhCnTrans from './zh'
 import { LocalesConfig, Lang } from '../types'
-import { getAuthClient } from 'src/components'
 
 let langChangeFN: (lang: Lang) => void = () => {}
 
 export const changeLang = (lang: Lang) => {
   i18n.changeLanguage(lang)
   langChangeFN && langChangeFN(lang)
-  const authClient = getAuthClient()
-
-  authClient?.setLang(lang)
 }
 
 const initI18n = (localesConfig: LocalesConfig, lang?: Lang) => {

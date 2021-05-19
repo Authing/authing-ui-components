@@ -58,8 +58,6 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
 
   if (lang && i18n.changeLanguage && i18n.language !== lang) {
     i18n.changeLanguage(lang)
-    const authClient = getAuthClient()
-    authClient?.setLang(lang)
   }
 
   let realHost
@@ -80,6 +78,7 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
     appHost: realHost!,
     appId,
     requestFrom: 'ui-components',
+    lang,
     encryptFunction: (text, publicKey) => {
       const encrypt = new jsencrypt() // 实例化加密对象
       encrypt.setPublicKey(publicKey) // 设置公钥

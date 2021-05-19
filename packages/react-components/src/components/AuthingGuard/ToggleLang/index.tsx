@@ -3,10 +3,16 @@ import { Dropdown, Menu, Space } from 'antd'
 import { LANG_MAP } from '../types'
 import { useTranslation } from 'react-i18next'
 import { changeLang } from '../locales'
+import { useGuardContext } from '../../../context/global/context'
 
 export const ToggleLang: FC = () => {
+  const {
+    state: { authClient },
+  } = useGuardContext()
+
   const onClick = ({ key }: any) => {
     changeLang(key)
+    authClient.setLang(key)
   }
   const { i18n } = useTranslation()
 
