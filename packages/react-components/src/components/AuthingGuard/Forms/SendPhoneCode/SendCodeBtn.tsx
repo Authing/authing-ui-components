@@ -1,5 +1,7 @@
+import { Spin } from 'antd'
 import React, { FC, useState, useRef, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { LoadingOutlined } from '@ant-design/icons'
 
 const TIME = 60
 export interface SendCodeProps {
@@ -70,11 +72,17 @@ export const SendCodeBtn: FC<SendCodeProps> = ({ beforeSend, btnRef }) => {
       onClick={onClick}
       ref={btnRef}
     >
-      {enabled
-        ? t('common.sendVerifyCode')
-        : t('common.retryAfterTime', {
-            time: countDown,
-          })}
+      <Spin
+        spinning={loading}
+        indicator={<LoadingOutlined spin />}
+        size="small"
+      >
+        {enabled
+          ? t('common.sendVerifyCode')
+          : t('common.retryAfterTime', {
+              time: countDown,
+            })}
+      </Spin>
     </button>
   )
 }
