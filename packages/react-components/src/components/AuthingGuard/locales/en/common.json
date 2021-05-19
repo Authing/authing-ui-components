@@ -174,5 +174,10 @@
   "SMS": "SMS Verification",
   "EmailVerification": "Email Verification",
   "retrievePassword": "Retrieve password",
-  "registrationSuccess": "Registration Success"
+  "registrationSuccess": "Registration Success",
+  "repeatPasswordDoc": "The two passwords must be the same",
+  "saveSuccess": "Save successfully",
+  "copyFailed": "Copy Failed",
+  "repeatPassword": "Please repeat the password",
+  "phoneNotNull": "Mobile phone number cannot be empty"
 }
