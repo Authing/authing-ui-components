@@ -1,7 +1,7 @@
 import { message } from 'antd'
 import { User } from 'authing-js-sdk'
 import { FormInstance } from 'antd/lib/form'
-import React, { useRef } from 'react'
+import React, { useCallback, useRef } from 'react'
 
 import { useGuardContext } from '../../../context/global/context'
 import {
@@ -35,22 +35,28 @@ const useFormActions = () => {
     state: { guardEvents, authClient },
   } = useGuardContext()
 
-  const onSuccess = (user: User) => {
-    message.success(t('common.LoginSuccess'))
-    guardEvents.onLogin?.(user, authClient)
-  }
+  const onSuccess = useCallback(
+    (user: User) => {
+      message.success(t('common.LoginSuccess'))
+      guardEvents.onLogin?.(user, authClient)
+    },
+    [authClient, guardEvents, t]
+  )
 
-  const onFail = (error: any) => {
-    if (OTP_MFA_CODE === error?.code) {
-      setValue('mfaData', error.data)
-      setValue('guardScenes', GuardScenes.MfaVerify)
-    }
-    if (APP_MFA_CODE === error?.code) {
-      setValue('mfaData', error.data)
-      setValue('guardScenes', GuardScenes.AppMfaVerify)
-    }
-    guardEvents.onLoginError?.(error, authClient)
-  }
+  const onFail = useCallback(
+    (error: any) => {
+      if (OTP_MFA_CODE === error?.code) {
+        setValue('mfaData', error.data)
+        setValue('guardScenes', GuardScenes.MfaVerify)
+      }
+      if (APP_MFA_CODE === error?.code) {
+        setValue('mfaData', error.data)
+        setValue('guardScenes', GuardScenes.AppMfaVerify)
+      }
+      guardEvents.onLoginError?.(error, authClient)
+    },
+    [authClient, guardEvents, setValue]
+  )
 
   return {
     onFail,
