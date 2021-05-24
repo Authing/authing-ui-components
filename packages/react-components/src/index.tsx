@@ -7,7 +7,6 @@ import { AuthingGuard } from './components/AuthingGuard'
 import {
   GuardMode,
   // LoginMethods,
-  SocialConnections,
   UserConfig,
   // LoginMethods,
   // RegisterMethods,
@@ -17,12 +16,12 @@ import {
 import reportWebVitals from './reportWebVitals'
 
 const App = () => {
-  const [, setLang] = useState<Lang>('zh-CN')
+  const [lang, setLang] = useState<Lang>('zh-CN')
 
   const config: UserConfig = {
     mode: GuardMode.Normal,
     // appHost: 'https://sample-sso.authing.cn',
-    // apiHost: 'http://console.authing.localhost:3000',
+    apiHost: 'http://console.authing.localhost:3000',
     // apiHost: 'http://192.168.50.57:3000',
     // loginMethods: Object.values(LoginMethods),
     // logo:
@@ -52,8 +51,8 @@ const App = () => {
     //     background-color: #fff;
     //   }
     // `,
-    // autoRegister: true,
-    socialConnections: [SocialConnections.AppleWeb],
+    // // autoRegister: true,
+    // socialConnections: [SocialConnections.AppleWeb],
     localesConfig: {
       defaultLang: 'en-US',
       isShowChange: true,
@@ -62,7 +61,7 @@ const App = () => {
         console.log(value)
       },
     },
-    lang: 'en-US',
+    lang: lang,
   }
 
   const [visible, setVisible] = useState(false)
@@ -72,8 +71,8 @@ const App = () => {
   // }, [])
 
   initAuthClient({
-    appId: '5d70d0e991fdd597019df70d',
-    appHost: 'http://sample-sso.authing.cn',
+    appId: '60a722e6b689ce36bab4ac48',
+    appHost: 'http://console.authing.localhost:3000',
   })
 
   return (
@@ -82,7 +81,7 @@ const App = () => {
       <Button
         type="primary"
         onClick={() => {
-          setVisible(true)
+          setVisible(!visible)
         }}
       >
         开关
@@ -118,7 +117,7 @@ const App = () => {
         }}
         // onLoad={(a) => console.log(a, '加载完成')}
         // onPwdResetError={(e) => console.log(e)}
-        appId="6099fb5483deda8c44a4e457"
+        appId="60a722e6b689ce36bab4ac48"
         // appId="5fd877fb0ba0421962eced94"
         config={config}
       />

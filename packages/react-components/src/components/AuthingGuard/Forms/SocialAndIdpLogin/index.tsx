@@ -10,6 +10,7 @@ import {
   OTP_MFA_CODE,
 } from '../../../../components/AuthingGuard/constants'
 import {
+  Lang,
   Protocol,
   SocialAndIdpLoginProps,
 } from '../../../../components/AuthingGuard/types'
@@ -27,6 +28,7 @@ import { IconFont } from '../../IconFont'
 import { useScreenSize } from '../../hooks/useScreenSize'
 import { SocialConnectionProvider } from 'authing-js-sdk'
 import { useTranslation } from 'react-i18next'
+import { i18n } from '../../locales'
 
 export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
   onFail = () => {},
@@ -252,10 +254,13 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
           }
           onClick={onLogin}
         >
-          {item.name}
+          {item.tooltip?.[i18n.language as Lang] || item.name}
         </Button>
       ) : (
-        <Tooltip key={item.provider} title={item.name}>
+        <Tooltip
+          key={item.provider}
+          title={item.tooltip?.[i18n.language as Lang] || item.name}
+        >
           <div className="authing-social-login-item" onClick={onLogin}>
             <IconFont type={iconType} />
           </div>

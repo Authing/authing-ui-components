@@ -20,7 +20,6 @@ import {
 
 import './style.less'
 import { i18n, initI18n } from './locales'
-import { getAuthClient } from './hooks'
 const PREFIX_CLS = 'authing-ant'
 
 message.config({

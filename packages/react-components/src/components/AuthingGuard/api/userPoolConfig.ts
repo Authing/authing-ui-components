@@ -1,4 +1,4 @@
-import { Protocol } from '../../../components/AuthingGuard/types'
+import { Lang, Protocol } from '../../../components/AuthingGuard/types'
 import { SocialConnectionProvider } from 'authing-js-sdk'
 
 export interface OIDCConnectionConfig {
@@ -76,6 +76,7 @@ export interface SocialConnectionItem {
   description: string
   provider: SocialConnectionProvider
   authorizationUrl: string
+  tooltip: Record<Lang, string>
 }
 
 export interface EnterpriseConnectionItem {
