@@ -6,7 +6,7 @@
   "typings": "lib/index.d.ts",
   "dependencies": {
     "antd": "^4.8.0",
-    "authing-js-sdk": "^4.20.6",
+    "authing-js-sdk": "^4.20.7",
     "jsencrypt": "^3.0.0-rc.1",
     "qs": "^6.9.4"
   },
