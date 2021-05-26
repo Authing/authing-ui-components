@@ -38,11 +38,16 @@ upload:
     - echo $OSS_URL
     - echo $OSS_REGION
     - echo 版本 $VERSION
-    - ossutil --access-key-id ${ALIYUN_ACCESS_KEY} --access-key-secret ${ALIYUN_ACCESS_KEY_SECRET} -e ${OSS_REGION} cp -r -f packages/angular-components/dist/bundles oss://${OSS_URL}/packages/ng-ui-components/${VERSION}/
+    - >
+      ossutil --access-key-id ${ALIYUN_ACCESS_KEY}
+      --access-key-secret ${ALIYUN_ACCESS_KEY_SECRET}
+      -e ${OSS_REGION} cp -r -f packages/angular-components/dist/bundles oss://${OSS_URL}/packages/ng-ui-components/${VERSION}/
+
     - >
       ossutil --access-key-id ${ALIYUN_ACCESS_KEY}
       --access-key-secret ${ALIYUN_ACCESS_KEY_SECRET}
       -e ${OSS_REGION} cp -r -f packages/native-js/lib oss://${OSS_URL}/packages/native-js-ui-components/${VERSION}/
+
     - >
       ossutil --access-key-id ${ALIYUN_ACCESS_KEY}
       --access-key-secret ${ALIYUN_ACCESS_KEY_SECRET}
