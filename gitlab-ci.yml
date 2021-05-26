@@ -58,4 +58,4 @@ upload:
     #   --access-key-secret ${ALIYUN_ACCESS_KEY_SECRET}
     #   -e ${OSS_REGION} cp -r -f packages/vue-components/lib oss://${OSS_URL}/packages/vue-ui-components/${VERSION}/
   dependencies:
-    - publish
+    - build
