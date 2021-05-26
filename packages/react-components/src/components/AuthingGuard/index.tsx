@@ -69,6 +69,7 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
   }
 
   requestClient.setBaseUrl(realHost)
+  requestClient.setLangHeader(headers?.lang)
 
   const authClient = new AuthenticationClient({
     appHost: realHost!,

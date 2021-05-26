@@ -25,7 +25,7 @@ requestClient.get = async <T>(
       ...init,
       headers: {
         ...init?.headers,
-        'x-authing-lang': i18n.language,
+        [requestClient.langHeader]: i18n.language,
       },
     }
   )
@@ -46,7 +46,7 @@ requestClient.post = async <T>(
     headers: {
       ...config?.headers,
       'Content-Type': 'application/json',
-      'x-authing-lang': i18n.language,
+      [requestClient.langHeader]: i18n.language,
     },
   })
   return res.json()
@@ -55,4 +55,10 @@ requestClient.post = async <T>(
 requestClient.baseUrl = ''
 requestClient.setBaseUrl = (base: string) => {
   requestClient.baseUrl = base.replace(/\/$/, '')
+}
+
+const DEFAULT_LANG_HEADER = 'x-authing-lang'
+requestClient.langHeader = DEFAULT_LANG_HEADER
+requestClient.setLangHeader = (key: string | undefined) => {
+  requestClient.langHeader = key || DEFAULT_LANG_HEADER
 }
