@@ -51,6 +51,7 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
     defaultRegisterMethod = defaultGuardConfig.defaultRegisterMethod,
     lang,
     localesConfig = defaultLocalesConfig,
+    headers,
   } = config
 
   initI18n(localesConfig, lang)
@@ -78,6 +79,7 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
     appId,
     requestFrom: 'ui-components',
     lang,
+    headers,
     encryptFunction: (text, publicKey) => {
       const encrypt = new jsencrypt() // 实例化加密对象
       encrypt.setPublicKey(publicKey) // 设置公钥

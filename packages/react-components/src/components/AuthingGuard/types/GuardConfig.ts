@@ -1,5 +1,6 @@
 import {
   AuthenticationClient,
+  AuthenticationClientOptions,
   CommonMessage,
   SocialConnectionProvider,
   User,
@@ -309,6 +310,10 @@ export interface UserConfig {
    */
   localesConfig?: LocalesConfig
   lang?: Lang
+  /**
+   * 用于去品牌化
+   */
+  headers?: AuthenticationClientOptions['headers']
 }
 
 export interface GuardConfig extends UserConfig {
