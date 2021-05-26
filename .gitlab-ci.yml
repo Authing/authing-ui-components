@@ -2,7 +2,6 @@ image: node:12.14.0
 
 stages:
   - build
-  - upload
 
 before_script:
   - mkdir -p ~/.ssh
@@ -18,21 +17,6 @@ build:
   script:
     - yarn
     - yarn run build:lib
-  artifacts:
-    untracked: false
-    paths:
-      - packages/angular-components/dist
-      - packages/native-js/lib
-      - packages/react-components/lib
-      - packages/vue-components/lib
-    expire_in: 30 days
-
-upload:
-  stage: upload
-  when: manual
-  image:
-    name: fuergaosi/ossutil:latest
-  script:
     - export VERSION=$(cat lerna.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
     - echo 上传包到 cdn
     - echo $CDN_OSS_PROD
@@ -57,5 +41,3 @@ upload:
       ossutil --access-key-id ${ALIYUN_ACCESS_KEY}
       --access-key-secret ${ALIYUN_ACCESS_KEY_SECRET}
       -e ${OSS_REGION_PROD} cp -r -f packages/vue-components/lib oss://${CDN_OSS_PROD}/packages/vue-ui-components/${VERSION}/
-  dependencies:
-    - build
