@@ -15,6 +15,14 @@ before_script:
 build:
   stage: build
   when: manual
+  cache:
+    untracked: true
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - packages/angular-components/dist/bundles
+      - packages/native-js/lib
+      - packages/react-components/lib
+      - packages/vue-components/lib
   script:
     - yarn
     - yarn run build:lib
