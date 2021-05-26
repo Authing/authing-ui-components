@@ -44,11 +44,8 @@ export const QrCodeLoginForm: FC<QrLoginFormProps> = ({
         onFail && onFail(`${message}`)
       },
     })
-  }, [client, config.qrCodeScanOptions, onFail, onSuccess])
-
-  useEffect(() => {
     return () => clearInterval(timerRef.current)
-  }, [])
+  }, [client, config.qrCodeScanOptions, onFail, onSuccess])
 
   return (
     <div className="authing-guard-qr-form">

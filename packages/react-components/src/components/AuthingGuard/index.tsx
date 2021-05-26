@@ -19,7 +19,7 @@ import {
 } from '../../components/AuthingGuard/types/GuardConfig'
 
 import './style.less'
-import { i18n, initI18n } from './locales'
+import { initI18n } from './locales'
 const PREFIX_CLS = 'authing-ant'
 
 message.config({
@@ -56,11 +56,7 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
 
   initI18n(localesConfig, lang)
 
-  if (lang && i18n.changeLanguage && i18n.language !== lang) {
-    i18n.changeLanguage(lang)
-  }
-
-  let realHost
+  let realHost: string | undefined
   if (appHost) {
     realHost = appHost
   } else if (appDomain) {
@@ -78,7 +74,7 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
     appHost: realHost!,
     appId,
     requestFrom: 'ui-components',
-    lang,
+    lang: localesConfig.defaultLang ?? lang,
     headers,
     encryptFunction: (text, publicKey) => {
       const encrypt = new jsencrypt() // 实例化加密对象
@@ -120,7 +116,12 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
           localesConfig: config.localesConfig,
         }}
       >
-        <GuardLayout id={id} className={className} visible={visible} />
+        <GuardLayout
+          id={id}
+          className={className}
+          visible={visible}
+          lang={lang}
+        />
       </GuardContext>
     </ConfigProvider>
   )
