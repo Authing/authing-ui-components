@@ -14,6 +14,8 @@ before_script:
 build:
   stage: build
   when: manual
+  image:
+    name: fuergaosi/ossutil:latest
   script:
     - yarn
     - yarn run build:lib
