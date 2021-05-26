@@ -19,7 +19,7 @@ build:
     untracked: true
     key: ${CI_COMMIT_REF_SLUG}
     paths:
-      - packages/angular-components/dist/bundles
+      - packages/angular-components/dist/ng-ui-components/bundles
       - packages/native-js/lib
       - packages/react-components/lib
       - packages/vue-components/lib
@@ -29,7 +29,7 @@ build:
   artifacts:
     untracked: false
     paths:
-      - packages/angular-components/dist/bundles
+      - packages/angular-components/dist/ng-ui-components/bundles
       - packages/native-js/lib
       - packages/react-components/lib
       - packages/vue-components/lib
@@ -49,7 +49,7 @@ upload:
     - >
       ossutil --access-key-id ${ALIYUN_ACCESS_KEY}
       --access-key-secret ${ALIYUN_ACCESS_KEY_SECRET}
-      -e ${OSS_REGION_PROD} cp -r -f packages/angular-components/dist/bundles oss://${CDN_OSS_PROD}/packages/ng-ui-components/${VERSION}/
+      -e ${OSS_REGION_PROD} cp -r -f packages/angular-components/dist/ng-ui-components/bundles oss://${CDN_OSS_PROD}/packages/ng-ui-components/${VERSION}/
 
     - >
       ossutil --access-key-id ${ALIYUN_ACCESS_KEY}
