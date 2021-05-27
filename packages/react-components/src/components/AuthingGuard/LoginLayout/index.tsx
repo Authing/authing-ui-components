@@ -99,6 +99,9 @@ const useNormalLoginTabs = ({ onSuccess, onFail }: BaseFormProps) => {
         ref={(v) => (formRef.current[LoginMethods.LDAP] = v!)}
       />
     ),
+    [LoginMethods.WechatMpQrcode]: (
+      <QrCodeLoginForm type={LoginMethods.WechatMpQrcode} {...formProps} />
+    ),
     [LoginMethods.AD]: (
       <ADLoginForm
         {...formProps}

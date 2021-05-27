@@ -23,6 +23,7 @@ export const LOGIN_METHODS_MAP = () => ({
   [LoginMethods.WxMinQr]: i18n.t('login.scanLogin'),
   [LoginMethods.LDAP]: i18n.t('login.ldapLogin'),
   [LoginMethods.AD]: i18n.t('login.adLogin'),
+  [LoginMethods.WechatMpQrcode]: i18n.t('login.wechatmpQrcode'),
 })
 
 export const REGISTER_METHODS_MAP = () => ({

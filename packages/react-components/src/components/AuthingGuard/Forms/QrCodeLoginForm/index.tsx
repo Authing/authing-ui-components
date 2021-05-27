@@ -25,6 +25,7 @@ export const QrCodeLoginForm: FC<QrLoginFormProps> = ({
     return {
       [LoginMethods.AppQr]: authClient.qrcode,
       [LoginMethods.WxMinQr]: authClient.wxqrcode,
+      [LoginMethods.WechatMpQrcode]: authClient.wechatmpqrcode,
     }[type]
   }, [type, authClient])
 

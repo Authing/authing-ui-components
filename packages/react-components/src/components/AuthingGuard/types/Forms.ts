@@ -26,7 +26,7 @@ export interface LdapLoginFormProps extends BaseFormProps {
 }
 
 export interface QrLoginFormProps extends BaseFormProps {
-  type: LoginMethods.AppQr | LoginMethods.WxMinQr
+  type: LoginMethods.AppQr | LoginMethods.WxMinQr | LoginMethods.WechatMpQrcode
 }
 
 export interface EmailRegisterFormProps extends BaseFormProps {
