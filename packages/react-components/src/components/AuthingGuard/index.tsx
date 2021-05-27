@@ -11,6 +11,7 @@ import {
   OTP_MFA_CODE,
   APP_MFA_CODE,
   defaultLocalesConfig,
+  defaultHeaders,
 } from '../../components/AuthingGuard/constants'
 import { GuardLayout } from '../../components/AuthingGuard/GuardLayout'
 import {
@@ -51,7 +52,7 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
     defaultRegisterMethod = defaultGuardConfig.defaultRegisterMethod,
     lang,
     localesConfig = defaultLocalesConfig,
-    headers,
+    headers = defaultHeaders,
   } = config
 
   initI18n(localesConfig, lang)

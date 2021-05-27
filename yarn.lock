@@ -4611,10 +4611,10 @@ atob@^2.1.2:
   resolved "https://registry.npm.taobao.org/atob/download/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha1-bZUX654DDSQ2ZmZR6GvZ9vE1M8k=
 
-authing-js-sdk@^4.20.7:
-  version "4.20.8"
-  resolved "https://registry.nlark.com/authing-js-sdk/download/authing-js-sdk-4.20.8.tgz#4bb1f70f0e1648d19b98d432b1be88edab4c1ee9"
-  integrity sha1-S7H3Dw4WSNGbmNQysb6I7atMHuk=
+authing-js-sdk@4.20.9:
+  version "4.20.9"
+  resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.20.9.tgz#be2f93c0c20f141cfd0b516235a3e9927dd9cea8"
+  integrity sha512-VPJRozUiAvzZj2p+YEJgK9PtihwAoQJPMXHB7Xi3bkDJbUDGKkbL2Nr5XEt0deXgqyBqXrpOU6VGDh8PuKtyQA==
   dependencies:
     axios "^0.19.2"
     crypto-js "^4.0.0"
@@ -4651,8 +4651,8 @@ axe-core@^4.0.2:
 
 axios@^0.19.2:
   version "0.19.2"
-  resolved "https://registry.npm.taobao.org/axios/download/axios-0.19.2.tgz?cache=0&sync_timestamp=1603469143920&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Faxios%2Fdownload%2Faxios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
-  integrity sha1-PqNsXYgY0NX4qKl6bTa4bNwAyyc=
+  resolved "https://registry.npmjs.org/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
+  integrity sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
   dependencies:
     follow-redirects "1.5.10"
 
@@ -6450,8 +6450,8 @@ crypto-browserify@^3.11.0:
 
 crypto-js@^4.0.0:
   version "4.0.0"
-  resolved "https://registry.npm.taobao.org/crypto-js/download/crypto-js-4.0.0.tgz#2904ab2677a9d042856a2ea2ef80de92e4a36dcc"
-  integrity sha1-KQSrJnep0EKFai6i74DekuSjbcw=
+  resolved "https://registry.npmjs.org/crypto-js/-/crypto-js-4.0.0.tgz#2904ab2677a9d042856a2ea2ef80de92e4a36dcc"
+  integrity sha512-bzHZN8Pn+gS7DQA6n+iUmBfl0hO5DJq++QP3U6uTucDtk/0iGpXd/Gg7CGR0p8tJhofJyaKoWBuJI4eAO00BBg==
 
 crypto-random-string@^1.0.0:
   version "1.0.0"
@@ -8625,8 +8625,8 @@ fn.name@1.x.x:
 
 follow-redirects@1.5.10:
   version "1.5.10"
-  resolved "https://registry.npm.taobao.org/follow-redirects/download/follow-redirects-1.5.10.tgz#7b7a9f9aea2fdff36786a94ff643ed07f4ff5e2a"
-  integrity sha1-e3qfmuov3/NnhqlP9kPtB/T/Xio=
+  resolved "https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.5.10.tgz#7b7a9f9aea2fdff36786a94ff643ed07f4ff5e2a"
+  integrity sha512-0V5l4Cizzvqt5D44aTXbFZz+FtyXV1vrDN6qrelxtfYQKW0KO0W2T/hkE8xvGa/540LkZlkaUjO4ailYTFtHVQ==
   dependencies:
     debug "=3.1.0"
 
@@ -11007,9 +11007,9 @@ jsencrypt@^3.0.0-rc.1:
   integrity sha1-DgpHRLpDzFV/tc9i/oZGvOtWGxw=
 
 jsencrypt@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.npm.taobao.org/jsencrypt/download/jsencrypt-3.1.0.tgz?cache=0&sync_timestamp=1615320039883&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fjsencrypt%2Fdownload%2Fjsencrypt-3.1.0.tgz#634226c92c548dd9a69f8352770a32e58e831728"
-  integrity sha1-Y0ImySxUjdmmn4NSdwoy5Y6DFyg=
+  version "3.2.0"
+  resolved "https://registry.npmjs.org/jsencrypt/-/jsencrypt-3.2.0.tgz#09242aabf1984165dcd7698fe6ed163be77c05f8"
+  integrity sha512-Y/WBrCYRP1A2I1OEXxqurO+W3AC5uXhiArprpYQ0Y8/1Dc3NaiINAyCLx7HzXGwN7xvW3s5xpeOTdwD7lD1SQQ==
 
 jsesc@^2.5.1:
   version "2.5.2"
@@ -11143,7 +11143,7 @@ jszip@^3.1.3:
 
 jwt-decode@^2.2.0:
   version "2.2.0"
-  resolved "https://registry.npm.taobao.org/jwt-decode/download/jwt-decode-2.2.0.tgz#7d86bd56679f58ce6a84704a657dd392bba81a79"
+  resolved "https://registry.npmjs.org/jwt-decode/-/jwt-decode-2.2.0.tgz#7d86bd56679f58ce6a84704a657dd392bba81a79"
   integrity sha1-fYa9VmefWM5qhHBKZX3TkruoGnk=
 
 karma-chrome-launcher@~3.1.0:
