@@ -14,9 +14,6 @@ import { PasswordLoginFormProps } from '../../../../components/AuthingGuard/type
 import { LoginFormFooter } from '../../../../components/AuthingGuard/Forms/LoginFormFooter'
 import { useTranslation } from 'react-i18next'
 
-const captchaUrl = '/api/v2/security/captcha'
-const getCaptchaUrl = () => `${captchaUrl}?r=${+new Date()}`
-
 export const PasswordLoginForm = forwardRef<
   FormInstance,
   PasswordLoginFormProps
@@ -24,8 +21,11 @@ export const PasswordLoginForm = forwardRef<
   const { state } = useGuardContext()
   const { t } = useTranslation()
 
-  const { config, authClient } = state
+  const { config, authClient, realHost } = state
   const autoRegister = config.autoRegister
+
+  const captchaUrl = `${realHost}/api/v2/security/captcha`
+  const getCaptchaUrl = () => `${captchaUrl}?r=${+new Date()}`
 
   const [rawForm] = Form.useForm()
 

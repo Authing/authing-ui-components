@@ -21,7 +21,7 @@ const App = () => {
   const config: UserConfig = {
     mode: GuardMode.Normal,
     // appHost: 'https://sample-sso.authing.cn',
-    apiHost: 'http://console.authing.localhost:3000',
+    // apiHost: 'http://console.authing.localhost:3000',
     // apiHost: 'http://192.168.50.57:3000',
     // loginMethods: Object.values(LoginMethods),
     // logo:
@@ -71,8 +71,8 @@ const App = () => {
   // }, [])
 
   initAuthClient({
-    appId: '60a722e6b689ce36bab4ac48',
-    appHost: 'http://console.authing.localhost:3000',
+    appId: '60adc2ffca277ee9a84ee25a',
+    // appHost: 'http://console.authing.localhost:3000',
   })
 
   return (
@@ -117,7 +117,7 @@ const App = () => {
         }}
         // onLoad={(a) => console.log(a, '加载完成')}
         // onPwdResetError={(e) => console.log(e)}
-        appId="60a722e6b689ce36bab4ac48"
+        appId="60adc2ffca277ee9a84ee25a"
         // appId="5fd877fb0ba0421962eced94"
         config={config}
       />

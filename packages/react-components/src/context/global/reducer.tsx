@@ -34,6 +34,7 @@ export type IState = {
   guardEvents: GuardEventsHandler
   localesConfig: LocalesConfig
   lang?: Lang
+  realHost: string
 }
 
 const handlers: any = {
