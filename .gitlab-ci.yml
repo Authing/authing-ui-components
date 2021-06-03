@@ -37,7 +37,7 @@ build:
 
 upload:
   stage: upload
-  when: manual
+  # when: manual
   image:
     name: fuergaosi/ossutil:latest
   script:
