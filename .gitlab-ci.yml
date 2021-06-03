@@ -12,7 +12,7 @@ before_script:
   - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
   - echo "$SSH_CONFIG" > ~/.ssh/config
 
-build:
+build:lib:
   stage: build
   when: manual
   cache:
@@ -66,4 +66,4 @@ upload:
       --access-key-secret ${ALIYUN_ACCESS_KEY_SECRET}
       -e ${OSS_REGION_PROD} cp -r -f packages/vue-components/lib oss://${CDN_OSS_PROD}/packages/vue-ui-components/${VERSION}/
   dependencies:
-    - build
+    - build:lib
