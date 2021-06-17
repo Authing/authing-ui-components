@@ -124,6 +124,7 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
           className={className}
           visible={visible}
           lang={lang}
+          userConfig={config}
         />
       </GuardContext>
     </ConfigProvider>

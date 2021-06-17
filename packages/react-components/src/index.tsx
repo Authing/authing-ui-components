@@ -17,9 +17,11 @@ import reportWebVitals from './reportWebVitals'
 
 const App = () => {
   const [lang, setLang] = useState<Lang>('zh-CN')
+  const [title, setTitle] = useState('标题')
 
   const config: UserConfig = {
-    mode: GuardMode.Normal,
+    title,
+    mode: GuardMode.Modal,
     // appHost: 'https://sample-sso.authing.cn',
     // apiHost: 'http://console.authing.localhost:3000',
     // apiHost: 'http://192.168.50.57:3000',
@@ -102,7 +104,12 @@ const App = () => {
       >
         English
       </Button>
+      <input
+        value={title}
+        onChange={(evt) => setTitle(evt.target.value)}
+      ></input>
       <AuthingGuard
+        onLoad={(v) => console.log(v)}
         visible={visible}
         // onLoginTabChange={(v) => console.log(v)}
         // onRegisterTabChange={(v) => console.log(v)}

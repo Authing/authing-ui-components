@@ -272,7 +272,16 @@ export const GuardLayout: FC<{
   id?: string
   style?: React.CSSProperties
   lang?: Lang
-}> = ({ visible, id, className, style, lang }) => {
+  // 这个传下是为了响应 config 变化，好蠢，以后优化
+  userConfig: UserConfig
+}> = ({
+  visible,
+  id,
+  className,
+  style,
+  lang,
+  userConfig: reactiveUserConfig,
+}) => {
   const { t } = useTranslation()
   const {
     state: { guardScenes, authClient, guardEvents, activeTabs, localesConfig },
@@ -295,11 +304,16 @@ export const GuardLayout: FC<{
       guardEvents.onLoginTabChange?.(activeTabs.login)
     }
   }, [activeTabs.login, loading, guardEvents])
+
   useEffect(() => {
     if (!loading) {
       guardEvents.onRegisterTabChange?.(activeTabs.register)
     }
   }, [activeTabs.register, loading, guardEvents])
+
+  useEffect(() => {
+    setValue('userConfig', reactiveUserConfig)
+  }, [reactiveUserConfig, setValue])
 
   // 动画完成后完全隐藏 dom
   const [hidden, setHidden] = useState(false)
@@ -324,7 +338,9 @@ export const GuardLayout: FC<{
     }
 
     guardEvents.onLoad?.(authClient)
+  }, [authClient, errorDetail, guardEvents, loading, t])
 
+  useEffect(() => {
     if (guardConfig.isSSO) {
       trackSession().then((sessionData) => {
         // 这个接口没有 code, data, 直接返回了数据
@@ -335,7 +351,7 @@ export const GuardLayout: FC<{
         }
       })
     }
-  }, [authClient, errorDetail, guardEvents, loading, guardConfig, t])
+  }, [guardConfig.isSSO, guardEvents, authClient, t])
 
   useEffect(() => {
     setValue('config', guardConfig)
