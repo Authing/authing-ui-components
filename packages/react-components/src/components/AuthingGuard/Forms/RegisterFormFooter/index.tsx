@@ -44,7 +44,7 @@ export const RegisterFormFooter: FC<RegisterFormFooterProps> = ({
           <span className="authing-guard-tip">{t('common.alreadyHasAcc')}</span>
           <Button
             onClick={() => setValue('guardScenes', GuardScenes.Login)}
-            className="authing-guard-text-btn"
+            className="authing-guard-text-btn authing-guard-to-login-btn"
             type="text"
           >
             {t('common.loginImmediate')}

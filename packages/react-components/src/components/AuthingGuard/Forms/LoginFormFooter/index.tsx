@@ -63,7 +63,7 @@ export const LoginFormFooter: FC<LoginFormFooterProps> = ({
             <span className="authing-guard-tip">{t('common.noAccYet')}</span>
             <Button
               onClick={() => setValue('guardScenes', GuardScenes.Register)}
-              className="authing-guard-text-btn"
+              className="authing-guard-text-btn authing-guard-to-register-btn"
               type="text"
             >
               {t('common.registerImmediate')}
