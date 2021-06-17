@@ -101,16 +101,7 @@ export const CompleteUserInfoForm: FC<CompleteUserInfoFormProps> = ({
   const formFields = extendsFields.map((def) => {
     const key = `${def.type} ${def.type === 'internal' ? def.name : def.id}`
 
-    return user && (user as any)[def.name] && def.type === 'internal' ? (
-      <Form.Item key={key} label={def.label} style={{ marginBottom: 8 }}>
-        <Input
-          type="text"
-          value={(user as any)[def.name]}
-          readOnly
-          size="large"
-        />
-      </Form.Item>
-    ) : (
+    return (
       <Form.Item
         key={key}
         name={key}
