@@ -1,7 +1,12 @@
 import { Input, Form, Alert } from 'antd'
-import { FormInstance } from 'antd/lib/form'
+import { FormInstance, Rule } from 'antd/lib/form'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import React, { forwardRef, useImperativeHandle, useState } from 'react'
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from 'react'
 
 import {
   getRequiredRules,
@@ -10,7 +15,10 @@ import {
 } from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
 import { NEED_CAPTCHA } from '../../../../components/AuthingGuard/constants'
-import { PasswordLoginFormProps } from '../../../../components/AuthingGuard/types'
+import {
+  PasswordLoginFormProps,
+  User,
+} from '../../../../components/AuthingGuard/types'
 import { LoginFormFooter } from '../../../../components/AuthingGuard/Forms/LoginFormFooter'
 import { useTranslation } from 'react-i18next'
 
@@ -23,6 +31,7 @@ export const PasswordLoginForm = forwardRef<
 
   const { config, authClient, realHost } = state
   const autoRegister = config.autoRegister
+  const passwordLoginMethods = config.passwordLoginMethods
 
   const captchaUrl = `${realHost}/api/v2/security/captcha`
   const getCaptchaUrl = () => `${captchaUrl}?r=${+new Date()}`
@@ -38,29 +47,68 @@ export const PasswordLoginForm = forwardRef<
     onValidateFail && onValidateFail(errorInfo)
   }
 
+  const usernamePlaceholder = useMemo(() => {
+    const loginMethods = passwordLoginMethods
+    if (
+      loginMethods?.includes('email-password') &&
+      loginMethods?.includes('username-password')
+    ) {
+      return t('login.inputEmailUsername')
+    } else if (loginMethods?.includes('username-password')) {
+      return t('login.inputUsername')
+    } else {
+      return t('login.inputEmail')
+    }
+  }, [passwordLoginMethods, t])
+
+  const identityRules = useMemo(() => {
+    const rules: Rule[] = getRequiredRules(t('common.accNotNull'))
+
+    const loginMethods = passwordLoginMethods
+
+    if (
+      loginMethods?.includes('email-password') &&
+      loginMethods?.length === 1
+    ) {
+      rules.push({
+        type: 'email',
+        message: t('common.emailFormatError'),
+      })
+    }
+
+    return rules
+  }, [passwordLoginMethods, t])
+
+  const login = async (
+    values: any,
+    type: 'loginByEmail' | 'loginByUsername'
+  ) => {
+    const identity = values.identity && values.identity.trim()
+    const password = values.password && values.password.trim()
+    const captchaCode = values.captchaCode && values.captchaCode.trim()
+    return await authClient[type](identity, password, {
+      captchaCode,
+      customData: getUserRegisterParams(),
+    })
+  }
+
   const onFinish = async (values: any) => {
     try {
       const identity = values.identity && values.identity.trim()
-      const password = values.password && values.password.trim()
-      const captchaCode = values.captchaCode && values.captchaCode.trim()
 
-      const user = validate('phone', identity)
-        ? await authClient.loginByPhonePassword(identity, password, {
-            autoRegister,
-            captchaCode,
-            params: getUserRegisterParams(),
-          })
-        : validate('email', identity)
-        ? await authClient.loginByEmail(identity, password, {
-            autoRegister,
-            captchaCode,
-            params: getUserRegisterParams(),
-          })
-        : await authClient.loginByUsername(identity, password, {
-            autoRegister,
-            captchaCode,
-            params: getUserRegisterParams(),
-          })
+      let user: User
+      if (
+        passwordLoginMethods?.includes('email-password') &&
+        passwordLoginMethods?.includes('username-password')
+      ) {
+        validate('email', identity)
+          ? (user = await login(values, 'loginByEmail'))
+          : (user = await login(values, 'loginByUsername'))
+      } else if (passwordLoginMethods?.includes('username-password')) {
+        user = await login(values, 'loginByUsername')
+      } else {
+        user = await login(values, 'loginByEmail')
+      }
 
       onSuccess && onSuccess(user)
     } catch (error) {
@@ -83,12 +131,12 @@ export const PasswordLoginForm = forwardRef<
         <Input
           autoComplete="email,username,tel"
           size="large"
-          placeholder={t('login.inputEmailUsernamePhone')}
+          placeholder={usernamePlaceholder}
           prefix={<UserOutlined style={{ color: '#ddd' }} />}
         />
       ),
       name: 'identity',
-      rules: getRequiredRules(t('common.accNotNull')),
+      rules: identityRules,
     },
     {
       component: (

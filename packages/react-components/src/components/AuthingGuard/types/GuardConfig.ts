@@ -11,6 +11,7 @@ import {
   SocialConnectionItem,
   EnterpriseConnectionItem,
   ApplicationConfig,
+  PasswordLoginMethods,
 } from '../../../components/AuthingGuard/api'
 import { Lang } from './Locales'
 
@@ -315,6 +316,7 @@ export interface UserConfig {
    * 用于去品牌化
    */
   headers?: AuthenticationClientOptions['headers']
+  passwordLoginMethods?: PasswordLoginMethods[]
 }
 
 export interface GuardConfig extends UserConfig {

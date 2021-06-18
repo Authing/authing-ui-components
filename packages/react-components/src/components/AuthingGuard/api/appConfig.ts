@@ -49,6 +49,12 @@ export interface UserExtendsField {
 
 export type ExtendsField = InternalExtendsField | UserExtendsField
 
+export interface ApplicationPasswordTabConfig {
+  enabledLoginMethods?: PasswordLoginMethods[]
+}
+
+export type PasswordLoginMethods = 'username-password' | 'email-password'
+
 export interface ApplicationConfig {
   id: string
   cdnBase: string
@@ -108,6 +114,7 @@ export interface ApplicationConfig {
 
   protocol: Protocol
   oidcConfig: OidcClientMetadata
+  passwordTabConfig: ApplicationPasswordTabConfig
 }
 
 export const fetchAppConfig = (appId: string) =>

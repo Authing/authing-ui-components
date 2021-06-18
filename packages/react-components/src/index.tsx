@@ -55,6 +55,7 @@ const App = () => {
     // `,
     // // autoRegister: true,
     // socialConnections: [SocialConnections.AppleWeb],
+    passwordLoginMethods: ['username-password'],
     localesConfig: {
       defaultLang: 'en-US',
       isShowChange: true,
@@ -73,7 +74,7 @@ const App = () => {
   // }, [])
 
   initAuthClient({
-    appId: '60adc2ffca277ee9a84ee25a',
+    appId: '60c02a89a9e0431e271d9ff0',
     // appHost: 'http://console.authing.localhost:3000',
   })
 
@@ -124,7 +125,7 @@ const App = () => {
         }}
         // onLoad={(a) => console.log(a, '加载完成')}
         // onPwdResetError={(e) => console.log(e)}
-        appId="60adc2ffca277ee9a84ee25a"
+        appId="60c02a89a9e0431e271d9ff0"
         // appId="5fd877fb0ba0421962eced94"
         config={config}
       />

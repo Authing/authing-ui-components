@@ -144,6 +144,13 @@ const useGuardConfig = () => {
       userConfig.loginMethods ||
       appConfig.loginTabs?.list ||
       defaultGuardConfig.loginMethods
+
+    // 账密登录的登录拆分
+    const passwordLoginMethods =
+      userConfig.passwordLoginMethods ||
+      appConfig.passwordTabConfig?.enabledLoginMethods ||
+      defaultGuardConfig.loginMethods
+
     // 默认登录方式
     const defaultLoginMethod =
       userConfig.defaultLoginMethod ||
@@ -202,6 +209,7 @@ const useGuardConfig = () => {
         title,
         autoRegister,
         loginMethods,
+        passwordLoginMethods,
         extendsFields: appConfig.extendsFields,
         disableRegister,
         disableResetPwd,
@@ -216,6 +224,7 @@ const useGuardConfig = () => {
     userConfig,
     appConfig.loginTabs?.list,
     appConfig.loginTabs?.default,
+    appConfig.passwordTabConfig?.enabledLoginMethods,
     appConfig.registerTabs?.list,
     appConfig.registerTabs?.default,
     appConfig.name,
