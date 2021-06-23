@@ -48,7 +48,7 @@ export const PasswordLoginForm = forwardRef<
   }
 
   const usernamePlaceholder = useMemo(() => {
-    const loginMethods = passwordLoginMethods
+    const loginMethods = config.passwordLoginMethods
     if (
       loginMethods?.includes('email-password') &&
       loginMethods?.includes('username-password')
@@ -59,12 +59,12 @@ export const PasswordLoginForm = forwardRef<
     } else {
       return t('login.inputEmail')
     }
-  }, [passwordLoginMethods, t])
+  }, [config, t])
 
   const identityRules = useMemo(() => {
     const rules: Rule[] = getRequiredRules(t('common.accNotNull'))
 
-    const loginMethods = passwordLoginMethods
+    const loginMethods = config.passwordLoginMethods
 
     if (
       loginMethods?.includes('email-password') &&
@@ -77,7 +77,7 @@ export const PasswordLoginForm = forwardRef<
     }
 
     return rules
-  }, [passwordLoginMethods, t])
+  }, [config, t])
 
   const login = async (
     values: any,
