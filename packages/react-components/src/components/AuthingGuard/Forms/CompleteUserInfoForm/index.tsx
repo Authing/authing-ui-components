@@ -23,7 +23,7 @@ export const CompleteUserInfoForm: FC<CompleteUserInfoFormProps> = ({
 
   const { extendsFields } = config
 
-  const [user, setUser] = useState<User | null>()
+  const [, setUser] = useState<User | null>()
   const [definitions, setDefinitions] = useState<any[]>([])
 
   const onFinish = async (values: any) => {
