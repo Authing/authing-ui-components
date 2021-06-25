@@ -36,7 +36,7 @@ import { useTranslation } from 'react-i18next'
 import i18n from 'i18next'
 import { changeLang } from '../locales'
 
-const checkConfig = (appId: string, config: UserConfig) => {
+const checkConfig = (appId: string) => {
   // 不要去掉 console.warn，不然 vue 版打包出来每次都会 throw error，估计是 rollup 打包有问题
   if (!appId) {
     console.warn('APP ID: ', appId)
@@ -50,6 +50,8 @@ const useGuardConfig = () => {
     setValue,
   } = useGuardContext()
 
+  const { t } = useTranslation()
+
   const [loading, setLoading] = useState(true)
 
   const [appConfig, setAppConfig] = useState<Partial<ApplicationConfig>>({})
@@ -58,7 +60,7 @@ const useGuardConfig = () => {
 
   useEffect(() => {
     try {
-      checkConfig(appId, userConfig)
+      checkConfig(appId)
 
       setErrorDetail(null)
       setErrorMsg('')
@@ -67,7 +69,7 @@ const useGuardConfig = () => {
       setErrorMsg(e.message)
       console.error(e)
     }
-  }, [appId, userConfig])
+  }, [appId])
 
   // 获取应用配置
   useEffect(() => {
@@ -90,7 +92,7 @@ const useGuardConfig = () => {
       })
       .catch((e: any) => {
         setErrorDetail(e)
-        setErrorMsg(JSON.stringify(e))
+        setErrorMsg(t('common.networkError'))
       })
       .finally(() => {
         setLoading(false)

@@ -179,5 +179,6 @@
   "saveSuccess": "Save successfully",
   "copyFailed": "Copy Failed",
   "repeatPassword": "Please repeat the password",
-  "phoneNotNull": "Mobile phone number cannot be empty"
+  "phoneNotNull": "Mobile phone number cannot be empty",
+  "networkError": "Network error, please retry"
 }
