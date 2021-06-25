@@ -113,7 +113,7 @@ const useGuardConfig = () => {
 
     insertStyles(appConfig?.css, 'appConfig')
     insertStyles(userConfig.contentCss, 'userConfig')
-  }, [appConfig, userConfig])
+  }, [appConfig, userConfig.contentCss])
 
   const guardConfig = useMemo<GuardConfig>(() => {
     /**

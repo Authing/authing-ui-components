@@ -100,7 +100,9 @@ export const removeStyles = (recordKey: STYLE_RECORD_KEY) => {
     return
   }
 
-  insertedRecord[recordKey].innerHTML = ''
+  const styleElt = insertedRecord[recordKey]
+
+  styleElt.parentNode?.removeChild(styleElt)
 
   insertedRecord[recordKey] = null
 }
