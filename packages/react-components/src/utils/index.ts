@@ -53,11 +53,20 @@ export function getDeviceName() {
   return os
 }
 
+export type STYLE_RECORD_KEY = 'appConfig' | 'userConfig'
+
 /**
  * 传对象 {'background-color': 'red'}
  * 传字符串 "CSS 样式"
  */
-export const insertStyles = (styles: string | any) => {
+const insertedRecord: Record<STYLE_RECORD_KEY, any> = {
+  appConfig: null,
+  userConfig: null,
+}
+export const insertStyles = (
+  styles: string | any,
+  recordKey: STYLE_RECORD_KEY
+) => {
   let styleElt, styleSheet
   if ((document as any).createStyleSheet) {
     // IE
@@ -82,6 +91,18 @@ export const insertStyles = (styles: string | any) => {
       }
     }
   }
+
+  insertedRecord[recordKey] = styleElt
+}
+
+export const removeStyles = (recordKey: STYLE_RECORD_KEY) => {
+  if (!insertedRecord[recordKey]) {
+    return
+  }
+
+  insertedRecord[recordKey].innerHTML = ''
+
+  insertedRecord[recordKey] = null
 }
 
 export const useTitle = (title: string, prefix?: string) => {

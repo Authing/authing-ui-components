@@ -1,7 +1,12 @@
 import { message, Spin } from 'antd'
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react'
 
-import { getClassnames, insertStyles, deepMerge } from '../../../utils'
+import {
+  getClassnames,
+  insertStyles,
+  deepMerge,
+  removeStyles,
+} from '../../../utils'
 import { useGuardContext } from '../../../context/global/context'
 import { GuardHeader } from '../../../components/AuthingGuard/Header'
 import { MfaLayout } from '../../../components/AuthingGuard/MfaLayout'
@@ -102,8 +107,12 @@ const useGuardConfig = () => {
   }, [appId])
 
   useEffect(() => {
-    insertStyles(appConfig?.css)
-    insertStyles(userConfig.contentCss)
+    // 先移除之前的
+    removeStyles('appConfig')
+    removeStyles('userConfig')
+
+    insertStyles(appConfig?.css, 'appConfig')
+    insertStyles(userConfig.contentCss, 'userConfig')
   }, [appConfig, userConfig])
 
   const guardConfig = useMemo<GuardConfig>(() => {
