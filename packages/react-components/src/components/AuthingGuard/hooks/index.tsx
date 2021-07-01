@@ -2,7 +2,6 @@ import {
   AuthenticationClient,
   AuthenticationClientOptions,
 } from 'authing-js-sdk'
-import JSEncrypt from 'jsencrypt'
 import { defaultGuardConfig } from '../constants'
 
 let authClient: AuthenticationClient | null = null
@@ -47,11 +46,6 @@ export const initAuthClient = (config: AuthClientConfig) => {
   }
   config.appHost = realHost!
 
-  config.encryptFunction = (text, publicKey) => {
-    const encrypt = new JSEncrypt() // 实例化加密对象
-    encrypt.setPublicKey(publicKey) // 设置公钥
-    return Promise.resolve(encrypt.encrypt(text)) // 加密明文
-  }
   authClient = new AuthenticationClient(config)
 
   return authClient

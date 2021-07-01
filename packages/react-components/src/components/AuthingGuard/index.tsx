@@ -1,6 +1,5 @@
 import { ConfigProvider, message } from 'antd'
 import React, { FC } from 'react'
-import jsencrypt from 'jsencrypt'
 import { AuthenticationClient } from 'authing-js-sdk'
 
 import { GuardContext } from '../../context/global/context'
@@ -78,11 +77,6 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
     requestFrom: 'ui-components',
     lang: localesConfig.defaultLang ?? lang,
     headers,
-    encryptFunction: (text, publicKey) => {
-      const encrypt = new jsencrypt() // 实例化加密对象
-      encrypt.setPublicKey(publicKey) // 设置公钥
-      return Promise.resolve(encrypt.encrypt(text)) // 加密明文
-    },
     onError: (code, msg: any) => {
       if (code === 2020) {
         return

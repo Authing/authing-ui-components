@@ -11001,11 +11001,6 @@ jsdom@^16.4.0:
     ws "^7.2.3"
     xml-name-validator "^3.0.0"
 
-jsencrypt@^3.0.0-rc.1:
-  version "3.0.0-rc.1"
-  resolved "https://registry.npm.taobao.org/jsencrypt/download/jsencrypt-3.0.0-rc.1.tgz#0e0a4744ba43cc557fb5cf62fe8646bceb561b1c"
-  integrity sha1-DgpHRLpDzFV/tc9i/oZGvOtWGxw=
-
 jsencrypt@^3.1.0:
   version "3.2.0"
   resolved "https://registry.npmjs.org/jsencrypt/-/jsencrypt-3.2.0.tgz#09242aabf1984165dcd7698fe6ed163be77c05f8"
