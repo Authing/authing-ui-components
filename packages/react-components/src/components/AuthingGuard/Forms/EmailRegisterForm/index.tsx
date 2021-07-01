@@ -41,7 +41,7 @@ export const EmailRegisterForm = forwardRef<
         email,
         password,
         {
-          browser: navigator.userAgent,
+          browser: typeof navigator !== 'undefined' && navigator.userAgent,
           device: getDeviceName(),
         },
         {

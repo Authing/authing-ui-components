@@ -30,6 +30,10 @@ export const getRequiredRules = (msg: string): Rule[] => {
 }
 
 export function getDeviceName() {
+  if (typeof window === 'undefined') {
+    return null
+  }
+
   const userAgent = window.navigator.userAgent
   const platform = window.navigator.platform
   const macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K']

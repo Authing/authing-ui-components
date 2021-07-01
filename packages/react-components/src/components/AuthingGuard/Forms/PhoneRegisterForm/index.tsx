@@ -43,7 +43,7 @@ export const PhoneRegisterForm = forwardRef<
         code,
         password,
         {
-          browser: navigator.userAgent,
+          browser: typeof navigator !== 'undefined' && navigator.userAgent,
           device: getDeviceName(),
         },
         {
