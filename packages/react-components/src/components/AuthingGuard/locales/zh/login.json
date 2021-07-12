@@ -88,6 +88,6 @@
   "setPwdLimitMsg2": "密码长度至少为 6 位，且要包含英文、数字与符号中的两种",
   "setPwdLimitMsg3": "密码长度至少为 6 位，且要同时包含英文、数字与符号",
   "wechatmpQrcode": "公众号关注登录",
-  "inputEmailUsername": "请输入邮箱或账号",
-  "inputUsername": "请输入账号"
+  "inputEmailUsername": "请输入邮箱或用户名",
+  "inputUsername": "请输入用户名"
 }
