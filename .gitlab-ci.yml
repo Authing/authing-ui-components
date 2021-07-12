@@ -14,8 +14,6 @@ before_script:
 
 build:lib:
   stage: build
-  only:
-    - master
   rules:
     - if: '$CI_COMMIT_REF_NAME != "master" && $CI_COMMIT_TAG =~ "/^$/"'
       when: manual
