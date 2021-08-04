@@ -53,7 +53,10 @@ export interface ApplicationPasswordTabConfig {
   enabledLoginMethods?: PasswordLoginMethods[]
 }
 
-export type PasswordLoginMethods = 'username-password' | 'email-password'
+export type PasswordLoginMethods =
+  | 'username-password'
+  | 'email-password'
+  | 'phone-password'
 
 export interface ApplicationConfig {
   id: string

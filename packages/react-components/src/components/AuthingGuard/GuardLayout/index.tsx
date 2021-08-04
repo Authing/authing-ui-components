@@ -229,6 +229,7 @@ const useGuardConfig = () => {
         socialConnectionObjs,
         defaultRegisterMethod,
         enterpriseConnectionObjs,
+        publicKey: appConfig.publicKey,
       }
     )
   }, [
@@ -245,6 +246,7 @@ const useGuardConfig = () => {
     appConfig.extendsFields,
     appConfig.socialConnections,
     appConfig.identityProviders,
+    appConfig.publicKey,
     loading,
   ])
 

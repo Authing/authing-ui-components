@@ -323,6 +323,7 @@ export interface GuardConfig extends UserConfig {
   socialConnectionObjs: SocialConnectionItem[]
   enterpriseConnectionObjs: EnterpriseConnectionItem[]
   extendsFields: ApplicationConfig['extendsFields']
+  publicKey: ApplicationConfig['publicKey']
 }
 
 export interface LocalesConfig {

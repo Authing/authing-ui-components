@@ -1,4 +1,5 @@
 {
+  "inputAccount": "请输入{{text}}",
   "inputAdUsername": "请输入 AD 用户名",
   "inputAdPwd": "请输入 AD 密码",
   "inputLdapUsername": "请输入 LDAP 用户名",
