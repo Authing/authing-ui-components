@@ -78,7 +78,11 @@ export const defaultGuardConfig: Partial<UserConfig> = {
   registerMethods: [RegisterMethods.Email, RegisterMethods.Phone],
   logo:
     'https://files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png',
-  passwordLoginMethods: ['email-password', 'username-password'],
+  passwordLoginMethods: [
+    'email-password',
+    'username-password',
+    'phone-password',
+  ],
 }
 
 export const defaultLocalesConfig: LocalesConfig = {
