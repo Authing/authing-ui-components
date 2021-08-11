@@ -4,6 +4,7 @@ import { LANG_MAP } from '../types'
 import { useTranslation } from 'react-i18next'
 import { changeLang } from '../locales'
 import { useGuardContext } from '../../../context/global/context'
+import { IconFont } from '../IconFont'
 
 export const ToggleLang: FC = () => {
   const {
@@ -28,18 +29,22 @@ export const ToggleLang: FC = () => {
       }
     >
       <Space
-        size={6}
+        size={1}
         style={{
           alignSelf: 'center',
           color: '#999',
           marginTop: 24,
           cursor: 'pointer',
+          fontSize: 14,
         }}
       >
-        {
-          LANG_MAP.find((item) => item.value === (i18n.language || 'zh-CN'))
-            ?.label
-        }
+        <IconFont type="authing-yuyan" />
+        <span>
+          {
+            LANG_MAP.find((item) => item.value === (i18n.language || 'zh-CN'))
+              ?.label
+          }
+        </span>
       </Space>
     </Dropdown>
   )
