@@ -107,8 +107,7 @@ export const PasswordLoginForm = forwardRef<
 
     const encrypt = authClient.options.encryptFunction
 
-    const { publicKey } = getValue('config')
-
+    const { publicKey, autoRegister } = getValue('config')
     const { code, data, message } = await requestClient.post<User>(
       '/api/v2/login/account',
       {
@@ -118,6 +117,7 @@ export const PasswordLoginForm = forwardRef<
           captchaCode,
           customData: getUserRegisterParams(),
         },
+        autoRegister: autoRegister,
       },
       {
         headers: {

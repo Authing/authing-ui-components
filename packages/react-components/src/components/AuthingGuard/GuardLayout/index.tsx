@@ -459,7 +459,10 @@ export const GuardLayout: FC<{
           ) : (
             layoutMap[guardScenes]
           )}
-          <div>{localesConfig?.isShowChange && <ToggleLang />}</div>
+          {/* <div>{localesConfig?.isShowChange && <ToggleLang />}</div> */}
+          <div>
+            {localesConfig?.isShowChange === false ? null : <ToggleLang />}
+          </div>
         </div>
       </>
     </div>
