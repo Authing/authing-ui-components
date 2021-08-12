@@ -89,11 +89,15 @@ export default {
   mounted() {
     this.config = this.config || {}
     this.config.mode = this.mode ? this.mode : this.config.mode
+    this.config.autoRegister = this.autoRegister ? this.autoRegister : this.config.autoRegister
+    this.config.isSSO = this.isSSO ? this.isSSO : this.config.isSSO
+    this.config.clickCloseable = this.clickCloseable ? this.clickCloseable : this.config.clickCloseable
+    this.config.escCloseable = this.escCloseable ? this.escCloseable : this.config.escCloseable
 
-    this.config.autoRegister = format(this.autoRegister, this.config.autoRegister)
-    this.config.isSSO = format(this.isSSO, this.config.isSSO)
-    this.config.clickCloseable = format(this.clickCloseable, this.config.clickCloseable)
-    this.config.escCloseable = format(this.escCloseable, this.config.escCloseable)
+    // this.config.autoRegister = format(this.autoRegister, this.config.autoRegister)
+    // this.config.isSSO = format(this.isSSO, this.config.isSSO)
+    // this.config.clickCloseable = format(this.clickCloseable, this.config.clickCloseable)
+    // this.config.escCloseable = format(this.escCloseable, this.config.escCloseable)
 
     const guard = new NativeAuthingGuard(this.appId, this.config)
 
