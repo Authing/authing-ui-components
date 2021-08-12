@@ -15,14 +15,7 @@ import {
 } from '@authing/native-js-ui-components'
 import '@authing/native-js-ui-components/lib/index.min.css'
 
-export {
-  getAuthClient,
-  initAuthClient,
-  GuardMode,
-  GuardScenes,
-  LoginMethods,
-  RegisterMethods,
-}
+export { getAuthClient, initAuthClient, GuardMode, GuardScenes, LoginMethods, RegisterMethods }
 
 export default {
   name: 'AuthingGuard',
@@ -38,6 +31,30 @@ export default {
     visible: {
       type: Boolean,
       default: false,
+    },
+    mode: {
+      type: String,
+      required: false, // normal(全屏) modal(弹窗)
+    },
+    autoRegister: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    isSSO: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    clickCloseable: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
+    escCloseable: {
+      type: Boolean,
+      required: false,
+      default: true,
     },
   },
   data() {
@@ -70,6 +87,11 @@ export default {
     },
   },
   mounted() {
+    this.config.mode = this.mode ? this.mode : this.config.mode
+    this.config.autoRegister = this.autoRegister ? this.autoRegister : this.config.autoRegister
+    this.config.isSSO = this.isSSO ? this.isSSO : this.config.isSSO
+    this.config.clickCloseable = this.clickCloseable ? this.clickCloseable : this.config.clickCloseable
+    this.config.escCloseable = this.escCloseable ? this.escCloseable : this.config.escCloseable
     const guard = new NativeAuthingGuard(this.appId, this.config)
 
     const evts = Object.values(GuardEventsCamelToKebabMap)
