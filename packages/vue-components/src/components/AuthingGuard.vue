@@ -50,10 +50,12 @@ export default {
     },
     clickCloseable: {
       type: Boolean,
+      default: true,
       required: false,
     },
     escCloseable: {
       type: Boolean,
+      default: true,
       required: false,
     },
   },
