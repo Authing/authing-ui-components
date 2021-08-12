@@ -33,7 +33,7 @@ export default {
       required: false,
     },
     visible: {
-      type: String,
+      type: Boolean,
       default: false,
     },
     mode: {
@@ -41,20 +41,20 @@ export default {
       required: false, // normal(全屏) modal(弹窗)
     },
     autoRegister: {
-      type: String,
+      type: Boolean,
       required: false,
     },
     isSSO: {
-      type: String,
+      type: Boolean,
       required: false,
     },
     clickCloseable: {
-      type: String,
-      required: false,
+      type: Boolean,
+      required: true,
     },
     escCloseable: {
-      type: String,
-      required: false,
+      type: Boolean,
+      required: true,
     },
   },
   data() {
