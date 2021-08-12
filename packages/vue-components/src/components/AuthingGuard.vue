@@ -43,22 +43,18 @@ export default {
     autoRegister: {
       type: String,
       required: false,
-      default: false,
     },
     isSSO: {
       type: String,
       required: false,
-      default: false,
     },
     clickCloseable: {
       type: String,
       required: false,
-      default: true,
     },
     escCloseable: {
       type: String,
       required: false,
-      default: true,
     },
   },
   data() {
