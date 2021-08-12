@@ -17,6 +17,10 @@ import '@authing/native-js-ui-components/lib/index.min.css'
 
 export { getAuthClient, initAuthClient, GuardMode, GuardScenes, LoginMethods, RegisterMethods }
 
+const format = (a, b) => {
+  return !a || a === 'false' ? b : true
+}
+
 export default {
   name: 'AuthingGuard',
   props: {
@@ -29,7 +33,7 @@ export default {
       required: false,
     },
     visible: {
-      type: Boolean,
+      type: String,
       default: false,
     },
     mode: {
@@ -37,22 +41,22 @@ export default {
       required: false, // normal(全屏) modal(弹窗)
     },
     autoRegister: {
-      type: Boolean,
+      type: String,
       required: false,
       default: false,
     },
     isSSO: {
-      type: Boolean,
+      type: String,
       required: false,
       default: false,
     },
     clickCloseable: {
-      type: Boolean,
+      type: String,
       required: false,
       default: true,
     },
     escCloseable: {
-      type: Boolean,
+      type: String,
       required: false,
       default: true,
     },
@@ -87,11 +91,14 @@ export default {
     },
   },
   mounted() {
+    this.config = this.config || {}
     this.config.mode = this.mode ? this.mode : this.config.mode
-    this.config.autoRegister = this.autoRegister ? this.autoRegister : this.config.autoRegister
-    this.config.isSSO = this.isSSO ? this.isSSO : this.config.isSSO
-    this.config.clickCloseable = this.clickCloseable ? this.clickCloseable : this.config.clickCloseable
-    this.config.escCloseable = this.escCloseable ? this.escCloseable : this.config.escCloseable
+
+    this.config.autoRegister = format(this.autoRegister, this.config.autoRegister)
+    this.config.isSSO = format(this.isSSO, this.config.isSSO)
+    this.config.clickCloseable = format(this.clickCloseable, this.config.clickCloseable)
+    this.config.escCloseable = format(this.escCloseable, this.config.escCloseable)
+
     const guard = new NativeAuthingGuard(this.appId, this.config)
 
     const evts = Object.values(GuardEventsCamelToKebabMap)
