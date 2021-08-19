@@ -27,7 +27,7 @@ export const PasswordLoginForm = forwardRef<
   const { state, getValue } = useGuardContext()
   const { t } = useTranslation()
 
-  const { config, authClient, realHost, userPoolId } = state
+  const { config, authClient, realHost, userPoolId, appId } = state
   const autoRegister = config.autoRegister
 
   const captchaUrl = `${realHost}/api/v2/security/captcha`
@@ -122,6 +122,7 @@ export const PasswordLoginForm = forwardRef<
       {
         headers: {
           'x-authing-userpool-id': userPoolId,
+          'x-authing-app-id': appId,
         },
       }
     )

@@ -151,7 +151,7 @@ export const LoginLayout = () => {
           })
         }
         activeKey={activeTabs[GuardScenes.Login]}
-      ></AuthingTabs>
+      />
 
       {SHOW_SOCIAL_LOGIN_TAB.includes(activeTabs[GuardScenes.Login]) && (
         <SocialAndIdpLogin onFail={onFail} onSuccess={onSuccess} />
