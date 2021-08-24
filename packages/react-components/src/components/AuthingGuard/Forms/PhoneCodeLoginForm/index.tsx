@@ -92,7 +92,11 @@ export const PhoneCodeLoginForm = forwardRef<
         />
       </Form.Item>
 
-      <LoginFormFooter needRegister loading={loading}></LoginFormFooter>
+      <LoginFormFooter
+        needRestPwd
+        needRegister
+        loading={loading}
+      ></LoginFormFooter>
     </Form>
   )
 })
