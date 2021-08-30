@@ -14,17 +14,23 @@ import {
 import { SendPhoneCode } from '../../../../components/AuthingGuard/Forms/SendPhoneCode'
 import { RegisterFormFooter } from '../../../../components/AuthingGuard/Forms/RegisterFormFooter'
 import { useTranslation } from 'react-i18next'
+import { Agreements } from '../Agreements'
 
 export const PhoneRegisterForm = forwardRef<
   FormInstance,
   PhoneRegisterFormProps
 >(({ onSuccess, onFail, onValidateFail }, ref) => {
   const {
-    state: { authClient },
+    state: { authClient, config },
   } = useGuardContext()
   const { t } = useTranslation()
 
   const [rawForm] = Form.useForm()
+
+  const { agreements, agreementEnabled } = config
+
+  /** 表单是否被提交校验过 */
+  const [validated, setValidated] = useState(false)
 
   const [phone, setPhone] = useState('')
   const [loading, setLoading] = useState(false)
@@ -34,9 +40,18 @@ export const PhoneRegisterForm = forwardRef<
     onValidateFail && onValidateFail(errorInfo)
   }
 
+  const [acceptedAgreements, setAcceptedAgreements] = useState(false)
+
   const onFinish = async (values: any) => {
     try {
       await rawForm.validateFields()
+
+      setValidated(true)
+
+      if (agreementEnabled && agreements?.length && !acceptedAgreements) {
+        return
+      }
+
       const { phone, code, password } = values
       const user = await authClient.registerByPhoneCode(
         phone,
@@ -140,6 +155,14 @@ export const PhoneRegisterForm = forwardRef<
           {item.component}
         </Form.Item>
       ))}
+
+      {config.agreementEnabled && Boolean(agreements?.length) && (
+        <Agreements
+          onChange={setAcceptedAgreements}
+          agreements={agreements}
+          showError={validated}
+        />
+      )}
 
       <RegisterFormFooter loading={loading} />
     </Form>

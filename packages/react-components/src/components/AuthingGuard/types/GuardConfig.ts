@@ -12,6 +12,7 @@ import {
   EnterpriseConnectionItem,
   ApplicationConfig,
   PasswordLoginMethods,
+  Agreement,
 } from '../../../components/AuthingGuard/api'
 import { Lang } from './Locales'
 
@@ -324,6 +325,8 @@ export interface GuardConfig extends UserConfig {
   enterpriseConnectionObjs: EnterpriseConnectionItem[]
   extendsFields: ApplicationConfig['extendsFields']
   publicKey: ApplicationConfig['publicKey']
+  agreementEnabled: boolean
+  agreements: Agreement[]
 }
 
 export interface LocalesConfig {

@@ -13,6 +13,7 @@ import { useGuardContext } from '../../../../context/global/context'
 import { EmailRegisterFormProps } from '../../../../components/AuthingGuard/types'
 import { RegisterFormFooter } from '../../../../components/AuthingGuard/Forms/RegisterFormFooter'
 import { useTranslation } from 'react-i18next'
+import { Agreements } from '../Agreements'
 
 export const EmailRegisterForm = forwardRef<
   FormInstance,
@@ -20,8 +21,10 @@ export const EmailRegisterForm = forwardRef<
 >(({ onSuccess, onFail, onValidateFail }, ref) => {
   const { t } = useTranslation()
   const {
-    state: { authClient },
+    state: { authClient, config },
   } = useGuardContext()
+
+  const { agreements, agreementEnabled } = config
 
   const [rawForm] = Form.useForm()
 
@@ -32,9 +35,21 @@ export const EmailRegisterForm = forwardRef<
     onValidateFail && onValidateFail(errorInfo)
   }
 
+  const [acceptedAgreements, setAcceptedAgreements] = useState(false)
+
+  /** 表单是否被提交校验过 */
+  const [validated, setValidated] = useState(false)
+
   const onFinish = async (values: any) => {
     try {
       await rawForm.validateFields()
+
+      setValidated(true)
+
+      if (agreementEnabled && agreements?.length && !acceptedAgreements) {
+        return
+      }
+
       const { email, password } = values
       // 注册并获取登录态
       const user = await authClient.registerByEmail(
@@ -120,6 +135,14 @@ export const EmailRegisterForm = forwardRef<
           {item.component}
         </Form.Item>
       ))}
+
+      {config.agreementEnabled && Boolean(agreements?.length) && (
+        <Agreements
+          onChange={setAcceptedAgreements}
+          agreements={agreements}
+          showError={validated}
+        />
+      )}
 
       <RegisterFormFooter loading={loading} />
     </Form>

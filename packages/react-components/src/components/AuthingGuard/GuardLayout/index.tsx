@@ -230,6 +230,8 @@ const useGuardConfig = () => {
         defaultRegisterMethod,
         enterpriseConnectionObjs,
         publicKey: appConfig.publicKey,
+        agreementEnabled: appConfig.agreementEnabled,
+        agreements: appConfig.agreements,
       }
     )
   }, [
@@ -244,9 +246,11 @@ const useGuardConfig = () => {
     appConfig.ssoPageComponentDisplay?.autoRegisterThenLoginHintInfo,
     appConfig.ssoPageComponentDisplay?.registerBtn,
     appConfig.extendsFields,
+    appConfig.publicKey,
+    appConfig.agreementEnabled,
+    appConfig.agreements,
     appConfig.socialConnections,
     appConfig.identityProviders,
-    appConfig.publicKey,
     loading,
   ])
 
