@@ -93,9 +93,10 @@ export class AuthingGuard {
             this.hide()
           }
 
-          this.eventListeners[nativeEvt].forEach((item: any) => {
+          // TODO 返回最后一个执行函数的值，实际应该只让监听一次
+          return (this.eventListeners[nativeEvt].map((item: any) => {
             return item(...rest)
-          })          
+          })).slice(-1)[0]          
         },
       })
     }, {} as GuardEventsHandler)
