@@ -89,13 +89,13 @@ export class AuthingGuard {
     ).reduce((acc, [reactEvt, nativeEvt]) => {
       return Object.assign({}, acc, {
         [reactEvt]: (...rest: any) => {
-          this.eventListeners[nativeEvt].forEach((item: any) => {
-            item(...rest)
-          })
-
           if (nativeEvt === 'close') {
             this.hide()
           }
+
+          this.eventListeners[nativeEvt].forEach((item: any) => {
+            return item(...rest)
+          })          
         },
       })
     }, {} as GuardEventsHandler)
