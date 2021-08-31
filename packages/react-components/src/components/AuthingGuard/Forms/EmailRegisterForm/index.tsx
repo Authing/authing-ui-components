@@ -1,5 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
-import { Input, Form } from 'antd'
+import { Input, Form, message } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 
@@ -10,7 +10,10 @@ import {
   VALIDATE_PATTERN,
 } from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
-import { EmailRegisterFormProps } from '../../../../components/AuthingGuard/types'
+import {
+  EmailRegisterFormProps,
+  RegisterMethods,
+} from '../../../../components/AuthingGuard/types'
 import { RegisterFormFooter } from '../../../../components/AuthingGuard/Forms/RegisterFormFooter'
 import { useTranslation } from 'react-i18next'
 import { Agreements } from '../Agreements'
@@ -21,7 +24,7 @@ export const EmailRegisterForm = forwardRef<
 >(({ onSuccess, onFail, onValidateFail }, ref) => {
   const { t } = useTranslation()
   const {
-    state: { authClient, config },
+    state: { authClient, config, guardEvents },
   } = useGuardContext()
 
   const { agreements, agreementEnabled } = config
@@ -41,6 +44,34 @@ export const EmailRegisterForm = forwardRef<
   const [validated, setValidated] = useState(false)
 
   const onFinish = async (values: any) => {
+    if (guardEvents.onBeforeRegister) {
+      try {
+        const canRegister = await guardEvents.onBeforeRegister(
+          {
+            type: RegisterMethods.Email,
+            data: {
+              email: values.email,
+              password: values.password,
+            },
+          },
+          authClient
+        )
+
+        if (!canRegister) {
+          setLoading(false)
+          return
+        }
+      } catch (e) {
+        if (typeof e === 'string') {
+          message.error(e)
+        } else {
+          message.error(e.message)
+        }
+        setLoading(false)
+        return
+      }
+    }
+
     try {
       await rawForm.validateFields()
 

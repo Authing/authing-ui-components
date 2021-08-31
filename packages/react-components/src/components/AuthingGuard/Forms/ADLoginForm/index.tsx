@@ -1,11 +1,14 @@
-import { Input, Form } from 'antd'
+import { Input, Form, message } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
 
 import { getRequiredRules } from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
-import { ADLoginFormProps } from '../../../../components/AuthingGuard/types'
+import {
+  ADLoginFormProps,
+  LoginMethods,
+} from '../../../../components/AuthingGuard/types'
 import { LoginFormFooter } from '../../../../components/AuthingGuard/Forms/LoginFormFooter'
 import { useTranslation } from 'react-i18next'
 
@@ -13,7 +16,7 @@ export const ADLoginForm = forwardRef<FormInstance, ADLoginFormProps>(
   ({ onSuccess, onValidateFail, onFail }, ref) => {
     const { t } = useTranslation()
     const { state } = useGuardContext()
-    const { authClient } = state
+    const { authClient, guardEvents } = state
 
     const [loading, setLoading] = useState(false)
 
@@ -25,6 +28,34 @@ export const ADLoginForm = forwardRef<FormInstance, ADLoginFormProps>(
     const [rawForm] = Form.useForm()
 
     const onFinish = async (values: any) => {
+      if (guardEvents.onBeforeLogin) {
+        try {
+          const canLogin = await guardEvents.onBeforeLogin(
+            {
+              type: LoginMethods.AD,
+              data: {
+                identity: values.identity,
+                password: values.password,
+              },
+            },
+            authClient
+          )
+
+          if (!canLogin) {
+            setLoading(false)
+            return
+          }
+        } catch (e) {
+          if (typeof e === 'string') {
+            message.error(e)
+          } else {
+            message.error(e.message)
+          }
+          setLoading(false)
+          return
+        }
+      }
+
       try {
         const identity = values.identity && values.identity.trim()
         const password = values.password && values.password.trim()

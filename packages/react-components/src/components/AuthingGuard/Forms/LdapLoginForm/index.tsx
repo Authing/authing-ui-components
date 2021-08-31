@@ -1,4 +1,4 @@
-import { Input, Form } from 'antd'
+import { Input, Form, message } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
@@ -6,7 +6,10 @@ import React, { forwardRef, useImperativeHandle, useState } from 'react'
 import { getRequiredRules } from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
 import { NEED_CAPTCHA } from '../../../../components/AuthingGuard/constants'
-import { PasswordLoginFormProps } from '../../../../components/AuthingGuard/types'
+import {
+  LoginMethods,
+  PasswordLoginFormProps,
+} from '../../../../components/AuthingGuard/types'
 import { LoginFormFooter } from '../../../../components/AuthingGuard/Forms/LoginFormFooter'
 import { useTranslation } from 'react-i18next'
 
@@ -15,7 +18,7 @@ export const LdapLoginForm = forwardRef<FormInstance, PasswordLoginFormProps>(
     const { t } = useTranslation()
 
     const { state } = useGuardContext()
-    const { config, authClient, realHost } = state
+    const { config, authClient, realHost, guardEvents } = state
     const autoRegister = config.autoRegister
 
     const [rawForm] = Form.useForm()
@@ -33,6 +36,35 @@ export const LdapLoginForm = forwardRef<FormInstance, PasswordLoginFormProps>(
     }
 
     const onFinish = async (values: any) => {
+      if (guardEvents.onBeforeLogin) {
+        try {
+          const canLogin = await guardEvents.onBeforeLogin(
+            {
+              type: LoginMethods.LDAP,
+              data: {
+                identity: values.identity,
+                password: values.password,
+                captchaCode: values.captchaCode,
+              },
+            },
+            authClient
+          )
+
+          if (!canLogin) {
+            setLoading(false)
+            return
+          }
+        } catch (e) {
+          if (typeof e === 'string') {
+            message.error(e)
+          } else {
+            message.error(e.message)
+          }
+          setLoading(false)
+          return
+        }
+      }
+
       try {
         const identity = values.identity && values.identity.trim()
         const password = values.password && values.password.trim()

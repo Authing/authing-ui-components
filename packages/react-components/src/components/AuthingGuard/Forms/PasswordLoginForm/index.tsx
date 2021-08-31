@@ -1,4 +1,4 @@
-import { Input, Form, Alert, message as Message } from 'antd'
+import { Input, Form, Alert, message as Message, message } from 'antd'
 import { FormInstance, Rule } from 'antd/lib/form'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import React, {
@@ -12,6 +12,7 @@ import { getRequiredRules, getUserRegisterParams } from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
 import { NEED_CAPTCHA } from '../../../../components/AuthingGuard/constants'
 import {
+  LoginMethods,
   PasswordLoginFormProps,
   User,
 } from '../../../../components/AuthingGuard/types'
@@ -27,7 +28,7 @@ export const PasswordLoginForm = forwardRef<
   const { state, getValue } = useGuardContext()
   const { t } = useTranslation()
 
-  const { config, authClient, realHost, userPoolId, appId } = state
+  const { config, authClient, realHost, userPoolId, appId, guardEvents } = state
   const autoRegister = config.autoRegister
 
   const captchaUrl = `${realHost}/api/v2/security/captcha`
@@ -141,6 +142,35 @@ export const PasswordLoginForm = forwardRef<
   }
 
   const onFinish = async (values: any) => {
+    if (guardEvents.onBeforeLogin) {
+      try {
+        const canLogin = await guardEvents.onBeforeLogin(
+          {
+            type: LoginMethods.Password,
+            data: {
+              identity: values.identity,
+              password: values.password,
+              captchaCode: values.captchaCode,
+            },
+          },
+          authClient
+        )
+
+        if (!canLogin) {
+          setLoading(false)
+          return
+        }
+      } catch (e) {
+        if (typeof e === 'string') {
+          message.error(e)
+        } else {
+          message.error(e.message)
+        }
+        setLoading(false)
+        return
+      }
+    }
+
     try {
       let user: User | undefined
       user = await login(values)

@@ -191,10 +191,14 @@ export interface GuardEventsHandlerKebab {
   load: GuardEventsHandler['onLoad']
   // 加载失败
   'load-error': GuardEventsHandler['onLoadError']
+  // 登录前，即表单校验完成，请求接口前
+  'before-login': GuardEventsHandler['onBeforeLogin']
   // 用户登录成功
   login: GuardEventsHandler['onLogin']
   // 用户登录失败
   'login-error': GuardEventsHandler['onLoginError']
+  // 注册前，即表单校验完成，请求接口前
+  'before-register': GuardEventsHandler['onBeforeRegister']
   // 注册成功
   register: GuardEventsHandler['onRegister']
   // 注册失败
@@ -223,11 +227,89 @@ export interface GuardEventsHandlerKebab {
   'register-info-completed-error': GuardEventsHandler['onRegisterInfoCompletedError']
 }
 
+export interface PasswordLoginParams {
+  type: LoginMethods.Password
+  data: {
+    // 标识，可能是用户名、邮箱、手机号
+    identity: string
+    // 密码
+    password: string
+    // 图形验证码
+    captchaCode?: string
+  }
+}
+
+export interface LDAPLoginParams {
+  type: LoginMethods.LDAP
+  data: {
+    // 标识，可能是用户名、邮箱、手机号
+    identity: string
+    // 密码
+    password: string
+    // 图形验证码
+    captchaCode?: string
+  }
+}
+
+export interface ADLoginParams {
+  type: LoginMethods.AD
+  data: {
+    // 标识，可能是用户名、邮箱、手机号
+    identity: string
+    // 密码
+    password: string
+  }
+}
+
+export interface PhoneCodeLoginParams {
+  type: LoginMethods.PhoneCode
+  data: {
+    // 手机号
+    phone: string
+    // 手机验证码
+    code: string
+  }
+}
+
+export interface EmailRegisterParams {
+  type: RegisterMethods.Email
+  data: {
+    // 邮箱
+    email: string
+    // 密码
+    password: string
+  }
+}
+
+export interface PhoneRegisterParams {
+  type: RegisterMethods.Phone
+  data: {
+    // 手机号
+    phone: string
+    // 密码
+    password: string
+    // 手机验证码
+    code: string
+  }
+}
+
 export interface GuardEventsHandler {
   onLoad?: (authClient: AuthenticationClient) => void
   onLoadError?: (error: CommonMessage) => void
+  onBeforeLogin?: (
+    loginInfo:
+      | PasswordLoginParams
+      | LDAPLoginParams
+      | ADLoginParams
+      | PhoneCodeLoginParams,
+    authClient: AuthenticationClient
+  ) => boolean | Promise<boolean>
   onLogin?: (user: User, authClient: AuthenticationClient) => void
   onLoginError?: (user: User, authClient: AuthenticationClient) => void
+  onBeforeRegister?: (
+    registerInfo: EmailRegisterParams | PhoneRegisterParams,
+    authClient: AuthenticationClient
+  ) => boolean | Promise<boolean>
   onRegister?: (user: User, authClient: AuthenticationClient) => void
   onRegisterError?: (user: User, authClient: AuthenticationClient) => void
   onPwdEmailSend?: (authClient: AuthenticationClient) => void

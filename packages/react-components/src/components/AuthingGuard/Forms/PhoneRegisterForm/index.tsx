@@ -1,10 +1,13 @@
-import { Input, Form } from 'antd'
+import { Input, Form, message } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
 import { UserOutlined, LockOutlined, SafetyOutlined } from '@ant-design/icons'
 
 import { useGuardContext } from '../../../../context/global/context'
-import { PhoneRegisterFormProps } from '../../../../components/AuthingGuard/types'
+import {
+  PhoneRegisterFormProps,
+  RegisterMethods,
+} from '../../../../components/AuthingGuard/types'
 import {
   getDeviceName,
   getRequiredRules,
@@ -21,7 +24,7 @@ export const PhoneRegisterForm = forwardRef<
   PhoneRegisterFormProps
 >(({ onSuccess, onFail, onValidateFail }, ref) => {
   const {
-    state: { authClient, config },
+    state: { authClient, config, guardEvents },
   } = useGuardContext()
   const { t } = useTranslation()
 
@@ -43,6 +46,35 @@ export const PhoneRegisterForm = forwardRef<
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
 
   const onFinish = async (values: any) => {
+    if (guardEvents.onBeforeRegister) {
+      try {
+        const canRegister = await guardEvents.onBeforeRegister(
+          {
+            type: RegisterMethods.Phone,
+            data: {
+              phone: values.phone,
+              password: values.password,
+              code: values.code,
+            },
+          },
+          authClient
+        )
+
+        if (!canRegister) {
+          setLoading(false)
+          return
+        }
+      } catch (e) {
+        if (typeof e === 'string') {
+          message.error(e)
+        } else {
+          message.error(e.message)
+        }
+        setLoading(false)
+        return
+      }
+    }
+
     try {
       await rawForm.validateFields()
 

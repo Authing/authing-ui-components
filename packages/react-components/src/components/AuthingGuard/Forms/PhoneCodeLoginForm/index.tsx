@@ -1,6 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
 import { FormInstance, Rule } from 'antd/lib/form'
-import { Alert, Form, Input } from 'antd'
+import { Alert, Form, Input, message } from 'antd'
 import { UserOutlined, SafetyOutlined } from '@ant-design/icons'
 
 import {
@@ -9,7 +9,10 @@ import {
   VALIDATE_PATTERN,
 } from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
-import { PhoneCodeLoginFormProps } from '../../../../components/AuthingGuard/types'
+import {
+  LoginMethods,
+  PhoneCodeLoginFormProps,
+} from '../../../../components/AuthingGuard/types'
 import { SendPhoneCode } from '../../../../components/AuthingGuard/Forms/SendPhoneCode'
 import { LoginFormFooter } from '../../../../components/AuthingGuard/Forms/LoginFormFooter'
 import { useTranslation } from 'react-i18next'
@@ -19,7 +22,7 @@ export const PhoneCodeLoginForm = forwardRef<
   PhoneCodeLoginFormProps
 >(({ onSuccess, onFail, onValidateFail }, ref) => {
   const {
-    state: { authClient, config },
+    state: { authClient, config, guardEvents },
   } = useGuardContext()
   const { t } = useTranslation()
 
@@ -42,6 +45,34 @@ export const PhoneCodeLoginForm = forwardRef<
   }
 
   const onFinish = async (values: any) => {
+    if (guardEvents.onBeforeLogin) {
+      try {
+        const canLogin = await guardEvents.onBeforeLogin(
+          {
+            type: LoginMethods.PhoneCode,
+            data: {
+              phone: values.phone,
+              code: values.code,
+            },
+          },
+          authClient
+        )
+
+        if (!canLogin) {
+          setLoading(false)
+          return
+        }
+      } catch (e) {
+        if (typeof e === 'string') {
+          message.error(e)
+        } else {
+          message.error(e.message)
+        }
+        setLoading(false)
+        return
+      }
+    }
+
     try {
       const { phone, code } = values
       const user = await authClient.loginByPhoneCode(phone, code, {
