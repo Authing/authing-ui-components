@@ -21,6 +21,8 @@ const format = (a, b) => {
   return !a || a === 'false' ? b : true
 }
 
+const callbackEvent = ['before-login', 'before-register']
+
 export default {
   name: 'AuthingGuard',
   props: {
@@ -56,6 +58,14 @@ export default {
     escCloseable: {
       type: Boolean,
       default: true,
+      required: false,
+    },
+    onBeforeLogin: {
+      type: Function,
+      required: false,
+    },
+    onBeforeRegister: {
+      type: Function,
       required: false,
     },
   },
@@ -104,6 +114,11 @@ export default {
     const guard = new NativeAuthingGuard(this.appId, this.config)
 
     const evts = Object.values(GuardEventsCamelToKebabMap)
+    const kebabToCamelMap = Object.entries(GuardEventsCamelToKebabMap).reduce((acc, [camel, kebab]) => {
+      return Object.assign({}, acc, {
+        [kebab]: camel,
+      })
+    }, {})
 
     const listeners = evts.reduce((acc, evtName) => {
       return Object.assign({}, acc, {
@@ -111,7 +126,16 @@ export default {
           if (evtName === 'close') {
             this.localVisible = false
           }
-          this.$emit(evtName, ...rest)
+          if (!callbackEvent.includes(evtName)) {
+            this.$emit(evtName, ...rest)
+          } else {
+            const camelEvtName = kebabToCamelMap[evtName]
+
+            if (this[camelEvtName]) {
+              return this[camelEvtName](...rest)
+            }
+            return true
+          }
         },
       })
     }, {})
