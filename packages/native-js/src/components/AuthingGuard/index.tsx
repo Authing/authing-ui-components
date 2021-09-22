@@ -99,7 +99,7 @@ export class AuthingGuard {
             .map((item: any) => {
               return item(...rest)
             })
-            .slice(-1)[0]
+            .slice(-1)[0] ?? true
         },
       })
     }, {} as GuardEventsHandler)
