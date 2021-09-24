@@ -114,10 +114,8 @@ export const PasswordLoginForm = forwardRef<
       {
         account: identity,
         password: await encrypt!(password, publicKey),
-        options: {
-          captchaCode,
-          customData: getUserRegisterParams(),
-        },
+        captchaCode,
+        customData: getUserRegisterParams(),
         autoRegister: autoRegister,
       },
       {

@@ -23,6 +23,7 @@ requestClient.get = async <T>(
     })}`,
     {
       ...init,
+      credentials: 'include',
       headers: {
         ...init?.headers,
         [requestClient.langHeader]: i18n.language,
@@ -43,6 +44,7 @@ requestClient.post = async <T>(
   const res = await fetch(`${requestClient.baseUrl}${path}`, {
     method: 'POST',
     body: JSON.stringify(data),
+    credentials: 'include',
     headers: {
       ...config?.headers,
       'Content-Type': 'application/json',
@@ -56,7 +58,6 @@ requestClient.baseUrl = ''
 requestClient.setBaseUrl = (base: string) => {
   requestClient.baseUrl = base.replace(/\/$/, '')
 }
-
 const DEFAULT_LANG_HEADER = 'x-authing-lang'
 requestClient.langHeader = DEFAULT_LANG_HEADER
 requestClient.setLangHeader = (key: string | undefined) => {
