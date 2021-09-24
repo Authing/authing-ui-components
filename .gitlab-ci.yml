@@ -39,6 +39,24 @@ build:lib:
       - packages/react-components/lib
       - packages/vue-components/lib
     expire_in: 30 days
+    
+sonarqube-check:
+  stage: sonarqube-check
+  image: 
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [""]
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script: 
+    - sonar-scanner
+  allow_failure: true
+  only:
+    - master # or the name of your main branch
 
 upload:oss:
   stage: upload
@@ -72,21 +90,3 @@ upload:oss:
       -e ${OSS_REGION_PROD} cp -r -f packages/vue-components/lib oss://${CDN_OSS_PROD}/packages/vue-ui-components/${VERSION}/
   dependencies:
     - build:lib
-
-sonarqube-check:
-  stage: sonarqube-check
-  image: 
-    name: sonarsource/sonar-scanner-cli:latest
-    entrypoint: [""]
-  variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
-  cache:
-    key: "${CI_JOB_NAME}"
-    paths:
-      - .sonar/cache
-  script: 
-    - sonar-scanner
-  allow_failure: true
-  only:
-    - master # or the name of your main branch
