@@ -111,6 +111,9 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
           guardEvents,
           localesConfig: config.localesConfig,
           realHost: realHost,
+          guardSize: 'middle',
+          showHeader: true,
+          showBottom: true,
         }}
       >
         <GuardLayout

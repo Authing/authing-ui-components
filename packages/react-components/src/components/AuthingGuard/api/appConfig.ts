@@ -12,7 +12,7 @@ import { i18n } from '../locales'
 export enum ApplicationMfaType {
   SMS = 'SMS',
   EMAIL = 'EMAIL',
-  // OTP = 'OTP',
+  OTP = 'OTP',
   // FACE = 'FACE',
   // FINGERPRINT = 'FINGERPRINT',
 }
@@ -23,6 +23,7 @@ export const ApplicationMfaTypeLabel: () => Record<
 > = () => ({
   [ApplicationMfaType.SMS]: i18n.t('common.SMS'),
   [ApplicationMfaType.EMAIL]: i18n.t('common.EmailVerification'),
+  [ApplicationMfaType.OTP]: i18n.t('common.Totp'),
 })
 
 export interface OidcClientMetadata {

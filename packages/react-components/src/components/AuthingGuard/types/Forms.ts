@@ -71,6 +71,8 @@ export interface SmsMFAVerifyFormProps extends BaseFormProps {
 
 export interface SmsMFAFormProps extends BaseFormProps {}
 
+export interface TotpMFAFormProps extends BaseFormProps {}
+
 export interface MFACheckPhoneFormProps {
   mfaToken: string
   onSuccess: (phone: string) => void

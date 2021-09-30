@@ -180,5 +180,6 @@
   "copyFailed": "Copy Failed",
   "repeatPassword": "Please repeat the password",
   "phoneNotNull": "Mobile phone number cannot be empty",
-  "networkError": "Network error, please retry"
+  "networkError": "Network error, please retry",
+  "download": "download"
 }

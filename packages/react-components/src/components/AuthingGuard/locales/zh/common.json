@@ -181,5 +181,7 @@
   "retrievePassword": "找回密码",
   "registrationSuccess": "注册成功",
   "copyFailed": "复制失败",
-  "networkError": "网络错误，请重试"
+  "networkError": "网络错误，请重试",
+  "Totp": "OTP 验证",
+  "download": "下载"
 }

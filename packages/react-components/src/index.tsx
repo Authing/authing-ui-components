@@ -21,9 +21,9 @@ const App = () => {
 
   const config: UserConfig = {
     title,
-    mode: GuardMode.Modal,
+    // mode: GuardMode.Modal,
     // appHost: 'https://sample-sso.authing.cn',
-    // apiHost: 'http://console.authing.localhost:3000',
+    apiHost: 'http://console.authing.localhost:3000',
     // apiHost: 'http://192.168.50.57:3000',
     // loginMethods: Object.values(LoginMethods),
     // logo:
@@ -74,8 +74,8 @@ const App = () => {
   // }, [])
 
   initAuthClient({
-    appId: '60c02a89a9e0431e271d9ff0',
-    // appHost: 'http://console.authing.localhost:3000',
+    appId: '614fe4efaefd69e21419ac34',
+    appHost: 'http://console.authing.localhost:3000',
   })
 
   return (
@@ -111,7 +111,7 @@ const App = () => {
       ></input>
       <AuthingGuard
         onLoad={(v) => console.log(v)}
-        visible={visible}
+        // visible={visible}
         // onLoginTabChange={(v) => console.log(v)}
         // onRegisterTabChange={(v) => console.log(v)}
         // onClose={() => {
@@ -120,13 +120,12 @@ const App = () => {
         //     setVisible(true)
         //   }, 2000)
         // }}
-        onClose={() => {
-          setVisible(false)
-        }}
+        // onClose={() => {
+        //   setVisible(false)
+        // }}
         // onLoad={(a) => console.log(a, '加载完成')}
         // onPwdResetError={(e) => console.log(e)}
-        appId="60c02a89a9e0431e271d9ff0"
-        // appId="5fd877fb0ba0421962eced94"
+        appId="614fe4efaefd69e21419ac34"
         config={config}
       />
     </>

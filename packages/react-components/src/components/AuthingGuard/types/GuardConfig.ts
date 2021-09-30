@@ -411,6 +411,7 @@ export interface GuardConfig extends UserConfig {
   publicKey: ApplicationConfig['publicKey']
   agreementEnabled: boolean
   agreements: Agreement[]
+  cdnBase: string
 }
 
 export interface LocalesConfig {

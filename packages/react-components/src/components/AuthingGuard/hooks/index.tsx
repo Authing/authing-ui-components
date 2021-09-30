@@ -2,10 +2,28 @@ import {
   AuthenticationClient,
   AuthenticationClientOptions,
 } from 'authing-js-sdk'
+import { useEffect, useState } from 'react'
 import { defaultGuardConfig } from '../constants'
 
 let authClient: AuthenticationClient | null = null
 
+function debounce(fn: Function, delay: number, immediate = true) {
+  let timer: any
+
+  return function (this: any) {
+    let context = this
+    let args = arguments
+    timer && clearTimeout(timer)
+
+    if (immediate && !timer) {
+      fn.apply(context, args)
+    }
+
+    timer = setTimeout(function () {
+      fn.apply(context, args)
+    }, delay)
+  }
+}
 export interface AuthClientConfig extends AuthenticationClientOptions {
   /**
    * @deprecated 使用 appHost
@@ -67,4 +85,23 @@ export const getAuthClient = (config?: AuthClientConfig) => {
   }
 
   return authClient
+}
+
+export const useMediaSize = () => {
+  const global = require('globalthis')()
+
+  // isPhoneMedia
+  const [isPhoneMedia, setPhoneMedia] = useState<boolean>(
+    global?.window?.innerWidth <= 719
+  )
+
+  useEffect(() => {
+    const onResize = debounce(() => {
+      setPhoneMedia(global?.window?.innerWidth <= 719)
+    }, 200)
+
+    window.onresize = onResize
+  }, [global])
+
+  return { isPhoneMedia }
 }

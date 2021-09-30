@@ -1,6 +1,6 @@
 import { message } from 'antd'
 import { User } from 'authing-js-sdk'
-import React, { FC, useState } from 'react'
+import React, { FC, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AuthingDropdown } from 'src/common/AuthingDropdown'
 
@@ -10,6 +10,7 @@ import {
 } from '../../../components/AuthingGuard/Forms'
 import { useGuardContext } from '../../../context/global/context'
 import { ApplicationMfaType, ApplicationMfaTypeLabel } from '../api'
+import { TotpMfaVerifyForm } from '../Forms/TotpMfaVerifyForm'
 
 import './style.less'
 
@@ -37,15 +38,18 @@ export const AppMfaLayout: FC<MfaLayoutProps> = () => {
     onFail,
   }
 
-  const formMap = {
+  const formMap: Record<ApplicationMfaType, ReactNode> = {
     [ApplicationMfaType.EMAIL]: <EmailMfaVerifyForm {...formProps} />,
     [ApplicationMfaType.SMS]: <SmsMfaVerifyForm {...formProps} />,
+    [ApplicationMfaType.OTP]: <TotpMfaVerifyForm {...formProps} />,
   }
 
   const availableMfaType = mfaData.applicationMfa
     ?.filter(
       (item) =>
-        item.status && Object.keys(ApplicationMfaType).includes(item.mfaPolicy)
+        item.status &&
+        Object.keys(ApplicationMfaType).includes(item.mfaPolicy) &&
+        type !== item.mfaPolicy
     )
     ?.sort((a, b) => a.sort - b.sort)
     ?.map((item) => ({

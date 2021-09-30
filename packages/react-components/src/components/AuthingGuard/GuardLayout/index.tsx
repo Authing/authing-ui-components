@@ -232,6 +232,7 @@ const useGuardConfig = () => {
         publicKey: appConfig.publicKey,
         agreementEnabled: appConfig.agreementEnabled,
         agreements: appConfig.agreements,
+        cdnBase: appConfig.cdnBase,
       }
     )
   }, [
@@ -249,6 +250,7 @@ const useGuardConfig = () => {
     appConfig.publicKey,
     appConfig.agreementEnabled,
     appConfig.agreements,
+    appConfig.cdnBase,
     appConfig.socialConnections,
     appConfig.identityProviders,
     loading,
@@ -310,13 +312,33 @@ export const GuardLayout: FC<{
 }) => {
   const { t } = useTranslation()
   const {
-    state: { guardScenes, authClient, guardEvents, activeTabs, localesConfig },
+    state: {
+      guardScenes,
+      authClient,
+      guardEvents,
+      activeTabs,
+      localesConfig,
+      guardSize,
+      showHeader,
+      showBottom,
+    },
     setValue,
   } = useGuardContext()
 
   const { realVisible, isControlled, toggleLocalVisible } = useModal(visible)
 
   const { loading, errorMsg, guardConfig, errorDetail } = useGuardConfig()
+
+  const guardSizeClassName = useMemo(() => {
+    switch (guardSize) {
+      case 'large':
+        return 'authing-guard-size_large'
+
+      case 'middle':
+      case 'small':
+        return 'authing-guard-size'
+    }
+  }, [guardSize])
 
   useEffect(() => {
     if (lang) {
@@ -446,6 +468,7 @@ export const GuardLayout: FC<{
           className={getClassnames([
             'authing-guard-container',
             !realVisible && 'authing-guard-container__hidden',
+            guardSizeClassName,
           ])}
         >
           {isModal && guardConfig.clickCloseable && (
@@ -454,7 +477,7 @@ export const GuardLayout: FC<{
             </button>
           )}
 
-          <GuardHeader />
+          {showHeader && <GuardHeader />}
 
           {loading ? (
             <Spin size="large" className="authing-guard-loading" />
@@ -463,10 +486,12 @@ export const GuardLayout: FC<{
           ) : (
             layoutMap[guardScenes]
           )}
-          {/* <div>{localesConfig?.isShowChange && <ToggleLang />}</div> */}
-          <div>
-            {localesConfig?.isShowChange === false ? null : <ToggleLang />}
-          </div>
+
+          {showBottom && (
+            <div className={'authing-guard-bottom'}>
+              {localesConfig?.isShowChange === false ? null : <ToggleLang />}
+            </div>
+          )}
         </div>
       </>
     </div>

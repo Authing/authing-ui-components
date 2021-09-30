@@ -28,6 +28,7 @@ export type IState = {
       mfaPolicy: ApplicationMfaType
       sort: number
     }[]
+    totpMfaEnabled: boolean
   }
   userPoolId: string
   appId: string
@@ -35,6 +36,9 @@ export type IState = {
   localesConfig: LocalesConfig
   lang?: Lang
   realHost: string
+  guardSize: 'large' | 'middle' | 'small'
+  showHeader: boolean
+  showBottom: boolean
 }
 
 const handlers: any = {
