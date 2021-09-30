@@ -1,4 +1,5 @@
 {
+  "inputAccount": "Enter {{text}}",
   "inputAdUsername": "Enter AD username",
   "accBind": "Account Binding",
   "accPwdLoginVerify": "Account login verification",
