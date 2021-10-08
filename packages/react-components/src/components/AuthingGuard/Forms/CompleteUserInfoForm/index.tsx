@@ -7,6 +7,7 @@ import { UploadImage } from '../UploadImage'
 import { requestClient } from '../../api/http'
 import { CompleteUserInfoFormProps } from '../../types'
 import { useTranslation } from 'react-i18next'
+import { i18n } from '../../locales'
 
 export const CompleteUserInfoForm: FC<CompleteUserInfoFormProps> = ({
   onSuccess,
@@ -101,13 +102,10 @@ export const CompleteUserInfoForm: FC<CompleteUserInfoFormProps> = ({
   const formFields = extendsFields.map((def) => {
     const key = `${def.type} ${def.type === 'internal' ? def.name : def.id}`
 
+    const label = i18n.language === 'zh-CN' ? def.label : def.name
+
     return (
-      <Form.Item
-        key={key}
-        name={key}
-        label={def.label}
-        style={{ marginBottom: 8 }}
-      >
+      <Form.Item key={key} name={key} label={label} style={{ marginBottom: 8 }}>
         {INPUT_MAP[def.inputType] || (
           <Input type={def.inputType} size="large" />
         )}
