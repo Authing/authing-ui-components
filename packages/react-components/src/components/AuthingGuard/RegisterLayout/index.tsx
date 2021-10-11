@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next'
 export const RegisterLayout: FC = () => {
   const {
     state: {
-      config: { registerMethods, extendsFields },
+      config: { registerMethods, extendsFields, loginMethods = [] },
       activeTabs,
       guardEvents,
       authClient,
@@ -54,10 +54,12 @@ export const RegisterLayout: FC = () => {
     }
     switch (t) {
       case RegisterMethods.Email:
-        next[GuardScenes.Login] = LoginMethods.Password
+        loginMethods.includes(LoginMethods.Password) &&
+          (next[GuardScenes.Login] = LoginMethods.Password)
         break
       case RegisterMethods.Phone:
-        next[GuardScenes.Login] = LoginMethods.PhoneCode
+        loginMethods.includes(LoginMethods.PhoneCode) &&
+          (next[GuardScenes.Login] = LoginMethods.PhoneCode)
         break
       default:
         break

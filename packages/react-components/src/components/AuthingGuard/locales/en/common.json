@@ -163,7 +163,7 @@
   "bindEmailDoc": "You have not bound the mailbox yet, please enter the mailbox to bind",
   "copy": "Copy",
   "emailNotNull": "E-mail can not be empty",
-  "setPassword": "set password",
+  "setPassword": "Set password",
   "passwordNotNull": "password can not be blank",
   "LDAPAccountNotNull": "LDAP account cannot be empty",
   "captchaCodeNotNull": "verification code must be filled",
@@ -180,5 +180,6 @@
   "copyFailed": "Copy Failed",
   "repeatPassword": "Please repeat the password",
   "phoneNotNull": "Mobile phone number cannot be empty",
-  "networkError": "Network error, please retry"
+  "networkError": "Network error, please retry",
+  "unBindEmaileDoc": "{{email}} has been bound to another account"
 }
