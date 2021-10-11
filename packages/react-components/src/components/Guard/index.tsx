@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { ModuleContext } from 'src/context/module/context'
+import { useAppId } from '../../hooks'
 import { GuardLogin } from '../Login'
 
 export enum GuardModuleType {
@@ -21,6 +22,17 @@ export const Guard: React.FC<{
 
   const [initData, setInitData] = useState({})
 
+  useAppId(appId)
+
+  const renderModule = useMemo(
+    () =>
+      ComponentsMapping[module]({
+        appId,
+        ...initData,
+      }),
+    [appId, initData, module]
+  )
+
   return (
     <>
       <ModuleContext
@@ -30,10 +42,7 @@ export const Guard: React.FC<{
           setInitData,
         }}
       >
-        {ComponentsMapping[module]({
-          appId,
-          ...initData,
-        })}
+        {renderModule}
       </ModuleContext>
     </>
   )

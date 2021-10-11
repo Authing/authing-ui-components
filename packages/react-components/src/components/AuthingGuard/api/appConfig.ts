@@ -1,4 +1,4 @@
-import { requestClient } from './http'
+import { requestClient } from '../../../utils/http'
 import { Lang, Protocol } from '../../../components/AuthingGuard/types'
 import {
   IAzureAdConnectionConfig,
@@ -7,7 +7,7 @@ import {
   OIDCConnectionConfig,
   SocialConnectionItem,
 } from './userPoolConfig'
-import { i18n } from '../locales'
+import { i18n } from '../../../locales'
 
 export enum ApplicationMfaType {
   SMS = 'SMS',
@@ -132,5 +132,8 @@ export interface ApplicationConfig {
 
 export const fetchAppConfig = (appId: string) =>
   requestClient.get<ApplicationConfig>(
-    `/api/v2/applications/${appId}/public-config`
+    `/api/v2/applications/${appId}/public-config`,
+    {
+      credentials: 'include',
+    }
   )

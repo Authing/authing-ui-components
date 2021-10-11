@@ -39,7 +39,7 @@ import { IconFont } from '../IconFont'
 import { ToggleLang } from '../ToggleLang'
 import { useTranslation } from 'react-i18next'
 import i18n from 'i18next'
-import { changeLang } from '../locales'
+import { changeLang } from '../../../locales'
 
 const checkConfig = (appId: string) => {
   // 不要去掉 console.warn，不然 vue 版打包出来每次都会 throw error，估计是 rollup 打包有问题

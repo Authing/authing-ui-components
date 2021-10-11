@@ -19,7 +19,7 @@ import {
 import { LoginFormFooter } from '../../../../components/AuthingGuard/Forms/LoginFormFooter'
 import { useTranslation } from 'react-i18next'
 import { PasswordLoginMethods } from '../../api'
-import { requestClient } from '../../api/http'
+import { requestClient } from '../../../../utils/http'
 
 export const PasswordLoginForm = forwardRef<
   FormInstance,

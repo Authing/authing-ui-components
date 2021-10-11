@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import { Dropdown, Menu, Space } from 'antd'
 import { LANG_MAP } from '../types'
 import { useTranslation } from 'react-i18next'
-import { changeLang } from '../locales'
+import { changeLang } from '../../../locales'
 import { useGuardContext } from '../../../context/global/context'
 import { IconFont } from '../IconFont'
 

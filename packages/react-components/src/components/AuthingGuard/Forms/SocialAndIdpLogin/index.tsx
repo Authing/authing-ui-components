@@ -21,14 +21,14 @@ import {
   IAzureAdConnectionConfig,
   IOAuthConnectionConfig,
 } from '../../../../components/AuthingGuard/api'
-import { requestClient } from '../../api/http'
+import { requestClient } from '../../../../utils/http'
 
 import './style.less'
 import { IconFont } from '../../IconFont'
 import { useScreenSize } from '../../hooks/useScreenSize'
 import { SocialConnectionProvider } from 'authing-js-sdk'
 import { useTranslation } from 'react-i18next'
-import { i18n } from '../../locales'
+import { i18n } from '../../../../locales'
 
 export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
   onFail = () => {},

@@ -58,6 +58,7 @@ requestClient.baseUrl = ''
 requestClient.setBaseUrl = (base: string) => {
   requestClient.baseUrl = base.replace(/\/$/, '')
 }
+
 const DEFAULT_LANG_HEADER = 'x-authing-lang'
 requestClient.langHeader = DEFAULT_LANG_HEADER
 requestClient.setLangHeader = (key: string | undefined) => {

@@ -4,7 +4,7 @@ import { AuthenticationClient } from 'authing-js-sdk'
 
 import { GuardContext } from '../../context/global/context'
 import { GuardScenes } from '../../components/AuthingGuard/types'
-import { requestClient } from '../../components/AuthingGuard/api/http'
+import { requestClient } from '../../utils/http'
 import {
   defaultGuardConfig,
   OTP_MFA_CODE,
@@ -19,7 +19,7 @@ import {
 } from '../../components/AuthingGuard/types/GuardConfig'
 
 import './style.less'
-import { initI18n } from './locales'
+import { initI18n } from '../../locales'
 const PREFIX_CLS = 'authing-ant'
 
 message.config({
