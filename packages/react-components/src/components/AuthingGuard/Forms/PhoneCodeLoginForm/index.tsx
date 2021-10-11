@@ -1,29 +1,38 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
 import { FormInstance, Rule } from 'antd/lib/form'
-import { Alert, Form, Input } from 'antd'
+import { Alert, Form, Input, message } from 'antd'
 import { UserOutlined, SafetyOutlined } from '@ant-design/icons'
 
-import { getRequiredRules, VALIDATE_PATTERN } from '../../../../utils'
+import {
+  getRequiredRules,
+  getUserRegisterParams,
+  VALIDATE_PATTERN,
+} from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
-import { PhoneCodeLoginFormProps } from '../../../../components/AuthingGuard/types'
+import {
+  LoginMethods,
+  PhoneCodeLoginFormProps,
+} from '../../../../components/AuthingGuard/types'
 import { SendPhoneCode } from '../../../../components/AuthingGuard/Forms/SendPhoneCode'
 import { LoginFormFooter } from '../../../../components/AuthingGuard/Forms/LoginFormFooter'
-
-const rulesMap: Record<string, Rule[]> = {
-  phone: getRequiredRules('请输入手机号码').concat({
-    pattern: VALIDATE_PATTERN.phone,
-    message: '手机号码格式不正确',
-  }),
-  code: getRequiredRules('请输入验证码'),
-}
+import { useTranslation } from 'react-i18next'
 
 export const PhoneCodeLoginForm = forwardRef<
   FormInstance,
   PhoneCodeLoginFormProps
 >(({ onSuccess, onFail, onValidateFail }, ref) => {
   const {
-    state: { authClient, config },
+    state: { authClient, config, guardEvents },
   } = useGuardContext()
+  const { t } = useTranslation()
+
+  const rulesMap: Record<string, Rule[]> = {
+    phone: getRequiredRules(t('login.inputPhone')).concat({
+      pattern: VALIDATE_PATTERN.phone,
+      message: t('common.phoneFormateError'),
+    }),
+    code: getRequiredRules(t('common.inputVerifyCode')),
+  }
 
   const [rawForm] = Form.useForm()
 
@@ -36,9 +45,39 @@ export const PhoneCodeLoginForm = forwardRef<
   }
 
   const onFinish = async (values: any) => {
+    if (guardEvents.onBeforeLogin) {
+      try {
+        const canLogin = await guardEvents.onBeforeLogin(
+          {
+            type: LoginMethods.PhoneCode,
+            data: {
+              phone: values.phone,
+              code: values.code,
+            },
+          },
+          authClient
+        )
+
+        if (!canLogin) {
+          setLoading(false)
+          return
+        }
+      } catch (e) {
+        if (typeof e === 'string') {
+          message.error(e)
+        } else {
+          message.error(e.message)
+        }
+        setLoading(false)
+        return
+      }
+    }
+
     try {
       const { phone, code } = values
-      const user = await authClient.loginByPhoneCode(phone, code)
+      const user = await authClient.loginByPhoneCode(phone, code, {
+        params: getUserRegisterParams(),
+      })
       onSuccess && onSuccess(user)
     } catch (error) {
       onFail && onFail(error)
@@ -58,7 +97,7 @@ export const PhoneCodeLoginForm = forwardRef<
     >
       {config.autoRegister && (
         <Alert
-          message="输入手机号验证码登录，如果您没有帐号，我们会自动创建。"
+          message={t('login.phoneAutoRegister')}
           style={{ marginBottom: 24 }}
         />
       )}
@@ -69,20 +108,26 @@ export const PhoneCodeLoginForm = forwardRef<
             setPhone(e.target.value)
           }}
           size="large"
-          placeholder="请输入手机号"
+          placeholder={t('login.inputPhone')}
           prefix={<UserOutlined style={{ color: '#ddd' }} />}
         />
       </Form.Item>
       <Form.Item name="code" rules={rulesMap.code}>
         <Input
           size="large"
-          placeholder="请输入 4 位验证码"
+          placeholder={t('common.inputFourVerifyCode', {
+            length: 4,
+          })}
           prefix={<SafetyOutlined style={{ color: '#ddd' }} />}
-          addonAfter={<SendPhoneCode phone={phone} />}
+          suffix={<SendPhoneCode phone={phone} />}
         />
       </Form.Item>
 
-      <LoginFormFooter needRegister loading={loading}></LoginFormFooter>
+      <LoginFormFooter
+        needRestPwd
+        needRegister
+        loading={loading}
+      ></LoginFormFooter>
     </Form>
   )
 })

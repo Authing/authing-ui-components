@@ -8,6 +8,7 @@ import {
 } from '../../../../components/AuthingGuard/types'
 import { useGuardContext } from '../../../../context/global/context'
 import { EmailScene } from 'authing-js-sdk'
+import { useTranslation } from 'react-i18next'
 
 export const ResetPasswordStep1: FC<ResetPasswordStep1Props> = ({
   onSuccess,
@@ -15,6 +16,7 @@ export const ResetPasswordStep1: FC<ResetPasswordStep1Props> = ({
   const {
     state: { authClient, guardEvents },
   } = useGuardContext()
+  const { t } = useTranslation()
 
   const [loading, setLoading] = useState(false)
 
@@ -27,7 +29,7 @@ export const ResetPasswordStep1: FC<ResetPasswordStep1Props> = ({
         await authClient.sendEmail(value, EmailScene.ResetPassword)
 
         guardEvents.onPwdEmailSend?.(authClient)
-        message.success('邮件发送成功')
+        message.success(t('login.emailSent'))
         onSuccess(ResetPwdMethods.Email, value)
       } catch (e) {
         guardEvents.onPwdEmailSendError?.(e, authClient)
@@ -52,12 +54,12 @@ export const ResetPasswordStep1: FC<ResetPasswordStep1Props> = ({
           {
             validator: (rule, value) => {
               if (!value) {
-                return Promise.reject('手机号或邮箱不能为空')
+                return Promise.reject(t('login.inputPhoneOrEmail'))
               }
               if (validate('email', value) || validate('phone', value)) {
                 return Promise.resolve()
               } else {
-                return Promise.reject('请输入正确的手机号或邮箱')
+                return Promise.reject(t('login.inputCorrectPhone'))
               }
             },
           },
@@ -66,7 +68,7 @@ export const ResetPasswordStep1: FC<ResetPasswordStep1Props> = ({
         <Input
           size="large"
           autoComplete="tel,email"
-          placeholder="请输入手机号或邮箱"
+          placeholder={t('login.inputPhoneOrEmail')}
         />
       </Form.Item>
       <Button
@@ -77,7 +79,7 @@ export const ResetPasswordStep1: FC<ResetPasswordStep1Props> = ({
         htmlType="submit"
         loading={loading}
       >
-        重置密码
+        {t('login.resetPwd')}
       </Button>
     </Form>
   )

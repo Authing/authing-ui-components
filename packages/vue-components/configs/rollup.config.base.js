@@ -62,6 +62,8 @@ export default {
           'GuardScenes',
           'LoginMethods',
           'RegisterMethods',
+          'getAuthClient',
+          'initAuthClient',
         ],
       },
     }),

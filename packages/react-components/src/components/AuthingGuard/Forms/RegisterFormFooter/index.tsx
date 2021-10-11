@@ -4,6 +4,7 @@ import { useGuardContext } from '../../../../context/global/context'
 import { GuardScenes } from '../../../../components/AuthingGuard/types'
 
 import './style.less'
+import { useTranslation } from 'react-i18next'
 
 export interface RegisterFormFooterProps {
   loading: boolean
@@ -12,7 +13,11 @@ export interface RegisterFormFooterProps {
 export const RegisterFormFooter: FC<RegisterFormFooterProps> = ({
   loading,
 }) => {
-  const { setValue } = useGuardContext()
+  const {
+    setValue,
+    state: { config },
+  } = useGuardContext()
+  const { t } = useTranslation()
 
   return (
     <>
@@ -23,18 +28,26 @@ export const RegisterFormFooter: FC<RegisterFormFooterProps> = ({
         loading={loading}
         block
       >
-        注册
+        {loading
+          ? t(
+              `map.${config.text?.registerBtn?.loading}`,
+              config.text?.registerBtn?.loading
+            )
+          : t(
+              `map.${config.text?.registerBtn?.normal}`,
+              config.text?.registerBtn?.normal
+            )}
       </Button>
 
       <div className="authing-guard-form-actions">
         <div className="authing-guard-tip-btn-comb">
-          <span className="authing-guard-tip">已有账号，</span>
+          <span className="authing-guard-tip">{t('common.alreadyHasAcc')}</span>
           <Button
             onClick={() => setValue('guardScenes', GuardScenes.Login)}
-            className="authing-guard-text-btn"
+            className="authing-guard-text-btn authing-guard-to-login-btn"
             type="text"
           >
-            立即登录
+            {t('common.loginImmediate')}
           </Button>
         </div>
       </div>

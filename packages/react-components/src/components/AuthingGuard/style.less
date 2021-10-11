@@ -1,3 +1,9 @@
+@import '~antd/lib/style/mixins/index.less';
+
+*[class*='authing-'] {
+  @import '~antd/lib/style/core/global.less';
+}
+
 .authing-guard-text-btn {
   color: #396aff;
   padding: 0;
@@ -9,10 +15,24 @@
   }
 }
 
+.authing-text-center {
+  text-align: center;
+  .authing-code-input {
+    justify-content: center;
+  }
+  .authing-dropdown-menu-container {
+    text-align: left;
+  }
+}
+
 .authing-guard-form-actions {
   display: flex;
   justify-content: space-between;
   margin-top: 8px;
+  align-items: center;
+  .authing-ant-divider-vertical {
+    visibility: hidden;
+  }
 }
 
 .authing-guard-tip {
@@ -61,4 +81,23 @@
 
 .authing-guard-pointer {
   cursor: pointer;
+}
+
+@media only screen and (max-width: 719px) {
+  .authing-guard-form-actions {
+    .authing-ant-divider-vertical {
+      visibility: initial;
+    }
+    justify-content: flex-end !important;
+    .authing-guard-text-btn {
+      color: #999999;
+      font-size: 12px;
+    }
+    .authing-guard-tip-btn-comb {
+      margin-left: initial !important;
+      font-size: 12px;
+      font-weight: 400;
+      color: #999999;
+    }
+  }
 }

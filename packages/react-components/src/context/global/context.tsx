@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react'
+import React, { useCallback, useReducer } from 'react'
 import { createBaseContext, IBaseContext, BaseContextComponent } from '../base'
 import { reducer, IState } from './reducer'
 
@@ -24,9 +24,9 @@ export function GuardContext({
 }: BaseContextComponent<Record<string, any>>) {
   const [state, dispatch] = useReducer(reducer, value)
   const getValue = (key: keyof IState) => state[key]
-  const setValue = (key: keyof IState, value: any) => {
+  const setValue = useCallback((key: keyof IState, value: any) => {
     dispatch({ type: 'SET_VALUE', key, value })
-  }
+  }, [])
 
   let ctx: IGuardContext = {
     state,

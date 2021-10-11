@@ -1,25 +1,27 @@
 {
   "name": "@authing/react-ui-components",
-  "version": "2.0.6",
+  "version": "2.4.52",
   "private": false,
   "main": "lib/index.min.js",
   "typings": "lib/index.d.ts",
   "dependencies": {
     "antd": "^4.8.0",
-    "authing-js-sdk": "^4.6.2",
-    "jsencrypt": "^3.0.0-rc.1",
+    "authing-js-sdk": "4.20.23",
     "qs": "^6.9.4"
   },
   "peerDependencies": {
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react": "16.14.0",
+    "react-dom": "16.14.0"
   },
   "scripts": {
     "start": "PORT=3006 node scripts/start.js",
     "build": "node scripts/build.js",
     "build:lib": "node scripts/lib.js",
-    "test": "node scripts/test.js",
-    "prepublishOnly": "yarn run build:lib"
+    "test": "node scripts/test.js"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   },
   "eslintConfig": {
     "extends": [
@@ -139,6 +141,8 @@
     "file-loader": "6.1.1",
     "fs-extra": "^9.0.1",
     "html-webpack-plugin": "4.5.0",
+    "i18next": "^20.1.0",
+    "i18next-browser-languagedetector": "^6.1.0",
     "identity-obj-proxy": "3.0.0",
     "jest": "26.6.0",
     "jest-circus": "26.6.0",
@@ -154,12 +158,15 @@
     "postcss-loader": "3.0.0",
     "postcss-normalize": "8.0.1",
     "postcss-preset-env": "6.7.0",
+    "postcss-rename-selector": "^0.1.1",
     "postcss-safe-parser": "5.0.2",
     "prettier": "^2.1.2",
-    "react": "^17.0.1",
+    "query-string": "^7.0.0",
+    "react": "16.14.0",
     "react-app-polyfill": "^2.0.0",
     "react-dev-utils": "^11.0.0",
-    "react-dom": "^17.0.1",
+    "react-dom": "16.14.0",
+    "react-i18next": "^11.8.12",
     "react-refresh": "^0.8.3",
     "resolve": "1.18.1",
     "resolve-url-loader": "^3.1.2",

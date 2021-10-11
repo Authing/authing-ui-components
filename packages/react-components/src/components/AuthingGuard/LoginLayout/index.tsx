@@ -1,7 +1,7 @@
 import { message } from 'antd'
 import { User } from 'authing-js-sdk'
 import { FormInstance } from 'antd/lib/form'
-import React, { useRef } from 'react'
+import React, { useCallback, useRef } from 'react'
 
 import { useGuardContext } from '../../../context/global/context'
 import {
@@ -13,8 +13,9 @@ import {
   PhoneCodeLoginForm,
 } from '../../../components/AuthingGuard/Forms'
 import {
+  OTP_MFA_CODE,
+  APP_MFA_CODE,
   LOGIN_METHODS_MAP,
-  NEED_MFA_CODE,
 } from '../../../components/AuthingGuard/constants'
 import { AuthingTabs } from '../../../common/AuthingTabs'
 import {
@@ -24,25 +25,38 @@ import {
 } from '../../../components/AuthingGuard/types'
 
 import './style.less'
+import { useTranslation } from 'react-i18next'
 
 const useFormActions = () => {
+  const { t } = useTranslation()
+
   const {
     setValue,
     state: { guardEvents, authClient },
   } = useGuardContext()
 
-  const onSuccess = (user: User) => {
-    message.success('登录成功')
-    guardEvents.onLogin?.(user, authClient)
-  }
+  const onSuccess = useCallback(
+    (user: User) => {
+      message.success(t('common.LoginSuccess'))
+      guardEvents.onLogin?.(user, authClient)
+    },
+    [authClient, guardEvents, t]
+  )
 
-  const onFail = (error: any) => {
-    if (error?.code === NEED_MFA_CODE) {
-      setValue('mfaToken', error.data.mfaToken)
-      setValue('guardScenes', GuardScenes.MfaVerify)
-    }
-    guardEvents.onLoginError?.(error, authClient)
-  }
+  const onFail = useCallback(
+    (error: any) => {
+      if (OTP_MFA_CODE === error?.code) {
+        setValue('mfaData', error.data)
+        setValue('guardScenes', GuardScenes.MfaVerify)
+      }
+      if (APP_MFA_CODE === error?.code) {
+        setValue('mfaData', error.data)
+        setValue('guardScenes', GuardScenes.AppMfaVerify)
+      }
+      guardEvents.onLoginError?.(error, authClient)
+    },
+    [authClient, guardEvents, setValue]
+  )
 
   return {
     onFail,
@@ -85,6 +99,9 @@ const useNormalLoginTabs = ({ onSuccess, onFail }: BaseFormProps) => {
         ref={(v) => (formRef.current[LoginMethods.LDAP] = v!)}
       />
     ),
+    [LoginMethods.WechatMpQrcode]: (
+      <QrCodeLoginForm type={LoginMethods.WechatMpQrcode} {...formProps} />
+    ),
     [LoginMethods.AD]: (
       <ADLoginForm
         {...formProps}
@@ -100,7 +117,7 @@ const useNormalLoginTabs = ({ onSuccess, onFail }: BaseFormProps) => {
 
   const tabs = loginMethods.map((item) => ({
     key: item,
-    label: LOGIN_METHODS_MAP[item],
+    label: LOGIN_METHODS_MAP()?.[item]!,
     component: LOGIN_FORM_MAP[item],
   }))
 
@@ -134,7 +151,7 @@ export const LoginLayout = () => {
           })
         }
         activeKey={activeTabs[GuardScenes.Login]}
-      ></AuthingTabs>
+      />
 
       {SHOW_SOCIAL_LOGIN_TAB.includes(activeTabs[GuardScenes.Login]) && (
         <SocialAndIdpLogin onFail={onFail} onSuccess={onSuccess} />

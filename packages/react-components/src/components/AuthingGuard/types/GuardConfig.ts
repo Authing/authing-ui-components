@@ -1,10 +1,20 @@
-import { AuthenticationClient, CommonMessage, User } from 'authing-js-sdk'
+import {
+  AuthenticationClient,
+  AuthenticationClientOptions,
+  CommonMessage,
+  SocialConnectionProvider,
+  User,
+} from 'authing-js-sdk'
 import { QrCodeAuthenticationClient } from 'authing-js-sdk/build/main/lib/authentication/QrCodeAuthenticationClient'
 
 import {
   SocialConnectionItem,
   EnterpriseConnectionItem,
+  ApplicationConfig,
+  PasswordLoginMethods,
+  Agreement,
 } from '../../../components/AuthingGuard/api'
+import { Lang } from './Locales'
 
 export type { AuthenticationClient, CommonMessage, User } from 'authing-js-sdk'
 
@@ -20,6 +30,7 @@ export enum LoginMethods {
   PhoneCode = 'phone-code',
   WxMinQr = 'wechat-miniprogram-qrcode', // 对应社会化登录的 wechat:miniprogram:qrconnect(小程序扫码登录)
   AD = 'ad', // 对应企业身份源的 Windows AD 登录
+  WechatMpQrcode = 'wechatmp-qrcode', // 微信扫码关注登录
 }
 
 export enum RegisterMethods {
@@ -31,7 +42,9 @@ export enum GuardScenes {
   Login = 'login',
   Register = 'register',
   MfaVerify = 'mfaVerify',
+  AppMfaVerify = 'appMfaVerify',
   RestPassword = 'restPassword',
+  CompleteUserInfo = 'completeUserInfo',
 }
 
 export enum ResetPwdMethods {
@@ -42,19 +55,18 @@ export enum ResetPwdMethods {
 export enum SocialConnections {
   Qq = 'qq',
   Weibo = 'weibo',
-  // Alipay = 'alipay',
   Github = 'github',
   Google = 'google',
   WxPc = 'wechat:pc',
   Dingtalk = 'dingtalk',
-  // WxMobile = 'wechat:mobile',
   WxWCorpQr = 'wechatwork:corp:qrconnect',
-  // WxMinQr = 'wechat:miniprogram:qrconnect',
-  // WxWebAuth = 'wechat:webpage-authorization',
-  // WxMinApp = 'wechat:miniprogram:app-launch',
-  // WxMinDefault = 'wechat:miniprogram:default',
   WxWSPQr = 'wechatwork:service-provider:qrconnect',
   WxWSPAuth = 'wechatwork:service-provider:authorization',
+  AlipayWeb = 'alipay:web',
+  AppleWeb = 'apple:web',
+  Baidu = 'baidu',
+  LarkInternalApp = 'lark-internal',
+  LarkMarketPlaceApp = 'lark-public',
 }
 
 export enum Protocol {
@@ -158,8 +170,10 @@ export const GuardEventsCamelToKebabMap = {
   onLoad: 'load',
   onLoadError: 'load-error',
   onLogin: 'login',
+  onBeforeLogin: 'before-login',
   onLoginError: 'login-error',
   onRegister: 'register',
+  onBeforeRegister: 'before-register',
   onRegisterError: 'register-error',
   onPwdEmailSend: 'pwd-email-send',
   onPwdEmailSendError: 'pwd-email-send-error',
@@ -168,6 +182,10 @@ export const GuardEventsCamelToKebabMap = {
   onPwdReset: 'pwd-reset',
   onPwdResetError: 'pwd-reset-error',
   onClose: 'close',
+  onLoginTabChange: 'login-tab-change',
+  onRegisterTabChange: 'register-tab-change',
+  onRegisterInfoCompleted: 'register-info-completed',
+  onRegisterInfoCompletedError: 'register-info-completed-error',
 } as const
 
 export interface GuardEventsHandlerKebab {
@@ -175,10 +193,14 @@ export interface GuardEventsHandlerKebab {
   load: GuardEventsHandler['onLoad']
   // 加载失败
   'load-error': GuardEventsHandler['onLoadError']
+  // 登录前，即表单校验完成，请求接口前
+  'before-login': GuardEventsHandler['onBeforeLogin']
   // 用户登录成功
   login: GuardEventsHandler['onLogin']
   // 用户登录失败
   'login-error': GuardEventsHandler['onLoginError']
+  // 注册前，即表单校验完成，请求接口前
+  'before-register': GuardEventsHandler['onBeforeRegister']
   // 注册成功
   register: GuardEventsHandler['onRegister']
   // 注册失败
@@ -197,13 +219,99 @@ export interface GuardEventsHandlerKebab {
   'pwd-reset-error': GuardEventsHandler['onPwdResetError']
   // 表单关闭事件
   close: GuardEventsHandler['onClose']
+  // 登录的 tab 切换
+  'login-tab-change': GuardEventsHandler['onLoginTabChange']
+  // 注册的 tab 切换
+  'register-tab-change': GuardEventsHandler['onRegisterTabChange']
+  // 注册信息补充完毕
+  'register-info-completed': GuardEventsHandler['onRegisterInfoCompleted']
+  // 注册信息补充失败
+  'register-info-completed-error': GuardEventsHandler['onRegisterInfoCompletedError']
+}
+
+export interface PasswordLoginParams {
+  type: LoginMethods.Password
+  data: {
+    // 标识，可能是用户名、邮箱、手机号
+    identity: string
+    // 密码
+    password: string
+    // 图形验证码
+    captchaCode?: string
+  }
+}
+
+export interface LDAPLoginParams {
+  type: LoginMethods.LDAP
+  data: {
+    // 标识，可能是用户名、邮箱、手机号
+    identity: string
+    // 密码
+    password: string
+    // 图形验证码
+    captchaCode?: string
+  }
+}
+
+export interface ADLoginParams {
+  type: LoginMethods.AD
+  data: {
+    // 标识，可能是用户名、邮箱、手机号
+    identity: string
+    // 密码
+    password: string
+  }
+}
+
+export interface PhoneCodeLoginParams {
+  type: LoginMethods.PhoneCode
+  data: {
+    // 手机号
+    phone: string
+    // 手机验证码
+    code: string
+  }
+}
+
+export interface EmailRegisterParams {
+  type: RegisterMethods.Email
+  data: {
+    // 邮箱
+    email: string
+    // 密码
+    password: string
+  }
+}
+
+export interface PhoneRegisterParams {
+  type: RegisterMethods.Phone
+  data: {
+    // 手机号
+    phone: string
+    // 密码
+    password: string
+    // 手机验证码
+    code: string
+  }
 }
 
 export interface GuardEventsHandler {
   onLoad?: (authClient: AuthenticationClient) => void
   onLoadError?: (error: CommonMessage) => void
+  onBeforeLogin?: (
+    loginInfo:
+      | PasswordLoginParams
+      | LDAPLoginParams
+      | ADLoginParams
+      | PhoneCodeLoginParams,
+    authClient: AuthenticationClient
+  ) => boolean | Promise<boolean>
   onLogin?: (user: User, authClient: AuthenticationClient) => void
   onLoginError?: (user: User, authClient: AuthenticationClient) => void
+  onBeforeRegister?: (
+    registerInfo: EmailRegisterParams | PhoneRegisterParams,
+    authClient: AuthenticationClient
+  ) => boolean | Promise<boolean>
   onRegister?: (user: User, authClient: AuthenticationClient) => void
   onRegisterError?: (user: User, authClient: AuthenticationClient) => void
   onPwdEmailSend?: (authClient: AuthenticationClient) => void
@@ -222,17 +330,54 @@ export interface GuardEventsHandler {
     authClient: AuthenticationClient
   ) => void
   onClose?: () => void
+  onLoginTabChange?: (activeTab: LoginMethods) => void
+  onRegisterTabChange?: (activeTab: RegisterMethods) => void
+  onRegisterInfoCompleted?: (
+    user: User,
+    udfs: {
+      definition: any
+      value: any
+    }[],
+    authClient: AuthenticationClient
+  ) => void
+  onRegisterInfoCompletedError?: (
+    error: CommonMessage,
+    udfs: {
+      definition: any
+      value: any
+    }[],
+    authClient: AuthenticationClient
+  ) => void
 }
 
 export interface UserConfig {
   logo?: string
-  appId?: string
   title?: string
+  zIndex?: number
   isSSO?: boolean
   mode?: GuardMode
+  /**
+   * @deprecated 使用 appHost
+   */
   apiHost?: string
+  /**
+   * @deprecated 使用 appHost
+   */
   appDomain?: string
+  appHost?: string
   contentCss?: string
+  text?: {
+    loginBtn?: {
+      normal?: string
+      loading?: string
+    }
+    registerBtn?: {
+      normal?: string
+      loading?: string
+    }
+    // 登录 tab
+    loginTabs?: Partial<Record<LoginMethods, string>>
+  }
   escCloseable?: boolean
   autoRegister?: boolean
   clickCloseable?: boolean
@@ -244,12 +389,32 @@ export interface UserConfig {
   enterpriseConnections?: string[]
   defaultLoginMethod?: LoginMethods
   registerMethods?: RegisterMethods[]
-  socialConnections?: SocialConnections[]
+  socialConnections?: (SocialConnections | SocialConnectionProvider)[]
   defaultRegisterMethod?: RegisterMethods
   qrCodeScanOptions?: Parameters<QrCodeAuthenticationClient['startScanning']>[1]
+  /**
+   * 国际化处理
+   */
+  localesConfig?: LocalesConfig
+  lang?: Lang
+  /**
+   * 用于去品牌化
+   */
+  headers?: AuthenticationClientOptions['headers']
+  passwordLoginMethods?: PasswordLoginMethods[]
 }
 
 export interface GuardConfig extends UserConfig {
   socialConnectionObjs: SocialConnectionItem[]
   enterpriseConnectionObjs: EnterpriseConnectionItem[]
+  extendsFields: ApplicationConfig['extendsFields']
+  publicKey: ApplicationConfig['publicKey']
+  agreementEnabled: boolean
+  agreements: Agreement[]
+}
+
+export interface LocalesConfig {
+  defaultLang?: Lang
+  isShowChange?: boolean
+  onChange?: (lang: Lang) => void
 }

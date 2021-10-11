@@ -3,10 +3,14 @@ import shortid from 'shortid'
 import React, { FC, useEffect } from 'react'
 import { Button, Avatar, Space, Tooltip, message } from 'antd'
 
-import { popupCenter } from '../../../../utils'
+import { isWechatBrowser, popupCenter } from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
-import { NEED_MFA_CODE } from '../../../../components/AuthingGuard/constants'
 import {
+  APP_MFA_CODE,
+  OTP_MFA_CODE,
+} from '../../../../components/AuthingGuard/constants'
+import {
+  Lang,
   Protocol,
   SocialAndIdpLoginProps,
 } from '../../../../components/AuthingGuard/types'
@@ -20,28 +24,42 @@ import {
 import { requestClient } from '../../api/http'
 
 import './style.less'
+import { IconFont } from '../../IconFont'
+import { useScreenSize } from '../../hooks/useScreenSize'
+import { SocialConnectionProvider } from 'authing-js-sdk'
+import { useTranslation } from 'react-i18next'
+import { i18n } from '../../locales'
 
 export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
   onFail = () => {},
   onSuccess = () => {},
 }) => {
   const {
-    state: { config, userPoolId },
+    state: { config, userPoolId, appId, authClient },
   } = useGuardContext()
+  const { t } = useTranslation()
 
   const noForm = !config.loginMethods?.length
 
+  const [screenSize] = useScreenSize()
+
   useEffect(() => {
-    const onMessage = (event: MessageEvent) => {
+    const onMessage = (evt: MessageEvent) => {
       // TODO: event.origin是指发送的消息源，一定要进行验证！！！
 
-      const { code, message: errMsg, data } = event.data
-      // TODO: 和前端约定
+      const { code, message: errMsg, data, event } = evt.data
+
+      const { source, eventType } = event || {}
+
+      // 社会化登录是用 authing-js-sdk 实现的，不用再在这里回调了
+      if (source === 'authing' && eventType === 'socialLogin') {
+        return
+      }
 
       try {
         const parsedMsg = JSON.parse(errMsg)
         const { code: authingCode } = parsedMsg
-        if (authingCode === NEED_MFA_CODE) {
+        if ([OTP_MFA_CODE, APP_MFA_CODE].includes(authingCode)) {
           onFail(parsedMsg)
           return
         }
@@ -51,9 +69,10 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
 
       if (code !== undefined) {
         if (code === 200) {
+          localStorage.setItem('_authing_token', data?.token)
           onSuccess(data)
         } else {
-          message.error(JSON.stringify(errMsg))
+          message.error(errMsg)
         }
       }
     }
@@ -92,7 +111,7 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
                 state,
                 protocol: i.protocol,
                 userPoolId,
-                appId: config.appId,
+                appId,
                 referer: window.location.href,
                 connection: { providerIentifier: i.identifier },
               }
@@ -100,7 +119,9 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
             popupCenter(url)
           }}
         >
-          使用 {i.displayName} 登录
+          {t('login.loginBy', {
+            name: i.displayName,
+          })}
         </Button>
       )
     } else if (i.protocol === Protocol.SAML) {
@@ -116,7 +137,9 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
             popupCenter(config.samlRequest!)
           }}
         >
-          使用 {i.displayName} 登录
+          {t('login.loginBy', {
+            name: i.displayName,
+          })}
         </Button>
       )
     } else if (i.protocol === Protocol.CAS) {
@@ -133,7 +156,9 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
             popupCenter(config.casConnectionLoginUrl!)
           }}
         >
-          使用 {i.displayName} 登录
+          {t('login.loginBy', {
+            name: i.displayName,
+          })}
         </Button>
       )
     } else if (i.protocol === Protocol.OAUTH) {
@@ -150,7 +175,9 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
             popupCenter(config.authUrl!)
           }}
         >
-          使用 {i.displayName} 登录
+          {t('login.loginBy', {
+            name: i.displayName,
+          })}
         </Button>
       )
     } else if (i.protocol === Protocol.AZURE_AD) {
@@ -166,7 +193,9 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
             popupCenter(configItem.authorizationUrl)
           }}
         >
-          使用 {i.displayName} 登录
+          {t('login.loginBy', {
+            name: i.displayName,
+          })}
         </Button>
       )
     } else {
@@ -174,34 +203,70 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
     }
   })
 
-  const socialLoginButtons = config.socialConnectionObjs.map((item) => {
-    const url = item.authorizationUrl + '?from_guard=1'
-    const cls = `authing-icon authing-${item.provider.replace(/:/g, '-')}`
-
-    return noForm ? (
-      <Button
-        key={item.provider}
-        block
-        size="large"
-        className="authing-guard-third-login-btn"
-        icon={<i className={cls} style={{ fontSize: 20, marginRight: 8 }} />}
-        onClick={async () => {
-          popupCenter(url)
-        }}
-      >
-        {item.name}
-      </Button>
-    ) : (
-      <Tooltip key={item.provider} title={item.name}>
-        <div
-          className="authing-social-login-item"
-          onClick={() => popupCenter(url)}
-        >
-          <i className={cls} />
-        </div>
-      </Tooltip>
+  const socialLoginButtons = config.socialConnectionObjs
+    .filter((item) =>
+      isWechatBrowser()
+        ? item.provider === SocialConnectionProvider.WECHATMP
+        : item.provider !== SocialConnectionProvider.WECHATMP
     )
-  })
+    .map((item) => {
+      const iconType = `authing-${item.provider.replace(/:/g, '-')}`
+
+      const authorization_params: Record<string, any> = {}
+      if (item.provider === SocialConnectionProvider.BAIDU) {
+        authorization_params.display = screenSize
+      }
+
+      const onLogin = () => {
+        authClient.social.authorize(item.provider, {
+          onSuccess(user) {
+            onSuccess(user)
+          },
+          onError(code, msg) {
+            try {
+              const parsedMsg = JSON.parse(msg)
+              const { code: authingCode } = parsedMsg
+              if ([OTP_MFA_CODE, APP_MFA_CODE].includes(authingCode)) {
+                onFail(parsedMsg)
+                return
+              }
+            } catch (e) {
+              // do nothing...
+            }
+
+            message.error(msg)
+          },
+          authorization_params,
+        })
+      }
+
+      return noForm ? (
+        <Button
+          key={item.provider}
+          block
+          size="large"
+          className="authing-guard-third-login-btn"
+          icon={
+            <IconFont
+              type={iconType}
+              style={{ fontSize: 20, marginRight: 8 }}
+            />
+          }
+          onClick={onLogin}
+        >
+          {item.tooltip?.[i18n.language as Lang] || item.name}
+        </Button>
+      ) : (
+        <Tooltip
+          key={item.provider}
+          title={item.tooltip?.[i18n.language as Lang] || item.name}
+        >
+          <div className="authing-social-login-item" onClick={onLogin}>
+            <IconFont type={iconType} />
+          </div>
+        </Tooltip>
+      )
+    })
 
   const idp =
     config.enterpriseConnectionObjs.length > 0 ? (
@@ -218,7 +283,7 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
     ) : null
 
   const socialLogin =
-    config.socialConnectionObjs.length > 0 && noForm ? (
+    socialLoginButtons.length > 0 && noForm ? (
       <Space
         size={12}
         className="authing-guard-full-width-space"
@@ -227,9 +292,11 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
         {socialLoginButtons}
       </Space>
     ) : (
-      config.socialConnectionObjs.length > 0 && (
+      socialLoginButtons.length > 0 && (
         <>
-          <div className="authing-social-login-title">第三方账号登录</div>
+          <div className="authing-social-login-title">
+            {t('login.thridAccLogin')}
+          </div>
           <div className="authing-social-login-list">{socialLoginButtons}</div>
         </>
       )

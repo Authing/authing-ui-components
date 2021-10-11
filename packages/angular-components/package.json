@@ -1,6 +1,6 @@
 {
   "name": "angular-components",
-  "version": "0.0.1",
+  "version": "2.4.52",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -8,10 +8,9 @@
     "build:lib": "ng build NgUIComponent --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "prepublishOnly": "yarn run build:lib"
+    "e2e": "ng e2e"
   },
-  "private": false,
+  "private": true,
   "dependencies": {
     "@angular/animations": "~10.2.0",
     "@angular/common": "~10.2.0",
@@ -21,7 +20,7 @@
     "@angular/platform-browser": "~10.2.0",
     "@angular/platform-browser-dynamic": "~10.2.0",
     "@angular/router": "~10.2.0",
-    "@authing/native-js-ui-components": "2.0.6",
+    "@authing/native-js-ui-components": "^2.4.52",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"

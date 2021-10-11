@@ -1,24 +1,38 @@
-import { Input, Form, Alert } from 'antd'
-import { FormInstance } from 'antd/lib/form'
+import { Input, Form, Alert, message as Message, message } from 'antd'
+import { FormInstance, Rule } from 'antd/lib/form'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import React, { forwardRef, useImperativeHandle, useState } from 'react'
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from 'react'
 
-import { getRequiredRules, validate } from '../../../../utils'
+import { getRequiredRules, getUserRegisterParams } from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
 import { NEED_CAPTCHA } from '../../../../components/AuthingGuard/constants'
-import { PasswordLoginFormProps } from '../../../../components/AuthingGuard/types'
+import {
+  LoginMethods,
+  PasswordLoginFormProps,
+  User,
+} from '../../../../components/AuthingGuard/types'
 import { LoginFormFooter } from '../../../../components/AuthingGuard/Forms/LoginFormFooter'
-
-const captchaUrl = '/api/v2/security/captcha'
-const getCaptchaUrl = () => `${captchaUrl}?r=${+new Date()}`
+import { useTranslation } from 'react-i18next'
+import { PasswordLoginMethods } from '../../api'
+import { requestClient } from '../../api/http'
 
 export const PasswordLoginForm = forwardRef<
   FormInstance,
   PasswordLoginFormProps
 >(({ onSuccess, onValidateFail, onFail }, ref) => {
-  const { state } = useGuardContext()
-  const { config, authClient } = state
+  const { state, getValue } = useGuardContext()
+  const { t } = useTranslation()
+
+  const { config, authClient, realHost, userPoolId, appId, guardEvents } = state
   const autoRegister = config.autoRegister
+
+  const captchaUrl = `${realHost}/api/v2/security/captcha`
+  const getCaptchaUrl = () => `${captchaUrl}?r=${+new Date()}`
 
   const [rawForm] = Form.useForm()
 
@@ -31,28 +45,134 @@ export const PasswordLoginForm = forwardRef<
     onValidateFail && onValidateFail(errorInfo)
   }
 
+  const loginMethodsText = useMemo<
+    Record<
+      PasswordLoginMethods,
+      {
+        t: string
+        sort: number
+      }
+    >
+  >(
+    () => ({
+      'email-password': {
+        t: t('common.email'),
+        sort: 2,
+      },
+      'phone-password': {
+        t: t('common.phoneNumber'),
+        sort: 1,
+      },
+      'username-password': {
+        t: t('common.username'),
+        sort: 0,
+      },
+    }),
+    [t]
+  )
+
+  const usernamePlaceholder = useMemo(
+    () =>
+      t('login.inputAccount', {
+        text: config.passwordLoginMethods
+          ?.map((item) => loginMethodsText[item])
+          .sort((a, b) => a.sort - b.sort)
+          .map((item) => item.t)
+          .join(' / '),
+      }),
+    [config.passwordLoginMethods, loginMethodsText, t]
+  )
+
+  const identityRules = useMemo(() => {
+    const rules: Rule[] = getRequiredRules(t('common.accNotNull'))
+
+    const loginMethods = config.passwordLoginMethods
+
+    if (
+      loginMethods?.includes('email-password') &&
+      loginMethods?.length === 1
+    ) {
+      rules.push({
+        type: 'email',
+        message: t('common.emailFormatError'),
+      })
+    }
+
+    return rules
+  }, [config, t])
+
+  const login = async (values: any) => {
+    const identity = values.identity && values.identity.trim()
+    const password = values.password && values.password.trim()
+    const captchaCode = values.captchaCode && values.captchaCode.trim()
+
+    const encrypt = authClient.options.encryptFunction
+
+    const { publicKey, autoRegister } = getValue('config')
+    const { code, data, message } = await requestClient.post<User>(
+      '/api/v2/login/account',
+      {
+        account: identity,
+        password: await encrypt!(password, publicKey),
+        captchaCode,
+        customData: getUserRegisterParams(),
+        autoRegister: autoRegister,
+      },
+      {
+        headers: {
+          'x-authing-userpool-id': userPoolId,
+          'x-authing-app-id': appId,
+        },
+      }
+    )
+
+    if (code === 200) {
+      return data
+    } else {
+      Message.error(message)
+      // eslint-disable-next-line no-throw-literal
+      throw {
+        code,
+        message,
+        data,
+      }
+    }
+  }
+
   const onFinish = async (values: any) => {
+    if (guardEvents.onBeforeLogin) {
+      try {
+        const canLogin = await guardEvents.onBeforeLogin(
+          {
+            type: LoginMethods.Password,
+            data: {
+              identity: values.identity,
+              password: values.password,
+              captchaCode: values.captchaCode,
+            },
+          },
+          authClient
+        )
+
+        if (!canLogin) {
+          setLoading(false)
+          return
+        }
+      } catch (e) {
+        if (typeof e === 'string') {
+          message.error(e)
+        } else {
+          message.error(e.message)
+        }
+        setLoading(false)
+        return
+      }
+    }
+
     try {
-      const identity = values.identity && values.identity.trim()
-      const password = values.password && values.password.trim()
-      const captchaCode = values.captchaCode && values.captchaCode.trim()
-
-      const user = validate('phone', identity)
-        ? await authClient.loginByPhonePassword(identity, password, {
-            autoRegister,
-            captchaCode,
-          })
-        : validate('email', identity)
-        ? await authClient.loginByEmail(identity, password, {
-            autoRegister,
-            captchaCode,
-          })
-        : await authClient.loginByUsername(identity, password, {
-            autoRegister,
-            captchaCode,
-          })
-
-      onSuccess && onSuccess(user)
+      let user: User | undefined
+      user = await login(values)
+      user && onSuccess && onSuccess(user)
     } catch (error) {
       if (error.code === NEED_CAPTCHA && verifyCodeUrl === null) {
         setNeedCaptcha(true)
@@ -73,33 +193,33 @@ export const PasswordLoginForm = forwardRef<
         <Input
           autoComplete="email,username,tel"
           size="large"
-          placeholder="请输入邮箱、用户名或手机号"
+          placeholder={usernamePlaceholder}
           prefix={<UserOutlined style={{ color: '#ddd' }} />}
         />
       ),
       name: 'identity',
-      rules: getRequiredRules('账号不能为空'),
+      rules: identityRules,
     },
     {
       component: (
         <Input.Password
           size="large"
-          placeholder="请输入登录密码"
+          placeholder={t('login.inputLoginPwd')}
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
         />
       ),
       name: 'password',
-      rules: getRequiredRules('密码不能为空'),
+      rules: getRequiredRules(t('common.passwordNotNull')),
     },
     {
       component: (
         <Input
           size="large"
-          placeholder="请输入图形验证码"
+          placeholder={t('login.inputCaptchaCode')}
           addonAfter={
             <img
               src={verifyCodeUrl ?? ''}
-              alt="图形验证码"
+              alt={t('login.captchaCode')}
               style={{ height: '2em', cursor: 'pointer' }}
               onClick={() => setVerifyCodeUrl(getCaptchaUrl())}
             />
@@ -107,7 +227,7 @@ export const PasswordLoginForm = forwardRef<
         />
       ),
       name: 'captchaCode',
-      rules: getRequiredRules('验证码不能为空'),
+      rules: getRequiredRules(t('common.captchaCodeNotNull')),
       hide: !needCaptcha,
     },
   ]
@@ -120,10 +240,7 @@ export const PasswordLoginForm = forwardRef<
       onFinish={onFinish}
     >
       {autoRegister && (
-        <Alert
-          message="输入帐号密码登录，如果您没有帐号，我们会自动创建。"
-          style={{ marginBottom: 24 }}
-        />
+        <Alert message={t('login.autoRegister')} style={{ marginBottom: 24 }} />
       )}
       {formItems.map(
         (item) =>

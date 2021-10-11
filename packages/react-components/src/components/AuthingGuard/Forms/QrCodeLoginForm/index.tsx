@@ -1,6 +1,5 @@
 import { Spin } from 'antd'
-import React, { FC, useEffect, useMemo } from 'react'
-import { QRCodeUserInfo } from 'authing-js-sdk/build/main/lib/authentication/types'
+import React, { FC, useEffect, useMemo, useRef } from 'react'
 
 import { useGuardContext } from '../../../../context/global/context'
 import {
@@ -20,40 +19,33 @@ export const QrCodeLoginForm: FC<QrLoginFormProps> = ({
     state: { authClient, config },
   } = useGuardContext()
 
+  const timerRef = useRef<any>()
+
   const client = useMemo(() => {
     return {
       [LoginMethods.AppQr]: authClient.qrcode,
       [LoginMethods.WxMinQr]: authClient.wxqrcode,
+      [LoginMethods.WechatMpQrcode]: authClient.wechatmpqrcode,
     }[type]
   }, [type, authClient])
 
   useEffect(() => {
-    const onScanningSuccess = async (
-      userInfo: QRCodeUserInfo,
-      ticket: string
-    ) => {
-      config.qrCodeScanOptions?.onSuccess?.(userInfo as QRCodeUserInfo, ticket)
-
-      const { token } = userInfo
-      let fullUserInfo: User
-      if (!token) {
-        // 轮询接口不会返回完整用户信息，需要使用 ticket 换取
-        fullUserInfo = (await client.exchangeUserInfo(ticket)) as User
-      } else {
-        fullUserInfo = userInfo as User
-      }
-      onSuccess && onSuccess(fullUserInfo)
-    }
-
     client.startScanning('authingGuardQrcode', {
+      autoExchangeUserInfo: true,
       ...config.qrCodeScanOptions,
-      onSuccess: onScanningSuccess,
+      onStart(timer) {
+        timerRef.current = timer
+      },
+      onSuccess(user) {
+        onSuccess && onSuccess(user as User)
+      },
       onError: (message) => {
         config.qrCodeScanOptions?.onError?.(message)
 
         onFail && onFail(`${message}`)
       },
     })
+    return () => clearInterval(timerRef.current)
   }, [client, config.qrCodeScanOptions, onFail, onSuccess])
 
   return (

@@ -1,5 +1,5 @@
 import { requestClient } from './http'
-import { Protocol } from '../../../components/AuthingGuard/types'
+import { Lang, Protocol } from '../../../components/AuthingGuard/types'
 import {
   IAzureAdConnectionConfig,
   ICasConnectionConfig,
@@ -7,6 +7,23 @@ import {
   OIDCConnectionConfig,
   SocialConnectionItem,
 } from './userPoolConfig'
+import { i18n } from '../locales'
+
+export enum ApplicationMfaType {
+  SMS = 'SMS',
+  EMAIL = 'EMAIL',
+  // OTP = 'OTP',
+  // FACE = 'FACE',
+  // FINGERPRINT = 'FINGERPRINT',
+}
+
+export const ApplicationMfaTypeLabel: () => Record<
+  ApplicationMfaType,
+  string
+> = () => ({
+  [ApplicationMfaType.SMS]: i18n.t('common.SMS'),
+  [ApplicationMfaType.EMAIL]: i18n.t('common.EmailVerification'),
+})
 
 export interface OidcClientMetadata {
   grant_types: string[]
@@ -31,6 +48,22 @@ export interface UserExtendsField {
 }
 
 export type ExtendsField = InternalExtendsField | UserExtendsField
+
+export interface ApplicationPasswordTabConfig {
+  enabledLoginMethods?: PasswordLoginMethods[]
+}
+
+export interface Agreement {
+  id: number
+  title: string
+  required: boolean
+  lang: Lang
+}
+
+export type PasswordLoginMethods =
+  | 'username-password'
+  | 'email-password'
+  | 'phone-password'
 
 export interface ApplicationConfig {
   id: string
@@ -91,6 +124,10 @@ export interface ApplicationConfig {
 
   protocol: Protocol
   oidcConfig: OidcClientMetadata
+  passwordTabConfig: ApplicationPasswordTabConfig
+
+  agreementEnabled: boolean
+  agreements: Agreement[]
 }
 
 export const fetchAppConfig = (appId: string) =>

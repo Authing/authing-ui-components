@@ -17,6 +17,9 @@
   color: #abb9d7;
   font-size: 24px;
   margin-bottom: 24px;
+  width: 100%;
+  word-break: break-all;
+  text-align: center;
 }
 
 // .large .logo {
@@ -27,3 +30,23 @@
 //   color: #333333;
 //   font-size: 32px;
 // }
+
+@media only screen and (max-width: 719px) {
+  .authing-guard-header {
+    align-items: flex-start;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 40px;
+    padding-bottom: 48px;
+  }
+  .authing-guard-title {
+    margin-bottom: 0;
+    padding-left: 8px;
+    color: #333333;
+    font-weight: 500;
+  }
+  .authing-guard-logo {
+    margin: 0;
+  }
+}

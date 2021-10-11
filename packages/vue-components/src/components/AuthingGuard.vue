@@ -4,6 +4,8 @@
 
 <script>
 import {
+  getAuthClient,
+  initAuthClient,
   AuthingGuard as NativeAuthingGuard,
   GuardEventsCamelToKebabMap,
   GuardMode,
@@ -13,12 +15,18 @@ import {
 } from '@authing/native-js-ui-components'
 import '@authing/native-js-ui-components/lib/index.min.css'
 
-export { GuardMode, GuardScenes, LoginMethods, RegisterMethods }
+export { getAuthClient, initAuthClient, GuardMode, GuardScenes, LoginMethods, RegisterMethods }
+
+const format = (a, b) => {
+  return !a || a === 'false' ? b : true
+}
+
+const callbackEvent = ['before-login', 'before-register']
 
 export default {
   name: 'AuthingGuard',
   props: {
-    userPoolId: {
+    appId: {
       type: String,
       required: true,
     },
@@ -29,6 +37,36 @@ export default {
     visible: {
       type: Boolean,
       default: false,
+    },
+    mode: {
+      type: String,
+      required: false, // normal(全屏) modal(弹窗)
+    },
+    autoRegister: {
+      type: Boolean,
+      required: false,
+    },
+    isSSO: {
+      type: Boolean,
+      required: false,
+    },
+    clickCloseable: {
+      type: Boolean,
+      default: true,
+      required: false,
+    },
+    escCloseable: {
+      type: Boolean,
+      default: true,
+      required: false,
+    },
+    onBeforeLogin: {
+      type: Function,
+      required: false,
+    },
+    onBeforeRegister: {
+      type: Function,
+      required: false,
     },
   },
   data() {
@@ -61,9 +99,26 @@ export default {
     },
   },
   mounted() {
-    const guard = new NativeAuthingGuard(this.userPoolId, this.config)
+    this.config = this.config || {}
+    this.config.mode = this.mode ? this.mode : this.config.mode
+    this.config.autoRegister = this.autoRegister ? this.autoRegister : this.config.autoRegister
+    this.config.isSSO = this.isSSO ? this.isSSO : this.config.isSSO
+    this.config.clickCloseable = this.clickCloseable ? this.clickCloseable : this.config.clickCloseable
+    this.config.escCloseable = this.escCloseable ? this.escCloseable : this.config.escCloseable
+
+    // this.config.autoRegister = format(this.autoRegister, this.config.autoRegister)
+    // this.config.isSSO = format(this.isSSO, this.config.isSSO)
+    // this.config.clickCloseable = format(this.clickCloseable, this.config.clickCloseable)
+    // this.config.escCloseable = format(this.escCloseable, this.config.escCloseable)
+
+    const guard = new NativeAuthingGuard(this.appId, this.config)
 
     const evts = Object.values(GuardEventsCamelToKebabMap)
+    const kebabToCamelMap = Object.entries(GuardEventsCamelToKebabMap).reduce((acc, [camel, kebab]) => {
+      return Object.assign({}, acc, {
+        [kebab]: camel,
+      })
+    }, {})
 
     const listeners = evts.reduce((acc, evtName) => {
       return Object.assign({}, acc, {
@@ -71,7 +126,16 @@ export default {
           if (evtName === 'close') {
             this.localVisible = false
           }
-          this.$emit(evtName, ...rest)
+          if (!callbackEvent.includes(evtName)) {
+            this.$emit(evtName, ...rest)
+          } else {
+            const camelEvtName = kebabToCamelMap[evtName]
+
+            if (this[camelEvtName]) {
+              return this[camelEvtName](...rest)
+            }
+            return true
+          }
         },
       })
     }, {})

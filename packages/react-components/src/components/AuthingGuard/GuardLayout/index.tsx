@@ -1,21 +1,27 @@
 import { message, Spin } from 'antd'
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react'
 
-import { getClassnames, insertStyles } from '../../../utils'
+import {
+  getClassnames,
+  insertStyles,
+  deepMerge,
+  removeStyles,
+} from '../../../utils'
 import { useGuardContext } from '../../../context/global/context'
 import { GuardHeader } from '../../../components/AuthingGuard/Header'
 import { MfaLayout } from '../../../components/AuthingGuard/MfaLayout'
 import { LoginLayout } from '../../../components/AuthingGuard/LoginLayout'
-import { defaultGuardConfig } from '../../../components/AuthingGuard/constants'
+import {
+  defaultGuardConfig,
+  HIDE_SOCIALS,
+} from '../../../components/AuthingGuard/constants'
 import { RegisterLayout } from '../../../components/AuthingGuard/RegisterLayout'
 import { ResetPwdLayout } from '../../../components/AuthingGuard/ResetPwdLayout'
 import {
   SessionData,
   trackSession,
-  UserPoolConfig,
   fetchAppConfig,
   ApplicationConfig,
-  fetchUserPoolConfig,
   SocialConnectionItem,
 } from '../../../components/AuthingGuard/api'
 import {
@@ -23,32 +29,35 @@ import {
   GuardScenes,
   GuardConfig,
   UserConfig,
+  Lang,
 } from '../../../components/AuthingGuard/types'
 
 import './style.less'
+import { CompleteUserInfoLayout } from '../CompleteUserInfoLayout'
+import { AppMfaLayout } from '../AppMFALayout'
+import { IconFont } from '../IconFont'
+import { ToggleLang } from '../ToggleLang'
+import { useTranslation } from 'react-i18next'
+import i18n from 'i18next'
+import { changeLang } from '../locales'
 
-const checkConfig = (userPoolId: string, config: UserConfig) => {
+const checkConfig = (appId: string) => {
   // 不要去掉 console.warn，不然 vue 版打包出来每次都会 throw error，估计是 rollup 打包有问题
-  if (!userPoolId) {
-    console.warn('用户池 ID: ', userPoolId)
-    throw new Error('请传入用户池 ID')
-  }
-  if (config.isSSO && (!config.appDomain || !config.appId)) {
-    console.warn('config 配置: ', config)
-    throw new Error('SSO 模式请传入 appDomain 和 appId 字段')
+  if (!appId) {
+    console.warn('APP ID: ', appId)
+    throw new Error(i18n.t('common.unAppId'))
   }
 }
 
 const useGuardConfig = () => {
   const {
-    state: { userPoolId, userConfig },
+    state: { appId, userConfig },
+    setValue,
   } = useGuardContext()
 
-  const [loadingUserPool, setLoadingUserPool] = useState(true)
-  const [loadingApp, setLoadingApp] = useState(true)
-  const [userPoolConfig, setUserPoolConfig] = useState<Partial<UserPoolConfig>>(
-    {}
-  )
+  const { t } = useTranslation()
+
+  const [loading, setLoading] = useState(true)
 
   const [appConfig, setAppConfig] = useState<Partial<ApplicationConfig>>({})
   const [errorMsg, setErrorMsg] = useState('')
@@ -56,7 +65,7 @@ const useGuardConfig = () => {
 
   useEffect(() => {
     try {
-      checkConfig(userPoolId, userConfig)
+      checkConfig(appId)
 
       setErrorDetail(null)
       setErrorMsg('')
@@ -65,60 +74,17 @@ const useGuardConfig = () => {
       setErrorMsg(e.message)
       console.error(e)
     }
-  }, [userPoolId, userConfig])
-
-  // 获取用户池配置
-  useEffect(() => {
-    setLoadingUserPool(true)
-
-    if (!userPoolId) {
-      setLoadingUserPool(false)
-      return
-    }
-
-    fetchUserPoolConfig(userPoolId)
-      .then((res) => {
-        if (res.code !== 200) {
-          setErrorMsg(res.message!)
-          setErrorDetail(res)
-          return
-        }
-        // 某些社会化登录会在 tabs 中显示，或者无法在 Guard 中使用，所以底部不显示了
-        const hideSocials = [
-          'wechat:miniprogram:app-launch',
-          'wechat:miniprogram:qrconnect',
-          'wechat:webpage-authorization',
-          'wechat:miniprogram:default',
-          'wechatwork:addressbook',
-          'wechat:mobile',
-          'alipay',
-        ]
-        if (res.data) {
-          res.data.socialConnections = res.data?.socialConnections.filter(
-            (item) => !hideSocials.includes(item.provider)
-          )
-        }
-
-        setUserPoolConfig(res.data!)
-      })
-      .catch((e: any) => {
-        setErrorMsg(JSON.stringify(e))
-        setErrorDetail(e)
-      })
-      .finally(() => {
-        setLoadingUserPool(false)
-      })
-  }, [userPoolId])
+  }, [appId])
 
   // 获取应用配置
   useEffect(() => {
-    setLoadingApp(true)
+    setLoading(true)
 
-    if (!userConfig.appId) {
-      setLoadingApp(false)
+    if (!appId) {
+      setLoading(false)
       return
     }
-    fetchAppConfig(userConfig.appId)
+    fetchAppConfig(appId)
       .then((res) => {
         if (res.code !== 200) {
           setErrorMsg(res.message!)
@@ -127,52 +93,55 @@ const useGuardConfig = () => {
         }
 
         setAppConfig(res.data!)
+        setValue('userPoolId', res.data?.userPoolId)
       })
       .catch((e: any) => {
         setErrorDetail(e)
-        setErrorMsg(JSON.stringify(e))
+        setErrorMsg(t('common.networkError'))
       })
       .finally(() => {
-        setLoadingApp(false)
+        setLoading(false)
       })
-  }, [userConfig.appId])
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [appId])
 
   useEffect(() => {
-    insertStyles(appConfig?.css)
-    insertStyles(userConfig.contentCss)
-  }, [appConfig, userConfig])
+    // 先移除之前的
+    removeStyles('appConfig')
+    removeStyles('userConfig')
 
-  const loading = useMemo(() => {
-    return loadingApp || loadingUserPool
-  }, [loadingUserPool, loadingApp])
+    insertStyles(appConfig?.css, 'appConfig')
+    insertStyles(userConfig.contentCss, 'userConfig')
+  }, [appConfig, userConfig.contentCss])
 
   const guardConfig = useMemo<GuardConfig>(() => {
     /**
-     * 将用户池配置、应用配置与用户手动传入的配置合并
+     * 将用应用配置与用户手动传入的配置合并
      * 优先级：用户传入 > 应用 > 用户池
      */
 
     // 社会化登录
     let socialConnectionObjs: SocialConnectionItem[] | undefined
     // 默认展示所有社会化登录
-    if (!userConfig.socialConnections && !appConfig.socialConnections) {
-      socialConnectionObjs = [...(userPoolConfig.socialConnections || [])]
+    if (!userConfig.socialConnections) {
+      socialConnectionObjs = [...(appConfig.socialConnections || [])]
     } else {
-      const socials =
-        userConfig.socialConnections ||
-        appConfig.socialConnections?.map?.((item) => item.provider) ||
-        []
-      socialConnectionObjs = userPoolConfig.socialConnections?.filter?.(
-        (item) => socials.includes(item.provider)
+      const socials = userConfig.socialConnections
+      socialConnectionObjs = appConfig.socialConnections?.filter?.((item) =>
+        socials.includes(item.provider)
       )
     }
 
+    // 某些社会化登录会在 tabs 中显示，或者无法在 Guard 中使用，所以底部不显示了
+    socialConnectionObjs = socialConnectionObjs?.filter(
+      (item) => !HIDE_SOCIALS.includes(item.provider)
+    )
+
     // 企业身份源
     let enterpriseConnectionObjs: ApplicationConfig['identityProviders']
-    if (!userConfig.appId) {
-      // 企业身份源都要绑定 AppId
-      enterpriseConnectionObjs = []
-    } else if (userConfig.enterpriseConnections) {
+
+    if (userConfig.enterpriseConnections) {
       enterpriseConnectionObjs =
         appConfig.identityProviders?.filter?.((item) =>
           userConfig.enterpriseConnections!.includes(item.identifier)
@@ -186,6 +155,13 @@ const useGuardConfig = () => {
       userConfig.loginMethods ||
       appConfig.loginTabs?.list ||
       defaultGuardConfig.loginMethods
+
+    // 账密登录的登录拆分
+    const passwordLoginMethods =
+      userConfig.passwordLoginMethods ||
+      appConfig.passwordTabConfig?.enabledLoginMethods ||
+      defaultGuardConfig.loginMethods
+
     // 默认登录方式
     const defaultLoginMethod =
       userConfig.defaultLoginMethod ||
@@ -206,18 +182,12 @@ const useGuardConfig = () => {
     // 应用名
     const title = loading
       ? ''
-      : userConfig.title ??
-        appConfig.name ??
-        userPoolConfig.name ??
-        defaultGuardConfig.title
+      : userConfig.title ?? appConfig.name ?? defaultGuardConfig.title
 
     // 应用 logo
     const logo = loading
       ? ''
-      : userConfig.logo ??
-        appConfig.logo ??
-        userPoolConfig.logo ??
-        defaultGuardConfig.logo
+      : userConfig.logo ?? appConfig.logo ?? defaultGuardConfig.logo
 
     // 是否自动注册
     const autoRegister =
@@ -241,37 +211,47 @@ const useGuardConfig = () => {
         !defaultGuardConfig.disableResetPwd
       )
 
-    return ({
-      ...defaultGuardConfig,
-      ...userConfig,
-      logo,
-      title,
-      autoRegister,
-      loginMethods,
-      disableRegister,
-      disableResetPwd,
-      registerMethods,
-      defaultLoginMethod,
-      socialConnectionObjs,
-      defaultRegisterMethod,
-      enterpriseConnectionObjs,
-    } as unknown) as GuardConfig
+    return deepMerge<GuardConfig>(
+      {} as GuardConfig,
+      defaultGuardConfig,
+      userConfig,
+      {
+        logo,
+        title,
+        autoRegister,
+        loginMethods,
+        passwordLoginMethods,
+        extendsFields: appConfig.extendsFields,
+        disableRegister,
+        disableResetPwd,
+        registerMethods,
+        defaultLoginMethod,
+        socialConnectionObjs,
+        defaultRegisterMethod,
+        enterpriseConnectionObjs,
+        publicKey: appConfig.publicKey,
+        agreementEnabled: appConfig.agreementEnabled,
+        agreements: appConfig.agreements,
+      }
+    )
   }, [
     userConfig,
-    appConfig.socialConnections,
     appConfig.loginTabs?.list,
     appConfig.loginTabs?.default,
+    appConfig.passwordTabConfig?.enabledLoginMethods,
     appConfig.registerTabs?.list,
     appConfig.registerTabs?.default,
     appConfig.name,
     appConfig.logo,
     appConfig.ssoPageComponentDisplay?.autoRegisterThenLoginHintInfo,
     appConfig.ssoPageComponentDisplay?.registerBtn,
+    appConfig.extendsFields,
+    appConfig.publicKey,
+    appConfig.agreementEnabled,
+    appConfig.agreements,
+    appConfig.socialConnections,
     appConfig.identityProviders,
     loading,
-    userPoolConfig.name,
-    userPoolConfig.logo,
-    userPoolConfig.socialConnections,
   ])
 
   return {
@@ -279,7 +259,6 @@ const useGuardConfig = () => {
     errorMsg,
     guardConfig,
     errorDetail,
-    userPoolConfig,
   }
 }
 
@@ -317,15 +296,50 @@ export const GuardLayout: FC<{
   visible?: boolean
   className?: string
   id?: string
-}> = ({ visible, id, className }) => {
+  style?: React.CSSProperties
+  lang?: Lang
+  // 这个传下是为了响应 config 变化，好蠢，以后优化
+  userConfig: UserConfig
+}> = ({
+  visible,
+  id,
+  className,
+  style,
+  lang,
+  userConfig: reactiveUserConfig,
+}) => {
+  const { t } = useTranslation()
   const {
-    state: { guardScenes, authClient, guardEvents },
+    state: { guardScenes, authClient, guardEvents, activeTabs, localesConfig },
     setValue,
   } = useGuardContext()
 
   const { realVisible, isControlled, toggleLocalVisible } = useModal(visible)
 
   const { loading, errorMsg, guardConfig, errorDetail } = useGuardConfig()
+
+  useEffect(() => {
+    if (lang) {
+      authClient.setLang(lang)
+      changeLang(lang)
+    }
+  }, [authClient, lang])
+
+  useEffect(() => {
+    if (!loading) {
+      guardEvents.onLoginTabChange?.(activeTabs.login)
+    }
+  }, [activeTabs.login, loading, guardEvents])
+
+  useEffect(() => {
+    if (!loading) {
+      guardEvents.onRegisterTabChange?.(activeTabs.register)
+    }
+  }, [activeTabs.register, loading, guardEvents])
+
+  useEffect(() => {
+    setValue('userConfig', reactiveUserConfig)
+  }, [reactiveUserConfig, setValue])
 
   // 动画完成后完全隐藏 dom
   const [hidden, setHidden] = useState(false)
@@ -334,11 +348,11 @@ export const GuardLayout: FC<{
   }, [realVisible])
 
   const closeHandler = useCallback(() => {
-    if (!isControlled) {
+    if (!isControlled && realVisible) {
       toggleLocalVisible()
     }
     guardEvents.onClose?.()
-  }, [isControlled, guardEvents, toggleLocalVisible])
+  }, [isControlled, guardEvents, toggleLocalVisible, realVisible])
 
   useEffect(() => {
     if (loading) {
@@ -350,18 +364,20 @@ export const GuardLayout: FC<{
     }
 
     guardEvents.onLoad?.(authClient)
+  }, [authClient, errorDetail, guardEvents, loading, t])
 
+  useEffect(() => {
     if (guardConfig.isSSO) {
       trackSession().then((sessionData) => {
         // 这个接口没有 code, data, 直接返回了数据
         let typedData = (sessionData as unknown) as SessionData
         if (typedData.userInfo) {
-          message.success('登录成功')
+          message.success(t('common.LoginSuccess'))
           guardEvents.onLogin?.(typedData.userInfo, authClient)
         }
       })
     }
-  }, [authClient, errorDetail, guardEvents, loading, guardConfig])
+  }, [guardConfig.isSSO, guardEvents, authClient, t])
 
   useEffect(() => {
     setValue('config', guardConfig)
@@ -379,25 +395,31 @@ export const GuardLayout: FC<{
   // 监听 esc 关闭 modal
   useEffect(() => {
     const handler = (evt: KeyboardEvent) => {
-      if (evt.keyCode === 27 && guardConfig.escCloseable) {
+      if (evt.keyCode === 27 && isModal && guardConfig.escCloseable) {
         closeHandler()
       }
     }
 
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  }, [closeHandler, guardConfig])
+  }, [closeHandler, guardConfig, isModal])
 
   const layoutMap = {
     [GuardScenes.Login]: <LoginLayout />,
     [GuardScenes.Register]: <RegisterLayout />,
     [GuardScenes.RestPassword]: <ResetPwdLayout />,
     [GuardScenes.MfaVerify]: <MfaLayout />,
+    [GuardScenes.CompleteUserInfo]: <CompleteUserInfoLayout />,
+    [GuardScenes.AppMfaVerify]: <AppMfaLayout />,
   }
 
   return (
     <div
       id={id}
+      style={{
+        ...style,
+        zIndex: guardConfig.zIndex || 100,
+      }}
       className={getClassnames([
         'authing-guard-layout',
         !realVisible && 'authing-guard-layout__hidden',
@@ -428,7 +450,7 @@ export const GuardLayout: FC<{
         >
           {isModal && guardConfig.clickCloseable && (
             <button onClick={closeHandler} className="authing-guard-close-btn">
-              <i className="authing-icon authing-guanbi"></i>
+              <IconFont type="authing-guanbi" />
             </button>
           )}
 
@@ -441,6 +463,10 @@ export const GuardLayout: FC<{
           ) : (
             layoutMap[guardScenes]
           )}
+          {/* <div>{localesConfig?.isShowChange && <ToggleLang />}</div> */}
+          <div>
+            {localesConfig?.isShowChange === false ? null : <ToggleLang />}
+          </div>
         </div>
       </>
     </div>

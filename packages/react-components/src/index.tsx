@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import { Button } from 'antd'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
+import { initAuthClient, Lang } from './components'
 import { AuthingGuard } from './components/AuthingGuard'
 
 import {
   GuardMode,
-  LoginMethods,
+  // LoginMethods,
   UserConfig,
   // LoginMethods,
   // RegisterMethods,
@@ -14,9 +16,15 @@ import {
 import reportWebVitals from './reportWebVitals'
 
 const App = () => {
+  const [lang, setLang] = useState<Lang>('zh-CN')
+  const [title, setTitle] = useState('标题')
+
   const config: UserConfig = {
-    // apiHost: 'https://console.authing.localhost',
-    apiHost: 'http://console.authing.localhost:3000',
+    title,
+    mode: GuardMode.Modal,
+    // appHost: 'https://sample-sso.authing.cn',
+    // apiHost: 'http://console.authing.localhost:3000',
+    // apiHost: 'http://192.168.50.57:3000',
     // loginMethods: Object.values(LoginMethods),
     // logo:
     //   'https://files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png',
@@ -27,38 +35,98 @@ const App = () => {
     // defaultScenes: GuardScenes.Login,
     // socialConnections: Object.values(SocialConnections),
     // enterpriseConnections: ["oidc1"],
-    appId: '5fa5053e252697ad5302ce7e',
     // appDomain: 'oidc1.authing.cn',
     // appId: '5f17a529f64fb009b794a2ff',
     // isSSO: true,
-    mode: GuardMode.Modal,
-    contentCss: `
-      html, body {
-        background-color: #fff;
-      }
-    `,
-    // autoRegister: true,
+    // zIndex: 300,
+    // text: {
+    //   loginTabs: {
+    //     [LoginMethods.Password]: '密码登录一下',
+    //   },
+    //   loginBtn: {
+    //     loading: 'fuck',
+    //   },
+    // },
+    // mode: GuardMode.Modal,
+    // contentCss: `
+    //   html, body {
+    //     background-color: #fff;
+    //   }
+    // `,
+    // // autoRegister: true,
+    // socialConnections: [SocialConnections.AppleWeb],
+    passwordLoginMethods: ['username-password'],
+    localesConfig: {
+      defaultLang: 'en-US',
+      isShowChange: true,
+      onChange: (value) => {
+        console.log('...........')
+        console.log(value)
+      },
+    },
+    lang: lang,
   }
+
   const [visible, setVisible] = useState(false)
 
-  useEffect(() => {
-    setTimeout(() => setVisible(true), 3000)
-  }, [])
+  // useEffect(() => {
+  //   setTimeout(() => setVisible(true), 3000)
+  // }, [])
+
+  initAuthClient({
+    appId: '60c02a89a9e0431e271d9ff0',
+    // appHost: 'http://console.authing.localhost:3000',
+  })
 
   return (
     // eslint-disable-next-line react/jsx-no-undef
     <>
+      <Button
+        type="primary"
+        onClick={() => {
+          setVisible(!visible)
+        }}
+      >
+        开关
+      </Button>
+      <Button
+        type="primary"
+        onClick={() => {
+          setLang('zh-CN')
+        }}
+      >
+        中文
+      </Button>
+      <Button
+        type="primary"
+        onClick={() => {
+          setLang('en-US')
+        }}
+      >
+        English
+      </Button>
+      <input
+        value={title}
+        onChange={(evt) => setTitle(evt.target.value)}
+      ></input>
       <AuthingGuard
+        onLoad={(v) => console.log(v)}
         visible={visible}
+        // onLoginTabChange={(v) => console.log(v)}
+        // onRegisterTabChange={(v) => console.log(v)}
+        // onClose={() => {
+        //   setVisible(false)
+        //   setTimeout(() => {
+        //     setVisible(true)
+        //   }, 2000)
+        // }}
         onClose={() => {
           setVisible(false)
-          setTimeout(() => {
-            setVisible(true)
-          }, 2000)
         }}
-        onLoad={(a) => console.log(a, '加载完成')}
+        // onLoad={(a) => console.log(a, '加载完成')}
         // onPwdResetError={(e) => console.log(e)}
-        userPoolId="59f86b4832eb28071bdd9214"
+        appId="60c02a89a9e0431e271d9ff0"
+        // appId="5fd877fb0ba0421962eced94"
         config={config}
       />
     </>

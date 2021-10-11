@@ -1,4 +1,5 @@
 import qs from 'qs'
+import { i18n } from '../locales'
 
 export const requestClient = async (...rest: Parameters<typeof fetch>) => {
   const res = await fetch(...rest)
@@ -20,7 +21,14 @@ requestClient.get = async <T>(
     `${requestClient.baseUrl}${path}${qs.stringify(query, {
       addQueryPrefix: true,
     })}`,
-    init
+    {
+      ...init,
+      credentials: 'include',
+      headers: {
+        ...init?.headers,
+        [requestClient.langHeader]: i18n.language,
+      },
+    }
   )
 
   return res.json()
@@ -28,17 +36,30 @@ requestClient.get = async <T>(
 
 requestClient.post = async <T>(
   path: string,
-  data: any
+  data: any,
+  config?: {
+    headers: any
+  }
 ): Promise<AuthingResponse<T>> => {
   const res = await fetch(`${requestClient.baseUrl}${path}`, {
     method: 'POST',
-    body: data,
+    body: JSON.stringify(data),
+    credentials: 'include',
+    headers: {
+      ...config?.headers,
+      'Content-Type': 'application/json',
+      [requestClient.langHeader]: i18n.language,
+    },
   })
-
   return res.json()
 }
 
 requestClient.baseUrl = ''
 requestClient.setBaseUrl = (base: string) => {
   requestClient.baseUrl = base.replace(/\/$/, '')
+}
+const DEFAULT_LANG_HEADER = 'x-authing-lang'
+requestClient.langHeader = DEFAULT_LANG_HEADER
+requestClient.setLangHeader = (key: string | undefined) => {
+  requestClient.langHeader = key || DEFAULT_LANG_HEADER
 }

@@ -1,6 +1,5 @@
 import { ConfigProvider, message } from 'antd'
 import React, { FC } from 'react'
-import jsencrypt from 'jsencrypt'
 import { AuthenticationClient } from 'authing-js-sdk'
 
 import { GuardContext } from '../../context/global/context'
@@ -8,7 +7,10 @@ import { GuardScenes } from '../../components/AuthingGuard/types'
 import { requestClient } from '../../components/AuthingGuard/api/http'
 import {
   defaultGuardConfig,
-  NEED_MFA_CODE,
+  OTP_MFA_CODE,
+  APP_MFA_CODE,
+  defaultLocalesConfig,
+  defaultHeaders,
 } from '../../components/AuthingGuard/constants'
 import { GuardLayout } from '../../components/AuthingGuard/GuardLayout'
 import {
@@ -17,8 +19,7 @@ import {
 } from '../../components/AuthingGuard/types/GuardConfig'
 
 import './style.less'
-import './assets/iconfont.css'
-
+import { initI18n } from './locales'
 const PREFIX_CLS = 'authing-ant'
 
 message.config({
@@ -26,7 +27,7 @@ message.config({
 })
 
 interface AuthingGuardProps extends GuardEventsHandler {
-  userPoolId: string
+  appId: string
   config?: UserConfig
   visible?: boolean
   className?: string
@@ -34,7 +35,7 @@ interface AuthingGuardProps extends GuardEventsHandler {
 }
 
 export const AuthingGuard: FC<AuthingGuardProps> = ({
-  userPoolId,
+  appId,
   config = {},
   visible,
   className,
@@ -42,40 +43,45 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
   ...guardEvents
 }) => {
   const {
-    apiHost = defaultGuardConfig.apiHost!,
-    appId,
+    apiHost,
     appDomain,
-    isSSO,
+    appHost,
     defaultLoginMethod = defaultGuardConfig.defaultLoginMethod,
     defaultScenes = defaultGuardConfig.defaultScenes,
     defaultRegisterMethod = defaultGuardConfig.defaultRegisterMethod,
+    lang,
+    localesConfig = defaultLocalesConfig,
+    headers = defaultHeaders,
   } = config
 
-  let host = apiHost
-  if (appDomain && isSSO) {
-    const parsedUrl = new URL(apiHost)
-    host = `${parsedUrl.protocol}//${appDomain}${
+  initI18n(localesConfig, lang)
+
+  let realHost: string | undefined
+  if (appHost) {
+    realHost = appHost
+  } else if (appDomain) {
+    const parsedUrl = new URL(defaultGuardConfig.appHost!)
+    realHost = `${parsedUrl.protocol}//${appDomain}${
       parsedUrl.port ? ':' + parsedUrl.port : ''
     }`
+  } else {
+    realHost = apiHost || defaultGuardConfig.appHost!
   }
 
-  requestClient.setBaseUrl(host)
+  requestClient.setBaseUrl(realHost)
+  requestClient.setLangHeader(headers?.lang)
 
   const authClient = new AuthenticationClient({
-    userPoolId,
-    host,
+    appHost: realHost!,
     appId,
     requestFrom: 'ui-components',
-    encryptFunction: (text, publicKey) => {
-      const encrypt = new jsencrypt() // 实例化加密对象
-      encrypt.setPublicKey(publicKey) // 设置公钥
-      return Promise.resolve(encrypt.encrypt(text)) // 加密明文
-    },
+    lang: localesConfig.defaultLang ?? lang,
+    headers,
     onError: (code, msg: any) => {
       if (code === 2020) {
         return
       }
-      if (code === NEED_MFA_CODE) {
+      if ([OTP_MFA_CODE, APP_MFA_CODE].includes(code)) {
         message.info(msg)
         return
       }
@@ -95,15 +101,25 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
           authClient,
           config: { ...config },
           userConfig: config,
+          appId,
           guardScenes: defaultScenes,
           activeTabs,
           guardTitle: config.title,
-          mfaToken: '',
-          userPoolId,
+          mfaData: {
+            mfaToken: '',
+          },
           guardEvents,
+          localesConfig: config.localesConfig,
+          realHost: realHost,
         }}
       >
-        <GuardLayout id={id} className={className} visible={visible} />
+        <GuardLayout
+          id={id}
+          className={className}
+          visible={visible}
+          lang={lang}
+          userConfig={config}
+        />
       </GuardContext>
     </ConfigProvider>
   )

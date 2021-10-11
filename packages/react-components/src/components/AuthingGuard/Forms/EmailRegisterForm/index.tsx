@@ -1,24 +1,33 @@
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
-import { Input, Form } from 'antd'
+import { Input, Form, message } from 'antd'
 import { FormInstance } from 'antd/lib/form'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 
 import {
   getDeviceName,
   getRequiredRules,
+  getUserRegisterParams,
   VALIDATE_PATTERN,
 } from '../../../../utils'
 import { useGuardContext } from '../../../../context/global/context'
-import { EmailRegisterFormProps } from '../../../../components/AuthingGuard/types'
+import {
+  EmailRegisterFormProps,
+  RegisterMethods,
+} from '../../../../components/AuthingGuard/types'
 import { RegisterFormFooter } from '../../../../components/AuthingGuard/Forms/RegisterFormFooter'
+import { useTranslation } from 'react-i18next'
+import { Agreements } from '../Agreements'
 
 export const EmailRegisterForm = forwardRef<
   FormInstance,
   EmailRegisterFormProps
 >(({ onSuccess, onFail, onValidateFail }, ref) => {
+  const { t } = useTranslation()
   const {
-    state: { authClient },
+    state: { authClient, config, guardEvents },
   } = useGuardContext()
+
+  const { agreements, agreementEnabled } = config
 
   const [rawForm] = Form.useForm()
 
@@ -29,19 +38,63 @@ export const EmailRegisterForm = forwardRef<
     onValidateFail && onValidateFail(errorInfo)
   }
 
+  const [acceptedAgreements, setAcceptedAgreements] = useState(false)
+
+  /** 表单是否被提交校验过 */
+  const [validated, setValidated] = useState(false)
+
   const onFinish = async (values: any) => {
+    if (guardEvents.onBeforeRegister) {
+      try {
+        const canRegister = await guardEvents.onBeforeRegister(
+          {
+            type: RegisterMethods.Email,
+            data: {
+              email: values.email,
+              password: values.password,
+            },
+          },
+          authClient
+        )
+
+        if (!canRegister) {
+          setLoading(false)
+          return
+        }
+      } catch (e) {
+        if (typeof e === 'string') {
+          message.error(e)
+        } else {
+          message.error(e.message)
+        }
+        setLoading(false)
+        return
+      }
+    }
+
     try {
       await rawForm.validateFields()
+
+      setValidated(true)
+
+      if (agreementEnabled && agreements?.length && !acceptedAgreements) {
+        return
+      }
+
       const { email, password } = values
       // 注册并获取登录态
       const user = await authClient.registerByEmail(
         email,
         password,
         {
-          browser: navigator.userAgent,
+          browser:
+            typeof navigator !== 'undefined' ? navigator.userAgent : null,
           device: getDeviceName(),
         },
-        { generateToken: true }
+        {
+          generateToken: true,
+          params: getUserRegisterParams(),
+        }
       )
       onSuccess && onSuccess(user)
     } catch (error) {
@@ -59,40 +112,40 @@ export const EmailRegisterForm = forwardRef<
         <Input
           autoComplete="email"
           size="large"
-          placeholder="请输入邮箱"
+          placeholder={t('login.inputEmail')}
           prefix={<UserOutlined style={{ color: '#ddd' }} />}
         />
       ),
       name: 'email',
-      rules: getRequiredRules('邮箱不能为空').concat({
+      rules: getRequiredRules(t('common.emailNotNull')).concat({
         pattern: VALIDATE_PATTERN.email,
-        message: '邮箱格式错误',
+        message: t('login.emailError'),
       }),
     },
     {
       component: (
         <Input.Password
           size="large"
-          placeholder="设置密码"
+          placeholder={t('common.setPassword')}
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
         />
       ),
       name: 'password',
-      rules: getRequiredRules('密码不能为空'),
+      rules: getRequiredRules(t('common.passwordNotNull')),
     },
     {
       component: (
         <Input.Password
           size="large"
-          placeholder="再输入一次密码"
+          placeholder={t('login.inputPwdAgain')}
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
         />
       ),
       name: 'new-password',
-      rules: getRequiredRules('请重复密码').concat({
+      rules: getRequiredRules(t('common.repeatPassword')).concat({
         validator: (rule, value) => {
           if (value !== rawForm.getFieldValue('password')) {
-            return Promise.reject('两次密码必须一致')
+            return Promise.reject(t('common.repeatPasswordDoc'))
           } else {
             return Promise.resolve()
           }
@@ -113,6 +166,14 @@ export const EmailRegisterForm = forwardRef<
           {item.component}
         </Form.Item>
       ))}
+
+      {config.agreementEnabled && Boolean(agreements?.length) && (
+        <Agreements
+          onChange={setAcceptedAgreements}
+          agreements={agreements}
+          showError={validated}
+        />
+      )}
 
       <RegisterFormFooter loading={loading} />
     </Form>

@@ -7,12 +7,15 @@ import {
   UserConfig,
   GuardScenes,
   LoginMethods,
+  getAuthClient,
   CommonMessage,
+  initAuthClient,
   RegisterMethods,
   GuardEventsHandler,
   AuthenticationClient,
   GuardEventsHandlerKebab,
   GuardEventsCamelToKebabMap,
+  AuthenticationClientOptions,
 } from '@authing/react-ui-components'
 import '@authing/react-ui-components/lib/index.min.css'
 
@@ -23,12 +26,15 @@ export type {
   GuardEventsHandler,
   AuthenticationClient,
   GuardEventsHandlerKebab,
+  AuthenticationClientOptions,
 }
 
 export {
   GuardMode,
   GuardScenes,
   LoginMethods,
+  getAuthClient,
+  initAuthClient,
   RegisterMethods,
   GuardEventsCamelToKebabMap,
 }
@@ -41,7 +47,7 @@ export type EventListeners = {
 }
 
 export class AuthingGuard {
-  constructor(private userPoolId: string, private config?: UserConfig) {
+  constructor(private appId: string, private config?: UserConfig) {
     this.render()
   }
 
@@ -55,8 +61,6 @@ export class AuthingGuard {
         container.id = defaultId
         document.body.appendChild(container)
       }
-
-      container.innerHTML = ''
 
       return container
     }
@@ -85,13 +89,17 @@ export class AuthingGuard {
     ).reduce((acc, [reactEvt, nativeEvt]) => {
       return Object.assign({}, acc, {
         [reactEvt]: (...rest: any) => {
-          this.eventListeners[nativeEvt].forEach((item: any) => {
-            item(...rest)
-          })
-
           if (nativeEvt === 'close') {
             this.hide()
           }
+
+          // TODO 返回最后一个执行函数的值，实际应该只让监听一次
+          return this.eventListeners[nativeEvt]
+            // @ts-ignore
+            .map((item: any) => {
+              return item(...rest)
+            })
+            .slice(-1)[0] ?? true
         },
       })
     }, {} as GuardEventsHandler)
@@ -99,7 +107,7 @@ export class AuthingGuard {
     return ReactDOM.render(
       <ReactAuthingGuard
         {...evts}
-        userPoolId={this.userPoolId}
+        appId={this.appId}
         config={this.config}
         visible={this.visible}
       />,

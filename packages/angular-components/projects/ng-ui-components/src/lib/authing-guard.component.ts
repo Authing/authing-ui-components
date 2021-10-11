@@ -14,11 +14,14 @@ import {
   GuardScenes,
   AuthingGuard,
   LoginMethods,
+  getAuthClient,
   CommonMessage,
+  initAuthClient,
   RegisterMethods,
   GuardEventsHandler,
   AuthenticationClient,
   GuardEventsHandlerKebab,
+  AuthenticationClientOptions,
 } from '@authing/native-js-ui-components';
 
 export type {
@@ -28,9 +31,17 @@ export type {
   GuardEventsHandler,
   AuthenticationClient,
   GuardEventsHandlerKebab,
+  AuthenticationClientOptions,
 };
 
-export { GuardMode, GuardScenes, LoginMethods, RegisterMethods };
+export {
+  GuardMode,
+  GuardScenes,
+  LoginMethods,
+  getAuthClient,
+  initAuthClient,
+  RegisterMethods,
+};
 
 @Component({
   selector: 'authing-guard',
@@ -55,7 +66,7 @@ export class AuthingGuardComponent implements OnInit, OnChanges {
   }
 
   @Input() visible?: boolean;
-  @Input() userPoolId: string;
+  @Input() appId: string;
   @Input() config?: UserConfig;
 
   @Output() onLoad = new EventEmitter<
@@ -99,7 +110,7 @@ export class AuthingGuardComponent implements OnInit, OnChanges {
   >();
 
   ngAfterViewInit() {
-    const guard = new AuthingGuard(this.userPoolId, this.config);
+    const guard = new AuthingGuard(this.appId, this.config);
 
     guard.on('load', (...rest) => this.onLoad.emit(rest));
     guard.on('load-error', (...rest) => this.onLoadError.emit(rest));

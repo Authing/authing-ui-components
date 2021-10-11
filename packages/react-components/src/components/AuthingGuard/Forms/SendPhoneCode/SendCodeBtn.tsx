@@ -1,8 +1,12 @@
+import { Spin } from 'antd'
 import React, { FC, useState, useRef, useEffect, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+import { LoadingOutlined } from '@ant-design/icons'
 
 const TIME = 60
 export interface SendCodeProps {
   beforeSend: () => Promise<boolean>
+  btnRef?: React.RefObject<HTMLButtonElement>
 }
 
 const useSentCounter = () => {
@@ -38,15 +42,25 @@ const useSentCounter = () => {
   }
 }
 
-export const SendCodeBtn: FC<SendCodeProps> = ({ beforeSend }) => {
+export const SendCodeBtn: FC<SendCodeProps> = ({ beforeSend, btnRef }) => {
   const { enabled, send, countDown } = useSentCounter()
+  const [loading, setLoading] = useState(false)
+  const { t } = useTranslation()
+  const disabled = useMemo(() => {
+    return !enabled || loading
+  }, [enabled, loading])
 
   const onClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!enabled) {
+    setLoading(true)
+    if (disabled) {
       return
     }
 
-    if (!(await beforeSend())) return
+    if (!(await beforeSend())) {
+      setLoading(false)
+      return
+    }
+    setLoading(false)
     send()
   }
 
@@ -54,10 +68,21 @@ export const SendCodeBtn: FC<SendCodeProps> = ({ beforeSend }) => {
     <button
       type="button"
       className="authing-send-code-btn"
-      disabled={!enabled}
+      disabled={disabled}
       onClick={onClick}
+      ref={btnRef}
     >
-      {enabled ? '发送验证码' : `${countDown} 秒后重试`}
+      <Spin
+        spinning={loading}
+        indicator={<LoadingOutlined spin />}
+        size="small"
+      >
+        {enabled
+          ? t('common.sendVerifyCode')
+          : t('common.retryAfterTime', {
+              time: countDown,
+            })}
+      </Spin>
     </button>
   )
 }

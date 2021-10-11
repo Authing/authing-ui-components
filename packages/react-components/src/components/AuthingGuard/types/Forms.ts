@@ -7,6 +7,8 @@ export interface BaseFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onFail?: (error: any) => void
 }
 
+export interface CompleteUserInfoFormProps extends BaseFormProps {}
+
 export interface PasswordLoginFormProps extends BaseFormProps {
   onValidateFail?: (error: any) => void
 }
@@ -24,7 +26,7 @@ export interface LdapLoginFormProps extends BaseFormProps {
 }
 
 export interface QrLoginFormProps extends BaseFormProps {
-  type: LoginMethods.AppQr | LoginMethods.WxMinQr
+  type: LoginMethods.AppQr | LoginMethods.WxMinQr | LoginMethods.WechatMpQrcode
 }
 
 export interface EmailRegisterFormProps extends BaseFormProps {
@@ -60,6 +62,31 @@ export interface SocialAndIdpLoginProps extends BaseFormProps {}
 
 export interface MfaVerifyForm extends BaseFormProps {
   goReset: () => void
+}
+export interface SmsMFAVerifyFormProps extends BaseFormProps {
+  phone?: string
+  mfaToken: string
+  sendCodeRef: React.RefObject<HTMLButtonElement>
+}
+
+export interface SmsMFAFormProps extends BaseFormProps {}
+
+export interface MFACheckPhoneFormProps {
+  mfaToken: string
+  onSuccess: (phone: string) => void
+}
+
+export interface EmailMFAVerifyFormProps extends BaseFormProps {
+  email?: string
+  mfaToken: string
+  sendCodeRef: React.RefObject<HTMLButtonElement>
+}
+
+export interface EmailMFAFormProps extends BaseFormProps {}
+
+export interface MFACheckEmailFormProps {
+  mfaToken: string
+  onSuccess: (email: string) => void
 }
 
 export interface MfaResetForm extends BaseFormProps {

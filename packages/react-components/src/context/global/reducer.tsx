@@ -4,9 +4,12 @@ import {
   GuardScenes,
   UserConfig,
   GuardEventsHandler,
+  LocalesConfig,
+  Lang,
 } from '../../components/AuthingGuard/types'
 import { AuthenticationClient } from 'authing-js-sdk'
 import { IBaseAction } from '../base'
+import { ApplicationMfaType } from '../../components/AuthingGuard/api/appConfig'
 
 export type IState = {
   config: GuardConfig // 处理后的 Guard 配置
@@ -15,9 +18,23 @@ export type IState = {
   activeTabs: ActiveTabs // 登录、注册方式
   guardScenes: GuardScenes // 当前在哪个界面
   guardTitle: string
-  mfaToken: string // 需要 mfa 登录时返回的 token
+  // 需要 mfa 登录时后端返回的错误信息
+  mfaData: {
+    mfaToken: string
+    phone?: string
+    email?: string
+    applicationMfa?: {
+      status: 0 | 1
+      mfaPolicy: ApplicationMfaType
+      sort: number
+    }[]
+  }
   userPoolId: string
+  appId: string
   guardEvents: GuardEventsHandler
+  localesConfig: LocalesConfig
+  lang?: Lang
+  realHost: string
 }
 
 const handlers: any = {

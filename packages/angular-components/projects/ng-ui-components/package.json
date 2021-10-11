@@ -1,15 +1,20 @@
 {
   "name": "@authing/ng-ui-components",
-  "version": "2.0.6",
+  "version": "2.4.52",
   "peerDependencies": {
     "@angular/common": "^10.2.0",
     "@angular/core": "^10.2.0"
   },
   "dependencies": {
-    "tslib": "^2.0.0",
-    "@authing/native-js-ui-components": "2.0.6"
+    "@authing/native-js-ui-components": "^2.4.52",
+    "tslib": "^2.0.0"
   },
   "bundledDependencies": [
     "@authing/native-js-ui-components"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public",
+    "directory": "../../dist/ng-ui-components",
+    "registry": "https://registry.npmjs.org"
+  }
 }

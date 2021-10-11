@@ -14,11 +14,12 @@ import {
   EmailRegisterForm,
   PhoneRegisterForm,
 } from '../../../components/AuthingGuard/Forms'
+import { useTranslation } from 'react-i18next'
 
 export const RegisterLayout: FC = () => {
   const {
     state: {
-      config: { registerMethods },
+      config: { registerMethods, extendsFields, loginMethods = [] },
       activeTabs,
       guardEvents,
       authClient,
@@ -26,9 +27,14 @@ export const RegisterLayout: FC = () => {
     setValue,
   } = useGuardContext()
 
+  const { t } = useTranslation()
   const onSuccess = (user: User) => {
-    message.success('注册成功')
-    setValue('guardScenes', GuardScenes.Login)
+    message.success(t('common.registrationSuccess'))
+    if (extendsFields?.length > 0) {
+      setValue('guardScenes', GuardScenes.CompleteUserInfo)
+    } else {
+      setValue('guardScenes', GuardScenes.Login)
+    }
     guardEvents.onRegister?.(user, authClient)
   }
 
@@ -48,10 +54,12 @@ export const RegisterLayout: FC = () => {
     }
     switch (t) {
       case RegisterMethods.Email:
-        next[GuardScenes.Login] = LoginMethods.Password
+        loginMethods.includes(LoginMethods.Password) &&
+          (next[GuardScenes.Login] = LoginMethods.Password)
         break
       case RegisterMethods.Phone:
-        next[GuardScenes.Login] = LoginMethods.PhoneCode
+        loginMethods.includes(LoginMethods.PhoneCode) &&
+          (next[GuardScenes.Login] = LoginMethods.PhoneCode)
         break
       default:
         break
@@ -67,7 +75,7 @@ export const RegisterLayout: FC = () => {
 
   const tabs = registerMethods!.map((item) => ({
     key: item,
-    label: REGISTER_METHODS_MAP[item],
+    label: REGISTER_METHODS_MAP()[item],
     component: REGISTER_FORM_MAP[item],
   }))
 
