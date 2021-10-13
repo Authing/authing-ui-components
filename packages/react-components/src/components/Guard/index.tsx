@@ -1,10 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { ConfigProvider } from 'antd'
+
 import { ModuleContext } from 'src/context/module/context'
 import { useAppId } from '../../hooks'
 import { GuardLogin } from '../Login'
 import { getAuthClient, initAuthClient } from './authClient'
 import { initConfig, GuardConfig, getConfig } from './config'
 import { getEvents, GuardEvents, initEvents } from './event'
+import './styles.less'
+const PREFIX_CLS = 'authing-ant'
 
 export enum GuardModuleType {
   LOGIN = 'login',
@@ -70,7 +74,7 @@ export const Guard: React.FC<GuardProps> = ({
 
   return (
     // TODO 这部分缺失 Loging 态
-    <>
+    <ConfigProvider prefixCls={PREFIX_CLS}>
       <ModuleContext
         value={{
           module,
@@ -80,6 +84,6 @@ export const Guard: React.FC<GuardProps> = ({
       >
         {renderModule}
       </ModuleContext>
-    </>
+    </ConfigProvider>
   )
 }
