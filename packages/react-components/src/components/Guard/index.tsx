@@ -3,7 +3,7 @@ import { ModuleContext } from 'src/context/module/context'
 import { useAppId } from '../../hooks'
 import { GuardLogin } from '../Login'
 import { getAuthClient, initAuthClient } from './authClient'
-import { initConfig, GuardConfig } from './config'
+import { initConfig, GuardConfig, getConfig } from './config'
 import { getEvents, GuardEvents, initEvents } from './event'
 
 export enum GuardModuleType {
@@ -60,7 +60,8 @@ export const Guard: React.FC<GuardProps> = ({
     if (initSettingEnd) {
       return ComponentsMapping[module]({
         appId,
-        ...initData,
+        initData,
+        config: getConfig(),
       })
     } else {
       return spin
