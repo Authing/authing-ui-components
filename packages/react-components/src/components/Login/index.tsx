@@ -1,19 +1,7 @@
 import React from 'react'
-import { IG2FCProps } from 'src/classes/IGuardV2FCProps'
+import { GuardLoginProps } from './props'
 
-interface LoginConfig {
-  autoRegister: boolean
-}
-
-interface LoginEvents {
-  onLogin: () => void
-}
-
-interface GuardLoginProps extends IG2FCProps, LoginEvents {
-  config?: LoginConfig
-}
-
-export const GuardLogin = (props: any) => {
+export const GuardLogin: React.FC<GuardLoginProps> = (props) => {
   // props: appId, initData, config
   console.log('login 组件开始加载', props)
   const onLogin = () => {

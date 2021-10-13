@@ -1,19 +1,19 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { ModuleContext } from 'src/context/module/context'
 import { useAppId } from '../../hooks'
 import { GuardLogin } from '../Login'
-import { getAuthClient, initAuthClient } from './authClient'
-import { initConfig, GuardConfig, getConfig } from './config'
-import { getEvents, GuardEvents, initEvents } from './event'
+import { ModuleContext } from 'src/context/module/context'
+import { initAuthClient } from './authClient'
+import { GuardEvents } from './event'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { initConfig, GuardConfig } from 'src/utils/config'
+import { initGuardHttp } from 'src/utils/guradHttp'
+import { initI18n } from 'src/locales'
+// import { IG2FCProps } from 'src/classes'
 
 export enum GuardModuleType {
   LOGIN = 'login',
 }
 
-const ComponentsMapping: Record<
-  GuardModuleType,
-  (initData: object) => React.ReactNode
-> = {
+const ComponentsMapping: Record<GuardModuleType, any> = {
   [GuardModuleType.LOGIN]: GuardLogin,
 }
 
@@ -31,24 +31,37 @@ export const Guard: React.FC<GuardProps> = ({
 
   const [initData, setInitData] = useState({})
   const [initSettingEnd, setInitSettingEnd] = useState(false)
+  const [guardConfig, setGuardConfig] = useState<GuardConfig>({})
 
   useAppId(appId)
 
   // TODO 初始化的 Loging
   const initGuardSetting = useCallback(async () => {
     try {
-      initEvents(guardEvents)
-      await initConfig(config, appId)
+      const { config: mergedConfig, publicConfig } = await initConfig(
+        appId,
+        config ?? {}
+      )
+
+      setGuardConfig(mergedConfig)
+
+      const httpClient = initGuardHttp(mergedConfig?.host!)
+      httpClient.setAppId(appId)
+      httpClient.setUserpoolId(publicConfig.userPoolId)
+
+      // TODO 这部分有点小问题 等待优化
+      initI18n({}, mergedConfig.lang)
+
       initAuthClient(config, appId)
 
-      getEvents().onLoad?.(getAuthClient())
+      // getEvents().onLoad?.(getAuthClient())
     } catch (error) {
-      getEvents().onLoadError?.(error)
+      // getEvents().onLoadError?.(error)
     }
 
     // 初始化 结束
     setInitSettingEnd(true)
-  }, [appId, config, guardEvents])
+  }, [appId, config])
 
   useEffect(() => {
     initGuardSetting()
@@ -61,12 +74,12 @@ export const Guard: React.FC<GuardProps> = ({
       return ComponentsMapping[module]({
         appId,
         initData,
-        config: getConfig(),
+        config: guardConfig,
       })
     } else {
       return spin
     }
-  }, [appId, initData, initSettingEnd, module])
+  }, [appId, guardConfig, initData, initSettingEnd, module])
 
   return (
     // TODO 这部分缺失 Loging 态

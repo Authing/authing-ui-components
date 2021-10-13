@@ -1,14 +1,15 @@
 import message from 'antd/lib/message'
 import { AuthenticationClient } from 'authing-js-sdk'
+import { GuardConfig } from 'src/utils/config'
 import { ErrorCode } from 'src/utils/GuardErrorCode'
-import { defaultConfig, GuardConfig } from './config'
+
 import packageConfig from '../../../package.json'
 
 let authClient: AuthenticationClient
 
 export const initAuthClient = (config: GuardConfig = {}, appId: string) => {
-  const host = config.base?.host ?? defaultConfig.base.host
-  const lang = config.base?.lang ?? defaultConfig.base.lang
+  const host = config.host
+  const lang = config.lang
 
   if (!authClient) {
     try {

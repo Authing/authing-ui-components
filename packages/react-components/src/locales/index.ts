@@ -13,7 +13,7 @@ export const changeLang = (lang: Lang) => {
   langChangeFN && langChangeFN(lang)
 }
 
-const initI18n = (localesConfig: LocalesConfig, lang?: Lang) => {
+const initI18n = (localesConfig: LocalesConfig = {}, lang?: Lang) => {
   if (!i18n.language) {
     i18n
       .use(LanguageDetector) // 监测当前浏览器语言
