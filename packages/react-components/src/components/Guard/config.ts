@@ -6,8 +6,6 @@ import {
 import { QrCodeAuthenticationClient } from 'authing-js-sdk/build/main/lib/authentication/QrCodeAuthenticationClient'
 import { Lang } from 'authing-js-sdk/build/main/types'
 import merge from 'lodash/merge'
-import { useEffect, useState } from 'react'
-import { FrameType } from 'src/FrameType'
 import { initI18n } from 'src/locales'
 import { getGuardHttp, initGuardHttp } from 'src/utils/guradHttp'
 import { AuthingResponse } from 'src/utils/http'
@@ -155,11 +153,7 @@ export const defaultConfig: DefaultConfig = {
 
 let mergedConfig: GuardConfig
 
-export const initConfig = async (
-  config: GuardConfig = {},
-  appId: string,
-  frame?: FrameType
-) => {
+export const initConfig = async (config: GuardConfig = {}, appId: string) => {
   // 先取一下 host lang 默认值
   const host = config?.base?.host ?? defaultConfig.base.host
   const lang = config?.base?.lang ?? defaultConfig.base.lang
@@ -172,9 +166,6 @@ export const initConfig = async (
   const httpClient = initGuardHttp(host)
   httpClient.setAppId(appId)
 
-  // 默认给一个 Reacat
-  httpClient.setFrame(frame ?? FrameType.React)
-
   // 拿一下 PublicConfig
   const publicConfig = await getPublicConfig(appId)
 
@@ -184,8 +175,6 @@ export const initConfig = async (
   const finalConfig = mergeConfig(config, publicConfig)
 
   mergedConfig = finalConfig
-
-  console.log(mergedConfig)
 
   return mergedConfig
 }

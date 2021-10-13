@@ -2,8 +2,9 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { ModuleContext } from 'src/context/module/context'
 import { useAppId } from '../../hooks'
 import { GuardLogin } from '../Login'
+import { getAuthClient, initAuthClient } from './authClient'
 import { initConfig, GuardConfig } from './config'
-import { useAsyncFn } from 'react-use'
+import { getEvents, GuardEvents, initEvents } from './event'
 
 export enum GuardModuleType {
   LOGIN = 'login',
@@ -16,10 +17,16 @@ const ComponentsMapping: Record<
   [GuardModuleType.LOGIN]: GuardLogin,
 }
 
-export const Guard: React.FC<{
+export interface GuardProps extends GuardEvents {
   appId: string
   config?: GuardConfig
-}> = ({ appId, config }) => {
+}
+
+export const Guard: React.FC<GuardProps> = ({
+  appId,
+  config,
+  ...guardEvents
+}) => {
   const [module, setModule] = useState<GuardModuleType>(GuardModuleType.LOGIN)
 
   const [initData, setInitData] = useState({})
@@ -29,23 +36,34 @@ export const Guard: React.FC<{
 
   // TODO 初始化的 Loging
   const initGuardSetting = useCallback(async () => {
-    await initConfig(config, appId)
+    try {
+      initEvents(guardEvents)
+      await initConfig(config, appId)
+      initAuthClient(config, appId)
+
+      getEvents().onLoad?.(getAuthClient())
+    } catch (error) {
+      getEvents().onLoadError?.(error)
+    }
+
+    // 初始化 结束
     setInitSettingEnd(true)
-  }, [appId, config])
+  }, [appId, config, guardEvents])
 
   useEffect(() => {
     initGuardSetting()
   }, [initGuardSetting])
 
+  const spin = () => 'loading.............'
+
   const renderModule = useMemo(() => {
     if (initSettingEnd) {
-      console.log('初始化完成')
       return ComponentsMapping[module]({
         appId,
         ...initData,
       })
     } else {
-      return 'loading.............'
+      return spin
     }
   }, [appId, initData, initSettingEnd, module])
 

@@ -2,6 +2,7 @@
   "name": "@authing/vue-ui-components",
   "description": "Authing Vue UI components",
   "version": "2.4.51",
+  "framework": "Vue",
   "keywords": [
     "vue",
     "vuejs",

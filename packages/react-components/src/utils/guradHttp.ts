@@ -1,5 +1,4 @@
-import { FrameType } from 'src/FrameType'
-import config from '../../package.json'
+import packageConfig from '../../package.json'
 import { requestClient } from './http'
 
 let httpClient: GuardHttp
@@ -9,8 +8,8 @@ class GuardHttp {
   private headers: Record<string, string> = {
     'x-authing-userpool-id': '',
     'x-authing-app-id': '',
-    'x-authing-sdk-version': config.version,
-    'x-authing-request-from': '',
+    'x-authing-sdk-version': packageConfig.version,
+    'x-authing-request-from': `Guard-${packageConfig.framework}@${packageConfig.version}`,
   }
 
   constructor(baseUrl: string) {
@@ -31,10 +30,6 @@ class GuardHttp {
 
   setAppId(appId: string) {
     this.headers['x-authing-app-id'] = appId
-  }
-
-  setFrame(frame: FrameType) {
-    this.headers['x-authing-request-from'] = `ui-components-${frame}`
   }
 
   public getHeaders = () => this.headers
