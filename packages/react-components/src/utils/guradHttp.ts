@@ -3,7 +3,7 @@ import { requestClient } from './http'
 
 let httpClient: GuardHttp
 
-class GuardHttp {
+export class GuardHttp {
   private requestClient: any
   private headers: Record<string, string> = {
     'x-authing-userpool-id': '',

@@ -10,14 +10,13 @@ import { getEvents, GuardEvents, initEvents } from './event'
 import './styles.less'
 const PREFIX_CLS = 'authing-ant'
 
+// import { IG2FCProps } from 'src/classes'
+
 export enum GuardModuleType {
   LOGIN = 'login',
 }
 
-const ComponentsMapping: Record<
-  GuardModuleType,
-  (initData: object) => React.ReactNode
-> = {
+const ComponentsMapping: Record<GuardModuleType, any> = {
   [GuardModuleType.LOGIN]: GuardLogin,
 }
 
@@ -35,24 +34,37 @@ export const Guard: React.FC<GuardProps> = ({
 
   const [initData, setInitData] = useState({})
   const [initSettingEnd, setInitSettingEnd] = useState(false)
+  const [guardConfig, setGuardConfig] = useState<GuardConfig>({})
 
   useAppId(appId)
 
   // TODO 初始化的 Loging
   const initGuardSetting = useCallback(async () => {
     try {
-      initEvents(guardEvents)
-      await initConfig(config, appId)
+      const { config: mergedConfig, publicConfig } = await initConfig(
+        appId,
+        config ?? {}
+      )
+
+      setGuardConfig(mergedConfig)
+
+      const httpClient = initGuardHttp(mergedConfig?.host!)
+      httpClient.setAppId(appId)
+      httpClient.setUserpoolId(publicConfig.userPoolId)
+
+      // TODO 这部分有点小问题 等待优化
+      initI18n({}, mergedConfig.lang)
+
       initAuthClient(config, appId)
 
-      getEvents().onLoad?.(getAuthClient())
+      // getEvents().onLoad?.(getAuthClient())
     } catch (error) {
-      getEvents().onLoadError?.(error)
+      // getEvents().onLoadError?.(error)
     }
 
     // 初始化 结束
     setInitSettingEnd(true)
-  }, [appId, config, guardEvents])
+  }, [appId, config])
 
   useEffect(() => {
     initGuardSetting()
@@ -65,12 +77,12 @@ export const Guard: React.FC<GuardProps> = ({
       return ComponentsMapping[module]({
         appId,
         initData,
-        config: getConfig(),
+        config: guardConfig,
       })
     } else {
       return spin
     }
-  }, [appId, initData, initSettingEnd, module])
+  }, [appId, guardConfig, initData, initSettingEnd, module])
 
   return (
     // TODO 这部分缺失 Loging 态

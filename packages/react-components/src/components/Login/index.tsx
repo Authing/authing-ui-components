@@ -1,6 +1,8 @@
 import React from 'react'
 import { Button, Form, Input, Radio } from 'antd'
 import { IG2FCProps } from 'src/classes/IGuardV2FCProps'
+import { GuardLoginProps } from './props'
+
 import './styles.less'
 interface LoginConfig {
   autoRegister: boolean
@@ -34,7 +36,8 @@ const LoginWithPassword = () => {
   )
 }
 
-export const GuardLogin = (props: any) => {
+export const GuardLogin: React.FC<GuardLoginProps> = (props) => {
+  // props: appId, initData, config
   console.log('login 组件开始加载', props)
   // login 组件是最小单位
 
