@@ -4,12 +4,13 @@ import { ConfigProvider } from 'antd'
 import { ModuleContext } from 'src/context/module/context'
 import { useAppId } from '../../hooks'
 import { GuardLogin } from '../Login'
-import { getAuthClient, initAuthClient } from './authClient'
-import { initConfig, GuardConfig, getConfig } from './config'
-import { getEvents, GuardEvents, initEvents } from './event'
+import { initAuthClient } from './authClient'
+import { GuardEvents } from './event'
+import { initConfig, GuardConfig } from 'src/utils/config'
+import { initGuardHttp } from 'src/utils/guradHttp'
+import { initI18n } from 'src/locales'
 import './styles.less'
 const PREFIX_CLS = 'authing-ant'
-
 // import { IG2FCProps } from 'src/classes'
 
 export enum GuardModuleType {
