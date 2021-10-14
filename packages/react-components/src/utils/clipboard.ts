@@ -1,3 +1,5 @@
+import { i18n } from 'src/components/AuthingGuard/locales'
+
 // https://juejin.im/post/6844903857290477582
 export const copyToClipboard = (str: string) => {
   const el = document.createElement('textarea') // 创建一个 <textarea> 元素
@@ -20,6 +22,6 @@ export const copyToClipboard = (str: string) => {
       document.getSelection()!.addRange(selected) // 恢复原来的选中
     }
   } catch (e) {
-    console.warn('复制失败')
+    console.warn(i18n.t('common.copyFailed'))
   }
 }
