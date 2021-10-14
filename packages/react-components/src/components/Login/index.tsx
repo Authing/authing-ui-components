@@ -2,8 +2,32 @@ import React from 'react'
 import { Button, Form, Input, Radio } from 'antd'
 import { GuardLoginProps } from './props'
 import './styles.less'
+import { useGuardHttp } from 'src/utils/guradHttp'
+import { useAuthClient } from '../Guard/authClient'
 
-const LoginWithPassword = () => {
+interface LoginWithPasswordProps {
+  publicKey: string
+}
+const LoginWithPassword = (props: LoginWithPasswordProps) => {
+  let client = useGuardHttp()
+  let ac = useAuthClient()
+  const encrypt = ac.options.encryptFunction
+  // console.log('检查 _publickConfig_', )
+
+  const onLoginClick = async () => {
+    let url = '/api/v2/login/account'
+    let body = {
+      account: 'yuri',
+      password: await encrypt!('123456', props.publicKey),
+
+      // captchaCode,
+      // customData: getUserRegisterParams(),
+      // autoRegister: autoRegister,
+    }
+    const { code, data, message } = await client.post(url, body)
+    console.log('检查登录结果', code, data, message)
+  }
+
   return (
     <div className="authing-g2-login-password">
       <Form.Item>
@@ -15,7 +39,13 @@ const LoginWithPassword = () => {
       </Form.Item>
 
       <div style={{ marginTop: 20 }}>
-        <Button type="primary" size="large">
+        <Button
+          type="primary"
+          size="large"
+          onClick={() => {
+            onLoginClick()
+          }}
+        >
           登录
         </Button>
       </div>
@@ -25,9 +55,9 @@ const LoginWithPassword = () => {
 
 export const GuardLogin: React.FC<GuardLoginProps> = (props) => {
   // props: appId, initData, config
-  console.log('login 组件开始加载', props)
   // login 组件是最小单位
-
+  let pc = props.config?._publicConfig_
+  console.log('login 组件开始加载', pc)
   // 6种不同的登录方式
   // PhoneCode = 'phone-code',
   // Password = 'password',
@@ -53,7 +83,7 @@ export const GuardLogin: React.FC<GuardLoginProps> = (props) => {
         <Radio.Button value="phone-code">手机</Radio.Button>
         <Radio.Button value="ldap">LDAP</Radio.Button>
       </Radio.Group>
-      <LoginWithPassword />
+      <LoginWithPassword publicKey={pc.publicKey} />
     </div>
   )
 }

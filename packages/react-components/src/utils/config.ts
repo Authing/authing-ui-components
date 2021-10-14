@@ -37,7 +37,7 @@ export const initConfig = async (
   return {
     config: {
       ...mergeConfig(config, defaultConfig),
-      _publickConfig_: publicConfig,
+      _publicConfig_: publicConfig,
     },
     publicConfig,
   }
