@@ -81,6 +81,8 @@ const mergeConfig = (
     disableRegister: !!(
       config.disableRegister ?? publicConfig.ssoPageComponentDisplay.registerBtn
     ),
+    // publicKey
+    publicKey: config.publicKey ?? publicConfig.publicKey,
   }
 
   return {

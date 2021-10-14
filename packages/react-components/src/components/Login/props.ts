@@ -12,7 +12,7 @@ export interface LoginConfig extends IG2Config {
   autoRegister?: boolean
   disableResetPwd?: boolean
   qrCodeScanOptions?: Parameters<QrCodeAuthenticationClient['startScanning']>[1]
-  _publicConfig_?: any
+  publicKey?: string
 }
 
 const defaultConfig: LoginConfig = {

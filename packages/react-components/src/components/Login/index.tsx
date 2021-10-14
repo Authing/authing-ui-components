@@ -56,7 +56,8 @@ const LoginWithPassword = (props: LoginWithPasswordProps) => {
 export const GuardLogin: React.FC<GuardLoginProps> = (props) => {
   // props: appId, initData, config
   // login 组件是最小单位
-  let pc = props.config?._publicConfig_
+  let pc = props.config?.publicKey
+  let publicKey = props.config?.publicKey!
   console.log('login 组件开始加载', pc)
   // 6种不同的登录方式
   // PhoneCode = 'phone-code',
@@ -83,7 +84,7 @@ export const GuardLogin: React.FC<GuardLoginProps> = (props) => {
         <Radio.Button value="phone-code">手机</Radio.Button>
         <Radio.Button value="ldap">LDAP</Radio.Button>
       </Radio.Group>
-      <LoginWithPassword publicKey={pc.publicKey} />
+      <LoginWithPassword publicKey={publicKey} />
     </div>
   )
 }
