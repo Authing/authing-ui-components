@@ -9,10 +9,12 @@ import { initConfig, GuardConfig } from 'src/utils/config'
 import { initGuardHttp } from 'src/utils/guradHttp'
 import { initI18n } from 'src/locales'
 import { IG2FCProps } from 'src/classes'
-import './styles.less'
 import { getDefaultGuardConfig } from './config'
 import { Spin } from '../Spin'
 import { GuardModuleType, moduleCodeMap } from './module'
+import { GuardMFA } from '../MFA'
+import './styles.less'
+
 const PREFIX_CLS = 'authing-ant'
 
 const ComponentsMapping: Record<
@@ -20,7 +22,7 @@ const ComponentsMapping: Record<
   (props: IG2FCProps) => React.ReactNode
 > = {
   [GuardModuleType.LOGIN]: (props) => <GuardLogin {...props} />,
-  [GuardModuleType.MFA]: (props) => <GuardLogin {...props} />,
+  [GuardModuleType.MFA]: (props) => <GuardMFA {...props} />,
 }
 
 export interface GuardProps extends GuardEvents {
@@ -38,9 +40,8 @@ export const Guard: React.FC<GuardProps> = (props) => {
   const events = guardEventsFilter(props)
 
   const onChangeModule = (code: number, initData?: any) => {
-    const nextModule = moduleCodeMap[code]
-
-    setModule(nextModule)
+    const action = moduleCodeMap[code]
+    setModule(action.module)
     initData && setInitData(initData)
   }
 
@@ -102,7 +103,7 @@ export const Guard: React.FC<GuardProps> = (props) => {
           setInitData,
         }}
       >
-        {renderModule}
+        <div className="authing-g2-render-module">{renderModule}</div>
       </ModuleContext>
     </ConfigProvider>
   )

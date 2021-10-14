@@ -3,6 +3,14 @@ export enum GuardModuleType {
   MFA = 'mfa',
 }
 
-export const moduleCodeMap: Record<number, GuardModuleType> = {
-  1636: GuardModuleType.MFA,
+interface GuardModuleAction {
+  action: string
+  module: GuardModuleType
+}
+
+export const moduleCodeMap: Record<number, GuardModuleAction> = {
+  1636: {
+    action: 'move',
+    module: GuardModuleType.MFA,
+  },
 }

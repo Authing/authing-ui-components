@@ -189,6 +189,8 @@ export const GuardLogin: React.FC<GuardLoginProps> = (props) => {
       {loginWay === 'phone-code' && (
         <LoginWithPhoneCode onLogin={props.onLogin} />
       )}
+
+      <Button onClick={() => props.changeModule?.(1636, { k: 1 })}>1636</Button>
     </div>
   )
 }
