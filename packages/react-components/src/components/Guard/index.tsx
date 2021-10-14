@@ -37,11 +37,11 @@ export const Guard: React.FC<GuardProps> = (props) => {
   const [guardConfig, setGuardConfig] = useState<GuardConfig>({})
   const events = guardEventsFilter(props)
 
-  const onChangeModule = (code: number, initData: any) => {
+  const onChangeModule = (code: number, initData?: any) => {
     const nextModule = moduleCodeMap[code]
 
     setModule(nextModule)
-    setInitData(initData)
+    initData && setInitData(initData)
   }
 
   // TODO 初始化的 Loging
