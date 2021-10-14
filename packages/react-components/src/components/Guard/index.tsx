@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { ConfigProvider } from 'antd'
 
 import { ModuleContext } from 'src/context/module/context'
-import { useAppId } from '../../hooks'
 import { GuardLogin } from '../Login'
 import { initAuthClient } from './authClient'
 import { GuardEvents } from './event'
@@ -12,6 +11,7 @@ import { initI18n } from 'src/locales'
 import { IG2FCProps } from 'src/classes'
 import './styles.less'
 import { getDefaultGuardConfig } from './config'
+import { Spin } from '../Spin'
 const PREFIX_CLS = 'authing-ant'
 
 export enum GuardModuleType {
@@ -32,14 +32,17 @@ export interface GuardProps extends GuardEvents {
   config?: GuardConfig
 }
 
-export const Guard: React.FC<GuardProps> = ({ appId, config }) => {
+export const Guard: React.FC<GuardProps> = ({
+  appId,
+  config,
+  onLoad,
+  onLoadError,
+}) => {
   const [module, setModule] = useState<GuardModuleType>(GuardModuleType.LOGIN)
 
   const [initData, setInitData] = useState({})
   const [initSettingEnd, setInitSettingEnd] = useState(false)
   const [guardConfig, setGuardConfig] = useState<GuardConfig>({})
-
-  useAppId(appId)
 
   // TODO 初始化的 Loging
   const initGuardSetting = useCallback(async () => {
@@ -59,23 +62,21 @@ export const Guard: React.FC<GuardProps> = ({ appId, config }) => {
       // TODO 这部分有点小问题 等待优化
       initI18n({}, mergedConfig.lang)
 
-      initAuthClient(config, appId)
+      const authClient = initAuthClient(config, appId)
 
-      // getEvents().onLoad?.(getAuthClient())
+      onLoad?.(authClient)
       // 初始化 结束
       setInitSettingEnd(true)
     } catch (error) {
-      // getEvents().onLoadError?.(error)
+      onLoadError?.(error)
 
       console.error(error)
     }
-  }, [appId, config])
+  }, [appId, config, onLoad, onLoadError])
 
   useEffect(() => {
     initGuardSetting()
   }, [initGuardSetting])
-
-  const spin = () => 'loading.............'
 
   const renderModule = useMemo(() => {
     if (initSettingEnd) {
@@ -85,7 +86,7 @@ export const Guard: React.FC<GuardProps> = ({ appId, config }) => {
         config: guardConfig,
       })
     } else {
-      return spin
+      return <Spin />
     }
   }, [appId, guardConfig, initData, initSettingEnd, module])
 
