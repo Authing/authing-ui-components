@@ -2,7 +2,7 @@
   border: 1px solid black;
   display: flex;
   flex-direction: column;
-  margin: 200px auto;
+  margin: 100px auto;
 
   justify-content: center;
   // align-items: center;
@@ -40,7 +40,9 @@
 }
 
 .authing-g2-login-password {
-  border: 1px solid black;
+  padding: 10px;
+}
+.authing-g2-login-phone-code {
   padding: 10px;
 }
 
@@ -50,4 +52,14 @@
   height: 46px;
   border-radius: 4px;
   // margin-bottom: 2px;
+}
+
+.authing-g2-input-prototype {
+  width: 336px;
+  border: 1px solid #eaebee;
+  height: 46px;
+  border-radius: 4px;
+  &::placeholder {
+    color: red;
+  }
 }
