@@ -4,7 +4,7 @@ import { ConfigProvider } from 'antd'
 import { ModuleContext } from 'src/context/module/context'
 import { GuardLogin } from '../Login'
 import { initAuthClient } from './authClient'
-import { GuardEvents } from './event'
+import { GuardEvents, guardEventsFilter } from './event'
 import { initConfig, GuardConfig } from 'src/utils/config'
 import { initGuardHttp } from 'src/utils/guradHttp'
 import { initI18n } from 'src/locales'
@@ -30,12 +30,14 @@ export interface GuardProps extends GuardEvents {
   config?: GuardConfig
 }
 
-export const Guard: React.FC<GuardProps> = ({ appId, config, ...events }) => {
+export const Guard: React.FC<GuardProps> = (props) => {
+  const { appId, config, onLoad, onLoadError } = props
   const [module, setModule] = useState<GuardModuleType>(GuardModuleType.LOGIN)
 
   const [initData, setInitData] = useState({})
   const [initSettingEnd, setInitSettingEnd] = useState(false)
   const [guardConfig, setGuardConfig] = useState<GuardConfig>({})
+  const events = guardEventsFilter(props)
 
   // TODO 初始化的 Loging
   const initGuardSetting = useCallback(async () => {
@@ -57,15 +59,15 @@ export const Guard: React.FC<GuardProps> = ({ appId, config, ...events }) => {
 
       const authClient = initAuthClient(config, appId)
 
-      events?.onLoad?.(authClient)
+      onLoad?.(authClient)
       // 初始化 结束
       setInitSettingEnd(true)
     } catch (error) {
-      events?.onLoadError?.(error)
+      onLoadError?.(error)
 
       console.error(error)
     }
-  }, [appId, config, events])
+  }, [appId, config, onLoad, onLoadError])
 
   useEffect(() => {
     initGuardSetting()
