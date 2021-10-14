@@ -9,7 +9,7 @@ import { LoginMethods } from 'authing-js-sdk'
 const App = () => {
   return (
     <div>
-      <Guard appId="60c02a89a9e0431e271d9ff0" />
+      <Guard appId="610271b10cd9106606c73d57" />
       {/* LDAP = 'ldap',
   AppQr = 'app-qrcode',
   Password = 'password',
@@ -19,7 +19,7 @@ const App = () => {
   WechatMpQrcode = 'wechatmp-qrcode', // 微信扫码关注登录 */}
 
       <AuthingGuard
-        appId="60c02a89a9e0431e271d9ff0"
+        appId="610271b10cd9106606c73d57"
         config={{
           loginMethods: [LoginMethods.Password, LoginMethods.LDAP],
         }}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Form, Input, Radio } from 'antd'
 import { GuardLoginProps } from './props'
 import './styles.less'
@@ -12,25 +12,60 @@ const LoginWithPassword = (props: LoginWithPasswordProps) => {
   let client = useGuardHttp()
   let ac = useAuthClient()
   const encrypt = ac.options.encryptFunction
-  // console.log('检查 _publickConfig_', )
+  const onFinish = async (values: any) => {
+    // console.log('Success:', values)
 
-  const onLoginClick = async () => {
     let url = '/api/v2/login/account'
     let body = {
-      account: 'yuri',
-      password: await encrypt!('123456', props.publicKey),
+      account: values.account,
+      password: await encrypt!(values.password, props.publicKey),
 
       // captchaCode,
       // customData: getUserRegisterParams(),
       // autoRegister: autoRegister,
     }
-    const { code, data, message } = await client.post(url, body)
-    console.log('检查登录结果', code, data, message)
+    const { code, message, data } = await client.post(url, body)
+    console.log('检查登录结果', code, message, data)
+  }
+
+  const onFinishFailed = (errorInfo: any) => {
+    console.log('Failed:', errorInfo)
   }
 
   return (
     <div className="authing-g2-login-password">
-      <Form.Item>
+      <Form
+        name="passworLogin"
+        // labelCol={{ span: 8 }}
+        // wrapperCol={{ span: 16 }}
+        // initialValues={{ remember: true }}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        autoComplete="off"
+      >
+        <Form.Item
+          label="账号"
+          name="account"
+          rules={[{ required: true, message: '请填写邮箱或手机号！' }]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label="密码"
+          name="password"
+          rules={[{ required: true, message: '请填写密码！' }]}
+        >
+          <Input.Password />
+        </Form.Item>
+
+        <Form.Item wrapperCol={{ offset: 3, span: 16 }}>
+          <Button type="primary" size="large" htmlType="submit">
+            登录
+          </Button>
+        </Form.Item>
+      </Form>
+
+      {/* <Form.Item>
         <Input className="authing-g2-input" placeholder={'请输入账号'} />
       </Form.Item>
 
@@ -48,17 +83,55 @@ const LoginWithPassword = (props: LoginWithPasswordProps) => {
         >
           登录
         </Button>
-      </div>
+      </div> */}
+    </div>
+  )
+}
+
+const LoginWithPhoneCode = (props: any) => {
+  return (
+    <div className="authing-g2-login-phonecode">
+      <Form
+        name="phoneCode"
+        // labelCol={{ span: 8 }}
+        // wrapperCol={{ span: 16 }}
+        // initialValues={{ remember: true }}
+        // onFinish={onFinish}
+        // onFinishFailed={onFinishFailed}
+        autoComplete="off"
+      >
+        <Form.Item
+          label="手机号"
+          name="phone"
+          rules={[{ required: true, message: '请填写手机号！' }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label="验证码"
+          name="code"
+          rules={[{ required: true, message: '请填写验证码！' }]}
+        >
+          <Input.Password />
+        </Form.Item>
+
+        <Form.Item wrapperCol={{ offset: 3, span: 16 }}>
+          <Button type="primary" size="large" htmlType="submit">
+            登录
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   )
 }
 
 export const GuardLogin: React.FC<GuardLoginProps> = (props) => {
+  const [loginWay, setLoginWay] = useState('password')
   // props: appId, initData, config
   // login 组件是最小单位
   let pc = props.config?.publicKey
   let publicKey = props.config?.publicKey!
-  console.log('login 组件开始加载', pc)
   // 6种不同的登录方式
   // PhoneCode = 'phone-code',
   // Password = 'password',
@@ -78,13 +151,16 @@ export const GuardLogin: React.FC<GuardLoginProps> = (props) => {
     <div className="g2-login-container">
       <Radio.Group
         className="authing-g2-button-group"
-        defaultValue={'password'}
+        // value={loginWay}
+        // onChange={(e) => setLoginWay(e.target.value)}
       >
         <Radio.Button value="password">密码</Radio.Button>
-        <Radio.Button value="phone-code">手机</Radio.Button>
+        <Radio.Button value="phone-code">手机号</Radio.Button>
         <Radio.Button value="ldap">LDAP</Radio.Button>
       </Radio.Group>
-      <LoginWithPassword publicKey={publicKey} />
+
+      {loginWay === 'password' && <LoginWithPassword publicKey={publicKey} />}
+      {loginWay === 'phone-code' && <LoginWithPhoneCode />}
     </div>
   )
 }
