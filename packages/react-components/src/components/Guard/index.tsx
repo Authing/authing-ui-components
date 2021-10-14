@@ -9,9 +9,9 @@ import { GuardEvents } from './event'
 import { initConfig, GuardConfig } from 'src/utils/config'
 import { initGuardHttp } from 'src/utils/guradHttp'
 import { initI18n } from 'src/locales'
+import { IG2FCProps } from 'src/classes'
 import './styles.less'
 import { getDefaultGuardConfig } from './config'
-import { IG2FCProps } from 'src/classes'
 const PREFIX_CLS = 'authing-ant'
 
 export enum GuardModuleType {
@@ -22,7 +22,9 @@ const ComponentsMapping: Record<
   GuardModuleType,
   (props: IG2FCProps) => React.ReactNode
 > = {
-  [GuardModuleType.LOGIN]: (props) => <GuardLogin {...props} />,
+  [GuardModuleType.LOGIN]: (props) => (
+    <GuardLogin {...props} onLogin={() => {}} />
+  ),
 }
 
 export interface GuardProps extends GuardEvents {

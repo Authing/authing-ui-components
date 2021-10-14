@@ -130,7 +130,6 @@ export const GuardLogin: React.FC<GuardLoginProps> = (props) => {
   const [loginWay, setLoginWay] = useState('password')
   // props: appId, initData, config
   // login 组件是最小单位
-  let pc = props.config?.publicKey
   let publicKey = props.config?.publicKey!
   // 6种不同的登录方式
   // PhoneCode = 'phone-code',
@@ -151,8 +150,8 @@ export const GuardLogin: React.FC<GuardLoginProps> = (props) => {
     <div className="g2-login-container">
       <Radio.Group
         className="authing-g2-button-group"
-        // value={loginWay}
-        // onChange={(e) => setLoginWay(e.target.value)}
+        value={loginWay}
+        onChange={(e) => setLoginWay(e.target.value)}
       >
         <Radio.Button value="password">密码</Radio.Button>
         <Radio.Button value="phone-code">手机号</Radio.Button>
