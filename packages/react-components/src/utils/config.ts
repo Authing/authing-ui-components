@@ -34,7 +34,13 @@ export const initConfig = async (
 ): Promise<{ config: GuardConfig; publicConfig: ApplicationConfig }> => {
   if (!publicConfig)
     await getPublicConfig(appId, config.host ?? getDefaultConfig().host!)
-  return { config: mergeConfig(config, defaultConfig), publicConfig }
+  return {
+    config: {
+      ...mergeConfig(config, defaultConfig),
+      _publickConfig_: publicConfig,
+    },
+    publicConfig,
+  }
 }
 
 const mergeConfig = (

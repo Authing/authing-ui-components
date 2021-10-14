@@ -1,4 +1,5 @@
 import { Lang } from 'authing-js-sdk/build/main/types'
+import { ApplicationConfig } from 'src/components/AuthingGuard/api'
 
 export enum GuardMode {
   Modal = 'modal',
@@ -28,6 +29,7 @@ export interface IG2Config {
   target?: HTMLElement
   clickCloseable?: boolean
   escCloseable?: boolean
+  _publickConfig_?: ApplicationConfig
 }
 
 const defaultG2Config: IG2Config = {
