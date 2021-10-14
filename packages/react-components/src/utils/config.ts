@@ -1,48 +1,37 @@
 import { LoginMethods, RegisterMethods } from 'authing-js-sdk'
 import { IG2Config } from 'src/classes'
 import { ApplicationConfig } from 'src/components/AuthingGuard/api'
-import { getDefaultLoginConfig, LoginConfig } from 'src/components/Login/props'
-import {
-  RegisterConfig,
-  getDefaultRegisterConfig,
-} from 'src/components/Register/props'
+import { LoginConfig } from 'src/components/Login/props'
+import { RegisterConfig } from 'src/components/Register/props'
 import { GuardHttp } from './guradHttp'
 import { AuthingResponse } from './http'
 
 export interface GuardConfig extends RegisterConfig, LoginConfig {}
 
-let defaultConfig: GuardConfig
+let publicConfigMap: Record<string, ApplicationConfig> = {}
 
-// TODO appId
-let publicConfig: ApplicationConfig
+const getPublicConfig = (appId: string) => publicConfigMap?.[appId]
 
-export const getDefaultConfig = (): GuardConfig => {
-  if (!defaultConfig) {
-    defaultConfig = {
-      ...getDefaultLoginConfig(),
-      ...getDefaultRegisterConfig(),
-    }
-  }
-
-  return defaultConfig
-}
+const setPublicConfig = (appId: string, config: ApplicationConfig) =>
+  (publicConfigMap[appId] = config)
 
 export const initConfig = async (
   appId: string,
-  config: GuardConfig,
-  defaultConfig: GuardConfig = getDefaultConfig()
+  config: IG2Config,
+  defaultConfig: IG2Config
 ): Promise<{ config: GuardConfig; publicConfig: ApplicationConfig }> => {
-  if (!publicConfig)
-    await getPublicConfig(appId, config.host ?? getDefaultConfig().host!)
+  if (!getPublicConfig(appId))
+    await requestPublicConfig(appId, config.host ?? defaultConfig.host!)
   return {
-    config: mergeConfig(config, defaultConfig),
-    publicConfig,
+    config: mergeConfig(config, defaultConfig, getPublicConfig(appId)),
+    publicConfig: getPublicConfig(appId),
   }
 }
 
 const mergeConfig = (
   config: GuardConfig,
-  defaultConfig: GuardConfig
+  defaultConfig: GuardConfig,
+  publicConfig: ApplicationConfig
 ): IG2Config => {
   const mergedPublicConfig: GuardConfig = {
     ...config,
@@ -88,7 +77,7 @@ const mergeConfig = (
   }
 }
 
-const getPublicConfig = async (
+const requestPublicConfig = async (
   appId: string,
   host: string
 ): Promise<ApplicationConfig> => {
@@ -108,7 +97,7 @@ const getPublicConfig = async (
   if (res.code !== 200 || !res.data)
     throw new Error(res?.message ?? 'Please check your config')
 
-  publicConfig = res.data
+  setPublicConfig(appId, res.data)
 
-  return publicConfig
+  return getPublicConfig(appId)
 }

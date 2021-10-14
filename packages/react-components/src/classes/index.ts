@@ -1,3 +1,4 @@
+import { AuthenticationClient, CommonMessage } from 'authing-js-sdk'
 import { Lang } from 'authing-js-sdk/build/main/types'
 
 export enum GuardMode {
@@ -28,6 +29,12 @@ export interface IG2Config {
   target?: HTMLElement
   clickCloseable?: boolean
   escCloseable?: boolean
+}
+
+export interface IG2Events {
+  onLoad?: (authClient: AuthenticationClient) => void
+  onLoadError?: (error: CommonMessage) => void
+  onClose?: () => void
 }
 
 const defaultG2Config: IG2Config = {

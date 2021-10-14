@@ -70,7 +70,7 @@ export const initGuardHttp = (baseUrl: string) => {
 
 export const getGuardHttp = () => {
   if (!httpClient) {
-    throw new Error('Please initialize GuardHttp')
+    throw new Error('Please initialize Http Client')
   }
 
   return httpClient

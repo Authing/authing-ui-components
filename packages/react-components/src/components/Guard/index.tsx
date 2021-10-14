@@ -10,15 +10,19 @@ import { initConfig, GuardConfig } from 'src/utils/config'
 import { initGuardHttp } from 'src/utils/guradHttp'
 import { initI18n } from 'src/locales'
 import './styles.less'
+import { getDefaultGuardConfig } from './config'
+import { IG2FCProps } from 'src/classes'
 const PREFIX_CLS = 'authing-ant'
-// import { IG2FCProps } from 'src/classes'
 
 export enum GuardModuleType {
   LOGIN = 'login',
 }
 
-const ComponentsMapping: Record<GuardModuleType, any> = {
-  [GuardModuleType.LOGIN]: GuardLogin,
+const ComponentsMapping: Record<
+  GuardModuleType,
+  (props: IG2FCProps) => React.ReactNode
+> = {
+  [GuardModuleType.LOGIN]: (props) => <GuardLogin {...props} />,
 }
 
 export interface GuardProps extends GuardEvents {
@@ -40,7 +44,8 @@ export const Guard: React.FC<GuardProps> = ({ appId, config }) => {
     try {
       const { config: mergedConfig, publicConfig } = await initConfig(
         appId,
-        config ?? {}
+        config ?? {},
+        getDefaultGuardConfig()
       )
 
       setGuardConfig(mergedConfig)
@@ -55,12 +60,13 @@ export const Guard: React.FC<GuardProps> = ({ appId, config }) => {
       initAuthClient(config, appId)
 
       // getEvents().onLoad?.(getAuthClient())
+      // 初始化 结束
+      setInitSettingEnd(true)
     } catch (error) {
       // getEvents().onLoadError?.(error)
-    }
 
-    // 初始化 结束
-    setInitSettingEnd(true)
+      console.error(error)
+    }
   }, [appId, config])
 
   useEffect(() => {
@@ -75,7 +81,6 @@ export const Guard: React.FC<GuardProps> = ({ appId, config }) => {
         appId,
         initData,
         config: guardConfig,
-        unrequestRemote: true,
       })
     } else {
       return spin

@@ -1,7 +1,21 @@
-import { getDefaultG2Config, IG2Config, IG2FCProps } from 'src/classes'
-import { LoginMethods, SocialConnectionProvider } from 'authing-js-sdk'
+import {
+  getDefaultG2Config,
+  IG2Config,
+  IG2Events,
+  IG2FCProps,
+} from 'src/classes'
+import { CommonMessage, SocialConnectionProvider } from 'authing-js-sdk'
 import { QrCodeAuthenticationClient } from 'authing-js-sdk/build/main/lib/authentication/QrCodeAuthenticationClient'
 import { PasswordLoginMethods } from '../AuthingGuard/api'
+import {
+  PasswordLoginParams,
+  LDAPLoginParams,
+  ADLoginParams,
+  PhoneCodeLoginParams,
+  AuthenticationClient,
+  LoginMethods,
+  User,
+} from '..'
 
 export interface LoginConfig extends IG2Config {
   loginMethods?: LoginMethods[]
@@ -27,8 +41,33 @@ const defaultConfig: LoginConfig = {
   ],
 }
 
-export interface LoginEvents {
-  onLogin: () => void
+export interface LoginEvents extends IG2Events {
+  onLogin?: (user: User, authClient: AuthenticationClient) => void
+  onLoginError?: (user: User, authClient: AuthenticationClient) => void
+  onBeforeLogin?: (
+    loginInfo:
+      | PasswordLoginParams
+      | LDAPLoginParams
+      | ADLoginParams
+      | PhoneCodeLoginParams,
+    authClient: AuthenticationClient
+  ) => boolean | Promise<boolean>
+  onPwdEmailSend?: (authClient: AuthenticationClient) => void
+  onPwdEmailSendError?: (
+    error: CommonMessage,
+    authClient: AuthenticationClient
+  ) => void
+  onPwdPhoneSend?: (authClient: AuthenticationClient) => void
+  onPwdPhoneSendError?: (
+    error: CommonMessage,
+    authClient: AuthenticationClient
+  ) => void
+  onPwdReset?: (authClient: AuthenticationClient) => void
+  onPwdResetError?: (
+    error: CommonMessage,
+    authClient: AuthenticationClient
+  ) => void
+  onLoginTabChange?: (activeTab: LoginMethods) => void
 }
 
 export interface GuardLoginProps extends IG2FCProps, LoginEvents {

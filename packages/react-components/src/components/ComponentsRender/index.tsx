@@ -23,7 +23,8 @@ export const ComponentsRender: React.FC<ComponentsRenderProps> = ({
   const init = useCallback(async () => {
     const { config: mergedConfig, publicConfig } = await initConfig(
       appId,
-      config ?? {}
+      config ?? {},
+      {}
     )
 
     setGuardConfig(mergedConfig)
