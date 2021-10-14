@@ -7,25 +7,29 @@ import { useAuthClient } from '../Guard/authClient'
 
 interface LoginWithPasswordProps {
   publicKey: string
+  onLogin: any
 }
-const LoginWithPassword = (props: LoginWithPasswordProps) => {
-  let client = useGuardHttp()
-  let ac = useAuthClient()
-  const encrypt = ac.options.encryptFunction
-  const onFinish = async (values: any) => {
-    // console.log('Success:', values)
 
+const LoginWithPassword = (props: LoginWithPasswordProps) => {
+  let { post } = useGuardHttp()
+  let client = useAuthClient()
+  const encrypt = client.options.encryptFunction
+  const onFinish = async (values: any) => {
     let url = '/api/v2/login/account'
     let body = {
       account: values.account,
       password: await encrypt!(values.password, props.publicKey),
-
       // captchaCode,
       // customData: getUserRegisterParams(),
       // autoRegister: autoRegister,
     }
-    const { code, message, data } = await client.post(url, body)
+    const { code, message, data } = await post(url, body)
     console.log('检查登录结果', code, message, data)
+    if (code) {
+      // 解析 code 判定，有一部分code需要提示，另一部分code需要跳转
+    } else {
+      props.onLogin() // 登录成功
+    }
   }
 
   const onFinishFailed = (errorInfo: any) => {
@@ -89,14 +93,32 @@ const LoginWithPassword = (props: LoginWithPasswordProps) => {
 }
 
 const LoginWithPhoneCode = (props: any) => {
+  let [form] = Form.useForm()
+  let client = useAuthClient()
+
+  const onSendCode = async () => {
+    let phone = form.getFieldValue('phone')
+    // try {
+    await client.sendSmsCode(phone)
+    // } catch {
+    //   console.log('1')
+    // }
+  }
+
+  const onFinish = async (values: any) => {
+    let u = await client.loginByPhoneCode(values.phone, values.code)
+    // u 就是这个信息
+    console.log('u', u)
+    props.onLogin()
+  }
+
   return (
-    <div className="authing-g2-login-phonecode">
+    <div className="authing-g2-login-phone-code">
       <Form
         name="phoneCode"
-        // labelCol={{ span: 8 }}
-        // wrapperCol={{ span: 16 }}
+        form={form}
         // initialValues={{ remember: true }}
-        // onFinish={onFinish}
+        onFinish={onFinish}
         // onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
@@ -107,17 +129,19 @@ const LoginWithPhoneCode = (props: any) => {
         >
           <Input />
         </Form.Item>
-
         <Form.Item
           label="验证码"
           name="code"
           rules={[{ required: true, message: '请填写验证码！' }]}
         >
-          <Input.Password />
+          <Input />
         </Form.Item>
 
-        <Form.Item wrapperCol={{ offset: 3, span: 16 }}>
-          <Button type="primary" size="large" htmlType="submit">
+        <Form.Item>
+          <Button onClick={() => onSendCode()} style={{ marginRight: 20 }}>
+            发送验证码
+          </Button>
+          <Button type="primary" htmlType="submit">
             登录
           </Button>
         </Form.Item>
@@ -130,7 +154,9 @@ export const GuardLogin: React.FC<GuardLoginProps> = (props) => {
   const [loginWay, setLoginWay] = useState('password')
   // props: appId, initData, config
   // login 组件是最小单位
+  console.log('props', props)
   let publicKey = props.config?.publicKey!
+
   // 6种不同的登录方式
   // PhoneCode = 'phone-code',
   // Password = 'password',
@@ -145,7 +171,6 @@ export const GuardLogin: React.FC<GuardLoginProps> = (props) => {
   // if (code === 1) {
   //   props.onLogin('登录成功')
   // }
-  // }
   return (
     <div className="g2-login-container">
       <Radio.Group
@@ -158,8 +183,12 @@ export const GuardLogin: React.FC<GuardLoginProps> = (props) => {
         <Radio.Button value="ldap">LDAP</Radio.Button>
       </Radio.Group>
 
-      {loginWay === 'password' && <LoginWithPassword publicKey={publicKey} />}
-      {loginWay === 'phone-code' && <LoginWithPhoneCode />}
+      {loginWay === 'password' && (
+        <LoginWithPassword publicKey={publicKey} onLogin={props.onLogin} />
+      )}
+      {loginWay === 'phone-code' && (
+        <LoginWithPhoneCode onLogin={props.onLogin} />
+      )}
     </div>
   )
 }
