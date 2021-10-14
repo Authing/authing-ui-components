@@ -12,17 +12,15 @@ import { IG2FCProps } from 'src/classes'
 import './styles.less'
 import { getDefaultGuardConfig } from './config'
 import { Spin } from '../Spin'
+import { GuardModuleType, moduleCodeMap } from './module'
 const PREFIX_CLS = 'authing-ant'
-
-export enum GuardModuleType {
-  LOGIN = 'login',
-}
 
 const ComponentsMapping: Record<
   GuardModuleType,
   (props: IG2FCProps) => React.ReactNode
 > = {
   [GuardModuleType.LOGIN]: (props) => <GuardLogin {...props} />,
+  [GuardModuleType.MFA]: (props) => <GuardLogin {...props} />,
 }
 
 export interface GuardProps extends GuardEvents {
@@ -38,6 +36,13 @@ export const Guard: React.FC<GuardProps> = (props) => {
   const [initSettingEnd, setInitSettingEnd] = useState(false)
   const [guardConfig, setGuardConfig] = useState<GuardConfig>({})
   const events = guardEventsFilter(props)
+
+  const onChangeModule = (code: number, initData: any) => {
+    const nextModule = moduleCodeMap[code]
+
+    setModule(nextModule)
+    setInitData(initData)
+  }
 
   // TODO 初始化的 Loging
   const initGuardSetting = useCallback(async () => {
@@ -80,6 +85,7 @@ export const Guard: React.FC<GuardProps> = (props) => {
         initData,
         config: guardConfig,
         ...events,
+        changeModule: onChangeModule,
       })
     } else {
       return <Spin />

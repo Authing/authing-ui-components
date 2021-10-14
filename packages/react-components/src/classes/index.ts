@@ -35,6 +35,7 @@ export interface IG2Events {
   onLoad?: (authClient: AuthenticationClient) => void
   onLoadError?: (error: CommonMessage) => void
   onClose?: () => void
+  changeModule?: (code: number, initData: any) => void
 }
 
 const defaultG2Config: IG2Config = {

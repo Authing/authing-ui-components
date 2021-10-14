@@ -1,5 +1,5 @@
+import { GuardModuleType } from 'src/components/Guard/module'
 import { useModule } from 'src/context/module/context'
-import { GuardModuleType } from '../components/Guard'
 
 export const useChangeModule = () => {
   const { module, changeModule, setInitData } = useModule()

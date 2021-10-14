@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { GuardModuleType } from 'src/components/Guard'
+import { GuardModuleType } from 'src/components/Guard/module'
 import { createBaseContext } from '../base'
 
 export interface IModuleContext {
