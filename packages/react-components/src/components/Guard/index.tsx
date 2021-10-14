@@ -14,6 +14,7 @@ import { Spin } from '../Spin'
 import { GuardModuleType, moduleCodeMap } from './module'
 import { GuardMFA } from '../MFA'
 import './styles.less'
+import { AuthenticationClient } from 'authing-js-sdk'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -30,19 +31,47 @@ export interface GuardProps extends GuardEvents {
   config?: GuardConfig
 }
 
-export const Guard: React.FC<GuardProps> = (props) => {
+export const Guard = (props: GuardProps) => {
   const { appId, config, onLoad, onLoadError } = props
   const [module, setModule] = useState<GuardModuleType>(GuardModuleType.LOGIN)
-
   const [initData, setInitData] = useState({})
   const [initSettingEnd, setInitSettingEnd] = useState(false)
   const [guardConfig, setGuardConfig] = useState<GuardConfig>({})
+  const [client, setClient] = useState<AuthenticationClient>()
   const events = guardEventsFilter(props)
 
-  const onChangeModule = (code: number, initData?: any) => {
-    const action = moduleCodeMap[code]
-    setModule(action.module)
+  // 切换 module
+  const onChangeModule = (moduleName: GuardModuleType, initData?: any) => {
+    setModule(moduleName)
     initData && setInitData(initData)
+  }
+
+  // 拿 code 换 action，返回可执行函数
+  const codePaser = (code: number) => {
+    // console.log('code', code)
+    const action = moduleCodeMap[code]
+    if (code === 200) {
+      return (data: any) => {
+        // console.log('登录成功 执行登录业务', data)
+        props.onLogin?.(data, client!) // 登录成功
+      }
+    }
+
+    if (!action) {
+      return () => {
+        console.error('未捕获 code', code)
+      }
+    }
+
+    // 解析成功
+    if (action?.action === 'changeModule') {
+      return (initData?: any) => onChangeModule?.(action.module, initData)
+    }
+
+    // 最终结果
+    return () => {
+      console.error('last action')
+    }
   }
 
   // TODO 初始化的 Loging
@@ -64,7 +93,7 @@ export const Guard: React.FC<GuardProps> = (props) => {
       initI18n({}, mergedConfig.lang)
 
       const authClient = initAuthClient(config, appId)
-
+      setClient(authClient)
       onLoad?.(authClient)
       // 初始化 结束
       setInitSettingEnd(true)
@@ -86,7 +115,8 @@ export const Guard: React.FC<GuardProps> = (props) => {
         initData,
         config: guardConfig,
         ...events,
-        changeModule: onChangeModule,
+        __changeModule: onChangeModule,
+        __codePaser: codePaser,
       })
     } else {
       return <Spin />

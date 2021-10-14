@@ -1,5 +1,6 @@
 import { AuthenticationClient, CommonMessage } from 'authing-js-sdk'
 import { Lang } from 'authing-js-sdk/build/main/types'
+import { GuardModuleType } from 'src/components/Guard/module'
 
 export enum GuardMode {
   Modal = 'modal',
@@ -35,7 +36,8 @@ export interface IG2Events {
   onLoad?: (authClient: AuthenticationClient) => void
   onLoadError?: (error: CommonMessage) => void
   onClose?: () => void
-  changeModule?: (code: number, initData: any) => void
+  __codePaser?: (code: number) => Function
+  __changeModule?: (moduleName: GuardModuleType, initData: any) => void
 }
 
 const defaultG2Config: IG2Config = {

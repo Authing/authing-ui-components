@@ -10,7 +10,7 @@ interface GuardModuleAction {
 
 export const moduleCodeMap: Record<number, GuardModuleAction> = {
   1636: {
-    action: 'move',
+    action: 'changeModule',
     module: GuardModuleType.MFA,
   },
 }

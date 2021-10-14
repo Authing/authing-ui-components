@@ -4,10 +4,12 @@ import { GuardLoginProps } from './props'
 import './styles.less'
 import { useGuardHttp } from 'src/utils/guradHttp'
 import { useAuthClient } from '../Guard/authClient'
+import { moduleCodeMap } from '../Guard/module'
 
 interface LoginWithPasswordProps {
   publicKey: string
   onLogin: any
+  __codePaser: any
 }
 
 const LoginWithPassword = (props: LoginWithPasswordProps) => {
@@ -24,12 +26,8 @@ const LoginWithPassword = (props: LoginWithPasswordProps) => {
       // autoRegister: autoRegister,
     }
     const { code, message, data } = await post(url, body)
-    console.log('检查登录结果', code, message, data)
-    if (code) {
-      // 解析 code 判定，有一部分code需要提示，另一部分code需要跳转
-    } else {
-      props.onLogin() // 登录成功
-    }
+    const callback = props.__codePaser?.(code)
+    callback(data)
   }
 
   const onFinishFailed = (errorInfo: any) => {
@@ -150,11 +148,11 @@ const LoginWithPhoneCode = (props: any) => {
   )
 }
 
-export const GuardLogin: React.FC<GuardLoginProps> = (props) => {
+export const GuardLogin = (props: GuardLoginProps) => {
   const [loginWay, setLoginWay] = useState('password')
   // props: appId, initData, config
   // login 组件是最小单位
-  console.log('props', props)
+  // console.log('props', props)
   let publicKey = props.config?.publicKey!
 
   // 6种不同的登录方式
@@ -171,6 +169,11 @@ export const GuardLogin: React.FC<GuardLoginProps> = (props) => {
   // if (code === 1) {
   //   props.onLogin('登录成功')
   // }
+
+  // login 拿到了 code，现在先解析一下，用 code 换 action
+  // 如果 action.action === move 则跳转
+  // 如果 action.action === tip 则弹出提示
+
   return (
     <div className="g2-login-container">
       <Radio.Group
@@ -180,17 +183,28 @@ export const GuardLogin: React.FC<GuardLoginProps> = (props) => {
       >
         <Radio.Button value="password">密码</Radio.Button>
         <Radio.Button value="phone-code">手机号</Radio.Button>
-        <Radio.Button value="ldap">LDAP</Radio.Button>
+        {/* <Radio.Button value="ldap">LDAP</Radio.Button> */}
       </Radio.Group>
 
       {loginWay === 'password' && (
-        <LoginWithPassword publicKey={publicKey} onLogin={props.onLogin} />
+        <LoginWithPassword
+          publicKey={publicKey}
+          onLogin={props.onLogin}
+          __codePaser={props.__codePaser}
+        />
       )}
       {loginWay === 'phone-code' && (
         <LoginWithPhoneCode onLogin={props.onLogin} />
       )}
 
-      <Button onClick={() => props.changeModule?.(1636, { k: 1 })}>1636</Button>
+      {/* <Button
+        onClick={() => {
+          let callback = props.__codePaser?.(1636)
+          callback?.({ k: 4 })
+        }}
+      >
+        1636
+      </Button> */}
     </div>
   )
 }

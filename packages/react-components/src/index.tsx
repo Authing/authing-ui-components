@@ -11,7 +11,7 @@ const App = () => {
     <div>
       <Guard
         appId="6167e1e3f19080f1bf7b7797"
-        onLogin={() => console.log('用户使用时，登录完成')}
+        onLogin={() => console.log('🏁 业务终点，登录完成。')}
       />
 
       {/* LDAP = 'ldap',

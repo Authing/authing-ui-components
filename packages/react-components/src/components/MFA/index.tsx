@@ -1,7 +1,7 @@
 import React from 'react'
 import { IG2FCProps } from 'src/classes'
 
-// import './styles.less'
+import './styles.less'
 
 export interface GuardMFAProps extends IG2FCProps {
   // appId: string
@@ -10,5 +10,5 @@ export interface GuardMFAProps extends IG2FCProps {
 
 export const GuardMFA = (props: GuardMFAProps) => {
   console.log('props', props.initData)
-  return <div>mfa</div>
+  return <div className="g2-mfa-container">mfa</div>
 }
