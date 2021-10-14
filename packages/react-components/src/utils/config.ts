@@ -35,10 +35,7 @@ export const initConfig = async (
   if (!publicConfig)
     await getPublicConfig(appId, config.host ?? getDefaultConfig().host!)
   return {
-    config: {
-      ...mergeConfig(config, defaultConfig),
-      _publicConfig_: publicConfig,
-    },
+    config: mergeConfig(config, defaultConfig),
     publicConfig,
   }
 }
