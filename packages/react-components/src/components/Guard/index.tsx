@@ -26,11 +26,7 @@ export interface GuardProps extends GuardEvents {
   config?: GuardConfig
 }
 
-export const Guard: React.FC<GuardProps> = ({
-  appId,
-  config,
-  ...guardEvents
-}) => {
+export const Guard: React.FC<GuardProps> = ({ appId, config }) => {
   const [module, setModule] = useState<GuardModuleType>(GuardModuleType.LOGIN)
 
   const [initData, setInitData] = useState({})
@@ -79,6 +75,7 @@ export const Guard: React.FC<GuardProps> = ({
         appId,
         initData,
         config: guardConfig,
+        unrequestRemote: true,
       })
     } else {
       return spin

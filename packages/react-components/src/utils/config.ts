@@ -13,6 +13,7 @@ export interface GuardConfig extends RegisterConfig, LoginConfig {}
 
 let defaultConfig: GuardConfig
 
+// TODO appId
 let publicConfig: ApplicationConfig
 
 export const getDefaultConfig = (): GuardConfig => {
