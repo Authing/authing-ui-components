@@ -22,9 +22,7 @@ const ComponentsMapping: Record<
   GuardModuleType,
   (props: IG2FCProps) => React.ReactNode
 > = {
-  [GuardModuleType.LOGIN]: (props) => (
-    <GuardLogin {...props} onLogin={() => {}} />
-  ),
+  [GuardModuleType.LOGIN]: (props) => <GuardLogin {...props} />,
 }
 
 export interface GuardProps extends GuardEvents {
@@ -32,12 +30,7 @@ export interface GuardProps extends GuardEvents {
   config?: GuardConfig
 }
 
-export const Guard: React.FC<GuardProps> = ({
-  appId,
-  config,
-  onLoad,
-  onLoadError,
-}) => {
+export const Guard: React.FC<GuardProps> = ({ appId, config, ...events }) => {
   const [module, setModule] = useState<GuardModuleType>(GuardModuleType.LOGIN)
 
   const [initData, setInitData] = useState({})
@@ -64,15 +57,15 @@ export const Guard: React.FC<GuardProps> = ({
 
       const authClient = initAuthClient(config, appId)
 
-      onLoad?.(authClient)
+      events?.onLoad?.(authClient)
       // 初始化 结束
       setInitSettingEnd(true)
     } catch (error) {
-      onLoadError?.(error)
+      events?.onLoadError?.(error)
 
       console.error(error)
     }
-  }, [appId, config, onLoad, onLoadError])
+  }, [appId, config, events])
 
   useEffect(() => {
     initGuardSetting()
@@ -84,11 +77,12 @@ export const Guard: React.FC<GuardProps> = ({
         appId,
         initData,
         config: guardConfig,
+        ...events,
       })
     } else {
       return <Spin />
     }
-  }, [appId, guardConfig, initData, initSettingEnd, module])
+  }, [appId, events, guardConfig, initData, initSettingEnd, module])
 
   return (
     // TODO 这部分缺失 Loging 态
