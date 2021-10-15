@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { ConfigProvider } from 'antd'
-
-import { ModuleContext } from 'src/context/module/context'
 import { GuardLogin } from '../Login'
 import { initAuthClient } from './authClient'
 import { GuardEvents, guardEventsFilter } from './event'
@@ -121,20 +119,12 @@ export const Guard = (props: GuardProps) => {
     } else {
       return <Spin />
     }
-  }, [appId, events, guardConfig, initData, initSettingEnd, module])
+  }, [appId, codePaser, events, guardConfig, initData, initSettingEnd, module])
 
   return (
     // TODO 这部分缺失 Loging 态
     <ConfigProvider prefixCls={PREFIX_CLS}>
-      <ModuleContext
-        value={{
-          module,
-          changeModule: setModule,
-          setInitData,
-        }}
-      >
-        <div className="authing-g2-render-module">{renderModule}</div>
-      </ModuleContext>
+      <div className="authing-g2-render-module">{renderModule}</div>
     </ConfigProvider>
   )
 }

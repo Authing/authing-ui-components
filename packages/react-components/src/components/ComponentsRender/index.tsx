@@ -5,6 +5,7 @@ import { initI18n } from 'src/locales'
 import { initConfig } from 'src/utils/config'
 import { initGuardHttp } from 'src/utils/guradHttp'
 import { initAuthClient } from '../Guard/authClient'
+import { Spin } from '../Spin'
 
 export interface ComponentsRenderProps extends IG2FCProps {
   component: any
@@ -44,8 +45,6 @@ export const ComponentsRender: React.FC<ComponentsRenderProps> = ({
     init()
   }, [init])
 
-  const spin = <span>loading.............</span>
-
   const renderComponent = useMemo(() => {
     if (initSettingEnd) {
       return component({
@@ -54,9 +53,9 @@ export const ComponentsRender: React.FC<ComponentsRenderProps> = ({
         initData,
       })
     } else {
-      return spin
+      return <Spin />
     }
-  }, [appId, component, guardConfig, initData, initSettingEnd, spin])
+  }, [appId, component, guardConfig, initData, initSettingEnd])
 
   return (
     <ConfigProvider prefixCls={PREFIX_CLS}>{renderComponent}</ConfigProvider>
