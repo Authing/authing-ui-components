@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { ConfigProvider } from 'antd'
 
-import { ModuleContext } from 'src/context/module/context'
 import { GuardLoginView } from '../Login'
+
 import { initAuthClient } from './authClient'
 import { GuardEvents, guardEventsFilter } from './event'
 import { initConfig, GuardConfig } from 'src/utils/config'
@@ -14,7 +14,6 @@ import { Spin } from '../Spin'
 import { GuardModuleType } from './module'
 import { GuardMFA } from '../MFA'
 import './styles.less'
-import { AuthenticationClient } from 'authing-js-sdk'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -126,15 +125,7 @@ export const Guard = (props: GuardProps) => {
   return (
     // TODO 这部分缺失 Loging 态
     <ConfigProvider prefixCls={PREFIX_CLS}>
-      <ModuleContext
-        value={{
-          module,
-          changeModule: setModule,
-          setInitData,
-        }}
-      >
-        <div className="authing-g2-render-module">{renderModule}</div>
-      </ModuleContext>
+      <div className="authing-g2-render-module">{renderModule}</div>
     </ConfigProvider>
   )
 }

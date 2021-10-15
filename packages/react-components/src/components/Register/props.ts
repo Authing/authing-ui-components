@@ -17,6 +17,7 @@ export interface RegisterConfig extends IG2Config {
   registerMethods?: RegisterMethods[]
   defaultRegisterMethod?: RegisterMethods
   disableRegister?: boolean
+  publicKey?: string
 }
 
 const defaultConfig: RegisterConfig = {
@@ -51,7 +52,7 @@ export interface RegisterEvents extends IG2Events {
   ) => void
 }
 
-export interface GuardLoginProps extends IG2FCProps, RegisterEvents {
+export interface GuardRegisterProps extends IG2FCProps, RegisterEvents {
   config?: RegisterConfig
 }
 

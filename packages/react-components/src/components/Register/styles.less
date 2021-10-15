@@ -1,0 +1,65 @@
+.g2-login-container {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  margin: 100px auto;
+
+  justify-content: center;
+  // align-items: center;
+
+  width: 456px;
+  height: 610px;
+  box-sizing: border-box;
+  padding: 5px;
+  // justify-content: center;
+  // align-items: center;
+}
+
+.authing-g2-button-group {
+  background: #eff2f6;
+  border-radius: 8px;
+  padding: 4px 2px;
+  margin-bottom: 16px;
+
+  .authing-ant-radio-button-wrapper {
+    margin: 0 2px;
+    border-radius: 8px;
+    color: #545968;
+    cursor: pointer;
+    border: none;
+    background: none;
+    height: auto;
+    &.authing-ant-radio-button-wrapper-checked {
+      color: #396aff;
+      background: #ffffff;
+    }
+    &:not(:first-child)::before {
+      display: none;
+    }
+  }
+}
+
+.authing-g2-login-password {
+  padding: 10px;
+}
+.authing-g2-login-phone-code {
+  padding: 10px;
+}
+
+.authing-g2-input {
+  width: 336px;
+  border: 1px solid #eaebee;
+  height: 46px;
+  border-radius: 4px;
+  // margin-bottom: 2px;
+}
+
+.authing-g2-input-prototype {
+  width: 336px;
+  border: 1px solid #eaebee;
+  height: 46px;
+  border-radius: 4px;
+  &::placeholder {
+    color: red;
+  }
+}
