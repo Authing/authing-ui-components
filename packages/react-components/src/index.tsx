@@ -10,17 +10,9 @@ const App = () => {
   return (
     <div>
       <Guard
-        appId="6167e1e3f19080f1bf7b7797"
-        onLogin={() => console.log('🏁 业务终点，登录完成。')}
+        appId="610271b10cd9106606c73d57"
+        onLogin={(u) => console.log('🏁 业务终点，登录完成。', u)}
       />
-
-      {/* LDAP = 'ldap',
-  AppQr = 'app-qrcode',
-  Password = 'password',
-  PhoneCode = 'phone-code',
-  WxMinQr = 'wechat-miniprogram-qrcode', // 对应社会化登录的 wechat:miniprogram:qrconnect(小程序扫码登录)
-  AD = 'ad', // 对应企业身份源的 Windows AD 登录
-  WechatMpQrcode = 'wechatmp-qrcode', // 微信扫码关注登录 */}
 
       <AuthingGuard
         appId="6167e1e3f19080f1bf7b7797"

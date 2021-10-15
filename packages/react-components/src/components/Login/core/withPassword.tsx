@@ -5,7 +5,7 @@ import { useGuardHttp } from 'src/utils/guradHttp'
 import { useAuthClient } from '../../Guard/authClient'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 
-// code 代码只完成核心功能，东西尽可能少
+// core 代码只完成核心功能，东西尽可能少
 interface LoginWithPasswordProps {
   publicKey: string
   onLogin: any
@@ -24,17 +24,13 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
       // customData: getUserRegisterParams(),
       // autoRegister: autoRegister,
     }
-    const { code, message, data } = await post(url, body)
-    // const callback = props.__codePaser?.(code)
-    // callback(data)
-    props.onLogin(code, message, data)
+    const { code, data } = await post(url, body)
+    props.onLogin(code, data)
   }
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo)
   }
-
-  // return <div className="authing-g2-login-password"></div>
 
   return (
     <div className="authing-g2-login-password">

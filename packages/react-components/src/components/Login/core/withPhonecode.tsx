@@ -23,9 +23,8 @@ export const LoginWithPhoneCode = (props: any) => {
 
   const onFinish = async (values: any) => {
     let u = await client.loginByPhoneCode(values.phone, values.code)
-    // u 就是这个信息
-    console.log('u', u)
-    props.onLogin()
+    // console.log('u', u) // u 就是这个信息
+    props.onLogin(200, u)
   }
 
   return (
