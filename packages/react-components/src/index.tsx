@@ -25,7 +25,7 @@ const App = () => {
       <AuthingGuard
         appId="6167e1e3f19080f1bf7b7797"
         config={{
-          loginMethods: [LoginMethods.Password, LoginMethods.LDAP],
+          loginMethods: [LoginMethods.Password, LoginMethods.PhoneCode],
         }}
       />
     </div>

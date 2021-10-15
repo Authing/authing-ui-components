@@ -70,7 +70,7 @@ export interface LoginEvents extends IG2Events {
   onLoginTabChange?: (activeTab: LoginMethods) => void
 }
 
-export interface GuardLoginProps extends IG2FCProps, LoginEvents {
+export interface GuardLoginViewProps extends IG2FCProps, LoginEvents {
   config?: LoginConfig
 }
 

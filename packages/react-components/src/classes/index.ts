@@ -36,7 +36,7 @@ export interface IG2Events {
   onLoad?: (authClient: AuthenticationClient) => void
   onLoadError?: (error: CommonMessage) => void
   onClose?: () => void
-  __codePaser?: (code: number) => Function
+  // __codePaser?: (code: number) => Function
   __changeModule?: (moduleName: GuardModuleType, initData: any) => void
 }
 

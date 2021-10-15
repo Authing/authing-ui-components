@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { ConfigProvider } from 'antd'
 
 import { ModuleContext } from 'src/context/module/context'
-import { GuardLogin } from '../Login'
+import { GuardLoginView } from '../Login'
 import { initAuthClient } from './authClient'
 import { GuardEvents, guardEventsFilter } from './event'
 import { initConfig, GuardConfig } from 'src/utils/config'
@@ -11,7 +11,7 @@ import { initI18n } from 'src/locales'
 import { IG2FCProps } from 'src/classes'
 import { getDefaultGuardConfig } from './config'
 import { Spin } from '../Spin'
-import { GuardModuleType, moduleCodeMap } from './module'
+import { GuardModuleType } from './module'
 import { GuardMFA } from '../MFA'
 import './styles.less'
 import { AuthenticationClient } from 'authing-js-sdk'
@@ -22,7 +22,7 @@ const ComponentsMapping: Record<
   GuardModuleType,
   (props: IG2FCProps) => React.ReactNode
 > = {
-  [GuardModuleType.LOGIN]: (props) => <GuardLogin {...props} />,
+  [GuardModuleType.LOGIN]: (props) => <GuardLoginView {...props} />,
   [GuardModuleType.MFA]: (props) => <GuardMFA {...props} />,
 }
 
@@ -37,7 +37,7 @@ export const Guard = (props: GuardProps) => {
   const [initData, setInitData] = useState({})
   const [initSettingEnd, setInitSettingEnd] = useState(false)
   const [guardConfig, setGuardConfig] = useState<GuardConfig>({})
-  const [client, setClient] = useState<AuthenticationClient>()
+  // const [client, setClient] = useState<AuthenticationClient>()
   const events = guardEventsFilter(props)
 
   // 切换 module
@@ -47,32 +47,32 @@ export const Guard = (props: GuardProps) => {
   }
 
   // 拿 code 换 action，返回可执行函数
-  const codePaser = (code: number) => {
-    // console.log('code', code)
-    const action = moduleCodeMap[code]
-    if (code === 200) {
-      return (data: any) => {
-        // console.log('登录成功 执行登录业务', data)
-        props.onLogin?.(data, client!) // 登录成功
-      }
-    }
+  // const codePaser = (code: number) => {
+  //   // console.log('code', code)
+  //   const action = moduleCodeMap[code]
+  //   if (code === 200) {
+  //     return (data: any) => {
+  //       // console.log('登录成功 执行登录业务', data)
+  //       props.onLogin?.(data, client!) // 登录成功
+  //     }
+  //   }
 
-    if (!action) {
-      return () => {
-        console.error('未捕获 code', code)
-      }
-    }
+  //   if (!action) {
+  //     return () => {
+  //       console.error('未捕获 code', code)
+  //     }
+  //   }
 
-    // 解析成功
-    if (action?.action === 'changeModule') {
-      return (initData?: any) => onChangeModule?.(action.module, initData)
-    }
+  //   // 解析成功
+  //   if (action?.action === 'changeModule') {
+  //     return (initData?: any) => onChangeModule?.(action.module, initData)
+  //   }
 
-    // 最终结果
-    return () => {
-      console.error('last action')
-    }
-  }
+  //   // 最终结果
+  //   return () => {
+  //     console.error('last action')
+  //   }
+  // }
 
   // TODO 初始化的 Loging
   const initGuardSetting = useCallback(async () => {
@@ -93,7 +93,7 @@ export const Guard = (props: GuardProps) => {
       initI18n({}, mergedConfig.lang)
 
       const authClient = initAuthClient(config, appId)
-      setClient(authClient)
+      // setClient(authClient)
       onLoad?.(authClient)
       // 初始化 结束
       setInitSettingEnd(true)
@@ -116,7 +116,7 @@ export const Guard = (props: GuardProps) => {
         config: guardConfig,
         ...events,
         __changeModule: onChangeModule,
-        __codePaser: codePaser,
+        // __codePaser: codePaser,
       })
     } else {
       return <Spin />
