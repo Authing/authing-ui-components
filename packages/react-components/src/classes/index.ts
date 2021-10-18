@@ -31,6 +31,7 @@ export interface IG2Config {
   target?: HTMLElement
   clickCloseable?: boolean
   escCloseable?: boolean
+  __appHost__?: string
   __publicConfig__?: ApplicationConfig
 }
 

@@ -3,6 +3,7 @@ import { IG2Config } from 'src/classes'
 import { ApplicationConfig } from 'src/components/AuthingGuard/api'
 import { LoginConfig } from 'src/components/Login/props'
 import { RegisterConfig } from 'src/components/Register/props'
+import { assembledAppHost } from '.'
 import { GuardHttp } from './guradHttp'
 import { AuthingResponse } from './http'
 
@@ -22,10 +23,19 @@ export const initConfig = async (
 ): Promise<{ config: GuardConfig; publicConfig: ApplicationConfig }> => {
   if (!getPublicConfig(appId))
     await requestPublicConfig(appId, config.host ?? defaultConfig.host!)
+  const mergedConfig = mergeConfig(
+    config,
+    defaultConfig,
+    getPublicConfig(appId)
+  )
   return {
     config: {
-      ...mergeConfig(config, defaultConfig, getPublicConfig(appId)),
+      ...mergedConfig,
       __publicConfig__: getPublicConfig(appId),
+      __appHost__: assembledAppHost(
+        getPublicConfig(appId).identifier,
+        mergedConfig?.host!
+      ),
     },
     publicConfig: getPublicConfig(appId),
   }

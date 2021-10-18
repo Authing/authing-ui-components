@@ -92,6 +92,7 @@ export interface ApplicationConfig {
   extendsFieldsEnabled: boolean
   extendsFields: ExtendsField[]
 
+  identifier: string
   identityProviders: {
     identifier: string
     protocol: Protocol
