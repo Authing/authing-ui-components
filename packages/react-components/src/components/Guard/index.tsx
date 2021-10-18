@@ -38,9 +38,7 @@ export interface GuardProps extends GuardEvents {
 
 export const Guard = (props: GuardProps) => {
   const { appId, config, onLoad, onLoadError } = props
-  const [module, setModule] = useState<GuardModuleType>(
-    GuardModuleType.REGISTER
-  )
+  const [module, setModule] = useState<GuardModuleType>(GuardModuleType.LOGIN)
   const [initData, setInitData] = useState({})
   const [initSettingEnd, setInitSettingEnd] = useState(false)
   const [guardConfig, setGuardConfig] = useState<GuardConfig>({})
