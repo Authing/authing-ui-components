@@ -39,6 +39,7 @@ export const LoginWithPhoneCode = (props: any) => {
       >
         <Form.Item name="phone">
           <Input
+            className="authing-g2-input"
             autoComplete="tel"
             size="large"
             placeholder={'请输入手机号'}
@@ -47,6 +48,7 @@ export const LoginWithPhoneCode = (props: any) => {
         </Form.Item>
         <Form.Item name="code">
           <Input
+            className="authing-g2-input"
             size="large"
             placeholder={'请输入验证码'}
             prefix={<SafetyOutlined style={{ color: '#ddd' }} />}

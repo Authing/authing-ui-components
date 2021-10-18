@@ -5,20 +5,21 @@ import { Guard } from './components/Guard'
 import { AuthingGuard } from './components/AuthingGuard'
 import reportWebVitals from './reportWebVitals'
 import { LoginMethods } from 'authing-js-sdk'
+import { message } from 'antd'
 
 const App = () => {
   return (
     <div>
       <Guard
         appId="610271b10cd9106606c73d57"
-        onLogin={(u) => console.log('🏁 业务终点，登录完成。', u)}
+        onLogin={(u) => message.info('🏁 用户业务层终点，登录完成。')}
       />
 
       <AuthingGuard
         appId="6167e1e3f19080f1bf7b7797"
-        config={{
-          loginMethods: [LoginMethods.Password, LoginMethods.PhoneCode],
-        }}
+        // config={{
+        //   loginMethods: [LoginMethods.Password, LoginMethods.PhoneCode],
+        // }}
       />
     </div>
   )
