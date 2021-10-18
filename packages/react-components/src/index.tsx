@@ -111,6 +111,9 @@ const App = () => {
       ></input>
       <AuthingGuard
         onLoad={(v) => console.log(v)}
+        onLogin={(ev) => {
+          console.log('>>>>>>>>>>', ev)
+        }}
         // visible={visible}
         // onLoginTabChange={(v) => console.log(v)}
         // onRegisterTabChange={(v) => console.log(v)}

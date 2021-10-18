@@ -195,5 +195,6 @@
   "aInvalid": "登录已失效",
   "mfaInvalid": "登录已失效",
   "mfaInvalidContent": "您的登录状态已经失效，请您重新登录",
-  "backLogin": "返回登录"
+  "backLogin": "返回登录",
+  "bindAppTotp": "正在跳转，请稍后..."
 }

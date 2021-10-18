@@ -8,6 +8,8 @@ import { AppDownload } from '../BindTotpForm/AppDownload'
 import { ScanQrcode } from '../BindTotpForm/ScanQrcode'
 import { InputSaftyCode } from '../BindTotpForm/InputSaftyCode'
 import { User } from 'authing-js-sdk'
+import { SaveSecretKey } from '../BindTotpForm/SaveSecretKey'
+import { BindSuccess } from '../BindTotpForm/BindSuccess'
 
 import './style.less'
 
@@ -153,7 +155,7 @@ export const UserMfa: React.FC<any> = ({
     setBtnLoading(true)
     try {
       if (totpSource === TotpSource.SELF) {
-        // await bindSelfTotp()
+        await bindSelfTotp()
       } else {
         await bindApplcationTotp()
       }
@@ -163,7 +165,29 @@ export const UserMfa: React.FC<any> = ({
       setBtnLoading(false)
     }
   }
-  // 企业
+
+  // 绑定个人
+  const bindSelfTotp = async () => {
+    const data: any = await requestClient.post(
+      '/api/v2/mfa/totp/associate/confirm',
+      {
+        authenticator_type: 'totp',
+        totp: saftyCode.join(''),
+        source: totpSource,
+      }
+    )
+
+    if (data.code !== 200) {
+      message.error(data.message)
+    } else {
+      message.success(t('user.bindSuccess'))
+      setCurrentStep((state) => state + 1)
+      setSaftyCode(getInitSaftyCode())
+    }
+    setBtnLoading(false)
+  }
+
+  // 绑定企业
   const bindApplcationTotp = async () => {
     const data: any = await requestClient.post(
       '/api/v2/mfa/totp/associate/confirm',
@@ -180,7 +204,7 @@ export const UserMfa: React.FC<any> = ({
         },
       }
     )
-
+    // 登录失效的校验
     if (data.code === ErrorCodes.MAF_TOKEN_INVALID) {
       Modal.confirm({
         title: t('common.mfaInvalid'),
@@ -218,13 +242,13 @@ export const UserMfa: React.FC<any> = ({
   }, [handleCheckAuthenticator, handleFetchBindInfo])
 
   // 下一步按钮事件
-  const handleNextStep = useCallback(async () => {
+  const handleNextStep = async () => {
     if (currentStep === 2) {
       await handleBind()
     } else {
       setCurrentStep((state) => state + 1)
     }
-  }, [])
+  }
 
   // 上一步按钮事件
   const handlePrevStep = () => {
@@ -268,8 +292,19 @@ export const UserMfa: React.FC<any> = ({
         userpoolName=""
       />,
       <InputSaftyCode {...{ saftyCode, setSaftyCode, isPhoneMedia }} />,
+      <SaveSecretKey {...{ secret, setIsSaved, isSaved }} />,
+      <BindSuccess totpSource={totpSource} user={user} />,
     ],
-    [isPhoneMedia, qrcode, secret, setSaftyCode, saftyCode]
+    [
+      isPhoneMedia,
+      qrcode,
+      secret,
+      setSaftyCode,
+      saftyCode,
+      isSaved,
+      user,
+      totpSource,
+    ]
   )
 
   // 下一步是否可用
