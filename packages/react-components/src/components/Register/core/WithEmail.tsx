@@ -1,5 +1,6 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
-import { Button, Form, Input } from 'antd'
+import { Button, Form, Input, message } from 'antd'
+import { RegisterMethods } from 'authing-js-sdk'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
@@ -16,12 +17,14 @@ import { Agreements } from '../components/Agreements'
 export interface RegisterWithEmailProps {
   onRegister: Function
   onRegisterError: Function
+  onBeforeRegister?: Function
   agreements: Agreement[]
 }
 
-export const WithEmail: React.FC<RegisterWithEmailProps> = ({
+export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
   onRegister,
   onRegisterError,
+  onBeforeRegister,
   agreements,
 }) => {
   const { t } = useTranslation()
@@ -33,6 +36,33 @@ export const WithEmail: React.FC<RegisterWithEmailProps> = ({
 
   const [finish, onFinish] = useAsyncFn(
     async (values: any) => {
+      if (onBeforeRegister) {
+        try {
+          const canRegister = await onBeforeRegister(
+            {
+              type: RegisterMethods.Phone,
+              data: {
+                phone: values.phone,
+                password: values.password,
+                code: values.code,
+              },
+            },
+            authClient
+          )
+
+          if (!canRegister) {
+            return
+          }
+        } catch (e) {
+          if (typeof e === 'string') {
+            message.error(e)
+          } else {
+            message.error(e.message)
+          }
+          return
+        }
+      }
+
       try {
         await form.validateFields()
 

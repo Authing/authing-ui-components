@@ -7,7 +7,6 @@ import {
 } from 'src/classes'
 import {
   AuthenticationClient,
-  CommonMessage,
   User,
   EmailRegisterParams,
   PhoneRegisterParams,
@@ -35,24 +34,8 @@ export interface RegisterEvents extends IG2Events {
     authClient: AuthenticationClient
   ) => boolean | Promise<boolean>
   onRegister?: (user: User, authClient: AuthenticationClient) => void
-  onRegisterError?: (user: User, authClient: AuthenticationClient) => void
+  onRegisterError?: (error: any) => void
   onRegisterTabChange?: (activeTab: RegisterMethods) => void
-  onRegisterInfoCompleted?: (
-    user: User,
-    udfs: {
-      definition: any
-      value: any
-    }[],
-    authClient: AuthenticationClient
-  ) => void
-  onRegisterInfoCompletedError?: (
-    error: CommonMessage,
-    udfs: {
-      definition: any
-      value: any
-    }[],
-    authClient: AuthenticationClient
-  ) => void
 }
 
 export interface GuardRegisterProps extends IG2FCProps, RegisterEvents {

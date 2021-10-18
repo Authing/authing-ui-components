@@ -4,8 +4,8 @@ import ReactDOM from 'react-dom'
 import { Guard } from './components/Guard'
 import { AuthingGuard } from './components/AuthingGuard'
 import reportWebVitals from './reportWebVitals'
-import { LoginMethods } from 'authing-js-sdk'
 import { message } from 'antd'
+import { RegisterMethods } from './components'
 
 const App = () => {
   return (
@@ -25,8 +25,12 @@ const App = () => {
         onLoginTabChange={(key) => {
           console.log('📁 业务事件，tab change', key)
         }}
+        onRegisterTabChange={(registerMethod) => {
+          console.log('📁 业务事件，tab change', registerMethod)
+        }}
         config={{
           autoRegister: true,
+          defaultRegisterMethod: RegisterMethods.Phone,
           // loginMethods?: LoginMethods[]
           // defaultLoginMethod?: LoginMethods
           // socialConnections?: SocialConnectionProvider[]

@@ -3,19 +3,33 @@ import { RegisterMethods, User } from 'authing-js-sdk'
 import React, { useMemo } from 'react'
 import { useAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
-import { WithEmail } from './core/WithEmail'
-import { WithPhone } from './core/WithPhone'
+import { RegisterWithEmail } from './core/WithEmail'
+import { RegisterWithPhone } from './core/WithPhone'
 import { GuardRegisterProps } from './props'
 import './styles.less'
 
 export const GuardRegister: React.FC<GuardRegisterProps> = ({
   config,
-  onRegister,
   __changeModule,
+  ...registerEvents
 }) => {
   const agreementEnabled = config?.agreementEnabled
 
   const authClient = useAuthClient()
+
+  const registerContextProps = useMemo(
+    () => ({
+      onRegister: (user: User) => {
+        registerEvents.onRegister?.(user, authClient)
+      },
+      onRegisterError: (error: any) => {
+        registerEvents.onRegisterError?.(error)
+      },
+      agreements: agreementEnabled ? config?.agreements ?? [] : [],
+      onBeforeRegister: registerEvents.onBeforeRegister,
+    }),
+    [agreementEnabled, authClient, config?.agreements, registerEvents]
+  )
 
   const tabMapping: Record<
     RegisterMethods,
@@ -23,32 +37,15 @@ export const GuardRegister: React.FC<GuardRegisterProps> = ({
   > = useMemo(
     () => ({
       [RegisterMethods.Email]: {
-        component: (
-          <WithEmail
-            onRegister={(user: User) => {
-              console.log('注册成功', user)
-              onRegister?.(user, authClient)
-            }}
-            onRegisterError={(error: any) => {
-              console.log(error)
-            }}
-            agreements={agreementEnabled ? config?.agreements ?? [] : []}
-          />
-        ),
+        component: <RegisterWithEmail {...registerContextProps} />,
         name: '邮箱',
       },
       [RegisterMethods.Phone]: {
-        component: (
-          <WithPhone
-            onRegister={() => {}}
-            onRegisterError={() => {}}
-            agreements={agreementEnabled ? config?.agreements ?? [] : []}
-          />
-        ),
+        component: <RegisterWithPhone {...registerContextProps} />,
         name: '手机',
       },
     }),
-    [agreementEnabled, authClient, config?.agreements, onRegister]
+    [registerContextProps]
   )
 
   const renderTab = useMemo(
@@ -69,7 +66,14 @@ export const GuardRegister: React.FC<GuardRegisterProps> = ({
         <div className="title">欢迎加入 {config?.title}</div>
       </div>
       <div className="g2-register-tabs">
-        <Tabs>{renderTab}</Tabs>
+        <Tabs
+          defaultActiveKey={config?.defaultRegisterMethod}
+          onChange={(activeKey) => {
+            registerEvents.onRegisterTabChange?.(activeKey as RegisterMethods)
+          }}
+        >
+          {renderTab}
+        </Tabs>
       </div>
       <div className="tipsLine">
         <div

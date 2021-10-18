@@ -64,7 +64,7 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
   return (
     <>
       <Row justify="space-between" align="middle">
-        <Col span={14}>
+        <Col span={15}>
           <Input {...inputProps} value={value} onChange={onChange} />
         </Col>
         <Col>

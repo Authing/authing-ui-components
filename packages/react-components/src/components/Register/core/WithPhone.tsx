@@ -20,7 +20,7 @@ export interface RegisterWithPhoneProps {
   agreements: Agreement[]
 }
 
-export const WithPhone: React.FC<RegisterWithPhoneProps> = ({
+export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   onRegister,
   onRegisterError,
   agreements,
