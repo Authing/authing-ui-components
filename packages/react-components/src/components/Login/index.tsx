@@ -122,18 +122,6 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
         value={loginWay}
         onChange={(e) => setLoginWay(e.target.value)}
       >
-        {props.config?.loginMethods?.includes(LoginMethods.Password) && (
-          <Radio.Button value="password">密码</Radio.Button>
-        )}
-        {props.config?.loginMethods?.includes(LoginMethods.PhoneCode) && (
-          <Radio.Button value="phone-code">手机号</Radio.Button>
-        )}
-        {props.config?.loginMethods?.includes(LoginMethods.LDAP) && (
-          <Radio.Button value="ldap">LDAP</Radio.Button>
-        )}
-        {props.config?.loginMethods?.includes(LoginMethods.AD) && (
-          <Radio.Button value="ad">企业身份源</Radio.Button>
-        )}
         {props.config?.loginMethods?.includes(LoginMethods.AppQr) && (
           <Radio.Button value="app-qrcode">app-qrcode</Radio.Button>
         )}
@@ -145,14 +133,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
         todo wechatmp-qrcode 并未出现在枚举中
         <Radio.Button value="wechatmp-qrcode">公众号扫码登录</Radio.Button>
       </Radio.Group> */}
-      {/* 
-      {loginWay === 'password' && (
-        <LoginWithPassword publicKey={publicKey} onLogin={onLogin} />
-      )}
-      {loginWay === 'phone-code' && <LoginWithPhoneCode onLogin={onLogin} />}
-      {loginWay === 'ldap' && <LoginWithLDAP onLogin={onLogin} />}
-      {loginWay === 'ad' && <LoginWithAD onLogin={onLogin} />}
-      {loginWay === 'app-qrcode' && <LoginWithAppQrcode onLogin={onLogin} />}
+      {/* {loginWay === 'app-qrcode' && <LoginWithAppQrcode onLogin={onLogin} />}
       {loginWay === 'wechat-miniprogram-qrcode' && (
         <LoginWithWechatMiniQrcode onLogin={onLogin} />
       )}
@@ -160,9 +141,9 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
         <LoginWithWechatmpQrcode onLogin={onLogin} />
       )} */}
 
-      <div className="tipsLine">
+      <div className="g2-tips-line">
         <div
-          className="linklike"
+          className="link-like"
           onClick={() =>
             props.__changeModule?.(GuardModuleType.FORGETPASSWORD, {})
           }
@@ -170,11 +151,11 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
           忘记密码
         </div>
         <span
-          className="registerTip"
+          className="register-tip"
           onClick={() => props.__changeModule?.(GuardModuleType.REGISTER, {})}
         >
           <span className="gray">还没有账号，</span>
-          <span className="linklike">立即注册</span>
+          <span className="link-like">立即注册</span>
         </span>
       </div>
     </div>
