@@ -23,7 +23,10 @@ export const initConfig = async (
   if (!getPublicConfig(appId))
     await requestPublicConfig(appId, config.host ?? defaultConfig.host!)
   return {
-    config: mergeConfig(config, defaultConfig, getPublicConfig(appId)),
+    config: {
+      ...mergeConfig(config, defaultConfig, getPublicConfig(appId)),
+      __publicConfig__: getPublicConfig(appId),
+    },
     publicConfig: getPublicConfig(appId),
   }
 }
@@ -69,6 +72,9 @@ const mergeConfig = (
     ),
     // publicKey
     publicKey: config.publicKey ?? publicConfig.publicKey,
+    // 注册协议
+    agreementEnabled: config.agreementEnabled ?? publicConfig.agreementEnabled,
+    agreements: config.agreements ?? publicConfig.agreements,
   }
 
   return {
@@ -84,6 +90,7 @@ const requestPublicConfig = async (
   let res: AuthingResponse<ApplicationConfig>
 
   const guardHttp = new GuardHttp(host)
+  guardHttp.setAppId(appId)
 
   try {
     res = await guardHttp.get<ApplicationConfig>(

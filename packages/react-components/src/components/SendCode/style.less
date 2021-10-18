@@ -1,0 +1,26 @@
+.authing-send-code-btn {
+  display: inline-block;
+  border: none;
+  background-color: transparent;
+  font-size: inherit;
+  color: #396aff;
+  cursor: pointer;
+  padding: 0;
+  user-select: none;
+  outline: none;
+}
+
+.authing-send-code-btn:focus {
+  outline: none;
+}
+
+.authing-send-code-btn[disabled] {
+  cursor: not-allowed;
+  filter: opacity(0.5);
+}
+
+@media only screen and (max-width: 719px) {
+  .authing-send-code-btn {
+    font-size: 14px;
+  }
+}

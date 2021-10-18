@@ -1,5 +1,6 @@
 import { AuthenticationClient, CommonMessage } from 'authing-js-sdk'
 import { Lang } from 'authing-js-sdk/build/main/types'
+import { ApplicationConfig } from 'src/components/AuthingGuard/api'
 import { GuardModuleType } from 'src/components/Guard/module'
 
 export enum GuardMode {
@@ -30,6 +31,7 @@ export interface IG2Config {
   target?: HTMLElement
   clickCloseable?: boolean
   escCloseable?: boolean
+  __publicConfig__?: ApplicationConfig
 }
 
 export interface IG2Events {

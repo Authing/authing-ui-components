@@ -14,6 +14,7 @@ import { Spin } from '../Spin'
 import { GuardModuleType } from './module'
 import { GuardMFA } from '../MFA'
 import './styles.less'
+import { GuardRegister } from '../Register'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -23,6 +24,7 @@ const ComponentsMapping: Record<
 > = {
   [GuardModuleType.LOGIN]: (props) => <GuardLoginView {...props} />,
   [GuardModuleType.MFA]: (props) => <GuardMFA {...props} />,
+  [GuardModuleType.REGISTER]: (props) => <GuardRegister {...props} />,
 }
 
 export interface GuardProps extends GuardEvents {
@@ -32,7 +34,9 @@ export interface GuardProps extends GuardEvents {
 
 export const Guard = (props: GuardProps) => {
   const { appId, config, onLoad, onLoadError } = props
-  const [module, setModule] = useState<GuardModuleType>(GuardModuleType.LOGIN)
+  const [module, setModule] = useState<GuardModuleType>(
+    GuardModuleType.REGISTER
+  )
   const [initData, setInitData] = useState({})
   const [initSettingEnd, setInitSettingEnd] = useState(false)
   const [guardConfig, setGuardConfig] = useState<GuardConfig>({})

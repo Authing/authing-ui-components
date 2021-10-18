@@ -1,18 +1,12 @@
-.g2-login-container {
+.g2-register-container {
   border: 1px solid black;
   display: flex;
   flex-direction: column;
-  margin: 100px auto;
-
   justify-content: center;
-  // align-items: center;
-
   width: 456px;
   height: 610px;
   box-sizing: border-box;
-  padding: 5px;
-  // justify-content: center;
-  // align-items: center;
+  padding: 39px 38px 31px;
 }
 
 .authing-g2-button-group {
@@ -20,6 +14,7 @@
   border-radius: 8px;
   padding: 4px 2px;
   margin-bottom: 16px;
+  width: fit-content;
 
   .authing-ant-radio-button-wrapper {
     margin: 0 2px;
@@ -39,13 +34,6 @@
   }
 }
 
-.authing-g2-login-password {
-  padding: 10px;
-}
-.authing-g2-login-phone-code {
-  padding: 10px;
-}
-
 .authing-g2-input {
   width: 336px;
   border: 1px solid #eaebee;
@@ -62,4 +50,18 @@
   &::placeholder {
     color: red;
   }
+}
+
+// 侵入 core 的样式代码
+//
+.authing-g2-login-phone-code {
+  // padding: 10px;
+}
+.authing-g2-login-button {
+  width: 100%;
+}
+
+.authing-g2-send-code {
+  color: #396aff;
+  cursor: pointer;
 }
