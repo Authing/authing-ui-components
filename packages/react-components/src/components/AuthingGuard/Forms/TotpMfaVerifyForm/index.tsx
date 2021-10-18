@@ -17,5 +17,7 @@ export const TotpMfaVerifyForm: FC<TotpMFAFormProps> = ({
   // 判断是否绑定
   const [bindTotp] = useState<boolean>(totpMfaEnabled)
 
+  // 如果绑定直接验证
+  // 如果没有绑定进入绑定的页面
   return <>{bindTotp ? <VerifyTotpForm /> : <BindTotpForm />}</>
 }

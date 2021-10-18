@@ -1,13 +1,14 @@
 import React, { FC, useEffect } from 'react'
 import { useGuardContext } from 'src/context/global/context'
-import { useMediaSize } from 'src/components/AuthingGuard/hooks'
+import { UserMfa, TotpSource } from '../UserMfa/'
 
 export interface BindTotpFormProps {}
 
 export const BindTotpForm: FC<BindTotpFormProps> = (props) => {
-  const { setValue } = useGuardContext()
-  // 判断是否移动端
-  const { isPhoneMedia } = useMediaSize()
+  const {
+    state: { mfaData, userPoolId, appId },
+    setValue,
+  } = useGuardContext()
 
   // 略微调整一下 Layout
   useEffect(() => {
@@ -22,12 +23,12 @@ export const BindTotpForm: FC<BindTotpFormProps> = (props) => {
     }
   }, [setValue])
 
-  console.log(isPhoneMedia)
-
   return (
-    <div>
-      <div>MFA 绑定</div>
-      <div>内容</div>
-    </div>
+    <UserMfa
+      userPoolId={userPoolId}
+      appId={appId}
+      totpSource={TotpSource.APPLICATION}
+      MFAToken={mfaData.mfaToken as string}
+    />
   )
 }

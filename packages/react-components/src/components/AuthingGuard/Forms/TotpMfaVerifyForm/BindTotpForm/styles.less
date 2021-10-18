@@ -247,3 +247,72 @@
     display: none;
   }
 }
+
+.appDownload {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  .item {
+    width: 370px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .logo {
+    width: 54px;
+    height: 54px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #293350;
+    line-height: 22px;
+    margin-top: 12px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    font-weight: 400;
+    color: #9fabcb;
+    line-height: 20px;
+    margin-top: 8px;
+    margin-bottom: 0;
+  }
+
+  .QRCode {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 32px;
+    .QRCodeItem {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .image {
+      width: 141px;
+      height: 141px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .QRCodeText {
+      font-size: 14px;
+      font-weight: 500;
+      color: #515b78;
+      line-height: 20px;
+      margin-top: 3px;
+    }
+  }
+}

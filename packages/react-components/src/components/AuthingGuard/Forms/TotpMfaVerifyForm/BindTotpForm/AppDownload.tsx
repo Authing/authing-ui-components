@@ -1,9 +1,7 @@
-import { Button } from 'antd'
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useMediaSize } from 'src/components/AuthingGuard/hooks'
-import { useGuardContext } from 'src/context/global/context'
-import { getClassnames, getOS } from 'src/utils'
+import { getOS } from 'src/utils'
+import { IconFont } from '../../../IconFont'
 import './styles.less'
 
 export interface AppDownloadProps {}
@@ -25,66 +23,106 @@ export const download_authenticator_config = {
   },
 }
 
+const GoogleApple = download_authenticator_config.iOS.googleQRcode
+const MicrosoftApple = download_authenticator_config.iOS.microsoftQRcode
+const GoogleAuthing = download_authenticator_config.Android.googleQRcode
+const MicrosoftBaidu = download_authenticator_config.Android.microsoftQRcode
+
 export const AppDownload: FC<AppDownloadProps> = () => {
-  const { isPhoneMedia } = useMediaSize()
-
   const { t } = useTranslation()
-
-  const {
-    state: { config },
-  } = useGuardContext()
 
   const os = getOS()
 
-  const appDownloadConfig = [
-    {
-      name: 'Google Authenticator',
-      imageUrl: 'googleLogo',
-      download: () => {
-        if (os && Object.keys(download_authenticator_config).includes(os)) {
-          // @ts-ignore
-          window.open(`${DOWNLOAD_AUTHENTICATOR_CONFIG?.[os].google}`)
-        }
-      },
-      androidQRcode: download_authenticator_config.Android.googleQRcode,
-      iOSQRcode: download_authenticator_config.iOS.googleQRcode,
-    },
-    {
-      name: 'Microsoft Authenticator',
-      imageUrl: 'microsoftLogo',
-      download: () => {
-        if (os && Object.keys(download_authenticator_config).includes(os)) {
-          // @ts-ignore
-          window.open(`${DOWNLOAD_AUTHENTICATOR_CONFIG?.[os]?.microsoft}`)
-        }
-      },
-      androidQRcode: download_authenticator_config.Android.microsoftQRcode,
-      iOSQRcode: download_authenticator_config.iOS.microsoftQRcode,
-    },
-  ]
-
   return (
-    <>
-      <div className="authing-guard-bindTotp-media">
-        {appDownloadConfig.map((item, index) => (
-          <div className="authing-guard-bindTotp-item-medias" key={index}>
-            <div className="bindTotp-item-header-medias">
-              <img src={item.imageUrl} alt="app logo" />
-              <span className="authing-mfa-dowload-item-title">
-                {item.name}
-              </span>
-            </div>
-            <Button
-              className="btnItem"
-              size="large"
-              type="primary"
-              onClick={item.download}
-            >
-              {t('common.download')}
-            </Button>
+    <div className="appDownload">
+      <div className="item">
+        <div
+          className="logo"
+          style={{
+            background: '#EFF2F6',
+          }}
+        >
+          <IconFont
+            type="authing-apple-web"
+            style={{
+              fontSize: 30,
+              color: '#293350',
+            }}
+          />
+        </div>
+        <span className="title">{t('common.downloadTotpAppIOS')}</span>
+        <span className="subtitle">{t('common.downloadTotpAppDocs')}</span>
+        <div className="QRCode">
+          <div className="QRCodeItem">
+            <div
+              className="image"
+              style={{
+                backgroundSize: 'contain',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                backgroundImage: `url('${GoogleApple}')`,
+              }}
+            />
+            <span className="QRCodeText">Google Authenticator</span>
           </div>
-        ))}
+          <div className="QRCodeItem">
+            <div
+              className="image"
+              style={{
+                backgroundSize: 'contain',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                backgroundImage: `url('${MicrosoftApple}')`,
+              }}
+            />
+            <span className="QRCodeText">Microsoft Authenticator</span>
+          </div>
+        </div>
       </div>
-    </>
+      <div className="item">
+        <div
+          className="logo"
+          style={{
+            background: '#28B1B0',
+          }}
+        >
+          <IconFont
+            type="authing-anzhuo"
+            style={{
+              fontSize: 30,
+              color: '#FFF',
+            }}
+          />
+        </div>
+        <span className="title">{t('common.downloadTotpAppAndroid')}</span>
+        <span className="subtitle">{t('common.downloadTotpAppDocs')}</span>
+        <div className="QRCode">
+          <div className="QRCodeItem">
+            <div
+              className="image"
+              style={{
+                backgroundSize: 'contain',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                backgroundImage: `url('${GoogleAuthing}')`,
+              }}
+            />
+            <span className="QRCodeText">Google Authenticator</span>
+          </div>
+          <div className="QRCodeItem">
+            <div
+              className="image"
+              style={{
+                backgroundSize: 'contain',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                backgroundImage: `url('${MicrosoftBaidu}')`,
+              }}
+            />
+            <span className="QRCodeText">Microsoft Authenticator</span>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }

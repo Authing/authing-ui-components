@@ -183,5 +183,10 @@
   "copyFailed": "复制失败",
   "networkError": "网络错误，请重试",
   "Totp": "OTP 验证",
-  "download": "下载"
+  "download": "下载",
+  "step": "步骤",
+  "downloadTotpApp": "下载验证器",
+  "downloadTotpAppIOS": "IOS 下载",
+  "downloadTotpAppDocs": "请使用手机扫码下载器验证器",
+  "downloadTotpAppAndroid": "Android 下载"
 }

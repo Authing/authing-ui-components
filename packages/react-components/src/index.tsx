@@ -23,7 +23,7 @@ const App = () => {
     title,
     // mode: GuardMode.Modal,
     // appHost: 'https://sample-sso.authing.cn',
-    apiHost: 'http://console.authing.localhost:3000',
+    apiHost: 'http://ycavpj-demo.authing.localhost:3000',
     // apiHost: 'http://192.168.50.57:3000',
     // loginMethods: Object.values(LoginMethods),
     // logo:
@@ -75,7 +75,7 @@ const App = () => {
 
   initAuthClient({
     appId: '6163d71a51cbde723b35f019',
-    appHost: 'http://console.authing.localhost:3000',
+    appHost: 'http://ycavpj-demo.authing.localhost:3000',
   })
 
   return (
