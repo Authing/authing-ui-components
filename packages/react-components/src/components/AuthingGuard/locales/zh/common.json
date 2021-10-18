@@ -188,5 +188,12 @@
   "downloadTotpApp": "下载验证器",
   "downloadTotpAppIOS": "IOS 下载",
   "downloadTotpAppDocs": "请使用手机扫码下载器验证器",
-  "downloadTotpAppAndroid": "Android 下载"
+  "downloadTotpAppAndroid": "Android 下载",
+  "copyed": "已经复制到剪切板",
+  "_ appellation": "名称",
+  "secret": "密钥",
+  "aInvalid": "登录已失效",
+  "mfaInvalid": "登录已失效",
+  "mfaInvalidContent": "您的登录状态已经失效，请您重新登录",
+  "backLogin": "返回登录"
 }

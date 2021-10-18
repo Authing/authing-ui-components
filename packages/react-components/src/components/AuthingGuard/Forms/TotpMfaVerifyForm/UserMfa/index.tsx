@@ -1,14 +1,45 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
-import { Steps, message, Spin, Button } from 'antd'
+import { Steps, message, Spin, Button, Space, Modal } from 'antd'
 import { useMediaSize } from 'src/components/AuthingGuard/hooks'
 import { useTranslation } from 'react-i18next'
 import { requestClient } from '../../../api/http'
 import { MobileSteps } from '../MobileSteps'
 import { AppDownload } from '../BindTotpForm/AppDownload'
+import { ScanQrcode } from '../BindTotpForm/ScanQrcode'
+import { InputSaftyCode } from '../BindTotpForm/InputSaftyCode'
+import { User } from 'authing-js-sdk'
 
 import './style.less'
 
 const { Step } = Steps
+
+// 临时
+export const ErrorCodes = {
+  // 密码错误
+  WRONG_PASSWORD: 2006,
+  // 未登录
+  LOGIN_REQUIRED: 2020,
+  // 用户或密码错误
+  USER_OR_PASSWORD_WRONG: 2333,
+  // 用户不存在
+  USER_NOT_EXISTS: 2004,
+  // TOP MFA 的 error code
+  OTP_MFA_CODE: 1635,
+  // 手机和短信验证吗 MFA 的 error code
+  MSG_MFA_CODE: 1636,
+  // MFA Token 失效
+  MAF_TOKEN_INVALID: 2021,
+  // 强制修改密码
+  FIRST_LOGIN_CODE: 1639,
+  // 密码输入错误次数已达上限
+  ACCOUNT_LOCK: 2057,
+  // 账号已经锁定了
+  ACCOUNT_LOCKED: 2005,
+  // 密码已过期
+  PASSWORD_EXPIRED: 2058,
+  // 使用过的密码
+  USED_PASSWORD: 2059,
+}
 
 // 估计是为了区分个人版和企业版
 export enum TotpSource {
@@ -42,18 +73,24 @@ export const UserMfa: React.FC<any> = ({
   const { isPhoneMedia } = useMediaSize()
   // 验证码组件需要一个初始化的值
   const getInitSaftyCode = () => new Array(6).fill('')
+  // 6位安全码
+  const [saftyCode, setSaftyCode] = useState<string[]>(getInitSaftyCode())
   // 加载状态
   const [isSpinning, setIsSpinning] = useState(false)
   // 当前的步骤
   const [currentStep, setCurrentStep] = useState<number>(0)
-  //
+  // 绑定 mfa 的密钥
   const [secret, setSecret] = useState('')
-  //
+  // 绑定 mfa 的二维码
   const [qrcode, setQrcode] = useState('')
   //
   const [mfaSecret, setMfaSecret] = useState('')
   // 按钮的加载状态
   const [btnLoading, setBtnLoading] = useState(false)
+  //
+  const [isSaved, setIsSaved] = useState(false)
+  //
+  const [user, setUser] = useState<User>()
 
   // 根据配置判断 enable 字段，如果满足直接进入到最后一步 （这块不敢删也不知道有啥用。。。。）
   // guard 和 user-portal 网络请求还不一样
@@ -118,12 +155,50 @@ export const UserMfa: React.FC<any> = ({
       if (totpSource === TotpSource.SELF) {
         // await bindSelfTotp()
       } else {
-        // await bindApplcationTotp()
+        await bindApplcationTotp()
       }
     } catch (e) {
       message.error(t('user.bindFail'))
     } finally {
       setBtnLoading(false)
+    }
+  }
+  // 企业
+  const bindApplcationTotp = async () => {
+    const data: any = await requestClient.post(
+      '/api/v2/mfa/totp/associate/confirm',
+      {
+        authenticator_type: 'totp',
+        totp: saftyCode.join(''),
+        source: totpSource,
+      },
+      {
+        headers: {
+          authorization: MFAToken,
+          'x-authing-userpool-id': userPoolId,
+          'x-authing-app-id': appId,
+        },
+      }
+    )
+
+    if (data.code === ErrorCodes.MAF_TOKEN_INVALID) {
+      Modal.confirm({
+        title: t('common.mfaInvalid'),
+        content: t('common.mfaInvalidContent'),
+        okText: t('common.backLogin'),
+        async onOk() {
+          // todo !!!!!!!
+        },
+      })
+    } else if (data.code !== 200) {
+      message.error(data.message)
+    } else {
+      const user = data?.data
+      message.success(t('user.bindSuccess'))
+      setCurrentStep((state) => state + 1)
+      setSaftyCode(getInitSaftyCode())
+      setBtnLoading(false)
+      user && setUser(user)
     }
   }
 
@@ -183,9 +258,28 @@ export const UserMfa: React.FC<any> = ({
   )
 
   //渲染内容
-  const STEP_MAP = useMemo(() => [!isPhoneMedia ? <AppDownload /> : null], [
-    isPhoneMedia,
-  ])
+  const STEP_MAP = useMemo(
+    () => [
+      !isPhoneMedia ? <AppDownload /> : null,
+      <ScanQrcode
+        isPhoneMedia={isPhoneMedia}
+        qrcode={qrcode}
+        secret={secret}
+        userpoolName=""
+      />,
+      <InputSaftyCode {...{ saftyCode, setSaftyCode, isPhoneMedia }} />,
+    ],
+    [isPhoneMedia, qrcode, secret, setSaftyCode, saftyCode]
+  )
+
+  // 下一步是否可用
+  const DISABLE_MAP = [
+    false,
+    false,
+    saftyCode.some((item) => !item),
+    !isSaved,
+    false,
+  ]
 
   // 组件挂载
   useEffect(() => {
@@ -195,23 +289,30 @@ export const UserMfa: React.FC<any> = ({
     <Spin spinning={isSpinning}>
       <div>
         <div>{useSteps}</div>
-        <div>{STEP_MAP[currentStep]}</div>
-        <div>
-          {(currentStep === 1 || currentStep === 2) && (
-            <Button loading={btnLoading} size="large" onClick={handlePrevStep}>
-              {t('user.prevStep')}
-            </Button>
-          )}
-          {currentStep !== 4 && (
-            <Button
-              loading={btnLoading}
-              size="large"
-              type="primary"
-              onClick={handleNextStep}
-            >
-              {t('user.nextStep')}
-            </Button>
-          )}
+        <div className="userMfaContent">{STEP_MAP[currentStep]}</div>
+        <div className="userMfaBtns">
+          <Space size={16}>
+            {(currentStep === 1 || currentStep === 2) && (
+              <Button
+                loading={btnLoading}
+                size="large"
+                onClick={handlePrevStep}
+              >
+                {t('user.prevStep')}
+              </Button>
+            )}
+            {currentStep !== 4 && (
+              <Button
+                loading={btnLoading}
+                disabled={DISABLE_MAP[currentStep]}
+                size="large"
+                type="primary"
+                onClick={handleNextStep}
+              >
+                {t('user.nextStep')}
+              </Button>
+            )}
+          </Space>
         </div>
       </div>
     </Spin>

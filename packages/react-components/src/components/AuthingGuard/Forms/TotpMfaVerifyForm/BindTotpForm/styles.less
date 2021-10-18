@@ -52,6 +52,7 @@
 }
 
 .appDownload {
+  padding-top: 20px;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -120,6 +121,81 @@
   }
 }
 
+.ScanQrcode {
+  .secretInput {
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid #e7e7e7;
+
+    padding: 9px 16px;
+
+    font-size: 14px;
+    font-weight: 400;
+    color: #515b78;
+    line-height: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    margin-bottom: 10px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .iconBox {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #eff2f6;
+    border-radius: 4px;
+    margin-right: 8px;
+
+    svg {
+      font-size: 12px;
+      color: #515b78;
+    }
+  }
+
+  :global {
+    .ant-typography {
+      margin: 0 0 0 8px;
+    }
+  }
+}
+
+.subtitle {
+  font-size: 14px;
+  font-weight: 400;
+  color: #9fabcb;
+  line-height: 20px;
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.desc {
+  color: #666;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+.qrcode {
+  width: 187px;
+  height: 187px;
+}
+
+.saftyCodeInput {
+  margin-top: 97px;
+}
+.saftyCodeTip {
+  color: #999;
+  font-size: 14px;
+  margin-top: 14px;
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -136,6 +212,7 @@
 }
 
 .ScanQrcode {
+  padding-top: 20px;
   .secretInput {
     width: 100%;
     border-radius: 4px;

@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import { getOS } from 'src/utils'
 import { IconFont } from '../../../IconFont'
 import './styles.less'
 
@@ -11,15 +10,19 @@ export const download_authenticator_config = {
     google:
       'https://authing-public-cn.oss-cn-beijing.aliyuncs.com/public/Google%20Authenticator.apk',
     microsoft: 'https://mobile.baidu.com/item?docid=27175919',
-    googleQRcode: '/GoogleAuthenticator-Authing.png',
-    microsoftQRcode: '/MicrosoftAuthenticator-Baidu.png',
+    googleQRcode:
+      'https://files.authing.co/authing-user-portal/GoogleAuthenticator-Authing.png',
+    microsoftQRcode:
+      'https://files.authing.co/authing-user-portal/MicrosoftAuthenticator-Baidu.png',
   },
   iOS: {
     google: 'https://apps.apple.com/us/app/google-authenticator/id388497605',
     microsoft:
       'https://apps.apple.com/us/app/microsoft-authenticator/id983156458',
-    googleQRcode: '/GoogleAuthenticator-Apple.png',
-    microsoftQRcode: '/MicrosoftAuthenticator-Apple.png',
+    googleQRcode:
+      'https://files.authing.co/authing-user-portal/GoogleAuthenticator-Apple.png',
+    microsoftQRcode:
+      'https://files.authing.co/authing-user-portal/MicrosoftAuthenticator-Apple.png',
   },
 }
 
@@ -30,8 +33,6 @@ const MicrosoftBaidu = download_authenticator_config.Android.microsoftQRcode
 
 export const AppDownload: FC<AppDownloadProps> = () => {
   const { t } = useTranslation()
-
-  const os = getOS()
 
   return (
     <div className="appDownload">
