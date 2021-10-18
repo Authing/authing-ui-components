@@ -49,6 +49,11 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
         message.error(initData?.__message)
       }
     }
+    if (action?.action === 'stateMove') {
+      return (initData?: any) => {
+        console.log('中间捕获，需要调用子组件方法，', 'stateMove')
+      }
+    }
 
     // 最终结果
     return () => {
@@ -60,8 +65,8 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     const callback = __codePaser?.(code)
     if (!data) {
       data = {}
-      data.__message = message
     }
+    data.__message = message
     callback?.(data)
   }
   return (
@@ -79,6 +84,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                 publicKey={publicKey}
                 autoRegister={autoRegister}
                 onLogin={onLogin}
+                host={props.config.host}
               />
             </Tabs.TabPane>
           )}
