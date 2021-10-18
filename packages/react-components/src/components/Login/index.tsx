@@ -95,6 +95,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
 
   let inputNone = !inputWays.includes(loginWay) ? 'none' : ''
   let qrcodeNone = !qrcodeWays.includes(loginWay) ? 'none' : ''
+
   return (
     <div className="g2-login-container">
       <div
@@ -109,7 +110,16 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
       >
         <div className="switch-text">扫码登录方式</div>
         <div className="imgae-mask" />
-        <img src={props.config?.logo} alt="" className="qrcode-switch-image" />
+        <img
+          src={`${props.config?.__publicConfig__?.cdnBase}/inputWay.png`}
+          alt=""
+          className={`qrcode-switch-image $ ${inputNone}`}
+        />
+        <img
+          src={`${props.config?.__publicConfig__?.cdnBase}/qrcodeWay.png`}
+          alt=""
+          className={`qrcode-switch-image $ ${qrcodeNone}`}
+        />
       </div>
 
       <div className="g2-base-header">
