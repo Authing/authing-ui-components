@@ -5,4 +5,8 @@ export const codeMap: Record<number, GuardModuleAction> = {
     action: 'changeModule',
     module: GuardModuleType.MFA,
   },
+  2333: {
+    action: 'message',
+    message: '密码错误',
+  },
 }

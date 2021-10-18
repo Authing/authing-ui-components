@@ -22,9 +22,13 @@ const ComponentsMapping: Record<
   GuardModuleType,
   (props: IG2FCProps) => React.ReactNode
 > = {
+  [GuardModuleType.ERROR]: (props) => <div>Todo Error Module</div>,
   [GuardModuleType.LOGIN]: (props) => <GuardLoginView {...props} />,
   [GuardModuleType.MFA]: (props) => <GuardMFA {...props} />,
   [GuardModuleType.REGISTER]: (props) => <GuardRegister {...props} />,
+  [GuardModuleType.FORGETPASSWORD]: (props) => (
+    <div>Todo forgetPassword Module</div>
+  ),
 }
 
 export interface GuardProps extends GuardEvents {
