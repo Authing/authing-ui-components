@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
-import { Steps, message, Spin, Button, Space, Modal } from 'antd'
+import { Steps, message, Spin, Button, Space } from 'antd'
 import { useMediaSize } from 'src/components/AuthingGuard/hooks'
 import { useTranslation } from 'react-i18next'
 import { requestClient } from '../../../api/http'
@@ -10,6 +10,8 @@ import { InputSaftyCode } from '../BindTotpForm/InputSaftyCode'
 import { User } from 'authing-js-sdk'
 import { SaveSecretKey } from '../BindTotpForm/SaveSecretKey'
 import { BindSuccess } from '../BindTotpForm/BindSuccess'
+import { useGuardContext } from '../../../../../context/global/context'
+import { GuardScenes } from '../../../../AuthingGuard/types'
 
 import './style.less'
 
@@ -86,13 +88,15 @@ export const UserMfa: React.FC<any> = ({
   // 绑定 mfa 的二维码
   const [qrcode, setQrcode] = useState('')
   //
-  const [mfaSecret, setMfaSecret] = useState('')
+  const [, setMfaSecret] = useState('')
   // 按钮的加载状态
   const [btnLoading, setBtnLoading] = useState(false)
   //
   const [isSaved, setIsSaved] = useState(false)
   //
   const [user, setUser] = useState<User>()
+
+  const { setValue } = useGuardContext()
 
   // 根据配置判断 enable 字段，如果满足直接进入到最后一步 （这块不敢删也不知道有啥用。。。。）
   // guard 和 user-portal 网络请求还不一样
@@ -206,14 +210,8 @@ export const UserMfa: React.FC<any> = ({
     )
     // 登录失效的校验
     if (data.code === ErrorCodes.MAF_TOKEN_INVALID) {
-      Modal.confirm({
-        title: t('common.mfaInvalid'),
-        content: t('common.mfaInvalidContent'),
-        okText: t('common.backLogin'),
-        async onOk() {
-          // todo !!!!!!!
-        },
-      })
+      message.error(t('common.mfaInvalidContent'))
+      setValue('guardScenes', GuardScenes.AppMfaVerify)
     } else if (data.code !== 200) {
       message.error(data.message)
     } else {

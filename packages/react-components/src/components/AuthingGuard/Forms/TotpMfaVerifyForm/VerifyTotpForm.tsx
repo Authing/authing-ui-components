@@ -1,11 +1,12 @@
 import React, { FC, useState } from 'react'
-import { Button, message, Modal } from 'antd'
+import { Button, message } from 'antd'
 import { InputSaftyCode } from './BindTotpForm/InputSaftyCode'
 import { useMediaSize } from 'src/components/AuthingGuard/hooks'
 import { useTranslation } from 'react-i18next'
 import { requestClient } from '../../api/http'
 import { TotpSource, ErrorCodes } from './UserMfa'
 import { useGuardContext } from '../../../../context/global/context'
+import { GuardScenes } from '../../../AuthingGuard/types'
 
 export const VerifyTotpForm: FC<any> = ({
   totpSource = TotpSource.SELF,
@@ -24,6 +25,7 @@ export const VerifyTotpForm: FC<any> = ({
       userPoolId,
       appId,
     },
+    setValue,
   } = useGuardContext()
 
   // 开始绑定
@@ -81,14 +83,8 @@ export const VerifyTotpForm: FC<any> = ({
     )
     // 登录失效的校验
     if (data.code === ErrorCodes.MAF_TOKEN_INVALID) {
-      Modal.confirm({
-        title: t('common.mfaInvalid'),
-        content: t('common.mfaInvalidContent'),
-        okText: t('common.backLogin'),
-        async onOk() {
-          // todo !!!!!!!
-        },
-      })
+      message.error(t('common.mfaInvalidContent'))
+      setValue('guardScenes', GuardScenes.AppMfaVerify)
     } else if (data.code !== 200) {
       message.error(data.message)
     } else {
