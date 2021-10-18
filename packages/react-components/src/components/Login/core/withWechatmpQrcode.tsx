@@ -3,6 +3,7 @@ import { useAuthClient } from '../../Guard/authClient'
 
 interface LoginWithWechatmpQrcodeProps {
   onLogin: any
+  canLoop: boolean
 }
 
 export const LoginWithWechatmpQrcode = (
@@ -14,11 +15,14 @@ export const LoginWithWechatmpQrcode = (
   // const config = props.config
 
   useEffect(() => {
-    appQrcodeClient.startScanning('authingGuardQrcode', {
+    if (!props.canLoop) {
+      return
+    }
+    appQrcodeClient.startScanning('authingGuardMpQrcode', {
       autoExchangeUserInfo: true,
       // ...config.qrCodeScanOptions,
       onStart(timer) {
-        console.log('开始扫码')
+        // console.log('开始扫码')
         timerRef.current = timer
       },
       onSuccess(user) {
@@ -32,12 +36,11 @@ export const LoginWithWechatmpQrcode = (
       },
     })
     return () => clearInterval(timerRef.current)
-  }, [appQrcodeClient])
+  }, [appQrcodeClient, props.canLoop])
 
   return (
     <div className="authing-g2-login-app-qrcode">
-      app qrcode
-      <div id="authingGuardQrcode"></div>
+      <div id="authingGuardMpQrcode"></div>
     </div>
   )
 }

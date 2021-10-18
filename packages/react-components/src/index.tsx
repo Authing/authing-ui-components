@@ -16,7 +16,7 @@ const App = () => {
         onBeforeLogin={(loginInfo, authClient) => {
           console.log('🪝loginInfo 被用户消费，返回 promise 或布尔', loginInfo)
           return new Promise((resolve) => {
-            resolve(false)
+            resolve(true)
           })
         }}
         onLoginError={() => {
@@ -43,7 +43,8 @@ const App = () => {
       />
 
       <AuthingGuard
-        appId="6167e1e3f19080f1bf7b7797"
+        appId="610271b10cd9106606c73d57"
+        // appId="6167e1e3f19080f1bf7b7797"
         // config={{
         //   loginMethods: [LoginMethods.Password, LoginMethods.PhoneCode],
         // }}

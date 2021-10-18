@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { message, Radio, Tabs } from 'antd'
 import { GuardLoginViewProps } from './props'
 import { useAuthClient } from '../Guard/authClient'
@@ -13,17 +13,30 @@ import { LoginWithWechatMiniQrcode } from './core/withWechatMiniQrcode'
 import { LoginWithWechatmpQrcode } from './core/withWechatmpQrcode'
 
 import './styles.less'
-import { LoginMethods } from 'authing-js-sdk'
+
 import { GuardModuleType } from '../Guard/module'
+import { LoginMethods } from '../AuthingGuard/types'
+
+const inputWays = [
+  LoginMethods.Password,
+  LoginMethods.PhoneCode,
+  LoginMethods.AD,
+  LoginMethods.LDAP,
+]
+const qrcodeWays = [
+  LoginMethods.AppQr,
+  LoginMethods.WxMinQr,
+  LoginMethods.WechatMpQrcode,
+]
 
 export const GuardLoginView = (props: GuardLoginViewProps) => {
-  // const [loginWay, setLoginWay] = useState('password')
-  // const [ways, setWays] = useState(props.config)
+  const [loginWay, setLoginWay] = useState(LoginMethods.Password) // input, qrcode
+  const [canLoop, setCanLoop] = useState(false) // 允许轮询
   const client = useAuthClient()
 
   let publicKey = props.config?.publicKey!
   let autoRegister = props.config?.autoRegister
-  console.log('props.config', autoRegister)
+  // console.log('props.config', autoRegister)
 
   const __codePaser = (code: number) => {
     const action = codeMap[code]
@@ -72,27 +85,54 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     return () => console.log('Guard 未传入 onBeforeLogin hooks')
   }
 
+  useEffect(() => {
+    if (qrcodeWays.includes(loginWay)) {
+      setCanLoop(true)
+    }
+    // 可以设定 = fasle 的时候关闭 qrcode 的几个定时器
+    // 不关的话，第二次进入会更快，也没什么代价（只有轮询）
+  }, [loginWay])
+
+  let inputNone = !inputWays.includes(loginWay) ? 'none' : ''
+  let qrcodeNone = !qrcodeWays.includes(loginWay) ? 'none' : ''
   return (
     <div className="g2-login-container">
-      <div className="g2-login-header">
-        <img src={props.config?.logo} alt="" className="icon" />
+      <div
+        className="g2-qrcode-switch"
+        onClick={() => {
+          if (inputWays.includes(loginWay)) {
+            setLoginWay(LoginMethods.WxMinQr)
+          } else if (qrcodeWays.includes(loginWay)) {
+            setLoginWay(LoginMethods.Password)
+          }
+        }}
+      >
+        <div className="switch-text">扫码登录方式</div>
+        <div className="imgae-mask" />
+        <img src={props.config?.logo} alt="" className="qrcode-switch-image" />
+      </div>
 
+      <div className="g2-base-header">
+        <img src={props.config?.logo} alt="" className="icon" />
         <div className="title">登录 {props.config?.title}</div>
       </div>
-      <div className="g2-login-tabs">
+
+      <div className={`g2-login-tabs ${inputNone}`}>
         <Tabs
           onChange={(k: any) => {
-            props.onLoginTabChange?.(k)
+            setLoginWay(k)
+            // props.onLoginTabChange?.(k)
           }}
+          activeKey={loginWay}
         >
           {props.config?.loginMethods?.includes(LoginMethods.Password) && (
             <Tabs.TabPane key={LoginMethods.Password} tab="密码登录">
               <LoginWithPassword
                 publicKey={publicKey}
                 autoRegister={autoRegister}
+                host={props.config.host}
                 onLogin={onLogin}
                 onBeforeLogin={onBeforeLogin}
-                host={props.config.host}
               />
             </Tabs.TabPane>
           )}
@@ -107,7 +147,13 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
           )}
           {props.config?.loginMethods?.includes(LoginMethods.LDAP) && (
             <Tabs.TabPane key={LoginMethods.LDAP} tab="LDAP">
-              <LoginWithLDAP onLogin={onLogin} />
+              <LoginWithLDAP
+                publicKey={publicKey}
+                autoRegister={autoRegister}
+                host={props.config.host}
+                onLogin={onLogin}
+                onBeforeLogin={onBeforeLogin}
+              />
             </Tabs.TabPane>
           )}
           {props.config?.loginMethods?.includes(LoginMethods.AD) && (
@@ -116,47 +162,46 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
             </Tabs.TabPane>
           )}
         </Tabs>
-      </div>
-      {/* <Radio.Group
-        className="authing-g2-button-group"
-        value={loginWay}
-        onChange={(e) => setLoginWay(e.target.value)}
-      >
-        {props.config?.loginMethods?.includes(LoginMethods.AppQr) && (
-          <Radio.Button value="app-qrcode">app-qrcode</Radio.Button>
-        )}
-        {props.config?.loginMethods?.includes(LoginMethods.WxMinQr) && (
-          <Radio.Button value="wechat-miniprogram-qrcode">
-            小程序扫码
-          </Radio.Button>
-        )}
-        todo wechatmp-qrcode 并未出现在枚举中
-        <Radio.Button value="wechatmp-qrcode">公众号扫码登录</Radio.Button>
-      </Radio.Group> */}
-      {/* {loginWay === 'app-qrcode' && <LoginWithAppQrcode onLogin={onLogin} />}
-      {loginWay === 'wechat-miniprogram-qrcode' && (
-        <LoginWithWechatMiniQrcode onLogin={onLogin} />
-      )}
-      {loginWay === 'wechatmp-qrcode' && (
-        <LoginWithWechatmpQrcode onLogin={onLogin} />
-      )} */}
 
-      <div className="g2-tips-line">
-        <div
-          className="link-like"
-          onClick={() =>
-            props.__changeModule?.(GuardModuleType.FORGETPASSWORD, {})
-          }
-        >
-          忘记密码
+        <div className="g2-tips-line">
+          <div
+            className="link-like"
+            onClick={() =>
+              props.__changeModule?.(GuardModuleType.FORGETPASSWORD, {})
+            }
+          >
+            忘记密码
+          </div>
+          <span className="register-tip">
+            <span className="gray">还没有账号，</span>
+            <span
+              className="link-like"
+              onClick={() =>
+                props.__changeModule?.(GuardModuleType.REGISTER, {})
+              }
+            >
+              立即注册
+            </span>
+          </span>
         </div>
-        <span
-          className="register-tip"
-          onClick={() => props.__changeModule?.(GuardModuleType.REGISTER, {})}
+      </div>
+
+      <div className={`g2-login-tabs ${qrcodeNone}`}>
+        <Tabs
+          onChange={(k: any) => {
+            props.onLoginTabChange?.(k)
+          }}
         >
-          <span className="gray">还没有账号，</span>
-          <span className="link-like">立即注册</span>
-        </span>
+          <Tabs.TabPane key={LoginMethods.WxMinQr} tab="小程序扫码">
+            <LoginWithWechatMiniQrcode onLogin={onLogin} canLoop={canLoop} />
+          </Tabs.TabPane>
+          <Tabs.TabPane key={LoginMethods.AppQr} tab="APP 扫码">
+            <LoginWithAppQrcode onLogin={onLogin} canLoop={canLoop} />
+          </Tabs.TabPane>
+          <Tabs.TabPane key={LoginMethods.WechatMpQrcode} tab="公众号扫码">
+            <LoginWithWechatmpQrcode onLogin={onLogin} canLoop={canLoop} />
+          </Tabs.TabPane>
+        </Tabs>
       </div>
     </div>
   )
