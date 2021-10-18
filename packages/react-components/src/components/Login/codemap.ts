@@ -1,12 +1,18 @@
+import { ErrorCode } from 'src/utils/GuardErrorCode'
 import { GuardModuleAction, GuardModuleType } from '../Guard/module'
 
 export const codeMap: Record<number, GuardModuleAction> = {
-  1636: {
+  [ErrorCode.APP_MFA_CODE]: {
+    // 跳转去 mfa 验证
     action: 'changeModule',
     module: GuardModuleType.MFA,
   },
-  2333: {
+  [ErrorCode.INPUT_CAPTCHACODE]: {
+    // 需要输入图形验证码
     action: 'message',
-    message: '密码错误',
+  },
+  2333: {
+    // 密码错误
+    action: 'message',
   },
 }
