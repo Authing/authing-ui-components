@@ -5,7 +5,7 @@ import { initAuthClient, Lang } from './components'
 import { AuthingGuard } from './components/AuthingGuard'
 
 import {
-  GuardMode,
+  // GuardMode,
   // LoginMethods,
   UserConfig,
   // LoginMethods,
@@ -74,7 +74,7 @@ const App = () => {
   // }, [])
 
   initAuthClient({
-    appId: '614fe4efaefd69e21419ac34',
+    appId: '6163d71a51cbde723b35f019',
     appHost: 'http://console.authing.localhost:3000',
   })
 
@@ -125,7 +125,7 @@ const App = () => {
         // }}
         // onLoad={(a) => console.log(a, '加载完成')}
         // onPwdResetError={(e) => console.log(e)}
-        appId="614fe4efaefd69e21419ac34"
+        appId="6163d71a51cbde723b35f019"
         config={config}
       />
     </>

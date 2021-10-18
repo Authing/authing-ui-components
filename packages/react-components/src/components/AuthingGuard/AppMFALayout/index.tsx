@@ -1,6 +1,6 @@
 import { message } from 'antd'
 import { User } from 'authing-js-sdk'
-import React, { FC, ReactNode, useState } from 'react'
+import React, { FC, ReactNode, useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AuthingDropdown } from 'src/common/AuthingDropdown'
 
@@ -44,21 +44,32 @@ export const AppMfaLayout: FC<MfaLayoutProps> = () => {
     [ApplicationMfaType.OTP]: <TotpMfaVerifyForm {...formProps} />,
   }
 
-  const availableMfaType = mfaData.applicationMfa
-    ?.filter(
-      (item) =>
-        item.status &&
-        Object.keys(ApplicationMfaType).includes(item.mfaPolicy) &&
-        type !== item.mfaPolicy
-    )
-    ?.sort((a, b) => a.sort - b.sort)
-    ?.map((item) => ({
-      label: ApplicationMfaTypeLabel()[item.mfaPolicy],
-      key: item.mfaPolicy,
-      onClick() {
-        setType(item.mfaPolicy)
-      },
-    }))
+  // 其他可选的模块
+  const availableMfaType = useMemo(() => {
+    return mfaData.applicationMfa
+      ?.filter(
+        (item) =>
+          item.status &&
+          Object.keys(ApplicationMfaType).includes(item.mfaPolicy) &&
+          type !== item.mfaPolicy
+      )
+      ?.sort((a, b) => a.sort - b.sort)
+      ?.map((item) => ({
+        label: ApplicationMfaTypeLabel()[item.mfaPolicy],
+        key: item.mfaPolicy,
+        onClick() {
+          setType(item.mfaPolicy)
+        },
+      }))
+  }, [mfaData, type])
+
+  // 根据配置动态确定 mfa 模块
+  useEffect(() => {
+    // 取出第一个模块 作为默认值
+    if (mfaData.applicationMfa && mfaData.applicationMfa.length > 0) {
+      setType(mfaData.applicationMfa[0].mfaPolicy)
+    }
+  }, [mfaData])
 
   return (
     <div className="authing-text-center">

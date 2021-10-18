@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from 'react'
+import React, { FC, useState } from 'react'
 import { useGuardContext } from 'src/context/global/context'
 import { TotpMFAFormProps } from '../../types'
 import { BindTotpForm } from './BindTotpForm/index'
@@ -14,7 +14,8 @@ export const TotpMfaVerifyForm: FC<TotpMFAFormProps> = ({
     },
   } = useGuardContext()
 
-  const [bindTotp, setBindTotp] = useState<boolean>(totpMfaEnabled)
+  // 判断是否绑定
+  const [bindTotp] = useState<boolean>(totpMfaEnabled)
 
   return <>{bindTotp ? <VerifyTotpForm /> : <BindTotpForm />}</>
 }

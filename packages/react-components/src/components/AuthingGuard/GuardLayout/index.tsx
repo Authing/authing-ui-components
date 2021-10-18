@@ -430,8 +430,8 @@ export const GuardLayout: FC<{
     [GuardScenes.Login]: <LoginLayout />,
     [GuardScenes.Register]: <RegisterLayout />,
     [GuardScenes.RestPassword]: <ResetPwdLayout />,
-    [GuardScenes.MfaVerify]: <MfaLayout />,
     [GuardScenes.CompleteUserInfo]: <CompleteUserInfoLayout />,
+    [GuardScenes.MfaVerify]: <MfaLayout />,
     [GuardScenes.AppMfaVerify]: <AppMfaLayout />,
   }
 
