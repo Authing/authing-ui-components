@@ -1,7 +1,8 @@
-import { Radio } from 'antd'
+import { Tabs } from 'antd'
 import { RegisterMethods, User } from 'authing-js-sdk'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { useAuthClient } from '../Guard/authClient'
+import { GuardModuleType } from '../Guard/module'
 import { WithEmail } from './core/WithEmail'
 import { WithPhone } from './core/WithPhone'
 import { GuardRegisterProps } from './props'
@@ -10,11 +11,8 @@ import './styles.less'
 export const GuardRegister: React.FC<GuardRegisterProps> = ({
   config,
   onRegister,
+  __changeModule,
 }) => {
-  const [currentTab, setCurrentTab] = useState<RegisterMethods>(
-    config?.defaultRegisterMethod!
-  )
-
   const agreementEnabled = config?.agreementEnabled
 
   const authClient = useAuthClient()
@@ -56,28 +54,38 @@ export const GuardRegister: React.FC<GuardRegisterProps> = ({
   const renderTab = useMemo(
     () =>
       config?.registerMethods?.map((method) => (
-        <Radio.Button value={method} key={method}>
-          {tabMapping[method].name}
-        </Radio.Button>
+        <Tabs.TabPane tab={tabMapping[method].name} key={method}>
+          {tabMapping[method].component}
+        </Tabs.TabPane>
       )),
     [config?.registerMethods, tabMapping]
   )
 
-  const renderTabContent = useMemo(() => tabMapping[currentTab].component, [
-    currentTab,
-    tabMapping,
-  ])
-
   return (
     <div className="g2-register-container">
-      <Radio.Group
-        className="authing-g2-button-group"
-        value={currentTab}
-        onChange={(e) => setCurrentTab(e.target.value)}
-      >
-        {renderTab}
-      </Radio.Group>
-      {renderTabContent}
+      <div className="g2-register-header">
+        <img src={config?.logo} alt="" className="icon" />
+
+        <div className="title">欢迎加入 {config?.title}</div>
+      </div>
+      <div className="g2-register-tabs">
+        <Tabs>{renderTab}</Tabs>
+      </div>
+      <div className="tipsLine">
+        <div
+          className="linklike"
+          onClick={() => __changeModule?.(GuardModuleType.FORGETPASSWORD, {})}
+        >
+          忘记密码
+        </div>
+        <span
+          className="login-tip"
+          onClick={() => __changeModule?.(GuardModuleType.LOGIN, {})}
+        >
+          <span className="gray">已有账号，</span>
+          <span className="linklike">返回登录</span>
+        </span>
+      </div>
     </div>
   )
 }

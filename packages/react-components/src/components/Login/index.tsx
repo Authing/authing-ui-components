@@ -144,7 +144,10 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
         >
           忘记密码
         </div>
-        <span className="registerTip" onClick={() => {}}>
+        <span
+          className="registerTip"
+          onClick={() => props.__changeModule?.(GuardModuleType.REGISTER, {})}
+        >
           <span className="gray">还没有账号，</span>
           <span className="linklike">立即注册</span>
         </span>
