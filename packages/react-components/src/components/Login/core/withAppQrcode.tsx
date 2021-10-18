@@ -26,7 +26,7 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
       },
       onSuccess(user) {
         console.log('扫码完成', user)
-        // onSuccess && onSuccess(user as User)
+        props.onLogin(200, user)
       },
       onError: (message) => {
         // config.qrCodeScanOptions?.onError?.(message)

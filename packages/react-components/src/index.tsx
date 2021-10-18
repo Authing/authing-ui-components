@@ -5,7 +5,7 @@ import { Guard } from './components/Guard'
 import { AuthingGuard } from './components/AuthingGuard'
 import reportWebVitals from './reportWebVitals'
 import { message } from 'antd'
-import { RegisterMethods } from './components'
+import { LoginMethods, RegisterMethods } from './components'
 
 const App = () => {
   return (
@@ -31,8 +31,8 @@ const App = () => {
         config={{
           autoRegister: true,
           defaultRegisterMethod: RegisterMethods.Phone,
-          // loginMethods?: LoginMethods[]
-          // defaultLoginMethod?: LoginMethods
+          // loginMethods: [LoginMethods.Password],
+          defaultLoginMethod: LoginMethods.PhoneCode,
           // socialConnections?: SocialConnectionProvider[]
           // passwordLoginMethods?: PasswordLoginMethods[]
           // enterpriseConnections?: string[]

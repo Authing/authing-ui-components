@@ -30,7 +30,8 @@ const qrcodeWays = [
 ]
 
 export const GuardLoginView = (props: GuardLoginViewProps) => {
-  const [loginWay, setLoginWay] = useState(LoginMethods.Password) // input, qrcode
+  let dlm = props.config?.defaultLoginMethod
+  const [loginWay, setLoginWay] = useState(dlm ? dlm : LoginMethods.Password)
   const [canLoop, setCanLoop] = useState(false) // 允许轮询
   const client = useAuthClient()
 

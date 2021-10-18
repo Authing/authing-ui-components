@@ -1,3 +1,4 @@
+import { message } from 'antd'
 import React, { useEffect, useRef } from 'react'
 import { useAuthClient } from '../../Guard/authClient'
 
@@ -27,17 +28,18 @@ export const LoginWithWechatMiniQrcode = (
       autoExchangeUserInfo: true,
       // ...config.qrCodeScanOptions,
       onStart(timer) {
-        console.log('开始扫码')
+        // console.log('开始扫码')
         timerRef.current = timer
       },
       onSuccess(user) {
-        console.log('扫码完成', user)
+        // console.log('扫码完成', user)
         // onSuccess && onSuccess(user as User)
+        props.onLogin(200, user)
       },
-      onError: (message) => {
+      onError: (ms) => {
         // config.qrCodeScanOptions?.onError?.(message)
         // onFail && onFail(`${message}`)
-        console.log('扫码错误', message)
+        message.error(ms)
       },
     })
   }, [appQrcodeClient, props.canLoop])
