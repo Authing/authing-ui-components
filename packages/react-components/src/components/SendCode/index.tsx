@@ -1,6 +1,6 @@
-import { message } from 'antd'
+import { Col, message, Row } from 'antd'
 import React, { FC } from 'react'
-import { CommonMessage, EmailScene } from 'authing-js-sdk'
+import { EmailScene } from 'authing-js-sdk'
 
 import { SendCodeBtn } from './SendCodeBtn'
 
@@ -8,19 +8,19 @@ import './style.less'
 import { useTranslation } from 'react-i18next'
 import { useAuthClient } from '../Guard/authClient'
 import { validate } from 'src/utils'
+import Input, { InputProps } from 'antd/lib/input'
 
-export interface SendPhoneCodeProps {
+export interface SendPhoneCodeProps extends InputProps {
   method: 'phone' | 'email'
   data: string
-  onSend?: () => void
-  onError?: (error: CommonMessage) => void
 }
 
 export const SendCode: FC<SendPhoneCodeProps> = ({
   method,
   data,
-  onSend,
-  onError,
+  value,
+  onChange,
+  ...inputProps
 }) => {
   const { t } = useTranslation()
 
@@ -37,10 +37,10 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
     }
     try {
       await authClient.sendEmail(email, EmailScene.ResetPassword)
-      onSend?.()
+      // onSend?.()
       return true
     } catch (error) {
-      onError?.(error)
+      // onError?.(error)
       return false
     }
   }
@@ -56,18 +56,25 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
     }
     try {
       await authClient.sendSmsCode(phone)
-      onSend?.()
       return true
     } catch (error) {
-      onError?.(error)
       return false
     }
   }
   return (
-    <SendCodeBtn
-      beforeSend={async () =>
-        method === 'phone' ? await sendPhone(data) : await sendEmail(data)
-      }
-    />
+    <>
+      <Row justify="space-between" align="middle">
+        <Col span={14}>
+          <Input {...inputProps} value={value} onChange={onChange} />
+        </Col>
+        <Col>
+          <SendCodeBtn
+            beforeSend={async () =>
+              method === 'phone' ? await sendPhone(data) : await sendEmail(data)
+            }
+          />
+        </Col>
+      </Row>
+    </>
   )
 }

@@ -28,6 +28,7 @@ export const initConfig = async (
     defaultConfig,
     getPublicConfig(appId)
   )
+
   return {
     config: {
       ...mergedConfig,
