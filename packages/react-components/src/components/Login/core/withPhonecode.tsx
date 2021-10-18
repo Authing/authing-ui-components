@@ -3,6 +3,7 @@ import { Button, Form, Input, message } from 'antd'
 import { useAuthClient } from '../../Guard/authClient'
 import { UserOutlined, SafetyOutlined } from '@ant-design/icons'
 import { validate } from 'src/utils'
+import { LoginMethods } from 'src/components'
 
 const SendCodeButton = (props: any) => {
   const [countDown, setCountDown] = useState(0)
@@ -63,8 +64,20 @@ export const LoginWithPhoneCode = (props: any) => {
   }
 
   const onFinish = async (values: any) => {
+    // onBeforeLogin
+    let loginInfo = {
+      type: LoginMethods.Password,
+      data: {
+        phone: values.phone,
+        code: values.code,
+      },
+    }
+    let context = await props.onBeforeLogin(loginInfo)
+    if (!context) {
+      return
+    }
+
     let u = await client.loginByPhoneCode(values.phone, values.code)
-    // console.log('u', u) // u 就是这个信息
     props.onLogin(200, u)
   }
 

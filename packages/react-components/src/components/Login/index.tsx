@@ -17,13 +17,13 @@ import { LoginMethods } from 'authing-js-sdk'
 import { GuardModuleType } from '../Guard/module'
 
 export const GuardLoginView = (props: GuardLoginViewProps) => {
-  console.log('props.config', props)
   // const [loginWay, setLoginWay] = useState('password')
   // const [ways, setWays] = useState(props.config)
   const client = useAuthClient()
 
   let publicKey = props.config?.publicKey!
   let autoRegister = props.config?.autoRegister
+  console.log('props.config', autoRegister)
 
   const __codePaser = (code: number) => {
     const action = codeMap[code]
@@ -49,11 +49,6 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
         message.error(initData?.__message)
       }
     }
-    if (action?.action === 'stateMove') {
-      return (initData?: any) => {
-        console.log('中间捕获，需要调用子组件方法，', 'stateMove')
-      }
-    }
 
     // 最终结果
     return () => {
@@ -69,6 +64,14 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     data.__message = message
     callback?.(data)
   }
+
+  const onBeforeLogin = (loginInfo: any) => {
+    if (props.onBeforeLogin) {
+      return props.onBeforeLogin?.(loginInfo, client)
+    }
+    return () => console.log('Guard 未传入 onBeforeLogin hooks')
+  }
+
   return (
     <div className="g2-login-container">
       <div className="g2-login-header">
@@ -77,23 +80,39 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
         <div className="title">登录 {props.config?.title}</div>
       </div>
       <div className="g2-login-tabs">
-        <Tabs>
+        <Tabs
+          onChange={(k: any) => {
+            props.onLoginTabChange?.(k)
+          }}
+        >
           {props.config?.loginMethods?.includes(LoginMethods.Password) && (
-            <Tabs.TabPane key="password" tab="密码登录">
+            <Tabs.TabPane key={LoginMethods.Password} tab="密码登录">
               <LoginWithPassword
                 publicKey={publicKey}
                 autoRegister={autoRegister}
                 onLogin={onLogin}
+                onBeforeLogin={onBeforeLogin}
                 host={props.config.host}
               />
             </Tabs.TabPane>
           )}
           {props.config?.loginMethods?.includes(LoginMethods.PhoneCode) && (
-            <Tabs.TabPane key="phone-code" tab="验证码登录">
+            <Tabs.TabPane key={LoginMethods.PhoneCode} tab="验证码登录">
               <LoginWithPhoneCode
                 autoRegister={autoRegister}
+                onBeforeLogin={onBeforeLogin}
                 onLogin={onLogin}
               />
+            </Tabs.TabPane>
+          )}
+          {props.config?.loginMethods?.includes(LoginMethods.LDAP) && (
+            <Tabs.TabPane key={LoginMethods.LDAP} tab="LDAP">
+              <LoginWithLDAP onLogin={onLogin} />
+            </Tabs.TabPane>
+          )}
+          {props.config?.loginMethods?.includes(LoginMethods.AD) && (
+            <Tabs.TabPane key={LoginMethods.AD} tab="LDAP">
+              <LoginWithAD onLogin={onLogin} />
             </Tabs.TabPane>
           )}
         </Tabs>

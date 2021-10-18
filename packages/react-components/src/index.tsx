@@ -13,6 +13,29 @@ const App = () => {
       <Guard
         appId="610271b10cd9106606c73d57"
         onLogin={(u) => message.info('🏁 用户业务层终点，登录完成。')}
+        onBeforeLogin={(loginInfo, authClient) => {
+          console.log('🪝loginInfo 被用户消费，返回 promise 或布尔', loginInfo)
+          return new Promise((resolve) => {
+            resolve(false)
+          })
+        }}
+        onLoginError={() => {
+          console.log('❌ 业务事件，error')
+        }}
+        onLoginTabChange={(key) => {
+          console.log('📁 业务事件，tab change', key)
+        }}
+        config={{
+          autoRegister: true,
+          // loginMethods?: LoginMethods[]
+          // defaultLoginMethod?: LoginMethods
+          // socialConnections?: SocialConnectionProvider[]
+          // passwordLoginMethods?: PasswordLoginMethods[]
+          // enterpriseConnections?: string[]
+          // disableResetPwd?: boolean
+          // qrCodeScanOptions?: Parameters<QrCodeAuthenticationClient['startScanning']>[1]
+          // publicKey?: string
+        }}
       />
 
       <AuthingGuard

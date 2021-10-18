@@ -6,6 +6,7 @@ import { useAuthClient } from '../../Guard/authClient'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { getUserRegisterParams } from 'src/utils'
 import { ErrorCode } from 'src/utils/GuardErrorCode'
+import { LoginMethods } from 'src/components'
 
 // core 代码只完成核心功能，东西尽可能少
 
@@ -13,10 +14,14 @@ import { ErrorCode } from 'src/utils/GuardErrorCode'
 //   return <div className="g2-captcha-image-code"></div>
 // }
 interface LoginWithPasswordProps {
+  // configs
   publicKey: string
   autoRegister?: boolean
-  onLogin: any
   host?: string
+
+  // events
+  onLogin: any
+  onBeforeLogin: any
 }
 
 export const LoginWithPassword = (props: LoginWithPasswordProps) => {
@@ -30,18 +35,35 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
 
   const encrypt = client.options.encryptFunction
   const onFinish = async (values: any) => {
+    // onBeforeLogin
+    let loginInfo = {
+      type: LoginMethods.Password,
+      data: {
+        identity: values.account,
+        password: values.password,
+        captchaCode: values.captchaCode,
+      },
+    }
+    let context = await props.onBeforeLogin(loginInfo)
+    if (!context) {
+      console.log('context', context)
+      return
+    }
+
+    // onLogin
     let url = '/api/v2/login/account'
+    let account = values.account && values.account.trim()
+    let password = values.password && values.password.trim()
     let captchaCode = values.captchaCode && values.captchaCode.trim()
 
     let body = {
-      account: values.account,
-      password: await encrypt!(values.password, props.publicKey),
+      account: account,
+      password: await encrypt!(password, props.publicKey),
       captchaCode,
       customData: getUserRegisterParams(),
       autoRegister: props.autoRegister,
     }
     const { code, message, data } = await post(url, body)
-    console.log('code', code)
 
     if (code === ErrorCode.INPUT_CAPTCHACODE) {
       setVerifyCodeUrl(getCaptchaUrl())
