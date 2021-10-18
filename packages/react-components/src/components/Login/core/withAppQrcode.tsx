@@ -3,6 +3,7 @@ import { useAuthClient } from '../../Guard/authClient'
 
 interface LoginWithAppQrcodeProps {
   onLogin: any
+  canLoop: boolean
 }
 
 export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
@@ -12,7 +13,11 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
   // const config = props.config
 
   useEffect(() => {
-    appQrcodeClient.startScanning('authingGuardQrcode', {
+    if (!props.canLoop) {
+      return
+    }
+
+    appQrcodeClient.startScanning('authingGuardAppQrcode', {
       autoExchangeUserInfo: true,
       // ...config.qrCodeScanOptions,
       onStart(timer) {
@@ -30,12 +35,11 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
       },
     })
     return () => clearInterval(timerRef.current)
-  }, [appQrcodeClient])
+  }, [appQrcodeClient, props.canLoop])
 
   return (
     <div className="authing-g2-login-app-qrcode">
-      app qrcode
-      <div id="authingGuardQrcode"></div>
+      <div id="authingGuardAppQrcode"></div>
     </div>
   )
 }

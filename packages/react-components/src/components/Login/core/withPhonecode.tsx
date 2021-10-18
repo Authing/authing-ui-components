@@ -13,7 +13,10 @@ const SendCodeButton = (props: any) => {
   const timerRef = useRef<any>(0)
 
   useEffect(() => {
-    return () => clearInterval(timerRef.current)
+    return () => {
+      console.log('终止定时器, at phonecode')
+      clearInterval(timerRef.current)
+    }
   }, [])
 
   useEffect(() => {
