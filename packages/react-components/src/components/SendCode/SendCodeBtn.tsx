@@ -1,7 +1,8 @@
-import { Spin } from 'antd'
+import { Button, Spin } from 'antd'
 import React, { FC, useState, useRef, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LoadingOutlined } from '@ant-design/icons'
+import './style.less'
 
 const TIME = 60
 export interface SendCodeProps {
@@ -65,9 +66,8 @@ export const SendCodeBtn: FC<SendCodeProps> = ({ beforeSend, btnRef }) => {
   }
 
   return (
-    <button
-      type="button"
-      className="authing-send-code-btn"
+    <Button
+      className="authing-g2-send-code-btn"
       disabled={disabled}
       onClick={onClick}
       ref={btnRef}
@@ -83,6 +83,6 @@ export const SendCodeBtn: FC<SendCodeProps> = ({ beforeSend, btnRef }) => {
               time: countDown,
             })}
       </Spin>
-    </button>
+    </Button>
   )
 }

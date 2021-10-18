@@ -1,26 +1,31 @@
-.authing-send-code-btn {
-  display: inline-block;
-  border: none;
-  background-color: transparent;
-  font-size: inherit;
-  color: #396aff;
-  cursor: pointer;
-  padding: 0;
-  user-select: none;
+.authing-g2-send-code-btn {
+  // display: inline-block;
+  // border: none;
+  // background-color: transparent;
+  // font-size: inherit;
+  // color: #396aff;
+  // cursor: pointer;
+  // padding: 0;
+  // user-select: none;
+  // outline: none;
+  height: 46px;
+  width: 120px;
+
+  border: 1px solid #d4d6dc;
+  border-radius: 4px;
+}
+
+.authing-g2-send-code-btn:focus {
   outline: none;
 }
 
-.authing-send-code-btn:focus {
-  outline: none;
-}
-
-.authing-send-code-btn[disabled] {
+.authing-g2-send-code-btn[disabled] {
   cursor: not-allowed;
   filter: opacity(0.5);
 }
 
 @media only screen and (max-width: 719px) {
-  .authing-send-code-btn {
+  .authing-g2-send-code-btn {
     font-size: 14px;
   }
 }

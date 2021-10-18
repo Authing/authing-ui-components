@@ -72,6 +72,7 @@ export const WithEmail: React.FC<RegisterWithEmailProps> = ({
     {
       component: (
         <Input
+          className="authing-g2-input"
           autoComplete="email"
           size="large"
           placeholder={t('login.inputEmail')}
@@ -87,6 +88,7 @@ export const WithEmail: React.FC<RegisterWithEmailProps> = ({
     {
       component: (
         <Input.Password
+          className="authing-g2-input"
           size="large"
           placeholder={t('common.setPassword')}
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
@@ -98,6 +100,7 @@ export const WithEmail: React.FC<RegisterWithEmailProps> = ({
     {
       component: (
         <Input.Password
+          className="authing-g2-input"
           size="large"
           placeholder={t('login.inputPwdAgain')}
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
@@ -105,7 +108,7 @@ export const WithEmail: React.FC<RegisterWithEmailProps> = ({
       ),
       name: 'new-password',
       rules: getRequiredRules(t('common.repeatPassword')).concat({
-        validator: (rule, value) => {
+        validator: (_, value) => {
           if (value !== form.getFieldValue('password')) {
             return Promise.reject(t('common.repeatPasswordDoc'))
           } else {

@@ -74,6 +74,7 @@ export const WithPhone: React.FC<RegisterWithPhoneProps> = ({
     {
       component: (
         <Input
+          className="authing-g2-input"
           autoComplete="tel"
           onChange={(e) => {
             setPhone(e.target.value)
@@ -121,14 +122,16 @@ export const WithPhone: React.FC<RegisterWithPhoneProps> = ({
     // },
     {
       component: (
-        <Input
+        <SendCode
+          className="authing-g2-input"
           autoComplete="one-time-code"
           size="large"
           placeholder={t('common.inputFourVerifyCode', {
             length: 4,
           })}
           prefix={<SafetyOutlined style={{ color: '#ddd' }} />}
-          addonAfter={<SendCode method="phone" data={phone} />}
+          method="phone"
+          data={phone}
         />
       ),
       name: 'code',
