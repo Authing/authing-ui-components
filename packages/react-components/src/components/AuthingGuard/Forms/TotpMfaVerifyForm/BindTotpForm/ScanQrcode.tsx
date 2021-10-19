@@ -21,23 +21,15 @@ export const ScanQrcode: FC<{
 
   return (
     <div className="ScanQrcode">
-      <h4 className="subtitle">{t('user.scanQrcode')}</h4>
-      <p className="desc">{desc}</p>
-
       {!isPhoneMedia ? (
-        <img className="qrcode" src={qrcode} alt="qrcode" />
+        <>
+          <h4 className="subtitle">{t('user.scanQrcode')}</h4>
+          <p className="desc">{desc}</p>
+          <img className="qrcode" src={qrcode} alt="qrcode" />
+        </>
       ) : (
         <>
-          {/* <div className="secretInput">
-            <div className="iconBox">
-              <IconFont type="authing-key-2-line" />
-            </div>
-            {t('common._appellation')}: {userpoolName}
-            <CopyIcon
-              copyValue={userpoolName!}
-              style={{ marginLeft: 'auto' }}
-            />
-          </div> */}
+          <h4 className="subtitle">{t('user.saveSecret')}</h4>
           <div className="secretInput">
             <div className="iconBox">
               <IconFont type="authing-key-2-line" />
