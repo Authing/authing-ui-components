@@ -16,5 +16,6 @@
     "access": "public",
     "directory": "../../dist/ng-ui-components",
     "registry": "https://registry.npmjs.org"
-  }
+  },
+  "gitHead": "34164419f4e80c41a03285229ed1d38d87b6dccf"
 }

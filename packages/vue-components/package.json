@@ -78,5 +78,6 @@
   "browserslist": [
     "> 10%",
     "last 2 versions"
-  ]
+  ],
+  "gitHead": "34164419f4e80c41a03285229ed1d38d87b6dccf"
 }
