@@ -137,7 +137,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
             size="large"
             type="primary"
             htmlType="submit"
-            className="authing-g2-login-button password"
+            className="authing-g2-submit-button password"
           >
             登录
           </Button>

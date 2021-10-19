@@ -123,7 +123,7 @@ export const LoginWithPhoneCode = (props: any) => {
             size="large"
             type="primary"
             htmlType="submit"
-            className="authing-g2-login-button phone-code"
+            className="authing-g2-submit-button phone-code"
           >
             登录
           </Button>

@@ -67,6 +67,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     if (!action) {
       return () => {
         console.error('未捕获 code', code)
+        // props.onLoginError?.(data, client) // 未捕获 code
       }
     }
 
@@ -77,12 +78,14 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     }
     if (action?.action === 'message') {
       return (initData?: any) => {
+        // props.onLoginError?.(data, client!) // 未捕获 code
         message.error(initData?.__message)
       }
     }
 
     // 最终结果
     return () => {
+      // props.onLoginError?.(data, client!) // 未捕获 code
       console.error('last action at loginview')
     }
   }
@@ -115,7 +118,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   let qrcodeNone = !qrcodeWays.includes(loginWay) ? 'none' : ''
 
   return (
-    <div className="g2-login-container">
+    <div className="g2-view-container">
       {/* 两种方式都需要渲染的时候，才出现切换按钮 */}
       {renderInputWay && renderQrcodeWay && (
         <div
@@ -141,13 +144,13 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
         </div>
       )}
 
-      <div className="g2-base-header">
+      <div className="g2-view-header">
         <img src={props.config?.logo} alt="" className="icon" />
         <div className="title">登录 {props.config?.title}</div>
       </div>
 
       {renderInputWay && (
-        <div className={`g2-login-tabs ${inputNone}`}>
+        <div className={`g2-view-tabs ${inputNone}`}>
           <Tabs
             onChange={(k: any) => {
               setLoginWay(k)
@@ -202,7 +205,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
             >
               忘记密码
             </div>
-            <span className="register-tip">
+            <span className="go-to-register">
               <span className="gray">还没有账号，</span>
               <span
                 className="link-like"
@@ -217,7 +220,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
         </div>
       )}
       {renderQrcodeWay && (
-        <div className={`g2-login-tabs ${qrcodeNone}`}>
+        <div className={`g2-view-tabs ${qrcodeNone}`}>
           <Tabs
             onChange={(k: any) => {
               props.onLoginTabChange?.(k)

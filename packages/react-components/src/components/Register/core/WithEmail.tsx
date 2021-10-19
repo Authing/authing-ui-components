@@ -172,7 +172,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
             size="large"
             type="primary"
             htmlType="submit"
-            className="authing-g2-register-button email"
+            className="authing-g2-submit-button email"
             loading={finish.loading}
           >
             注册

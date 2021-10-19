@@ -14,7 +14,7 @@ import { Spin } from '../Spin'
 import { GuardModuleType } from './module'
 import { GuardMFA } from '../MFA'
 import './styles.less'
-import { GuardRegister } from '../Register'
+import { GuardRegisterView } from '../Register'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -25,7 +25,7 @@ const ComponentsMapping: Record<
   [GuardModuleType.ERROR]: (props) => <div>Todo Error Module</div>,
   [GuardModuleType.LOGIN]: (props) => <GuardLoginView {...props} />,
   [GuardModuleType.MFA]: (props) => <GuardMFA {...props} />,
-  [GuardModuleType.REGISTER]: (props) => <GuardRegister {...props} />,
+  [GuardModuleType.REGISTER]: (props) => <GuardRegisterView {...props} />,
   [GuardModuleType.FORGETPASSWORD]: (props) => (
     <div>Todo forgetPassword Module</div>
   ),

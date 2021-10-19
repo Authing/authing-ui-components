@@ -31,12 +31,13 @@ const App = () => {
         config={{
           autoRegister: true,
           defaultRegisterMethod: RegisterMethods.Phone,
-          loginMethods: [
-            LoginMethods.Password,
-            LoginMethods.PhoneCode,
-            LoginMethods.WxMinQr,
-          ], //
+          // loginMethods: [
+          //   LoginMethods.Password,
+          //   LoginMethods.PhoneCode,
+          //   LoginMethods.WxMinQr,
+          // ], //
           // defaultLoginMethod: LoginMethods.WxMinQr, // 指定默认登录方式，如果这个方式不存在于 LoginMethods，那么就当作没有传入
+
           // socialConnections?: SocialConnectionProvider[]
           // passwordLoginMethods?: PasswordLoginMethods[]
           // enterpriseConnections?: string[]

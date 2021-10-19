@@ -7,9 +7,8 @@ import { codeMap } from './codemap'
 import { RegisterWithEmail } from './core/WithEmail'
 import { RegisterWithPhone } from './core/WithPhone'
 import { GuardRegisterViewProps } from './props'
-import './styles.less'
 
-export const GuardRegister: React.FC<GuardRegisterViewProps> = ({
+export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
   config,
   __changeModule,
   ...registerEvents
@@ -96,13 +95,13 @@ export const GuardRegister: React.FC<GuardRegisterViewProps> = ({
   )
 
   return (
-    <div className="g2-register-container">
-      <div className="g2-register-header">
+    <div className="g2-view-container">
+      <div className="g2-view-header">
         <img src={config?.logo} alt="" className="icon" />
 
         <div className="title">欢迎加入 {config?.title}</div>
       </div>
-      <div className="g2-register-tabs">
+      <div className="g2-view-tabs">
         <Tabs
           defaultActiveKey={config?.defaultRegisterMethod}
           onChange={(activeKey) => {
@@ -112,19 +111,19 @@ export const GuardRegister: React.FC<GuardRegisterViewProps> = ({
           {renderTab}
         </Tabs>
       </div>
-      <div className="tipsLine">
+      <div className="g2-tips-line">
         <div
-          className="linklike"
+          className="link-like"
           onClick={() => __changeModule?.(GuardModuleType.FORGETPASSWORD, {})}
         >
           忘记密码
         </div>
         <span
-          className="login-tip"
+          className="back-to-login"
           onClick={() => __changeModule?.(GuardModuleType.LOGIN, {})}
         >
           <span className="gray">已有账号，</span>
-          <span className="linklike">返回登录</span>
+          <span className="link-like">返回登录</span>
         </span>
       </div>
     </div>

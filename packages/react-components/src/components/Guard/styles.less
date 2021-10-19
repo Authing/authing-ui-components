@@ -12,6 +12,39 @@
 }
 
 // 侵入 core 的样式代码，guard view 皮肤
+.g2-view-container {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  width: 456px;
+  height: 610px;
+  box-sizing: border-box;
+  padding: 16px;
+  position: relative;
+  .none {
+    display: none;
+  }
+  .g2-view-header {
+    .icon {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      margin-bottom: 8px;
+    }
+    .title {
+      font-weight: 600;
+      font-size: 24px;
+    }
+    margin-bottom: 34px;
+  }
+
+  .authing-g2-submit-button {
+    width: 100%;
+    border-radius: 4px;
+    height: 42px;
+  }
+}
+
 .authing-g2-button-group {
   background: #eff2f6;
   border-radius: 8px;
@@ -64,12 +97,6 @@
   }
 }
 
-.authing-g2-login-button {
-  width: 100%;
-  border-radius: 4px;
-  height: 42px;
-}
-
 .authing-g2-send-code {
   color: #396aff;
   cursor: pointer;
@@ -77,20 +104,6 @@
     cursor: not-allowed;
     filter: opacity(0.5);
   }
-}
-
-.g2-base-header {
-  .icon {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    margin-bottom: 8px;
-  }
-  .title {
-    font-weight: 600;
-    font-size: 24px;
-  }
-  margin-bottom: 34px;
 }
 
 .g2-tips-line {
@@ -103,7 +116,10 @@
   .gray {
     color: #999;
   }
-  .register-tip {
+  .go-to-register {
+    margin-left: auto;
+  }
+  .back-to-login {
     margin-left: auto;
   }
 }
