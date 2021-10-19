@@ -13,6 +13,7 @@ import Input, { InputProps } from 'antd/lib/input'
 export interface SendPhoneCodeProps extends InputProps {
   method: 'phone' | 'email'
   data: string
+  form?: any
 }
 
 export const SendCode: FC<SendPhoneCodeProps> = ({
@@ -20,6 +21,7 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
   data,
   value,
   onChange,
+  form,
   ...inputProps
 }) => {
   const { t } = useTranslation()
@@ -64,14 +66,24 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
   return (
     <>
       <Row justify="space-between" align="middle">
-        <Col span={15}>
+        <Col span={16}>
           <Input {...inputProps} value={value} onChange={onChange} />
         </Col>
         <Col>
           <SendCodeBtn
-            beforeSend={async () =>
-              method === 'phone' ? await sendPhone(data) : await sendEmail(data)
-            }
+            beforeSend={async () => {
+              // console.log('form', form)
+              // console.log('inputProps', inputProps)
+              let phoneData = form ? form.getFieldValue(method) : data
+
+              return method === 'phone'
+                ? await sendPhone(phoneData)
+                : await sendEmail(phoneData)
+            }}
+            // beforeSend={async () => {
+            // console.log('form', form)
+            // return await false
+            // }}
           />
         </Col>
       </Row>

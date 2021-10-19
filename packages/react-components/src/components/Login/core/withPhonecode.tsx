@@ -4,53 +4,54 @@ import { useAuthClient } from '../../Guard/authClient'
 import { UserOutlined, SafetyOutlined } from '@ant-design/icons'
 import { validate } from 'src/utils'
 import { LoginMethods } from 'src/components'
+import { SendCode } from 'src/components/SendCode'
 
-const SendCodeButton = (props: any) => {
-  const [countDown, setCountDown] = useState(0)
-  const [sending, setSending] = useState(false)
+// const SendCodeButton = (props: any) => {
+//   const [countDown, setCountDown] = useState(0)
+//   const [sending, setSending] = useState(false)
 
-  let clsSending = sending === true && 'sending'
-  const timerRef = useRef<any>(0)
+//   let clsSending = sending === true && 'sending'
+//   const timerRef = useRef<any>(0)
 
-  useEffect(() => {
-    return () => {
-      console.log('终止定时器, at phonecode')
-      clearInterval(timerRef.current)
-    }
-  }, [])
+//   useEffect(() => {
+//     return () => {
+//       console.log('终止定时器, at phonecode')
+//       clearInterval(timerRef.current)
+//     }
+//   }, [])
 
-  useEffect(() => {
-    if (countDown <= 0) {
-      clearInterval(timerRef.current)
-      setSending(false)
-    }
-  }, [countDown])
+//   useEffect(() => {
+//     if (countDown <= 0) {
+//       clearInterval(timerRef.current)
+//       setSending(false)
+//     }
+//   }, [countDown])
 
-  return (
-    <div
-      className={`authing-g2-send-code ${clsSending}`}
-      onClick={() => {
-        let phone = props.form.getFieldValue('phone')
-        if (!validate('phone', phone)) {
-          message.error('请输入正确的手机号！')
-          return
-        }
-        if (sending === false) {
-          setCountDown(60)
-          timerRef.current = setInterval(() => {
-            setCountDown((per) => {
-              return per - 1
-            })
-          }, 1000)
-          setSending(true)
-          props.onSendCode()
-        }
-      }}
-    >
-      {sending ? `${countDown} 秒后重试` : '发送验证码'}
-    </div>
-  )
-}
+//   return (
+//     <div
+//       className={`authing-g2-send-code ${clsSending}`}
+//       onClick={() => {
+//         let phone = props.form.getFieldValue('phone')
+//         if (!validate('phone', phone)) {
+//           message.error('请输入正确的手机号！')
+//           return
+//         }
+//         if (sending === false) {
+//           setCountDown(60)
+//           timerRef.current = setInterval(() => {
+//             setCountDown((per) => {
+//               return per - 1
+//             })
+//           }, 1000)
+//           setSending(true)
+//           props.onSendCode()
+//         }
+//       }}
+//     >
+//       {sending ? `${countDown} 秒后重试` : '发送验证码'}
+//     </div>
+//   )
+// }
 
 export const LoginWithPhoneCode = (props: any) => {
   let [form] = Form.useForm()
@@ -112,12 +113,26 @@ export const LoginWithPhoneCode = (props: any) => {
           name="code"
           rules={[{ required: true, message: '请输入验证码' }]}
         >
-          <Input
+          {/* <Input
             className="authing-g2-input"
             size="large"
             placeholder={'请输入验证码'}
             prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
             suffix={<SendCodeButton form={form} onSendCode={onSendCode} />}
+          /> */}
+          <SendCode
+            className="authing-g2-input"
+            autoComplete="one-time-code"
+            size="large"
+            // placeholder={t('common.inputFourVerifyCode', {
+            //   length: 4,
+            // })}
+            prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
+            method="phone"
+            data={''}
+            form={form}
+            // data={form.getFieldValue('phone')}
+            placeholder={'请输入验证码'}
           />
         </Form.Item>
         <Form.Item>
