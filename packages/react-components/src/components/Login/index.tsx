@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { message, Radio, Tabs } from 'antd'
+import { message, Tabs } from 'antd'
 import { GuardLoginViewProps } from './props'
 import { useAuthClient } from '../Guard/authClient'
 import { codeMap } from './codemap'
@@ -16,6 +16,7 @@ import './styles.less'
 
 import { GuardModuleType } from '../Guard/module'
 import { LoginMethods } from '../AuthingGuard/types'
+import { IconFont } from '../IconFont'
 
 const inputWays = [
   LoginMethods.Password,
@@ -110,15 +111,13 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
       >
         <div className="switch-text">扫码登录方式</div>
         <div className="imgae-mask" />
-        <img
-          src={`${props.config?.__publicConfig__?.cdnBase}/inputWay.png`}
-          alt=""
-          className={`qrcode-switch-image $ ${inputNone}`}
+        <IconFont
+          type="authing-a-erweima22"
+          className={`qrcode-switch-image ${inputNone}`}
         />
-        <img
-          src={`${props.config?.__publicConfig__?.cdnBase}/qrcodeWay.png`}
-          alt=""
-          className={`qrcode-switch-image $ ${qrcodeNone}`}
+        <IconFont
+          type="authing-diannao"
+          className={`qrcode-switch-image ${qrcodeNone}`}
         />
       </div>
 
