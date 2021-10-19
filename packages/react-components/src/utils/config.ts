@@ -67,7 +67,7 @@ const mergeConfig = (
     // 禁止重制密码
     disableResetPwd: !!(
       config.disableResetPwd ??
-      publicConfig.ssoPageComponentDisplay?.registerBtn
+      !publicConfig.ssoPageComponentDisplay?.registerBtn
     ),
     // 是否自动注册
     autoRegister:
@@ -81,7 +81,8 @@ const mergeConfig = (
       (publicConfig.registerTabs.default as RegisterMethods),
     // 禁止注册
     disableRegister: !!(
-      config.disableRegister ?? publicConfig.ssoPageComponentDisplay.registerBtn
+      config.disableRegister ??
+      !publicConfig.ssoPageComponentDisplay.registerBtn
     ),
     // publicKey
     publicKey: config.publicKey ?? publicConfig.publicKey,

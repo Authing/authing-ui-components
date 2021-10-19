@@ -35,7 +35,7 @@ export interface SocialLoginProps {
 }
 
 export const SocialLogin: React.FC<SocialLoginProps> = ({ appId, config }) => {
-  const noForm = !config.loginMethods.length
+  const noLoginMethods = !config.loginMethods.length
 
   const userPoolId = config.__publicConfig__?.userPoolId
 
@@ -275,7 +275,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({ appId, config }) => {
         })
       }
 
-      return noForm ? (
+      return noLoginMethods ? (
         <Button
           key={item.provider}
           block
@@ -305,7 +305,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({ appId, config }) => {
   const idp =
     enterpriseConnectionObjs.length > 0 ? (
       <>
-        {!noForm && <div className="g2-social-login-title">OR</div>}
+        {!noLoginMethods && <div className="g2-social-login-title">OR</div>}
         <Space
           size={12}
           className="g2-guard-full-width-space"
@@ -317,7 +317,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({ appId, config }) => {
     ) : null
 
   const socialLogin =
-    socialLoginButtons.length > 0 && noForm ? (
+    socialLoginButtons.length > 0 && noLoginMethods ? (
       <Space
         size={12}
         className="g2-guard-full-width-space"
@@ -338,7 +338,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({ appId, config }) => {
 
   return (
     <>
-      {!noForm && (
+      {!noLoginMethods && (
         <div
           style={{
             flex: 1,
