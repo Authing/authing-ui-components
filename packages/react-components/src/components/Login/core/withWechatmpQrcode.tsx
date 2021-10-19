@@ -26,7 +26,7 @@ export const LoginWithWechatmpQrcode = (
         timerRef.current = timer
       },
       onSuccess(user) {
-        console.log('扫码完成', user)
+        props.onLogin(200, user)
         // onSuccess && onSuccess(user as User)
       },
       onError: (message) => {

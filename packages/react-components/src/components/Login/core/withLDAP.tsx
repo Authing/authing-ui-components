@@ -1,8 +1,7 @@
+import React, { useEffect, useRef, useState } from 'react'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Form, Input } from 'antd'
-import React, { useEffect, useRef, useState } from 'react'
 import { LoginMethods } from 'src/components'
-import { getUserRegisterParams } from 'src/utils'
 import { ErrorCode } from 'src/utils/GuardErrorCode'
 import { useAuthClient } from '../../Guard/authClient'
 
