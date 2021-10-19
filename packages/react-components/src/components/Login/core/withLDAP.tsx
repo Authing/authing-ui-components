@@ -48,22 +48,21 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
         autoRegister: props.autoRegister,
         captchaCode,
       })
-      // 登录成功？
-      // props.onLogin(e.code, e.data, e.message)
+      props.onLogin(200, user)
     } catch (error) {
       if (typeof error.message === 'string') {
         let e = { code: 2333, data: {}, message: '没有拿到错误提示' }
         try {
           e = JSON.parse(error.message)
+          console.log('解析 error.message 错误，检查 error', error)
           // onFail && onFail(errorData)
           return
-        } catch (_) {}
+        } catch {}
         if (e.code === ErrorCode.INPUT_CAPTCHACODE) {
           setVerifyCodeUrl(getCaptchaUrl())
           setShowCaptcha(true)
         }
         props.onLogin(e.code, e.data, e.message)
-
         // onFail && onFail(error)
       }
     }
