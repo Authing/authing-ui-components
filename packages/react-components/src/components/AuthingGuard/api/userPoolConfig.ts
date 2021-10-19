@@ -72,6 +72,7 @@ export interface ICasConnectionConfig {
 }
 export interface SocialConnectionItem {
   name: string
+  name_en: string
   logo: string
   description: string
   provider: SocialConnectionProvider

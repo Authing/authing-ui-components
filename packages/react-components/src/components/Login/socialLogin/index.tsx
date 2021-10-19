@@ -289,7 +289,9 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({ appId, config }) => {
           }
           onClick={onLogin}
         >
-          {item.tooltip?.[i18n.language as Lang] || item.name}
+          {i18n.language === 'zh-CN'
+            ? item.name
+            : item.name_en ?? item.provider}
         </Button>
       ) : (
         <Tooltip
@@ -320,7 +322,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({ appId, config }) => {
     socialLoginButtons.length > 0 && noLoginMethods ? (
       <Space
         size={12}
-        className="g2-guard-full-width-space"
+        className="g2-guard-full-width-space no-login-methods"
         direction="vertical"
       >
         {socialLoginButtons}
