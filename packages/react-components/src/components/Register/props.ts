@@ -14,15 +14,16 @@ import {
 import { Agreement } from '../AuthingGuard/api'
 
 export interface RegisterConfig extends IG2Config {
-  registerMethods?: RegisterMethods[]
-  defaultRegisterMethod?: RegisterMethods
-  disableRegister?: boolean
+  disableRegister: boolean
+  registerMethods: RegisterMethods[]
+  defaultRegisterMethod: RegisterMethods
   publicKey?: string
   agreementEnabled?: boolean
   agreements?: Agreement[]
 }
 
 const defaultConfig: RegisterConfig = {
+  ...getDefaultG2Config(),
   disableRegister: false,
   defaultRegisterMethod: RegisterMethods.Email,
   registerMethods: [RegisterMethods.Email, RegisterMethods.Phone],
@@ -39,7 +40,7 @@ export interface RegisterEvents extends IG2Events {
 }
 
 export interface GuardRegisterProps extends IG2FCProps, RegisterEvents {
-  config?: RegisterConfig
+  config?: Partial<RegisterConfig>
 }
 
 const getDefaultConfig = (): RegisterConfig => ({

@@ -1,11 +1,11 @@
 import { AuthenticationClient } from 'authing-js-sdk'
-import { GuardConfig } from 'src/utils/config'
 
 import packageConfig from '../../../package.json'
+import { GuardConfig } from './config'
 
 let authClient: AuthenticationClient
 
-export const initAuthClient = (config: GuardConfig = {}, appId: string) => {
+export const initAuthClient = (config: GuardConfig, appId: string) => {
   const host = config.host
   const lang = config.lang
 

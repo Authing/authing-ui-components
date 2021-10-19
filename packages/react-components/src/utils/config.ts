@@ -18,11 +18,11 @@ const setPublicConfig = (appId: string, config: ApplicationConfig) =>
 
 export const initConfig = async (
   appId: string,
-  config: IG2Config,
+  config: Partial<IG2Config>,
   defaultConfig: IG2Config
 ): Promise<{ config: GuardConfig; publicConfig: ApplicationConfig }> => {
   if (!getPublicConfig(appId))
-    await requestPublicConfig(appId, config.host ?? defaultConfig.host!)
+    await requestPublicConfig(appId, config.host ?? defaultConfig.host)
   const mergedConfig = mergeConfig(
     config,
     defaultConfig,
@@ -43,11 +43,12 @@ export const initConfig = async (
 }
 
 const mergeConfig = (
-  config: GuardConfig,
-  defaultConfig: GuardConfig,
+  config: Partial<GuardConfig>,
+  defaultConfig: IG2Config,
   publicConfig: ApplicationConfig
-): IG2Config => {
+): GuardConfig => {
   const mergedPublicConfig: GuardConfig = {
+    ...defaultConfig,
     ...config,
     title: config.title ?? publicConfig.name,
     logo: config.logo ?? publicConfig.logo,
@@ -57,7 +58,8 @@ const mergeConfig = (
       [],
     passwordLoginMethods:
       config?.passwordLoginMethods ??
-      publicConfig.passwordTabConfig?.enabledLoginMethods,
+      publicConfig.passwordTabConfig?.enabledLoginMethods ??
+      [],
     // 默认登录方式
     defaultLoginMethod:
       config.defaultLoginMethod ??
@@ -88,10 +90,7 @@ const mergeConfig = (
     agreements: config.agreements ?? publicConfig.agreements,
   }
 
-  return {
-    ...defaultConfig,
-    ...mergedPublicConfig,
-  }
+  return mergedPublicConfig
 }
 
 const requestPublicConfig = async (

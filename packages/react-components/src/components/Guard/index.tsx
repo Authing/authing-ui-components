@@ -33,7 +33,7 @@ const ComponentsMapping: Record<
 
 export interface GuardProps extends GuardEvents {
   appId: string
-  config?: GuardConfig
+  config?: Partial<GuardConfig>
 }
 
 export const Guard = (props: GuardProps) => {
@@ -41,7 +41,7 @@ export const Guard = (props: GuardProps) => {
   const [module, setModule] = useState<GuardModuleType>(GuardModuleType.LOGIN)
   const [initData, setInitData] = useState({})
   const [initSettingEnd, setInitSettingEnd] = useState(false)
-  const [guardConfig, setGuardConfig] = useState<GuardConfig>({})
+  const [guardConfig, setGuardConfig] = useState<GuardConfig>()
   // const [client, setClient] = useState<AuthenticationClient>()
   const events = guardEventsFilter(props)
 
@@ -97,7 +97,7 @@ export const Guard = (props: GuardProps) => {
       // TODO 这部分有点小问题 等待优化
       initI18n({}, mergedConfig.lang)
 
-      const authClient = initAuthClient(config, appId)
+      const authClient = initAuthClient(mergedConfig, appId)
       // setClient(authClient)
       onLoad?.(authClient)
       // 初始化 结束

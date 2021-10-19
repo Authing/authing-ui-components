@@ -18,18 +18,19 @@ import {
 } from '..'
 
 export interface LoginConfig extends IG2Config {
-  loginMethods?: LoginMethods[]
-  defaultLoginMethod?: LoginMethods
+  autoRegister: boolean
+  disableResetPwd: boolean
+  defaultLoginMethod: LoginMethods
+  loginMethods: LoginMethods[]
+  passwordLoginMethods: PasswordLoginMethods[]
   socialConnections?: SocialConnectionProvider[]
-  passwordLoginMethods?: PasswordLoginMethods[]
   enterpriseConnections?: string[]
-  autoRegister?: boolean
-  disableResetPwd?: boolean
   qrCodeScanOptions?: Parameters<QrCodeAuthenticationClient['startScanning']>[1]
   publicKey?: string
 }
 
 const defaultConfig: LoginConfig = {
+  ...getDefaultG2Config(),
   autoRegister: false,
   disableResetPwd: false,
   defaultLoginMethod: LoginMethods.Password,
@@ -72,7 +73,7 @@ export interface LoginEvents extends IG2Events {
 }
 
 export interface GuardLoginViewProps extends IG2FCProps, LoginEvents {
-  config?: LoginConfig
+  config?: Partial<LoginConfig>
 }
 
 export const getDefaultLoginConfig = (): LoginConfig => ({

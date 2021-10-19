@@ -10,7 +10,9 @@ export interface CompleteUserInfoConfig extends IG2Config {
   extendsFields?: ExtendsField[]
 }
 
-const defaultConfig: CompleteUserInfoConfig = {}
+const defaultConfig: CompleteUserInfoConfig = {
+  ...getDefaultG2Config(),
+}
 
 const getDefaultConfig = (): CompleteUserInfoConfig => ({
   ...getDefaultG2Config(),
