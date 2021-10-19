@@ -104,7 +104,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           autoComplete="email"
           size="large"
           placeholder={t('login.inputEmail')}
-          prefix={<UserOutlined style={{ color: '#ddd' }} />}
+          prefix={<UserOutlined style={{ color: '#878A95' }} />}
         />
       ),
       name: 'email',
@@ -119,7 +119,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           className="authing-g2-input"
           size="large"
           placeholder={t('common.setPassword')}
-          prefix={<LockOutlined style={{ color: '#ddd' }} />}
+          prefix={<LockOutlined style={{ color: '#878A95' }} />}
         />
       ),
       name: 'password',
@@ -131,7 +131,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           className="authing-g2-input"
           size="large"
           placeholder={t('login.inputPwdAgain')}
-          prefix={<LockOutlined style={{ color: '#ddd' }} />}
+          prefix={<LockOutlined style={{ color: '#878A95' }} />}
         />
       ),
       name: 'new-password',
@@ -156,7 +156,12 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         onFinish={onFinish}
       >
         {formItems.map((item) => (
-          <Form.Item key={item.name} name={item.name} rules={item.rules}>
+          <Form.Item
+            key={item.name}
+            name={item.name}
+            rules={item.rules}
+            className="authing-g2-input-form"
+          >
             {item.component}
           </Form.Item>
         ))}

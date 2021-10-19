@@ -25,6 +25,7 @@
     display: none;
   }
   .g2-view-header {
+    user-select: none;
     .icon {
       width: 35px;
       height: 35px;
@@ -69,19 +70,31 @@
     }
   }
 }
-
+.authing-g2-input-form {
+  padding: 0 2px;
+}
 .authing-g2-input {
   border: 1px solid #eaebee;
   height: 46px;
   border-radius: 4px;
-  &:hover {
+
+  // hover
+  &.authing-ant-input-affix-wrapper:hover {
     background: #eeeff1;
-    cursor: pointer;
     .authing-ant-input {
-      cursor: pointer;
       background: #eeeff1;
     }
   }
+
+  // focus
+  &.authing-ant-input-affix-wrapper-focused {
+    background: #ffffff !important;
+    .authing-ant-input {
+      background: #fff !important;
+    }
+  }
+
+  // 适配图形验证码
   &.add-after {
     border: none;
     .authing-ant-input-group {

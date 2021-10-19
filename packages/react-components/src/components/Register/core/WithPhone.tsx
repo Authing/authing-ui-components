@@ -79,7 +79,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           }}
           size="large"
           placeholder={t('login.inputPhone')}
-          prefix={<UserOutlined style={{ color: '#ddd' }} />}
+          prefix={<UserOutlined style={{ color: '#878A95' }} />}
         />
       ),
       name: 'phone',
@@ -127,7 +127,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           placeholder={t('common.inputFourVerifyCode', {
             length: 4,
           })}
-          prefix={<SafetyOutlined style={{ color: '#ddd' }} />}
+          prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
           method="phone"
           data={phone}
         />
@@ -146,7 +146,12 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         onFinish={onFinish}
       >
         {formItems.map((item) => (
-          <Form.Item key={item.name} name={item.name} rules={item.rules}>
+          <Form.Item
+            key={item.name}
+            name={item.name}
+            rules={item.rules}
+            className="authing-g2-input-form"
+          >
             {item.component}
           </Form.Item>
         ))}
