@@ -81,6 +81,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
         autoComplete="off"
       >
         <Form.Item
+          className="authing-g2-input-form"
           name="account"
           rules={[{ required: true, message: '账号不能为空' }]}
         >
@@ -89,10 +90,11 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
             autoComplete="email,username,tel"
             size="large"
             placeholder={'请输入 LDAP 账号'}
-            prefix={<UserOutlined style={{ color: '#ddd' }} />}
+            prefix={<UserOutlined style={{ color: '#878A95' }} />}
           />
         </Form.Item>
         <Form.Item
+          className="authing-g2-input-form"
           name="password"
           rules={[{ required: true, message: '密码不能为空' }]}
         >
@@ -100,11 +102,12 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
             className="authing-g2-input"
             size="large"
             placeholder={'请输入 LDAP 密码'}
-            prefix={<LockOutlined style={{ color: '#ddd' }} />}
+            prefix={<LockOutlined style={{ color: '#878A95' }} />}
           />
         </Form.Item>
         {showCaptcha && (
           <Form.Item
+            className="authing-g2-input-form"
             name="captchaCode"
             rules={[{ required: true, message: '请输入图形验证码' }]}
           >

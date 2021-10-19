@@ -95,6 +95,7 @@ export const LoginWithPhoneCode = (props: any) => {
         autoComplete="off"
       >
         <Form.Item
+          className="authing-g2-input-form"
           name="phone"
           rules={[{ required: true, message: '请输入手机号' }]}
         >
@@ -103,10 +104,11 @@ export const LoginWithPhoneCode = (props: any) => {
             autoComplete="tel"
             size="large"
             placeholder={'请输入手机号'}
-            prefix={<UserOutlined style={{ color: '#ddd' }} />}
+            prefix={<UserOutlined style={{ color: '#878A95' }} />}
           />
         </Form.Item>
         <Form.Item
+          className="authing-g2-input-form"
           name="code"
           rules={[{ required: true, message: '请输入验证码' }]}
         >
@@ -114,7 +116,7 @@ export const LoginWithPhoneCode = (props: any) => {
             className="authing-g2-input"
             size="large"
             placeholder={'请输入验证码'}
-            prefix={<SafetyOutlined style={{ color: '#ddd' }} />}
+            prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
             suffix={<SendCodeButton form={form} onSendCode={onSendCode} />}
           />
         </Form.Item>

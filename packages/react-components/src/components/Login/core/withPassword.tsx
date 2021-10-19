@@ -87,6 +87,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
       >
         <Form.Item
           name="account"
+          className="authing-g2-input-form"
           rules={[{ required: true, message: '账号不能为空' }]}
         >
           <Input
@@ -94,23 +95,25 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
             autoComplete="email,username,tel"
             size="large"
             placeholder={'请输入用户名 / 手机号 / 邮箱'}
-            prefix={<UserOutlined style={{ color: '#ddd' }} />}
+            prefix={<UserOutlined style={{ color: '#878A95' }} />}
           />
         </Form.Item>
         <Form.Item
           name="password"
+          className="authing-g2-input-form"
           rules={[{ required: true, message: '密码不能为空' }]}
         >
           <Input.Password
             className="authing-g2-input"
             size="large"
             placeholder={'输入登录密码'}
-            prefix={<LockOutlined style={{ color: '#ddd' }} />}
+            prefix={<LockOutlined style={{ color: '#878A95' }} />}
           />
         </Form.Item>
         {/* 图形验证码 */}
         {showCaptcha && (
           <Form.Item
+            className="authing-g2-input-form"
             name="captchaCode"
             rules={[{ required: true, message: '请输入图形验证码' }]}
           >
