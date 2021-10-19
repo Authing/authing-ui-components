@@ -16,14 +16,12 @@ import { Agreements } from '../components/Agreements'
 
 export interface RegisterWithEmailProps {
   onRegister: Function
-  onRegisterError: Function
   onBeforeRegister?: Function
   agreements: Agreement[]
 }
 
 export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
   onRegister,
-  onRegisterError,
   onBeforeRegister,
   agreements,
 }) => {
@@ -89,9 +87,9 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           }
         )
 
-        onRegister(user)
-      } catch (error) {
-        onRegisterError(error)
+        onRegister(200, user)
+      } catch ({ code, data, message }) {
+        onRegister(code, data, message)
       }
     },
     [form],

@@ -43,6 +43,10 @@ export interface GuardRegisterProps extends IG2FCProps, RegisterEvents {
   config?: Partial<RegisterConfig>
 }
 
+export interface GuardRegisterViewProps extends GuardRegisterProps {
+  config: RegisterConfig
+}
+
 const getDefaultConfig = (): RegisterConfig => ({
   ...getDefaultG2Config(),
   ...defaultConfig,

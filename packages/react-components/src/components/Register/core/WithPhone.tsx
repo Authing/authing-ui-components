@@ -16,13 +16,11 @@ import { Agreements } from '../components/Agreements'
 
 export interface RegisterWithPhoneProps {
   onRegister: Function
-  onRegisterError: Function
   agreements: Agreement[]
 }
 
 export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   onRegister,
-  onRegisterError,
   agreements,
 }) => {
   const { t } = useTranslation()
@@ -61,9 +59,9 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           }
         )
 
-        onRegister(user)
-      } catch (error) {
-        onRegisterError(error)
+        onRegister(200, user)
+      } catch ({ code, data, message }) {
+        onRegister(code, data, message)
       }
     },
     [form],
