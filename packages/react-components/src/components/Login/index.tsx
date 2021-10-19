@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { message, Tabs } from 'antd'
-import { GuardLoginViewProps, LoginConfig } from './props'
+import { GuardLoginViewProps } from './props'
 import { useAuthClient } from '../Guard/authClient'
 import { codeMap } from './codemap'
 
@@ -151,53 +151,54 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
       </div>
 
       {renderInputWay && (
-        <div className={`g2-view-tabs ${inputNone}`}>
-          <Tabs
-            onChange={(k: any) => {
-              setLoginWay(k)
-              // props.onLoginTabChange?.(k)
-            }}
-            activeKey={loginWay}
-          >
-            {ms?.includes(LoginMethods.Password) && (
-              <Tabs.TabPane key={LoginMethods.Password} tab="密码登录">
-                <LoginWithPassword
-                  publicKey={publicKey}
-                  autoRegister={autoRegister}
-                  host={props.config.host}
-                  onLogin={onLogin}
-                  onBeforeLogin={onBeforeLogin}
-                />
-              </Tabs.TabPane>
-            )}
-            {ms?.includes(LoginMethods.PhoneCode) && (
-              <Tabs.TabPane key={LoginMethods.PhoneCode} tab="验证码登录">
-                <LoginWithPhoneCode
-                  autoRegister={autoRegister}
-                  onBeforeLogin={onBeforeLogin}
-                  onLogin={onLogin}
-                />
-              </Tabs.TabPane>
-            )}
-            {ms?.includes(LoginMethods.LDAP) && (
-              <Tabs.TabPane key={LoginMethods.LDAP} tab="LDAP">
-                <LoginWithLDAP
-                  publicKey={publicKey}
-                  autoRegister={autoRegister}
-                  host={props.config.host}
-                  onLogin={onLogin}
-                  onBeforeLogin={onBeforeLogin}
-                />
-              </Tabs.TabPane>
-            )}
-            {ms?.includes(LoginMethods.AD) && (
-              <Tabs.TabPane key={LoginMethods.AD} tab="LDAP">
-                <LoginWithAD onLogin={onLogin} />
-              </Tabs.TabPane>
-            )}
-          </Tabs>
-
-          <div className="g2-tips-line">
+        <div className={inputNone}>
+          <div className={`g2-view-tabs`}>
+            <Tabs
+              onChange={(k: any) => {
+                setLoginWay(k)
+                // props.onLoginTabChange?.(k)
+              }}
+              activeKey={loginWay}
+            >
+              {ms?.includes(LoginMethods.Password) && (
+                <Tabs.TabPane key={LoginMethods.Password} tab="密码登录">
+                  <LoginWithPassword
+                    publicKey={publicKey}
+                    autoRegister={autoRegister}
+                    host={props.config.host}
+                    onLogin={onLogin}
+                    onBeforeLogin={onBeforeLogin}
+                  />
+                </Tabs.TabPane>
+              )}
+              {ms?.includes(LoginMethods.PhoneCode) && (
+                <Tabs.TabPane key={LoginMethods.PhoneCode} tab="验证码登录">
+                  <LoginWithPhoneCode
+                    autoRegister={autoRegister}
+                    onBeforeLogin={onBeforeLogin}
+                    onLogin={onLogin}
+                  />
+                </Tabs.TabPane>
+              )}
+              {ms?.includes(LoginMethods.LDAP) && (
+                <Tabs.TabPane key={LoginMethods.LDAP} tab="LDAP">
+                  <LoginWithLDAP
+                    publicKey={publicKey}
+                    autoRegister={autoRegister}
+                    host={props.config.host}
+                    onLogin={onLogin}
+                    onBeforeLogin={onBeforeLogin}
+                  />
+                </Tabs.TabPane>
+              )}
+              {ms?.includes(LoginMethods.AD) && (
+                <Tabs.TabPane key={LoginMethods.AD} tab="LDAP">
+                  <LoginWithAD onLogin={onLogin} />
+                </Tabs.TabPane>
+              )}
+            </Tabs>
+          </div>
+          <div className={`g2-tips-line`}>
             <div
               className="link-like"
               onClick={() =>
