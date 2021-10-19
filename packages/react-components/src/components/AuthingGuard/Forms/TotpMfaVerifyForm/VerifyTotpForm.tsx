@@ -21,8 +21,6 @@ export const VerifyTotpForm: FC<any> = ({
 
   const {
     state: {
-      guardEvents,
-      authClient,
       mfaData: { mfaToken: MFAToken },
       userPoolId,
       appId,
