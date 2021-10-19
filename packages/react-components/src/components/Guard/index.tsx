@@ -8,7 +8,7 @@ import { GuardEvents, guardEventsFilter } from './event'
 import { initConfig, GuardConfig } from 'src/utils/config'
 import { initGuardHttp } from 'src/utils/guradHttp'
 import { initI18n } from 'src/locales'
-import { IG2FCProps } from 'src/classes'
+import { IG2FCProps, IG2FCViewProps } from 'src/classes'
 import { getDefaultGuardConfig } from './config'
 import { Spin } from '../Spin'
 import { GuardModuleType } from './module'
@@ -20,7 +20,7 @@ const PREFIX_CLS = 'authing-ant'
 
 const ComponentsMapping: Record<
   GuardModuleType,
-  (props: IG2FCProps) => React.ReactNode
+  (props: GuardViewProps) => React.ReactNode
 > = {
   [GuardModuleType.ERROR]: (props) => <div>Todo Error Module</div>,
   [GuardModuleType.LOGIN]: (props) => <GuardLoginView {...props} />,
@@ -31,9 +31,12 @@ const ComponentsMapping: Record<
   ),
 }
 
-export interface GuardProps extends GuardEvents {
-  appId: string
+export interface GuardProps extends GuardEvents, IG2FCProps {
   config?: Partial<GuardConfig>
+}
+
+interface GuardViewProps extends GuardProps {
+  config: GuardConfig
 }
 
 export const Guard = (props: GuardProps) => {
@@ -41,7 +44,9 @@ export const Guard = (props: GuardProps) => {
   const [module, setModule] = useState<GuardModuleType>(GuardModuleType.LOGIN)
   const [initData, setInitData] = useState({})
   const [initSettingEnd, setInitSettingEnd] = useState(false)
-  const [guardConfig, setGuardConfig] = useState<GuardConfig>()
+  const [guardConfig, setGuardConfig] = useState<GuardConfig>(
+    getDefaultGuardConfig()
+  )
   // const [client, setClient] = useState<AuthenticationClient>()
   const events = guardEventsFilter(props)
 

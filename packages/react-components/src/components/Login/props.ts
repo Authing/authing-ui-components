@@ -3,6 +3,7 @@ import {
   IG2Config,
   IG2Events,
   IG2FCProps,
+  IG2FCViewProps,
 } from 'src/classes'
 import { CommonMessage, SocialConnectionProvider } from 'authing-js-sdk'
 import { QrCodeAuthenticationClient } from 'authing-js-sdk/build/main/lib/authentication/QrCodeAuthenticationClient'
@@ -75,7 +76,7 @@ export interface LoginEvents extends IG2Events {
 export interface GuardLoginProps extends IG2FCProps, LoginEvents {
   config?: Partial<LoginConfig>
 }
-export interface GuardLoginViewProps extends GuardLoginProps {
+export interface GuardLoginViewProps extends GuardLoginProps, IG2FCViewProps {
   config: LoginConfig
 }
 

@@ -1,5 +1,5 @@
 import { AuthenticationClient, CommonMessage } from 'authing-js-sdk'
-import { DeepPartial, Lang } from 'authing-js-sdk/build/main/types'
+import { Lang } from 'authing-js-sdk/build/main/types'
 import { ApplicationConfig } from 'src/components/AuthingGuard/api'
 import { GuardModuleType } from 'src/components/Guard/module'
 
@@ -17,6 +17,10 @@ export interface IG2FCProps extends IG2Events {
   appId: string
   initData?: any
   config?: Partial<IG2Config>
+}
+
+export interface IG2FCViewProps extends IG2FCProps {
+  config: IG2Config
 }
 
 export interface IG2Config {
