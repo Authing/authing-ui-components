@@ -5,7 +5,7 @@
 }
 
 .authing-g2-render-module {
-  margin: 100px auto;
+  // margin: 100px auto;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -48,9 +48,10 @@
   }
 
   .authing-g2-submit-button {
-    width: 100%;
+    width: calc(100% - 4px);
     border-radius: 4px;
     height: 42px;
+    margin: 0 2px;
   }
 }
 
@@ -135,6 +136,13 @@
   .link-like {
     color: #396aff;
     cursor: pointer;
+    transition: all 0.3s;
+    &:hover {
+      color: #557fff;
+    }
+    &:active {
+      color: #254cd9;
+    }
   }
   .gray {
     color: #999;

@@ -57,6 +57,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   // let autoRegister = props.config?.autoRegister
   let ms = props.config?.loginMethods
   let { autoRegister, disableResetPwd, disableRegister } = props.config
+  console.log('disableResetPwd', disableResetPwd)
   if (autoRegister === true) {
     disableRegister = true
   }

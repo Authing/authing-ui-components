@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Form, Input } from 'antd'
 
 import { useGuardHttp } from 'src/utils/guradHttp'
@@ -28,13 +28,24 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   let { post } = useGuardHttp()
   let client = useAuthClient()
   const [showCaptcha, setShowCaptcha] = useState(false)
+  const [buttonContent, setButtonContent] = useState('') // '', loading, success
   const [verifyCodeUrl, setVerifyCodeUrl] = useState('')
 
   const captchaUrl = `${props.host}/api/v2/security/captcha`
   const getCaptchaUrl = () => `${captchaUrl}?r=${+new Date()}`
 
   const encrypt = client.options.encryptFunction
+
+  useEffect(() => {
+    if (buttonContent === 'success') {
+      setTimeout(() => {
+        setButtonContent('')
+      }, 1000)
+    }
+  }, [buttonContent])
+
   const onFinish = async (values: any) => {
+    setButtonContent('loading')
     // onBeforeLogin
     let loginInfo = {
       type: LoginMethods.Password,
@@ -47,6 +58,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     let context = await props.onBeforeLogin(loginInfo)
     if (!context) {
       console.log('context', context)
+      setButtonContent('success')
       return
     }
 
@@ -69,7 +81,9 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
       setVerifyCodeUrl(getCaptchaUrl())
       setShowCaptcha(true)
     }
-
+    // if (Object.values(ErrorCode).includes(code)) {
+    //   setButtonContent('error')
+    // }
     props.onLogin(code, data, message)
   }
 
@@ -140,9 +154,13 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
             size="large"
             type="primary"
             htmlType="submit"
+            // loading={buttonContent === 'loading'}
+            // icon={buttonContent === 'success' && <CheckOutlined />}
             className="authing-g2-submit-button password"
           >
             {props.autoRegister ? '登录 / 注册' : '登录'}
+            {/* {buttonContent === 'success' && <CheckOutlined />} */}
+            {/* {buttonContent === '' && '登录'} */}
           </Button>
         </Form.Item>
       </Form>
