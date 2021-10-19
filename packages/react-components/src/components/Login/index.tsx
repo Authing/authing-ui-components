@@ -54,9 +54,12 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   const client = useAuthClient()
 
   let publicKey = props.config?.publicKey!
-  let autoRegister = props.config?.autoRegister
+  // let autoRegister = props.config?.autoRegister
   let ms = props.config?.loginMethods
-
+  let { autoRegister, disableResetPwd, disableRegister } = props.config
+  if (autoRegister === true) {
+    disableRegister = true
+  }
   const __codePaser = (code: number) => {
     const action = codeMap[code]
     if (code === 200) {
@@ -199,29 +202,30 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
             </Tabs>
           </div>
           <div className={`g2-tips-line`}>
-            <div
-              className="link-like"
-              onClick={() =>
-                props.__changeModule?.(GuardModuleType.FORGETPASSWORD, {})
-              }
-            >
-              忘记密码
-            </div>
-            <span className="go-to-register">
-              <span className="gray">还没有账号，</span>
-              <span
+            {!disableResetPwd && (
+              <div
                 className="link-like"
                 onClick={() =>
-                  props.__changeModule?.(GuardModuleType.REGISTER, {})
+                  props.__changeModule?.(GuardModuleType.FORGETPASSWORD, {})
                 }
               >
-                立即注册
+                忘记密码
+              </div>
+            )}
+            {!disableRegister && (
+              <span className="go-to-register">
+                <span className="gray">还没有账号，</span>
+                <span
+                  className="link-like"
+                  onClick={() =>
+                    props.__changeModule?.(GuardModuleType.REGISTER, {})
+                  }
+                >
+                  立即注册
+                </span>
               </span>
-            </span>
+            )}
           </div>
-          {/* <div className="g2-social-login"> */}
-          <SocialLogin appId={props.appId} config={props.config} />
-          {/* </div> */}
         </div>
       )}
       {renderQrcodeWay && (
@@ -236,23 +240,35 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                 <LoginWithWechatMiniQrcode
                   onLogin={onLogin}
                   canLoop={canLoop}
+                  qrCodeScanOptions={props.config.qrCodeScanOptions}
                 />
               </Tabs.TabPane>
             )}
             {ms?.includes(LoginMethods.AppQr) && (
               <Tabs.TabPane key={LoginMethods.AppQr} tab="APP 扫码">
-                <LoginWithAppQrcode onLogin={onLogin} canLoop={canLoop} />
+                <LoginWithAppQrcode
+                  onLogin={onLogin}
+                  canLoop={canLoop}
+                  qrCodeScanOptions={props.config.qrCodeScanOptions}
+                />
               </Tabs.TabPane>
             )}
 
             {ms?.includes(LoginMethods.WechatMpQrcode) && (
               <Tabs.TabPane key={LoginMethods.WechatMpQrcode} tab="公众号扫码">
-                <LoginWithWechatmpQrcode onLogin={onLogin} canLoop={canLoop} />
+                <LoginWithWechatmpQrcode
+                  onLogin={onLogin}
+                  canLoop={canLoop}
+                  qrCodeScanOptions={props.config.qrCodeScanOptions}
+                />
               </Tabs.TabPane>
             )}
           </Tabs>
         </div>
       )}
+      <div className="g2-social-login">
+        <SocialLogin appId={props.appId} config={props.config} />
+      </div>
     </div>
   )
 }

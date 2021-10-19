@@ -21,6 +21,7 @@ import {
 export interface LoginConfig extends IG2Config {
   autoRegister: boolean
   disableResetPwd: boolean
+  disableRegister: boolean
   defaultLoginMethod: LoginMethods
   loginMethods: LoginMethods[]
   passwordLoginMethods: PasswordLoginMethods[]
@@ -34,6 +35,7 @@ const defaultConfig: LoginConfig = {
   ...getDefaultG2Config(),
   autoRegister: false,
   disableResetPwd: false,
+  disableRegister: false,
   defaultLoginMethod: LoginMethods.Password,
   loginMethods: [LoginMethods.Password, LoginMethods.PhoneCode],
   passwordLoginMethods: [

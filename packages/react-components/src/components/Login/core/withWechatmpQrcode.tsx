@@ -4,6 +4,7 @@ import { useAuthClient } from '../../Guard/authClient'
 interface LoginWithWechatmpQrcodeProps {
   onLogin: any
   canLoop: boolean
+  qrCodeScanOptions: any
 }
 
 export const LoginWithWechatmpQrcode = (
@@ -20,7 +21,7 @@ export const LoginWithWechatmpQrcode = (
     }
     appQrcodeClient.startScanning('authingGuardMpQrcode', {
       autoExchangeUserInfo: true,
-      // ...config.qrCodeScanOptions,
+      ...props.qrCodeScanOptions,
       onStart(timer) {
         // console.log('开始扫码')
         timerRef.current = timer

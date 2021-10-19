@@ -17,6 +17,7 @@
   display: flex;
   flex-direction: column;
   width: 456px;
+  min-height: 610px;
   box-sizing: border-box;
   padding: 16px;
   position: relative;
@@ -27,16 +28,19 @@
     user-select: none;
     padding: 44px 38px 0;
     .icon {
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      border-radius: 4px;
       margin-bottom: 8px;
     }
     .title {
       font-weight: 600;
       font-size: 24px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    margin-bottom: 34px;
+    margin-bottom: 24px;
   }
 
   .g2-view-tabs {

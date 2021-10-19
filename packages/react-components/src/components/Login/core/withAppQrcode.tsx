@@ -4,6 +4,7 @@ import { useAuthClient } from '../../Guard/authClient'
 interface LoginWithAppQrcodeProps {
   onLogin: any
   canLoop: boolean
+  qrCodeScanOptions: any
 }
 
 export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
@@ -19,7 +20,7 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
 
     appQrcodeClient.startScanning('authingGuardAppQrcode', {
       autoExchangeUserInfo: true,
-      // ...config.qrCodeScanOptions,
+      ...props.qrCodeScanOptions,
       onStart(timer) {
         console.log('开始扫码')
         timerRef.current = timer

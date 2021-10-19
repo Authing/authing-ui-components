@@ -29,20 +29,22 @@ const App = () => {
           console.log('📁 业务事件，tab change', registerMethod)
         }}
         config={{
-          autoRegister: true,
+          // autoRegister: false,
           defaultRegisterMethod: RegisterMethods.Phone,
-          // loginMethods: [
-          //   LoginMethods.Password,
-          //   LoginMethods.PhoneCode,
-          //   LoginMethods.WxMinQr,
-          // ], //
+          // disableRegister: true,
+          // disableResetPwd: true,
+          // loginMethods: [],
+          loginMethods: [
+            LoginMethods.Password,
+            // LoginMethods.PhoneCode,
+            // LoginMethods.WxMinQr,
+          ], //
           // defaultLoginMethod: LoginMethods.WxMinQr, // 指定默认登录方式，如果这个方式不存在于 LoginMethods，那么就当作没有传入
-
-          // socialConnections?: SocialConnectionProvider[]
+          // qrCodeScanOptions?: Parameters<QrCodeAuthenticationClient['startScanning']>[1]
           // passwordLoginMethods?: PasswordLoginMethods[]
+          // socialConnections?: SocialConnectionProvider[]
           // enterpriseConnections?: string[]
           // disableResetPwd?: boolean
-          // qrCodeScanOptions?: Parameters<QrCodeAuthenticationClient['startScanning']>[1]
           // publicKey?: string
         }}
       />
@@ -50,9 +52,15 @@ const App = () => {
       <AuthingGuard
         appId="610271b10cd9106606c73d57"
         // appId="6167e1e3f19080f1bf7b7797"
-        // config={{
-        //   loginMethods: [LoginMethods.Password, LoginMethods.PhoneCode],
-        // }}
+        config={
+          {
+            // disableRegister: true,
+            // disableResetPwd: true,
+            // autoRegister: true,
+            // loginMethods: [],
+            // loginMethods: [LoginMethods.Password, LoginMethods.PhoneCode],
+          }
+        }
       />
     </div>
   )

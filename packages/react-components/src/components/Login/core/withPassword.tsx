@@ -142,7 +142,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
             htmlType="submit"
             className="authing-g2-submit-button password"
           >
-            登录
+            {props.autoRegister ? '登录 / 注册' : '登录'}
           </Button>
         </Form.Item>
       </Form>
