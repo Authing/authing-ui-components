@@ -1,71 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Button, Form, Input, message } from 'antd'
+import React from 'react'
+import { Button, Form, Input } from 'antd'
 import { useAuthClient } from '../../Guard/authClient'
 import { UserOutlined, SafetyOutlined } from '@ant-design/icons'
-import { validate } from 'src/utils'
 import { LoginMethods } from 'src/components'
 import { SendCode } from 'src/components/SendCode'
-
-// const SendCodeButton = (props: any) => {
-//   const [countDown, setCountDown] = useState(0)
-//   const [sending, setSending] = useState(false)
-
-//   let clsSending = sending === true && 'sending'
-//   const timerRef = useRef<any>(0)
-
-//   useEffect(() => {
-//     return () => {
-//       console.log('终止定时器, at phonecode')
-//       clearInterval(timerRef.current)
-//     }
-//   }, [])
-
-//   useEffect(() => {
-//     if (countDown <= 0) {
-//       clearInterval(timerRef.current)
-//       setSending(false)
-//     }
-//   }, [countDown])
-
-//   return (
-//     <div
-//       className={`authing-g2-send-code ${clsSending}`}
-//       onClick={() => {
-//         let phone = props.form.getFieldValue('phone')
-//         if (!validate('phone', phone)) {
-//           message.error('请输入正确的手机号！')
-//           return
-//         }
-//         if (sending === false) {
-//           setCountDown(60)
-//           timerRef.current = setInterval(() => {
-//             setCountDown((per) => {
-//               return per - 1
-//             })
-//           }, 1000)
-//           setSending(true)
-//           props.onSendCode()
-//         }
-//       }}
-//     >
-//       {sending ? `${countDown} 秒后重试` : '发送验证码'}
-//     </div>
-//   )
-// }
+import { useTranslation } from 'react-i18next'
 
 export const LoginWithPhoneCode = (props: any) => {
   let [form] = Form.useForm()
+  const { t } = useTranslation()
+
   let client = useAuthClient()
-
-  const onSendCode = async () => {
-    let phone = form.getFieldValue('phone')
-
-    try {
-      await client.sendSmsCode(phone)
-    } catch (error) {
-      console.log('发送验证码失败', error)
-    }
-  }
 
   const onFinish = async (values: any) => {
     // onBeforeLogin
@@ -124,15 +69,14 @@ export const LoginWithPhoneCode = (props: any) => {
             className="authing-g2-input"
             autoComplete="one-time-code"
             size="large"
-            // placeholder={t('common.inputFourVerifyCode', {
-            //   length: 4,
-            // })}
+            placeholder={t('common.inputFourVerifyCode', {
+              length: 4,
+            })}
             prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
             method="phone"
             data={''}
             form={form}
-            // data={form.getFieldValue('phone')}
-            placeholder={'请输入验证码'}
+            // placeholder={'请输入验证码'}
           />
         </Form.Item>
         <Form.Item>

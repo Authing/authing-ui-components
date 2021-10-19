@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { message, Tabs } from 'antd'
-import { GuardLoginViewProps, LoginConfig } from './props'
+import { GuardLoginViewProps } from './props'
 import { useAuthClient } from '../Guard/authClient'
 import { codeMap } from './codemap'
 
