@@ -22,9 +22,13 @@ export const TotpMfaVerifyForm: FC<TotpMFAFormProps> = ({
   return (
     <>
       {bindTotp ? (
-        <VerifyTotpForm totpSource={TotpSource.APPLICATION} />
+        <VerifyTotpForm
+          totpSource={TotpSource.APPLICATION}
+          onSuccess={onSuccess}
+          onFail={onFail}
+        />
       ) : (
-        <BindTotpForm />
+        <BindTotpForm onSuccess={onSuccess} onFail={onFail} />
       )}
     </>
   )

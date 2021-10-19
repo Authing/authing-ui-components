@@ -11,6 +11,8 @@ import { GuardScenes } from '../../../AuthingGuard/types'
 export const VerifyTotpForm: FC<any> = ({
   totpSource = TotpSource.SELF,
   className,
+  onSuccess,
+  onFail,
 }) => {
   const [MFACode, setMFACode] = useState(new Array(6).fill(''))
   const { isPhoneMedia } = useMediaSize()
@@ -89,10 +91,11 @@ export const VerifyTotpForm: FC<any> = ({
       message.error(data.message)
     } else {
       const user = data?.data
-      message.success(t('user.bindSuccess'))
+      // message.success(t('user.bindSuccess'))
       setMFACode(new Array(6).fill(''))
       setBtnLoading(false)
-      user && guardEvents.onLogin?.(user as any, authClient)
+      user && onSuccess(user)
+      // user && guardEvents.onLogin?.(user as any, authClient)
     }
   }
 

@@ -74,6 +74,8 @@ export const UserMfa: React.FC<any> = ({
   userPoolId,
   appId,
   className,
+  onSuccess,
+  onFail,
 }) => {
   // 多语言翻译
   const { t } = useTranslation()

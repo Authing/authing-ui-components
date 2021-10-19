@@ -2,9 +2,8 @@ import React, { FC, useEffect } from 'react'
 import { useGuardContext } from 'src/context/global/context'
 import { UserMfa, TotpSource } from '../UserMfa/'
 
-export interface BindTotpFormProps {}
-
-export const BindTotpForm: FC<BindTotpFormProps> = (props) => {
+export const BindTotpForm: FC<any> = (props) => {
+  const { onSuccess, onFail } = props
   const {
     state: { mfaData, userPoolId, appId },
     setValue,
@@ -34,6 +33,8 @@ export const BindTotpForm: FC<BindTotpFormProps> = (props) => {
       appId={appId}
       totpSource={TotpSource.APPLICATION}
       MFAToken={mfaData.mfaToken as string}
+      onSuccess={onSuccess}
+      onFail={onFail}
     />
   )
 }
