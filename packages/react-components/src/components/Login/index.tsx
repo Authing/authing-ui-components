@@ -18,6 +18,7 @@ import { GuardModuleType } from '../Guard/module'
 import { LoginMethods } from '../AuthingGuard/types'
 import { IconFont } from '../IconFont'
 import { intersection } from 'lodash'
+import { SocialLogin } from './socialLogin'
 
 const inputWays = [
   LoginMethods.Password,
@@ -218,6 +219,9 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
               </span>
             </span>
           </div>
+          {/* <div className="g2-social-login"> */}
+          <SocialLogin appId={props.appId} config={props.config} />
+          {/* </div> */}
         </div>
       )}
       {renderQrcodeWay && (

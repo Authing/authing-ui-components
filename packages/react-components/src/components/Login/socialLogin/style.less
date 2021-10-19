@@ -1,0 +1,79 @@
+.g2-guard-full-width-space {
+  width: 100%;
+}
+
+.g2-guard-third-login-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.g2-social-login-item {
+  display: inline-flex;
+  margin: 8px 8px;
+  width: 48px;
+  height: 48px;
+  background-color: #eff1f6;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+
+  .g2-icon {
+    font-size: 20px;
+    color: #aeb9d4;
+    transition: color 0.3s ease-in-out;
+  }
+
+  &:hover .g2-icon {
+    color: #396aff;
+  }
+}
+
+.g2-social-login-title {
+  text-align: center;
+  font-size: 14px;
+  color: #c8c9cc;
+}
+
+.g2-social-login-title::before,
+.g2-social-login-title::after {
+  content: '——';
+  color: #eeeeee;
+  margin: 0 11px;
+}
+
+.g2-social-login-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+@media only screen and (max-width: 719px) {
+  .g2-social-login-title {
+    font-size: 12px;
+  }
+  .g2-social-login-item {
+    width: 32px;
+    height: 32px;
+    .g2-icon {
+      font-size: 16px;
+    }
+  }
+  .g2-guard-full-width-space {
+    .g2-ant-space-item {
+      margin-bottom: 16px !important;
+      display: flex;
+      justify-content: center;
+      .g2-ant-btn {
+        width: 200px;
+        height: 34px;
+        background: #ffffff;
+        border-radius: 18px;
+        border: 1px solid #e7e7e7;
+        font-size: 12px;
+      }
+    }
+  }
+}

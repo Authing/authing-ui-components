@@ -3,6 +3,7 @@ import { Lang, Protocol } from '../../../components/AuthingGuard/types'
 import {
   IAzureAdConnectionConfig,
   ICasConnectionConfig,
+  IOAuthConnectionConfig,
   ISamlConnectionConfig,
   OIDCConnectionConfig,
   SocialConnectionItem,
@@ -103,6 +104,7 @@ export interface ApplicationConfig {
       | OIDCConnectionConfig
       | ICasConnectionConfig
       | IAzureAdConnectionConfig
+      | IOAuthConnectionConfig
   }[]
 
   ssoPageComponentDisplay: {

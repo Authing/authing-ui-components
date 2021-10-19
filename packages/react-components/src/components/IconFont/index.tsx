@@ -9,10 +9,7 @@ export const IconFont: FC<{
   className?: string
 }> = ({ type, style, className }) => {
   return (
-    <svg
-      style={{ ...style }}
-      className={getClassnames(['authing-icon', className])}
-    >
+    <svg style={{ ...style }} className={getClassnames(['g2-icon', className])}>
       <use xlinkHref={`#${type}`}></use>
     </svg>
   )
