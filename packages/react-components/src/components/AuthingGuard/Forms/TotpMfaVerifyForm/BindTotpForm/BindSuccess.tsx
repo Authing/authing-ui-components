@@ -21,7 +21,7 @@ export const BindSuccess: FC<{
         guardEvents.onLogin?.(user as any, authClient)
       }, 1000)
     }
-  }, [])
+  }, [guardEvents, user, totpSource, authClient])
 
   return (
     <Space size={16} direction="vertical">

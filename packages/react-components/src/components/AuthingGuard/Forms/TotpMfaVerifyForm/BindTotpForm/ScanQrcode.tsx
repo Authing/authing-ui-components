@@ -28,16 +28,16 @@ export const ScanQrcode: FC<{
         <img className="qrcode" src={qrcode} alt="qrcode" />
       ) : (
         <>
-          <div className="secretInput">
+          {/* <div className="secretInput">
             <div className="iconBox">
               <IconFont type="authing-key-2-line" />
             </div>
-            {t('common._ appellation')}: {userpoolName}
+            {t('common._appellation')}: {userpoolName}
             <CopyIcon
               copyValue={userpoolName!}
               style={{ marginLeft: 'auto' }}
             />
-          </div>
+          </div> */}
           <div className="secretInput">
             <div className="iconBox">
               <IconFont type="authing-key-2-line" />

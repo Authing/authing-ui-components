@@ -10,6 +10,10 @@ export const BindTotpForm: FC<BindTotpFormProps> = (props) => {
     setValue,
   } = useGuardContext()
 
+  const { state } = useGuardContext()
+
+  console.log(state)
+
   // 略微调整一下 Layout
   useEffect(() => {
     setValue('guardSize', 'large')
@@ -25,6 +29,7 @@ export const BindTotpForm: FC<BindTotpFormProps> = (props) => {
 
   return (
     <UserMfa
+      userpoolName={''}
       userPoolId={userPoolId}
       appId={appId}
       totpSource={TotpSource.APPLICATION}

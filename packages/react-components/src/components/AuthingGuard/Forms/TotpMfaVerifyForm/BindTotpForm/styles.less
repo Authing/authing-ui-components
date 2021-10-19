@@ -1,3 +1,5 @@
+@PSC-mobile-phone: ~'only screen and (max-width: 600px)';
+
 .mfaWrapper {
   position: relative;
   .mfaTitle {
@@ -390,6 +392,63 @@
       color: #515b78;
       line-height: 20px;
       margin-top: 3px;
+    }
+  }
+}
+
+@media @PSC-mobile-phone {
+  .mediaAppDownload {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .mediaAppDownloadItem {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      margin-bottom: 24px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .itemHeader {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 16px;
+        font-weight: 500;
+        color: #293350;
+        line-height: 19px;
+
+        img {
+          width: 60px;
+          height: 60px;
+          user-select: none;
+          margin-right: 8px;
+        }
+      }
+
+      .btnItem {
+        width: unset;
+        height: 28px;
+        background: #396aff;
+        border-radius: 4px;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+
+  .stepContent {
+    margin-top: 10px !important;
+
+    h4 {
+      display: none;
     }
   }
 }

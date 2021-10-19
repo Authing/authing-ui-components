@@ -61,6 +61,7 @@ export const AuthingDropdown: FC<{
       {visible
         ? createPortal(
             <div
+              data-id="authing-dropdown-menu"
               className={getClassnames(['authing-dropdown-menu-container'])}
               style={{
                 top: top,

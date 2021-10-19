@@ -12,6 +12,7 @@ import { SaveSecretKey } from '../BindTotpForm/SaveSecretKey'
 import { BindSuccess } from '../BindTotpForm/BindSuccess'
 import { useGuardContext } from '../../../../../context/global/context'
 import { GuardScenes } from '../../../../AuthingGuard/types'
+import { MediaAppDownload } from '../BindTotpForm/AppDownload'
 
 import './style.less'
 
@@ -55,6 +56,8 @@ export enum TotpSource {
 export interface UserMfaProps {
   // 用户池id
   userPoolId: string
+  // 用户池名称
+  userPoolName: string
   // 应用id
   appId: string
   // 区分个人版还是企业版
@@ -67,6 +70,7 @@ export interface UserMfaProps {
 export const UserMfa: React.FC<any> = ({
   totpSource = TotpSource.SELF,
   MFAToken,
+  userPoolName,
   userPoolId,
   appId,
   className,
@@ -88,7 +92,7 @@ export const UserMfa: React.FC<any> = ({
   // 绑定 mfa 的二维码
   const [qrcode, setQrcode] = useState('')
   //
-  const [, setMfaSecret] = useState('')
+  const [mfaSecret, setMfaSecret] = useState('')
   // 按钮的加载状态
   const [btnLoading, setBtnLoading] = useState(false)
   //
@@ -282,12 +286,12 @@ export const UserMfa: React.FC<any> = ({
   //渲染内容
   const STEP_MAP = useMemo(
     () => [
-      !isPhoneMedia ? <AppDownload /> : null,
+      !isPhoneMedia ? <AppDownload /> : <MediaAppDownload />,
       <ScanQrcode
         isPhoneMedia={isPhoneMedia}
         qrcode={qrcode}
-        secret={secret}
-        userpoolName=""
+        secret={mfaSecret}
+        userpoolName={userPoolName}
       />,
       <InputSaftyCode {...{ saftyCode, setSaftyCode, isPhoneMedia }} />,
       <SaveSecretKey {...{ secret, setIsSaved, isSaved }} />,
@@ -302,6 +306,8 @@ export const UserMfa: React.FC<any> = ({
       isSaved,
       user,
       totpSource,
+      mfaSecret,
+      userPoolName,
     ]
   )
 
