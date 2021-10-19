@@ -72,8 +72,11 @@ export interface LoginEvents extends IG2Events {
   ) => void
 }
 
-export interface GuardLoginViewProps extends IG2FCProps, LoginEvents {
+export interface GuardLoginProps extends IG2FCProps, LoginEvents {
   config?: Partial<LoginConfig>
+}
+export interface GuardLoginViewProps extends GuardLoginProps {
+  config: LoginConfig
 }
 
 export const getDefaultLoginConfig = (): LoginConfig => ({
