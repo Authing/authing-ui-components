@@ -6,54 +6,69 @@ import { AuthingGuard } from './components/AuthingGuard'
 import reportWebVitals from './reportWebVitals'
 import { message } from 'antd'
 import { LoginMethods, RegisterMethods } from './components'
+import { SocialConnectionProvider } from 'authing-js-sdk'
 
 const App = () => {
   return (
-    <div>
+    <div
+      style={{
+        background: '#f5f7fa',
+        height: '90vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
       <Guard
         appId="610271b10cd9106606c73d57"
         onLogin={(u) => message.info('🏁 用户业务层终点，登录完成。')}
         onBeforeLogin={(loginInfo, authClient) => {
-          console.log('🪝loginInfo 被用户消费，返回 promise 或布尔', loginInfo)
+          console.log('🪝onBeforeLogin 触发，返回 promise 或布尔', loginInfo)
           return new Promise((resolve) => {
             resolve(true)
           })
         }}
         onLoginError={() => {
-          console.log('❌ 业务事件，error')
+          console.log('❌ onLoginError 触发')
         }}
         onLoginTabChange={(key) => {
-          console.log('📁 业务事件，tab change', key)
+          console.log('📁 onLoginTabChange 触发', key)
         }}
         onRegisterTabChange={(registerMethod) => {
-          console.log('📁 业务事件，tab change', registerMethod)
+          console.log('📁 onRegisterTabChange 触发', registerMethod)
         }}
-        config={{
-          // autoRegister: false,
-          defaultRegisterMethod: RegisterMethods.Phone,
-          disableRegister: false,
-          disableResetPwd: false,
-          // loginMethods: [],
-          // loginMethods: [
-          //   LoginMethods.Password,
-          //   LoginMethods.PhoneCode,
-          //   LoginMethods.WxMinQr,
-          // ],
-          // defaultLoginMethod: LoginMethods.WxMinQr, // 指定默认登录方式，如果这个方式不存在于 LoginMethods，那么就当作没有传入
-          // qrCodeScanOptions?: Parameters<QrCodeAuthenticationClient['startScanning']>[1]
-          // passwordLoginMethods?: PasswordLoginMethods[]
-          // socialConnections?: SocialConnectionProvider[]
-          // enterpriseConnections?: string[]
-          // disableResetPwd?: boolean
-          // publicKey?: string
-        }}
+        config={
+          {
+            // autoRegister: false,
+            // defaultRegisterMethod: RegisterMethods.Phone,
+            // disableRegister: false,
+            // disableResetPwd: false,
+            // defaultLoginMethod: LoginMethods.WxMinQr, // 指定默认登录方式，如果这个方式不存在于 LoginMethods，那么就当作没有传入
+            // loginMethods: [
+            //   LoginMethods.Password,
+            //   LoginMethods.PhoneCode,
+            //   LoginMethods.WxMinQr,
+            // ],
+            // socialConnections: [
+            //   SocialConnectionProvider.ALIPAY,
+            //   SocialConnectionProvider.APPLE_WEB,
+            // ], // 指定可选的社会化登录方式
+            // qrCodeScanOptions?: Parameters<QrCodeAuthenticationClient['startScanning']>[1]
+            // passwordLoginMethods?: PasswordLoginMethods[]
+            // enterpriseConnections: [] // 这个有啥用？
+            // publicKey?: string
+            // lang: 'en-US',
+            // export declare type Lang = 'zh-CN' | 'en-US';
+          }
+        }
       />
 
-      {/* <AuthingGuard
+      <AuthingGuard
         appId="610271b10cd9106606c73d57"
         // appId="6167e1e3f19080f1bf7b7797"
         config={
           {
+            // lang: 'en-US',
             // disableRegister: true,
             // disableResetPwd: true,
             // autoRegister: true,
@@ -61,7 +76,7 @@ const App = () => {
             // loginMethods: [LoginMethods.Password, LoginMethods.PhoneCode],
           }
         }
-      /> */}
+      />
     </div>
   )
 }

@@ -19,6 +19,7 @@ import { LoginMethods } from '../AuthingGuard/types'
 import { IconFont } from '../IconFont'
 import { intersection } from 'lodash'
 import { SocialLogin } from './socialLogin'
+import { useTranslation } from 'react-i18next'
 
 const inputWays = [
   LoginMethods.Password,
@@ -48,9 +49,10 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   let [defaultMethod, renderInputWay, renderQrcodeWay] = useMethods(
     props.config
   )
-
+  const { t } = useTranslation()
   const [loginWay, setLoginWay] = useState(defaultMethod)
   const [canLoop, setCanLoop] = useState(false) // 允许轮询
+  // const [lang, setLang] = useState(props.config.lang) // 语言
   const client = useAuthClient()
 
   let publicKey = props.config?.publicKey!
@@ -165,7 +167,10 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
               activeKey={loginWay}
             >
               {ms?.includes(LoginMethods.Password) && (
-                <Tabs.TabPane key={LoginMethods.Password} tab="密码登录">
+                <Tabs.TabPane
+                  key={LoginMethods.Password}
+                  tab={t('login.pwdLogin')}
+                >
                   <LoginWithPassword
                     publicKey={publicKey}
                     autoRegister={autoRegister}
@@ -176,7 +181,10 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                 </Tabs.TabPane>
               )}
               {ms?.includes(LoginMethods.PhoneCode) && (
-                <Tabs.TabPane key={LoginMethods.PhoneCode} tab="验证码登录">
+                <Tabs.TabPane
+                  key={LoginMethods.PhoneCode}
+                  tab={t('login.verifyCodeLogin')}
+                >
                   <LoginWithPhoneCode
                     autoRegister={autoRegister}
                     onBeforeLogin={onBeforeLogin}
@@ -185,7 +193,10 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                 </Tabs.TabPane>
               )}
               {ms?.includes(LoginMethods.LDAP) && (
-                <Tabs.TabPane key={LoginMethods.LDAP} tab="LDAP">
+                <Tabs.TabPane
+                  key={LoginMethods.LDAP}
+                  tab={t('login.ldapLogin')}
+                >
                   <LoginWithLDAP
                     publicKey={publicKey}
                     autoRegister={autoRegister}
@@ -196,7 +207,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                 </Tabs.TabPane>
               )}
               {ms?.includes(LoginMethods.AD) && (
-                <Tabs.TabPane key={LoginMethods.AD} tab="LDAP">
+                <Tabs.TabPane key={LoginMethods.AD} tab={t('login.adLogin')}>
                   <LoginWithAD onLogin={onLogin} />
                 </Tabs.TabPane>
               )}
@@ -210,7 +221,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                   props.__changeModule?.(GuardModuleType.FORGETPASSWORD, {})
                 }
               >
-                忘记密码
+                {t('login.forgetPwd')}
               </div>
             )}
             {!disableRegister && (
@@ -237,7 +248,10 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
             }}
           >
             {ms?.includes(LoginMethods.WxMinQr) && (
-              <Tabs.TabPane key={LoginMethods.WxMinQr} tab="小程序扫码">
+              <Tabs.TabPane
+                key={LoginMethods.WxMinQr}
+                tab={t('login.scanLogin')}
+              >
                 <LoginWithWechatMiniQrcode
                   onLogin={onLogin}
                   canLoop={canLoop}
@@ -246,7 +260,10 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
               </Tabs.TabPane>
             )}
             {ms?.includes(LoginMethods.AppQr) && (
-              <Tabs.TabPane key={LoginMethods.AppQr} tab="APP 扫码">
+              <Tabs.TabPane
+                key={LoginMethods.AppQr}
+                tab={t('login.appScanLogin')}
+              >
                 <LoginWithAppQrcode
                   onLogin={onLogin}
                   canLoop={canLoop}
@@ -254,9 +271,11 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                 />
               </Tabs.TabPane>
             )}
-
             {ms?.includes(LoginMethods.WechatMpQrcode) && (
-              <Tabs.TabPane key={LoginMethods.WechatMpQrcode} tab="公众号扫码">
+              <Tabs.TabPane
+                key={LoginMethods.WechatMpQrcode}
+                tab={t('login.wechatmpQrcode')}
+              >
                 <LoginWithWechatmpQrcode
                   onLogin={onLogin}
                   canLoop={canLoop}
