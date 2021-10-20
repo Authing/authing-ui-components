@@ -9,11 +9,33 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background: gray;
+  height: 100vh;
+  --sidePadding: 38px;
+}
+
+@media only screen and (max-width: 450px) {
+  .authing-g2-render-module {
+    --sidePadding: 8px;
+  }
+  // .g2-tips-line {
+  //   padding: 0 24px;
+  // }
+  // .g2-view-container {
+  //   .g2-view-header {
+  //     padding: 44px 24px 0;
+  //   }
+  //   .g2-view-tabs {
+  //     padding: 0 24px;
+  //   }
+  // }
 }
 
 // 侵入 core 的样式代码，guard view 皮肤
 .g2-view-container {
-  border: 1px solid black;
+  box-shadow: 0px 0px 60px rgba(84, 89, 104, 0.05);
+  background: #ffffff;
+  // border: 1px solid black;
   display: flex;
   flex-direction: column;
   width: 456px;
@@ -26,7 +48,7 @@
   }
   .g2-view-header {
     user-select: none;
-    padding: 44px 38px 0;
+    padding: 44px var(--sidePadding) 0;
     .icon {
       width: 48px;
       height: 48px;
@@ -44,7 +66,7 @@
   }
 
   .g2-view-tabs {
-    padding: 0 38px;
+    padding: 0 var(--sidePadding);
   }
 
   .authing-g2-submit-button {
@@ -132,7 +154,7 @@
 .g2-tips-line {
   display: flex;
   font-size: 14px;
-  padding: 0 38px;
+  padding: 0 var(--sidePadding);
   .link-like {
     color: #396aff;
     cursor: pointer;
