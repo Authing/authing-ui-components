@@ -1,5 +1,6 @@
 import { Button } from 'antd'
 import React, { useMemo, useState } from 'react'
+import { IconFont } from 'src/components/IconFont'
 import { GuardMFAInitData, MFAType } from '../props'
 import './style.less'
 
@@ -18,19 +19,19 @@ const methodTitleMapping: Record<
 > = {
   [MFAType.EMAIL]: {
     title: '手机验证',
-    icon: '',
+    icon: 'authing-phone',
   },
   [MFAType.SMS]: {
     title: '电子邮箱验证',
-    icon: '',
+    icon: 'authing-mail',
   },
   [MFAType.TOTP]: {
     title: 'OTP 口令验证',
-    icon: '',
+    icon: 'authing-totp',
   },
   [MFAType.FACE]: {
     title: '人脸识别',
-    icon: '',
+    icon: 'authing-face',
   },
 }
 
@@ -55,15 +56,16 @@ export const MFAMethods: React.FC<MFAMethodsProps> = ({
             }}
             key={item.mfaPolicy}
           >
-            {methodTitleMapping[item.mfaPolicy].title}
+            <IconFont type={methodTitleMapping[item.mfaPolicy].icon} />
+            {`${methodTitleMapping[item.mfaPolicy].title}`}
           </Button>
         )),
     [applicationMfa, currentMethod, onChangeMethod]
   )
   return (
-    <>
-      <div className="g2-social-login-title">其他验证方式</div>
+    <div className="g2-mfa-method">
+      <div className="g2-mfa-method-title">其他验证方式</div>
       {otherMethods}
-    </>
+    </div>
   )
 }

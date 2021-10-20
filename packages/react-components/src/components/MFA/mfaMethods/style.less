@@ -1,3 +1,22 @@
+.g2-mfa-method {
+  padding: 0 38px;
+}
+
+.g2-mfa-method-title {
+  text-align: center;
+  font-size: 14px;
+  color: #c8c9cc;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.g2-mfa-method-title::before,
+.g2-mfa-method-title::after {
+  content: '——';
+  color: #eeeeee;
+  margin: 0 11px;
+}
+
 .g2-guard-mfa-methods-btn {
   border: none !important;
   background-color: #f5f6f7 !important;
@@ -6,7 +25,15 @@
   font-size: 14px !important;
   height: 49px !important;
   margin-top: 8px !important;
+  width: 100%;
 
   justify-content: center;
   align-items: center;
+
+  font-size: 14px;
+
+  .g2-icon {
+    font-size: 16px;
+    margin-right: 8px;
+  }
 }
