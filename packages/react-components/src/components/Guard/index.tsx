@@ -42,7 +42,7 @@ interface GuardViewProps extends GuardProps {
 
 export const Guard = (props: GuardProps) => {
   const { appId, config, onLoad, onLoadError } = props
-  const [module, setModule] = useState<GuardModuleType>(GuardModuleType.LOGIN)
+  const [module, setModule] = useState<GuardModuleType>(GuardModuleType.MFA)
   const [initData, setInitData] = useState({})
   const [initSettingEnd, setInitSettingEnd] = useState(false)
   const [guardConfig, setGuardConfig] = useState<GuardConfig>(

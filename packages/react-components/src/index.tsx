@@ -11,13 +11,13 @@ import { SocialConnectionProvider } from 'authing-js-sdk'
 const App = () => {
   return (
     <div
-      style={{
-        background: '#f5f7fa',
-        height: '90vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
+    // style={{
+    //   background: '#f5f7fa',
+    //   height: '90vh',
+    //   display: 'flex',
+    //   justifyContent: 'center',
+    //   alignItems: 'center',
+    // }}
     >
       <Guard
         appId="610271b10cd9106606c73d57"
@@ -39,15 +39,15 @@ const App = () => {
         }}
         config={
           {
-            // autoRegister: false,
+            // autoRegister: true,
             // defaultRegisterMethod: RegisterMethods.Phone,
             // disableRegister: false,
             // disableResetPwd: false,
             // defaultLoginMethod: LoginMethods.WxMinQr, // 指定默认登录方式，如果这个方式不存在于 LoginMethods，那么就当作没有传入
             // loginMethods: [
-            //   LoginMethods.Password,
+            // LoginMethods.Password,
             //   LoginMethods.PhoneCode,
-            //   LoginMethods.WxMinQr,
+            // LoginMethods.WxMinQr,
             // ],
             // socialConnections: [
             //   SocialConnectionProvider.ALIPAY,
@@ -63,7 +63,7 @@ const App = () => {
         }
       />
 
-      <AuthingGuard
+      {/* <AuthingGuard
         appId="610271b10cd9106606c73d57"
         // appId="6167e1e3f19080f1bf7b7797"
         config={
@@ -76,7 +76,7 @@ const App = () => {
             // loginMethods: [LoginMethods.Password, LoginMethods.PhoneCode],
           }
         }
-      />
+      /> */}
     </div>
   )
 }

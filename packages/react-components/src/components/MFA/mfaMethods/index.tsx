@@ -5,6 +5,8 @@ import './style.less'
 
 export interface MFAMethodsProps {
   applicationMfa: GuardMFAInitData['applicationMfa']
+  method: MFAType
+  onChangeMethod: (type: MFAType) => void
 }
 
 const methodTitleMapping: Record<
@@ -34,29 +36,29 @@ const methodTitleMapping: Record<
 
 export const MFAMethods: React.FC<MFAMethodsProps> = ({
   applicationMfa = [],
+  method,
+  onChangeMethod,
 }) => {
-  const [currentMethod, setCurrentMethod] = useState(
-    applicationMfa.sort((a, b) => a.sort - b.sort)[0]
-  )
+  const [currentMethod, setCurrentMethod] = useState(method)
 
   const otherMethods = useMemo(
     () =>
       applicationMfa
-        .filter((item) => item.mfaPolicy !== currentMethod.mfaPolicy)
+        .filter((item) => item.mfaPolicy !== currentMethod)
         .sort((a, b) => a.sort - b.sort)
         .map((item) => (
           <Button
             className="g2-guard-mfa-methods-btn"
             onClick={(e) => {
-              console.log(e)
+              onChangeMethod(item.mfaPolicy)
+              setCurrentMethod(item.mfaPolicy)
             }}
-            value={item.mfaPolicy}
             key={item.mfaPolicy}
           >
             {methodTitleMapping[item.mfaPolicy].title}
           </Button>
         )),
-    [applicationMfa, currentMethod.mfaPolicy]
+    [applicationMfa, currentMethod, onChangeMethod]
   )
   return (
     <>
