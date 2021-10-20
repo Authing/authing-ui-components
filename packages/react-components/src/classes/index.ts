@@ -12,10 +12,8 @@ export enum GuardScenes {
   Login = 'login',
   Register = 'register',
 }
-
 export interface IG2FCProps extends IG2Events {
   appId: string
-  initData?: any
   config?: Partial<IG2Config>
 }
 

@@ -12,7 +12,7 @@ import { IG2FCProps } from 'src/classes'
 import { getDefaultGuardConfig } from './config'
 import { Spin } from '../Spin'
 import { GuardModuleType } from './module'
-import { GuardMFA } from '../MFA'
+import { GuardMFAView } from '../MFA'
 import './styles.less'
 import { GuardRegisterView } from '../Register'
 
@@ -24,7 +24,7 @@ const ComponentsMapping: Record<
 > = {
   [GuardModuleType.ERROR]: (props) => <div>Todo Error Module</div>,
   [GuardModuleType.LOGIN]: (props) => <GuardLoginView {...props} />,
-  [GuardModuleType.MFA]: (props) => <GuardMFA {...props} />,
+  [GuardModuleType.MFA]: (props) => <GuardMFAView {...props} />,
   [GuardModuleType.REGISTER]: (props) => <GuardRegisterView {...props} />,
   [GuardModuleType.FORGETPASSWORD]: (props) => (
     <div>Todo forgetPassword Module</div>
@@ -37,6 +37,7 @@ export interface GuardProps extends GuardEvents, IG2FCProps {
 
 interface GuardViewProps extends GuardProps {
   config: GuardConfig
+  initData: any
 }
 
 export const Guard = (props: GuardProps) => {

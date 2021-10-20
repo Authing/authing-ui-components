@@ -1,14 +1,37 @@
 import React from 'react'
-import { IG2FCProps } from 'src/classes'
+import { GuardModuleType } from '../Guard/module'
+import { IconFont } from '../IconFont'
+import { BindMFAEmail, MFAEmail } from './core/email'
+import { MFAMethods } from './mfaMethods'
+import { GuardMFAViewProps, MFAType } from './props'
 
 import './styles.less'
 
-export interface GuardMFAProps extends IG2FCProps {
-  // appId: string
-  // config?: GuardConfig
-}
+export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
+  initData,
+  __changeModule,
+}) => {
+  console.log('props', initData)
 
-export const GuardMFA = (props: GuardMFAProps) => {
-  console.log('props', props.initData)
-  return <div className="g2-mfa-container">mfa</div>
+  const onBack = () => __changeModule?.(GuardModuleType.LOGIN, {})
+
+  return (
+    <div className="g2-view-container">
+      <div className="g2-view-back">
+        <span onClick={onBack}>
+          <IconFont type="authing-back" />
+          <span>返回登录</span>
+        </span>
+      </div>
+      <MFAEmail mfaToken={initData.mfaToken} email={initData.email} />
+      <MFAMethods
+        applicationMfa={[
+          { mfaPolicy: MFAType.SMS, status: 1, sort: 1 },
+          { mfaPolicy: MFAType.EMAIL, status: 1, sort: 2 },
+          { mfaPolicy: MFAType.TOTP, status: 1, sort: 3 },
+          { mfaPolicy: MFAType.FACE, status: 1, sort: 4 },
+        ]}
+      />
+    </div>
+  )
 }

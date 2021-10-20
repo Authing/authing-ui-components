@@ -19,12 +19,6 @@
     "noEmit": false,
     "jsx": "react"
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.json",
-    "src/components/Guard/config.ts.back",
-    "src/components/Guard/config.back"
-  ],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.json"],
   "exclude": ["node_modules", "lib", "build"]
 }
