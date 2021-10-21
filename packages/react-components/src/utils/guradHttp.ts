@@ -57,6 +57,20 @@ export class GuardHttp {
         ...config?.headers,
       },
     })
+
+  public postForm = async <T>(
+    path: string,
+    formData: any,
+    config?: {
+      headers: any
+    }
+  ) =>
+    await requestClient.postForm<T>(path, formData, {
+      headers: {
+        ...this.headers,
+        ...config?.headers,
+      },
+    })
 }
 
 export const initGuardHttp = (baseUrl: string) => {

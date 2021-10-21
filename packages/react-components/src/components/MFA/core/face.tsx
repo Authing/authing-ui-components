@@ -53,13 +53,12 @@ function dataURItoBlob(base64Data: any) {
   return new Blob([ia], { type: mimeString })
 }
 export const MFAFace = (props: any) => {
-  let { post } = useGuardHttp()
+  let { postForm } = useGuardHttp()
   const interval = useRef<NodeJS.Timeout | undefined>()
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [faceState, setFaceState] = useState('准备中') // 准备中, 识别中
   const [percent, setPercent] = useState(0) // 识别进度（相似性）
-  const client = useAuthClient()
   // console.log(client.mfa)
 
   // 预加载数据
@@ -113,14 +112,14 @@ export const MFAFace = (props: any) => {
 
     console.log('formData', formData)
 
-    const ur = await post(
+    const ur = await postForm(
       '/api/v2/upload?folder=photos&private=true',
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
+      formData
+      // {
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data',
+      //   },
+      // }
     )
     console.log('formdata 上传', ur)
 

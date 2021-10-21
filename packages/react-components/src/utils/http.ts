@@ -54,6 +54,25 @@ requestClient.post = async <T>(
   return res.json()
 }
 
+requestClient.postForm = async <T>(
+  path: string,
+  formData: any,
+  config?: {
+    headers: any
+  }
+): Promise<AuthingResponse<T>> => {
+  const res = await fetch(`${requestClient.baseUrl}${path}`, {
+    method: 'post',
+    body: formData,
+    credentials: 'include',
+    headers: {
+      ...config?.headers,
+      [requestClient.langHeader]: i18n.language,
+    },
+  })
+  return res.json()
+}
+
 requestClient.baseUrl = ''
 requestClient.setBaseUrl = (base: string) => {
   requestClient.baseUrl = base.replace(/\/$/, '')
