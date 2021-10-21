@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { GuardModuleType } from '../Guard/module'
 import { IconFont } from '../IconFont'
 import { MFAEmail } from './core/email'
+import { MFASms } from './core/sms'
 import { MFAMethods } from './mfaMethods'
 import { GuardMFAViewProps, MFAType } from './props'
 
@@ -11,7 +12,9 @@ const ComponentsMapping: Record<MFAType, (props: any) => React.ReactNode> = {
   [MFAType.EMAIL]: (props) => (
     <MFAEmail mfaToken={props.mfaToken} email={props.email} />
   ),
-  [MFAType.SMS]: () => <div>sms</div>,
+  [MFAType.SMS]: (props) => (
+    <MFASms mfaToken={props.mfaToken} phone={props.phone} />
+  ),
   [MFAType.TOTP]: () => <div>TOTP</div>,
   [MFAType.FACE]: () => <div>face</div>,
 }
@@ -20,9 +23,10 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
   initData,
   __changeModule,
 }) => {
+  console.log('mfa initData', initData)
   const [currentMethod, setCurrentMethod] = useState(
-    // initData.applicationMfa.sort((a, b) => a.sort - b.sort)[0].mfaPolicy
-    MFAType.SMS
+    initData.applicationMfa?.sort((a, b) => a.sort - b.sort)[0].mfaPolicy ??
+      MFAType.EMAIL
   )
 
   const onBack = () => __changeModule?.(GuardModuleType.LOGIN, {})
@@ -35,14 +39,11 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
           <span>返回登录</span>
         </span>
       </div>
-      {ComponentsMapping[currentMethod]({ ...initData })}
+      <div className="g2-mfa-content">
+        {ComponentsMapping[currentMethod]({ ...initData })}
+      </div>
       <MFAMethods
-        applicationMfa={[
-          { mfaPolicy: MFAType.SMS, status: 1, sort: 1 },
-          { mfaPolicy: MFAType.EMAIL, status: 1, sort: 2 },
-          { mfaPolicy: MFAType.TOTP, status: 1, sort: 3 },
-          { mfaPolicy: MFAType.FACE, status: 1, sort: 4 },
-        ]}
+        applicationMfa={initData.applicationMfa}
         method={currentMethod}
         onChangeMethod={(type) => {
           setCurrentMethod(type)

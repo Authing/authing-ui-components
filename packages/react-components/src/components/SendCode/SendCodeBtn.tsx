@@ -3,9 +3,10 @@ import React, { FC, useState, useRef, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LoadingOutlined } from '@ant-design/icons'
 import './style.less'
+import { ButtonProps } from 'antd/lib/button'
 
 const TIME = 60
-export interface SendCodeProps {
+export interface SendCodeProps extends ButtonProps {
   beforeSend: () => Promise<boolean>
   btnRef?: React.RefObject<HTMLButtonElement>
 }
@@ -43,7 +44,11 @@ const useSentCounter = () => {
   }
 }
 
-export const SendCodeBtn: FC<SendCodeProps> = ({ beforeSend, btnRef }) => {
+export const SendCodeBtn: FC<SendCodeProps> = ({
+  beforeSend,
+  btnRef,
+  ...buttonProps
+}) => {
   const { enabled, send, countDown } = useSentCounter()
   const [loading, setLoading] = useState(false)
   const { t } = useTranslation()
@@ -67,7 +72,8 @@ export const SendCodeBtn: FC<SendCodeProps> = ({ beforeSend, btnRef }) => {
 
   return (
     <Button
-      className="authing-g2-send-code-btn"
+      {...buttonProps}
+      className={buttonProps.type ?? 'authing-g2-send-code-btn'}
       disabled={disabled}
       onClick={onClick}
       ref={btnRef}

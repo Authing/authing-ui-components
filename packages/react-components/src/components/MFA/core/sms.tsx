@@ -1,6 +1,6 @@
 import { Input, Button, message } from 'antd'
 import { Form } from 'antd'
-import { EmailScene, User } from 'authing-js-sdk'
+import { User } from 'authing-js-sdk'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VerifyCodeInput } from 'src/common/VerifyCodeInput'
@@ -10,74 +10,68 @@ import { VALIDATE_PATTERN } from 'src/utils'
 
 const CODE_LEN = 4
 
-interface BindMFAEmailProps {
+export interface BindMFASmsProps {
   mfaToken: string
-  onBind: (email: string) => void
+  onBind: (phone: string) => void
 }
-export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
-  mfaToken,
-  onBind,
-}) => {
-  const { t } = useTranslation()
 
-  const [loading, setLoading] = useState(false)
+export const BindMFASms: React.FC<BindMFASmsProps> = ({ mfaToken, onBind }) => {
+  const { t } = useTranslation()
 
   const [form] = Form.useForm()
 
+  const [loading, setLoading] = useState(false)
+
   const authClient = useAuthClient()
 
-  const onFinish = async ({ email }: any) => {
+  const onFinish = async ({ phone }: any) => {
     try {
       const bindable = await authClient.mfa.phoneOrEmailBindable({
         mfaToken,
-        email,
+        phone,
       })
-
       if (!bindable) {
         message.error(
           t('common.unBindEmaileDoc', {
-            email: email,
+            email: phone,
           })
         )
         return
       }
 
-      console.log('bindable', bindable)
-      console.log('onBind', onBind)
-      onBind(email)
+      onBind(phone)
     } catch (e) {
-      const error = JSON.parse(e.message)
-
-      message.error(error.message)
+      // do nothing
     } finally {
       setLoading(false)
     }
   }
+
   return (
     <>
-      <p className="authing-g2-mfa-title">绑定电子邮箱</p>
-      <p className="authing-g2-mfa-tips">{t('common.bindEmailDoc')}</p>
+      <h3 className="authing-g2-mfa-title">{t('common.bindPhone')}</h3>
+      <p className="authing-g2-mfa-tips">{t('login.bindPhoneInfo')}</p>
       <Form
         form={form}
-        onFinish={onFinish}
         onSubmitCapture={() => setLoading(true)}
+        onFinish={onFinish}
         onFinishFailed={() => setLoading(false)}
       >
         <Form.Item
           className="authing-g2-input-form"
-          name="email"
+          name="phone"
           rules={[
             {
               required: true,
-              message: t('login.inputEmail'),
+              message: t('login.inputPhone'),
             },
             {
-              pattern: VALIDATE_PATTERN.email,
-              message: t('login.emailError'),
+              pattern: VALIDATE_PATTERN.phone,
+              message: t('login.phoneError'),
             },
           ]}
         >
-          <Input className="authing-g2-input" autoComplete="email" />
+          <Input className="authing-g2-input" />
         </Form.Item>
 
         <Button
@@ -95,36 +89,48 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
   )
 }
 
-interface VerifyMFAEmailProps {
-  email: string
+export interface VerifyMFASmsProps {
   mfaToken: string
+  phone: string
   onVerify: Function
   sendCodeRef: React.RefObject<HTMLButtonElement>
 }
 
-export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
-  email,
+export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   mfaToken,
-  onVerify,
+  phone,
   sendCodeRef,
 }) => {
   const { t } = useTranslation()
 
   const [form] = Form.useForm()
 
+  const authClient = useAuthClient()
+
   const [MfaCode, setMFACode] = useState(new Array(CODE_LEN).fill(''))
-
   const [loading, setLoading] = useState(false)
-
   const [sending, setSending] = useState(false)
   const [sent, setSent] = useState(false)
 
-  const authClient = useAuthClient()
+  const onFinish = async (values: any) => {
+    try {
+      const user: User = await authClient.mfa.verifyAppSmsMfa({
+        mfaToken,
+        phone: phone!,
+        code: MfaCode.join(''),
+      })
+      // TODO
+    } catch (e) {
+      // TODO
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const sendVerifyCode = async () => {
+    setSending(true)
     try {
-      setSending(true)
-      await authClient.sendEmail(email!, EmailScene.MfaVerify)
+      await authClient.sendSmsCode(phone!)
       setSent(true)
       return true
     } catch (e) {
@@ -134,30 +140,14 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
     }
   }
 
-  const onFinish = async (values: any) => {
-    try {
-      const user: User = await authClient.mfa.verifyAppEmailMfa({
-        mfaToken,
-        email: email!,
-        code: MfaCode.join(''),
-      })
-
-      onVerify({ code: 200, data: user })
-    } catch (e) {
-      onVerify({ ...e })
-    } finally {
-      setLoading(false)
-    }
-  }
-
   return (
     <>
-      <p className="authing-g2-mfa-title">{t('login.inputEmailCode')}</p>
-      <p className="authing-g2-mfa-tips">
+      <h3 className="authing-guard-mfa-title">{t('login.inputPhoneCode')}</h3>
+      <p className="authing-guard-mfa-tips">
         {sending
           ? t('login.sendingVerifyCode')
           : sent
-          ? `${t('login.verifyCodeSended')} ${email}`
+          ? `${t('login.verifyCodeSended')} ${phone}`
           : t('login.clickSent')}
       </p>
       <Form
@@ -194,7 +184,7 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
         />
 
         <Button
-          className="authing-g2-submit-button g2-mfa-submit-button"
+          className="authing-guard-mfa-confirm-btn"
           loading={loading}
           block
           htmlType="submit"
@@ -208,30 +198,30 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
   )
 }
 
-export const MFAEmail: React.FC<{
+export const MFASms: React.FC<{
   mfaToken: string
-  email?: string
-}> = ({ email: userEmail, mfaToken }) => {
-  const [email, setEmail] = useState(userEmail)
+  phone?: string
+}> = ({ phone: userPhone, mfaToken }) => {
+  const [phone, setPhone] = useState(userPhone)
   const sendCodeRef = useRef<HTMLButtonElement>(null)
 
   return (
     <>
-      {email ? (
-        <VerifyMFAEmail
+      {phone ? (
+        <VerifyMFASms
           mfaToken={mfaToken}
-          email={email}
+          phone={phone}
           onVerify={() => {
             console.log('验证成功')
           }}
           sendCodeRef={sendCodeRef}
         />
       ) : (
-        <BindMFAEmail
+        <BindMFASms
           mfaToken={mfaToken}
           onBind={(email: string) => {
             console.log('email', email)
-            setEmail(email)
+            setPhone(phone)
             sendCodeRef.current?.click()
           }}
         />

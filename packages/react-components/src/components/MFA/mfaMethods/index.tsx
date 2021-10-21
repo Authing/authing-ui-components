@@ -18,12 +18,12 @@ const methodTitleMapping: Record<
   }
 > = {
   [MFAType.EMAIL]: {
-    title: '手机验证',
-    icon: 'authing-phone',
-  },
-  [MFAType.SMS]: {
     title: '电子邮箱验证',
     icon: 'authing-mail',
+  },
+  [MFAType.SMS]: {
+    title: '手机验证',
+    icon: 'authing-phone',
   },
   [MFAType.TOTP]: {
     title: 'OTP 口令验证',
@@ -63,9 +63,16 @@ export const MFAMethods: React.FC<MFAMethodsProps> = ({
     [applicationMfa, currentMethod, onChangeMethod]
   )
   return (
-    <div className="g2-mfa-method">
-      <div className="g2-mfa-method-title">其他验证方式</div>
-      {otherMethods}
-    </div>
+    <>
+      <div
+        style={{
+          minHeight: 32,
+        }}
+      />
+      <div className="g2-mfa-method">
+        <div className="g2-mfa-method-title">其他验证方式</div>
+        {otherMethods}
+      </div>
+    </>
   )
 }
