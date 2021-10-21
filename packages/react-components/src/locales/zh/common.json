@@ -181,5 +181,8 @@
   "retrievePassword": "找回密码",
   "registrationSuccess": "注册成功",
   "copyFailed": "复制失败",
-  "networkError": "网络错误，请重试"
+  "networkError": "网络错误，请重试",
+  "downloadTotpAppIOS": "IOS 下载",
+  "downloadTotpAppAndroid": "Android 下载",
+  "downloadTotpAppDocs": "请使用手机扫码下载验证器"
 }

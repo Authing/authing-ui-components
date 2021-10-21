@@ -21,6 +21,8 @@ import { GuardModuleType } from './module'
 import { GuardMFAView } from '../MFA'
 import './styles.less'
 import { GuardRegisterView } from '../Register'
+import { GuardDownloadATView } from '../DownloadAuthenticator'
+import { ChangeModuleEvent, GuardStateMachine } from './stateMachine'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -32,6 +34,7 @@ const ComponentsMapping: Record<
   [GuardModuleType.LOGIN]: (props) => <GuardLoginView {...props} />,
   [GuardModuleType.MFA]: (props) => <GuardMFAView {...props} />,
   [GuardModuleType.REGISTER]: (props) => <GuardRegisterView {...props} />,
+  [GuardModuleType.DOWNLOAD_AT]: (props) => <GuardDownloadATView {...props} />,
   [GuardModuleType.FORGETPASSWORD]: (props) => (
     <div>Todo forgetPassword Module</div>
   ),
@@ -62,9 +65,13 @@ export const Guard = (props: GuardProps) => {
   const [guardConfig, setGuardConfig] = useState<GuardConfig>(
     getDefaultGuardConfig()
   )
+  const [
+    guardStateMachine,
+    setGuardStateMachine,
+  ] = useState<GuardStateMachine>()
 
   const initState: ModuleState = {
-    module: GuardModuleType.LOGIN,
+    module: GuardModuleType.DOWNLOAD_AT,
     initData: {},
   }
 
@@ -83,7 +90,7 @@ export const Guard = (props: GuardProps) => {
   const events = guardEventsFilter(props)
 
   // 切换 module
-  const onChangeModule = (moduleName: GuardModuleType, initData?: any) => {
+  const onChangeModule: ChangeModuleEvent = ({ moduleName, initData }) => {
     changeModule({
       type: moduleName,
       payload: {
@@ -112,6 +119,19 @@ export const Guard = (props: GuardProps) => {
       const authClient = initAuthClient(mergedConfig, appId)
       // setClient(authClient)
       onLoad?.(authClient)
+
+      // 初始化 Guard 状态机
+      setGuardStateMachine(
+        new GuardStateMachine(
+          onChangeModule,
+          {
+            moduleName: initState.module,
+            initData: initState.initData,
+          },
+          mergedConfig
+        )
+      )
+
       // 初始化 结束
       setInitSettingEnd(true)
     } catch (error) {
@@ -119,7 +139,7 @@ export const Guard = (props: GuardProps) => {
 
       console.error(error)
     }
-  }, [appId, config, onLoad, onLoadError])
+  }, [appId, config, initState.initData, initState.module, onLoad, onLoadError])
 
   useEffect(() => {
     initGuardSetting()
@@ -132,7 +152,7 @@ export const Guard = (props: GuardProps) => {
         initData: moduleState.initData,
         config: guardConfig,
         ...events,
-        __changeModule: onChangeModule,
+        __changeModule: guardStateMachine?.next,
         // __codePaser: codePaser,
       })
     } else {
@@ -142,6 +162,7 @@ export const Guard = (props: GuardProps) => {
     appId,
     events,
     guardConfig,
+    guardStateMachine?.next,
     initSettingEnd,
     moduleState.initData,
     moduleState.module,

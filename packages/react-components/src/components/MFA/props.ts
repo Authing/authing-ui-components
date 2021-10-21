@@ -11,7 +11,7 @@ const defaultConfig: MFAConfig = {
   ...getDefaultG2Config(),
 }
 
-export const getDefaultLoginConfig = (): MFAConfig => ({
+export const getDefaultMFAConfig = (): MFAConfig => ({
   ...getDefaultG2Config(),
   ...defaultConfig,
 })
