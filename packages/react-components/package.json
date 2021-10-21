@@ -8,6 +8,7 @@
   "dependencies": {
     "antd": "^4.8.0",
     "authing-js-sdk": "4.20.23",
+    "face-api.js": "^0.22.2",
     "qs": "^6.9.4",
     "react-use": "^17.3.1"
   },
