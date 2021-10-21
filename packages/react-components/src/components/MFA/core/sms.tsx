@@ -142,8 +142,8 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
 
   return (
     <>
-      <h3 className="authing-guard-mfa-title">{t('login.inputPhoneCode')}</h3>
-      <p className="authing-guard-mfa-tips">
+      <h3 className="authing-g2-mfa-title">{t('login.inputPhoneCode')}</h3>
+      <p className="authing-g2-mfa-tips">
         {sending
           ? t('login.sendingVerifyCode')
           : sent
@@ -184,7 +184,7 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
         />
 
         <Button
-          className="authing-guard-mfa-confirm-btn"
+          className="authing-g2-submit-button g2-mfa-submit-button"
           loading={loading}
           block
           htmlType="submit"
@@ -219,8 +219,7 @@ export const MFASms: React.FC<{
       ) : (
         <BindMFASms
           mfaToken={mfaToken}
-          onBind={(email: string) => {
-            console.log('email', email)
+          onBind={(phone: string) => {
             setPhone(phone)
             sendCodeRef.current?.click()
           }}

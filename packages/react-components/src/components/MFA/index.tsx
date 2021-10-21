@@ -10,11 +10,11 @@ import { GuardMFAViewProps, MFAType } from './props'
 import './styles.less'
 
 const ComponentsMapping: Record<MFAType, (props: any) => React.ReactNode> = {
-  [MFAType.EMAIL]: (props) => (
-    <MFAEmail mfaToken={props.mfaToken} email={props.email} />
+  [MFAType.EMAIL]: ({ initData }) => (
+    <MFAEmail mfaToken={initData.mfaToken} email={initData.email} />
   ),
-  [MFAType.SMS]: (props) => (
-    <MFASms mfaToken={props.mfaToken} phone={props.phone} />
+  [MFAType.SMS]: ({ initData }) => (
+    <MFASms mfaToken={initData.mfaToken} phone={initData.phone} />
   ),
   [MFAType.TOTP]: () => <div>TOTP</div>,
   [MFAType.FACE]: (props) => <MFAFace config={props.config} />,
@@ -41,7 +41,10 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
         </span>
       </div>
       <div className="g2-mfa-content">
-        {ComponentsMapping[currentMethod]({ config: config, ...initData })}
+        {ComponentsMapping[currentMethod]({
+          config: config,
+          initData: initData,
+        })}
       </div>
       <MFAMethods
         applicationMfa={initData.applicationMfa}
