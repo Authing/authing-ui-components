@@ -90,39 +90,8 @@ export const Guard = (props: GuardProps) => {
         initData: initData ?? {},
       },
     })
-    // setModule(moduleName)
-    // initData && setInitData(initData)
   }
 
-  // 拿 code 换 action，返回可执行函数
-  // const codePaser = (code: number) => {
-  //   // console.log('code', code)
-  //   const action = moduleCodeMap[code]
-  //   if (code === 200) {
-  //     return (data: any) => {
-  //       // console.log('登录成功 执行登录业务', data)
-  //       props.onLogin?.(data, client!) // 登录成功
-  //     }
-  //   }
-
-  //   if (!action) {
-  //     return () => {
-  //       console.error('未捕获 code', code)
-  //     }
-  //   }
-
-  //   // 解析成功
-  //   if (action?.action === 'changeModule') {
-  //     return (initData?: any) => onChangeModule?.(action.module, initData)
-  //   }
-
-  //   // 最终结果
-  //   return () => {
-  //     console.error('last action')
-  //   }
-  // }
-
-  // TODO 初始化的 Loging
   const initGuardSetting = useCallback(async () => {
     try {
       const { config: mergedConfig, publicConfig } = await initConfig(
