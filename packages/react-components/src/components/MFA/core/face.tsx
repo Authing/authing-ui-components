@@ -1,65 +1,27 @@
 import { Button } from 'antd'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { detectSingleFace, nets, TinyFaceDetectorOptions } from 'face-api.js'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { detectSingleFace } from 'face-api.js'
 import { useGuardHttp } from 'src/utils/guradHttp'
-import { useAuthClient } from 'src/components/Guard/authClient'
+import {
+  FACE_SCORE,
+  devicesConstraints,
+  dataURItoBlob,
+  getCurrentFaceDetectionNet,
+  getFaceDetectorOptions,
+  isFaceDetectionModelLoaded,
+} from './face_deps'
 
-let inputSize = 512
-let scoreThreshold = 0.5
-
-let devicesConstraints = {
-  video: {
-    width: 210,
-    height: 210,
-  },
-}
-const FACE_SCORE = 0.65
-
-function getFaceDetectorOptions() {
-  return new TinyFaceDetectorOptions({ inputSize, scoreThreshold })
-}
-
-function getCurrentFaceDetectionNet() {
-  return nets.tinyFaceDetector
-}
-
-function isFaceDetectionModelLoaded() {
-  return !!getCurrentFaceDetectionNet().params
-}
-
-// const dataURItoBlob = (base64Data: any) => {
-//   let byteString
-//   if (base64Data.split(',')[0].indexOf('base64') >= 0)
-//     byteString = atob(base64Data.split(',')[1])
-//   else byteString = unescape(base64Data.split(',')[1])
-//   let mimeString = base64Data.split(',')[0].split(':')[1].split(';')[0]
-//   let ia = new Uint8Array(byteString.length)
-//   for (let i = 0; i < byteString.length; i++) {
-//     ia[i] = byteString.charCodeAt(i)
-//   }
-//   return new Blob([ia], { type: mimeString })
-// }
-
-function dataURItoBlob(base64Data: any) {
-  var byteString
-  if (base64Data.split(',')[0].indexOf('base64') >= 0)
-    byteString = atob(base64Data.split(',')[1])
-  else byteString = unescape(base64Data.split(',')[1])
-  var mimeString = base64Data.split(',')[0].split(':')[1].split(';')[0]
-  var ia = new Uint8Array(byteString.length)
-  for (var i = 0; i < byteString.length; i++) {
-    ia[i] = byteString.charCodeAt(i)
-  }
-  return new Blob([ia], { type: mimeString })
-}
 export const MFAFace = (props: any) => {
-  let { postForm } = useGuardHttp()
-  const interval = useRef<NodeJS.Timeout | undefined>()
+  let { postForm, post } = useGuardHttp()
+  const [faceState, setFaceState] = useState('准备中') // 准备中, 识别中, 点击重试
+  const [percent, setPercent] = useState(0) // 识别进度（相似性）
+
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [faceState, setFaceState] = useState('准备中') // 准备中, 识别中
-  const [percent, setPercent] = useState(0) // 识别进度（相似性）
-  // console.log(client.mfa)
+  const interval = useRef<NodeJS.Timeout | undefined>()
+  const p1 = useRef<string>() // p1 key
+  const p2 = useRef<string>() // p2 key
+  const cooldown = useRef<number>(6) // p2 cooldown, * 500ms
 
   // 预加载数据
   useEffect(() => {
@@ -70,7 +32,6 @@ export const MFAFace = (props: any) => {
     )
     cdnContext.then((result) => {
       // setLoading(false)
-      console.log('cdn result', result)
     })
 
     if (faceState !== '识别中') {
@@ -81,7 +42,6 @@ export const MFAFace = (props: any) => {
     devicesContext
       .then((stream) => {
         videoRef.current!.srcObject = stream
-        console.log('成功读取视频流')
       })
       .catch((e) => {
         // 没有设备，或没有授权
@@ -97,66 +57,114 @@ export const MFAFace = (props: any) => {
     }
   }, [faceState, interval, props.config])
 
-  // 识别成功，退出
-  const quitIdentifying = () => {
-    console.log('识别成功，退出')
-    setPercent(100)
-    interval.current && clearInterval(interval.current)
-  }
-
   // 上传文件
   const uploadImage = async (blob: Blob) => {
     const formData = new FormData()
     formData.append('folder', 'photos')
     formData.append('file', blob, 'personal.jpeg')
 
-    console.log('formData', formData)
-
-    const ur = await postForm(
-      '/api/v2/upload?folder=photos&private=true',
-      formData
-      // {
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data',
-      //   },
-      // }
-    )
-    console.log('formdata 上传', ur)
-
-    // const res: any = await onFinish({ photo: key })
-
-    // switch (res.code) {
-    //   case 200:
-    //     setErrorMes('')
-    //     return false
-
-    //   default:
-    //     setErrorMes(res.message)
-    //     return false
-    // }
+    let url = '/api/v2/upload?folder=photos&private=true'
+    let result = await postForm<any>(url, formData)
+    let key = result.data?.key
+    return key
   }
 
-  // 识别开始
-  const onIdentify = useCallback(async () => {
-    // console.log('onPlay do')
+  const faceLogin = (result: any) => {
+    let { code, data, message } = result
+    if (code === 1702) {
+      p1.current = undefined
+      p2.current = undefined
+      interval.current = undefined
+      cooldown.current = 6
+      setFaceState('点击重试')
+    }
+    props.mfaLogin(code, data, message)
+  }
+
+  const faceBind = () => {
+    let url = '/api/v2/mfa/face/associate'
+    let data = {
+      photoA: p1.current,
+      photoB: p2.current,
+    }
+    let mfaToken = props.initData.mfaToken
+    let config = {
+      headers: {
+        authorization: mfaToken,
+      },
+    }
+    post(url, data, config).then((result) => {
+      faceLogin(result)
+    })
+  }
+
+  const faceCheck = () => {
+    let url = '/api/v2/mfa/face/verify'
+    let data = {
+      photo: p1.current,
+    }
+    let mfaToken = props.initData.mfaToken
+    let config = {
+      headers: {
+        authorization: mfaToken,
+      },
+    }
+    post(url, data, config).then((result) => {
+      // 如果是 1702，那么久绑定一个
+      faceLogin(result)
+    })
+  }
+
+  // bind 的情况
+  const goToBindScene = (key: string) => {
+    if (!p1.current) {
+      p1.current = key
+    } else {
+      if (cooldown.current > 0) {
+        cooldown.current -= 1
+      }
+      if (cooldown.current <= 0) {
+        p2.current = key
+        // 彻底上传完了，应该走验证了
+        interval.current && clearInterval(interval.current)
+        faceBind()
+      }
+    }
+  }
+
+  // goToCheck 的情况
+  const goToCheckScene = (key: string) => {
+    p1.current = key
+    interval.current && clearInterval(interval.current)
+    faceCheck()
+  }
+
+  // 识别成功，自动前进到下一个步骤
+  const quitIdentifying = (blob: Blob) => {
+    setPercent(100)
+    uploadImage(blob).then((key) => {
+      if (props.initData?.faceMfaEnabled === true) {
+        goToCheckScene(key)
+      } else {
+        goToBindScene(key)
+      }
+    })
+  }
+
+  const autoShoot = useCallback(async () => {
     if (!interval.current) {
-      interval.current = setInterval(() => onIdentify(), 500)
+      interval.current = setInterval(() => autoShoot(), 500)
     }
     const videoDom = videoRef.current!
     if (videoDom.paused || videoDom.ended || !isFaceDetectionModelLoaded()) {
-      console.log('onPlay return')
       return
     }
     const options = getFaceDetectorOptions()
     const result = await detectSingleFace(videoDom, options)
-    // console.log('检查 videoDom', videoDom)
-    console.log('检查 result', result?.score)
 
+    console.log('重试')
     if (result) {
-      // 识别成功，退出识别
       if (result.score > FACE_SCORE) {
-        quitIdentifying()
-
         const canvas = canvasRef.current!
         const ctx = canvas!.getContext('2d')!
         ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -164,7 +172,8 @@ export const MFAFace = (props: any) => {
 
         const base64Data = canvas.toDataURL('image/jpeg', 1.0)
         const blob = dataURItoBlob(base64Data)
-        uploadImage(blob)
+        // 识别成功，退出识别
+        quitIdentifying(blob)
 
         // if (onSeize && (await onSeize(blob))) {
         //   checking.current = false
@@ -176,46 +185,13 @@ export const MFAFace = (props: any) => {
         //   isVideoStop && setProgressStatus('exception')
         // }
       } else {
-        // 识别失败，但是有结果，输出相似性
+        // 识别失败，但是有结果，设置相似性
         // setProgressStatus('active')
         setPercent(() => {
           return (result.score / FACE_SCORE) * 100
         })
       }
     }
-    // if (!checking.current && result) {
-    //   if (result.score > FACE_SCORE) {
-    //     checking.current = true
-    //     setLoading(true)
-    //     setPercent(100)
-    //     setProgressStatus('success')
-    //     const mycanvas = canvasRef.current!
-
-    //     const ctx = mycanvas!.getContext('2d')!
-    //     ctx.clearRect(0, 0, mycanvas.width, mycanvas.height)
-    //     ctx.drawImage(videoEl, 0, 0, mycanvas.width, mycanvas.height)
-
-    //     const base64Data = mycanvas.toDataURL('image/jpeg', 1.0)
-    //     const blob = dataURItoBlob(base64Data)
-
-    //     if (onSeize && (await onSeize(blob))) {
-    //       checking.current = false
-    //       setPercent(0)
-    //       setProgressStatus('active')
-    //     } else {
-    //       clearInterval(interval.current)
-    //       isVideoStop && setVideoType(VideoAction.STOP)
-    //       isVideoStop && setProgressStatus('exception')
-    //     }
-
-    //     setLoading(false)
-    //   } else {
-    //     setProgressStatus('active')
-    //     setPercent(() => {
-    //       return (result.score / FACE_SCORE) * 100
-    //     })
-    //   }
-    // }
   }, [])
 
   return (
@@ -233,29 +209,43 @@ export const MFAFace = (props: any) => {
             type="primary"
             className="authing-g2-submit-button mfa-face"
             onClick={() => {
-              // onPlay()
               setFaceState('识别中')
+              autoShoot()
             }}
           >
             开始验证
           </Button>
         </>
       )}
-      {faceState === '识别中' && (
-        <div>
-          <video
-            className="g2-mfa-face-image video-round"
-            ref={videoRef}
-            onLoadedMetadata={() => onIdentify()}
-            id="inputVideo"
-            autoPlay
-            muted
-            playsInline
+      {faceState === '点击重试' && (
+        <>
+          <img
+            className="g2-mfa-face-image"
+            src="//files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png"
+            alt=""
           />
-          识别率 {percent}
-        </div>
+          <Button
+            type="primary"
+            className="authing-g2-submit-button mfa-face"
+            onClick={() => {
+              setFaceState('识别中')
+              autoShoot()
+            }}
+          >
+            重试
+          </Button>
+        </>
       )}
-
+      <video
+        style={{ display: faceState === '识别中' ? 'block' : 'none' }}
+        className="g2-mfa-face-image video-round"
+        ref={videoRef}
+        // onLoadedMetadata={() => onIdentify()}
+        id="inputVideo"
+        autoPlay
+        muted
+        playsInline
+      />
       <canvas
         style={{
           width: 210,

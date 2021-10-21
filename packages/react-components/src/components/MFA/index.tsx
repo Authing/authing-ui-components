@@ -6,7 +6,8 @@ import { MFASms } from './core/sms'
 import { MFAFace } from './core/face'
 import { MFAMethods } from './mfaMethods'
 import { GuardMFAViewProps, MFAType } from './props'
-
+import { useAuthClient } from '../Guard/authClient'
+import { codeMap } from './codemap'
 import './styles.less'
 
 const ComponentsMapping: Record<MFAType, (props: any) => React.ReactNode> = {
@@ -17,20 +18,63 @@ const ComponentsMapping: Record<MFAType, (props: any) => React.ReactNode> = {
     <MFASms mfaToken={initData.mfaToken} phone={initData.phone} />
   ),
   [MFAType.TOTP]: () => <div>TOTP</div>,
-  [MFAType.FACE]: (props) => <MFAFace config={props.config} />,
+  [MFAType.FACE]: ({ config, initData, mfaLogin }) => (
+    <MFAFace config={config} initData={initData} mfaLogin={mfaLogin} />
+  ),
 }
 
 export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
   initData,
   config,
   __changeModule,
+  onLogin,
 }) => {
   const [currentMethod, setCurrentMethod] = useState(
     // initData.applicationMfa.sort((a, b) => a.sort - b.sort)[0].mfaPolicy
     MFAType.FACE
   )
+  const client = useAuthClient()
 
   const onBack = () => __changeModule?.(GuardModuleType.LOGIN, {})
+
+  const __codePaser = (code: number) => {
+    const action = codeMap[code]
+    if (code === 200) {
+      return (data: any) => {
+        onLogin?.(data, client) // 登录成功
+      }
+    }
+
+    if (!action) {
+      return () => {
+        console.error('未捕获 code', code)
+        // props.onLoginError?.(data, client) // 未捕获 code
+      }
+    }
+
+    // 解析成功
+    if (action?.action === 'changeModule') {
+      let m = action.module ? action.module : GuardModuleType.ERROR
+      return (initData?: any) => __changeModule?.(m, initData)
+    }
+    if (action?.action === 'insideFix') {
+      return () => {}
+    }
+    // 最终结果
+    return () => {
+      // props.onLoginError?.(data, client!) // 未捕获 code
+      console.error('last action at mfaview')
+    }
+  }
+
+  const mfaLogin = (code: any, data: any, message?: string) => {
+    const callback = __codePaser?.(code)
+    if (!data) {
+      data = {}
+    }
+    data.__message = message
+    callback?.(data)
+  }
 
   return (
     <div className="g2-view-container">
@@ -44,6 +88,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
         {ComponentsMapping[currentMethod]({
           config: config,
           initData: initData,
+          mfaLogin: mfaLogin,
         })}
       </div>
       <MFAMethods
