@@ -25,7 +25,6 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
   config,
   __changeModule,
 }) => {
-  console.log('mfa initData', initData)
   const [currentMethod, setCurrentMethod] = useState(
     // initData.applicationMfa.sort((a, b) => a.sort - b.sort)[0].mfaPolicy
     MFAType.FACE
@@ -41,7 +40,9 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
           <span>返回登录</span>
         </span>
       </div>
-      {ComponentsMapping[currentMethod]({ config: config, ...initData })}
+      <div className="g2-mfa-content">
+        {ComponentsMapping[currentMethod]({ config: config, ...initData })}
+      </div>
       <MFAMethods
         applicationMfa={initData.applicationMfa}
         method={currentMethod}

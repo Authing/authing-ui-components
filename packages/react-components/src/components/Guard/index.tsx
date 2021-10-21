@@ -46,21 +46,52 @@ interface GuardViewProps extends GuardProps {
   initData: any
 }
 
+interface IBaseAction<T = string, P = any> {
+  type: T & string
+  payload?: Partial<P>
+}
+
+interface ModuleState {
+  module: GuardModuleType
+  initData: any
+}
+
 export const Guard = (props: GuardProps) => {
   const { appId, config, onLoad, onLoadError } = props
-  const [module, setModule] = useState<GuardModuleType>(GuardModuleType.MFA)
-  const [initData, setInitData] = useState({})
   const [initSettingEnd, setInitSettingEnd] = useState(false)
   const [guardConfig, setGuardConfig] = useState<GuardConfig>(
     getDefaultGuardConfig()
   )
-  // const [client, setClient] = useState<AuthenticationClient>()
+
+  const initState: ModuleState = {
+    module: GuardModuleType.LOGIN,
+    initData: {},
+  }
+
+  const moduleReducer: (
+    state: ModuleState,
+    action: IBaseAction<GuardModuleType, ModuleState>
+  ) => ModuleState = (state, { type, payload }) => {
+    return {
+      module: type,
+      initData: payload?.initData,
+    }
+  }
+
+  const [moduleState, changeModule] = useReducer(moduleReducer, initState)
+
   const events = guardEventsFilter(props)
 
   // 切换 module
   const onChangeModule = (moduleName: GuardModuleType, initData?: any) => {
-    setModule(moduleName)
-    initData && setInitData(initData)
+    changeModule({
+      type: moduleName,
+      payload: {
+        initData: initData ?? {},
+      },
+    })
+    // setModule(moduleName)
+    // initData && setInitData(initData)
   }
 
   // 拿 code 换 action，返回可执行函数
@@ -127,9 +158,9 @@ export const Guard = (props: GuardProps) => {
 
   const renderModule = useMemo(() => {
     if (initSettingEnd) {
-      return ComponentsMapping[module]({
+      return ComponentsMapping[moduleState.module]({
         appId,
-        initData,
+        initData: moduleState.initData,
         config: guardConfig,
         ...events,
         __changeModule: onChangeModule,
@@ -138,7 +169,14 @@ export const Guard = (props: GuardProps) => {
     } else {
       return <Spin />
     }
-  }, [appId, events, guardConfig, initData, initSettingEnd, module])
+  }, [
+    appId,
+    events,
+    guardConfig,
+    initSettingEnd,
+    moduleState.initData,
+    moduleState.module,
+  ])
 
   return (
     // TODO 这部分缺失 Loging 态
