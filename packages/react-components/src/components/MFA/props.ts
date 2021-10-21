@@ -4,6 +4,7 @@ import {
   IG2Events,
   IG2FCProps,
 } from 'src/classes'
+import { AuthenticationClient, User } from '..'
 
 export interface MFAConfig extends IG2Config {}
 
@@ -16,7 +17,9 @@ export const getDefaultMFAConfig = (): MFAConfig => ({
   ...defaultConfig,
 })
 
-export interface MFAEvents extends IG2Events {}
+export interface MFAEvents extends IG2Events {
+  onLogin?: (user: User, authClient: AuthenticationClient) => void
+}
 
 export enum MFAType {
   SMS = 'SMS',
