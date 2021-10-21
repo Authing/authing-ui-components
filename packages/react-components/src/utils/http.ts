@@ -46,8 +46,8 @@ requestClient.post = async <T>(
     body: JSON.stringify(data),
     credentials: 'include',
     headers: {
-      ...config?.headers,
       'Content-Type': 'application/json',
+      ...config?.headers,
       [requestClient.langHeader]: i18n.language,
     },
   })

@@ -11,24 +11,26 @@
   font-size: 14px;
   color: #545968;
   text-align: center;
-  margin-bottom: 24px;
+  color: #545968;
+  font-weight: 300;
+  font-size: 14px;
+  // margin-top: 8px;
 }
 
 .g2-mfa-content {
-  margin: 0 38px;
-
-  .g2-mfa-submit-button {
-    margin-top: 32px !important;
-  }
-
-  .authing-ant-form-item-control-input-content {
-    display: flex;
-    justify-content: center;
-  }
-
-  .authing-ant-form-horizontal {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
+  // height: 300px;
+  // border: 1px black solid;
+  margin: 16px 38px 32px;
+  .g2-mfa-face-image {
+    height: 120px;
+    margin: 0px auto;
+    display: block;
+    margin-bottom: 24px;
+    &.video-round {
+      width: 220;
+      height: 220;
+      border-radius: 50%;
+      vertical-align: middle;
+    }
   }
 }
