@@ -55,7 +55,7 @@ interface IBaseAction<T = string, P = any> {
 }
 
 interface ModuleState {
-  module: GuardModuleType
+  moduleName: GuardModuleType
   initData: any
 }
 
@@ -71,7 +71,7 @@ export const Guard = (props: GuardProps) => {
   ] = useState<GuardStateMachine>()
 
   const initState: ModuleState = {
-    module: GuardModuleType.DOWNLOAD_AT,
+    moduleName: GuardModuleType.LOGIN,
     initData: {},
   }
 
@@ -80,7 +80,7 @@ export const Guard = (props: GuardProps) => {
     action: IBaseAction<GuardModuleType, ModuleState>
   ) => ModuleState = (state, { type, payload }) => {
     return {
-      module: type,
+      moduleName: type,
       initData: payload?.initData,
     }
   }
@@ -90,7 +90,7 @@ export const Guard = (props: GuardProps) => {
   const events = guardEventsFilter(props)
 
   // 切换 module
-  const onChangeModule: ChangeModuleEvent = ({ moduleName, initData }) => {
+  const onChangeModule = (moduleName: GuardModuleType, initData: any = {}) => {
     changeModule({
       type: moduleName,
       payload: {
@@ -100,6 +100,7 @@ export const Guard = (props: GuardProps) => {
   }
 
   const initGuardSetting = useCallback(async () => {
+    console.log('init Guard setting')
     try {
       const { config: mergedConfig, publicConfig } = await initConfig(
         appId,
@@ -120,17 +121,10 @@ export const Guard = (props: GuardProps) => {
       // setClient(authClient)
       onLoad?.(authClient)
 
-      // 初始化 Guard 状态机
-      setGuardStateMachine(
-        new GuardStateMachine(
-          onChangeModule,
-          {
-            moduleName: initState.module,
-            initData: initState.initData,
-          },
-          mergedConfig
-        )
-      )
+      // // 初始化 Guard 状态机
+      // setGuardStateMachine(
+      //   new GuardStateMachine(onChangeModule, initState, mergedConfig)
+      // )
 
       // 初始化 结束
       setInitSettingEnd(true)
@@ -139,7 +133,7 @@ export const Guard = (props: GuardProps) => {
 
       console.error(error)
     }
-  }, [appId, config, initState.initData, initState.module, onLoad, onLoadError])
+  }, [appId, config, onLoad, onLoadError])
 
   useEffect(() => {
     initGuardSetting()
@@ -147,12 +141,12 @@ export const Guard = (props: GuardProps) => {
 
   const renderModule = useMemo(() => {
     if (initSettingEnd) {
-      return ComponentsMapping[moduleState.module]({
+      return ComponentsMapping[moduleState.moduleName]({
         appId,
         initData: moduleState.initData,
         config: guardConfig,
         ...events,
-        __changeModule: guardStateMachine?.next,
+        __changeModule: onChangeModule,
         // __codePaser: codePaser,
       })
     } else {
@@ -162,10 +156,9 @@ export const Guard = (props: GuardProps) => {
     appId,
     events,
     guardConfig,
-    guardStateMachine?.next,
     initSettingEnd,
     moduleState.initData,
-    moduleState.module,
+    moduleState.moduleName,
   ])
 
   return (

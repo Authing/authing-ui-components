@@ -11,10 +11,8 @@ export const GuardDownloadATView: React.FC<GuardDownloadATViewProps> = ({
 
   const cdnBase = config.__publicConfig__?.cdnBase
 
-  console.log('image', `${cdnBase}/GoogleAuthenticator-Apple.png`)
-
   return (
-    <div className="g2-view-container">
+    <div className="g2-view-container g2-view-container-totp-dl">
       <div className="g2-mfa-totp-title">下载验证器</div>
       <div className="g2-mfa-totp-download">
         <div className="g2-mfa-totp-download-item">
