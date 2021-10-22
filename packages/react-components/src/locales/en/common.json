@@ -184,5 +184,6 @@
   "downloadTotpAppAndroid": "Android download",
   "downloadTotpAppDocs": "Please use your mobile phone to scan the code to download the verifier",
   "downloadTotpAppIOS": "IOS download",
-  "unBindEmaileDoc": "{{email}} has been bound to another account"
+  "unBindEmaileDoc": "{{email}} has been bound to another account",
+  "bindTotp": "Bind OTP"
 }

@@ -22,7 +22,7 @@ import { GuardMFAView } from '../MFA'
 import './styles.less'
 import { GuardRegisterView } from '../Register'
 import { GuardDownloadATView } from '../DownloadAuthenticator'
-import { ChangeModuleEvent, GuardStateMachine } from './stateMachine'
+import { GuardStateMachine } from './stateMachine'
 
 const PREFIX_CLS = 'authing-ant'
 

@@ -1,4 +1,4 @@
-import { Form } from 'antd'
+import { Button, Form } from 'antd'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VerifyCodeInput } from 'src/common/VerifyCodeInput'
@@ -12,10 +12,24 @@ export interface BindMFATotpProps {
 }
 
 export const BindMFATotp: React.FC<BindMFATotpProps> = ({ changeModule }) => {
+  const { t } = useTranslation()
   return (
-    <span onClick={() => changeModule(GuardModuleType.DOWNLOAD_AT)}>
-      bind mfa totp
-    </span>
+    <>
+      <p className="authing-g2-mfa-title">{t('common.bindTotp')}</p>
+      <p className="authing-g2-mfa-tips">
+        为了保障访问安全，请前往 OTP 绑定页面
+      </p>
+      <Button
+        className="authing-g2-submit-button g2-mfa-submit-button bind-totp"
+        // loading={loading}
+        block
+        htmlType="submit"
+        type="primary"
+        size="large"
+      >
+        {t('common.sure')}
+      </Button>
+    </>
   )
 }
 
@@ -31,8 +45,8 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = () => {
 
   return (
     <>
-      <h3 className="authing-g2-mfa-title">{t('login.accPwdLoginVerify')}</h3>
-      <p className="authing-g2-mfa-title">{t('login.inputSixCode')}</p>
+      <p className="authing-g2-mfa-title">{t('login.accPwdLoginVerify')}</p>
+      <p className="authing-g2-mfa-tips">{t('login.inputSixCode')}</p>
       <Form
         form={form}
         onSubmitCapture={() => {}}
@@ -46,6 +60,7 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = () => {
       >
         <Form.Item
           name="mfaCode"
+          className="g2-mfa-totp-verify-input"
           rules={[
             {
               validateTrigger: [],
@@ -65,6 +80,16 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = () => {
             setVerifyCode={setMFACode}
           />
         </Form.Item>
+        <Button
+          className="authing-g2-submit-button g2-mfa-submit-button"
+          // loading={loading}
+          block
+          htmlType="submit"
+          type="primary"
+          size="large"
+        >
+          {t('common.sure')}
+        </Button>
       </Form>
     </>
   )

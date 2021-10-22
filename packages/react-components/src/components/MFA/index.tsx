@@ -4,12 +4,12 @@ import { IconFont } from '../IconFont'
 import { MFAEmail } from './core/email'
 import { MFASms } from './core/sms'
 import { MFAFace } from './core/face'
+import { MFATotp } from './core/totp'
 import { MFAMethods } from './mfaMethods'
 import { GuardMFAViewProps, MFAType } from './props'
 import { useAuthClient } from '../Guard/authClient'
 import { codeMap } from './codemap'
 import './styles.less'
-import { MFATotp } from './core/totp'
 
 const ComponentsMapping: Record<MFAType, (props: any) => React.ReactNode> = {
   [MFAType.EMAIL]: ({ initData }) => (

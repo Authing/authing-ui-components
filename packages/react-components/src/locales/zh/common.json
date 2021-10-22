@@ -184,5 +184,6 @@
   "networkError": "网络错误，请重试",
   "downloadTotpAppIOS": "IOS 下载",
   "downloadTotpAppAndroid": "Android 下载",
-  "downloadTotpAppDocs": "请使用手机扫码下载验证器"
+  "downloadTotpAppDocs": "请使用手机扫码下载验证器",
+  "bindTotp": "绑定 OTP"
 }
