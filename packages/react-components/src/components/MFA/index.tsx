@@ -4,6 +4,7 @@ import { IconFont } from '../IconFont'
 import { MFAEmail } from './core/email'
 import { MFASms } from './core/sms'
 import { MFAFace } from './core/face'
+import { MFATotp } from './core/totp'
 import { MFAMethods } from './mfaMethods'
 import { GuardMFAViewProps, MFAType } from './props'
 import { useAuthClient } from '../Guard/authClient'
@@ -17,7 +18,14 @@ const ComponentsMapping: Record<MFAType, (props: any) => React.ReactNode> = {
   [MFAType.SMS]: ({ initData }) => (
     <MFASms mfaToken={initData.mfaToken} phone={initData.phone} />
   ),
-  [MFAType.TOTP]: () => <div>TOTP</div>,
+  [MFAType.TOTP]: ({ initData, changeModule }) => (
+    <MFATotp
+      mfaToken={initData.mfaToken}
+      totpMfaEnabled={initData.totpMfaEnabled}
+      code={initData.code}
+      changeModule={changeModule}
+    />
+  ),
   [MFAType.FACE]: ({ config, initData, mfaLogin, setShowMethods }) => (
     <MFAFace
       config={config}
@@ -95,6 +103,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
         {ComponentsMapping[currentMethod]({
           config: config,
           initData: initData,
+          changeModule: __changeModule,
           mfaLogin: mfaLogin,
           setShowMethods: setShowMethods,
         })}

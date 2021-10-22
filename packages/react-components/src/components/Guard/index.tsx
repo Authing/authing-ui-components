@@ -21,6 +21,8 @@ import { GuardModuleType } from './module'
 import { GuardMFAView } from '../MFA'
 import './styles.less'
 import { GuardRegisterView } from '../Register'
+import { GuardDownloadATView } from '../DownloadAuthenticator'
+import { GuardStateMachine } from './stateMachine'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -32,6 +34,7 @@ const ComponentsMapping: Record<
   [GuardModuleType.LOGIN]: (props) => <GuardLoginView {...props} />,
   [GuardModuleType.MFA]: (props) => <GuardMFAView {...props} />,
   [GuardModuleType.REGISTER]: (props) => <GuardRegisterView {...props} />,
+  [GuardModuleType.DOWNLOAD_AT]: (props) => <GuardDownloadATView {...props} />,
   [GuardModuleType.FORGETPASSWORD]: (props) => (
     <div>Todo forgetPassword Module</div>
   ),
@@ -52,7 +55,7 @@ interface IBaseAction<T = string, P = any> {
 }
 
 interface ModuleState {
-  module: GuardModuleType
+  moduleName: GuardModuleType
   initData: any
 }
 
@@ -62,9 +65,13 @@ export const Guard = (props: GuardProps) => {
   const [guardConfig, setGuardConfig] = useState<GuardConfig>(
     getDefaultGuardConfig()
   )
+  const [
+    guardStateMachine,
+    setGuardStateMachine,
+  ] = useState<GuardStateMachine>()
 
   const initState: ModuleState = {
-    module: GuardModuleType.LOGIN,
+    moduleName: GuardModuleType.LOGIN,
     initData: {},
   }
 
@@ -73,7 +80,7 @@ export const Guard = (props: GuardProps) => {
     action: IBaseAction<GuardModuleType, ModuleState>
   ) => ModuleState = (state, { type, payload }) => {
     return {
-      module: type,
+      moduleName: type,
       initData: payload?.initData,
     }
   }
@@ -83,7 +90,7 @@ export const Guard = (props: GuardProps) => {
   const events = guardEventsFilter(props)
 
   // 切换 module
-  const onChangeModule = (moduleName: GuardModuleType, initData?: any) => {
+  const onChangeModule = (moduleName: GuardModuleType, initData: any = {}) => {
     changeModule({
       type: moduleName,
       payload: {
@@ -93,6 +100,7 @@ export const Guard = (props: GuardProps) => {
   }
 
   const initGuardSetting = useCallback(async () => {
+    console.log('init Guard setting')
     try {
       const { config: mergedConfig, publicConfig } = await initConfig(
         appId,
@@ -112,6 +120,12 @@ export const Guard = (props: GuardProps) => {
       const authClient = initAuthClient(mergedConfig, appId)
       // setClient(authClient)
       onLoad?.(authClient)
+
+      // // 初始化 Guard 状态机
+      // setGuardStateMachine(
+      //   new GuardStateMachine(onChangeModule, initState, mergedConfig)
+      // )
+
       // 初始化 结束
       setInitSettingEnd(true)
     } catch (error) {
@@ -127,7 +141,7 @@ export const Guard = (props: GuardProps) => {
 
   const renderModule = useMemo(() => {
     if (initSettingEnd) {
-      return ComponentsMapping[moduleState.module]({
+      return ComponentsMapping[moduleState.moduleName]({
         appId,
         initData: moduleState.initData,
         config: guardConfig,
@@ -144,7 +158,7 @@ export const Guard = (props: GuardProps) => {
     guardConfig,
     initSettingEnd,
     moduleState.initData,
-    moduleState.module,
+    moduleState.moduleName,
   ])
 
   return (

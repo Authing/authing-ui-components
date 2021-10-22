@@ -99,6 +99,7 @@ export interface VerifyMFASmsProps {
 export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   mfaToken,
   phone,
+  onVerify,
   sendCodeRef,
 }) => {
   const { t } = useTranslation()
@@ -120,8 +121,10 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
         code: MfaCode.join(''),
       })
       // TODO
+      onVerify({ code: 200, data: user })
     } catch (e) {
       // TODO
+      onVerify({ ...e })
     } finally {
       setLoading(false)
     }

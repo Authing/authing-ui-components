@@ -180,5 +180,10 @@
   "copyFailed": "Copy Failed",
   "repeatPassword": "Please repeat the password",
   "phoneNotNull": "Mobile phone number cannot be empty",
-  "networkError": "Network error, please retry"
+  "networkError": "Network error, please retry",
+  "downloadTotpAppAndroid": "Android download",
+  "downloadTotpAppDocs": "Please use your mobile phone to scan the code to download the verifier",
+  "downloadTotpAppIOS": "IOS download",
+  "unBindEmaileDoc": "{{email}} has been bound to another account",
+  "bindTotp": "Bind OTP"
 }

@@ -4,6 +4,7 @@ export enum GuardModuleType {
   REGISTER = 'register',
   MFA = 'mfa',
   FORGETPASSWORD = 'forgetPassword',
+  DOWNLOAD_AT = 'downloadAT',
 }
 export interface GuardModuleAction {
   action: string

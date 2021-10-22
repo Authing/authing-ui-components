@@ -21,9 +21,21 @@
     margin-top: 32px !important;
   }
 
+  .bind-totp {
+    margin-top: 80px !important;
+  }
+
   .authing-ant-form-item-control-input-content {
     display: flex;
     justify-content: center;
+  }
+
+  .g2-mfa-totp-verify-input {
+    .authing-code-input-item {
+      &:not(:first-child) {
+        margin-left: 14px;
+      }
+    }
   }
 
   .authing-ant-form-horizontal {
