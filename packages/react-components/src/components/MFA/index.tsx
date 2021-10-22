@@ -18,8 +18,13 @@ const ComponentsMapping: Record<MFAType, (props: any) => React.ReactNode> = {
     <MFASms mfaToken={initData.mfaToken} phone={initData.phone} />
   ),
   [MFAType.TOTP]: () => <div>TOTP</div>,
-  [MFAType.FACE]: ({ config, initData, mfaLogin }) => (
-    <MFAFace config={config} initData={initData} mfaLogin={mfaLogin} />
+  [MFAType.FACE]: ({ config, initData, mfaLogin, setShowMethods }) => (
+    <MFAFace
+      config={config}
+      initData={initData}
+      mfaLogin={mfaLogin}
+      setShowMethods={setShowMethods}
+    />
   ),
 }
 
@@ -33,6 +38,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
     // initData.applicationMfa.sort((a, b) => a.sort - b.sort)[0].mfaPolicy
     MFAType.FACE
   )
+  const [showMethods, setShowMethods] = useState(true)
   const client = useAuthClient()
 
   const onBack = () => __changeModule?.(GuardModuleType.LOGIN, {})
@@ -60,6 +66,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
     if (action?.action === 'insideFix') {
       return () => {}
     }
+
     // 最终结果
     return () => {
       // props.onLoginError?.(data, client!) // 未捕获 code
@@ -89,15 +96,18 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
           config: config,
           initData: initData,
           mfaLogin: mfaLogin,
+          setShowMethods: setShowMethods,
         })}
       </div>
-      <MFAMethods
-        applicationMfa={initData.applicationMfa}
-        method={currentMethod}
-        onChangeMethod={(type) => {
-          setCurrentMethod(type)
-        }}
-      />
+      {showMethods && (
+        <MFAMethods
+          applicationMfa={initData.applicationMfa}
+          method={currentMethod}
+          onChangeMethod={(type) => {
+            setCurrentMethod(type)
+          }}
+        />
+      )}
     </div>
   )
 }

@@ -11,6 +11,16 @@ import {
   isFaceDetectionModelLoaded,
 } from './face_deps'
 
+const useDashoffset = (percent: number) => {
+  // 接受 0 - 1，返回 0-700 之间的偏移量
+  let offset = percent * 7
+
+  // 在识别成功的时候，返回绿色
+  let dashStyle = {}
+  // let dashStyle = percent > 0.65 ? { stroke: '#1EB76D' } : {}
+  return { offset, dashStyle }
+}
+
 export const MFAFace = (props: any) => {
   let { postForm, post } = useGuardHttp()
   const [faceState, setFaceState] = useState('准备中') // 准备中, 识别中, 点击重试
@@ -22,6 +32,8 @@ export const MFAFace = (props: any) => {
   const p1 = useRef<string>() // p1 key
   const p2 = useRef<string>() // p2 key
   const cooldown = useRef<number>(6) // p2 cooldown, * 500ms
+
+  let { offset, dashStyle } = useDashoffset(percent)
 
   // 预加载数据
   useEffect(() => {
@@ -35,8 +47,7 @@ export const MFAFace = (props: any) => {
     })
 
     if (faceState !== '识别中') {
-      // 不存在 video dom，不要去尝试了
-      return
+      return // 不存在 video dom，不要去尝试了
     }
     let devicesContext = navigator.mediaDevices.getUserMedia(devicesConstraints)
     devicesContext
@@ -57,6 +68,15 @@ export const MFAFace = (props: any) => {
     }
   }, [faceState, interval, props.config])
 
+  // 监听 faceState
+  useEffect(() => {
+    if (faceState === '识别中' || faceState === '点击重试') {
+      props.setShowMethods(false)
+    } else {
+      props.setShowMethods(true)
+    }
+  }, [faceState])
+
   // 上传文件
   const uploadImage = async (blob: Blob) => {
     const formData = new FormData()
@@ -69,9 +89,20 @@ export const MFAFace = (props: any) => {
     return key
   }
 
+  // get base 64
+  const getBase64 = (videoDom: any) => {
+    const canvas = canvasRef.current!
+    const ctx = canvas!.getContext('2d')!
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    ctx.drawImage(videoDom, 0, 0, canvas.width, canvas.height)
+    const base64Data = canvas.toDataURL('image/jpeg', 1.0)
+    return base64Data
+  }
+
   const faceLogin = (result: any) => {
     let { code, data, message } = result
-    if (code === 1702) {
+
+    if (code === 1700 || code === 1701 || code === 1702) {
       p1.current = undefined
       p2.current = undefined
       interval.current = undefined
@@ -162,42 +193,28 @@ export const MFAFace = (props: any) => {
     const options = getFaceDetectorOptions()
     const result = await detectSingleFace(videoDom, options)
 
-    console.log('重试')
+    console.log('重试', result?.score)
     if (result) {
       if (result.score > FACE_SCORE) {
-        const canvas = canvasRef.current!
-        const ctx = canvas!.getContext('2d')!
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        ctx.drawImage(videoDom, 0, 0, canvas.width, canvas.height)
-
-        const base64Data = canvas.toDataURL('image/jpeg', 1.0)
+        const base64Data = getBase64(videoDom)
         const blob = dataURItoBlob(base64Data)
-        // 识别成功，退出识别
-        quitIdentifying(blob)
-
-        // if (onSeize && (await onSeize(blob))) {
-        //   checking.current = false
-        //   setPercent(0)
-        //   setProgressStatus('active')
-        // } else {
-        //   clearInterval(interval.current)
-        //   isVideoStop && setVideoType(VideoAction.STOP)
-        //   isVideoStop && setProgressStatus('exception')
-        // }
+        quitIdentifying(blob) // 识别成功，退出识别
       } else {
         // 识别失败，但是有结果，设置相似性
-        // setProgressStatus('active')
         setPercent(() => {
           return (result.score / FACE_SCORE) * 100
         })
+        // console.log('识别失败，但是有结果，设置相似性', percent)
       }
+    } else {
+      setPercent(10)
     }
   }, [])
 
   return (
-    <div className="g2-mfa-content">
-      <h3 className="g2-mfa-title">绑定人脸识别</h3>
-      <p className="g2-mfa-tips">请保持摄像头已打开并无遮挡</p>
+    <div>
+      <h3 className="authing-g2-mfa-title">绑定人脸识别</h3>
+      <p className="authing-g2-mfa-tips">请保持摄像头已打开并无遮挡</p>
       {faceState === '准备中' && (
         <>
           <img
@@ -217,35 +234,57 @@ export const MFAFace = (props: any) => {
           </Button>
         </>
       )}
-      {faceState === '点击重试' && (
-        <>
-          <img
-            className="g2-mfa-face-image"
-            src="//files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png"
-            alt=""
-          />
-          <Button
-            type="primary"
-            className="authing-g2-submit-button mfa-face"
-            onClick={() => {
-              setFaceState('识别中')
-              autoShoot()
-            }}
-          >
-            重试
-          </Button>
-        </>
-      )}
-      <video
-        style={{ display: faceState === '识别中' ? 'block' : 'none' }}
-        className="g2-mfa-face-image video-round"
-        ref={videoRef}
-        // onLoadedMetadata={() => onIdentify()}
-        id="inputVideo"
-        autoPlay
-        muted
-        playsInline
-      />
+      <div
+        className="g2-mfa-face-identifying"
+        style={{
+          display: faceState !== '准备中' ? 'flex' : 'none',
+        }}
+      >
+        <video
+          className="video-round"
+          ref={videoRef}
+          // onLoadedMetadata={() => onIdentify()}
+          id="inputVideo"
+          autoPlay
+          muted
+          playsInline
+        />
+        <div
+          className="video-round mesh"
+          style={{
+            display: faceState === '点击重试' ? 'flex' : 'none',
+          }}
+          onClick={() => {
+            setFaceState('识别中')
+            setPercent(0)
+            autoShoot()
+          }}
+        >
+          重试一次
+        </div>
+
+        <div className="video-round ring">
+          <svg width={240} height={240} fill="none">
+            {/* <circle
+              id="circleBg"
+              className="svg-circle-bg"
+              cx={120}
+              cy={120}
+              r={110}
+            /> */}
+            <circle
+              className="svg-circle-running"
+              style={dashStyle}
+              strokeDasharray={700} // 根据周长做 0-700 之间的数值表示准确率
+              strokeDashoffset={700 - offset} // 处理这个 offset, 0-700之间的数
+              cx={120}
+              cy={120}
+              r={110}
+            />
+          </svg>
+        </div>
+      </div>
+
       <canvas
         style={{
           width: 210,
