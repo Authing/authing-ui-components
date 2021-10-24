@@ -11,13 +11,13 @@ import { SocialConnectionProvider } from 'authing-js-sdk'
 const App = () => {
   return (
     <div
-      style={{
-        background: '#f5f7fa',
-        height: '90vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
+    // style={{
+    //   background: '#f5f7fa',
+    //   height: '90vh',
+    //   display: 'flex',
+    //   justifyContent: 'center',
+    //   alignItems: 'center',
+    // }}
     >
       <Guard
         appId="610271b10cd9106606c73d57"

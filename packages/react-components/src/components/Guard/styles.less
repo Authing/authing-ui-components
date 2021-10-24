@@ -6,11 +6,13 @@
 
 .authing-g2-render-module {
   --sidePadding: 38px;
+  --containerWidth: 456px;
 }
 
 @media only screen and (max-width: 450px) {
   .authing-g2-render-module {
     --sidePadding: 8px;
+    --containerWidth: 100%;
   }
 }
 
@@ -20,7 +22,7 @@
   background: #ffffff;
   display: flex;
   flex-direction: column;
-  width: 456px;
+  width: var(--containerWidth);
   min-height: 610px;
   box-sizing: border-box;
   padding: 16px;
@@ -94,9 +96,11 @@
     }
   }
 }
+
 .authing-g2-input-form {
   padding: 0 2px;
 }
+
 .authing-g2-input {
   border: 1px solid #eaebee;
   height: 46px;
