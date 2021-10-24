@@ -65,10 +65,10 @@ export const Guard = (props: GuardProps) => {
   const [guardConfig, setGuardConfig] = useState<GuardConfig>(
     getDefaultGuardConfig()
   )
-  const [
-    guardStateMachine,
-    setGuardStateMachine,
-  ] = useState<GuardStateMachine>()
+  // const [
+  //   guardStateMachine,
+  //   setGuardStateMachine,
+  // ] = useState<GuardStateMachine>()
 
   const initState: ModuleState = {
     moduleName: GuardModuleType.LOGIN,
@@ -99,6 +99,8 @@ export const Guard = (props: GuardProps) => {
     })
   }
 
+  const guardStateMachine = new GuardStateMachine(onChangeModule, initState)
+
   const initGuardSetting = useCallback(async () => {
     console.log('init Guard setting')
     try {
@@ -121,6 +123,8 @@ export const Guard = (props: GuardProps) => {
       // setClient(authClient)
       onLoad?.(authClient)
 
+      guardStateMachine.setConfig(mergedConfig)
+
       // // 初始化 Guard 状态机
       // setGuardStateMachine(
       //   new GuardStateMachine(onChangeModule, initState, mergedConfig)
@@ -133,6 +137,7 @@ export const Guard = (props: GuardProps) => {
 
       console.error(error)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appId, config, onLoad, onLoadError])
 
   useEffect(() => {
@@ -146,7 +151,7 @@ export const Guard = (props: GuardProps) => {
         initData: moduleState.initData,
         config: guardConfig,
         ...events,
-        __changeModule: onChangeModule,
+        __changeModule: guardStateMachine.next,
         // __codePaser: codePaser,
       })
     } else {
@@ -156,6 +161,7 @@ export const Guard = (props: GuardProps) => {
     appId,
     events,
     guardConfig,
+    guardStateMachine.next,
     initSettingEnd,
     moduleState.initData,
     moduleState.moduleName,

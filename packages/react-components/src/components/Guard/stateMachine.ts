@@ -9,6 +9,7 @@ export interface ModuleState {
 export enum ActionType {
   ChangeModule = 'ChangeModule',
   Back = 'Back',
+  Init = 'Init',
 }
 
 export interface StateMachineLog {
@@ -17,13 +18,16 @@ export interface StateMachineLog {
   dataSource: ModuleState
 }
 
-export type ChangeModuleEvent = (module: ModuleState) => void
+export type ChangeModuleEvent = (
+  nextModelu: GuardModuleType,
+  initData?: any
+) => void
 export class GuardStateMachine {
   // 计数器
   private order: number = 0
 
   // 总体的配置信息
-  private config: GuardConfig
+  private config: Partial<GuardConfig> = {}
 
   // 历史记录
   private moduleStateHistory: ModuleState[] = []
@@ -33,51 +37,65 @@ export class GuardStateMachine {
   // Log
   private stateMachineLog: Record<number, StateMachineLog> = {}
 
-  constructor(
-    changeMouleEvent: ChangeModuleEvent,
-    initData: ModuleState,
-    initConfig: GuardConfig
-  ) {
+  constructor(changeMouleEvent: ChangeModuleEvent, initData: ModuleState) {
     this.changeMouleEvent = changeMouleEvent
 
-    this.config = initConfig
-
-    this.historyPush(initData)
+    this.historyPush(initData, ActionType.Init)
+    console.log('history', this.moduleStateHistory)
+    console.log('log', this.stateMachineLog)
   }
 
-  next(nextModelu: GuardModuleType, initData?: any) {
+  // next = (nextModelu: GuardModuleType, initData: any) => {
+  //   const moduleData: ModuleState = {
+  //     moduleName: nextModelu,
+  //     initData,
+  //   }
+
+  //   this.changeMouleEvent(nextModelu, initData)
+
+  //   this.historyPush(moduleData)
+  // }
+
+  // next = (back: number) => {
+  //   if (back !== -1) return
+  // }
+
+  next(nextModelu: GuardModuleType, initData: any) {
     const moduleData: ModuleState = {
       moduleName: nextModelu,
       initData,
     }
 
-    this.changeMouleEvent(moduleData)
+    this.changeMouleEvent(nextModelu, initData)
 
     this.historyPush(moduleData)
   }
 
-  back() {
+  back = () => {
     if (this.moduleStateHistory.length <= 1) return
 
     const backModule = this.moduleStateHistory[1]
-    this.changeMouleEvent(backModule)
+    this.changeMouleEvent(backModule.moduleName, backModule.initData)
 
     this.moduleStateHistory.splice(0, 1)
   }
 
   // 业务终点 Log 发送
-  end() {
+  end = () => {
     console.log('业务终点 Log', JSON.stringify(this.stateMachineLog))
     console.log('业务终点 Config', JSON.stringify(this.config))
 
     // TODO 请求
   }
 
-  historyPush(data: ModuleState) {
+  historyPush(
+    data: ModuleState,
+    actionType: ActionType = ActionType.ChangeModule
+  ) {
     this.moduleStateHistory.unshift(data)
 
     this.stateMachineLog[this.order++] = {
-      action: ActionType.ChangeModule,
+      action: actionType,
       date: new Date().getTime(),
       dataSource: data,
     }
@@ -96,5 +114,9 @@ export class GuardStateMachine {
       date: new Date().getTime(),
       dataSource: data,
     }
+  }
+
+  setConfig(config: GuardConfig) {
+    this.config = config
   }
 }
