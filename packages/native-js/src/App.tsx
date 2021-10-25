@@ -15,7 +15,7 @@ function App() {
 
     // guard.show()
 
-    guard.on('load', (e) => {
+    guard.on('load', (e: any) => {
       console.log('加载啊', e)
     })
 
