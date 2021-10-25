@@ -48,6 +48,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
   initData,
   config,
   __changeModule,
+  __back,
   onLogin,
 }) => {
   const [currentMethod, setCurrentMethod] = useState(
@@ -57,7 +58,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
   const [showMethods, setShowMethods] = useState(true)
   const client = useAuthClient()
 
-  const onBack = () => __changeModule?.(GuardModuleType.LOGIN, {})
+  const onBack = () => __back?.()
 
   const __codePaser = (code: number) => {
     const action = codeMap[code]

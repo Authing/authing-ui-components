@@ -22,6 +22,7 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
   initData,
   onLogin,
   __changeModule,
+  __back,
 }) => {
   const { get, post } = useGuardHttp()
 
@@ -82,8 +83,7 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
   )
 
   const onBack = () => {
-    __changeModule?.(GuardModuleType.MFA, {
-      ...initData,
+    __back?.({
       current: MFAType.TOTP,
     })
   }

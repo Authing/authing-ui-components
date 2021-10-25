@@ -43,21 +43,6 @@ export class GuardStateMachine {
     this.historyPush(initData, ActionType.Init)
   }
 
-  // next = (nextModelu: GuardModuleType, initData: any) => {
-  //   const moduleData: ModuleState = {
-  //     moduleName: nextModelu,
-  //     initData,
-  //   }
-
-  //   this.changeMouleEvent(nextModelu, initData)
-
-  //   this.historyPush(moduleData)
-  // }
-
-  // next = (back: number) => {
-  //   if (back !== -1) return
-  // }
-
   next = (nextModelu: GuardModuleType, initData: any) => {
     const moduleData: ModuleState = {
       moduleName: nextModelu,
