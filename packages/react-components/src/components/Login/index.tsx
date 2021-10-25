@@ -79,7 +79,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   const { t } = useTranslation()
   const [loginWay, setLoginWay] = useState(defaultMethod)
   const [canLoop, setCanLoop] = useState(false) // 允许轮询
-  // const [lang, setLang] = useState(props.config.lang) // 语言
+  const [loading, setLoading] = useState(true) // 加载中
   const client = useAuthClient()
 
   let publicKey = props.config?.publicKey!
@@ -152,7 +152,13 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   }, [loginWay])
 
   let { switchText, inputNone, qrcodeNone } = useSwitchStates(loginWay)
-
+  // if (loading) {
+  //   return (
+  //     <div className="g2-view-container">
+  //       <LoadShielding />
+  //     </div>
+  //   )
+  // }
   return (
     <div className="g2-view-container">
       {/* 两种方式都需要渲染的时候，才出现切换按钮 */}
