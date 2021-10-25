@@ -57,7 +57,12 @@ export const ResetPassword = (props: any) => {
         <Form.Item
           className="authing-g2-input-form"
           name="password"
-          rules={[{ required: true, message: '请输入手机号 / 邮箱' }]}
+          rules={[
+            {
+              required: true,
+              message: '至少六位，需包含英文、数字、符号中的两种',
+            },
+          ]}
         >
           <Input.Password
             className="authing-g2-input"
