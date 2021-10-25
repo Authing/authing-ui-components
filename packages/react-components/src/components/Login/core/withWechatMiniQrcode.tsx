@@ -43,7 +43,8 @@ export const LoginWithWechatMiniQrcode = (
         message.error(ms)
       },
     })
-  }, [appQrcodeClient, props.canLoop])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [appQrcodeClient, props.canLoop, props.qrCodeScanOptions])
 
   return (
     <div className="authing-g2-login-app-qrcode">

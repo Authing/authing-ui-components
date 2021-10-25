@@ -36,6 +36,7 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
       },
     })
     return () => clearInterval(timerRef.current)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appQrcodeClient, props.canLoop, props.qrCodeScanOptions])
 
   return (
