@@ -36,7 +36,7 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
       },
     })
     return () => clearInterval(timerRef.current)
-  }, [appQrcodeClient, props.canLoop])
+  }, [appQrcodeClient, props.canLoop, props.qrCodeScanOptions])
 
   return (
     <div className="authing-g2-login-app-qrcode">
