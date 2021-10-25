@@ -19,3 +19,9 @@ export const ShieldSpin = (props: IG2SpinProps) => {
     </div>
   )
 }
+
+export const Spin = () => (
+  <div className="g2-init-setting-loading">
+    <ShieldSpin size={100} />
+  </div>
+)

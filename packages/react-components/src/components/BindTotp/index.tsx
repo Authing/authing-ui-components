@@ -3,10 +3,9 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useGuardHttp } from 'src/utils/guradHttp'
 import { useAuthClient } from '../Guard/authClient'
-import { GuardModuleType } from '../Guard/module'
 import { IconFont } from '../IconFont'
 import { MFAType } from '../MFA/props'
-import { ShieldSpin } from '../ShieldSpin'
+import { ShieldSpin, Spin } from '../ShieldSpin'
 import { BindSuccess } from './core/bindSuccess'
 import { SecurityCode } from './core/securityCode'
 import { GuardBindTotpViewProps } from './props'
@@ -21,7 +20,6 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
   config: GuardConfig,
   initData,
   onLogin,
-  __changeModule,
   __back,
 }) => {
   const { get, post } = useGuardHttp()
@@ -89,26 +87,32 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
   }
 
   return (
-    <div className="g2-view-container">
-      <div className="g2-view-back">
-        <span onClick={onBack}>
-          <IconFont type="authing-back" />
-          <span>返回验证页</span>
-        </span>
-      </div>
-      <div className="g2-mfa-content g2-mfa-bindTotp">
-        {bindInfo.loading ? (
-          <ShieldSpin />
-        ) : (
-          renderContent[bindTotpType]({
-            mfaToken: initData.mfaToken,
-            qrcode,
-            secret,
-            onBind,
-            onNext,
-          })
-        )}
-      </div>
-    </div>
+    <>
+      {bindInfo.loading ? (
+        <Spin />
+      ) : (
+        <div className="g2-view-container">
+          <div className="g2-view-back">
+            <span onClick={onBack}>
+              <IconFont type="authing-back" />
+              <span>返回验证页</span>
+            </span>
+          </div>
+          <div className="g2-mfa-content g2-mfa-bindTotp">
+            {bindInfo.loading ? (
+              <ShieldSpin />
+            ) : (
+              renderContent[bindTotpType]({
+                mfaToken: initData.mfaToken,
+                qrcode,
+                secret,
+                onBind,
+                onNext,
+              })
+            )}
+          </div>
+        </div>
+      )}
+    </>
   )
 }
