@@ -1,4 +1,4 @@
-import { i18n } from 'src/components/AuthingGuard/locales'
+import { i18n } from 'src/locales'
 
 // https://juejin.im/post/6844903857290477582
 export const copyToClipboard = (str: string) => {

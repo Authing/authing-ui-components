@@ -41,8 +41,6 @@ export class GuardStateMachine {
     this.changeMouleEvent = changeMouleEvent
 
     this.historyPush(initData, ActionType.Init)
-    console.log('history', this.moduleStateHistory)
-    console.log('log', this.stateMachineLog)
   }
 
   // next = (nextModelu: GuardModuleType, initData: any) => {
@@ -60,12 +58,11 @@ export class GuardStateMachine {
   //   if (back !== -1) return
   // }
 
-  next(nextModelu: GuardModuleType, initData: any) {
+  next = (nextModelu: GuardModuleType, initData: any) => {
     const moduleData: ModuleState = {
       moduleName: nextModelu,
       initData,
     }
-
     this.changeMouleEvent(nextModelu, initData)
 
     this.historyPush(moduleData)
@@ -88,10 +85,10 @@ export class GuardStateMachine {
     // TODO 请求
   }
 
-  historyPush(
+  historyPush = (
     data: ModuleState,
     actionType: ActionType = ActionType.ChangeModule
-  ) {
+  ) => {
     this.moduleStateHistory.unshift(data)
 
     this.stateMachineLog[this.order++] = {
@@ -104,7 +101,7 @@ export class GuardStateMachine {
       this.moduleStateHistory.splice(10, this.moduleStateHistory.length - 10)
   }
 
-  historyBack(data: ModuleState) {
+  historyBack = (data: ModuleState) => {
     if (this.moduleStateHistory.length <= 1) return
 
     this.moduleStateHistory.splice(0, 1)
@@ -116,7 +113,7 @@ export class GuardStateMachine {
     }
   }
 
-  setConfig(config: GuardConfig) {
+  setConfig = (config: GuardConfig) => {
     this.config = config
   }
 }
