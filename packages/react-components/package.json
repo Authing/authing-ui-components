@@ -1,16 +1,16 @@
 {
   "name": "@authing/react-ui-components",
-  "version": "2.4.51",
+  "version": "2.4.53",
   "framework": "React",
   "private": false,
   "main": "lib/index.min.js",
   "typings": "lib/index.d.ts",
   "dependencies": {
     "antd": "^4.8.0",
-    "authing-js-sdk": "4.20.23",
+    "authing-js-sdk": "4.22.18",
     "face-api.js": "^0.22.2",
-    "qs": "^6.9.4",
-    "react-use": "^17.3.1"
+    "react-use": "^17.3.1",
+    "qs": "^6.9.4"
   },
   "peerDependencies": {
     "react": "16.14.0",

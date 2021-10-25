@@ -272,6 +272,11 @@
     lodash "^4.17.15"
     resize-observer-polyfill "^1.5.0"
 
+"@authing/jose@^1.0.3":
+  version "1.0.5"
+  resolved "https://registry.nlark.com/@authing/jose/download/@authing/jose-1.0.5.tgz#d3e9c58aac74f47e5048a791d69c68f8bc52d7d8"
+  integrity sha1-0+nFiqx09H5QSKeR1pxo+LxS19g=
+
 "@babel/code-frame@7.10.4", "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.5.5":
   version "7.10.4"
   resolved "https://registry.npm.taobao.org/@babel/code-frame/download/@babel/code-frame-7.10.4.tgz#168da1a36e90da68ae8d49c0f1b48c7c6249213a"
@@ -4665,11 +4670,12 @@ atob@^2.1.2:
   resolved "https://registry.npm.taobao.org/atob/download/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha1-bZUX654DDSQ2ZmZR6GvZ9vE1M8k=
 
-authing-js-sdk@4.20.23:
-  version "4.20.23"
-  resolved "https://registry.yarnpkg.com/authing-js-sdk/-/authing-js-sdk-4.20.23.tgz#63e9c775930753ceb67cb6e284bd3059f11a7881"
-  integrity sha512-JuPy57TVL/O7KpVd0lITgaF9t0M3pk9pZazpvwBOS2SYOUA76Vr0jPtjXYyKXgGfDg0YCIvcZIkSzLYRFt1gQw==
+authing-js-sdk@4.22.18:
+  version "4.22.18"
+  resolved "https://registry.npmmirror.com/authing-js-sdk/download/authing-js-sdk-4.22.18.tgz#7131245f25c5bc6f61b9154c9c3ae1617ca7b853"
+  integrity sha1-cTEkXyXFvG9huRVMnDrhYXynuFM=
   dependencies:
+    "@authing/jose" "^1.0.3"
     axios "^0.19.2"
     crypto-js "^4.0.0"
     jsencrypt "^3.1.0"
