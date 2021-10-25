@@ -1,8 +1,12 @@
+import { message } from 'antd'
 import { User } from 'authing-js-sdk'
+import { type } from 'os'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
+import { ErrorCode } from 'src/utils/GuardErrorCode'
 import { useGuardHttp } from 'src/utils/guradHttp'
 import { useAuthClient } from '../Guard/authClient'
+import { GuardModuleType } from '../Guard/module'
 import { IconFont } from '../IconFont'
 import { MFAType } from '../MFA/props'
 import { ShieldSpin, Spin } from '../ShieldSpin'
@@ -20,6 +24,7 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
   config: GuardConfig,
   initData,
   onLogin,
+  __changeModule,
   __back,
 }) => {
   const { get, post } = useGuardHttp()
@@ -44,7 +49,21 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
       },
     }
 
-    await get(`/api/v2/mfa/authenticator`, query, config)
+    try {
+      const { data } = await get<any>(
+        `/api/v2/mfa/authenticator`,
+        query,
+        config
+      )
+
+      if (data.code === ErrorCode.LOGIN_INVALID) {
+        message.error(data.message)
+        __changeModule?.(GuardModuleType.LOGIN, {})
+        return
+      }
+    } catch (error) {
+      message.error(error.message)
+    }
 
     const { data } = await post<any>(
       '/api/v2/mfa/totp/associate',
@@ -108,6 +127,7 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
                 secret,
                 onBind,
                 onNext,
+                changeModule: __changeModule,
               })
             )}
           </div>

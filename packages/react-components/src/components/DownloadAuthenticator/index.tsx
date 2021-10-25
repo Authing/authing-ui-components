@@ -1,8 +1,8 @@
 import { Tabs } from 'antd'
 import React, { ReactNode, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ImagePro } from 'src/common/ImagePro'
 import { IconFont } from '../IconFont'
-import { MFAType } from '../MFA/props'
 import { GuardDownloadATViewProps } from './props'
 import './styles.less'
 
@@ -49,7 +49,9 @@ export const GuardDownloadATView: React.FC<GuardDownloadATViewProps> = ({
             </span>
             <div className="g2-mfa-totp-download-qrcode">
               <div className="g2-mfa-totp-download-qrcode-item">
-                <img
+                <ImagePro
+                  width={120}
+                  height={120}
                   className="g2-mfa-totp-download-image"
                   src={downloadConfig[value].google}
                   alt="Google Authenticator"
@@ -59,7 +61,9 @@ export const GuardDownloadATView: React.FC<GuardDownloadATViewProps> = ({
                 </span>
               </div>
               <div className="g2-mfa-totp-download-qrcode-item">
-                <img
+                <ImagePro
+                  width={120}
+                  height={120}
                   className="g2-mfa-totp-download-image"
                   src={downloadConfig[value].microsoft}
                   alt="Microsoft Authenticator"

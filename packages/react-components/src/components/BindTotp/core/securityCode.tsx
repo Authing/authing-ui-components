@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { VerifyCodeInput } from 'src/common/VerifyCodeInput'
+import { GuardModuleType } from 'src/components/Guard/module'
 import { useGuardHttp } from 'src/utils/guradHttp'
 
 const CODE_LEN = 6
@@ -11,12 +12,14 @@ export interface SecurityCodeProps {
   mfaToken: string
   qrcode: string
   onNext: any
+  changeModule: any
 }
 
 export const SecurityCode: React.FC<SecurityCodeProps> = ({
   mfaToken,
   qrcode,
   onNext,
+  changeModule,
 }) => {
   const [form] = Form.useForm()
   const [saftyCode, setSaftyCode] = useState(new Array(CODE_LEN).fill(''))
@@ -24,6 +27,10 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
   const { t } = useTranslation()
 
   const { post } = useGuardHttp()
+
+  const onJump = () => {
+    changeModule?.(GuardModuleType.DOWNLOAD_AT)
+  }
 
   const [bind, bindTotp] = useAsyncFn(async () => {
     const { code, data, message: resMessage } = await post(
@@ -50,10 +57,24 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
   return (
     <>
       <p className="authing-g2-mfa-title">MFA 绑定</p>
-      <p className="authing-g2-mfa-tips">
+      <p
+        className="authing-g2-mfa-tips"
+        style={{
+          textAlign: 'left',
+        }}
+      >
         请在手机打开 Google Authenticator / Microsoft
-        Authenticator（没有验证器请 点击下载） 扫码添加 MFA，在手机查看并输入 6
-        位数字安全码。
+        Authenticator（没有验证器请{' '}
+        <span
+          style={{
+            color: '#396AFF',
+            cursor: 'pointer',
+          }}
+          onClick={onJump}
+        >
+          点击下载
+        </span>
+        ） 扫码添加 MFA，在手机查看并输入 6 位数字安全码。
       </p>
       <img className="g2-mfa-bindTotp-qrcode" src={qrcode} alt="qrcode" />
       <Form

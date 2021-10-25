@@ -3,4 +3,5 @@ export enum ErrorCode {
   APP_MFA_CODE = 1636,
   INPUT_CAPTCHACODE = 2000,
   USER_EXISTENCE = 2026,
+  LOGIN_INVALID = 2021,
 }
