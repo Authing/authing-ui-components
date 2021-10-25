@@ -12,14 +12,27 @@ import { codeMap } from './codemap'
 import './styles.less'
 
 const ComponentsMapping: Record<MFAType, (props: any) => React.ReactNode> = {
-  [MFAType.EMAIL]: ({ initData }) => (
-    <MFAEmail mfaToken={initData.mfaToken} email={initData.email} />
+  [MFAType.EMAIL]: ({ initData, mfaLogin }) => (
+    <MFAEmail
+      mfaToken={initData.mfaToken}
+      email={initData.email}
+      mfaLogin={mfaLogin}
+    />
   ),
-  [MFAType.SMS]: ({ initData }) => (
-    <MFASms mfaToken={initData.mfaToken} phone={initData.phone} />
+  [MFAType.SMS]: ({ initData, mfaLogin }) => (
+    <MFASms
+      mfaToken={initData.mfaToken}
+      phone={initData.phone}
+      mfaLogin={mfaLogin}
+    />
   ),
-  [MFAType.TOTP]: ({ initData, config, changeModule }) => (
-    <MFATotp changeModule={changeModule} config={config} initData={initData} />
+  [MFAType.TOTP]: ({ initData, config, changeModule, mfaLogin }) => (
+    <MFATotp
+      changeModule={changeModule}
+      config={config}
+      initData={initData}
+      mfaLogin={mfaLogin}
+    />
   ),
   [MFAType.FACE]: ({ config, initData, mfaLogin, setShowMethods }) => (
     <MFAFace

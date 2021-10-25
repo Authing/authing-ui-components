@@ -1,9 +1,12 @@
 import { Button, Form } from 'antd'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useAsyncFn } from 'react-use'
 import { VerifyCodeInput } from 'src/common/VerifyCodeInput'
 import { GuardModuleType } from 'src/components/Guard/module'
+import { useGuardHttp } from 'src/utils/guradHttp'
 import { GuardMFAInitData, MFAConfig } from '../props'
+import { message as Message } from 'antd'
 
 const CODE_LEN = 6
 
@@ -42,29 +45,46 @@ export const BindMFATotp: React.FC<BindMFATotpProps> = ({
 
 export interface VerifyMFATotpProps {
   mfaToken: string
+  mfaLogin: any
 }
 
-export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = () => {
+export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
+  mfaToken,
+  mfaLogin,
+}) => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
 
+  const { post } = useGuardHttp()
+
   const [MFACode, setMFACode] = useState(new Array(6).fill(''))
+
+  const [finish, onFinish] = useAsyncFn(async () => {
+    const { code, data, message } = await post(
+      '/api/v2/mfa/totp/verify',
+      {
+        totp: MFACode.join(''),
+      },
+      {
+        headers: {
+          authorization: mfaToken,
+        },
+      }
+    )
+
+    if (code !== 200) {
+      mfaLogin(200, message)
+      Message.error(message)
+    } else {
+      mfaLogin(200, data)
+    }
+  }, [mfaToken, MFACode])
 
   return (
     <>
       <p className="authing-g2-mfa-title">{t('login.accPwdLoginVerify')}</p>
       <p className="authing-g2-mfa-tips">{t('login.inputSixCode')}</p>
-      <Form
-        form={form}
-        onSubmitCapture={() => {}}
-        onFinish={
-          () => {}
-          //     () =>
-          //   onFinish({
-          //     totp: MFACode.join(''),
-          //   })
-        }
-      >
+      <Form form={form} onSubmitCapture={() => {}} onFinish={onFinish}>
         <Form.Item
           name="mfaCode"
           className="g2-mfa-totp-verify-input"
@@ -89,7 +109,7 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = () => {
         </Form.Item>
         <Button
           className="authing-g2-submit-button g2-mfa-submit-button"
-          // loading={loading}
+          loading={finish.loading}
           block
           htmlType="submit"
           type="primary"
@@ -106,13 +126,18 @@ export interface MFATotpProps {
   changeModule: any
   config: MFAConfig
   initData: GuardMFAInitData
+  mfaLogin: any
 }
 
-export const MFATotp: React.FC<MFATotpProps> = ({ changeModule, initData }) => {
+export const MFATotp: React.FC<MFATotpProps> = ({
+  changeModule,
+  initData,
+  mfaLogin,
+}) => {
   return (
     <>
       {initData.totpMfaEnabled ? (
-        <VerifyMFATotp mfaToken={initData.mfaToken} />
+        <VerifyMFATotp mfaToken={initData.mfaToken} mfaLogin={mfaLogin} />
       ) : (
         <BindMFATotp initData={initData} changeModule={changeModule} />
       )}
