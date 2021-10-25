@@ -67,10 +67,10 @@ export const Guard = (props: GuardProps) => {
   const [guardConfig, setGuardConfig] = useState<GuardConfig>(
     getDefaultGuardConfig()
   )
-  // const [
-  //   guardStateMachine,
-  //   setGuardStateMachine,
-  // ] = useState<GuardStateMachine>()
+  const [
+    guardStateMachine,
+    setGuardStateMachine,
+  ] = useState<GuardStateMachine>()
 
   const initState: ModuleState = {
     moduleName: GuardModuleType.LOGIN,
@@ -101,8 +101,6 @@ export const Guard = (props: GuardProps) => {
     })
   }
 
-  // const guardStateMachine = new GuardStateMachine(onChangeModule, initState)
-
   const initGuardSetting = useCallback(async () => {
     console.log('init Guard setting')
     try {
@@ -125,7 +123,11 @@ export const Guard = (props: GuardProps) => {
       // setClient(authClient)
       onLoad?.(authClient)
 
-      // guardStateMachine.setConfig(mergedConfig)
+      const guardStateMachine = new GuardStateMachine(onChangeModule, initState)
+
+      guardStateMachine.setConfig(mergedConfig)
+
+      setGuardStateMachine(guardStateMachine)
 
       // // 初始化 Guard 状态机
       // setGuardStateMachine(
@@ -153,7 +155,15 @@ export const Guard = (props: GuardProps) => {
         initData: moduleState.initData,
         config: guardConfig,
         ...events,
-        __changeModule: onChangeModule,
+        __changeModule: guardStateMachine?.next,
+        __back: guardStateMachine?.back,
+        // __changeModule: (type, initData) => {
+        //   if (typeof type === 'number') {
+        //     guardStateMachine?.back()
+        //   } else {
+        //     guardStateMachine?.next(type, initData)
+        //   }
+        // },
         // __codePaser: codePaser,
       })
     } else {
@@ -163,6 +173,8 @@ export const Guard = (props: GuardProps) => {
     appId,
     events,
     guardConfig,
+    guardStateMachine?.back,
+    guardStateMachine?.next,
     initSettingEnd,
     moduleState.initData,
     moduleState.moduleName,
