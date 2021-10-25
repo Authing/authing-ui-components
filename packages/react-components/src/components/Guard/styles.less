@@ -57,6 +57,11 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    .title-explain {
+      font-weight: 300;
+      font-size: 14px;
+      color: #545968;
+    }
     margin-bottom: 24px;
   }
 
@@ -109,6 +114,13 @@
   border: 1px solid #eaebee;
   height: 46px;
   border-radius: 4px;
+  &:hover {
+    background: #eeeff1;
+  }
+  &:focus {
+    background: #ffffff !important;
+  }
+
   input {
     // 通过这个方式 hack 浏览器自动填充：
     // 自动填充的浏览器可以说罪恶滔天，钉死在 mdn 的耻辱柱上：https://developer.mozilla.org/en-US/docs/Web/CSS/:autofill
@@ -122,7 +134,7 @@
     }
   }
 
-  // hover
+  // affix-wrapper 特殊处理 hover
   &.authing-ant-input-affix-wrapper:hover {
     border-color: #eeeff1;
     background: #eeeff1;

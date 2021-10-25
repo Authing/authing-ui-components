@@ -24,6 +24,7 @@ import { GuardRegisterView } from '../Register'
 import { GuardDownloadATView } from '../DownloadAuthenticator'
 import { GuardStateMachine } from './stateMachine'
 import { GuardBindTotpView } from '../BindTotp'
+import { GuardForgetPassword } from '../ForgetPassword'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -37,7 +38,7 @@ const ComponentsMapping: Record<
   [GuardModuleType.REGISTER]: (props) => <GuardRegisterView {...props} />,
   [GuardModuleType.DOWNLOAD_AT]: (props) => <GuardDownloadATView {...props} />,
   [GuardModuleType.FORGETPASSWORD]: (props) => (
-    <div>Todo forgetPassword Module</div>
+    <GuardForgetPassword {...props} />
   ),
   [GuardModuleType.BIND_TOTP]: (props) => <GuardBindTotpView {...props} />,
 }
