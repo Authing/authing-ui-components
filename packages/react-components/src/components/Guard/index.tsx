@@ -16,7 +16,7 @@ import { initGuardHttp } from 'src/utils/guradHttp'
 import { initI18n } from 'src/locales'
 import { IG2FCProps } from 'src/classes'
 import { getDefaultGuardConfig } from './config'
-import { Spin } from '../Spin'
+import { ShieldSpin } from '../ShieldSpin'
 import { GuardModuleType } from './module'
 import { GuardMFAView } from '../MFA'
 import './styles.less'
@@ -167,7 +167,11 @@ export const Guard = (props: GuardProps) => {
         // __codePaser: codePaser,
       })
     } else {
-      return <Spin />
+      return (
+        <div className="g2-init-setting-loading">
+          <ShieldSpin size={100} />
+        </div>
+      )
     }
   }, [
     appId,

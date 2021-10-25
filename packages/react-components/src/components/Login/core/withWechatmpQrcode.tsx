@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { ShieldSpin } from 'src/components/ShieldSpin'
 import { useAuthClient } from '../../Guard/authClient'
 
 interface LoginWithWechatmpQrcodeProps {
@@ -12,6 +13,8 @@ export const LoginWithWechatmpQrcode = (
 ) => {
   const timerRef = useRef<any>()
   const client = useAuthClient()
+  const [loading, setLoading] = useState(true)
+
   const appQrcodeClient = client.wechatmpqrcode
   // const config = props.config
 
@@ -22,6 +25,9 @@ export const LoginWithWechatmpQrcode = (
     appQrcodeClient.startScanning('authingGuardMpQrcode', {
       autoExchangeUserInfo: true,
       ...props.qrCodeScanOptions,
+      onCodeLoaded() {
+        setLoading(false)
+      },
       onStart(timer) {
         // console.log('开始扫码')
         timerRef.current = timer
@@ -37,10 +43,12 @@ export const LoginWithWechatmpQrcode = (
       },
     })
     return () => clearInterval(timerRef.current)
-  }, [appQrcodeClient, props.canLoop])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [appQrcodeClient, props.canLoop, props.qrCodeScanOptions])
 
   return (
     <div className="authing-g2-login-app-qrcode">
+      {loading && <ShieldSpin />}
       <div id="authingGuardMpQrcode"></div>
     </div>
   )

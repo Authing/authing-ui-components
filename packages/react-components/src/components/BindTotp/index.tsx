@@ -6,7 +6,7 @@ import { useAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
 import { IconFont } from '../IconFont'
 import { MFAType } from '../MFA/props'
-import { Spin } from '../Spin'
+import { ShieldSpin } from '../ShieldSpin'
 import { BindSuccess } from './core/bindSuccess'
 import { SecurityCode } from './core/securityCode'
 import { GuardBindTotpViewProps } from './props'
@@ -98,7 +98,7 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
       </div>
       <div className="g2-mfa-content g2-mfa-bindTotp">
         {bindInfo.loading ? (
-          <Spin />
+          <ShieldSpin />
         ) : (
           renderContent[bindTotpType]({
             mfaToken: initData.mfaToken,
