@@ -1,5 +1,6 @@
+import React, { useEffect, useRef, useState } from 'react'
 import { message } from 'antd'
-import React, { useEffect, useRef } from 'react'
+import { ShieldSpin } from 'src/components/ShieldSpin'
 import { useAuthClient } from '../../Guard/authClient'
 
 interface LoginWithWechatMiniQrcodeProps {
@@ -13,6 +14,7 @@ export const LoginWithWechatMiniQrcode = (
 ) => {
   const timerRef = useRef<any>()
   const client = useAuthClient()
+  const [loading, setLoading] = useState(true)
   const appQrcodeClient = client.wxqrcode
 
   useEffect(() => {
@@ -28,6 +30,9 @@ export const LoginWithWechatMiniQrcode = (
     appQrcodeClient.startScanning('authingGuardMiniQrcode', {
       autoExchangeUserInfo: true,
       ...props.qrCodeScanOptions,
+      onCodeLoaded() {
+        setLoading(false)
+      },
       onStart(timer) {
         // console.log('开始扫码')
         timerRef.current = timer
@@ -48,6 +53,7 @@ export const LoginWithWechatMiniQrcode = (
 
   return (
     <div className="authing-g2-login-app-qrcode">
+      {loading && <ShieldSpin />}
       <div id="authingGuardMiniQrcode"></div>
     </div>
   )

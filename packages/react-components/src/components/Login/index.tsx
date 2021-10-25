@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { message, Tabs } from 'antd'
-import { GuardLoginViewProps } from './props'
-import { useAuthClient } from '../Guard/authClient'
-import { codeMap } from './codemap'
+import { intersection } from 'lodash'
 
 import { LoginWithPassword } from './core/withPassword'
 import { LoginWithPhoneCode } from './core/withPhonecode'
@@ -11,15 +10,16 @@ import { LoginWithAD } from './core/withAD'
 import { LoginWithAppQrcode } from './core/withAppQrcode'
 import { LoginWithWechatMiniQrcode } from './core/withWechatMiniQrcode'
 import { LoginWithWechatmpQrcode } from './core/withWechatmpQrcode'
+import { codeMap } from './codemap'
+import { SocialLogin } from './socialLogin'
+import { GuardLoginViewProps } from './props'
 
-import './styles.less'
-
+import { useAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
 import { LoginMethods } from '../AuthingGuard/types'
 import { IconFont } from '../IconFont'
-import { intersection } from 'lodash'
-import { SocialLogin } from './socialLogin'
-import { useTranslation } from 'react-i18next'
+
+import './styles.less'
 
 const inputWays = [
   LoginMethods.Password,
@@ -79,7 +79,6 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   const { t } = useTranslation()
   const [loginWay, setLoginWay] = useState(defaultMethod)
   const [canLoop, setCanLoop] = useState(false) // 允许轮询
-  const [loading, setLoading] = useState(true) // 加载中
   const client = useAuthClient()
 
   let publicKey = props.config?.publicKey!
