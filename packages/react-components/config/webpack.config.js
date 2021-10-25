@@ -831,7 +831,7 @@ module.exports = function (webpackEnv) {
       isEnvLib &&
         new NpmDtsWebpackPlugin({
           output: 'lib/index.d.ts',
-          entry: 'components/index',
+          entry: 'src/components/index',
         }),
       // 包大小分析
       // new WebpackBundleAnalyzer.BundleAnalyzerPlugin(),
