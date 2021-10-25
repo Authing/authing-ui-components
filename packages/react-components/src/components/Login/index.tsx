@@ -45,6 +45,33 @@ const useMethods = (config: any) => {
   return [dlm, renderInputWay, renderQrcodeWay]
 }
 
+const useDisables = (data: any) => {
+  let { disableResetPwd, disableRegister } = data.config
+  let { loginWay, autoRegister } = data
+
+  if (loginWay === LoginMethods.PhoneCode) {
+    disableResetPwd = true
+  }
+  if (loginWay === LoginMethods.LDAP) {
+    disableResetPwd = true
+    disableRegister = true
+  }
+  if (autoRegister === true) {
+    disableRegister = true
+  }
+  return { disableResetPwd, disableRegister }
+}
+
+const useSwitchStates = (loginWay: LoginMethods) => {
+  let switchText = '扫码登录'
+  if (qrcodeWays.includes(loginWay)) {
+    switchText = '更多登录'
+  }
+  let inputNone = !inputWays.includes(loginWay) ? 'none' : ''
+  let qrcodeNone = !qrcodeWays.includes(loginWay) ? 'none' : ''
+
+  return { switchText, inputNone, qrcodeNone }
+}
 export const GuardLoginView = (props: GuardLoginViewProps) => {
   let [defaultMethod, renderInputWay, renderQrcodeWay] = useMethods(
     props.config
@@ -58,11 +85,14 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   let publicKey = props.config?.publicKey!
   // let autoRegister = props.config?.autoRegister
   let ms = props.config?.loginMethods
-  let { autoRegister, disableResetPwd, disableRegister } = props.config
-  console.log('disableResetPwd', disableResetPwd)
-  if (autoRegister === true) {
-    disableRegister = true
-  }
+  let { autoRegister } = props.config
+
+  let { disableResetPwd, disableRegister } = useDisables({
+    config: props.config,
+    loginWay,
+    autoRegister,
+  })
+
   const __codePaser = (code: number) => {
     const action = codeMap[code]
     if (code === 200) {
@@ -121,33 +151,34 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     // 不关的话，第二次进入会更快，也没什么代价（只有轮询）
   }, [loginWay])
 
-  let inputNone = !inputWays.includes(loginWay) ? 'none' : ''
-  let qrcodeNone = !qrcodeWays.includes(loginWay) ? 'none' : ''
+  let { switchText, inputNone, qrcodeNone } = useSwitchStates(loginWay)
 
   return (
     <div className="g2-view-container">
       {/* 两种方式都需要渲染的时候，才出现切换按钮 */}
       {renderInputWay && renderQrcodeWay && (
-        <div
-          className="g2-qrcode-switch"
-          onClick={() => {
-            if (inputWays.includes(loginWay)) {
-              setLoginWay(LoginMethods.WxMinQr)
-            } else if (qrcodeWays.includes(loginWay)) {
-              setLoginWay(LoginMethods.Password)
-            }
-          }}
-        >
-          <div className="switch-text">扫码登录方式</div>
-          <div className="imgae-mask" />
-          <IconFont
-            type="authing-a-erweima22"
-            className={`qrcode-switch-image ${inputNone}`}
-          />
-          <IconFont
-            type="authing-diannao"
-            className={`qrcode-switch-image ${qrcodeNone}`}
-          />
+        <div className="g2-qrcode-switch">
+          <div className="switch-text">{switchText}</div>
+          <div
+            className="switch-img"
+            onClick={() => {
+              if (inputWays.includes(loginWay)) {
+                setLoginWay(LoginMethods.WxMinQr)
+              } else if (qrcodeWays.includes(loginWay)) {
+                setLoginWay(LoginMethods.Password)
+              }
+            }}
+          >
+            <div className="imgae-mask" />
+            <IconFont
+              type="authing-a-erweima22"
+              className={`qrcode-switch-image ${inputNone}`}
+            />
+            <IconFont
+              type="authing-diannao"
+              className={`qrcode-switch-image ${qrcodeNone}`}
+            />
+          </div>
         </div>
       )}
 
