@@ -1,4 +1,4 @@
-import { Input, Button, message } from 'antd'
+import { Input, Button, message as Message } from 'antd'
 import { Form } from 'antd'
 import { User } from 'authing-js-sdk'
 import React, { useRef, useState } from 'react'
@@ -31,7 +31,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({ mfaToken, onBind }) => {
         phone,
       })
       if (!bindable) {
-        message.error(
+        Message.error(
           t('common.unBindEmaileDoc', {
             email: phone,
           })
@@ -92,7 +92,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({ mfaToken, onBind }) => {
 export interface VerifyMFASmsProps {
   mfaToken: string
   phone: string
-  onVerify: Function
+  onVerify: (code: number, data: any) => void
   sendCodeRef: React.RefObject<HTMLButtonElement>
 }
 
@@ -121,10 +121,11 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
         code: MfaCode.join(''),
       })
       // TODO
-      onVerify({ code: 200, data: user })
+      onVerify(200, user)
     } catch (e) {
       // TODO
-      onVerify({ ...e })
+      onVerify(e.code as number, e.message)
+      Message.error(e.message)
     } finally {
       setLoading(false)
     }
@@ -204,7 +205,8 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
 export const MFASms: React.FC<{
   mfaToken: string
   phone?: string
-}> = ({ phone: userPhone, mfaToken }) => {
+  mfaLogin: any
+}> = ({ phone: userPhone, mfaToken, mfaLogin }) => {
   const [phone, setPhone] = useState(userPhone)
   const sendCodeRef = useRef<HTMLButtonElement>(null)
 
@@ -214,8 +216,8 @@ export const MFASms: React.FC<{
         <VerifyMFASms
           mfaToken={mfaToken}
           phone={phone}
-          onVerify={() => {
-            console.log('验证成功')
+          onVerify={(code, data) => {
+            mfaLogin(code, data)
           }}
           sendCodeRef={sendCodeRef}
         />

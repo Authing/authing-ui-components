@@ -53,6 +53,7 @@ export interface IG2Events {
   onClose?: () => void
   // __codePaser?: (code: number) => Function
   __changeModule?: (moduleName: GuardModuleType, initData: any) => void
+  __back?: (initData?: any) => void
 }
 
 export const getDefaultG2Config = (): IG2Config => defaultG2Config

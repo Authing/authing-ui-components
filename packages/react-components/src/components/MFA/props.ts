@@ -42,6 +42,7 @@ export interface GuardMFAInitData {
   avatar?: string
   nickme?: string
   username?: string
+  current?: MFAType
 }
 
 export interface GuardMFAProps extends IG2FCProps, MFAEvents {

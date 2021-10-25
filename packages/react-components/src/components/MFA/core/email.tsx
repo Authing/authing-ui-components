@@ -1,4 +1,4 @@
-import { Input, Button, message } from 'antd'
+import { Input, Button, message as Message } from 'antd'
 import { Form } from 'antd'
 import { EmailScene, User } from 'authing-js-sdk'
 import React, { useRef, useState } from 'react'
@@ -34,21 +34,18 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
       })
 
       if (!bindable) {
-        message.error(
+        Message.error(
           t('common.unBindEmaileDoc', {
             email: email,
           })
         )
         return
       }
-
-      console.log('bindable', bindable)
-      console.log('onBind', onBind)
       onBind(email)
     } catch (e) {
       const error = JSON.parse(e.message)
 
-      message.error(error.message)
+      Message.error(error.message)
     } finally {
       setLoading(false)
     }
@@ -98,7 +95,7 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
 interface VerifyMFAEmailProps {
   email: string
   mfaToken: string
-  onVerify: Function
+  onVerify: (code: number, data: any) => void
   sendCodeRef: React.RefObject<HTMLButtonElement>
 }
 
@@ -142,9 +139,10 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
         code: MfaCode.join(''),
       })
 
-      onVerify({ code: 200, data: user })
+      onVerify(200, user)
     } catch (e) {
-      onVerify({ ...e })
+      onVerify(e.code as number, e.message)
+      Message.error(e.message)
     } finally {
       setLoading(false)
     }
@@ -211,7 +209,8 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
 export const MFAEmail: React.FC<{
   mfaToken: string
   email?: string
-}> = ({ email: userEmail, mfaToken }) => {
+  mfaLogin: any
+}> = ({ email: userEmail, mfaToken, mfaLogin }) => {
   const [email, setEmail] = useState(userEmail)
   const sendCodeRef = useRef<HTMLButtonElement>(null)
 
@@ -221,8 +220,8 @@ export const MFAEmail: React.FC<{
         <VerifyMFAEmail
           mfaToken={mfaToken}
           email={email}
-          onVerify={() => {
-            console.log('验证成功')
+          onVerify={(code, data) => {
+            mfaLogin(code, data)
           }}
           sendCodeRef={sendCodeRef}
         />

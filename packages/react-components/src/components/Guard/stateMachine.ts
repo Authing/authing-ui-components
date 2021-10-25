@@ -66,21 +66,28 @@ export class GuardStateMachine {
     this.changeMouleEvent(nextModelu, initData)
 
     this.historyPush(moduleData)
+    console.log('next Log', this.stateMachineLog)
+    console.log('next History', this.moduleStateHistory)
   }
 
-  back = () => {
+  back = (initData: any = {}) => {
     if (this.moduleStateHistory.length <= 1) return
 
     const backModule = this.moduleStateHistory[1]
-    this.changeMouleEvent(backModule.moduleName, backModule.initData)
+    this.changeMouleEvent(backModule.moduleName, {
+      ...initData,
+      ...backModule.initData,
+    })
 
     this.moduleStateHistory.splice(0, 1)
+    console.log('back Log', this.stateMachineLog)
+    console.log('back History', this.moduleStateHistory)
   }
 
   // 业务终点 Log 发送
   end = () => {
-    console.log('业务终点 Log', JSON.stringify(this.stateMachineLog))
-    console.log('业务终点 Config', JSON.stringify(this.config))
+    console.log('业务终点 Log', this.stateMachineLog)
+    console.log('业务终点 Config', this.config)
 
     // TODO 请求
   }

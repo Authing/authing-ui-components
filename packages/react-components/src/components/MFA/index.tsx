@@ -12,18 +12,26 @@ import { codeMap } from './codemap'
 import './styles.less'
 
 const ComponentsMapping: Record<MFAType, (props: any) => React.ReactNode> = {
-  [MFAType.EMAIL]: ({ initData }) => (
-    <MFAEmail mfaToken={initData.mfaToken} email={initData.email} />
-  ),
-  [MFAType.SMS]: ({ initData }) => (
-    <MFASms mfaToken={initData.mfaToken} phone={initData.phone} />
-  ),
-  [MFAType.TOTP]: ({ initData, changeModule }) => (
-    <MFATotp
+  [MFAType.EMAIL]: ({ initData, mfaLogin }) => (
+    <MFAEmail
       mfaToken={initData.mfaToken}
-      totpMfaEnabled={initData.totpMfaEnabled}
-      code={initData.code}
+      email={initData.email}
+      mfaLogin={mfaLogin}
+    />
+  ),
+  [MFAType.SMS]: ({ initData, mfaLogin }) => (
+    <MFASms
+      mfaToken={initData.mfaToken}
+      phone={initData.phone}
+      mfaLogin={mfaLogin}
+    />
+  ),
+  [MFAType.TOTP]: ({ initData, config, changeModule, mfaLogin }) => (
+    <MFATotp
       changeModule={changeModule}
+      config={config}
+      initData={initData}
+      mfaLogin={mfaLogin}
     />
   ),
   [MFAType.FACE]: ({ config, initData, mfaLogin, setShowMethods }) => (
@@ -43,8 +51,8 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
   onLogin,
 }) => {
   const [currentMethod, setCurrentMethod] = useState(
-    // initData.applicationMfa.sort((a, b) => a.sort - b.sort)[0].mfaPolicy
-    MFAType.FACE
+    initData.current ??
+      initData.applicationMfa?.sort((a, b) => a.sort - b.sort)[0].mfaPolicy
   )
   const [showMethods, setShowMethods] = useState(true)
   const client = useAuthClient()
