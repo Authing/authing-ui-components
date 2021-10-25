@@ -3,16 +3,22 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VerifyCodeInput } from 'src/common/VerifyCodeInput'
 import { GuardModuleType } from 'src/components/Guard/module'
+import { GuardMFAInitData, MFAConfig } from '../props'
 
 const CODE_LEN = 6
 
 export interface BindMFATotpProps {
-  mfaToken: string
+  initData: GuardMFAInitData
   changeModule: any
 }
 
-export const BindMFATotp: React.FC<BindMFATotpProps> = ({ changeModule }) => {
+export const BindMFATotp: React.FC<BindMFATotpProps> = ({
+  changeModule,
+  initData,
+}) => {
   const { t } = useTranslation()
+
+  const next = () => changeModule(GuardModuleType.BIND_TOTP, initData)
   return (
     <>
       <p className="authing-g2-mfa-title">{t('common.bindTotp')}</p>
@@ -26,6 +32,7 @@ export const BindMFATotp: React.FC<BindMFATotpProps> = ({ changeModule }) => {
         htmlType="submit"
         type="primary"
         size="large"
+        onClick={next}
       >
         {t('common.sure')}
       </Button>
@@ -96,23 +103,18 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = () => {
 }
 
 export interface MFATotpProps {
-  totpMfaEnabled: boolean
-  mfaToken: string
-  code: string
   changeModule: any
+  config: MFAConfig
+  initData: GuardMFAInitData
 }
 
-export const MFATotp: React.FC<MFATotpProps> = ({
-  totpMfaEnabled,
-  mfaToken,
-  changeModule,
-}) => {
+export const MFATotp: React.FC<MFATotpProps> = ({ changeModule, initData }) => {
   return (
     <>
-      {totpMfaEnabled ? (
-        <VerifyMFATotp mfaToken={mfaToken} />
+      {initData.totpMfaEnabled ? (
+        <VerifyMFATotp mfaToken={initData.mfaToken} />
       ) : (
-        <BindMFATotp mfaToken={mfaToken} changeModule={changeModule} />
+        <BindMFATotp initData={initData} changeModule={changeModule} />
       )}
     </>
   )

@@ -18,13 +18,8 @@ const ComponentsMapping: Record<MFAType, (props: any) => React.ReactNode> = {
   [MFAType.SMS]: ({ initData }) => (
     <MFASms mfaToken={initData.mfaToken} phone={initData.phone} />
   ),
-  [MFAType.TOTP]: ({ initData, changeModule }) => (
-    <MFATotp
-      mfaToken={initData.mfaToken}
-      totpMfaEnabled={initData.totpMfaEnabled}
-      code={initData.code}
-      changeModule={changeModule}
-    />
+  [MFAType.TOTP]: ({ initData, config, changeModule }) => (
+    <MFATotp changeModule={changeModule} config={config} initData={initData} />
   ),
   [MFAType.FACE]: ({ config, initData, mfaLogin, setShowMethods }) => (
     <MFAFace
@@ -43,8 +38,8 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
   onLogin,
 }) => {
   const [currentMethod, setCurrentMethod] = useState(
-    // initData.applicationMfa.sort((a, b) => a.sort - b.sort)[0].mfaPolicy
-    MFAType.FACE
+    initData.current ??
+      initData.applicationMfa?.sort((a, b) => a.sort - b.sort)[0].mfaPolicy
   )
   const [showMethods, setShowMethods] = useState(true)
   const client = useAuthClient()
