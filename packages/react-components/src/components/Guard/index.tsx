@@ -103,7 +103,6 @@ export const Guard = (props: GuardProps) => {
   }
 
   const initGuardSetting = useCallback(async () => {
-    console.log('init Guard setting')
     try {
       const { config: mergedConfig, publicConfig } = await initConfig(
         appId,

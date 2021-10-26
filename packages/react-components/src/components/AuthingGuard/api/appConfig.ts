@@ -9,6 +9,7 @@ import {
   SocialConnectionItem,
 } from './userPoolConfig'
 import { i18n } from '../../../locales'
+import { PasswordStrength } from 'src/utils'
 
 export enum ApplicationMfaType {
   SMS = 'SMS',
@@ -131,6 +132,9 @@ export interface ApplicationConfig {
 
   agreementEnabled: boolean
   agreements: Agreement[]
+  customPasswordStrength: any
+  passwordStrength: PasswordStrength
+  verifyCodeLength: number
 }
 
 export const fetchAppConfig = (appId: string) =>

@@ -3,32 +3,53 @@ import { Button, Form, Input } from 'antd'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
-import { Agreement } from 'src/components/AuthingGuard/api'
+import { Agreement, ApplicationConfig } from 'src/components/AuthingGuard/api'
 import { useAuthClient } from 'src/components/Guard/authClient'
 import { SendCode } from 'src/components/SendCode'
+import { useDebounce } from 'src/hooks'
 import {
   getDeviceName,
   getRequiredRules,
   getUserRegisterParams,
   VALIDATE_PATTERN,
 } from 'src/utils'
+import { useGuardHttp } from 'src/utils/guradHttp'
 import { Agreements } from '../components/Agreements'
 
 export interface RegisterWithPhoneProps {
   onRegister: Function
   agreements: Agreement[]
+  publicConfig?: ApplicationConfig
 }
 
 export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   onRegister,
   agreements,
+  publicConfig,
 }) => {
   const { t } = useTranslation()
   const authClient = useAuthClient()
   const [form] = Form.useForm()
+  const { get } = useGuardHttp()
   const [phone, setPhone] = useState<string>('')
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
   const [validated, setValidated] = useState(false)
+  const [isFind, setIsFind] = useState<boolean>(false)
+
+  const verifyCodeLength = publicConfig?.verifyCodeLength ?? 4
+
+  // 检查手机号是否已经被注册过了 by my son donglyc
+  const handleCheckPhone = useDebounce(async (value: any) => {
+    if (value.phone) {
+      let { data } = await get(`/api/v2/users/find`, {
+        userPoolId: publicConfig?.userPoolId,
+        key: form.getFieldValue('phone'),
+        type: 'phone',
+      })
+      setIsFind(Boolean(data))
+      form.validateFields(['phone'])
+    }
+  }, 1000)
 
   const [finish, onFinish] = useAsyncFn(
     async (values: any) => {
@@ -83,41 +104,30 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         />
       ),
       name: 'phone',
-      rules: getRequiredRules(t('common.phoneNotNull')).concat({
-        pattern: VALIDATE_PATTERN.phone,
-        message: t('login.phoneError'),
-      }),
+      rules: [
+        ...getRequiredRules(t('common.phoneNotNull')).concat({
+          pattern: VALIDATE_PATTERN.phone,
+          message: t('login.phoneError'),
+        }),
+        {
+          validator: (_: any, value: string) => {
+            if (value) {
+              if (VALIDATE_PATTERN.phone.test(value)) {
+                if (isFind) {
+                  return Promise.reject(t('common.checkPhone'))
+                } else {
+                  return Promise.resolve()
+                }
+              } else {
+                return Promise.reject(new Error(t('common.phoneFormateError')))
+              }
+            } else {
+              return Promise.resolve()
+            }
+          },
+        },
+      ],
     },
-    // {
-    //   component: (
-    //     <Input.Password
-    //       size="large"
-    //       placeholder={t('common.setPassword')}
-    //       prefix={<LockOutlined style={{ color: '#ddd' }} />}
-    //     />
-    //   ),
-    //   name: 'password',
-    //   rules: getRequiredRules(t('common.passwordNotNull')),
-    // },
-    // {
-    //   component: (
-    //     <Input.Password
-    //       size="large"
-    //       placeholder={t('login.inputPwdAgain')}
-    //       prefix={<LockOutlined style={{ color: '#ddd' }} />}
-    //     />
-    //   ),
-    //   name: 'new-password',
-    //   rules: getRequiredRules(t('common.repeatPassword')).concat({
-    //     validator: (rule, value) => {
-    //       if (value !== form.getFieldValue('password')) {
-    //         return Promise.reject(t('common.repeatPasswordDoc'))
-    //       } else {
-    //         return Promise.resolve()
-    //       }
-    //     },
-    //   }),
-    // },
     {
       component: (
         <SendCode
@@ -125,8 +135,9 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           autoComplete="one-time-code"
           size="large"
           placeholder={t('common.inputFourVerifyCode', {
-            length: 4,
+            length: verifyCodeLength,
           })}
+          maxLength={verifyCodeLength}
           prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
           method="phone"
           data={phone}
@@ -144,6 +155,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         name="emailRegister"
         autoComplete="off"
         onFinish={onFinish}
+        onValuesChange={handleCheckPhone}
       >
         {formItems.map((item) => (
           <Form.Item
