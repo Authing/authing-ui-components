@@ -6,6 +6,7 @@ export enum GuardModuleType {
   FORGETPASSWORD = 'forgetPassword',
   DOWNLOAD_AT = 'downloadAT',
   BIND_TOTP = 'bindTotp',
+  COMPLETE_INFO = 'completeInfo',
 }
 export interface GuardModuleAction {
   action: string

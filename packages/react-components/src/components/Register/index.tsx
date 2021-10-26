@@ -1,9 +1,8 @@
-import { message, Tabs } from 'antd'
+import { Tabs } from 'antd'
 import { RegisterMethods, User } from 'authing-js-sdk'
 import React, { useMemo } from 'react'
 import { useAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
-import { codeMap } from './codemap'
 import { RegisterWithEmail } from './core/WithEmail'
 import { RegisterWithPhone } from './core/WithPhone'
 import { GuardRegisterViewProps } from './props'
@@ -20,33 +19,14 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
   const __codePaser = (code: number) => {
     if (code === 200) {
       return (user: User) => {
-        registerEvents.onRegister?.(user, authClient)
-        __changeModule?.(GuardModuleType.LOGIN, {})
+        // TODO 用户信息补全 等待后端接口修改
+        if (config.__publicConfig__!.extendsFieldsEnabled) {
+          __changeModule?.(GuardModuleType.COMPLETE_INFO, {})
+        } else {
+          registerEvents.onRegister?.(user, authClient)
+          __changeModule?.(GuardModuleType.LOGIN, {})
+        }
       }
-    }
-
-    const action = codeMap[code]
-
-    if (!action) {
-      return () => {
-        console.error('GuardRegister 未捕获 code', code)
-      }
-    }
-
-    if (action?.action === 'changeModule') {
-      let m = action.module ? action.module : GuardModuleType.ERROR
-      return (initData?: any) => __changeModule?.(m, initData)
-    }
-
-    if (action?.action === 'message') {
-      return (initData?: any) => {
-        message.error(initData?.__message)
-      }
-    }
-
-    // 最终结果
-    return () => {
-      console.error('last action at loginview')
     }
   }
 
@@ -55,7 +35,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
       onRegister: (code: number, data: any = {}, message?: string) => {
         const callback = __codePaser(code)
 
-        callback({
+        callback?.({
           ...data,
           _message: message,
         })
