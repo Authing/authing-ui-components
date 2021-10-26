@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Button, message, Tabs } from 'antd'
-import { intersection } from 'lodash'
+import { message } from 'antd'
 
-import { useAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
-import { LoginMethods } from '../AuthingGuard/types'
-import { IconFont } from '../IconFont'
 import { ResetPassword } from './core/resetPassword'
 
 import './styles.less'
