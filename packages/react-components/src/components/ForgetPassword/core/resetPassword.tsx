@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Form, Input } from 'antd'
-import { RuleObject } from 'antd/lib/form'
 import { StoreValue } from 'antd/lib/form/interface'
 
 import { UserOutlined, SafetyOutlined, LockOutlined } from '@ant-design/icons'
-import { LoginMethods } from 'src/components'
 import { SendCode } from 'src/components/SendCode'
 
 import { useAuthClient } from '../../Guard/authClient'
 import { validate } from 'src/utils'
+import SubmitButton from 'src/components/SubmitButton'
 
 export const ResetPassword = (props: any) => {
   const { t } = useTranslation()
@@ -17,6 +16,7 @@ export const ResetPassword = (props: any) => {
   let [identify, setIdentify] = useState('')
   let [codeMethod, setCodeMethod] = useState<'phone' | 'email'>('phone')
   let client = useAuthClient()
+  let submitButtonRef = useRef<any>(null)
 
   const onFinish = async (values: any) => {
     let identify = values.identify
@@ -47,6 +47,9 @@ export const ResetPassword = (props: any) => {
         name="resetPassword"
         form={form}
         onFinish={onFinish}
+        onFinishFailed={() => {
+          submitButtonRef?.current?.onError()
+        }}
         autoComplete="off"
       >
         <Form.Item
@@ -55,7 +58,7 @@ export const ResetPassword = (props: any) => {
           rules={[
             { required: true, message: t('login.inputPhoneOrEmail') },
             {
-              validator: async (rule: RuleObject, value: StoreValue) => {
+              validator: async (_, value: StoreValue) => {
                 if (!value) {
                   return
                 }
@@ -122,15 +125,12 @@ export const ResetPassword = (props: any) => {
             prefix={<LockOutlined style={{ color: '#878A95' }} />}
           />
         </Form.Item>
-        <Form.Item>
-          <Button
-            size="large"
-            type="primary"
-            htmlType="submit"
-            className="authing-g2-submit-button "
-          >
-            确认
-          </Button>
+        <Form.Item className="authing-g2-input-form submit-form">
+          <SubmitButton
+            className="forget-password"
+            text={t('common.confirm')}
+            ref={submitButtonRef}
+          />
         </Form.Item>
       </Form>
     </div>
