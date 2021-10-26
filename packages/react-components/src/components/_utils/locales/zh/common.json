@@ -104,6 +104,7 @@
     "noRegister": "无法注册",
     "noAccount": "帐号丢失",
     "noResetPass": "无法重置密码",
+    "locked": "账号被锁定",
     "other": "其他",
     "noVerifyTip": {
       "tip": "如果没有手机验证码，建议您进行以下操作：",
