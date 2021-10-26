@@ -7,6 +7,7 @@ export enum GuardModuleType {
   DOWNLOAD_AT = 'downloadAT',
   BIND_TOTP = 'bindTotp',
   ANY_QUESTIONS = 'anyQuestions',
+  COMPLETE_INFO = 'completeInfo',
 }
 export interface GuardModuleAction {
   action: string

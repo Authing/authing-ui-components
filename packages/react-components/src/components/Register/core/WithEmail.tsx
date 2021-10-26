@@ -170,7 +170,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
       rules: [
         {
           validator(_, value) {
-            if (value.indexOf(' ') !== -1) {
+            if ((value ?? '').indexOf(' ') !== -1) {
               return Promise.reject(t('common.checkPasswordHasSpace'))
             }
             return Promise.resolve()

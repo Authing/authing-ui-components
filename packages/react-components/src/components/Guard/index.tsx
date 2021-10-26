@@ -26,6 +26,7 @@ import { GuardStateMachine } from './stateMachine'
 import { GuardBindTotpView } from '../BindTotp'
 import { GuardForgetPassword } from '../ForgetPassword'
 import { GuardNeedHelpView } from '../NeedHelpView'
+import { GuardCompleteInfoView } from '../CompleteInfo'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -44,6 +45,9 @@ const ComponentsMapping: Record<
   [GuardModuleType.BIND_TOTP]: (props) => <GuardBindTotpView {...props} />,
   [GuardModuleType.ANY_QUESTIONS]: (props) => <div></div>,
   [GuardModuleType.ANY_QUESTIONS]: (props) => <GuardNeedHelpView {...props} />,
+  [GuardModuleType.COMPLETE_INFO]: (props) => (
+    <GuardCompleteInfoView {...props} />
+  ),
 }
 
 export interface GuardProps extends GuardEvents, IG2FCProps {

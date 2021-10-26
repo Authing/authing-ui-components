@@ -1,7 +1,11 @@
+import { CompleteInfoEvents } from '../CompleteInfo/props'
 import { LoginEvents } from '../Login/props'
 import { RegisterEvents } from '../Register/props'
 
-export interface GuardEvents extends LoginEvents, RegisterEvents {}
+export interface GuardEvents
+  extends LoginEvents,
+    RegisterEvents,
+    CompleteInfoEvents {}
 
 export const guardEventsFilter = (props: any) => {
   const events: GuardEvents = {}
