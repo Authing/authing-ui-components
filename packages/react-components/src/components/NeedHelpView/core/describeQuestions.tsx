@@ -47,6 +47,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
     <div className="authing-g2-describe-questions">
       <Form
         name="resetPassword"
+        layout="vertical"
         form={form}
         // onFinish={onFinish}
         // onFinishFailed={() => {
