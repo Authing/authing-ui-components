@@ -133,15 +133,18 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = ({
     <Form layout="vertical" form={form} onFinish={onFinish}>
       {formFields}
 
-      <Button
-        size="large"
-        loading={finish.loading}
-        type="primary"
-        block
-        htmlType="submit"
-      >
-        {t('common.problem.form.submit')}
-      </Button>
+      <Form.Item className="authing-g2-input-form">
+        <Button
+          className="authing-g2-submit-button password g2-completeInfo-submit"
+          size="large"
+          loading={finish.loading}
+          type="primary"
+          block
+          htmlType="submit"
+        >
+          {t('common.problem.form.submit')}
+        </Button>
+      </Form.Item>
     </Form>
   )
 }
