@@ -19,6 +19,6 @@
     "noEmit": false,
     "jsx": "react"
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.json"],
+  "include": ["*.ts", "*.tsx", "**/*.ts", "**/*.tsx", "**/*.json", "index.js"],
   "exclude": ["node_modules", "lib", "build"]
 }
