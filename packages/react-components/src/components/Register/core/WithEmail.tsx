@@ -1,22 +1,28 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Form, Input, message } from 'antd'
+import { Rule } from 'antd/lib/form'
 import { RegisterMethods } from 'authing-js-sdk'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
-import { Agreement } from 'src/components/AuthingGuard/api'
+import { Agreement, ApplicationConfig } from 'src/components/AuthingGuard/api'
 import { useAuthClient } from 'src/components/Guard/authClient'
+import { useDebounce } from 'src/hooks'
 import {
   getDeviceName,
+  getPasswordValidate,
   getRequiredRules,
   getUserRegisterParams,
+  PASSWORD_STRENGTH_TEXT_MAP,
   VALIDATE_PATTERN,
 } from 'src/utils'
+import { useGuardHttp } from 'src/utils/guradHttp'
 import { Agreements } from '../components/Agreements'
 
 export interface RegisterWithEmailProps {
   onRegister: Function
   onBeforeRegister?: Function
+  publicConfig?: ApplicationConfig
   agreements: Agreement[]
 }
 
@@ -24,13 +30,29 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
   onRegister,
   onBeforeRegister,
   agreements,
+  publicConfig,
 }) => {
   const { t } = useTranslation()
   const authClient = useAuthClient()
+  const { get } = useGuardHttp()
   const [form] = Form.useForm()
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
   const [validated, setValidated] = useState(false)
+  const [isFind, setIsFind] = useState<boolean>(false)
+
+  // 检查手机号是否已经被注册过了 by my son donglyc
+  const handleCheckPhone = useDebounce(async (value: any) => {
+    if (value.email) {
+      let { data } = await get<boolean>(`/api/v2/users/find`, {
+        userPoolId: publicConfig?.userPoolId,
+        key: form.getFieldValue('email'),
+        type: 'email',
+      })
+      setIsFind(Boolean(data))
+      form.validateFields(['email'])
+    }
+  }, 1000)
 
   const [finish, onFinish] = useAsyncFn(
     async (values: any) => {
@@ -96,7 +118,11 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
     { loading: false }
   )
 
-  const formItems = [
+  const formItems: {
+    component: React.ReactNode
+    name: string
+    rules: Rule[]
+  }[] = [
     {
       component: (
         <Input
@@ -108,42 +134,73 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         />
       ),
       name: 'email',
-      rules: getRequiredRules(t('common.emailNotNull')).concat({
-        pattern: VALIDATE_PATTERN.email,
-        message: t('login.emailError'),
-      }),
+      rules: [
+        ...getRequiredRules(t('common.emailNotNull')),
+        {
+          validator: (rule, value) => {
+            if (value) {
+              if (VALIDATE_PATTERN.email.test(value)) {
+                if (isFind) {
+                  return Promise.reject(t('common.checkEmail'))
+                } else {
+                  return Promise.resolve()
+                }
+              } else {
+                return Promise.reject(new Error(t('common.emailFormatError')))
+              }
+            } else {
+              return Promise.resolve()
+            }
+          },
+        },
+      ],
     },
     {
       component: (
         <Input.Password
           className="authing-g2-input"
           size="large"
-          placeholder={t('common.setPassword')}
+          placeholder={PASSWORD_STRENGTH_TEXT_MAP[
+            publicConfig?.passwordStrength!
+          ].placeholder()}
           prefix={<LockOutlined style={{ color: '#878A95' }} />}
         />
       ),
       name: 'password',
-      rules: getRequiredRules(t('common.passwordNotNull')),
+      rules: [
+        ...getPasswordValidate(
+          publicConfig?.passwordStrength,
+          publicConfig?.customPasswordStrength
+        ),
+      ],
     },
     {
       component: (
         <Input.Password
           className="authing-g2-input"
           size="large"
-          placeholder={t('login.inputPwdAgain')}
+          placeholder={PASSWORD_STRENGTH_TEXT_MAP[
+            publicConfig?.passwordStrength!
+          ].placeholder()}
           prefix={<LockOutlined style={{ color: '#878A95' }} />}
         />
       ),
       name: 'new-password',
-      rules: getRequiredRules(t('common.repeatPassword')).concat({
-        validator: (_, value) => {
-          if (value !== form.getFieldValue('password')) {
-            return Promise.reject(t('common.repeatPasswordDoc'))
-          } else {
-            return Promise.resolve()
-          }
+      rules: [
+        {
+          validator: (_, value) => {
+            if (value !== form.getFieldValue('password')) {
+              return Promise.reject(t('common.repeatPasswordDoc'))
+            } else {
+              return Promise.resolve()
+            }
+          },
         },
-      }),
+        ...getPasswordValidate(
+          publicConfig?.passwordStrength,
+          publicConfig?.customPasswordStrength
+        ),
+      ],
     },
   ]
 
@@ -154,6 +211,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         name="emailRegister"
         autoComplete="off"
         onFinish={onFinish}
+        onValuesChange={handleCheckPhone}
       >
         {formItems.map((item) => (
           <Form.Item
@@ -180,7 +238,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
             className="authing-g2-submit-button email"
             loading={finish.loading}
           >
-            注册
+            {t('common.register')}
           </Button>
         </Form.Item>
       </Form>

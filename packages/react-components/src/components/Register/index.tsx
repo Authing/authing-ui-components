@@ -60,8 +60,11 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
           _message: message,
         })
       },
-      agreements: agreementEnabled ? config?.agreements ?? [] : [],
       onBeforeRegister: registerEvents.onBeforeRegister,
+      agreements: agreementEnabled ? config?.agreements ?? [] : [],
+      customPasswordStrength: config.__publicConfig__?.customPasswordStrength,
+      passwordStrength: config.__publicConfig__?.passwordStrength,
+      publicConfig: config.__publicConfig__,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [agreementEnabled, config?.agreements, registerEvents.onBeforeRegister]

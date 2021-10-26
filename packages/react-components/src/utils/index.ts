@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Rule } from 'antd/lib/form'
 import { useGuardContext } from '../context/global/context'
 import qs from 'qs'
+import { i18n } from 'src/locales'
 
 export * from './popupCenter'
 export * from './clipboard'
@@ -187,4 +188,123 @@ export const assembledAppHost = (identifier: string, host: string) => {
   splitHost.shift()
 
   return `${hostUrl.protocol}//${identifier}.${splitHost.join('.')}`
+}
+
+export enum PasswordStrength {
+  NoCheck,
+  Low,
+  Middle,
+  High,
+  AUTO,
+}
+
+export const PASSWORD_STRENGTH_TEXT_MAP: Record<
+  PasswordStrength,
+  {
+    placeholder: () => string
+    validateMessage: () => string
+  }
+> = {
+  [PasswordStrength.NoCheck]: {
+    placeholder: () => i18n.t('login.inputPwd'),
+    validateMessage: () => i18n.t('login.inputPwd'),
+  },
+  [PasswordStrength.Low]: {
+    placeholder: () => i18n.t('login.setPwdLimit1'),
+    validateMessage: () => i18n.t('login.setPwdLimitMsg1'),
+  },
+  [PasswordStrength.Middle]: {
+    placeholder: () => i18n.t('login.login.setPwdLimit2'),
+    validateMessage: () => i18n.t('login.setPwdLimitMsg2'),
+  },
+  [PasswordStrength.High]: {
+    placeholder: () => i18n.t('login.login.setPwdLimit3'),
+    validateMessage: () => i18n.t('login.setPwdLimitMsg3'),
+  },
+  [PasswordStrength.AUTO]: {
+    placeholder: () => i18n.t('login.inputPwd'),
+    validateMessage: () => i18n.t('login.inputPwd'),
+  },
+}
+
+const SYMBOL_TYPE_PATTERNS = [
+  /\d+/,
+  /[a-zA-Z]/,
+  /[-!$%^&*()_+|~=`{}[\]:";'<>?,./]/,
+]
+
+export const getSymbolTypeLength = (pwd: string) => {
+  return SYMBOL_TYPE_PATTERNS.map((pattern) => pattern.test(pwd)).filter(
+    (item) => item
+  ).length
+}
+
+export const getPasswordValidate = (
+  strength: PasswordStrength = PasswordStrength.NoCheck,
+  customPasswordStrength: any = {}
+): Rule[] => {
+  const required = {
+    required: true,
+    message: i18n.t('common.noEmptyPassword'),
+  }
+
+  const validateMap: Record<PasswordStrength, Rule[]> = {
+    [PasswordStrength.NoCheck]: [required],
+    [PasswordStrength.Low]: [
+      required,
+      {
+        validator(r, v) {
+          if (v && v.length < 6) {
+            return Promise.reject(
+              PASSWORD_STRENGTH_TEXT_MAP[PasswordStrength.Low].validateMessage()
+            )
+          }
+          return Promise.resolve()
+        },
+      },
+    ],
+    [PasswordStrength.Middle]: [
+      required,
+      {
+        validator(r, v) {
+          if (v && (v.length < 6 || getSymbolTypeLength(v) < 2)) {
+            return Promise.reject(
+              PASSWORD_STRENGTH_TEXT_MAP[
+                PasswordStrength.Middle
+              ].validateMessage()
+            )
+          }
+          return Promise.resolve()
+        },
+      },
+    ],
+    [PasswordStrength.High]: [
+      required,
+      {
+        validator(r, v) {
+          console.log(r, v)
+          if (v && (v.length < 6 || getSymbolTypeLength(v) < 3)) {
+            console.log(
+              PASSWORD_STRENGTH_TEXT_MAP[PasswordStrength.High].validateMessage
+            )
+            return Promise.reject(
+              PASSWORD_STRENGTH_TEXT_MAP[
+                PasswordStrength.High
+              ].validateMessage()
+            )
+          }
+          return Promise.resolve(true)
+        },
+      },
+    ],
+    [PasswordStrength.AUTO]: [
+      required,
+      {
+        pattern: customPasswordStrength?.regex,
+        message: customPasswordStrength?.message,
+      },
+    ],
+  }
+
+  return validateMap[strength]
 }
