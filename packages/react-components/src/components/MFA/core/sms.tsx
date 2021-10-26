@@ -1,3 +1,4 @@
+import { UserOutlined } from '@ant-design/icons'
 import { Input, Button, message as Message } from 'antd'
 import { Form } from 'antd'
 import { User } from 'authing-js-sdk'
@@ -71,7 +72,18 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({ mfaToken, onBind }) => {
             },
           ]}
         >
-          <Input className="authing-g2-input" />
+          {/* <Input
+            className="authing-g2-input"
+            placeholder={t('login.inputPhone')}
+            prefix={<UserOutlined style={{ color: '#878A95' }} />}
+          /> */}
+          <Input
+            className="authing-g2-input"
+            autoComplete="tel"
+            size="large"
+            placeholder={t('login.inputPhone')}
+            prefix={<UserOutlined style={{ color: '#878A95' }} />}
+          />
         </Form.Item>
 
         <Button

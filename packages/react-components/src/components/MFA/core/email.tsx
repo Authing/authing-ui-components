@@ -1,3 +1,4 @@
+import { UserOutlined } from '@ant-design/icons'
 import { Input, Button, message as Message } from 'antd'
 import { Form } from 'antd'
 import { EmailScene, User } from 'authing-js-sdk'
@@ -74,7 +75,13 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
             },
           ]}
         >
-          <Input className="authing-g2-input" autoComplete="email" />
+          <Input
+            className="authing-g2-input"
+            autoComplete="email"
+            size="large"
+            placeholder={t('login.inputEmail')}
+            prefix={<UserOutlined style={{ color: '#878A95' }} />}
+          />
         </Form.Item>
 
         <Button
