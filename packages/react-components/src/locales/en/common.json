@@ -104,6 +104,7 @@
     "noRegister": "Unable to register",
     "noAccount": "Lost Account",
     "noResetPass": "Unable to reset password",
+    "locked": "Account is locked",
     "other": "Other",
     "noVerifyTip": {
       "tip": "If you don't receive the verification code, please do the following steps to solve this issue:",
