@@ -5,6 +5,8 @@ import { GuardModuleType } from '../Guard/module'
 import { CompleteInfo } from './core/completeInfo'
 import { GuardCompleteInfoViewProps } from './props'
 
+import './styles.less'
+
 export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
   config,
   onRegisterInfoCompleted,
@@ -26,7 +28,7 @@ export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
           {`欢迎加入 ${config.title} ，为了更好的使用体验，请先完善您的资料信息。`}
         </div>
       </div>
-      <div className="g2-view-tabs">
+      <div className="g2-view-tabs g2-completeInfo-content">
         <CompleteInfo
           extendsFields={config?.__publicConfig__?.extendsFields!}
           onRegisterInfoCompleted={(user, udfs, authClient) => {
