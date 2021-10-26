@@ -1,7 +1,7 @@
 import { AuthenticationClient, CommonMessage } from 'authing-js-sdk'
 import { Lang } from 'authing-js-sdk/build/main/types'
-import { ApplicationConfig } from 'src/components/AuthingGuard/api'
-import { GuardModuleType } from 'src/components/Guard/module'
+import { ApplicationConfig } from '../AuthingGuard/api'
+import { GuardModuleType } from '../Guard/module'
 
 export enum GuardMode {
   Modal = 'modal',

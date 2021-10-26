@@ -1,8 +1,8 @@
 import React, { FC, useState, useMemo, useEffect } from 'react'
 import { Space, Checkbox } from 'antd'
 import { Agreement } from '../../api'
-import { getClassnames } from '../../../../utils'
 import './style.less'
+import { getClassnames } from '../../../_utils'
 
 export interface AgreementsProps {
   value?: boolean

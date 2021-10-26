@@ -4,11 +4,11 @@ import { Button, Form, Input, Select } from 'antd'
 import { StoreValue } from 'antd/lib/form/interface'
 
 import { UserOutlined, SafetyOutlined, LockOutlined } from '@ant-design/icons'
-import { SendCode } from 'src/components/SendCode'
+import { SendCode } from '../../SendCode'
 
 import { useAuthClient } from '../../Guard/authClient'
-import { getPasswordValidate, validate } from 'src/utils'
-import SubmitButton from 'src/components/SubmitButton'
+import { getPasswordValidate, validate } from '../../_utils'
+import SubmitButton from '../../SubmitButton'
 
 interface describeQuestionsProps {}
 

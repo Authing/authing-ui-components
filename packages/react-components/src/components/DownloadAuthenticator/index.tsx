@@ -1,7 +1,7 @@
 import { Tabs } from 'antd'
 import React, { ReactNode, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ImagePro } from 'src/common/ImagePro'
+import { ImagePro } from '../ImagePro'
 import { IconFont } from '../IconFont'
 import { GuardDownloadATViewProps } from './props'
 import './styles.less'

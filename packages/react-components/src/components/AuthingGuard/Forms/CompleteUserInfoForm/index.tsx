@@ -1,13 +1,13 @@
 import { Button, Form, Input, message, Spin } from 'antd'
 import { useForm } from 'antd/lib/form/Form'
 import React, { FC, useEffect, useState } from 'react'
-import { useGuardContext } from '../../../../context/global/context'
+import { useGuardContext } from '../../../context/global/context'
 import { User } from 'authing-js-sdk'
 import { UploadImage } from '../UploadImage'
-import { requestClient } from '../../../../utils/http'
+import { requestClient } from '../../../_utils/http'
 import { CompleteUserInfoFormProps } from '../../types'
 import { useTranslation } from 'react-i18next'
-import { i18n } from '../../../../locales'
+import { i18n } from '../../../_utils/locales'
 
 export const CompleteUserInfoForm: FC<CompleteUserInfoFormProps> = ({
   onSuccess,

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { message } from 'antd'
-import { ShieldSpin } from 'src/components/ShieldSpin'
+import { ShieldSpin } from '../../ShieldSpin'
 import { useAuthClient } from '../../Guard/authClient'
 
 interface LoginWithWechatMiniQrcodeProps {

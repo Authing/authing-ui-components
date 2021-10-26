@@ -1,6 +1,6 @@
 import { useRef, useCallback } from 'react'
-import { GuardModuleType } from 'src/components/Guard/module'
-import { useModule } from 'src/context/module/context'
+import { GuardModuleType } from '../../Guard/module'
+import { useModule } from '../../context/module/context'
 
 export const useChangeModule = () => {
   const { module, changeModule, setInitData } = useModule()

@@ -1,6 +1,6 @@
 import { message } from 'antd'
 import { AuthenticationClient } from 'authing-js-sdk'
-import { ErrorCode } from 'src/utils/GuardErrorCode'
+import { ErrorCode } from '../_utils/GuardErrorCode'
 
 import packageConfig from '../../../package.json'
 import { GuardConfig } from './config'

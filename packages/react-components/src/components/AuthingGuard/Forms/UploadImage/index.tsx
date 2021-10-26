@@ -3,7 +3,7 @@ import { message, Spin, Upload } from 'antd'
 import { UploadChangeParam } from 'antd/lib/upload'
 import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useGuardContext } from '../../../../context/global/context'
+import { useGuardContext } from '../../../context/global/context'
 
 export const UploadImage: FC<{
   value?: string

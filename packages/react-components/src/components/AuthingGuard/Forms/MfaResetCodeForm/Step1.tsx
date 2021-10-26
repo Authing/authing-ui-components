@@ -1,8 +1,8 @@
 import { Input, Form, Button } from 'antd'
 import React, { FC, useState } from 'react'
 import { LockOutlined } from '@ant-design/icons'
-import { getRequiredRules } from '../../../../utils'
-import { useGuardContext } from '../../../../context/global/context'
+import { getRequiredRules } from '../../../_utils'
+import { useGuardContext } from '../../../context/global/context'
 import { User } from 'authing-js-sdk'
 import { useTranslation } from 'react-i18next'
 

@@ -6,7 +6,7 @@ import {
   RegisterMethods,
   LocalesConfig,
 } from '../../components/AuthingGuard/types'
-import { i18n } from '../../locales'
+import { i18n } from '../_utils/locales'
 
 // 个人版 OTP MFA 的 error code
 export const OTP_MFA_CODE = 1635

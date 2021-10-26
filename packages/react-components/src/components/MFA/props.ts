@@ -1,9 +1,4 @@
-import {
-  getDefaultG2Config,
-  IG2Config,
-  IG2Events,
-  IG2FCProps,
-} from 'src/classes'
+import { getDefaultG2Config, IG2Config, IG2Events, IG2FCProps } from '../Type'
 import { AuthenticationClient, User } from '..'
 
 export interface MFAConfig extends IG2Config {}

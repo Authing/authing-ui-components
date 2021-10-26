@@ -4,7 +4,7 @@ import { message } from 'antd'
 import { GuardModuleType } from '../Guard/module'
 import { ResetPassword } from './core/resetPassword'
 
-import { ImagePro } from 'src/common/ImagePro'
+import { ImagePro } from '../ImagePro'
 
 export const GuardForgetPassword = (props: any) => {
   let publicConfig = props.config.__publicConfig__

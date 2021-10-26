@@ -7,7 +7,7 @@ import { SendCodeBtn } from './SendCodeBtn'
 import './style.less'
 import { useTranslation } from 'react-i18next'
 import { useAuthClient } from '../Guard/authClient'
-import { validate } from 'src/utils'
+import { validate } from '../_utils'
 import Input, { InputProps } from 'antd/lib/input'
 
 export interface SendPhoneCodeProps extends InputProps {

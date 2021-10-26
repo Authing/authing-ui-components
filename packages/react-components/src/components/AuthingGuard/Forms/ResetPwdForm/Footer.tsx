@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from 'antd'
 
-import { useGuardContext } from '../../../../context/global/context'
+import { useGuardContext } from '../../../context/global/context'
 import { GuardScenes } from '../../../../components/AuthingGuard/types'
 import { useTranslation } from 'react-i18next'
 

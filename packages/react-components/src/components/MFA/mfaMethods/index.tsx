@@ -1,6 +1,6 @@
 import { Button } from 'antd'
 import React, { useMemo, useState } from 'react'
-import { IconFont } from 'src/components/IconFont'
+import { IconFont } from '../../IconFont'
 import { GuardMFAInitData, MFAType } from '../props'
 import './style.less'
 

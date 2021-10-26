@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useGuardContext } from '../../../context/global/context'
+import { useGuardContext } from '../../context/global/context'
 import { CompleteUserInfoForm } from '../Forms/CompleteUserInfoForm'
 
 import './style.less'

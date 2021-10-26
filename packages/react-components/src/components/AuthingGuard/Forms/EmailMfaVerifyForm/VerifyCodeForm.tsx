@@ -2,8 +2,8 @@ import { EmailScene, User } from 'authing-js-sdk'
 import React, { FC, useState } from 'react'
 import { Button, Form } from 'antd'
 
-import { VerifyCodeInput } from '../../../../common/VerifyCodeInput'
-import { useGuardContext } from '../../../../context/global/context'
+import { VerifyCodeInput } from '../../../VerifyCodeInput'
+import { useGuardContext } from '../../../context/global/context'
 import { EmailMFAVerifyFormProps } from '../../../../components/AuthingGuard/types'
 
 import './style.less'

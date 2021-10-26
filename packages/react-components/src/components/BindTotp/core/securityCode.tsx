@@ -3,9 +3,9 @@ import { Form, message } from 'antd'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
-import { VerifyCodeInput } from 'src/common/VerifyCodeInput'
-import { GuardModuleType } from 'src/components/Guard/module'
-import { useGuardHttp } from 'src/utils/guradHttp'
+import { VerifyCodeInput } from '../../VerifyCodeInput'
+import { GuardModuleType } from '../../Guard/module'
+import { useGuardHttp } from '../../_utils/guradHttp'
 
 const CODE_LEN = 6
 export interface SecurityCodeProps {

@@ -1,12 +1,12 @@
 import React, { FC, useState } from 'react'
 import { Form, Input, Button, message } from 'antd'
 
-import { validate } from '../../../../utils'
+import { validate } from '../../../_utils'
 import {
   ResetPasswordStep1Props,
   ResetPwdMethods,
 } from '../../../../components/AuthingGuard/types'
-import { useGuardContext } from '../../../../context/global/context'
+import { useGuardContext } from '../../../context/global/context'
 import { EmailScene } from 'authing-js-sdk'
 import { useTranslation } from 'react-i18next'
 

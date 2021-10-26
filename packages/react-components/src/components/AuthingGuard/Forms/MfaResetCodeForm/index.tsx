@@ -3,7 +3,7 @@ import React, { FC, useState } from 'react'
 
 import { MfaResetStep1 } from './Step1'
 import { MfaResetStep2 } from './Step2'
-import { useGuardContext } from '../../../../context/global/context'
+import { useGuardContext } from '../../../context/global/context'
 import { MfaResetForm } from '../../../../components/AuthingGuard/types'
 
 import './style.less'

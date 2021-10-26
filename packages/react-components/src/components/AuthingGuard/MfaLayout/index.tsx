@@ -7,7 +7,7 @@ import {
   MfaResetCodeForm,
   MFAVerifyForm,
 } from '../../../components/AuthingGuard/Forms'
-import { useGuardContext } from '../../../context/global/context'
+import { useGuardContext } from '../../context/global/context'
 
 import './style.less'
 import { useTranslation } from 'react-i18next'

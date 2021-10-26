@@ -1,5 +1,5 @@
 import { User } from '../types'
-import { requestClient } from '../../../utils/http'
+import { requestClient } from '../../_utils/http'
 
 export interface SessionData {
   session: null | {

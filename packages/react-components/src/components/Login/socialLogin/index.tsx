@@ -6,9 +6,9 @@ import qs from 'qs'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import shortid from 'shortid'
-import { i18n } from 'src/locales'
-import { isWechatBrowser, popupCenter } from 'src/utils'
-import { useGuardHttp } from 'src/utils/guradHttp'
+import { i18n } from '../../_utils/locales'
+import { isWechatBrowser, popupCenter } from '../../_utils'
+import { useGuardHttp } from '../../_utils/guradHttp'
 import {
   ApplicationConfig,
   IAzureAdConnectionConfig,

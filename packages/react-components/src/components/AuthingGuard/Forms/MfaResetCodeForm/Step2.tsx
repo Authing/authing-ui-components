@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 
 import { Button, Checkbox, Form } from 'antd'
-import { CopyAbleText } from '../../../../common/CopyAbleText'
+import { CopyAbleText } from '../../../CopyAbleText'
 import { useTranslation } from 'react-i18next'
 
 export interface MfaResetStep2Props {

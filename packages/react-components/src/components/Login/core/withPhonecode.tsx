@@ -2,8 +2,8 @@ import React from 'react'
 import { Button, Form, Input } from 'antd'
 import { useAuthClient } from '../../Guard/authClient'
 import { UserOutlined, SafetyOutlined } from '@ant-design/icons'
-import { LoginMethods } from 'src/components'
-import { SendCode } from 'src/components/SendCode'
+import { LoginMethods } from '../../'
+import { SendCode } from '../../SendCode'
 import { useTranslation } from 'react-i18next'
 
 export const LoginWithPhoneCode = (props: any) => {

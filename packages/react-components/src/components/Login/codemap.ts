@@ -1,4 +1,4 @@
-import { ErrorCode } from 'src/utils/GuardErrorCode'
+import { ErrorCode } from '../_utils/GuardErrorCode'
 import { GuardModuleAction, GuardModuleType } from '../Guard/module'
 
 export const codeMap: Record<number, GuardModuleAction> = {

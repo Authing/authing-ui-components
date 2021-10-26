@@ -4,10 +4,10 @@ import { Form } from 'antd'
 import { User } from 'authing-js-sdk'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { VerifyCodeInput } from 'src/common/VerifyCodeInput'
-import { useAuthClient } from 'src/components/Guard/authClient'
-import { SendCodeBtn } from 'src/components/SendCode/SendCodeBtn'
-import { VALIDATE_PATTERN } from 'src/utils'
+import { VerifyCodeInput } from '../../VerifyCodeInput'
+import { useAuthClient } from '../../Guard/authClient'
+import { SendCodeBtn } from '../../SendCode/SendCodeBtn'
+import { VALIDATE_PATTERN } from '../../_utils'
 
 const CODE_LEN = 4
 

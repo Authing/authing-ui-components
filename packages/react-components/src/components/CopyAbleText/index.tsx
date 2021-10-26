@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { CopyOutlined, CheckOutlined } from '@ant-design/icons'
-import { copyToClipboard, getClassnames } from '../../utils'
+import { copyToClipboard, getClassnames } from '../_utils'
 
 import './style.less'
 import { useTranslation } from 'react-i18next'

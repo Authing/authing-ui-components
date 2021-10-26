@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { getClassnames } from 'src/utils'
+import { getClassnames } from '../_utils'
 import './iconfont'
 import './style.less'
 

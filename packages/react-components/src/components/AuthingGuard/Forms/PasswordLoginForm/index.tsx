@@ -8,8 +8,8 @@ import React, {
   useState,
 } from 'react'
 
-import { getRequiredRules, getUserRegisterParams } from '../../../../utils'
-import { useGuardContext } from '../../../../context/global/context'
+import { getRequiredRules, getUserRegisterParams } from '../../../_utils'
+import { useGuardContext } from '../../../context/global/context'
 import { NEED_CAPTCHA } from '../../../../components/AuthingGuard/constants'
 import {
   LoginMethods,
@@ -19,7 +19,7 @@ import {
 import { LoginFormFooter } from '../../../../components/AuthingGuard/Forms/LoginFormFooter'
 import { useTranslation } from 'react-i18next'
 import { PasswordLoginMethods } from '../../api'
-import { requestClient } from '../../../../utils/http'
+import { requestClient } from '../../../_utils/http'
 
 export const PasswordLoginForm = forwardRef<
   FormInstance,

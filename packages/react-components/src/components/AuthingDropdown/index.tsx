@@ -1,6 +1,6 @@
 import { DownOutlined } from '@ant-design/icons'
 import React, { FC, useState } from 'react'
-import { getClassnames } from '../../utils'
+import { getClassnames } from '../_utils'
 
 import './style.less'
 

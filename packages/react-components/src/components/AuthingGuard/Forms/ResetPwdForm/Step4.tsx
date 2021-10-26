@@ -1,4 +1,4 @@
-import { useGuardContext } from '../../../../context/global/context'
+import { useGuardContext } from '../../../context/global/context'
 import React, { FC, useEffect, useRef, useState } from 'react'
 
 import { GuardScenes } from '../../../../components/AuthingGuard/types'

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { message } from 'antd'
-import { ImagePro } from 'src/common/ImagePro'
+import { ImagePro } from '../ImagePro'
 import { DescribeQuestions } from './core/describeQuestions'
 import { GuardModuleType } from '../Guard/module'
 

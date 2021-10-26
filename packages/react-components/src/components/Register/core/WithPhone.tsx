@@ -3,17 +3,17 @@ import { Button, Form, Input } from 'antd'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
-import { Agreement, ApplicationConfig } from 'src/components/AuthingGuard/api'
-import { useAuthClient } from 'src/components/Guard/authClient'
-import { SendCode } from 'src/components/SendCode'
-import { useDebounce } from 'src/hooks'
+import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
+import { useAuthClient } from '../../Guard/authClient'
+import { SendCode } from '../../SendCode'
+import { useDebounce } from '../../_utils/hooks'
 import {
   getDeviceName,
   getRequiredRules,
   getUserRegisterParams,
   VALIDATE_PATTERN,
-} from 'src/utils'
-import { useGuardHttp } from 'src/utils/guradHttp'
+} from '../../_utils'
+import { useGuardHttp } from '../../_utils/guradHttp'
 import { Agreements } from '../components/Agreements'
 
 export interface RegisterWithPhoneProps {

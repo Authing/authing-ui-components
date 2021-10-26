@@ -3,14 +3,14 @@ import { FormInstance } from 'antd/lib/form'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
 
-import { getRequiredRules } from '../../../../utils'
-import { useGuardContext } from '../../../../context/global/context'
+import { useGuardContext } from '../../../context/global/context'
 import {
   ADLoginFormProps,
   LoginMethods,
 } from '../../../../components/AuthingGuard/types'
 import { LoginFormFooter } from '../../../../components/AuthingGuard/Forms/LoginFormFooter'
 import { useTranslation } from 'react-i18next'
+import { getRequiredRules } from '../../../_utils'
 
 export const ADLoginForm = forwardRef<FormInstance, ADLoginFormProps>(
   ({ onSuccess, onValidateFail, onFail }, ref) => {

@@ -3,7 +3,7 @@ import { FormInstance } from 'antd/lib/form'
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
 import { UserOutlined, LockOutlined, SafetyOutlined } from '@ant-design/icons'
 
-import { useGuardContext } from '../../../../context/global/context'
+import { useGuardContext } from '../../../context/global/context'
 import {
   PhoneRegisterFormProps,
   RegisterMethods,
@@ -13,7 +13,7 @@ import {
   getRequiredRules,
   getUserRegisterParams,
   VALIDATE_PATTERN,
-} from '../../../../utils'
+} from '../../../_utils'
 import { SendPhoneCode } from '../../../../components/AuthingGuard/Forms/SendPhoneCode'
 import { RegisterFormFooter } from '../../../../components/AuthingGuard/Forms/RegisterFormFooter'
 import { useTranslation } from 'react-i18next'

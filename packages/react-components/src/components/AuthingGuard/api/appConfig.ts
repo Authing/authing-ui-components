@@ -1,4 +1,3 @@
-import { requestClient } from '../../../utils/http'
 import { Lang, Protocol } from '../../../components/AuthingGuard/types'
 import {
   IAzureAdConnectionConfig,
@@ -8,8 +7,9 @@ import {
   OIDCConnectionConfig,
   SocialConnectionItem,
 } from './userPoolConfig'
-import { i18n } from '../../../locales'
-import { PasswordStrength } from 'src/utils'
+import { i18n } from '../../_utils/locales'
+import { requestClient } from '../../_utils/http'
+import { PasswordStrength } from '../../_utils'
 
 export enum ApplicationMfaType {
   SMS = 'SMS',

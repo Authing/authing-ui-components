@@ -2,9 +2,9 @@ import { ConfigProvider, message } from 'antd'
 import React, { FC } from 'react'
 import { AuthenticationClient } from 'authing-js-sdk'
 
-import { GuardContext } from '../../context/global/context'
+import { GuardContext } from '../context/global/context'
 import { GuardScenes } from '../../components/AuthingGuard/types'
-import { requestClient } from '../../utils/http'
+import { requestClient } from '../_utils/http'
 import {
   defaultGuardConfig,
   OTP_MFA_CODE,
@@ -19,7 +19,7 @@ import {
 } from '../../components/AuthingGuard/types/GuardConfig'
 
 import './style.less'
-import { initI18n } from '../../locales'
+import { initI18n } from '../_utils/locales'
 const PREFIX_CLS = 'authing-ant'
 
 message.config({

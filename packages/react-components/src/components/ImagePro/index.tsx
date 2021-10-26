@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { getClassnames } from 'src/utils'
+import { getClassnames } from '../_utils'
 import './styles.less'
 
 export interface ImageProProps {

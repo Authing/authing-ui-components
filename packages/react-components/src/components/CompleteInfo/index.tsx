@@ -1,5 +1,5 @@
 import React from 'react'
-import { ImagePro } from 'src/common/ImagePro'
+import { ImagePro } from '../ImagePro'
 import { GuardModuleType } from '../Guard/module'
 
 import { CompleteInfo } from './core/completeInfo'

@@ -3,8 +3,8 @@ import React, { FC } from 'react'
 import { CommonMessage } from 'authing-js-sdk'
 
 import { SendCodeBtn } from './SendCodeBtn'
-import { validate } from '../../../../utils'
-import { useGuardContext } from '../../../../context/global/context'
+import { validate } from '../../../_utils'
+import { useGuardContext } from '../../../context/global/context'
 
 import './style.less'
 import { useTranslation } from 'react-i18next'

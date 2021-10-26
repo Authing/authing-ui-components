@@ -1,6 +1,6 @@
 import { Button, Divider } from 'antd'
 import React, { FC } from 'react'
-import { useGuardContext } from '../../../../context/global/context'
+import { useGuardContext } from '../../../context/global/context'
 import { GuardScenes } from '../../../../components/AuthingGuard/types'
 import './style.less'
 import { useTranslation } from 'react-i18next'

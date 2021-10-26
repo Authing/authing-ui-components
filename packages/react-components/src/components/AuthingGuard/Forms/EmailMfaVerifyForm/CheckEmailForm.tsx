@@ -1,12 +1,10 @@
 import React, { FC, useState } from 'react'
 import { Button, Form, Input, message } from 'antd'
-
-import { useGuardContext } from '../../../../context/global/context'
+import { useGuardContext } from '../../../context/global/context'
 import { MFACheckEmailFormProps } from '../../types'
-
 import './style.less'
-import { VALIDATE_PATTERN } from '../../../../utils'
 import { useTranslation } from 'react-i18next'
+import { VALIDATE_PATTERN } from '../../../_utils'
 
 export const CheckEmailForm: FC<MFACheckEmailFormProps> = ({
   onSuccess,

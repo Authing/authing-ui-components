@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Form, Input } from 'antd'
 
-import { useGuardHttp } from 'src/utils/guradHttp'
+import { useGuardHttp } from '../../_utils/guradHttp'
 import { useAuthClient } from '../../Guard/authClient'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import { getUserRegisterParams } from 'src/utils'
-import { ErrorCode } from 'src/utils/GuardErrorCode'
-import { LoginMethods } from 'src/components'
+import { getUserRegisterParams } from '../../_utils'
+import { ErrorCode } from '../../_utils/GuardErrorCode'
+import { LoginMethods } from '../../'
 
 // core 代码只完成核心功能，东西尽可能少
 

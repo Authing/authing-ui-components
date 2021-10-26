@@ -1,9 +1,4 @@
-import {
-  getDefaultG2Config,
-  IG2Config,
-  IG2Events,
-  IG2FCProps,
-} from 'src/classes'
+import { getDefaultG2Config, IG2Config, IG2Events, IG2FCProps } from '../Type'
 
 export interface DownloadATConfig extends IG2Config {}
 

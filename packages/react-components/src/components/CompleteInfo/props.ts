@@ -1,10 +1,5 @@
 import { AuthenticationClient, CommonMessage, User } from 'authing-js-sdk'
-import {
-  getDefaultG2Config,
-  IG2Config,
-  IG2Events,
-  IG2FCProps,
-} from 'src/classes'
+import { getDefaultG2Config, IG2Config, IG2Events, IG2FCProps } from '../Type'
 
 export interface CompleteInfoConfig extends IG2Config {}
 

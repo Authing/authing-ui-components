@@ -1,5 +1,5 @@
 import React, { FC, useRef, useState } from 'react'
-import { useGuardContext } from 'src/context/global/context'
+import { useGuardContext } from '../../../context/global/context'
 import { CheckEmailForm } from './CheckEmailForm'
 import { VerifyCodeForm } from './VerifyCodeForm'
 import { SmsMFAFormProps } from '../../types'

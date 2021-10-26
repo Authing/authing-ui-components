@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Form, Input } from 'antd'
-import { LoginMethods } from 'src/components'
-import { ErrorCode } from 'src/utils/GuardErrorCode'
+import { LoginMethods } from '../../'
+import { ErrorCode } from '../../_utils/GuardErrorCode'
 import { useAuthClient } from '../../Guard/authClient'
 
 interface LoginWithLDAPProps {

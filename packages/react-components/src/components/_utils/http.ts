@@ -1,5 +1,5 @@
 import qs from 'qs'
-import { i18n } from '../locales'
+import { i18n } from './locales'
 
 export const requestClient = async (...rest: Parameters<typeof fetch>) => {
   const res = await fetch(...rest)

@@ -3,7 +3,7 @@ import { User } from 'authing-js-sdk'
 import { FormInstance } from 'antd/lib/form'
 import React, { useCallback, useRef } from 'react'
 
-import { useGuardContext } from '../../../context/global/context'
+import { useGuardContext } from '../../context/global/context'
 import {
   ADLoginForm,
   LdapLoginForm,
@@ -17,7 +17,7 @@ import {
   APP_MFA_CODE,
   LOGIN_METHODS_MAP,
 } from '../../../components/AuthingGuard/constants'
-import { AuthingTabs } from '../../../common/AuthingTabs'
+import { AuthingTabs } from '../../AuthingTabs'
 import {
   BaseFormProps,
   GuardScenes,

@@ -2,7 +2,7 @@ import { Button } from 'antd'
 import React, { FC, useMemo } from 'react'
 import { EllipsisOutlined } from '@ant-design/icons'
 
-import { getClassnames } from '../../utils'
+import { getClassnames } from '../_utils'
 
 import './style.less'
 

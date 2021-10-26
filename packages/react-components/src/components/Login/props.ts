@@ -4,7 +4,7 @@ import {
   IG2Events,
   IG2FCProps,
   IG2FCViewProps,
-} from 'src/classes'
+} from '../Type'
 import { CommonMessage, SocialConnectionProvider } from 'authing-js-sdk'
 import { QrCodeAuthenticationClient } from 'authing-js-sdk/build/main/lib/authentication/QrCodeAuthenticationClient'
 import { PasswordLoginMethods } from '../AuthingGuard/api'

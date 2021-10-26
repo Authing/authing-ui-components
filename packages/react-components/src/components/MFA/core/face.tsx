@@ -1,7 +1,7 @@
 import { Button } from 'antd'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { detectSingleFace } from 'face-api.js'
-import { useGuardHttp } from 'src/utils/guradHttp'
+import { useGuardHttp } from '../../_utils/guradHttp'
 import {
   FACE_SCORE,
   devicesConstraints,

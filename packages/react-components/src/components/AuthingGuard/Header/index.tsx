@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Avatar } from 'antd'
 
-import { useGuardContext } from '../../../context/global/context'
+import { useGuardContext } from '../../context/global/context'
 
 import './style.less'
 

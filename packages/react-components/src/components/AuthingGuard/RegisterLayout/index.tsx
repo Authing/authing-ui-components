@@ -2,13 +2,13 @@ import { message } from 'antd'
 import { User } from 'authing-js-sdk'
 import React, { FC } from 'react'
 
-import { useGuardContext } from '../../../context/global/context'
+import { useGuardContext } from '../../context/global/context'
 import {
   GuardScenes,
   LoginMethods,
   RegisterMethods,
 } from '../../../components/AuthingGuard/types'
-import { AuthingTabs } from '../../../common/AuthingTabs'
+import { AuthingTabs } from '../../AuthingTabs'
 import { REGISTER_METHODS_MAP } from '../../../components/AuthingGuard/constants'
 import {
   EmailRegisterForm,

@@ -7,8 +7,8 @@ import {
   getRequiredRules,
   getUserRegisterParams,
   VALIDATE_PATTERN,
-} from '../../../../utils'
-import { useGuardContext } from '../../../../context/global/context'
+} from '../../../_utils'
+import { useGuardContext } from '../../../context/global/context'
 import {
   LoginMethods,
   PhoneCodeLoginFormProps,

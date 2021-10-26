@@ -1,10 +1,5 @@
 import { RegisterMethods } from 'authing-js-sdk'
-import {
-  IG2FCProps,
-  IG2Config,
-  getDefaultG2Config,
-  IG2Events,
-} from 'src/classes'
+import { IG2FCProps, IG2Config, getDefaultG2Config, IG2Events } from '../Type'
 import {
   AuthenticationClient,
   User,

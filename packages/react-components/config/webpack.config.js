@@ -832,6 +832,8 @@ module.exports = function (webpackEnv) {
         new NpmDtsWebpackPlugin({
           output: 'lib/index.d.ts',
           entry: 'src/components/index',
+          logLevel: 'debug',
+          tsc: '--baseUrl @authing/react-ui-components',
         }),
       // 包大小分析
       // new WebpackBundleAnalyzer.BundleAnalyzerPlugin(),

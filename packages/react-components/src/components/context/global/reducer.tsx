@@ -6,10 +6,10 @@ import {
   GuardEventsHandler,
   LocalesConfig,
   Lang,
-} from '../../components/AuthingGuard/types'
+} from '../../AuthingGuard/types'
 import { AuthenticationClient } from 'authing-js-sdk'
 import { IBaseAction } from '../base'
-import { ApplicationMfaType } from '../../components/AuthingGuard/api/appConfig'
+import { ApplicationMfaType } from '../../AuthingGuard/api/appConfig'
 
 export type IState = {
   config: GuardConfig // 处理后的 Guard 配置

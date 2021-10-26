@@ -3,8 +3,8 @@ import shortid from 'shortid'
 import React, { FC, useEffect } from 'react'
 import { Button, Avatar, Space, Tooltip, message } from 'antd'
 
-import { isWechatBrowser, popupCenter } from '../../../../utils'
-import { useGuardContext } from '../../../../context/global/context'
+import { isWechatBrowser, popupCenter } from '../../../_utils'
+import { useGuardContext } from '../../../context/global/context'
 import {
   APP_MFA_CODE,
   OTP_MFA_CODE,
@@ -21,14 +21,14 @@ import {
   IAzureAdConnectionConfig,
   IOAuthConnectionConfig,
 } from '../../../../components/AuthingGuard/api'
-import { requestClient } from '../../../../utils/http'
+import { requestClient } from '../../../_utils/http'
 
 import './style.less'
 import { IconFont } from '../../IconFont'
 import { useScreenSize } from '../../hooks/useScreenSize'
 import { SocialConnectionProvider } from 'authing-js-sdk'
 import { useTranslation } from 'react-i18next'
-import { i18n } from '../../../../locales'
+import { i18n } from '../../../_utils/locales'
 
 export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
   onFail = () => {},

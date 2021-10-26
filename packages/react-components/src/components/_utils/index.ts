@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { Rule } from 'antd/lib/form'
-import { useGuardContext } from '../context/global/context'
 import qs from 'qs'
-import { i18n } from 'src/locales'
+import { useGuardContext } from '../context/global/context'
+import { i18n } from './locales'
 
 export * from './popupCenter'
 export * from './clipboard'

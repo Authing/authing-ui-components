@@ -1,7 +1,7 @@
 import { Spin } from 'antd'
 import React, { FC, useEffect, useMemo, useRef } from 'react'
 
-import { useGuardContext } from '../../../../context/global/context'
+import { useGuardContext } from '../../../context/global/context'
 import {
   LoginMethods,
   QrLoginFormProps,

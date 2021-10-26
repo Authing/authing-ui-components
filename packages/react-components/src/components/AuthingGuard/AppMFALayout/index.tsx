@@ -2,13 +2,13 @@ import { message } from 'antd'
 import { User } from 'authing-js-sdk'
 import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { AuthingDropdown } from 'src/common/AuthingDropdown'
+import { AuthingDropdown } from '../../AuthingDropdown'
 
 import {
   EmailMfaVerifyForm,
   SmsMfaVerifyForm,
 } from '../../../components/AuthingGuard/Forms'
-import { useGuardContext } from '../../../context/global/context'
+import { useGuardContext } from '../../context/global/context'
 import { ApplicationMfaType, ApplicationMfaTypeLabel } from '../api'
 
 import './style.less'
