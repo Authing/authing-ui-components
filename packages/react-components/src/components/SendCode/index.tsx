@@ -29,6 +29,7 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
   const authClient = useAuthClient()
 
   const sendEmail = async (email: string) => {
+    console.log('send email', email)
     if (!email) {
       message.error(t('login.inputPhone'))
       return false
@@ -48,6 +49,8 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
   }
 
   const sendPhone = async (phone: string) => {
+    console.log('send phone', phone)
+
     if (!phone) {
       message.error(t('login.inputPhone'))
       return false

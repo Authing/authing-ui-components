@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { message, Tabs } from 'antd'
+import { Button, message, Tabs } from 'antd'
 import { intersection } from 'lodash'
 
 import { useAuthClient } from '../Guard/authClient'
@@ -13,11 +13,15 @@ import './styles.less'
 import { ImagePro } from 'src/common/ImagePro'
 
 export const GuardForgetPassword = (props: any) => {
-  const client = useAuthClient()
-
-  let publicKey = props.config?.publicKey!
-  let ms = props.config?.loginMethods
-  let { autoRegister } = props.config
+  const onReset = (res: any) => {
+    let code = res.code
+    if ([2001, 2004].includes(code)) {
+      message.error(res.message)
+      return
+    }
+    // 返回登录
+    props.__changeModule(GuardModuleType.LOGIN)
+  }
 
   return (
     <div className="g2-view-container">
@@ -37,7 +41,15 @@ export const GuardForgetPassword = (props: any) => {
         </div>
       </div>
       <div className="g2-view-tabs">
-        <ResetPassword />
+        <ResetPassword onReset={onReset} />
+      </div>
+      <div className="g2-tips-line">
+        <div
+          className="link-like back-to-login"
+          onClick={() => props.__changeModule(GuardModuleType.LOGIN)}
+        >
+          其他账号登录
+        </div>
       </div>
     </div>
   )
