@@ -137,12 +137,52 @@
   &.submit-form {
     margin-top: 32px;
   }
+  // &.authing-ant-form-item-has-error {
+  //   input::placeholder {
+  //     color: #ff4d4f;
+  //   }
+  // }
+  .authing-ant-form-item-explain {
+    // display: none;
+    transition: 0.2s all;
+    position: absolute;
+    user-select: none;
+    background: white;
+    left: 10px;
+    top: -15px;
+    z-index: 100;
+    padding: 4px 8px;
+    border-radius: 4px;
+    box-shadow: #eeeff1;
+  }
 }
+.authing-g2-input-form {
+  .authing-g2-select {
+    border: 1px solid #f5f6f7;
+    border-color: #f5f6f7;
+    height: 46px;
+    border-radius: 4px;
 
+    .authing-ant-select-selector {
+      height: 100% !important;
+      border-color: #f5f6f7 !important;
+      background-color: #f5f6f7 !important;
+      .authing-ant-select-selection-item {
+        line-height: 42px;
+      }
+      &:hover {
+        border-color: #eeeff1 !important;
+        background-color: #eeeff1 !important;
+      }
+    }
+  }
+}
 .authing-g2-input {
-  border: 1px solid #eaebee;
+  border: 1px solid #f5f6f7;
   height: 46px;
   border-radius: 4px;
+  background: #f5f6f7;
+
   &:hover {
     background: #eeeff1;
   }

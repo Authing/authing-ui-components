@@ -260,6 +260,16 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                 {t('login.forgetPwd')}
               </div>
             )}
+
+            <div
+              className="link-like"
+              onClick={() =>
+                props.__changeModule?.(GuardModuleType.ANY_QUESTIONS, {})
+              }
+            >
+              问题?
+            </div>
+
             {!disableRegister && (
               <span className="go-to-register">
                 <span className="gray">还没有账号，</span>

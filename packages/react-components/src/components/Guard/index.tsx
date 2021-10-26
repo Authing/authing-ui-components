@@ -25,6 +25,7 @@ import { GuardDownloadATView } from '../DownloadAuthenticator'
 import { GuardStateMachine } from './stateMachine'
 import { GuardBindTotpView } from '../BindTotp'
 import { GuardForgetPassword } from '../ForgetPassword'
+import { GuardNeedHelpView } from '../NeedHelpView'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -41,6 +42,8 @@ const ComponentsMapping: Record<
     <GuardForgetPassword {...props} />
   ),
   [GuardModuleType.BIND_TOTP]: (props) => <GuardBindTotpView {...props} />,
+  [GuardModuleType.ANY_QUESTIONS]: (props) => <div></div>,
+  [GuardModuleType.ANY_QUESTIONS]: (props) => <GuardNeedHelpView {...props} />,
 }
 
 export interface GuardProps extends GuardEvents, IG2FCProps {

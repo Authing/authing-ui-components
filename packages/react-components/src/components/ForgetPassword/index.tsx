@@ -4,10 +4,11 @@ import { message } from 'antd'
 import { GuardModuleType } from '../Guard/module'
 import { ResetPassword } from './core/resetPassword'
 
-import './styles.less'
 import { ImagePro } from 'src/common/ImagePro'
 
 export const GuardForgetPassword = (props: any) => {
+  let publicConfig = props.config.__publicConfig__
+
   const onReset = (res: any) => {
     let code = res.code
     if ([2001, 2004].includes(code)) {
@@ -36,7 +37,7 @@ export const GuardForgetPassword = (props: any) => {
         </div>
       </div>
       <div className="g2-view-tabs">
-        <ResetPassword onReset={onReset} />
+        <ResetPassword onReset={onReset} publicConfig={publicConfig} />
       </div>
       <div className="g2-tips-line">
         <div

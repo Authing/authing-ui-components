@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Form, Input } from 'antd'
 import { StoreValue } from 'antd/lib/form/interface'
@@ -7,10 +7,14 @@ import { UserOutlined, SafetyOutlined, LockOutlined } from '@ant-design/icons'
 import { SendCode } from 'src/components/SendCode'
 
 import { useAuthClient } from '../../Guard/authClient'
-import { validate } from 'src/utils'
+import { getPasswordValidate, validate } from 'src/utils'
 import SubmitButton from 'src/components/SubmitButton'
 
-export const ResetPassword = (props: any) => {
+interface ResetPasswordProps {
+  onReset: any
+  publicConfig: any
+}
+export const ResetPassword = (props: ResetPasswordProps) => {
   const { t } = useTranslation()
   let [form] = Form.useForm()
   let [identify, setIdentify] = useState('')
@@ -111,11 +115,26 @@ export const ResetPassword = (props: any) => {
         <Form.Item
           className="authing-g2-input-form"
           name="password"
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: '至少六位，需包含英文、数字、符号中的两种',
+          //   },
+
+          // ]}
           rules={[
             {
-              required: true,
-              message: '至少六位，需包含英文、数字、符号中的两种',
+              validator(_, value) {
+                if (value.indexOf(' ') !== -1) {
+                  return Promise.reject(t('common.checkPasswordHasSpace'))
+                }
+                return Promise.resolve()
+              },
             },
+            ...getPasswordValidate(
+              props.publicConfig?.passwordStrength,
+              props.publicConfig?.customPasswordStrength
+            ),
           ]}
         >
           <Input.Password
