@@ -42,7 +42,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
   const [isFind, setIsFind] = useState<boolean>(false)
 
   // 检查手机号是否已经被注册过了 by my son donglyc
-  const handleCheckPhone = useDebounce(async (value: any) => {
+  const handleCheckEmail = useDebounce(async (value: any) => {
     if (value.email) {
       let { data } = await get<boolean>(`/api/v2/users/find`, {
         userPoolId: publicConfig?.userPoolId,
@@ -168,6 +168,14 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
       ),
       name: 'password',
       rules: [
+        {
+          validator(_, value) {
+            if (value.indexOf(' ') !== -1) {
+              return Promise.reject(t('common.checkPasswordHasSpace'))
+            }
+            return Promise.resolve()
+          },
+        },
         ...getPasswordValidate(
           publicConfig?.passwordStrength,
           publicConfig?.customPasswordStrength
@@ -211,7 +219,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         name="emailRegister"
         autoComplete="off"
         onFinish={onFinish}
-        onValuesChange={handleCheckPhone}
+        onValuesChange={handleCheckEmail}
       >
         {formItems.map((item) => (
           <Form.Item

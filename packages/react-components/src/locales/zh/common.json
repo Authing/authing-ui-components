@@ -187,5 +187,7 @@
   "downloadTotpAppDocs": "请使用手机扫码下载验证器",
   "bindTotp": "绑定 OTP",
   "noEmptyPassword": "密码不能为空",
-  "checkEmail": "该邮箱已被注册"
+  "checkEmail": "该邮箱已被注册",
+  "checkPhone": "该手机号已被注册",
+  "checkPasswordHasSpace": "不能包含空格"
 }

@@ -134,6 +134,7 @@ export interface ApplicationConfig {
   agreements: Agreement[]
   customPasswordStrength: any
   passwordStrength: PasswordStrength
+  verifyCodeLength: number
 }
 
 export const fetchAppConfig = (appId: string) =>
