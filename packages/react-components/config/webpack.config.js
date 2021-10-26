@@ -76,29 +76,6 @@ const hasJsxRuntime = (() => {
   }
 })()
 
-// 获取组件库所有组件入口，
-function getEntries() {
-  function isDir(dir) {
-    return fs.lstatSync(dir).isDirectory()
-  }
-
-  const entries = {
-    index: path.join(__dirname, `../src/index.tsx`),
-  }
-  const dir = path.join(__dirname, '../src/components')
-  const files = fs.readdirSync(dir)
-  files.forEach((file) => {
-    const absolutePath = path.join(dir, file)
-    if (isDir(absolutePath)) {
-      entries[file] = path.join(
-        __dirname,
-        `../src/components/${file}/index.tsx`
-      )
-    }
-  })
-  return entries
-}
-
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
 module.exports = function (webpackEnv) {
@@ -799,12 +776,12 @@ module.exports = function (webpackEnv) {
             // as micromatch doesn't match
             // '../cra-template-typescript/template/src/App.tsx'
             // otherwise.
-            '../**/src/**/*.{ts,tsx}',
-            '**/src/**/*.{ts,tsx}',
-            '!**/src/**/__tests__/**',
-            '!**/src/**/?(*.)(spec|test).*',
-            '!**/src/setupProxy.*',
-            '!**/src/setupTests.*',
+            '../**/components/**/*.{ts,tsx}',
+            '**/components/**/*.{ts,tsx}',
+            '!**/components/**/__tests__/**',
+            '!**/components/**/?(*.)(spec|test).*',
+            '!**/components/setupProxy.*',
+            '!**/components/setupTests.*',
           ],
           silent: true,
           // The formatter is invoked directly in WebpackDevServerUtils during development
@@ -831,9 +808,8 @@ module.exports = function (webpackEnv) {
       isEnvLib &&
         new NpmDtsWebpackPlugin({
           output: 'lib/index.d.ts',
-          entry: 'src/components/index',
+          entry: 'components/index',
           logLevel: 'debug',
-          tsc: '--baseUrl @authing/react-ui-components',
         }),
       // 包大小分析
       // new WebpackBundleAnalyzer.BundleAnalyzerPlugin(),

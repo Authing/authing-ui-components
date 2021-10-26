@@ -1,4 +1,4 @@
-import packageConfig from '../../../package.json'
+import packageConfig from '../../package.json'
 import { requestClient } from './http'
 
 let httpClient: GuardHttp

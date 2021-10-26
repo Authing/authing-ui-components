@@ -13,7 +13,7 @@ import {
   ApplicationConfig,
   PasswordLoginMethods,
   Agreement,
-} from '../../../components/AuthingGuard/api'
+} from '../api'
 import { Lang } from './Locales'
 
 export type { AuthenticationClient, CommonMessage, User } from 'authing-js-sdk'

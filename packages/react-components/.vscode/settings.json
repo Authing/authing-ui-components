@@ -21,7 +21,7 @@
   "prettier.printWidth": 120,
   "prettier.singleQuote": false,
   "prettier.semi": true,
-  "i18n-ally.localesPaths": "src/locales",
+  "i18n-ally.localesPaths": "components/_utils/locales",
   "i18n-ally.displayLanguage": "zh",
   "i18n-ally.keystyle": "nested",
   "i18n-ally.annotations": true,

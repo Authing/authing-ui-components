@@ -1,6 +1,6 @@
 import { User } from 'authing-js-sdk'
 import { LoginMethods } from './GuardConfig'
-import { ResetPwdMethods } from '../../../components/AuthingGuard/types/GuardConfig'
+import { ResetPwdMethods } from './GuardConfig'
 
 export interface BaseFormProps extends React.HTMLAttributes<HTMLDivElement> {
   onSuccess?: (user: User) => void

@@ -1,4 +1,4 @@
-import { Lang, Protocol } from '../../../components/AuthingGuard/types'
+import { Lang, Protocol } from '../types'
 import { SocialConnectionProvider } from 'authing-js-sdk'
 
 export interface OIDCConnectionConfig {

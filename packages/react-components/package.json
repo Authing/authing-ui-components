@@ -12,6 +12,7 @@
     "react-use": "^17.3.1",
     "qs": "^6.9.4"
   },
+  "types": "react-app-env.d.ts",
   "peerDependencies": {
     "react": "16.14.0",
     "react-dom": "16.14.0"
@@ -46,21 +47,21 @@
   },
   "jest": {
     "roots": [
-      "<rootDir>/src"
+      "<rootDir>/components"
     ],
     "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
-      "!src/**/*.d.ts"
+      "components/**/*.{js,jsx,ts,tsx}",
+      "!components/**/*.d.ts"
     ],
     "setupFiles": [
       "react-app-polyfill/jsdom"
     ],
     "setupFilesAfterEnv": [
-      "<rootDir>/src/setupTests.ts"
+      "<rootDir>/components/setupTests.ts"
     ],
     "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
-      "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
+      "<rootDir>/components/**/__tests__/**/*.{js,jsx,ts,tsx}",
+      "<rootDir>/components/**/*.{spec,test}.{js,jsx,ts,tsx}"
     ],
     "testEnvironment": "jsdom",
     "testRunner": "/Users/lixpng/workspace/authing/ui-components/packages/react-components/node_modules/jest-circus/runner.js",
