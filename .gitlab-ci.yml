@@ -2,6 +2,7 @@ image: node:12.14.0
 
 stages:
   - build
+  - upload:demo
   - upload
   - sonarqube-check
 
@@ -39,11 +40,27 @@ build:lib:
       - packages/react-components/lib
       - packages/vue-components/lib
     expire_in: 30 days
-    
+
+upload:demo:
+  stage: upload:demo
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "feat/guard"'
+      when: on_success
+  image:
+    name: fuergaosi/ossutil:latest
+  dependencies:
+    - build:lib
+  script:
+    - echo build 并上传 demo
+    - ossutil --access-key-id ${ALIYUN_ACCESS_KEY}
+      --access-key-secret ${ALIYUN_ACCESS_KEY_SECRET}
+      -e ${OSS_REGION_PROD} cp -r -f packages/native-js/lib oss://${OSS_REGION_DAILY}/guard/demo/
 
 upload:oss:
   stage: upload
   # when: manual
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "master"'
   image:
     name: fuergaosi/ossutil:latest
   script:
@@ -76,17 +93,17 @@ upload:oss:
 
 sonarqube-check:
   stage: sonarqube-check
-  image: 
+  image:
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
   variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar" # Defines the location of the analysis task cache
+    GIT_DEPTH: "0" # Tells git to fetch all the branches of the project, required by the analysis task
   cache:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
-  script: 
+  script:
     - sonar-scanner
   allow_failure: true
   only:
