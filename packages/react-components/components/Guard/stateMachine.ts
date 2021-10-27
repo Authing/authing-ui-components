@@ -1,4 +1,4 @@
-import { GuardConfig } from './config'
+import { GuardComponentConifg, GuardConfig } from './config'
 import { GuardModuleType } from './module'
 
 export interface ModuleState {
@@ -27,7 +27,7 @@ export class GuardStateMachine {
   private order: number = 0
 
   // 总体的配置信息
-  private config: Partial<GuardConfig> = {}
+  private config: GuardComponentConifg = {}
 
   // 历史记录
   private moduleStateHistory: ModuleState[] = []

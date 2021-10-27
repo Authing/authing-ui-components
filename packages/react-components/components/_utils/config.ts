@@ -6,6 +6,7 @@ import { RegisterConfig } from '../Register/props'
 import { assembledAppHost } from '.'
 import { GuardHttp } from './guradHttp'
 import { AuthingResponse } from './http'
+import { GuardComponentConifg } from '../Guard/config'
 
 export interface GuardConfig extends RegisterConfig, LoginConfig {}
 
@@ -43,7 +44,7 @@ export const initConfig = async (
 }
 
 const mergeConfig = (
-  config: Partial<GuardConfig>,
+  config: GuardComponentConifg,
   defaultConfig: IG2Config,
   publicConfig: ApplicationConfig
 ): GuardConfig => {

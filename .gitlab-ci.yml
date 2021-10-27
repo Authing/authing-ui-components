@@ -56,7 +56,7 @@ upload:demo:
     - echo build 并上传 demo
     - ossutil --access-key-id ${ALIYUN_ACCESS_KEY}
       --access-key-secret ${ALIYUN_ACCESS_KEY_SECRET}
-      -e ${OSS_REGION_DAILY} cp -r -f packages/native-js/lib oss://${CDN_OSS_DAILY}/guard/demo/
+      -e ${OSS_REGION_DAILY} cp -r -f packages/native-js/lib oss://${CDN_OSS_DAILY}/guard/demo/lib/
 
 upload:oss:
   stage: upload

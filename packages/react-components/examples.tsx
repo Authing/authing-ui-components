@@ -1,12 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import { Guard } from './components/Guard'
-import { AuthingGuard } from './components/AuthingGuard'
 import reportWebVitals from './reportWebVitals'
 import { message } from 'antd'
-import { LoginMethods, RegisterMethods } from './components'
-import { SocialConnectionProvider } from 'authing-js-sdk'
+import { Guard } from './components'
 
 const App = () => {
   return (

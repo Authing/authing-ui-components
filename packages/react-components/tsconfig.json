@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    // "baseUrl": ".",
     "outDir": "lib/",
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -19,6 +18,13 @@
     "noEmit": false,
     "jsx": "react"
   },
-  "include": ["*.ts", "*.tsx", "**/*.ts", "**/*.tsx", "**/*.json", "index.js"],
+  "include": [
+    "components/**/*.ts",
+    "components/**/*.tsx",
+    "components/**/*.json",
+    "react-app-env.d.ts",
+    "reportWebVitals.ts",
+    "setupTests.ts"
+  ],
   "exclude": ["node_modules", "lib", "build"]
 }
