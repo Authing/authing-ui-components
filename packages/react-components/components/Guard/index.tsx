@@ -43,7 +43,6 @@ const ComponentsMapping: Record<
     <GuardForgetPassword {...props} />
   ),
   [GuardModuleType.BIND_TOTP]: (props) => <GuardBindTotpView {...props} />,
-  [GuardModuleType.ANY_QUESTIONS]: (props) => <div></div>,
   [GuardModuleType.ANY_QUESTIONS]: (props) => <GuardNeedHelpView {...props} />,
   [GuardModuleType.COMPLETE_INFO]: (props) => (
     <GuardCompleteInfoView {...props} />
