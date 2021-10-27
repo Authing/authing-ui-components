@@ -2,8 +2,9 @@ image: node:12.14.0
 
 stages:
   - build
-  - upload:demo
+  - build:demo
   - upload
+  - upload:demo
   - sonarqube-check
 
 before_script:
@@ -17,12 +18,10 @@ before_script:
 build:lib:
   stage: build
   rules:
-    - if: '$CI_COMMIT_REF_NAME != "master" && $CI_COMMIT_TAG =~ "/^$/"'
+    - if: '$CI_COMMIT_REF_NAME != "master" && $CI_COMMIT_TAG =~ "/^$/" && $CI_COMMIT_REF_NAME != "feat/guard"'
       when: manual
     - if: '$CI_COMMIT_REF_NAME == "master" && $CI_COMMIT_TAG =~ "/^$/"'
       when: manual
-    - if: '$CI_COMMIT_REF_NAME == "feat/guard"'
-      when: on_success
   cache:
     untracked: true
     key: ${CI_COMMIT_REF_SLUG}
@@ -42,6 +41,29 @@ build:lib:
       - packages/react-components/lib
       - packages/vue-components/lib
     expire_in: 30 days
+
+build:demo:
+  stage: build:demo
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "feat/guard"'
+  cache:
+    untracked: true
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - packages/native-js/lib
+      - packages/react-components/lib
+  script:
+    - yarn
+    - cd packages/react-components
+    - yarn build:lib
+    - ca ../native-js
+    - yarn build:lib
+
+  artifacts:
+    untracked: false
+    paths:
+      - packages/native-js/lib
+    expire_in: 30 mins
 
 upload:demo:
   stage: upload:demo
