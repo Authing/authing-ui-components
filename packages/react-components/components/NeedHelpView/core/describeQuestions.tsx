@@ -4,20 +4,17 @@ import { Form, Input, Select, Upload } from 'antd'
 import SubmitButton from '../../SubmitButton'
 import { UserOutlined, PlusOutlined } from '@ant-design/icons'
 import { UploadFile } from 'antd/lib/upload/interface'
+import { useGuardHttp } from '../../_utils/guradHttp'
 
-function getBase64(file: any) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => resolve(reader.result)
-    reader.onerror = (error) => reject(error)
-  })
+interface describeQuestionsProps {
+  appId: string
+  host: string
+  onSuccess: any
 }
-
-interface describeQuestionsProps {}
 
 export const DescribeQuestions = (props: describeQuestionsProps) => {
   const { t } = useTranslation()
+
   // 不清楚为什么放出去之后，i18n 的结果全是 undefeated
   const typeProblemMap: any = {
     0: [
@@ -82,37 +79,37 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
     },
   ]
 
-  let [form] = Form.useForm()
-  // let [identify, setIdentify] = useState('')
-  // let [codeMethod, setCodeMethod] = useState<'phone' | 'email'>('phone')
-  // let client = useAuthClient()
-  let submitButtonRef = useRef<any>(null)
+  const [form] = Form.useForm()
+  const { post } = useGuardHttp()
+  const [uploadUrl, setUploadUrl] = useState([])
+  const submitButtonRef = useRef<any>(null)
   const [fileList, setFileList] = useState<UploadFile<any>[]>([])
-  let [typeProblem, setTypeProblem] = useState(0)
-  let textMap = typeProblemMap[typeProblem]
+  const [typeProblem, setTypeProblem] = useState(0)
+  const textMap = typeProblemMap[typeProblem]
 
-  // handleCancel = () => this.setState({ previewVisible: false })
-
-  const handlePreview = async (file: any) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj)
+  const onFinish = (values: any) => {
+    const params = {
+      type: typeProblem,
+      description: values.description,
+      phone: values.identify,
+      images: uploadUrl,
+      appId: props.appId,
     }
-
-    // this.setState({
-    //   previewImage: file.url || file.preview,
-    //   previewVisible: true,
-    //   previewTitle:
-    //     file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
-    // })
+    let context = post('/api/v2/feedback', params)
+    context.then((res) => {
+      if (res.code === 200) {
+        props.onSuccess()
+      }
+    })
   }
 
-  // handleChange = ({ fileList }) => this.setState({ fileList })
-
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-    </div>
-  )
+  // const handlePreview = async (file: any) => {
+  //   // setPreviewImage(file.url);
+  //   // file 没有 url 属性，需要改成下面的用法
+  //   let url = file.response.data.url
+  //   setPreviewImage(url)
+  //   setPreviewVisible(true)
+  // }
 
   return (
     <div className="authing-g2-describe-questions">
@@ -120,7 +117,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
         name="resetPassword"
         layout="vertical"
         form={form}
-        // onFinish={onFinish}
+        onFinish={onFinish}
         onFinishFailed={() => {
           submitButtonRef?.current?.onError()
         }}
@@ -174,30 +171,26 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
         </Form.Item>
 
         <div className="authing-g2-input-form">
-          <div className="label">问题截图</div>
+          <div className="label-title">问题截图</div>
           <div className="g2-questions">
             <Upload
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              listType="picture-card"
-              fileList={fileList}
-              onPreview={handlePreview}
-              // onChange={this.handleChange}
-            >
-              {fileList.length >= 8 ? null : uploadButton}
-            </Upload>
-
-            {/* <Upload.Dragger
-              name="files"
-              action="/api/v2/upload?folder=photos"
+              action={`${props.host}/api/v2/upload?folder=photos`}
               listType="picture-card"
               accept="image/png, image/jpeg, image/jpg"
-              className="authing-g2-questions-upload"
-              // fileList={fileList}
-              // onPreview={handlePreview}
-              // onChange={handleChange}
+              className="authing-g2-questions-upload-self"
+              fileList={fileList}
+              onPreview={() => {}}
+              onChange={(e) => {
+                setFileList(e.fileList)
+                const imgUrl: any = e.fileList.map((item: any) => {
+                  const response = item.response
+                  return response?.data.url
+                })
+                setUploadUrl(imgUrl)
+              }}
             >
-              <FileAddFilled />
-            </Upload.Dragger> */}
+              {fileList.length >= 5 ? null : <PlusOutlined />}
+            </Upload>
           </div>
         </div>
 

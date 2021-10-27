@@ -11,6 +11,13 @@ export const codeMap: Record<number, GuardModuleAction> = {
     // 需要输入图形验证码
     action: 'message',
   },
+
+  1639: {
+    // 跳转去修改密码
+    action: 'changeModule',
+    module: GuardModuleType.CHANGE_PWD,
+  },
+
   2333: {
     // 密码错误
     action: 'message',

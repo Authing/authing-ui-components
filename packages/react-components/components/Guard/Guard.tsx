@@ -15,7 +15,7 @@ import { initConfig, GuardConfig } from '../_utils/config'
 import { initGuardHttp } from '../_utils/guradHttp'
 import { initI18n } from '..//_utils/locales'
 import { IG2FCProps } from '../Type'
-import { getDefaultGuardConfig, GuardComponentConifg } from './config'
+import { getDefaultGuardConfig } from './config'
 import { ShieldSpin } from '../ShieldSpin'
 import { GuardModuleType } from './module'
 import { GuardMFAView } from '../MFA'
@@ -25,6 +25,7 @@ import { GuardDownloadATView } from '../DownloadAuthenticator'
 import { GuardStateMachine } from './stateMachine'
 import { GuardBindTotpView } from '../BindTotp'
 import { GuardForgetPassword } from '../ForgetPassword'
+import { GuardChangePassword } from '../ChangePassword'
 import { GuardNeedHelpView } from '../NeedHelpView'
 import { GuardCompleteInfoView } from '../CompleteInfo'
 
@@ -39,11 +40,9 @@ const ComponentsMapping: Record<
   [GuardModuleType.MFA]: (props) => <GuardMFAView {...props} />,
   [GuardModuleType.REGISTER]: (props) => <GuardRegisterView {...props} />,
   [GuardModuleType.DOWNLOAD_AT]: (props) => <GuardDownloadATView {...props} />,
-  [GuardModuleType.FORGETPASSWORD]: (props) => (
-    <GuardForgetPassword {...props} />
-  ),
+  [GuardModuleType.FORGET_PWD]: (props) => <GuardForgetPassword {...props} />,
+  [GuardModuleType.CHANGE_PWD]: (props) => <GuardChangePassword {...props} />,
   [GuardModuleType.BIND_TOTP]: (props) => <GuardBindTotpView {...props} />,
-  [GuardModuleType.ANY_QUESTIONS]: (props) => <div></div>,
   [GuardModuleType.ANY_QUESTIONS]: (props) => <GuardNeedHelpView {...props} />,
   [GuardModuleType.COMPLETE_INFO]: (props) => (
     <GuardCompleteInfoView {...props} />
@@ -51,7 +50,7 @@ const ComponentsMapping: Record<
 }
 
 export interface GuardProps extends GuardEvents, IG2FCProps {
-  config?: GuardComponentConifg
+  config?: Partial<GuardConfig>
 }
 
 interface GuardViewProps extends GuardProps {
@@ -69,7 +68,7 @@ interface ModuleState {
   initData: any
 }
 
-export const Guard: React.FC<GuardProps> = (props) => {
+export const Guard = (props: GuardProps) => {
   const { appId, config, onLoad, onLoadError } = props
   const [initSettingEnd, setInitSettingEnd] = useState(false)
   const [guardConfig, setGuardConfig] = useState<GuardConfig>(

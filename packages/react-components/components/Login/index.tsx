@@ -251,23 +251,31 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
           </div>
           <div className={`g2-tips-line`}>
             {!disableResetPwd && (
-              <div
-                className="link-like"
-                onClick={() =>
-                  props.__changeModule?.(GuardModuleType.FORGETPASSWORD, {})
-                }
-              >
-                {t('login.forgetPwd')}
+              <div>
+                <span
+                  className="link-like"
+                  onClick={() =>
+                    props.__changeModule?.(GuardModuleType.FORGET_PWD, {})
+                  }
+                >
+                  {t('login.forgetPwd')}
+                </span>
+                <span style={{ margin: '0 4px' }} className="gray">
+                  丨
+                </span>
               </div>
             )}
 
             <div
-              className="link-like"
+              className="touch-tip"
               onClick={() =>
                 props.__changeModule?.(GuardModuleType.ANY_QUESTIONS, {})
               }
             >
-              问题?
+              <IconFont
+                type={'authing-a-question-line1'}
+                // style={{ fontSize: 20, marginRight: 8 }}
+              />
             </div>
 
             {!disableRegister && (
