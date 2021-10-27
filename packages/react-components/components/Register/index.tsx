@@ -95,7 +95,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
       <div className="g2-tips-line">
         <div
           className="link-like"
-          onClick={() => __changeModule?.(GuardModuleType.FORGETPASSWORD, {})}
+          onClick={() => __changeModule?.(GuardModuleType.FORGET_PWD, {})}
         >
           忘记密码
         </div>

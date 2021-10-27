@@ -25,6 +25,7 @@ import { GuardDownloadATView } from '../DownloadAuthenticator'
 import { GuardStateMachine } from './stateMachine'
 import { GuardBindTotpView } from '../BindTotp'
 import { GuardForgetPassword } from '../ForgetPassword'
+import { GuardChangePassword } from '../ChangePassword'
 import { GuardNeedHelpView } from '../NeedHelpView'
 import { GuardCompleteInfoView } from '../CompleteInfo'
 
@@ -39,9 +40,8 @@ const ComponentsMapping: Record<
   [GuardModuleType.MFA]: (props) => <GuardMFAView {...props} />,
   [GuardModuleType.REGISTER]: (props) => <GuardRegisterView {...props} />,
   [GuardModuleType.DOWNLOAD_AT]: (props) => <GuardDownloadATView {...props} />,
-  [GuardModuleType.FORGETPASSWORD]: (props) => (
-    <GuardForgetPassword {...props} />
-  ),
+  [GuardModuleType.FORGET_PWD]: (props) => <GuardForgetPassword {...props} />,
+  [GuardModuleType.CHANGE_PWD]: (props) => <GuardChangePassword {...props} />,
   [GuardModuleType.BIND_TOTP]: (props) => <GuardBindTotpView {...props} />,
   [GuardModuleType.ANY_QUESTIONS]: (props) => <GuardNeedHelpView {...props} />,
   [GuardModuleType.COMPLETE_INFO]: (props) => (

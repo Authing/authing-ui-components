@@ -1,19 +1,10 @@
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form, Input, message, Select, Upload } from 'antd'
+import { Form, Input, Select, Upload } from 'antd'
 import SubmitButton from '../../SubmitButton'
 import { UserOutlined, PlusOutlined } from '@ant-design/icons'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { useGuardHttp } from '../../_utils/guradHttp'
-
-function getBase64(file: any) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => resolve(reader.result)
-    reader.onerror = (error) => reject(error)
-  })
-}
 
 interface describeQuestionsProps {
   appId: string

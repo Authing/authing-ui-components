@@ -255,7 +255,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                 <span
                   className="link-like"
                   onClick={() =>
-                    props.__changeModule?.(GuardModuleType.FORGETPASSWORD, {})
+                    props.__changeModule?.(GuardModuleType.FORGET_PWD, {})
                   }
                 >
                   {t('login.forgetPwd')}
