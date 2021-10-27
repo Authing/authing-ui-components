@@ -9,7 +9,7 @@ import { RotateReset } from './core/rotateReset'
 export const GuardChangePassword = (props: any) => {
   let { initData, config } = props
   let publicConfig = config.__publicConfig__
-  let [resetType, setResetType] = useState<'inital' | 'rotate'>(initData.type) //
+  let [resetType] = useState<'inital' | 'rotate'>(initData.type) //
   console.log('******', resetType)
   // let publicConfig = props.config.__publicConfig__
 

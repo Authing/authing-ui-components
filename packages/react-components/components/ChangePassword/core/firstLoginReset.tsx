@@ -1,13 +1,11 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Form, Input } from 'antd'
-import { StoreValue } from 'antd/lib/form/interface'
 
-import { UserOutlined, SafetyOutlined, LockOutlined } from '@ant-design/icons'
-import { SendCode } from '../../SendCode'
+import { LockOutlined } from '@ant-design/icons'
 
 import { useAuthClient } from '../../Guard/authClient'
-import { getPasswordValidate, validate } from '../../_utils'
+import { getPasswordValidate } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
 
 interface FirstLoginResetProps {
