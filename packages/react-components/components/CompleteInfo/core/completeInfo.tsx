@@ -27,7 +27,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = ({
 
   const [definitions, setDefinitions] = useState<any[]>([])
 
-  const [load, loadInitData] = useAsyncFn(async () => {
+  const [, loadInitData] = useAsyncFn(async () => {
     const user = await authClient.getCurrentUser()
 
     const { data } = await get<any>('/api/v2/udfs/definitions', undefined, {

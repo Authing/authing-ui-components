@@ -1,6 +1,5 @@
 import { message } from 'antd'
 import { User } from 'authing-js-sdk'
-import { type } from 'os'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { ErrorCode } from '../_utils/GuardErrorCode'

@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from 'react'
-import { useAuthClient } from '../../Guard/authClient'
+import React from 'react'
 
 interface LoginWithADProps {
   onLogin: any

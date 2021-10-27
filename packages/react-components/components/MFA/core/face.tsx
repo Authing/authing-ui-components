@@ -75,6 +75,7 @@ export const MFAFace = (props: any) => {
     } else {
       props.setShowMethods(true)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [faceState])
 
   // 上传文件
@@ -209,6 +210,7 @@ export const MFAFace = (props: any) => {
     } else {
       setPercent(10)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
