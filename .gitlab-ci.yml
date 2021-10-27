@@ -58,7 +58,6 @@ build:demo:
     - yarn build:lib
     - cd ../native-js
     - yarn build:lib
-
   artifacts:
     untracked: false
     paths:
