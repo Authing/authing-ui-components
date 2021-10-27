@@ -56,7 +56,7 @@ build:demo:
     - yarn
     - cd packages/react-components
     - yarn build:lib
-    - ca ../native-js
+    - cd ../native-js
     - yarn build:lib
 
   artifacts:
