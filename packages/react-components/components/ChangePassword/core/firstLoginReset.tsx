@@ -11,8 +11,9 @@ import { getPasswordValidate, validate } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
 
 interface FirstLoginResetProps {
-  onReset: any
+  // onReset: any
   publicConfig: any
+  initData: any
 }
 export const FirstLoginReset = (props: FirstLoginResetProps) => {
   const { t } = useTranslation()
@@ -22,16 +23,11 @@ export const FirstLoginReset = (props: FirstLoginResetProps) => {
 
   const onFinish = async (values: any) => {
     let newPassword = values.password
-    let newPassword2 = values.password2
-
-    // let context = new Promise(() => {})
-    // context
-    //   .then((r) => {
-    //     props.onReset(r)
-    //   })
-    //   .catch((e) => {
-    //     props.onReset(e)
-    //   })
+    // let newPassword2 = values.password2
+    let res = await client.resetPasswordByFirstLoginToken({
+      token: props.initData.token,
+      password: newPassword,
+    })
   }
 
   return (
@@ -51,7 +47,7 @@ export const FirstLoginReset = (props: FirstLoginResetProps) => {
           rules={[
             {
               validator(_, value) {
-                if (value.indexOf(' ') !== -1) {
+                if (value && value.indexOf(' ') !== -1) {
                   return Promise.reject(t('common.checkPasswordHasSpace'))
                 }
                 return Promise.resolve()
@@ -66,11 +62,28 @@ export const FirstLoginReset = (props: FirstLoginResetProps) => {
           <Input.Password
             className="authing-g2-input"
             size="large"
-            placeholder={'请输入新密码'}
+            placeholder={t('login.inputPwd')}
             prefix={<LockOutlined style={{ color: '#878A95' }} />}
           />
         </Form.Item>
-        <Form.Item className="authing-g2-input-form" name="password2">
+        <Form.Item
+          className="authing-g2-input-form"
+          name="password2"
+          rules={[
+            {
+              validator(_, value) {
+                let pwd = form.getFieldValue('password')
+                if (!value) {
+                  return Promise.reject(t('login.inputPwd'))
+                }
+                if (value !== pwd) {
+                  return Promise.reject('两次密码需要一致')
+                }
+                return Promise.resolve()
+              },
+            },
+          ]}
+        >
           <Input.Password
             className="authing-g2-input"
             size="large"
