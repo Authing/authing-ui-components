@@ -73,7 +73,7 @@ upload:demo:
   image:
     name: fuergaosi/ossutil:latest
   dependencies:
-    - build:lib
+    - build:demo
   script:
     - echo build 并上传 demo
     - ossutil --access-key-id ${ALIYUN_ACCESS_KEY}
