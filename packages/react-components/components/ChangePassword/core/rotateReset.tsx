@@ -10,25 +10,25 @@ import { useAuthClient } from '../../Guard/authClient'
 import { getPasswordValidate, validate } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
 
-interface FirstLoginResetProps {
+interface RotateResetProps {
   onReset: any
   publicConfig: any
   initData: any
 }
-export const FirstLoginReset = (props: FirstLoginResetProps) => {
+
+export const RotateReset = (props: RotateResetProps) => {
   const { t } = useTranslation()
   let [form] = Form.useForm()
   let client = useAuthClient()
   let submitButtonRef = useRef<any>(null)
 
   const onFinish = async (values: any) => {
-    let newPassword = values.password
-    // let newPassword2 = values.password2
-    let res = await client.resetPasswordByFirstLoginToken({
-      token: props.initData.token,
-      password: newPassword,
-    })
-    props.onReset(res)
+    // let newPassword = values.password
+    // let res = await client.resetPasswordByFirstLoginToken({
+    //   token: props.initData.token,
+    //   password: newPassword,
+    // })
+    // props.onReset(res)
   }
 
   return (
@@ -42,6 +42,18 @@ export const FirstLoginReset = (props: FirstLoginResetProps) => {
         }}
         autoComplete="off"
       >
+        <Form.Item
+          className="authing-g2-input-form"
+          name="oldPassword"
+          rules={[{ required: true }]}
+        >
+          <Input.Password
+            className="authing-g2-input"
+            size="large"
+            placeholder={'请输入当前密码'}
+            prefix={<LockOutlined style={{ color: '#878A95' }} />}
+          />
+        </Form.Item>
         <Form.Item
           className="authing-g2-input-form"
           name="password"
@@ -92,7 +104,6 @@ export const FirstLoginReset = (props: FirstLoginResetProps) => {
             prefix={<LockOutlined style={{ color: '#878A95' }} />}
           />
         </Form.Item>
-
         <Form.Item className="authing-g2-input-form submit-form">
           <SubmitButton
             className="forget-password"

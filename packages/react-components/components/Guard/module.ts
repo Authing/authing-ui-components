@@ -14,4 +14,5 @@ export interface GuardModuleAction {
   action: string
   module?: GuardModuleType
   message?: string
+  initData?: any
 }

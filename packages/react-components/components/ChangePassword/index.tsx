@@ -1,25 +1,27 @@
-import React from 'react'
-
+import React, { useState } from 'react'
+import { GuardModuleType } from '../Guard/module'
 import { ImagePro } from '../ImagePro'
 import { FirstLoginReset } from './core/firstLoginReset'
+import { RotateReset } from './core/rotateReset'
 
 // 手动修改密码，并非「忘记密码」
 // 进入的场景是读取配置：1开了首次登录修改密码 || 2开了密码轮换
 export const GuardChangePassword = (props: any) => {
   let { initData, config } = props
-  // console.log('props', props)
   let publicConfig = config.__publicConfig__
+  let [resetType, setResetType] = useState<'inital' | 'rotate'>(initData.type) //
+  console.log('******', resetType)
   // let publicConfig = props.config.__publicConfig__
 
-  // const onReset = (res: any) => {
-  //   let code = res.code
-  //   if ([2001, 2004].includes(code)) {
-  //     message.error(res.message)
-  //     return
-  //   }
-  //   // 返回登录
-  //   props.__changeModule(GuardModuleType.LOGIN)
-  // }
+  const onReset = (res: any) => {
+    let code = res.code
+    if (code === 200) {
+      // 返回登录
+      props.__changeModule(GuardModuleType.LOGIN)
+    } else {
+      console.log('*** reset code 未捕获', res)
+    }
+  }
 
   return (
     <div className="g2-view-container">
@@ -33,11 +35,24 @@ export const GuardChangePassword = (props: any) => {
         />
         <div className="title">欢迎访问 {config.title}</div>
         <div className="title-explain">
-          为了保障账号安全，请设置你的初始密码。
+          你的密码连续使用超过 xxx，可能存在风险。请重新设置密码。
         </div>
       </div>
       <div className="g2-view-tabs">
-        <FirstLoginReset initData={initData} publicConfig={publicConfig} />
+        {resetType === 'inital' && (
+          <FirstLoginReset
+            onReset={onReset}
+            initData={initData}
+            publicConfig={publicConfig}
+          />
+        )}
+        {resetType === 'rotate' && (
+          <RotateReset
+            onReset={onReset}
+            initData={initData}
+            publicConfig={publicConfig}
+          />
+        )}
       </div>
     </div>
   )
