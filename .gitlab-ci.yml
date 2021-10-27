@@ -54,10 +54,7 @@ build:demo:
       - packages/react-components/lib
   script:
     - yarn
-    - cd packages/react-components
-    - yarn build:lib
-    - cd ../native-js
-    - yarn build:lib
+    - yarn build:demo
   artifacts:
     untracked: false
     paths:
