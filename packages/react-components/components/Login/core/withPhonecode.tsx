@@ -9,6 +9,21 @@ import { SendCode } from '../../SendCode'
 import { validate } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
 
+// const formatPhone = (value: any) => {
+//   if (!value) {
+//     return ''
+//   }
+//   let a = value.slice(0, 3)
+//   let b = value.slice(3, 7)
+//   let c = value.slice(7, 11)
+//   if (value.length < 4) {
+//     return a
+//   } else if (value.length < 8) {
+//     return `${a}-${b}`
+//   } else {
+//     return `${a}-${b}-${c}`
+//   }
+// }
 export const LoginWithPhoneCode = (props: any) => {
   let [form] = Form.useForm()
   let submitButtonRef = useRef<any>(null)
@@ -75,7 +90,11 @@ export const LoginWithPhoneCode = (props: any) => {
           <Input
             className="authing-g2-input"
             autoComplete="tel"
+            type="tel"
             size="large"
+            // 只有 InputNumber formatter、controls API
+            // formatter={formatPhone}
+            // parser={(value) => (value ? value.replaceAll('-', '') : '')}
             placeholder={t('login.inputPhone')}
             prefix={<UserOutlined style={{ color: '#878A95' }} />}
           />

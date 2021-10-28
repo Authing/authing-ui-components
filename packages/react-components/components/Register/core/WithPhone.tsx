@@ -1,6 +1,6 @@
 import { SafetyOutlined, UserOutlined } from '@ant-design/icons'
-import { Button, Form, Input } from 'antd'
-import React, { useState } from 'react'
+import { Form, Input } from 'antd'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
@@ -15,6 +15,7 @@ import {
 } from '../../_utils'
 import { useGuardHttp } from '../../_utils/guradHttp'
 import { Agreements } from '../components/Agreements'
+import SubmitButton from '../../SubmitButton'
 
 export interface RegisterWithPhoneProps {
   onRegister: Function
@@ -28,6 +29,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   publicConfig,
 }) => {
   const { t } = useTranslation()
+  const submitButtonRef = useRef<any>(null)
   const authClient = useAuthClient()
   const [form] = Form.useForm()
   const { get } = useGuardHttp()
@@ -51,9 +53,10 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
     }
   }, 1000)
 
-  const [finish, onFinish] = useAsyncFn(
+  const [, onFinish] = useAsyncFn(
     async (values: any) => {
       try {
+        submitButtonRef.current.onSpin(true)
         await form.validateFields()
 
         setValidated(true)
@@ -80,8 +83,10 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           }
         )
 
+        submitButtonRef.current.onSpin(false)
         onRegister(200, user)
       } catch ({ code, data, message }) {
+        submitButtonRef.current.onSpin(false)
         onRegister(code, data, message)
       }
     },
@@ -155,6 +160,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         name="emailRegister"
         autoComplete="off"
         onFinish={onFinish}
+        onFinishFailed={() => submitButtonRef.current.onError()}
         onValuesChange={handleCheckPhone}
       >
         {formItems.map((item) => (
@@ -175,15 +181,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           />
         )}
         <Form.Item>
-          <Button
-            size="large"
-            type="primary"
-            htmlType="submit"
-            className="authing-g2-submit-button email"
-            loading={finish.loading}
-          >
-            注册
-          </Button>
+          <SubmitButton text={t('common.register')} ref={submitButtonRef} />
         </Form.Item>
       </Form>
     </div>

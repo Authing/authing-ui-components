@@ -1,8 +1,8 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
-import { Button, Form, Input, message } from 'antd'
+import { Form, Input, message } from 'antd'
 import { Rule } from 'antd/lib/form'
 import { RegisterMethods } from 'authing-js-sdk'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
@@ -18,6 +18,7 @@ import {
 } from '../../_utils'
 import { useGuardHttp } from '../../_utils/guradHttp'
 import { Agreements } from '../components/Agreements'
+import SubmitButton from '../../SubmitButton'
 
 export interface RegisterWithEmailProps {
   onRegister: Function
@@ -33,6 +34,8 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
   publicConfig,
 }) => {
   const { t } = useTranslation()
+  const submitButtonRef = useRef<any>(null)
+
   const authClient = useAuthClient()
   const { get } = useGuardHttp()
   const [form] = Form.useForm()
@@ -54,8 +57,9 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
     }
   }, 1000)
 
-  const [finish, onFinish] = useAsyncFn(
+  const [, onFinish] = useAsyncFn(
     async (values: any) => {
+      submitButtonRef.current.onSpin(true)
       if (onBeforeRegister) {
         try {
           const canRegister = await onBeforeRegister(
@@ -69,8 +73,8 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
             },
             authClient
           )
-
           if (!canRegister) {
+            submitButtonRef.current.onSpin(false)
             return
           }
         } catch (e) {
@@ -79,19 +83,18 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           } else {
             message.error(e.message)
           }
+          submitButtonRef.current.onSpin(false)
           return
         }
       }
 
       try {
         await form.validateFields()
-
         setValidated(true)
-
         if (agreements?.length && !acceptedAgreements) {
+          submitButtonRef.current.onSpin(false)
           return
         }
-
         const { email, password } = values
 
         // 注册
@@ -108,9 +111,10 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
             params: getUserRegisterParams(),
           }
         )
-
+        submitButtonRef.current.onSpin(false)
         onRegister(200, user)
       } catch ({ code, data, message }) {
+        submitButtonRef.current.onSpin(false)
         onRegister(code, data, message)
       }
     },
@@ -219,6 +223,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         name="emailRegister"
         autoComplete="off"
         onFinish={onFinish}
+        onFinishFailed={() => submitButtonRef.current.onError()}
         onValuesChange={handleCheckEmail}
       >
         {formItems.map((item) => (
@@ -239,15 +244,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           />
         )}
         <Form.Item>
-          <Button
-            size="large"
-            type="primary"
-            htmlType="submit"
-            className="authing-g2-submit-button email"
-            loading={finish.loading}
-          >
-            {t('common.register')}
-          </Button>
+          <SubmitButton text={t('common.register')} ref={submitButtonRef} />
         </Form.Item>
       </Form>
     </div>
