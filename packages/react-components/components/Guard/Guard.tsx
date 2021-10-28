@@ -80,7 +80,7 @@ export const Guard = (props: GuardProps) => {
   ] = useState<GuardStateMachine>()
 
   const initState: ModuleState = {
-    moduleName: GuardModuleType.ANY_QUESTIONS,
+    moduleName: GuardModuleType.LOGIN,
     initData: {},
   }
 

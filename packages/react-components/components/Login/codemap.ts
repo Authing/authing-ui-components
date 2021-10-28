@@ -16,9 +16,9 @@ export const codeMap: Record<number, GuardModuleAction> = {
     // 首次登陆，跳转去修改密码
     action: 'changeModule',
     module: GuardModuleType.CHANGE_PWD,
-    // initData: { type: 'inital' },
+    initData: { type: 'inital' },
     // 借助 1639 强行 mock 一下
-    initData: { type: 'rotate' },
+    // initData: { type: 'rotate' },
   },
 
   2058: {
