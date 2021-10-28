@@ -32,9 +32,16 @@ export const LoginWithPhoneCode = (props: any) => {
       return
     }
 
-    let u = await client.loginByPhoneCode(values.phone, values.code)
-    submitButtonRef.current.onSpin(false)
-    props.onLogin(200, u)
+    let loginContext = client.loginByPhoneCode(values.phone, values.code)
+    loginContext
+      .then((u) => {
+        submitButtonRef.current.onSpin(false)
+        props.onLogin(200, u)
+      })
+      .catch((e) => {
+        submitButtonRef.current.onSpin(false)
+        props.onLogin(e.code, e.data, e.message)
+      })
   }
 
   return (
