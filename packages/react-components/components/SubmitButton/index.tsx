@@ -27,11 +27,8 @@ const SubmitButton = (props: SubmitButtonProps, ref: any) => {
     onError: (text?: string) => {
       setShaking(true)
     },
-    onSpin: () => {
-      setSpin(true)
-    },
-    stopSpin: () => {
-      setSpin(false)
+    onSpin: (sp: boolean) => {
+      setSpin(sp)
     },
   }))
 

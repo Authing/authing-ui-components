@@ -90,7 +90,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
   const textMap = typeProblemMap[typeProblem]
 
   const onFinish = (values: any) => {
-    submitButtonRef?.current?.onSpin()
+    submitButtonRef?.current?.onSpin(true)
     const params = {
       type: typeProblem,
       description: values.description,
@@ -101,7 +101,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
     let context = post('/api/v2/feedback', params)
     context.then((res) => {
       if (res.code === 200) {
-        submitButtonRef?.current?.stopSpin()
+        submitButtonRef?.current?.onSpin(false)
         props.onSuccess()
       }
     })
