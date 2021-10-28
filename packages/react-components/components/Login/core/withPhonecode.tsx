@@ -5,6 +5,8 @@ import { UserOutlined, SafetyOutlined } from '@ant-design/icons'
 import { LoginMethods } from '../../'
 import { SendCode } from '../../SendCode'
 import { useTranslation } from 'react-i18next'
+import { validate } from '../../_utils'
+import { StoreValue } from 'antd/lib/form/interface'
 
 export const LoginWithPhoneCode = (props: any) => {
   let [form] = Form.useForm()
@@ -43,13 +45,27 @@ export const LoginWithPhoneCode = (props: any) => {
         <Form.Item
           className="authing-g2-input-form"
           name="phone"
-          rules={[{ required: true, message: '请输入手机号' }]}
+          rules={[
+            { required: true, message: t('login.inputPhone') },
+            {
+              validator: async (_, value: StoreValue) => {
+                if (!value) {
+                  return
+                }
+                if (validate('phone', value)) {
+                  return
+                } else {
+                  throw new Error(t('common.phoneFormateError'))
+                }
+              },
+            },
+          ]}
         >
           <Input
             className="authing-g2-input"
             autoComplete="tel"
             size="large"
-            placeholder={'请输入手机号'}
+            placeholder={t('login.inputPhone')}
             prefix={<UserOutlined style={{ color: '#878A95' }} />}
           />
         </Form.Item>
@@ -76,6 +92,7 @@ export const LoginWithPhoneCode = (props: any) => {
             method="phone"
             data={''}
             form={form}
+            onSendCodeBefore={() => form.validateFields(['phone'])}
             // placeholder={'请输入验证码'}
           />
         </Form.Item>
