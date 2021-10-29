@@ -1,4 +1,4 @@
-import { useRef, useCallback, useEffect } from 'react'
+import { useRef, useCallback } from 'react'
 import { GuardModuleType } from '../../Guard/module'
 import { useModule } from '../../context/module/context'
 
