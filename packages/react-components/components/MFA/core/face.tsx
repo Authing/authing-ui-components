@@ -67,7 +67,7 @@ export const MFAFace = (props: any) => {
     return () => {
       interval.current && clearInterval(interval.current)
     }
-  }, [faceState, interval, props.config])
+  }, [faceState, interval, props.config, cdnBase])
 
   // 监听 faceState
   useEffect(() => {
