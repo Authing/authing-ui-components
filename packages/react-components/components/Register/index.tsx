@@ -1,6 +1,7 @@
 import { Tabs } from 'antd'
 import { RegisterMethods, User } from 'authing-js-sdk'
 import React, { useMemo } from 'react'
+import { ChangeLanguage } from '../ChangeLanguage'
 import { useAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
 import { RegisterWithEmail } from './core/WithEmail'
@@ -107,6 +108,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
           <span className="link-like">返回登录</span>
         </span>
       </div>
+      <ChangeLanguage />
     </div>
   )
 }

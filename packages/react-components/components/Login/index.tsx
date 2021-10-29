@@ -18,6 +18,7 @@ import { useAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
 import { LoginMethods } from '../AuthingGuard/types'
 import { IconFont } from '../IconFont'
+import { ChangeLanguage } from '../ChangeLanguage'
 
 import './styles.less'
 
@@ -345,6 +346,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
       <div className="g2-social-login">
         <SocialLogin appId={props.appId} config={props.config} />
       </div>
+      <ChangeLanguage />
     </div>
   )
 }
