@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { GuardModuleType } from '../Guard/module'
 import { ImagePro } from '../ImagePro'
 import { FirstLoginReset } from './core/firstLoginReset'
@@ -9,8 +9,8 @@ import { RotateReset } from './core/rotateReset'
 export const GuardChangePassword = (props: any) => {
   let { initData, config } = props
   let publicConfig = config.__publicConfig__
-  let [resetType] = useState<'inital' | 'rotate'>(initData.type) //
-  console.log('******', resetType)
+  // let [resetType] = useState<'inital' | 'rotate'>(initData.type) //
+  // console.log('******', initData.type)
   // let publicConfig = props.config.__publicConfig__
 
   const onReset = (res: any) => {
@@ -39,14 +39,14 @@ export const GuardChangePassword = (props: any) => {
         </div>
       </div>
       <div className="g2-view-tabs">
-        {resetType === 'inital' && (
+        {initData.type === 'inital' && (
           <FirstLoginReset
             onReset={onReset}
             initData={initData}
             publicConfig={publicConfig}
           />
         )}
-        {resetType === 'rotate' && (
+        {initData.type === 'rotate' && (
           <RotateReset
             onReset={onReset}
             initData={initData}

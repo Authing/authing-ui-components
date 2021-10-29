@@ -93,6 +93,8 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
 
   const mfaLogin = (code: any, data: any, message?: string) => {
     const callback = __codePaser?.(code)
+
+    console.log('data', data)
     if (!data) {
       data = {}
     }

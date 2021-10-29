@@ -70,6 +70,9 @@
 
     .authing-ant-tabs-tab {
       color: #878a95;
+      &:hover {
+        color: #282d3c;
+      }
     }
   }
 
@@ -262,6 +265,17 @@
       }
     }
   }
+
+  // 适配数字输入框
+  &.authing-ant-input-number {
+    width: 100%;
+    input {
+      padding: 1.4em 0.5em !important;
+    }
+    .authing-ant-input-number-handler-wrap {
+      display: none;
+    }
+  }
   .g2-captcha-code-image {
     min-width: 100px;
   }
@@ -317,6 +331,10 @@
   align-items: center;
   box-shadow: 0px 0px 60px rgba(84, 89, 104, 0.05);
 }
+.authing-g2-describe-questions {
+  // height: 400px;
+  // overflow-y: auto;
+}
 
 .g2-questions {
   .authing-ant-upload-list-picture-card-container {
@@ -337,5 +355,33 @@
     &:hover {
       background: #eeeff1;
     }
+  }
+}
+
+.g2-questions-send-success-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 610px;
+  .plate {
+    margin-bottom: 14px;
+  }
+  .title {
+    color: #282d3c;
+    font-weight: 500;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  .message {
+    font-size: 14px;
+    color: #545968;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+  .timer-tip {
+    font-size: 14px;
+    color: #545968;
+    margin-top: 12px;
   }
 }

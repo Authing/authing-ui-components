@@ -14,6 +14,7 @@ export interface SendPhoneCodeProps extends InputProps {
   method: 'phone' | 'email'
   data: string
   form?: any
+  onSendCodeBefore?: any // 点击的时候先做这个
 }
 
 export const SendCode: FC<SendPhoneCodeProps> = ({
@@ -22,6 +23,7 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
   value,
   onChange,
   form,
+  onSendCodeBefore,
   ...inputProps
 }) => {
   const { t } = useTranslation()
@@ -29,13 +31,12 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
   const authClient = useAuthClient()
 
   const sendEmail = async (email: string) => {
-    console.log('send email', email)
     if (!email) {
-      message.error(t('login.inputPhone'))
+      message.error(t('login.inputEmail'))
       return false
     }
     if (!validate('email', email)) {
-      message.error(t('common.phoneFormateError'))
+      message.error('邮箱不正确')
       return false
     }
     try {
@@ -49,16 +50,6 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
   }
 
   const sendPhone = async (phone: string) => {
-    console.log('send phone', phone)
-
-    if (!phone) {
-      message.error(t('login.inputPhone'))
-      return false
-    }
-    if (!validate('phone', phone)) {
-      message.error(t('common.phoneFormateError'))
-      return false
-    }
     try {
       await authClient.sendSmsCode(phone)
       return true
@@ -70,23 +61,28 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
     <>
       <Row justify="space-between" align="middle">
         <Col span={15}>
-          <Input {...inputProps} value={value} onChange={onChange} />
+          <Input
+            {...inputProps}
+            value={value}
+            onChange={onChange}
+            maxLength={4}
+          />
         </Col>
         <Col offset={1} span={8}>
           <SendCodeBtn
-            beforeSend={async () => {
-              // console.log('form', form)
-              // console.log('inputProps', inputProps)
-              let phoneData = form ? form.getFieldValue(method) : data
-
-              return method === 'phone'
-                ? await sendPhone(phoneData)
-                : await sendEmail(phoneData)
+            beforeSend={() => {
+              return onSendCodeBefore()
+                .then(async (b: any) => {
+                  let phoneData = form ? form.getFieldValue(method) : data
+                  return method === 'phone'
+                    ? await sendPhone(phoneData)
+                    : await sendEmail(phoneData)
+                })
+                .catch((e: any) => {
+                  // console.log('e', e)
+                  return false
+                })
             }}
-            // beforeSend={async () => {
-            // console.log('form', form)
-            // return await false
-            // }}
           />
         </Col>
       </Row>

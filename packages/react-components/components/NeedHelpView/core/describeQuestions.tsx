@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form, Input, Select, Upload } from 'antd'
+import { Form, Input, Modal, Select, Upload } from 'antd'
 import SubmitButton from '../../SubmitButton'
 import { UserOutlined, PlusOutlined } from '@ant-design/icons'
 import { UploadFile } from 'antd/lib/upload/interface'
@@ -82,12 +82,15 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
   const [form] = Form.useForm()
   const { post } = useGuardHttp()
   const [uploadUrl, setUploadUrl] = useState([])
-  const submitButtonRef = useRef<any>(null)
+  const [previewVisible, setPreviewVisible] = useState(false)
+  const [previewImage, setPreviewImage] = useState()
   const [fileList, setFileList] = useState<UploadFile<any>[]>([])
   const [typeProblem, setTypeProblem] = useState(0)
+  const submitButtonRef = useRef<any>(null)
   const textMap = typeProblemMap[typeProblem]
 
   const onFinish = (values: any) => {
+    submitButtonRef?.current?.onSpin(true)
     const params = {
       type: typeProblem,
       description: values.description,
@@ -98,18 +101,19 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
     let context = post('/api/v2/feedback', params)
     context.then((res) => {
       if (res.code === 200) {
+        submitButtonRef?.current?.onSpin(false)
         props.onSuccess()
       }
     })
   }
 
-  // const handlePreview = async (file: any) => {
-  //   // setPreviewImage(file.url);
-  //   // file 没有 url 属性，需要改成下面的用法
-  //   let url = file.response.data.url
-  //   setPreviewImage(url)
-  //   setPreviewVisible(true)
-  // }
+  const handlePreview = async (file: any) => {
+    // setPreviewImage(file.url);
+    // file 没有 url 属性，需要改成下面的用法
+    let url = file.response.data.url
+    setPreviewImage(url)
+    setPreviewVisible(true)
+  }
 
   return (
     <div className="authing-g2-describe-questions">
@@ -179,7 +183,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
               accept="image/png, image/jpeg, image/jpg"
               className="authing-g2-questions-upload-self"
               fileList={fileList}
-              onPreview={() => {}}
+              onPreview={handlePreview}
               onChange={(e) => {
                 setFileList(e.fileList)
                 const imgUrl: any = e.fileList.map((item: any) => {
@@ -202,6 +206,15 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
           />
         </Form.Item>
       </Form>
+
+      <Modal
+        visible={previewVisible}
+        title={null}
+        footer={null}
+        onCancel={() => setPreviewVisible(false)}
+      >
+        <img alt="example" style={{ width: '100%' }} src={previewImage} />
+      </Modal>
     </div>
   )
 }

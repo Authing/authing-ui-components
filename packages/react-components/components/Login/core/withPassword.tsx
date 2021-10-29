@@ -1,18 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import { Button, Form, Input } from 'antd'
+import React, { useRef, useState } from 'react'
+import { Form, Input } from 'antd'
+import { UserOutlined, LockOutlined } from '@ant-design/icons'
 
 import { useGuardHttp } from '../../_utils/guradHttp'
 import { useAuthClient } from '../../Guard/authClient'
-import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { getUserRegisterParams } from '../../_utils'
 import { ErrorCode } from '../../_utils/GuardErrorCode'
 import { LoginMethods } from '../../'
+import SubmitButton from '../../SubmitButton'
 
 // core 代码只完成核心功能，东西尽可能少
-
-// const CaptchaImageCode = (props) => {
-//   return <div className="g2-captcha-image-code"></div>
-// }
 interface LoginWithPasswordProps {
   // configs
   publicKey: string
@@ -27,8 +24,9 @@ interface LoginWithPasswordProps {
 export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   let { post } = useGuardHttp()
   let client = useAuthClient()
+  let submitButtonRef = useRef<any>(null)
+
   const [showCaptcha, setShowCaptcha] = useState(false)
-  const [buttonContent, setButtonContent] = useState('') // '', loading, success
   const [verifyCodeUrl, setVerifyCodeUrl] = useState('')
 
   const captchaUrl = `${props.host}/api/v2/security/captcha`
@@ -36,17 +34,9 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
 
   const encrypt = client.options.encryptFunction
 
-  useEffect(() => {
-    if (buttonContent === 'success') {
-      setTimeout(() => {
-        setButtonContent('')
-      }, 1000)
-    }
-  }, [buttonContent])
-
   const onFinish = async (values: any) => {
-    setButtonContent('loading')
     // onBeforeLogin
+    submitButtonRef.current.onSpin(true)
     let loginInfo = {
       type: LoginMethods.Password,
       data: {
@@ -57,8 +47,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     }
     let context = await props.onBeforeLogin(loginInfo)
     if (!context) {
-      console.log('context', context)
-      setButtonContent('success')
+      submitButtonRef.current.onSpin(false)
       return
     }
 
@@ -84,11 +73,8 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     // if (Object.values(ErrorCode).includes(code)) {
     //   setButtonContent('error')
     // }
+    submitButtonRef.current.onSpin(false)
     props.onLogin(code, data, message)
-  }
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo)
   }
 
   return (
@@ -96,7 +82,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
       <Form
         name="passworLogin"
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
+        onFinishFailed={() => submitButtonRef.current.onError()}
         autoComplete="off"
       >
         <Form.Item
@@ -150,18 +136,11 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
 
         {/* <img src={captchaUrl} alt="" /> */}
         <Form.Item>
-          <Button
-            size="large"
-            type="primary"
-            htmlType="submit"
-            // loading={buttonContent === 'loading'}
-            // icon={buttonContent === 'success' && <CheckOutlined />}
-            className="authing-g2-submit-button password"
-          >
-            {props.autoRegister ? '登录 / 注册' : '登录'}
-            {/* {buttonContent === 'success' && <CheckOutlined />} */}
-            {/* {buttonContent === '' && '登录'} */}
-          </Button>
+          <SubmitButton
+            text={props.autoRegister ? '登录 / 注册' : '登录'}
+            className="password"
+            ref={submitButtonRef}
+          />
         </Form.Item>
       </Form>
     </div>

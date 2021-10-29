@@ -1,4 +1,3 @@
-import { Button } from 'antd'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { detectSingleFace } from 'face-api.js'
 import { useGuardHttp } from '../../_utils/guradHttp'
@@ -10,6 +9,8 @@ import {
   getFaceDetectorOptions,
   isFaceDetectionModelLoaded,
 } from './face_deps'
+import { ImagePro } from '../../ImagePro'
+import SubmitButton from '../../SubmitButton'
 
 const useDashoffset = (percent: number) => {
   // 接受 0 - 1，返回 0-700 之间的偏移量
@@ -32,13 +33,13 @@ export const MFAFace = (props: any) => {
   const p1 = useRef<string>() // p1 key
   const p2 = useRef<string>() // p2 key
   const cooldown = useRef<number>(6) // p2 cooldown, * 500ms
+  const cdnBase = props.config.__publicConfig__.cdnBase
 
   let { offset, dashStyle } = useDashoffset(percent)
 
   // 预加载数据
   useEffect(() => {
     // 载入 cdn
-    const cdnBase = props.config.__publicConfig__.cdnBase
     let cdnContext = getCurrentFaceDetectionNet().loadFromUri(
       `${cdnBase}/face-api/v1/tiny_face_detector_model-weights_manifest.json`
     )
@@ -66,7 +67,7 @@ export const MFAFace = (props: any) => {
     return () => {
       interval.current && clearInterval(interval.current)
     }
-  }, [faceState, interval, props.config])
+  }, [faceState, interval, props.config, cdnBase])
 
   // 监听 faceState
   useEffect(() => {
@@ -219,21 +220,22 @@ export const MFAFace = (props: any) => {
       <p className="authing-g2-mfa-tips">请保持摄像头已打开并无遮挡</p>
       {faceState === '准备中' && (
         <>
-          <img
+          <ImagePro
             className="g2-mfa-face-image"
-            src="//files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png"
+            width={247}
+            height={131}
+            src={`${cdnBase}/face.png`}
             alt=""
           />
-          <Button
-            type="primary"
-            className="authing-g2-submit-button mfa-face"
+
+          <SubmitButton
             onClick={() => {
               setFaceState('识别中')
               autoShoot()
             }}
-          >
-            开始验证
-          </Button>
+            text={'开始验证'}
+            className="mfa-face"
+          />
         </>
       )}
       <div

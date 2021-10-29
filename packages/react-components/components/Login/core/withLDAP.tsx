@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
-import { Button, Form, Input } from 'antd'
+import { Form, Input } from 'antd'
 import { LoginMethods } from '../../'
 import { ErrorCode } from '../../_utils/GuardErrorCode'
 import { useAuthClient } from '../../Guard/authClient'
+import SubmitButton from '../../SubmitButton'
 
 interface LoginWithLDAPProps {
   // configs
@@ -18,6 +20,9 @@ interface LoginWithLDAPProps {
 
 export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
   let client = useAuthClient()
+  const { t } = useTranslation()
+  let submitButtonRef = useRef<any>(null)
+
   const [showCaptcha, setShowCaptcha] = useState(false)
   const [verifyCodeUrl, setVerifyCodeUrl] = useState('')
   const captchaUrl = `${props.host}/api/v2/security/captcha`
@@ -25,6 +30,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
 
   const onFinish = async (values: any) => {
     // onBeforeLogin
+    submitButtonRef.current.onSpin(true)
     let loginInfo = {
       type: LoginMethods.LDAP,
       data: {
@@ -35,7 +41,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
     }
     let context = await props.onBeforeLogin(loginInfo)
     if (!context) {
-      console.log('阻断执行，context：', context)
+      submitButtonRef.current.onSpin(false)
       return
     }
 
@@ -56,20 +62,18 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
           e = JSON.parse(error.message)
           console.log('解析 error.message 错误，检查 error', error)
           // onFail && onFail(errorData)
+          submitButtonRef.current.onSpin(false)
           return
         } catch {}
         if (e.code === ErrorCode.INPUT_CAPTCHACODE) {
           setVerifyCodeUrl(getCaptchaUrl())
           setShowCaptcha(true)
         }
+        submitButtonRef.current.onSpin(false)
         props.onLogin(e.code, e.data, e.message)
         // onFail && onFail(error)
       }
     }
-  }
-
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo)
   }
 
   return (
@@ -77,7 +81,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
       <Form
         name="passworLogin"
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
+        onFinishFailed={() => submitButtonRef.current.onError()}
         autoComplete="off"
       >
         <Form.Item
@@ -129,14 +133,11 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
         )}
 
         <Form.Item>
-          <Button
-            size="large"
-            type="primary"
-            htmlType="submit"
-            className="authing-g2-submit-button password"
-          >
-            登录
-          </Button>
+          <SubmitButton
+            text={t('common.login')}
+            className="password"
+            ref={submitButtonRef}
+          />
         </Form.Item>
       </Form>
     </div>

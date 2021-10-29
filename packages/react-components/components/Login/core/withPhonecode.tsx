@@ -1,18 +1,38 @@
-import React from 'react'
-import { Button, Form, Input } from 'antd'
+import React, { useRef } from 'react'
+import { Form, Input } from 'antd'
+import { useTranslation } from 'react-i18next'
+import { StoreValue } from 'antd/lib/form/interface'
 import { useAuthClient } from '../../Guard/authClient'
 import { UserOutlined, SafetyOutlined } from '@ant-design/icons'
 import { LoginMethods } from '../../'
 import { SendCode } from '../../SendCode'
-import { useTranslation } from 'react-i18next'
+import { validate } from '../../_utils'
+import SubmitButton from '../../SubmitButton'
 
+// const formatPhone = (value: any) => {
+//   if (!value) {
+//     return ''
+//   }
+//   let a = value.slice(0, 3)
+//   let b = value.slice(3, 7)
+//   let c = value.slice(7, 11)
+//   if (value.length < 4) {
+//     return a
+//   } else if (value.length < 8) {
+//     return `${a}-${b}`
+//   } else {
+//     return `${a}-${b}-${c}`
+//   }
+// }
 export const LoginWithPhoneCode = (props: any) => {
   let [form] = Form.useForm()
+  let submitButtonRef = useRef<any>(null)
   const { t } = useTranslation()
 
   let client = useAuthClient()
 
   const onFinish = async (values: any) => {
+    submitButtonRef.current.onSpin(true)
     // onBeforeLogin
     let loginInfo = {
       type: LoginMethods.Password,
@@ -23,11 +43,20 @@ export const LoginWithPhoneCode = (props: any) => {
     }
     let context = await props.onBeforeLogin(loginInfo)
     if (!context) {
+      submitButtonRef.current.onSpin(false)
       return
     }
 
-    let u = await client.loginByPhoneCode(values.phone, values.code)
-    props.onLogin(200, u)
+    let loginContext = client.loginByPhoneCode(values.phone, values.code)
+    loginContext
+      .then((u) => {
+        submitButtonRef.current.onSpin(false)
+        props.onLogin(200, u)
+      })
+      .catch((e) => {
+        submitButtonRef.current.onSpin(false)
+        props.onLogin(e.code, e.data, e.message)
+      })
   }
 
   return (
@@ -35,21 +64,38 @@ export const LoginWithPhoneCode = (props: any) => {
       <Form
         name="phoneCode"
         form={form}
-        // initialValues={{ remember: true }}
         onFinish={onFinish}
-        // onFinishFailed={onFinishFailed}
+        onFinishFailed={() => submitButtonRef.current.onError()}
         autoComplete="off"
       >
         <Form.Item
           className="authing-g2-input-form"
           name="phone"
-          rules={[{ required: true, message: '请输入手机号' }]}
+          rules={[
+            { required: true, message: t('login.inputPhone') },
+            {
+              validator: async (_, value: StoreValue) => {
+                if (!value) {
+                  return
+                }
+                if (validate('phone', value)) {
+                  return
+                } else {
+                  throw new Error(t('common.phoneFormateError'))
+                }
+              },
+            },
+          ]}
         >
           <Input
             className="authing-g2-input"
             autoComplete="tel"
+            type="tel"
             size="large"
-            placeholder={'请输入手机号'}
+            // 只有 InputNumber formatter、controls API
+            // formatter={formatPhone}
+            // parser={(value) => (value ? value.replaceAll('-', '') : '')}
+            placeholder={t('login.inputPhone')}
             prefix={<UserOutlined style={{ color: '#878A95' }} />}
           />
         </Form.Item>
@@ -58,13 +104,6 @@ export const LoginWithPhoneCode = (props: any) => {
           name="code"
           rules={[{ required: true, message: '请输入验证码' }]}
         >
-          {/* <Input
-            className="authing-g2-input"
-            size="large"
-            placeholder={'请输入验证码'}
-            prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
-            suffix={<SendCodeButton form={form} onSendCode={onSendCode} />}
-          /> */}
           <SendCode
             className="authing-g2-input"
             autoComplete="one-time-code"
@@ -76,18 +115,15 @@ export const LoginWithPhoneCode = (props: any) => {
             method="phone"
             data={''}
             form={form}
-            // placeholder={'请输入验证码'}
+            onSendCodeBefore={() => form.validateFields(['phone'])}
           />
         </Form.Item>
         <Form.Item>
-          <Button
-            size="large"
-            type="primary"
-            htmlType="submit"
-            className="authing-g2-submit-button phone-code"
-          >
-            {props.autoRegister ? '登录 / 注册' : '登录'}
-          </Button>
+          <SubmitButton
+            text={props.autoRegister ? '登录 / 注册' : '登录'}
+            className="password"
+            ref={submitButtonRef}
+          />
         </Form.Item>
       </Form>
     </div>
