@@ -1,5 +1,5 @@
-import { Button, Form, Input, message, Select } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { Form, Input, message, Select } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { ExtendsField } from '../../AuthingGuard/api'
@@ -8,6 +8,7 @@ import { useAuthClient } from '../../Guard/authClient'
 import { i18n } from '../../_utils/locales'
 import { useGuardHttp } from '../../_utils/guradHttp'
 import { GuardCompleteInfoViewProps } from '../props'
+import SubmitButton from '../../SubmitButton'
 
 export interface CompleteInfoProps {
   extendsFields: ExtendsField[]
@@ -21,6 +22,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = ({
   onRegisterInfoCompletedError,
 }) => {
   const authClient = useAuthClient()
+  const submitButtonRef = useRef<any>(null)
   const { get, post } = useGuardHttp()
   const { t } = useTranslation()
   const [form] = Form.useForm()
@@ -89,7 +91,9 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = ({
     )
   })
 
-  const [finish, onFinish] = useAsyncFn(async (values: any) => {
+  const [, onFinish] = useAsyncFn(async (values: any) => {
+    submitButtonRef.current?.onSpin(true)
+
     const internalFields: any = {}
     const userFields: any[] = []
     Object.entries(values).forEach(([key, value]) => {
@@ -120,30 +124,31 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = ({
           },
         }
       )
-
+      submitButtonRef.current?.onSpin(false)
       message.success(t('common.saveSuccess'))
       onRegisterInfoCompleted?.(user, udfs, authClient)
     } catch (e) {
       // TODO
+      submitButtonRef.current?.onSpin(false)
       onRegisterInfoCompletedError?.(e, udfs, authClient)
     }
   }, [])
 
   return (
-    <Form layout="vertical" form={form} onFinish={onFinish}>
+    <Form
+      layout="vertical"
+      form={form}
+      onFinish={onFinish}
+      onFinishFailed={() => submitButtonRef.current.onError()}
+    >
       {formFields}
 
       <Form.Item className="authing-g2-input-form">
-        <Button
-          className="authing-g2-submit-button password g2-completeInfo-submit"
-          size="large"
-          loading={finish.loading}
-          type="primary"
-          block
-          htmlType="submit"
-        >
-          {t('common.problem.form.submit')}
-        </Button>
+        <SubmitButton
+          text={t('common.problem.form.submit')}
+          ref={submitButtonRef}
+          className="password g2-completeInfo-submit"
+        />
       </Form.Item>
     </Form>
   )

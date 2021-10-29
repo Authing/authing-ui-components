@@ -1,4 +1,3 @@
-import { Button } from 'antd'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { detectSingleFace } from 'face-api.js'
 import { useGuardHttp } from '../../_utils/guradHttp'
@@ -11,6 +10,7 @@ import {
   isFaceDetectionModelLoaded,
 } from './face_deps'
 import { ImagePro } from '../../ImagePro'
+import SubmitButton from '../../SubmitButton'
 
 const useDashoffset = (percent: number) => {
   // 接受 0 - 1，返回 0-700 之间的偏移量
@@ -227,16 +227,15 @@ export const MFAFace = (props: any) => {
             src={`${cdnBase}/face.png`}
             alt=""
           />
-          <Button
-            type="primary"
-            className="authing-g2-submit-button mfa-face"
+
+          <SubmitButton
             onClick={() => {
               setFaceState('识别中')
               autoShoot()
             }}
-          >
-            开始验证
-          </Button>
+            text={'开始验证'}
+            className="mfa-face"
+          />
         </>
       )}
       <div
