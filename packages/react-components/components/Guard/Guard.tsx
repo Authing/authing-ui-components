@@ -28,6 +28,7 @@ import { GuardChangePassword } from '../ChangePassword'
 import { GuardNeedHelpView } from '../NeedHelpView'
 import { GuardCompleteInfoView } from '../CompleteInfo'
 import './styles.less'
+import { IconFont } from '../AuthingGuard/IconFont'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -202,6 +203,9 @@ export const Guard = (props: GuardProps) => {
       {config?.mode === GuardMode.Modal ? (
         <Modal
           className="authing-g2-render-module-modal"
+          closeIcon={
+            <IconFont type="authing-close-line" className="g2-modal-close" />
+          }
           visible={props.visible}
           onCancel={props.onClose}
           keyboard={config.escCloseable}

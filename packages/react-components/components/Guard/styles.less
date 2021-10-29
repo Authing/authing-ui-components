@@ -331,10 +331,6 @@
   align-items: center;
   box-shadow: 0px 0px 60px rgba(84, 89, 104, 0.05);
 }
-.authing-g2-describe-questions {
-  // height: 400px;
-  // overflow-y: auto;
-}
 
 .g2-questions {
   .authing-ant-upload-list-picture-card-container {
@@ -416,6 +412,19 @@
   }
   .authing-ant-modal-close {
     left: 0;
+    border-radius: 4px;
+    transform: scale(0.5);
+    color: #d4d6dc;
+    transition: 0.2s all;
+    &:hover {
+      background: #eeeff1;
+      color: #878a95;
+    }
+
+    .g2-modal-close {
+      font-size: 36px;
+      margin-top: 10px;
+    }
   }
   .authing-ant-modal-footer {
     display: none;
