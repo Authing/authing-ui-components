@@ -196,11 +196,6 @@ export const Guard = (props: GuardProps) => {
     moduleState.moduleName,
   ])
 
-  // let [v, sv] = useState(props.visible)
-  // useEffect(() => {
-  //   sv(props.visible)
-  // }, [props.visible])
-
   return (
     // TODO 这部分缺失 Loging 态
     <ConfigProvider prefixCls={PREFIX_CLS}>
