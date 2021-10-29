@@ -7,6 +7,7 @@ import { GuardModuleType } from '../../Guard/module'
 import { useGuardHttp } from '../../_utils/guradHttp'
 import { GuardMFAInitData, MFAConfig } from '../props'
 import { message as Message } from 'antd'
+import SubmitButton from '../../SubmitButton'
 
 const CODE_LEN = 6
 
@@ -28,17 +29,11 @@ export const BindMFATotp: React.FC<BindMFATotpProps> = ({
       <p className="authing-g2-mfa-tips">
         为了保障访问安全，请前往 OTP 绑定页面
       </p>
-      <Button
-        className="authing-g2-submit-button g2-mfa-submit-button bind-totp"
-        // loading={loading}
-        block
-        htmlType="submit"
-        type="primary"
-        size="large"
+      <SubmitButton
+        text={t('common.sure')}
         onClick={next}
-      >
-        {t('common.sure')}
-      </Button>
+        className="g2-mfa-submit-button bind-totp"
+      />
     </>
   )
 }
