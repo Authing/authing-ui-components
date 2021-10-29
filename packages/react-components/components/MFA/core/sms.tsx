@@ -1,5 +1,5 @@
 import { UserOutlined } from '@ant-design/icons'
-import { Input, Button, message as Message } from 'antd'
+import { Input, message as Message } from 'antd'
 import { Form } from 'antd'
 import { User } from 'authing-js-sdk'
 import React, { useRef, useState } from 'react'
@@ -8,6 +8,7 @@ import { VerifyCodeInput } from '../../VerifyCodeInput'
 import { useAuthClient } from '../../Guard/authClient'
 import { SendCodeBtn } from '../../SendCode/SendCodeBtn'
 import { VALIDATE_PATTERN } from '../../_utils'
+import SubmitButton from '../../SubmitButton'
 
 const CODE_LEN = 4
 
@@ -17,15 +18,12 @@ export interface BindMFASmsProps {
 }
 
 export const BindMFASms: React.FC<BindMFASmsProps> = ({ mfaToken, onBind }) => {
-  const { t } = useTranslation()
-
-  const [form] = Form.useForm()
-
-  const [loading, setLoading] = useState(false)
-
   const authClient = useAuthClient()
-
+  const submitButtonRef = useRef<any>(null)
+  const { t } = useTranslation()
+  const [form] = Form.useForm()
   const onFinish = async ({ phone }: any) => {
+    submitButtonRef.current.onSpin(true)
     try {
       const bindable = await authClient.mfa.phoneOrEmailBindable({
         mfaToken,
@@ -44,7 +42,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({ mfaToken, onBind }) => {
     } catch (e) {
       // do nothing
     } finally {
-      setLoading(false)
+      submitButtonRef.current?.onSpin(false)
     }
   }
 
@@ -54,9 +52,8 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({ mfaToken, onBind }) => {
       <p className="authing-g2-mfa-tips">{t('login.bindPhoneInfo')}</p>
       <Form
         form={form}
-        onSubmitCapture={() => setLoading(true)}
         onFinish={onFinish}
-        onFinishFailed={() => setLoading(false)}
+        onFinishFailed={() => submitButtonRef.current.onError()}
       >
         <Form.Item
           className="authing-g2-input-form"
@@ -72,11 +69,6 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({ mfaToken, onBind }) => {
             },
           ]}
         >
-          {/* <Input
-            className="authing-g2-input"
-            placeholder={t('login.inputPhone')}
-            prefix={<UserOutlined style={{ color: '#878A95' }} />}
-          /> */}
           <Input
             className="authing-g2-input"
             autoComplete="tel"
@@ -85,17 +77,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({ mfaToken, onBind }) => {
             prefix={<UserOutlined style={{ color: '#878A95' }} />}
           />
         </Form.Item>
-
-        <Button
-          className="authing-g2-submit-button"
-          loading={loading}
-          block
-          htmlType="submit"
-          type="primary"
-          size="large"
-        >
-          {t('common.sure')}
-        </Button>
+        <SubmitButton text={t('common.sure')} ref={submitButtonRef} />
       </Form>
     </>
   )
@@ -114,18 +96,17 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   onVerify,
   sendCodeRef,
 }) => {
+  const authClient = useAuthClient()
+  const submitButtonRef = useRef<any>(null)
   const { t } = useTranslation()
-
   const [form] = Form.useForm()
 
-  const authClient = useAuthClient()
-
   const [MfaCode, setMFACode] = useState(new Array(CODE_LEN).fill(''))
-  const [loading, setLoading] = useState(false)
   const [sending, setSending] = useState(false)
   const [sent, setSent] = useState(false)
 
   const onFinish = async (values: any) => {
+    submitButtonRef.current.onSpin(true)
     try {
       const user: User = await authClient.mfa.verifyAppSmsMfa({
         mfaToken,
@@ -135,11 +116,11 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
       // TODO
       onVerify(200, user)
     } catch (e) {
-      // TODO
-      onVerify(e.code as number, e.message)
-      Message.error(e.message)
+      const error = JSON.parse(e.message)
+      submitButtonRef.current.onError()
+      onVerify(error.code as number, error)
     } finally {
-      setLoading(false)
+      submitButtonRef.current?.onSpin(false)
     }
   }
 
@@ -168,9 +149,8 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
       </p>
       <Form
         form={form}
-        onSubmitCapture={() => setLoading(true)}
         onFinish={onFinish}
-        onFinishFailed={() => setLoading(false)}
+        onFinishFailed={() => submitButtonRef.current.onError()}
       >
         <Form.Item
           name="mfaCode"
@@ -199,16 +179,11 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
           type="link"
         />
 
-        <Button
-          className="authing-g2-submit-button g2-mfa-submit-button"
-          loading={loading}
-          block
-          htmlType="submit"
-          type="primary"
-          size="large"
-        >
-          {t('common.sure')}
-        </Button>
+        <SubmitButton
+          text={t('common.sure')}
+          ref={submitButtonRef}
+          className="g2-mfa-submit-button"
+        />
       </Form>
     </>
   )
