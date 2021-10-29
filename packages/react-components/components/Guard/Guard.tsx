@@ -22,7 +22,7 @@ import { GuardMFAView } from '../MFA'
 import './styles.less'
 import { GuardRegisterView } from '../Register'
 import { GuardDownloadATView } from '../DownloadAuthenticator'
-import { GuardStateMachine } from './stateMachine'
+import { GuardStateMachine, useHistoryHijack } from './stateMachine'
 import { GuardBindTotpView } from '../BindTotp'
 import { GuardForgetPassword } from '../ForgetPassword'
 import { GuardChangePassword } from '../ChangePassword'
@@ -70,20 +70,34 @@ interface ModuleState {
 
 export const Guard = (props: GuardProps) => {
   const { appId, config, onLoad, onLoadError } = props
+
+  // 整合一下 所有的事件
+  const events = guardEventsFilter(props)
+
+  // 初始化 Loading 标识
   const [initSettingEnd, setInitSettingEnd] = useState(false)
+
+  // Config
   const [guardConfig, setGuardConfig] = useState<GuardConfig>(
     getDefaultGuardConfig()
   )
+
+  // 状态机
   const [
     guardStateMachine,
     setGuardStateMachine,
   ] = useState<GuardStateMachine>()
 
+  // 劫持浏览器 History
+  const [historyNext] = useHistoryHijack(guardStateMachine?.back)
+
+  // 首页 init 数据
   const initState: ModuleState = {
     moduleName: GuardModuleType.LOGIN,
     initData: {},
   }
 
+  // modules 定义
   const moduleReducer: (
     state: ModuleState,
     action: IBaseAction<GuardModuleType, ModuleState>
@@ -94,11 +108,10 @@ export const Guard = (props: GuardProps) => {
     }
   }
 
+  // Modules Reducer
   const [moduleState, changeModule] = useReducer(moduleReducer, initState)
 
-  const events = guardEventsFilter(props)
-
-  // 切换 module
+  // 切换 Module
   const onChangeModule = (moduleName: GuardModuleType, initData: any = {}) => {
     changeModule({
       type: moduleName,
@@ -108,8 +121,10 @@ export const Guard = (props: GuardProps) => {
     })
   }
 
+  // 初始化 Guard 一系列的东西
   const initGuardSetting = useCallback(async () => {
     try {
+      // Config 初始化
       const { config: mergedConfig, publicConfig } = await initConfig(
         appId,
         config ?? {},
@@ -118,27 +133,23 @@ export const Guard = (props: GuardProps) => {
 
       setGuardConfig(mergedConfig)
 
+      // Rest 初始化
       const httpClient = initGuardHttp(mergedConfig?.host!)
       httpClient.setAppId(appId)
       httpClient.setUserpoolId(publicConfig.userPoolId)
 
-      // TODO 这部分有点小问题 等待优化
+      // TODO  国际化 这部分有点小问题 等待优化
       initI18n({}, mergedConfig.lang)
 
+      // Authing JS SDK
       const authClient = initAuthClient(mergedConfig, appId)
-      // setClient(authClient)
+
       onLoad?.(authClient)
 
+      // 状态机 初始化
       const guardStateMachine = new GuardStateMachine(onChangeModule, initState)
-
       guardStateMachine.setConfig(mergedConfig)
-
       setGuardStateMachine(guardStateMachine)
-
-      // // 初始化 Guard 状态机
-      // setGuardStateMachine(
-      //   new GuardStateMachine(onChangeModule, initState, mergedConfig)
-      // )
 
       // 初始化 结束
       setInitSettingEnd(true)
@@ -161,16 +172,10 @@ export const Guard = (props: GuardProps) => {
         initData: moduleState.initData,
         config: guardConfig,
         ...events,
-        __changeModule: guardStateMachine?.next,
-        __back: guardStateMachine?.back,
-        // __changeModule: (type, initData) => {
-        //   if (typeof type === 'number') {
-        //     guardStateMachine?.back()
-        //   } else {
-        //     guardStateMachine?.next(type, initData)
-        //   }
-        // },
-        // __codePaser: codePaser,
+        __changeModule: (moduleName, initData) => {
+          historyNext(initData)
+          guardStateMachine?.next(moduleName, initData)
+        },
       })
     } else {
       return (
@@ -183,8 +188,8 @@ export const Guard = (props: GuardProps) => {
     appId,
     events,
     guardConfig,
-    guardStateMachine?.back,
-    guardStateMachine?.next,
+    guardStateMachine,
+    historyNext,
     initSettingEnd,
     moduleState.initData,
     moduleState.moduleName,

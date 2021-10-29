@@ -7,12 +7,12 @@ import { useGuardHttp } from '../_utils/guradHttp'
 import { useAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
 import { IconFont } from '../IconFont'
-import { MFAType } from '../MFA/props'
 import { ShieldSpin, Spin } from '../ShieldSpin'
 import { BindSuccess } from './core/bindSuccess'
 import { SecurityCode } from './core/securityCode'
 import { GuardBindTotpViewProps } from './props'
 import './styles.less'
+const window: Window = require('global/window')
 
 enum BindTotpType {
   SECURITY_CODE = 'securityCode',
@@ -24,7 +24,6 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
   initData,
   onLogin,
   __changeModule,
-  __back,
 }) => {
   const { get, post } = useGuardHttp()
 
@@ -99,9 +98,7 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
   )
 
   const onBack = () => {
-    __back?.({
-      current: MFAType.TOTP,
-    })
+    window.history.back()
   }
 
   return (

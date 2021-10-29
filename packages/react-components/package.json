@@ -9,8 +9,9 @@
     "antd": "^4.8.0",
     "authing-js-sdk": "4.22.18",
     "face-api.js": "^0.22.2",
-    "react-use": "^17.3.1",
-    "qs": "^6.9.4"
+    "global": "^4.4.0",
+    "qs": "^6.9.4",
+    "react-use": "^17.3.1"
   },
   "types": "react-app-env.d.ts",
   "peerDependencies": {

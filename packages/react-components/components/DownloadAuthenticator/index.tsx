@@ -5,6 +5,7 @@ import { ImagePro } from '../ImagePro'
 import { IconFont } from '../IconFont'
 import { GuardDownloadATViewProps } from './props'
 import './styles.less'
+const window: Window = require('global/window')
 
 enum DownloadType {
   IOS = 'ios',
@@ -13,7 +14,6 @@ enum DownloadType {
 
 export const GuardDownloadATView: React.FC<GuardDownloadATViewProps> = ({
   config,
-  __back,
 }) => {
   const { t } = useTranslation()
 
@@ -79,7 +79,7 @@ export const GuardDownloadATView: React.FC<GuardDownloadATViewProps> = ({
     [downloadConfig, t]
   )
 
-  const onBack = () => __back?.()
+  const onBack = () => window.history.back()
 
   return (
     <div className="g2-view-container">

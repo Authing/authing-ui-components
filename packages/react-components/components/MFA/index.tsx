@@ -10,6 +10,7 @@ import { GuardMFAViewProps, MFAType } from './props'
 import { useAuthClient } from '../Guard/authClient'
 import { codeMap } from './codemap'
 import './styles.less'
+const window: Window = require('global/window')
 
 const ComponentsMapping: Record<MFAType, (props: any) => React.ReactNode> = {
   [MFAType.EMAIL]: ({ initData, mfaLogin }) => (
@@ -48,7 +49,6 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
   initData,
   config,
   __changeModule,
-  __back,
   onLogin,
 }) => {
   const [currentMethod, setCurrentMethod] = useState(
@@ -58,7 +58,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
   const [showMethods, setShowMethods] = useState(true)
   const client = useAuthClient()
 
-  const onBack = () => __back?.()
+  const onBack = () => window.history.back()
 
   const __codePaser = (code: number) => {
     const action = codeMap[code]

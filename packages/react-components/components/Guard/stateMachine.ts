@@ -1,5 +1,7 @@
+import { useEffect } from 'react'
 import { GuardComponentConifg, GuardConfig } from './config'
 import { GuardModuleType } from './module'
+const window: Window = require('global/window')
 
 export interface ModuleState {
   moduleName: GuardModuleType
@@ -42,6 +44,8 @@ export class GuardStateMachine {
 
     this.historyPush(initData, ActionType.Init)
   }
+  globalWindow = (): Window | undefined =>
+    typeof window !== undefined ? window : undefined
 
   next = (nextModelu: GuardModuleType, initData: any) => {
     const moduleData: ModuleState = {
@@ -66,13 +70,11 @@ export class GuardStateMachine {
 
     this.moduleStateHistory.splice(0, 1)
     console.log('back Log', this.stateMachineLog)
-    console.log('back History', this.moduleStateHistory)
   }
 
   // 业务终点 Log 发送
   end = () => {
     console.log('业务终点 Log', this.stateMachineLog)
-    console.log('业务终点 Config', this.config)
 
     // TODO 请求
   }
@@ -108,4 +110,24 @@ export class GuardStateMachine {
   setConfig = (config: GuardConfig) => {
     this.config = config
   }
+}
+
+export const useHistoryHijack = (back?: () => void) => {
+  const next = (state: any = {}) => {
+    window?.history.pushState(state, '', window?.location.href)
+  }
+
+  useEffect(() => {
+    const onPopstate = () => {
+      back?.()
+    }
+
+    back && window?.addEventListener('popstate', onPopstate)
+
+    return () => {
+      back && window.removeEventListener('popstate', onPopstate)
+    }
+  }, [back])
+
+  return [next]
 }
