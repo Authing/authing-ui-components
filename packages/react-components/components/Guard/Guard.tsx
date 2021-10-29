@@ -5,7 +5,7 @@ import React, {
   useReducer,
   useState,
 } from 'react'
-import { ConfigProvider } from 'antd'
+import { ConfigProvider, Modal } from 'antd'
 
 import { GuardLoginView } from '../Login'
 
@@ -14,12 +14,11 @@ import { GuardEvents, guardEventsFilter } from './event'
 import { initConfig, GuardConfig } from '../_utils/config'
 import { initGuardHttp } from '../_utils/guradHttp'
 import { initI18n } from '..//_utils/locales'
-import { IG2FCProps } from '../Type'
+import { GuardMode, IG2FCProps } from '../Type'
 import { getDefaultGuardConfig } from './config'
 import { ShieldSpin } from '../ShieldSpin'
 import { GuardModuleType } from './module'
 import { GuardMFAView } from '../MFA'
-import './styles.less'
 import { GuardRegisterView } from '../Register'
 import { GuardDownloadATView } from '../DownloadAuthenticator'
 import { GuardStateMachine, useHistoryHijack } from './stateMachine'
@@ -28,6 +27,7 @@ import { GuardForgetPassword } from '../ForgetPassword'
 import { GuardChangePassword } from '../ChangePassword'
 import { GuardNeedHelpView } from '../NeedHelpView'
 import { GuardCompleteInfoView } from '../CompleteInfo'
+import './styles.less'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -51,6 +51,7 @@ const ComponentsMapping: Record<
 
 export interface GuardProps extends GuardEvents, IG2FCProps {
   config?: Partial<GuardConfig>
+  visible?: boolean
 }
 
 interface GuardViewProps extends GuardProps {
@@ -195,10 +196,28 @@ export const Guard = (props: GuardProps) => {
     moduleState.moduleName,
   ])
 
+  // let [v, sv] = useState(props.visible)
+  // useEffect(() => {
+  //   sv(props.visible)
+  // }, [props.visible])
+
   return (
     // TODO 这部分缺失 Loging 态
     <ConfigProvider prefixCls={PREFIX_CLS}>
-      <div className="authing-g2-render-module">{renderModule}</div>
+      {config?.mode === GuardMode.Modal ? (
+        <Modal
+          className="authing-g2-render-module-modal"
+          visible={props.visible}
+          onCancel={props.onClose}
+          keyboard={config.escCloseable}
+          maskClosable={true} //点击蒙层，是否允许关闭
+          getContainer={config.target ? config.target : false}
+        >
+          <div className="authing-g2-render-module">{renderModule}</div>
+        </Modal>
+      ) : (
+        <div className="authing-g2-render-module">{renderModule}</div>
+      )}
     </ConfigProvider>
   )
 }

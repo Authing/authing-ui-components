@@ -1,21 +1,28 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 
 import reportWebVitals from './reportWebVitals'
-import { message } from 'antd'
+import { Button, message } from 'antd'
 import { Guard } from './components'
+import { SocialConnectionProvider } from 'authing-js-sdk'
+import { GuardMode } from './components/Type'
 
 const App = () => {
+  let [visible, setVisible] = useState(true)
   return (
     <div
-    // style={{
-    //   background: '#f5f7fa',
-    //   height: '90vh',
-    //   display: 'flex',
-    //   justifyContent: 'center',
-    //   alignItems: 'center',
-    // }}
+      style={{
+        background: '#f5f7fa',
+        height: '90vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
     >
+      <div id="c1"></div>
+      <Button onClick={() => setVisible(false)}>隐藏</Button>
+      <Button onClick={() => setVisible(true)}>开启</Button>
+
       <Guard
         appId="610271b10cd9106606c73d57"
         onLogin={(u) => message.info('🏁 用户业务层终点，登录完成。')}
@@ -34,30 +41,35 @@ const App = () => {
         onRegisterTabChange={(registerMethod) => {
           console.log('📁 onRegisterTabChange 触发', registerMethod)
         }}
-        config={
-          {
-            // autoRegister: true,
-            // defaultRegisterMethod: RegisterMethods.Phone,
-            // disableRegister: false,
-            // disableResetPwd: false,
-            // defaultLoginMethod: LoginMethods.WxMinQr, // 指定默认登录方式，如果这个方式不存在于 LoginMethods，那么就当作没有传入
-            // loginMethods: [
-            // LoginMethods.Password,
-            //   LoginMethods.PhoneCode,
-            // LoginMethods.WxMinQr,
-            // ],
-            // socialConnections: [
-            //   SocialConnectionProvider.ALIPAY,
-            //   SocialConnectionProvider.APPLE_WEB,
-            // ], // 指定可选的社会化登录方式
-            // qrCodeScanOptions?: Parameters<QrCodeAuthenticationClient['startScanning']>[1]
-            // passwordLoginMethods?: PasswordLoginMethods[]
-            // enterpriseConnections: [] // 这个有啥用？
-            // publicKey?: string
-            // lang: 'en-US',
-            // export declare type Lang = 'zh-CN' | 'en-US';
-          }
-        }
+        onClose={() => {
+          setVisible(false)
+        }}
+        visible={visible}
+        config={{
+          // autoRegister: true,
+          // defaultRegisterMethod: RegisterMethods.Phone,
+          // disableRegister: false,
+          // disableResetPwd: false,
+          // defaultLoginMethod: LoginMethods.WxMinQr, // 指定默认登录方式，如果这个方式不存在于 LoginMethods，那么就当作没有传入
+          // loginMethods: [
+          // LoginMethods.Password,
+          //   LoginMethods.PhoneCode,
+          // LoginMethods.WxMinQr,
+          // ],
+          socialConnections: [
+            SocialConnectionProvider.ALIPAY,
+            SocialConnectionProvider.APPLE_WEB,
+          ], // 指定可选的社会化登录方式
+          // qrCodeScanOptions?: Parameters<QrCodeAuthenticationClient['startScanning']>[1]
+          // passwordLoginMethods?: PasswordLoginMethods[]
+          // enterpriseConnections: [] // 这个有啥用？
+          // publicKey?: string
+          lang: 'en-US',
+          mode: GuardMode.Modal,
+          clickCloseable: false, // clickCloseable	Modal 模式时是否隐藏登录框右上角的关闭按钮
+          escCloseable: true, //
+          target: '#c1',
+        }}
       />
 
       {/* <AuthingGuard
