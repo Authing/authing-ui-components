@@ -190,5 +190,6 @@
   "noEmptyPassword": "密码不能为空",
   "checkEmail": "该邮箱已被注册",
   "checkPhone": "该手机号已被注册",
-  "checkPasswordHasSpace": "不能包含空格"
+  "checkPasswordHasSpace": "不能包含空格",
+  "useRecoveryCodetips": "登录成功后，我们将生成一个新的恢复代码。"
 }

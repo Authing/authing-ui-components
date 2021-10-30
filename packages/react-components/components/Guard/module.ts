@@ -9,6 +9,7 @@ export enum GuardModuleType {
   BIND_TOTP = 'bindTotp',
   ANY_QUESTIONS = 'anyQuestions',
   COMPLETE_INFO = 'completeInfo',
+  RECOVERY_CODE = 'recoveryCode',
 }
 export interface GuardModuleAction {
   action: string

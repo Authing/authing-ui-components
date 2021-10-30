@@ -28,6 +28,7 @@ import { GuardForgetPassword } from '../ForgetPassword'
 import { GuardChangePassword } from '../ChangePassword'
 import { GuardNeedHelpView } from '../NeedHelpView'
 import { GuardCompleteInfoView } from '../CompleteInfo'
+import { GuardRecoveryCodeView } from '../RecoveryCode'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -46,6 +47,9 @@ const ComponentsMapping: Record<
   [GuardModuleType.ANY_QUESTIONS]: (props) => <GuardNeedHelpView {...props} />,
   [GuardModuleType.COMPLETE_INFO]: (props) => (
     <GuardCompleteInfoView {...props} />
+  ),
+  [GuardModuleType.RECOVERY_CODE]: (props) => (
+    <GuardRecoveryCodeView {...props} />
   ),
 }
 
