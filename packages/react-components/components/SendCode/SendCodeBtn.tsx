@@ -62,7 +62,6 @@ export const SendCodeBtn: FC<SendCodeProps> = ({
     }
 
     let beforeStop = !(await beforeSend())
-    console.log('beforeStop', beforeStop)
     if (beforeStop) {
       setLoading(false)
       return

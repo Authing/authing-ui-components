@@ -17,7 +17,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
 }) => {
   const { t } = useTranslation()
   const agreementEnabled = config?.agreementEnabled
-
+  const { langRange } = config
   const authClient = useAuthClient()
 
   const __codePaser = (code: number) => {
@@ -115,7 +115,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
           </span>
         </span>
       </div>
-      <ChangeLanguage />
+      <ChangeLanguage langRange={langRange} />
     </div>
   )
 }

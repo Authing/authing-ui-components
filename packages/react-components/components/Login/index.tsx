@@ -86,7 +86,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   let publicKey = props.config?.publicKey!
   // let autoRegister = props.config?.autoRegister
   let ms = props.config?.loginMethods
-  let { autoRegister } = props.config
+  let { autoRegister, langRange } = props.config
 
   let { disableResetPwd, disableRegister } = useDisables({
     config: props.config,
@@ -349,7 +349,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
       <div className="g2-social-login">
         <SocialLogin appId={props.appId} config={props.config} />
       </div>
-      <ChangeLanguage />
+      <ChangeLanguage langRange={langRange} />
     </div>
   )
 }

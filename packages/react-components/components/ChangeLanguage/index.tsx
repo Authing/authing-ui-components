@@ -5,6 +5,9 @@ import { changeLang } from '../_utils/locales'
 
 export const ChangeLanguage = (props: any) => {
   const { i18n } = useTranslation()
+  if (props.langRange.length <= 1) {
+    return <></>
+  }
 
   let switchText = 'English'
   if (i18n.language === 'en-US') {

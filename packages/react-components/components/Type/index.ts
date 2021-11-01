@@ -25,6 +25,7 @@ export interface IG2Config {
   title: string
   logo: string
   lang: Lang
+  langRange: Lang[]
   host: string
   mode: GuardMode
   clickCloseable: boolean
@@ -38,6 +39,7 @@ export interface IG2Config {
 
 const defaultG2Config: IG2Config = {
   lang: 'zh-CN',
+  langRange: ['zh-CN', 'en-US'],
   title: 'Authing',
   escCloseable: true,
   clickCloseable: true,
