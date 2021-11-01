@@ -79,7 +79,7 @@
   "registerImmediate": "sign up now",
   "registerInfoFill": "Registration information completion",
   "resetPwd": "Reset password",
-  "retryAfterTime": "Try again in {{time}} seconds",
+  "retryAfterTime": "{{time}} seconds",
   "sendVerifyCode": "Send code",
   "submit": "Submit",
   "sure": "Confirm",

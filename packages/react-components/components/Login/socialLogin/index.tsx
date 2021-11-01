@@ -275,34 +275,72 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({ appId, config }) => {
         })
       }
 
-      return noLoginMethods ? (
-        <Button
-          key={item.provider}
-          block
-          size="large"
-          className="g2-guard-third-login-btn"
-          icon={
-            <IconFont
-              type={`${iconType}-fill`}
-              style={{ fontSize: 20, marginRight: 8 }}
-            />
-          }
-          onClick={onLogin}
-        >
-          {i18n.language === 'zh-CN'
-            ? item.name
-            : item.name_en ?? item.provider}
-        </Button>
-      ) : (
-        <Tooltip
-          key={item.provider}
-          title={item.tooltip?.[i18n.language as Lang] || item.name}
-        >
-          <div className="g2-social-login-item" onClick={onLogin}>
-            <IconFont type={`${iconType}-fill`} />
-          </div>
-        </Tooltip>
-      )
+      const shape = config.socialConnectionsBtnShape
+
+      if (shape === 'rectangle') {
+        return (
+          <Button
+            key={item.provider}
+            block
+            size="large"
+            className="g2-guard-third-login-btn"
+            icon={
+              <IconFont
+                type={`${iconType}-fill`}
+                style={{ fontSize: 20, marginRight: 8 }}
+              />
+            }
+            onClick={onLogin}
+            style={{
+              marginBottom: 8,
+            }}
+          >
+            {i18n.language === 'zh-CN'
+              ? item.name
+              : item.name_en ?? item.provider}
+          </Button>
+        )
+      } else if (shape === 'round') {
+        return (
+          <Tooltip
+            key={item.provider}
+            title={item.tooltip?.[i18n.language as Lang] || item.name}
+          >
+            <div className="g2-social-login-item" onClick={onLogin}>
+              <IconFont type={`${iconType}-fill`} />
+            </div>
+          </Tooltip>
+        )
+      } else {
+        return noLoginMethods ? (
+          <Button
+            key={item.provider}
+            block
+            size="large"
+            className="g2-guard-third-login-btn"
+            icon={
+              <IconFont
+                type={`${iconType}-fill`}
+                style={{ fontSize: 20, marginRight: 8 }}
+              />
+            }
+            onClick={onLogin}
+          >
+            {i18n.language === 'zh-CN'
+              ? item.name
+              : item.name_en ?? item.provider}
+          </Button>
+        ) : (
+          <Tooltip
+            key={item.provider}
+            title={item.tooltip?.[i18n.language as Lang] || item.name}
+          >
+            <div className="g2-social-login-item" onClick={onLogin}>
+              <IconFont type={`${iconType}-fill`} />
+            </div>
+          </Tooltip>
+        )
+      }
     })
   const idp =
     enterpriseConnectionObjs.length > 0 ? (
@@ -317,6 +355,9 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({ appId, config }) => {
         </Space>
       </>
     ) : null
+
+  // let socialLogin
+  // const shape = config.socialConnectionsBtnShape
 
   const socialLogin =
     socialLoginButtons.length > 0 && noLoginMethods ? (
