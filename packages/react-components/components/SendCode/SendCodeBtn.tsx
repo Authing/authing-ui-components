@@ -1,7 +1,6 @@
-import { Button, Spin } from 'antd'
+import { Button } from 'antd'
 import React, { FC, useState, useRef, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { LoadingOutlined } from '@ant-design/icons'
 import './style.less'
 import { ButtonProps } from 'antd/lib/button'
 
