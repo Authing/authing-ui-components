@@ -186,5 +186,6 @@
   "downloadTotpAppDocs": "Please use your mobile phone to scan the code to download the verifier",
   "downloadTotpAppIOS": "IOS download",
   "unBindEmaileDoc": "{{email}} has been bound to another account",
-  "bindTotp": "Bind OTP"
+  "bindTotp": "Bind OTP",
+  "loginFailCheck": "Reminder: Your password is wrong, you can try {{number}} times"
 }
