@@ -1,7 +1,9 @@
-import { Button } from 'antd'
 import React, { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Button } from 'antd'
 import { IconFont } from '../../IconFont'
 import { GuardMFAInitData, MFAType } from '../props'
+import { i18n } from '../../_utils/locales'
 import './style.less'
 
 export interface MFAMethodsProps {
@@ -13,24 +15,24 @@ export interface MFAMethodsProps {
 const methodTitleMapping: Record<
   MFAType,
   {
-    title: string
+    title: () => string
     icon: string
   }
 > = {
   [MFAType.EMAIL]: {
-    title: '电子邮箱验证',
+    title: () => i18n.t('common.EmailVerification'),
     icon: 'authing-mail',
   },
   [MFAType.SMS]: {
-    title: '手机验证',
+    title: () => i18n.t('common.SMS'),
     icon: 'authing-phone',
   },
   [MFAType.TOTP]: {
-    title: 'OTP 口令验证',
+    title: () => i18n.t('common.OTPVerification'),
     icon: 'authing-totp',
   },
   [MFAType.FACE]: {
-    title: '人脸识别',
+    title: () => i18n.t('common.faceVerification'),
     icon: 'authing-face',
   },
 }
@@ -41,6 +43,7 @@ export const MFAMethods: React.FC<MFAMethodsProps> = ({
   onChangeMethod,
 }) => {
   const [currentMethod, setCurrentMethod] = useState(method)
+  const { t } = useTranslation()
 
   const otherMethods = useMemo(
     () =>
@@ -57,7 +60,7 @@ export const MFAMethods: React.FC<MFAMethodsProps> = ({
             key={item.mfaPolicy}
           >
             <IconFont type={methodTitleMapping[item.mfaPolicy].icon} />
-            {`${methodTitleMapping[item.mfaPolicy].title}`}
+            {`${methodTitleMapping[item.mfaPolicy].title()}`}
           </Button>
         )),
     [applicationMfa, currentMethod, onChangeMethod]
@@ -70,7 +73,7 @@ export const MFAMethods: React.FC<MFAMethodsProps> = ({
         }}
       />
       <div className="g2-mfa-method">
-        <div className="g2-mfa-method-title">其他验证方式</div>
+        <div className="g2-mfa-method-title">{t('login.otherVerifyWay')}</div>
         {otherMethods}
       </div>
     </>

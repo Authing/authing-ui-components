@@ -37,7 +37,7 @@ export const UseCode: React.FC<UseCodeProps> = ({ mfaToken }) => {
   return (
     <>
       <p className="authing-g2-mfa-title">{t('common.useRecoverCode')}</p>
-      <p className="authing-g2-mfa-tips">{t('common.useRecoveryCodetips')}</p>
+      <p className="authing-g2-mfa-tips">{t('login.mfaAfterReset')}</p>
       <Form
         form={form}
         onFinish={onFinish}
