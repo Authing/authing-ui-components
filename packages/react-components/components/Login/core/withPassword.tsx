@@ -9,7 +9,6 @@ import { getUserRegisterParams } from '../../_utils'
 import { ErrorCode } from '../../_utils/GuardErrorCode'
 import { LoginMethods } from '../../'
 import SubmitButton from '../../SubmitButton'
-import { useTranslation } from 'react-i18next'
 
 // core 代码只完成核心功能，东西尽可能少
 interface LoginWithPasswordProps {
@@ -27,7 +26,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   let { t } = useTranslation()
   let { post } = useGuardHttp()
   let client = useAuthClient()
-  const { t } = useTranslation()
+
   let submitButtonRef = useRef<any>(null)
 
   const [showCaptcha, setShowCaptcha] = useState(false)
