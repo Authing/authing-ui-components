@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 import reportWebVitals from './reportWebVitals'
 import { Button, message } from 'antd'
 import { Guard } from './components'
-import { SocialConnectionProvider } from 'authing-js-sdk'
+
 import { GuardMode } from './components/Type'
 
 const App = () => {
@@ -51,7 +51,7 @@ const App = () => {
           // disableRegister: false,
           // disableResetPwd: false,
           // defaultLoginMethod: LoginMethods.WxMinQr, // 指定默认登录方式，如果这个方式不存在于 LoginMethods，那么就当作没有传入
-          // loginMethods: [
+          // loginMethods: [],
           // LoginMethods.Password,
           //   LoginMethods.PhoneCode,
           // LoginMethods.WxMinQr,
@@ -70,6 +70,7 @@ const App = () => {
           clickCloseable: false, // clickCloseable	Modal 模式时是否隐藏登录框右上角的关闭按钮
           escCloseable: true, //
           target: '#c1',
+          socialConnectionsBtnShape: 'rectangle',
         }}
       />
 

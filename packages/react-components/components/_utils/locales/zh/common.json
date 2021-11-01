@@ -22,7 +22,7 @@
   "logout": "退出",
   "updateSuccess": "更新成功",
   "agreeAgreement": "我已阅读并接受",
-  "retryAfterTime": "{{time}} 秒后重试",
+  "retryAfterTime": "{{time}} 秒",
   "sendVerifyCode": "发送验证码",
   "emailFormatError": "邮箱格式不正确",
   "phoneFormateError": "手机号格式不正确",
