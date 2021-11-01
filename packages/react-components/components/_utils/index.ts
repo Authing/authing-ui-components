@@ -245,7 +245,7 @@ export const getPasswordValidate = (
 ): Rule[] => {
   const required = {
     required: true,
-    message: i18n.t('common.noEmptyPassword'),
+    message: i18n.t('common.passwordNotNull'),
   }
 
   const validateMap: Record<PasswordStrength, Rule[]> = {

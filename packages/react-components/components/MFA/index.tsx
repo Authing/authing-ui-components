@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { GuardModuleType } from '../Guard/module'
 import { IconFont } from '../IconFont'
 import { MFAEmail } from './core/email'
@@ -57,6 +58,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
   )
   const [showMethods, setShowMethods] = useState(true)
   const client = useAuthClient()
+  const { t } = useTranslation()
 
   const onBack = () => window.history.back()
 
@@ -107,7 +109,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
       <div className="g2-view-back">
         <span onClick={onBack}>
           <IconFont type="authing-back" />
-          <span>返回登录</span>
+          <span>{t('common.backLoginPage')}</span>
         </span>
       </div>
       <div className="g2-mfa-content">

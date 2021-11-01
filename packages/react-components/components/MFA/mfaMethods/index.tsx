@@ -1,5 +1,6 @@
-import { Button } from 'antd'
 import React, { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Button } from 'antd'
 import { IconFont } from '../../IconFont'
 import { GuardMFAInitData, MFAType } from '../props'
 import './style.less'
@@ -41,6 +42,7 @@ export const MFAMethods: React.FC<MFAMethodsProps> = ({
   onChangeMethod,
 }) => {
   const [currentMethod, setCurrentMethod] = useState(method)
+  const { t } = useTranslation()
 
   const otherMethods = useMemo(
     () =>
@@ -70,7 +72,7 @@ export const MFAMethods: React.FC<MFAMethodsProps> = ({
         }}
       />
       <div className="g2-mfa-method">
-        <div className="g2-mfa-method-title">其他验证方式</div>
+        <div className="g2-mfa-method-title">{t('login.otherVerifyWay')}</div>
         {otherMethods}
       </div>
     </>
