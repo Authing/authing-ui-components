@@ -1,5 +1,5 @@
 import { Form, Checkbox, Typography } from 'antd'
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import SubmitButton from '../../SubmitButton'
 
@@ -21,10 +21,11 @@ export const BindSuccess: React.FC<BindSuccessProps> = ({ secret, onBind }) => {
     submitButtonRef.current?.onSpin(true)
     try {
       await form.validateFields()
+      submitButtonRef.current?.onSpin(true)
+      onBind()
     } finally {
       submitButtonRef.current?.onSpin(true)
     }
-    onBind()
   }
 
   return (
