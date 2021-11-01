@@ -189,5 +189,6 @@
   "bindTotp": "Bind OTP",
   "checkEmail": "This Email is registed",
   "checkPhone": "This phone is registed",
+  "loginFailCheck": "Reminder: Your password is wrong, you can try {{number}} times",
   "checkPasswordHasSpace": "No spaces"
 }

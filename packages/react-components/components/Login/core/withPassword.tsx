@@ -26,10 +26,12 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   let { t } = useTranslation()
   let { post } = useGuardHttp()
   let client = useAuthClient()
+
   let submitButtonRef = useRef<any>(null)
 
   const [showCaptcha, setShowCaptcha] = useState(false)
   const [verifyCodeUrl, setVerifyCodeUrl] = useState('')
+  const [remainCount, setRemainCount] = useState(0)
 
   const captchaUrl = `${props.host}/api/v2/security/captcha`
   const getCaptchaUrl = () => `${captchaUrl}?r=${+new Date()}`
@@ -37,6 +39,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   const encrypt = client.options.encryptFunction
 
   const onFinish = async (values: any) => {
+    setRemainCount(0)
     // onBeforeLogin
     submitButtonRef.current.onSpin(true)
     let loginInfo = {
@@ -71,6 +74,11 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     if (code === ErrorCode.INPUT_CAPTCHACODE) {
       setVerifyCodeUrl(getCaptchaUrl())
       setShowCaptcha(true)
+    }
+    if (code === ErrorCode.PASSWORD_ERROR) {
+      if ((data as any)?.remainCount) {
+        setRemainCount((data as any)?.remainCount ?? 0)
+      }
     }
     // if (Object.values(ErrorCode).includes(code)) {
     //   setButtonContent('error')
@@ -136,6 +144,20 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
               }
             />
           </Form.Item>
+        )}
+        {remainCount !== 0 && (
+          <span
+            style={{
+              marginBottom: 23,
+              fontSize: 12,
+              color: '#E63333',
+              display: 'block',
+            }}
+          >
+            {t('common.loginFailCheck', {
+              number: remainCount,
+            })}
+          </span>
         )}
 
         <Form.Item>

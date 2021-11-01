@@ -189,5 +189,7 @@
   "bindTotp": "绑定 OTP",
   "checkEmail": "该邮箱已被注册",
   "checkPhone": "该手机号已被注册",
+  "loginFailCheck": "温馨提示：你的密码错误，还可以尝试 {{number}} 次",
+  "useRecoveryCodetips": "登录成功后，我们将生成一个新的恢复代码。",
   "checkPasswordHasSpace": "不能包含空格"
 }

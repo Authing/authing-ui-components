@@ -71,7 +71,7 @@ const App = () => {
           clickCloseable: false, // clickCloseable	Modal 模式时是否隐藏登录框右上角的关闭按钮
           escCloseable: true, //
           target: '#c1',
-          socialConnectionsBtnShape: 'rectangle',
+          // socialConnectionsBtnShape: 'rectangle',
         }}
       />
 
