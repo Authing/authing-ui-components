@@ -6,6 +6,7 @@ import { Button, message } from 'antd'
 import { Guard } from './components'
 
 import { GuardMode } from './components/Type'
+import { SocialConnectionProvider } from 'authing-js-sdk'
 
 const App = () => {
   let [visible, setVisible] = useState(true)
@@ -56,16 +57,16 @@ const App = () => {
           //   LoginMethods.PhoneCode,
           // LoginMethods.WxMinQr,
           // ],
-          // socialConnections: [
-          //   SocialConnectionProvider.ALIPAY,
-          //   SocialConnectionProvider.APPLE_WEB,
-          // ], // 指定可选的社会化登录方式
+          socialConnections: [
+            SocialConnectionProvider.ALIPAY,
+            SocialConnectionProvider.APPLE_WEB,
+          ], // 指定可选的社会化登录方式
           // qrCodeScanOptions?: Parameters<QrCodeAuthenticationClient['startScanning']>[1]
           // passwordLoginMethods?: PasswordLoginMethods[]
           // enterpriseConnections: [] // 这个有啥用？
           // publicKey?: string
-          // lang: 'en-US',
-          lang: 'zh-CN',
+          lang: 'en-US',
+          // lang: 'zh-CN',
           mode: GuardMode.Modal,
           clickCloseable: false, // clickCloseable	Modal 模式时是否隐藏登录框右上角的关闭按钮
           escCloseable: true, //

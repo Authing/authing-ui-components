@@ -77,5 +77,6 @@
   "setted": "Has been set",
   "unBind": "Unbound",
   "unSet": "Not set",
+  "resetpasswordText1": "Type your Phone / Email，we will send reset code for you, this account all passwords will be reset.",
   "pleaseDownloadAuthenticator": "Open Google Authenticator / Microsoft Authenticator on your phone and scan below QR code"
 }

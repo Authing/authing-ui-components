@@ -57,7 +57,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
       props.onLogin(200, user)
     } catch (error) {
       if (typeof error.message === 'string') {
-        let e = { code: 2333, data: {}, message: '没有拿到错误提示' }
+        let e = { code: 2333, data: {}, message: '请求超时，LDAP 配置错误' }
         try {
           e = JSON.parse(error.message)
           console.log('解析 error.message 错误，检查 error', error)
@@ -87,13 +87,13 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
         <Form.Item
           className="authing-g2-input-form"
           name="account"
-          rules={[{ required: true, message: '账号不能为空' }]}
+          rules={[{ required: true, message: t('common.accNotNull') }]}
         >
           <Input
             className="authing-g2-input"
             autoComplete="email,username,tel"
             size="large"
-            placeholder={'请输入 LDAP 账号'}
+            placeholder={t('login.inputLdapUsername')}
             prefix={<UserOutlined style={{ color: '#878A95' }} />}
           />
         </Form.Item>
@@ -105,7 +105,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
           <Input.Password
             className="authing-g2-input"
             size="large"
-            placeholder={'请输入 LDAP 密码'}
+            placeholder={t('login.inputLdapPwd')}
             prefix={<LockOutlined style={{ color: '#878A95' }} />}
           />
         </Form.Item>
@@ -113,17 +113,17 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
           <Form.Item
             className="authing-g2-input-form"
             name="captchaCode"
-            rules={[{ required: true, message: '请输入图形验证码' }]}
+            rules={[{ required: true, message: t('login.inputCaptchaCode') }]}
           >
             <Input
               className="authing-g2-input add-after"
               size="large"
-              placeholder={'请输入图形验证码'}
+              placeholder={t('login.inputCaptchaCode')}
               addonAfter={
                 <img
                   className="g2-captcha-code-image"
                   src={verifyCodeUrl}
-                  alt={'图形验证码'}
+                  alt={t('login.captchaCode')}
                   style={{ height: '2em', cursor: 'pointer' }}
                   onClick={() => setVerifyCodeUrl(getCaptchaUrl())}
                 />

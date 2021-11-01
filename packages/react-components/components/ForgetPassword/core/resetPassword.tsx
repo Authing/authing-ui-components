@@ -115,13 +115,6 @@ export const ResetPassword = (props: ResetPasswordProps) => {
         <Form.Item
           className="authing-g2-input-form"
           name="password"
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: '至少六位，需包含英文、数字、符号中的两种',
-          //   },
-
-          // ]}
           rules={[
             {
               validator(_, value) {
@@ -140,7 +133,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
           <Input.Password
             className="authing-g2-input"
             size="large"
-            placeholder={'输入新密码'}
+            placeholder={t('user.inputNewPwd')}
             prefix={<LockOutlined style={{ color: '#878A95' }} />}
           />
         </Form.Item>

@@ -77,5 +77,6 @@
   "bindEmailTips": "为了您的账户安全，请绑定邮箱。",
   "personalMfa": "个人 MFA",
   "personalMfaTips": "绑定个人 MFA 后，您可以在登录时进行二次验证，更有效的保障您的账户安全。",
+  "resetpasswordText1": "输入你的注册电话 / 邮箱，将发送密码重置码给你，该账号关联的所有密码将被重置。",
   "pleaseDownloadAuthenticator": "请在手机打开 Google Authenticator / Microsoft Authenticator 扫码添加 MFA"
 }
