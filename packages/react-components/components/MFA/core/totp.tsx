@@ -26,9 +26,7 @@ export const BindMFATotp: React.FC<BindMFATotpProps> = ({
   return (
     <>
       <p className="authing-g2-mfa-title">{t('common.bindTotp')}</p>
-      <p className="authing-g2-mfa-tips">
-        为了保障访问安全，请前往 OTP 绑定页面
-      </p>
+      <p className="authing-g2-mfa-tips">{t('common.otpText1')}</p>
       <SubmitButton
         text={t('common.sure')}
         onClick={next}

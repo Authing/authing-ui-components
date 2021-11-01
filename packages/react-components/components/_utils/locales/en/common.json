@@ -174,6 +174,8 @@
   "inputVerifyCode": "please enter verification code",
   "SMS": "SMS Verification",
   "EmailVerification": "Email Verification",
+  "OTPVerification": "OTP Verification",
+  "faceVerification": "Face Verification",
   "retrievePassword": "Retrieve password",
   "registrationSuccess": "Registration Success",
   "repeatPasswordDoc": "The two passwords must be the same",
@@ -190,5 +192,10 @@
   "checkEmail": "This Email is registed",
   "checkPhone": "This phone is registed",
   "loginFailCheck": "Reminder: Your password is wrong, you can try {{number}} times",
+  "otpText1": "To ensure access security, please go to the OTP binding page",
+  "faceText1": "Bind face Verification",
+  "faceText2": "Please keep the camera open and unobstructed",
+  "faceText3": "Start",
+  "faceText4": "Try again",
   "checkPasswordHasSpace": "No spaces"
 }

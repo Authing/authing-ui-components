@@ -145,6 +145,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           maxLength={verifyCodeLength}
           prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
           method="phone"
+          onSendCodeBefore={() => form.validateFields(['phone'])}
           data={phone}
         />
       ),

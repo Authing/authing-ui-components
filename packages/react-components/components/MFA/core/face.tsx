@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { detectSingleFace } from 'face-api.js'
 import { useGuardHttp } from '../../_utils/guradHttp'
 import {
@@ -24,6 +25,7 @@ const useDashoffset = (percent: number) => {
 
 export const MFAFace = (props: any) => {
   let { postForm, post } = useGuardHttp()
+  let { t } = useTranslation()
   const [faceState, setFaceState] = useState('准备中') // 准备中, 识别中, 点击重试
   const [percent, setPercent] = useState(0) // 识别进度（相似性）
 
@@ -195,7 +197,7 @@ export const MFAFace = (props: any) => {
     const options = getFaceDetectorOptions()
     const result = await detectSingleFace(videoDom, options)
 
-    console.log('重试', result?.score)
+    // console.log('重试', result?.score)
     if (result) {
       if (result.score > FACE_SCORE) {
         const base64Data = getBase64(videoDom)
@@ -216,8 +218,8 @@ export const MFAFace = (props: any) => {
 
   return (
     <div>
-      <h3 className="authing-g2-mfa-title">绑定人脸识别</h3>
-      <p className="authing-g2-mfa-tips">请保持摄像头已打开并无遮挡</p>
+      <h3 className="authing-g2-mfa-title">{t('common.faceText1')}</h3>
+      <p className="authing-g2-mfa-tips">{t('common.faceText2')}</p>
       {faceState === '准备中' && (
         <>
           <ImagePro
@@ -233,7 +235,7 @@ export const MFAFace = (props: any) => {
               setFaceState('识别中')
               autoShoot()
             }}
-            text={'开始验证'}
+            text={t('common.faceText3')}
             className="mfa-face"
           />
         </>
@@ -264,7 +266,7 @@ export const MFAFace = (props: any) => {
             autoShoot()
           }}
         >
-          重试一次
+          {t('common.faceText4')}
         </div>
 
         <div className="video-round ring">
