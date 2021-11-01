@@ -120,7 +120,11 @@ export const LoginWithPhoneCode = (props: any) => {
         </Form.Item>
         <Form.Item>
           <SubmitButton
-            text={props.autoRegister ? '登录 / 注册' : '登录'}
+            text={
+              props.autoRegister
+                ? `${t('common.login')} / ${t('common.register')}`
+                : t('common.login')
+            }
             className="password"
             ref={submitButtonRef}
           />

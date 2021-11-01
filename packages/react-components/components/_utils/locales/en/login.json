@@ -90,5 +90,6 @@
   "setPwdLimitMsg3": "The password must be at least 6 digits long and must contain English, numbers and symbols at the same time",
   "wechatmpQrcode": "WechatMp QRcode\t",
   "inputEmailUsername": "Please enter email or account",
-  "inputUsername": "please enter account"
+  "inputUsername": "please enter account",
+  "moreWays": "more ways"
 }

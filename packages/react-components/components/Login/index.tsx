@@ -19,6 +19,7 @@ import { GuardModuleType } from '../Guard/module'
 import { LoginMethods } from '../AuthingGuard/types'
 import { IconFont } from '../IconFont'
 import { ChangeLanguage } from '../ChangeLanguage'
+import { i18n } from '../_utils/locales'
 
 import './styles.less'
 
@@ -64,9 +65,9 @@ const useDisables = (data: any) => {
 }
 
 const useSwitchStates = (loginWay: LoginMethods) => {
-  let switchText = '扫码登录'
+  let switchText = i18n.t('login.scanLogin')
   if (qrcodeWays.includes(loginWay)) {
-    switchText = '更多登录'
+    switchText = i18n.t('login.moreWays')
   }
   let inputNone = !inputWays.includes(loginWay) ? 'none' : ''
   let qrcodeNone = !qrcodeWays.includes(loginWay) ? 'none' : ''
@@ -192,7 +193,9 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
 
       <div className="g2-view-header">
         <img src={props.config?.logo} alt="" className="icon" />
-        <div className="title">登录 {props.config?.title}</div>
+        <div className="title">
+          {t('common.login')} {props.config?.title}
+        </div>
       </div>
 
       {renderInputWay && (
@@ -283,14 +286,14 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
 
             {!disableRegister && (
               <span className="go-to-register">
-                <span className="gray">还没有账号，</span>
+                <span className="gray">{t('common.noAccYet')}</span>
                 <span
                   className="link-like"
                   onClick={() =>
                     props.__changeModule?.(GuardModuleType.REGISTER, {})
                   }
                 >
-                  立即注册
+                  {t('common.registerImmediate')}
                 </span>
               </span>
             )}

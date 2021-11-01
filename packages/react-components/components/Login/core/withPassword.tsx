@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { Form, Input } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
+import { useTranslation } from 'react-i18next'
 
 import { useGuardHttp } from '../../_utils/guradHttp'
 import { useAuthClient } from '../../Guard/authClient'
@@ -22,6 +23,7 @@ interface LoginWithPasswordProps {
 }
 
 export const LoginWithPassword = (props: LoginWithPasswordProps) => {
+  let { t } = useTranslation()
   let { post } = useGuardHttp()
   let client = useAuthClient()
   let submitButtonRef = useRef<any>(null)
@@ -88,25 +90,27 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         <Form.Item
           name="account"
           className="authing-g2-input-form"
-          rules={[{ required: true, message: '账号不能为空' }]}
+          rules={[{ required: true, message: t('common.accNotNull') }]}
         >
           <Input
             className="authing-g2-input"
             autoComplete="email,username,tel"
             size="large"
-            placeholder={'请输入用户名 / 手机号 / 邮箱'}
+            placeholder={`${t('login.inputUsername')} / ${t(
+              'common.phoneNumber'
+            )} / ${t('common.email')}`}
             prefix={<UserOutlined style={{ color: '#878A95' }} />}
           />
         </Form.Item>
         <Form.Item
           name="password"
           className="authing-g2-input-form"
-          rules={[{ required: true, message: '密码不能为空' }]}
+          rules={[{ required: true, message: t('common.passwordNotNull') }]}
         >
           <Input.Password
             className="authing-g2-input"
             size="large"
-            placeholder={'输入登录密码'}
+            placeholder={t('login.inputLoginPwd')}
             prefix={<LockOutlined style={{ color: '#878A95' }} />}
           />
         </Form.Item>
@@ -115,17 +119,17 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
           <Form.Item
             className="authing-g2-input-form"
             name="captchaCode"
-            rules={[{ required: true, message: '请输入图形验证码' }]}
+            rules={[{ required: true, message: t('login.inputCaptchaCode') }]}
           >
             <Input
               className="authing-g2-input add-after"
               size="large"
-              placeholder={'请输入图形验证码'}
+              placeholder={t('login.inputCaptchaCode')}
               addonAfter={
                 <img
                   className="g2-captcha-code-image"
                   src={verifyCodeUrl}
-                  alt={'图形验证码'}
+                  alt={t('login.captchaCode')}
                   style={{ height: '2em', cursor: 'pointer' }}
                   onClick={() => setVerifyCodeUrl(getCaptchaUrl())}
                 />
@@ -134,10 +138,13 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
           </Form.Item>
         )}
 
-        {/* <img src={captchaUrl} alt="" /> */}
         <Form.Item>
           <SubmitButton
-            text={props.autoRegister ? '登录 / 注册' : '登录'}
+            text={
+              props.autoRegister
+                ? `${t('common.login')} / ${t('common.register')}`
+                : t('common.login')
+            }
             className="password"
             ref={submitButtonRef}
           />
