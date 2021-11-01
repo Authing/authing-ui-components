@@ -19,7 +19,7 @@ export const UseCode: React.FC<UseCodeProps> = ({ mfaToken }) => {
   const onFinish = async () => {
     submitButtonRef.current?.onSpin(true)
 
-    const { data } = await post(
+    await post(
       '/api/v2/mfa/totp/recovery',
       {
         recoveryCode: form.getFieldValue('recoveryCode'),
