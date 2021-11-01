@@ -8,10 +8,16 @@
   --sidePadding: 38px;
   --containerWidth: 456px;
 }
+.authing-g2-render-module-modal {
+  --containerWidth: 456px;
+}
 
 @media only screen and (max-width: 450px) {
   .authing-g2-render-module {
     --sidePadding: 8px;
+    --containerWidth: 100%;
+  }
+  .authing-g2-render-module-modal {
     --containerWidth: 100%;
   }
 }
@@ -177,45 +183,18 @@
     }
   }
 }
-// .authing-g2-select {
-//   border: 0;
-//   .authing-ant-select-selector {
-//     border: 1px solid #eaebee !important;
-//     height: 46px !important;
-//     border-radius: 4px !important;
-//   }
 
-//   .authing-ant-select-selection-item {
-//     display: flex;
-//     align-items: center;
-//   }
-
-//   .authing-ant-select-selector:hover {
-//     background: #eeeff1 !important;
-//     border: 1px solid #396aff !important;
-//   }
-
-//   .authing-ant-select-selector:focus {
-//     background: #ffffff !important;
-//     border: 1px solid #396aff !important;
-//   }
-
-//   .authing-ant-select-selector:hover .authing-ant-select-open:hover {
-//     background: #ffffff !important;
-//     border: 1px solid #396aff !important;
-//   }
-// }
 .authing-g2-input {
   border: 1px solid #f5f6f7;
   height: 46px;
   border-radius: 4px;
   background: #f5f6f7;
-
   &:hover {
     background: #eeeff1;
   }
   &:focus {
     background: #ffffff !important;
+    border-color: #618eff;
   }
 
   input {
@@ -235,6 +214,8 @@
   &.authing-ant-input-affix-wrapper:hover {
     border-color: #eeeff1;
     background: #eeeff1;
+    border-color: #618eff;
+
     .authing-ant-input {
       background: #eeeff1;
     }
@@ -243,6 +224,7 @@
   // focus
   &.authing-ant-input-affix-wrapper-focused {
     background: #ffffff !important;
+    border-color: #618eff;
     input {
       height: 0;
       padding: 1em 0.5em !important;
@@ -278,6 +260,18 @@
   }
   .g2-captcha-code-image {
     min-width: 100px;
+  }
+}
+
+// input error 的情况
+.authing-ant-form-item-has-error {
+  .authing-ant-input-affix-wrapper:hover {
+    border-color: #ff4d4f !important;
+  }
+
+  // focus
+  .authing-ant-input-affix-wrapper-focused {
+    border-color: #ff4d4f !important;
   }
 }
 
@@ -401,10 +395,9 @@
   }
 }
 .authing-g2-render-module-modal {
-  // width: var(--containerWidth);
-  width: 456px;
+  width: var(--containerWidth);
   .authing-ant-modal-content {
-    width: 456px;
+    width: var(--containerWidth);
     border-radius: 8px;
   }
   .authing-ant-modal-body {
@@ -428,5 +421,19 @@
   }
   .authing-ant-modal-footer {
     display: none;
+  }
+}
+
+.g2-send-code-input-col {
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type='number'] {
+    -moz-appearance: textfield;
   }
 }

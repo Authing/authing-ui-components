@@ -60,12 +60,19 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
   return (
     <>
       <Row justify="space-between" align="middle">
-        <Col span={15}>
+        <Col span={15} className="g2-send-code-input-col">
           <Input
-            {...inputProps}
             value={value}
-            onChange={onChange}
-            maxLength={4}
+            onChange={(e) => {
+              let v = e.target.value
+              if (v.length > 4) {
+                return
+              }
+              onChange?.(e)
+            }}
+            // maxLength={4}
+            type="number" // antd bug：如果 type===number 则 maxLength 不生效
+            {...inputProps}
           />
         </Col>
         <Col offset={1} span={8}>
