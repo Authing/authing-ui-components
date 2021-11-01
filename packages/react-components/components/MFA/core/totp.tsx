@@ -1,5 +1,5 @@
-import { Button, Form } from 'antd'
-import React, { useState } from 'react'
+import { Form } from 'antd'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { VerifyCodeInput } from '../../VerifyCodeInput'
@@ -50,28 +50,35 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
   const { t } = useTranslation()
   const [form] = Form.useForm()
 
+  const submitButtonRef = useRef<any>(null)
+
   const { post } = useGuardHttp()
 
   const [MFACode, setMFACode] = useState(new Array(6).fill(''))
 
-  const [finish, onFinish] = useAsyncFn(async () => {
-    const { code, data, message } = await post(
-      '/api/v2/mfa/totp/verify',
-      {
-        totp: MFACode.join(''),
-      },
-      {
-        headers: {
-          authorization: mfaToken,
+  const [, onFinish] = useAsyncFn(async () => {
+    submitButtonRef.current.onSpin(true)
+    try {
+      const { code, data, message } = await post(
+        '/api/v2/mfa/totp/verify',
+        {
+          totp: MFACode.join(''),
         },
-      }
-    )
+        {
+          headers: {
+            authorization: mfaToken,
+          },
+        }
+      )
 
-    if (code !== 200) {
-      mfaLogin(200, message)
-      Message.error(message)
-    } else {
-      mfaLogin(200, data)
+      if (code !== 200) {
+        mfaLogin(200, message)
+        Message.error(message)
+      } else {
+        mfaLogin(200, data)
+      }
+    } finally {
+      submitButtonRef.current.onSpin(false)
     }
   }, [mfaToken, MFACode])
 
@@ -102,16 +109,7 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
             setVerifyCode={setMFACode}
           />
         </Form.Item>
-        <Button
-          className="authing-g2-submit-button g2-mfa-submit-button"
-          loading={finish.loading}
-          block
-          htmlType="submit"
-          type="primary"
-          size="large"
-        >
-          {t('common.sure')}
-        </Button>
+        <SubmitButton text={t('common.sure')} ref={submitButtonRef} />
       </Form>
     </>
   )

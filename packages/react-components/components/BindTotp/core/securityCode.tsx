@@ -1,11 +1,12 @@
 import { Button } from 'antd'
 import { Form, message } from 'antd'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { VerifyCodeInput } from '../../VerifyCodeInput'
 import { GuardModuleType } from '../../Guard/module'
 import { useGuardHttp } from '../../_utils/guradHttp'
+import SubmitButton from '../../SubmitButton'
 
 const CODE_LEN = 6
 export interface SecurityCodeProps {
@@ -23,6 +24,7 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
 }) => {
   const [form] = Form.useForm()
   const [saftyCode, setSaftyCode] = useState(new Array(CODE_LEN).fill(''))
+  const submitButtonRef = useRef<any>(null)
 
   const { t } = useTranslation()
 
@@ -32,25 +34,30 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
     changeModule?.(GuardModuleType.DOWNLOAD_AT)
   }
 
-  const [bind, bindTotp] = useAsyncFn(async () => {
-    const { code, data, message: resMessage } = await post(
-      '/api/v2/mfa/totp/associate/confirm',
-      {
-        authenticator_type: 'totp',
-        totp: saftyCode.join(''),
-        source: 'APPLICATION',
-      },
-      {
-        headers: {
-          authorization: mfaToken,
+  const [, bindTotp] = useAsyncFn(async () => {
+    submitButtonRef.current.onSpin(true)
+    try {
+      const { code, data, message: resMessage } = await post(
+        '/api/v2/mfa/totp/associate/confirm',
+        {
+          authenticator_type: 'totp',
+          totp: saftyCode.join(''),
+          source: 'APPLICATION',
         },
-      }
-    )
+        {
+          headers: {
+            authorization: mfaToken,
+          },
+        }
+      )
 
-    if (code !== 200) {
-      message.error(resMessage)
-    } else {
-      onNext(data)
+      if (code !== 200) {
+        message.error(resMessage)
+      } else {
+        onNext(data)
+      }
+    } finally {
+      submitButtonRef.current?.onSpin(false)
     }
   }, [mfaToken, saftyCode])
 
@@ -106,16 +113,7 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
           />
         </Form.Item>
         <p>数字安全码</p>
-        <Button
-          className="authing-g2-submit-button g2-mfa-submit-button"
-          loading={bind.loading}
-          block
-          htmlType="submit"
-          type="primary"
-          size="large"
-        >
-          下一步
-        </Button>
+        <SubmitButton text={t('user.nextStep')} ref={submitButtonRef} />
       </Form>
     </>
   )

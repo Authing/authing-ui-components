@@ -1,6 +1,7 @@
-import { Button, Checkbox, Typography } from 'antd'
-import React, { useState } from 'react'
+import { Form, Checkbox, Typography } from 'antd'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import SubmitButton from '../../SubmitButton'
 
 const { Paragraph } = Typography
 
@@ -10,9 +11,21 @@ export interface BindSuccessProps {
 }
 
 export const BindSuccess: React.FC<BindSuccessProps> = ({ secret, onBind }) => {
-  const [isSaved, setIsSaved] = useState(false)
+  // const [isSaved, setIsSaved] = useState(false)
+  const submitButtonRef = useRef<any>(null)
+  const [form] = Form.useForm()
 
   const { t } = useTranslation()
+
+  const bindSuccess = async () => {
+    submitButtonRef.current?.onSpin(true)
+    try {
+      await form.validateFields()
+    } finally {
+      submitButtonRef.current?.onSpin(true)
+    }
+    onBind()
+  }
 
   return (
     <>
@@ -25,25 +38,25 @@ export const BindSuccess: React.FC<BindSuccessProps> = ({ secret, onBind }) => {
         <Paragraph copyable>{secret}</Paragraph>
       </div>
 
-      <Checkbox
-        className="g2-mfa-bindTotp-secretSave"
-        onChange={(evt) => setIsSaved(evt.target.checked)}
-        checked={isSaved}
-      >
-        {t('login.rememberedSecret')}
-      </Checkbox>
+      <Form form={form} onFinish={bindSuccess} style={{ width: '100%' }}>
+        <Form.Item
+          className="authing-g2-input-form"
+          name="remember"
+          rules={[
+            {
+              required: true,
+              message: t('common.pleaseRecordKey'),
+            },
+          ]}
+          valuePropName="checked"
+        >
+          <Checkbox className="g2-mfa-bindTotp-secretSave">
+            {t('login.rememberedSecret')}
+          </Checkbox>
+        </Form.Item>
 
-      <Button
-        className="authing-g2-submit-button g2-mfa-submit-button"
-        block
-        htmlType="submit"
-        type="primary"
-        size="large"
-        disabled={!isSaved}
-        onClick={onBind}
-      >
-        完成绑定
-      </Button>
+        <SubmitButton text={t('common.bindSuccess')} ref={submitButtonRef} />
+      </Form>
     </>
   )
 }
