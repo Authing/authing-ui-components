@@ -6,6 +6,7 @@ import { Button, message } from 'antd'
 import { Guard } from './components'
 
 import { GuardMode } from './components/Type'
+import { SocialConnectionProvider } from 'authing-js-sdk'
 
 const App = () => {
   let [visible, setVisible] = useState(true)

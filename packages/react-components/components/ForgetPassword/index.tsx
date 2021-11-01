@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { message } from 'antd'
 
 import { GuardModuleType } from '../Guard/module'
@@ -7,6 +8,7 @@ import { ResetPassword } from './core/resetPassword'
 import { ImagePro } from '../ImagePro'
 
 export const GuardForgetPassword = (props: any) => {
+  const { t } = useTranslation()
   let publicConfig = props.config.__publicConfig__
 
   const onReset = (res: any) => {
@@ -30,11 +32,8 @@ export const GuardForgetPassword = (props: any) => {
           className="icon"
         />
         {/* <img src={props.config?.logo} alt="" className="icon" /> */}
-        <div className="title">重置密码</div>
-        <div className="title-explain">
-          输入你的注册电话 /
-          邮箱，将发送密码重置码给你，该账号关联的所有密码将被重置。
-        </div>
+        <div className="title">{t('login.resetPwd')}</div>
+        <div className="title-explain">{t('user.resetpasswordText1')}</div>
       </div>
       <div className="g2-view-tabs">
         <ResetPassword onReset={onReset} publicConfig={publicConfig} />
@@ -44,7 +43,7 @@ export const GuardForgetPassword = (props: any) => {
           className="link-like back-to-login"
           onClick={() => props.__changeModule(GuardModuleType.LOGIN)}
         >
-          其他账号登录
+          {t('login.otherAccLogin')}
         </div>
       </div>
     </div>

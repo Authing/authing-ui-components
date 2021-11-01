@@ -55,7 +55,7 @@
   "perfectUserInfo": "完善用户信息",
   "welcomeJoinAndPerfect": "欢迎加入 {{name}} ，为了更好的使用体验，请先完善您的资料信息",
   "submit": "提交",
-  "resetPwd": "\b重置密码",
+  "resetPwd": "重置密码",
   "jumpAfterCount": "{{number}}s 后自动跳转登录",
   "pwdModifySuccess": "密码修改成功",
   "man": "男",

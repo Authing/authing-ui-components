@@ -1,18 +1,21 @@
+import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Tabs } from 'antd'
 import { RegisterMethods, User } from 'authing-js-sdk'
-import React, { useMemo } from 'react'
 import { ChangeLanguage } from '../ChangeLanguage'
 import { useAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
 import { RegisterWithEmail } from './core/WithEmail'
 import { RegisterWithPhone } from './core/WithPhone'
 import { GuardRegisterViewProps } from './props'
+import { i18n } from '../_utils/locales'
 
 export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
   config,
   __changeModule,
   ...registerEvents
 }) => {
+  const { t } = useTranslation()
   const agreementEnabled = config?.agreementEnabled
 
   const authClient = useAuthClient()
@@ -56,11 +59,11 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
     () => ({
       [RegisterMethods.Email]: {
         component: <RegisterWithEmail {...registerContextProps} />,
-        name: '邮箱',
+        name: i18n.t('common.email'),
       },
       [RegisterMethods.Phone]: {
         component: <RegisterWithPhone {...registerContextProps} />,
-        name: '手机',
+        name: i18n.t('common.phoneNumber'),
       },
     }),
     [registerContextProps]
@@ -81,7 +84,9 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
       <div className="g2-view-header">
         <img src={config?.logo} alt="" className="icon" />
 
-        <div className="title">欢迎加入 {config?.title}</div>
+        <div className="title">
+          {t('common.welcomeJoin', { name: config?.title })}
+        </div>
       </div>
       <div className="g2-view-tabs">
         <Tabs
@@ -98,14 +103,16 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
           className="link-like"
           onClick={() => __changeModule?.(GuardModuleType.FORGET_PWD, {})}
         >
-          忘记密码
+          {t('login.forgetPwd')}
         </div>
-        <span
-          className="back-to-login"
-          onClick={() => __changeModule?.(GuardModuleType.LOGIN, {})}
-        >
-          <span className="gray">已有账号，</span>
-          <span className="link-like">返回登录</span>
+        <span className="back-to-login">
+          <span className="gray">{t('common.alreadyHasAcc')}</span>
+          <span
+            className="link-like"
+            onClick={() => __changeModule?.(GuardModuleType.LOGIN, {})}
+          >
+            {t('common.backLoginPage')}
+          </span>
         </span>
       </div>
       <ChangeLanguage />

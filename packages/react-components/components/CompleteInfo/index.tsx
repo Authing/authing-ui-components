@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { ImagePro } from '../ImagePro'
 import { GuardModuleType } from '../Guard/module'
 
@@ -13,6 +14,7 @@ export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
   onRegisterInfoCompletedError,
   __changeModule,
 }) => {
+  const { t } = useTranslation()
   return (
     <div className="g2-view-container">
       <div className="g2-view-header">
@@ -23,9 +25,9 @@ export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
           alt=""
           className="icon"
         />
-        <div className="title">完善账号信息</div>
+        <div className="title">{t('common.perfectUserInfo')}</div>
         <div className="title-explain">
-          {`欢迎加入 ${config.title} ，为了更好的使用体验，请先完善您的资料信息。`}
+          {t('common.welcomeDoc', { name: config.title })}
         </div>
       </div>
       <div className="g2-view-tabs g2-completeInfo-content">
