@@ -75,22 +75,24 @@ export const SendCodeBtn: FC<SendCodeProps> = ({
   return (
     <Button
       {...buttonProps}
-      className={buttonProps.type ?? 'authing-g2-send-code-btn'}
+      className={
+        buttonProps.type ?? 'authing-g2-send-code-btn g2-loading-btn-center'
+      }
       disabled={disabled}
+      loading={loading}
       onClick={onClick}
       ref={btnRef}
     >
-      <Spin
-        spinning={loading}
-        indicator={<LoadingOutlined spin />}
-        size="small"
-      >
-        {enabled
-          ? t('common.sendVerifyCode')
-          : t('common.retryAfterTime', {
-              time: countDown,
-            })}
-      </Spin>
+      {loading === true && <span></span>}
+      {loading === false && (
+        <span>
+          {enabled
+            ? t('common.sendVerifyCode')
+            : t('common.retryAfterTime', {
+                time: countDown,
+              })}
+        </span>
+      )}
     </Button>
   )
 }
