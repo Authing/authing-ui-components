@@ -25,7 +25,7 @@ const App = () => {
       <Button onClick={() => setVisible(true)}>开启</Button>
 
       <Guard
-        appId="610271b10cd9106606c73d57"
+        appId="5f6265c67ff6fdae64ec516e"
         onLogin={(u) => message.info('🏁 用户业务层终点，登录完成。')}
         onBeforeLogin={(loginInfo, authClient) => {
           console.log('🪝onBeforeLogin 触发，返回 promise 或布尔', loginInfo)
@@ -57,20 +57,20 @@ const App = () => {
           //   LoginMethods.PhoneCode,
           // LoginMethods.WxMinQr,
           // ],
-          socialConnections: [
-            SocialConnectionProvider.ALIPAY,
-            SocialConnectionProvider.APPLE_WEB,
-          ], // 指定可选的社会化登录方式
+          // socialConnections: [
+          //   SocialConnectionProvider.ALIPAY,
+          //   SocialConnectionProvider.APPLE_WEB,
+          // ], // 指定可选的社会化登录方式
           // qrCodeScanOptions?: Parameters<QrCodeAuthenticationClient['startScanning']>[1]
           // passwordLoginMethods?: PasswordLoginMethods[]
           // enterpriseConnections: [] // 这个有啥用？
           // publicKey?: string
-          lang: 'en-US',
+          // lang: 'en-US',
           // lang: 'zh-CN',
           mode: GuardMode.Modal,
-          clickCloseable: false, // clickCloseable	Modal 模式时是否隐藏登录框右上角的关闭按钮
-          escCloseable: true, //
-          target: '#c1',
+          // clickCloseable: false, // clickCloseable	Modal 模式时是否隐藏登录框右上角的关闭按钮
+          // escCloseable: true, //
+          // target: '#c1',
           // socialConnectionsBtnShape: 'rectangle',
         }}
       />

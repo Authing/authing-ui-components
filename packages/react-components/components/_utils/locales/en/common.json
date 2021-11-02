@@ -146,7 +146,8 @@
       "questionDescript": "Problem description",
       "questionClip": "Problem screenshot",
       "upload": "Upload pictures",
-      "submit": "Submit"
+      "submit": "Submit",
+      "inputConcatWays": "Please enter contact information"
     }
   },
   "high": "High",
@@ -198,5 +199,19 @@
   "faceText3": "Start",
   "faceText4": "Try again",
   "checkPasswordHasSpace": "No spaces",
-  "backToVerify": "back"
+  "backToVerify": "back",
+  "autoJumpToLogin": "Then it will automatically jump to the login page",
+  "backToMFA": "Return to MFA binding",
+  "bindSuccess": "Complete binding",
+  "clickTodownload": "click to download",
+  "goToLogin": "Direct Login",
+  "mfaText1": "Scan the code to add MFA, check it on your mobile phone and enter the 6-digit security code.",
+  "noQuestions": "no problem,",
+  "noValidator": "No validator please",
+  "pleaseRecordKey": "Please record the key",
+  "timeoutLDAP": "Request timed out, LDAP configuration error",
+  "totpText1": "Please keep the recovery code properly",
+  "totpText2": "If your MFA is lost, you will need a recovery code",
+  "usePhoneOpen": "Please open on your phone",
+  "useRecoveryCodetips": "After successful login, we will generate a new recovery code."
 }
