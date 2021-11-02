@@ -169,7 +169,7 @@
   "setPassword": "设置密码",
   "passwordNotNull": "密码不能为空",
   "repeatPassword": "请重复密码",
-  "repeatPasswordDoc": "两次密码必须一致",
+  "repeatPasswordDoc": "输入的密码不匹配",
   "LDAPAccountNotNull": "LDAP 账号不能为空",
   "captchaCodeNotNull": "验证码不能为空",
   "recoverCodeNotNull": "恢复代码不能为空",
