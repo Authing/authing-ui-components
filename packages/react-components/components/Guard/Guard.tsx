@@ -217,7 +217,7 @@ export const Guard = (props: GuardProps) => {
           visible={props.visible}
           onCancel={props.onClose}
           keyboard={config.escCloseable}
-          maskClosable={true} //点击蒙层，是否允许关闭
+          maskClosable={false} //点击蒙层，是否允许关闭
           getContainer={config.target ? config.target : false}
         >
           <div className="authing-g2-render-module">{renderModule}</div>
