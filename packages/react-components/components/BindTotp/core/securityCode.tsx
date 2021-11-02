@@ -69,7 +69,7 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
           textAlign: 'left',
         }}
       >
-        {t('common.usePhoneOpen')} Google Authenticator / Microsoft
+        {t('common.usePhoneOpen')} Google Authenticator or Microsoft
         Authenticator（{t('common.noValidator')}{' '}
         <span
           style={{

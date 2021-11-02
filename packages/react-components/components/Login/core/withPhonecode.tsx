@@ -72,7 +72,7 @@ export const LoginWithPhoneCode = (props: any) => {
           className="authing-g2-input-form"
           name="phone"
           rules={[
-            { required: true, message: t('login.inputPhone') },
+            { required: true, message: t('common.phoneNotNull') },
             {
               validator: async (_, value: StoreValue) => {
                 if (!value) {

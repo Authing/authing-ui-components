@@ -61,7 +61,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({ mfaToken, onBind }) => {
           rules={[
             {
               required: true,
-              message: t('login.inputPhone'),
+              message: t('common.phoneNotNull'),
             },
             {
               pattern: VALIDATE_PATTERN.phone,

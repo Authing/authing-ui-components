@@ -60,11 +60,11 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
     () => ({
       [RegisterMethods.Email]: {
         component: <RegisterWithEmail {...registerContextProps} />,
-        name: i18n.t('common.email'),
+        name: i18n.t('common.emailLabel'),
       },
       [RegisterMethods.Phone]: {
         component: <RegisterWithPhone {...registerContextProps} />,
-        name: i18n.t('common.phoneNumber'),
+        name: i18n.t('common.phoneLabel'),
       },
     }),
     [registerContextProps]
