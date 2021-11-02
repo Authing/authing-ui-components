@@ -1,5 +1,5 @@
 import { SafetyOutlined, UserOutlined } from '@ant-design/icons'
-import { Form, Input } from 'antd'
+import { Form } from 'antd'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
@@ -16,6 +16,7 @@ import {
 import { useGuardHttp } from '../../_utils/guradHttp'
 import { Agreements } from '../components/Agreements'
 import SubmitButton from '../../SubmitButton'
+import { InputNumber } from '../../InputNumber'
 
 export interface RegisterWithPhoneProps {
   onRegister: Function
@@ -42,7 +43,9 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
 
   // 检查手机号是否已经被注册过了 by my son donglyc
   const handleCheckPhone = useDebounce(async (value: any) => {
-    if (value.phone) {
+    const phone: string = value.phone
+
+    if (phone && phone.length === 11) {
       let { data } = await get(`/api/v2/users/find`, {
         userPoolId: publicConfig?.userPoolId,
         key: form.getFieldValue('phone'),
@@ -50,6 +53,8 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
       })
       setIsFind(Boolean(data))
       form.validateFields(['phone'])
+    } else {
+      setIsFind(false)
     }
   }, 1000)
 
@@ -97,23 +102,20 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   const formItems = [
     {
       component: (
-        <Input
+        <InputNumber
           className="authing-g2-input"
-          autoComplete="tel"
           onChange={(e) => {
             setPhone(e.target.value)
           }}
           size="large"
           placeholder={t('login.inputPhone')}
           prefix={<UserOutlined style={{ color: '#878A95' }} />}
+          maxLength={11}
         />
       ),
       name: 'phone',
       rules: [
-        ...getRequiredRules(t('common.phoneNotNull')).concat({
-          pattern: VALIDATE_PATTERN.phone,
-          message: t('login.phoneError'),
-        }),
+        ...getRequiredRules(t('common.phoneNotNull')),
         {
           validator: (_: any, value: string) => {
             if (value) {

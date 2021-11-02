@@ -46,7 +46,9 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
 
   // 检查手机号是否已经被注册过了 by my son donglyc
   const handleCheckEmail = useDebounce(async (value: any) => {
-    if (value.email) {
+    const email: string = value?.email
+
+    if (value.email && VALIDATE_PATTERN.email.test(email)) {
       let { data } = await get<boolean>(`/api/v2/users/find`, {
         userPoolId: publicConfig?.userPoolId,
         key: form.getFieldValue('email'),
@@ -54,6 +56,8 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
       })
       setIsFind(Boolean(data))
       form.validateFields(['email'])
+    } else {
+      setIsFind(false)
     }
   }, 1000)
 

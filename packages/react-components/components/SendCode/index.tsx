@@ -8,7 +8,8 @@ import './style.less'
 import { useTranslation } from 'react-i18next'
 import { useAuthClient } from '../Guard/authClient'
 import { validate } from '../_utils'
-import Input, { InputProps } from 'antd/lib/input'
+import { InputProps } from 'antd/lib/input'
+import { InputNumber } from '../InputNumber'
 
 export interface SendPhoneCodeProps extends InputProps {
   method: 'phone' | 'email'
@@ -57,22 +58,16 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
       return false
     }
   }
+
   return (
     <>
       <Row justify="space-between" align="middle">
         <Col span={15} className="g2-send-code-input-col">
-          <Input
+          <InputNumber
             value={value}
-            onChange={(e) => {
-              let v = e.target.value
-              if (v.length > 4) {
-                return
-              }
-              onChange?.(e)
-            }}
-            // maxLength={4}
-            type="number" // antd bug：如果 type===number 则 maxLength 不生效
+            onChange={onChange}
             {...inputProps}
+            maxLength={4}
           />
         </Col>
         <Col offset={1} span={8}>

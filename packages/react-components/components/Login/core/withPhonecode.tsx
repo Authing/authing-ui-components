@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { Form, Input } from 'antd'
+import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { StoreValue } from 'antd/lib/form/interface'
 import { useAuthClient } from '../../Guard/authClient'
@@ -8,6 +8,7 @@ import { LoginMethods } from '../../'
 import { SendCode } from '../../SendCode'
 import { validate } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
+import { InputNumber } from '../../InputNumber'
 
 // const formatPhone = (value: any) => {
 //   if (!value) {
@@ -87,7 +88,7 @@ export const LoginWithPhoneCode = (props: any) => {
             },
           ]}
         >
-          <Input
+          <InputNumber
             className="authing-g2-input"
             autoComplete="tel"
             type="tel"

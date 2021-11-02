@@ -8,7 +8,6 @@ import { GuardModuleType } from '../Guard/module'
 import { RegisterWithEmail } from './core/WithEmail'
 import { RegisterWithPhone } from './core/WithPhone'
 import { GuardRegisterViewProps } from './props'
-import { i18n } from '../_utils/locales'
 
 export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
   config,
@@ -60,14 +59,14 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
     () => ({
       [RegisterMethods.Email]: {
         component: <RegisterWithEmail {...registerContextProps} />,
-        name: i18n.t('common.emailLabel'),
+        name: t('common.emailLabel'),
       },
       [RegisterMethods.Phone]: {
         component: <RegisterWithPhone {...registerContextProps} />,
-        name: i18n.t('common.phoneLabel'),
+        name: t('common.phoneLabel'),
       },
     }),
-    [registerContextProps]
+    [registerContextProps, t]
   )
 
   const renderTab = useMemo(
