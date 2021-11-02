@@ -109,7 +109,9 @@ export const ResetPassword = (props: ResetPasswordProps) => {
             prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
             method={codeMethod}
             data={identify}
-            onSendCodeBefore={() => form.validateFields(['identify'])}
+            onSendCodeBefore={async () => {
+              await form.validateFields(['identify'])
+            }}
 
             // form={form}
           />
