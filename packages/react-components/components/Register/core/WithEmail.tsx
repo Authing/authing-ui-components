@@ -13,7 +13,6 @@ import {
   getPasswordValidate,
   getRequiredRules,
   getUserRegisterParams,
-  PASSWORD_STRENGTH_TEXT_MAP,
   VALIDATE_PATTERN,
 } from '../../_utils'
 import { useGuardHttp } from '../../_utils/guradHttp'
@@ -168,9 +167,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         <Input.Password
           className="authing-g2-input"
           size="large"
-          placeholder={PASSWORD_STRENGTH_TEXT_MAP[
-            publicConfig?.passwordStrength!
-          ].placeholder()}
+          placeholder={t('login.inputPwd')}
           prefix={<LockOutlined style={{ color: '#878A95' }} />}
         />
       ),
@@ -234,6 +231,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
             name={item.name}
             rules={item.rules}
             className="authing-g2-input-form"
+            validateFirst={true}
           >
             {item.component}
           </Form.Item>

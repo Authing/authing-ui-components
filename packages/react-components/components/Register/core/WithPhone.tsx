@@ -172,6 +172,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
             name={item.name}
             rules={item.rules}
             className="authing-g2-input-form"
+            validateFirst={true}
           >
             {item.component}
           </Form.Item>

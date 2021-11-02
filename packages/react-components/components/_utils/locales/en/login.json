@@ -79,7 +79,7 @@
   "selectYourProblem": "Please select the problem you encountered",
   "subAccLogin": "Sub-account login",
   "submitFailRetry": "Submission failed, please try again",
-  "inputPwd": "Please enter password",
+  "inputPwd": "Enter the Password",
   "login": {
     "setPwdLimit2": "At least six digits, must contain two of English, numbers and symbols",
     "setPwdLimit3": "At least six digits, including English, numbers and symbols"

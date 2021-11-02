@@ -59,6 +59,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
         <Form.Item
           className="authing-g2-input-form"
           name="identify"
+          validateFirst={true}
           rules={[
             { required: true, message: t('login.inputPhoneOrEmail') },
             {
@@ -119,6 +120,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
         <Form.Item
           className="authing-g2-input-form"
           name="password"
+          validateFirst={true}
           rules={[
             {
               validator(_, value) {

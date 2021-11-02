@@ -214,5 +214,5 @@
   "totpText2": "If your MFA is lost, you will need a recovery code",
   "usePhoneOpen": "",
   "useRecoveryCodetips": "After successful login, we will generate a new recovery code.",
-  "passwordAgain": "Enter the password again"
+  "passwordAgain": "Enter the Password again"
 }
