@@ -77,11 +77,11 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
             submitButtonRef.current.onSpin(false)
             return
           }
-        } catch (e) {
+        } catch (e: any) {
           if (typeof e === 'string') {
             message.error(e)
           } else {
-            message.error(e.message)
+            message.error(e?.message)
           }
           submitButtonRef.current.onSpin(false)
           return
