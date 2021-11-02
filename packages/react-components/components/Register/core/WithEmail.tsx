@@ -191,9 +191,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         <Input.Password
           className="authing-g2-input"
           size="large"
-          placeholder={PASSWORD_STRENGTH_TEXT_MAP[
-            publicConfig?.passwordStrength!
-          ].placeholder()}
+          placeholder={t('common.passwordAgain')}
           prefix={<LockOutlined style={{ color: '#878A95' }} />}
         />
       ),

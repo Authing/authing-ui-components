@@ -213,5 +213,6 @@
   "timeoutLDAP": "请求超时，LDAP 配置错误",
   "noQuestions": "没有问题，",
   "goToLogin": "直接登录",
-  "autoJumpToLogin": "后将自动跳转登录页"
+  "autoJumpToLogin": "后将自动跳转登录页",
+  "passwordAgain": "再一次输入密码"
 }

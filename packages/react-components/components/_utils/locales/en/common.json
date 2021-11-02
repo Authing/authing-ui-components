@@ -213,5 +213,6 @@
   "totpText1": "Please keep the recovery code properly",
   "totpText2": "If your MFA is lost, you will need a recovery code",
   "usePhoneOpen": "Please open on your phone",
-  "useRecoveryCodetips": "After successful login, we will generate a new recovery code."
+  "useRecoveryCodetips": "After successful login, we will generate a new recovery code.",
+  "passwordAgain": "Enter the password again"
 }
