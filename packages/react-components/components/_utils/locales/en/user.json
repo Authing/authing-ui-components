@@ -11,7 +11,7 @@
   "confrimPwd": "Confirm Password",
   "currentPwd": "Current Password",
   "inputCurrPwd": "Enter current password",
-  "inputNewPwd": "Enter a new password",
+  "inputNewPwd": "Enter a new Password",
   "inputSafteyCode": "Enter Security Code",
   "mfaBind": "MFA Binding",
   "modifyPwd": "Change Password",
@@ -77,6 +77,6 @@
   "setted": "Has been set",
   "unBind": "Unbound",
   "unSet": "Not set",
-  "resetpasswordText1": "Type your Phone / Email，we will send reset code for you, this account all passwords will be reset.",
+  "resetpasswordText1": "Type in your phone number or email, and we will send a reset code to you.",
   "pleaseDownloadAuthenticator": "Open Google Authenticator or Microsoft Authenticator on your phone and scan below QR code"
 }

@@ -9,9 +9,9 @@ export const ChangeLanguage = (props: any) => {
     return <></>
   }
 
-  let switchText = 'English'
+  let switchText = '简体中文'
   if (i18n.language === 'en-US') {
-    switchText = '简体中文'
+    switchText = 'English'
   }
   return (
     <div className="g2-change-language-container">
