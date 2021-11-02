@@ -12,6 +12,7 @@ import { GuardLoginView } from '../Login'
 import { initAuthClient } from './authClient'
 import { GuardEvents, guardEventsFilter } from './event'
 import { initConfig, GuardConfig } from '../_utils/config'
+import { insertStyles } from '../_utils'
 import { initGuardHttp } from '../_utils/guradHttp'
 import { initI18n } from '..//_utils/locales'
 import { GuardMode, IG2FCProps } from '../Type'
@@ -76,7 +77,6 @@ interface ModuleState {
 
 export const Guard = (props: GuardProps) => {
   const { appId, config, onLoad, onLoadError } = props
-
   // 整合一下 所有的事件
   const events = guardEventsFilter(props)
 
@@ -170,6 +170,10 @@ export const Guard = (props: GuardProps) => {
   useEffect(() => {
     initGuardSetting()
   }, [initGuardSetting])
+
+  useEffect(() => {
+    insertStyles(guardConfig.contentCss)
+  }, [guardConfig.contentCss])
 
   const renderModule = useMemo(() => {
     if (initSettingEnd) {

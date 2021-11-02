@@ -32,4 +32,8 @@ export const codeMap: Record<number, GuardModuleAction> = {
     // 密码错误
     action: 'message',
   },
+  2057: {
+    // 密码错误太多次
+    action: 'message',
+  },
 }
