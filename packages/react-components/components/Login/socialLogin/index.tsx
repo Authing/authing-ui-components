@@ -32,9 +32,14 @@ import './style.less'
 export interface SocialLoginProps {
   appId: string
   config: LoginConfig
+  onLogin: any
 }
 
-export const SocialLogin: React.FC<SocialLoginProps> = ({ appId, config }) => {
+export const SocialLogin: React.FC<SocialLoginProps> = ({
+  appId,
+  config,
+  onLogin: onGuardLogin,
+}) => {
   const noLoginMethods = !config.loginMethods.length
 
   const userPoolId = config.__publicConfig__?.userPoolId
@@ -255,16 +260,22 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({ appId, config }) => {
           onSuccess(user) {
             // TODO
             // onSuccess(user)
+            onGuardLogin(200, user)
           },
           onError(code, msg) {
             try {
               const parsedMsg = JSON.parse(msg)
-              const { code: authingCode } = parsedMsg
-              if ([OTP_MFA_CODE, APP_MFA_CODE].includes(authingCode)) {
-                // TODO
-                // onFail(parsedMsg)
-                return
-              }
+              const {
+                code: authingCode,
+                message: authingMessage,
+                data: authingData,
+              } = parsedMsg
+              // if ([OTP_MFA_CODE, APP_MFA_CODE].includes(authingCode)) {
+              //   // TODO
+              //   onGuardLogin(authingCode, authingData, authingMessage)
+              //   return
+              // }
+              onGuardLogin(authingCode, authingData, authingMessage)
             } catch (e) {
               // do nothing...
             }

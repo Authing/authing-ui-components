@@ -347,7 +347,11 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
         </div>
       )}
       <div className="g2-social-login">
-        <SocialLogin appId={props.appId} config={props.config} />
+        <SocialLogin
+          appId={props.appId}
+          config={props.config}
+          onLogin={onLogin}
+        />
       </div>
       <ChangeLanguage langRange={langRange} />
     </div>
