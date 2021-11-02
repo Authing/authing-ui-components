@@ -157,6 +157,7 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
       >
         <Form.Item
           name="mfaCode"
+          className="g2-mfa-totp-verify-input"
           rules={[
             {
               validateTrigger: [],
