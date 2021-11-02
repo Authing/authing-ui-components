@@ -12,6 +12,7 @@ import { i18n } from '../_utils/locales'
 
 export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
   config,
+  onLangChange,
   __changeModule,
   ...registerEvents
 }) => {
@@ -115,7 +116,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
           </span>
         </span>
       </div>
-      <ChangeLanguage langRange={langRange} />
+      <ChangeLanguage langRange={langRange} onLangChange={onLangChange} />
     </div>
   )
 }

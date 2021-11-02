@@ -20,8 +20,10 @@ export const ChangeLanguage = (props: any) => {
         onClick={() => {
           if (i18n.language === 'zh-CN') {
             changeLang('en-US')
+            props.onLangChange('en-US')
           } else if (i18n.language === 'en-US') {
             changeLang('zh-CN')
+            props.onLangChange('zh-CN')
           }
         }}
       >
