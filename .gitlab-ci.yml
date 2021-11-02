@@ -50,8 +50,10 @@ build:demo:
     untracked: true
     key: ${CI_COMMIT_REF_SLUG}
     paths:
+      - packages/angular-components/dist/ng-ui-components/bundles
       - packages/native-js/lib
       - packages/react-components/lib
+      - packages/vue-components/lib
   script:
     - yarn
     - yarn build:demo
