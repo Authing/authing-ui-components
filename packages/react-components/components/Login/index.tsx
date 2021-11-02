@@ -353,7 +353,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
           onLogin={onLogin}
         />
       </div>
-      <ChangeLanguage langRange={langRange} />
+      <ChangeLanguage langRange={langRange} onLangChange={props.onLangChange} />
     </div>
   )
 }

@@ -159,7 +159,7 @@ export const Guard = (props: GuardProps) => {
 
       // 初始化 结束
       setInitSettingEnd(true)
-    } catch (error) {
+    } catch (error: any) {
       onLoadError?.(error)
 
       console.error(error)
