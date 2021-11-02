@@ -1,4 +1,3 @@
-// face 依赖
 import { nets, TinyFaceDetectorOptions } from 'face-api.js'
 
 let inputSize = 512

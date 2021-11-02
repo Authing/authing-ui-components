@@ -30,10 +30,8 @@ export const BindSuccess: React.FC<BindSuccessProps> = ({ secret, onBind }) => {
 
   return (
     <>
-      <p className="authing-g2-mfa-title">请妥善保存恢复代码</p>
-      <p className="authing-g2-mfa-tips">
-        如果您的 MFA 丢失时，您将需要一个恢复代码
-      </p>
+      <p className="authing-g2-mfa-title">{t('common.totpText1')}</p>
+      <p className="authing-g2-mfa-tips">{t('common.totpText2')}</p>
 
       <div className="g2-mfa-bindTotp-copySecret">
         <Paragraph copyable>{secret}</Paragraph>

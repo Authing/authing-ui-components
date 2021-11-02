@@ -19,7 +19,7 @@ export const GuardChangePassword = (props: any) => {
       // 返回登录
       props.__changeModule(GuardModuleType.LOGIN)
     } else {
-      console.log('*** reset code 未捕获', res)
+      console.log('*** reset code no catched', res)
     }
   }
 

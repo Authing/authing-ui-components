@@ -197,5 +197,6 @@
   "faceText2": "Please keep the camera open and unobstructed",
   "faceText3": "Start",
   "faceText4": "Try again",
-  "checkPasswordHasSpace": "No spaces"
+  "checkPasswordHasSpace": "No spaces",
+  "backToVerify": "back"
 }

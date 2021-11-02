@@ -47,7 +47,7 @@ export const RotateReset = (props: RotateResetProps) => {
           <Input.Password
             className="authing-g2-input"
             size="large"
-            placeholder={'请输入当前密码'}
+            placeholder={t('user.inputCurrPwd')}
             prefix={<LockOutlined style={{ color: '#878A95' }} />}
           />
         </Form.Item>
@@ -87,7 +87,7 @@ export const RotateReset = (props: RotateResetProps) => {
                   return Promise.reject(t('login.inputPwd'))
                 }
                 if (value !== pwd) {
-                  return Promise.reject('两次密码需要一致')
+                  return Promise.reject(t('common.repeatPasswordDoc'))
                 }
                 return Promise.resolve()
               },
@@ -97,7 +97,7 @@ export const RotateReset = (props: RotateResetProps) => {
           <Input.Password
             className="authing-g2-input"
             size="large"
-            placeholder={'再输入一次密码'}
+            placeholder={t('login.inputPwdAgain')}
             prefix={<LockOutlined style={{ color: '#878A95' }} />}
           />
         </Form.Item>

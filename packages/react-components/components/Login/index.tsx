@@ -143,7 +143,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     if (props.onBeforeLogin) {
       return props.onBeforeLogin?.(loginInfo, client)
     }
-    return () => console.log('Guard 未传入 onBeforeLogin hooks')
+    return () => console.log('Guard not onBeforeLogin hooks')
   }
 
   useEffect(() => {

@@ -19,14 +19,13 @@ const useDashoffset = (percent: number) => {
 
   // 在识别成功的时候，返回绿色
   let dashStyle = {}
-  // let dashStyle = percent > 0.65 ? { stroke: '#1EB76D' } : {}
   return { offset, dashStyle }
 }
 
 export const MFAFace = (props: any) => {
   let { postForm, post } = useGuardHttp()
   let { t } = useTranslation()
-  const [faceState, setFaceState] = useState('准备中') // 准备中, 识别中, 点击重试
+  const [faceState, setFaceState] = useState('ready') // ready, identifying, retry
   const [percent, setPercent] = useState(0) // 识别进度（相似性）
 
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -49,7 +48,7 @@ export const MFAFace = (props: any) => {
       // setLoading(false)
     })
 
-    if (faceState !== '识别中') {
+    if (faceState !== 'identifying') {
       return // 不存在 video dom，不要去尝试了
     }
     let devicesContext = navigator.mediaDevices.getUserMedia(devicesConstraints)
@@ -73,7 +72,7 @@ export const MFAFace = (props: any) => {
 
   // 监听 faceState
   useEffect(() => {
-    if (faceState === '识别中' || faceState === '点击重试') {
+    if (faceState === 'identifying' || faceState === 'retry') {
       props.setShowMethods(false)
     } else {
       props.setShowMethods(true)
@@ -111,7 +110,7 @@ export const MFAFace = (props: any) => {
       p2.current = undefined
       interval.current = undefined
       cooldown.current = 6
-      setFaceState('点击重试')
+      setFaceState('retry')
     }
     props.mfaLogin(code, data, message)
   }
@@ -197,7 +196,6 @@ export const MFAFace = (props: any) => {
     const options = getFaceDetectorOptions()
     const result = await detectSingleFace(videoDom, options)
 
-    // console.log('重试', result?.score)
     if (result) {
       if (result.score > FACE_SCORE) {
         const base64Data = getBase64(videoDom)
@@ -220,7 +218,7 @@ export const MFAFace = (props: any) => {
     <div>
       <h3 className="authing-g2-mfa-title">{t('common.faceText1')}</h3>
       <p className="authing-g2-mfa-tips">{t('common.faceText2')}</p>
-      {faceState === '准备中' && (
+      {faceState === 'ready' && (
         <>
           <ImagePro
             className="g2-mfa-face-image"
@@ -232,7 +230,7 @@ export const MFAFace = (props: any) => {
 
           <SubmitButton
             onClick={() => {
-              setFaceState('识别中')
+              setFaceState('identifying')
               autoShoot()
             }}
             text={t('common.faceText3')}
@@ -243,7 +241,7 @@ export const MFAFace = (props: any) => {
       <div
         className="g2-mfa-face-identifying"
         style={{
-          display: faceState !== '准备中' ? 'flex' : 'none',
+          display: faceState !== 'ready' ? 'flex' : 'none',
         }}
       >
         <video
@@ -258,10 +256,10 @@ export const MFAFace = (props: any) => {
         <div
           className="video-round mesh"
           style={{
-            display: faceState === '点击重试' ? 'flex' : 'none',
+            display: faceState === 'retry' ? 'flex' : 'none',
           }}
           onClick={() => {
-            setFaceState('识别中')
+            setFaceState('identifying')
             setPercent(0)
             autoShoot()
           }}
@@ -271,13 +269,6 @@ export const MFAFace = (props: any) => {
 
         <div className="video-round ring">
           <svg width={240} height={240} fill="none">
-            {/* <circle
-              id="circleBg"
-              className="svg-circle-bg"
-              cx={120}
-              cy={120}
-              r={110}
-            /> */}
             <circle
               className="svg-circle-running"
               style={dashStyle}

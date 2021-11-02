@@ -36,7 +36,7 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
       return false
     }
     if (!validate('email', email)) {
-      message.error('邮箱不正确')
+      message.error(t('common.emailFormatError'))
       return false
     }
     try {

@@ -76,7 +76,7 @@ export const FirstLoginReset = (props: FirstLoginResetProps) => {
                   return Promise.reject(t('login.inputPwd'))
                 }
                 if (value !== pwd) {
-                  return Promise.reject('两次密码需要一致')
+                  return Promise.reject(t('common.repeatPasswordDoc'))
                 }
                 return Promise.resolve()
               },
@@ -86,7 +86,7 @@ export const FirstLoginReset = (props: FirstLoginResetProps) => {
           <Input.Password
             className="authing-g2-input"
             size="large"
-            placeholder={'再输入一次密码'}
+            placeholder={t('login.inputPwdAgain')}
             prefix={<LockOutlined style={{ color: '#878A95' }} />}
           />
         </Form.Item>

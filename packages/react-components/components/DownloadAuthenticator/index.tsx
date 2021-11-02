@@ -86,7 +86,7 @@ export const GuardDownloadATView: React.FC<GuardDownloadATViewProps> = ({
       <div className="g2-view-back">
         <span onClick={onBack}>
           <IconFont type="authing-back" />
-          <span>返回 MFA 绑定</span>
+          <span>{t('common.backToMFA')}</span>
         </span>
       </div>
       <div className="g2-view-tabs g2-mfa-totp-download-tabs">

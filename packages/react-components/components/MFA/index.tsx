@@ -72,7 +72,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
 
     if (!action) {
       return () => {
-        console.error('未捕获 code', code)
+        console.error('not catch code', code)
         // props.onLoginError?.(data, client) // 未捕获 code
       }
     }
