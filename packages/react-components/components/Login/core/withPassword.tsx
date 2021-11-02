@@ -10,7 +10,6 @@ import { ErrorCode } from '../../_utils/GuardErrorCode'
 import { LoginMethods } from '../../'
 import SubmitButton from '../../SubmitButton'
 
-// core 代码只完成核心功能，东西尽可能少
 interface LoginWithPasswordProps {
   // configs
   publicKey: string

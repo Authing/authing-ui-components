@@ -130,8 +130,13 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
         <Form.Item
           className="authing-g2-input-form"
           name="identify"
-          label="联系方式"
-          rules={[{ required: true, message: '请输入联系方式' }]}
+          label={t('common.problem.form.phone')}
+          rules={[
+            {
+              required: true,
+              message: t('common.problem.form.inputConcatWays'),
+            },
+          ]}
         >
           <Input
             className="authing-g2-input"
@@ -143,7 +148,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
         </Form.Item>
         <Form.Item
           className="authing-g2-input-form"
-          label="相关问题"
+          label={t('common.problem.form.question')}
           name="questionPicker"
           initialValue={typeProblem}
         >
@@ -169,13 +174,15 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
         <Form.Item
           className="authing-g2-input-form"
           name="description"
-          label="问题描述"
+          label={t('common.problem.form.questionDescript')}
         >
           <Input.TextArea className="authing-g2-input" />
         </Form.Item>
 
         <div className="authing-g2-input-form">
-          <div className="label-title">问题截图</div>
+          <div className="label-title">
+            {t('common.problem.form.questionClip')}
+          </div>
           <div className="g2-questions">
             <Upload
               action={`${props.host}/api/v2/upload?folder=photos`}
@@ -201,7 +208,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
         <Form.Item className="authing-g2-input-form submit-form">
           <SubmitButton
             className="forget-password"
-            text="提交"
+            text={t('common.problem.form.submit')}
             ref={submitButtonRef}
           />
         </Form.Item>

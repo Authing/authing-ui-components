@@ -102,7 +102,7 @@ export const LoginWithPhoneCode = (props: any) => {
         <Form.Item
           className="authing-g2-input-form"
           name="code"
-          rules={[{ required: true, message: '请输入验证码' }]}
+          rules={[{ required: true, message: t('common.inputVerifyCode') }]}
         >
           <SendCode
             className="authing-g2-input"

@@ -141,6 +141,7 @@
     "successTipMsg": "您的信息已经提交给应用管理员，会尽快处理您的反馈，请您耐心等待。",
     "form": {
       "phone": "联系方式",
+      "inputConcatWays": "请输入联系方式",
       "phonePlaceholder": "请输入您的邮箱或手机号（必填）",
       "question": "相关问题",
       "questionDescript": "问题描述",
@@ -195,10 +196,22 @@
   "useRecoveryCodetips": "登录成功后，我们将生成一个新的恢复代码。",
   "bindSuccess": "完成绑定",
   "pleaseRecordKey": "请记录密钥",
+  "totpText1": "请妥善保存恢复代码",
+  "totpText2": "如果您的 MFA 丢失时，您将需要一个恢复代码",
   "otpText1": "为了保障访问安全，请前往 OTP 绑定页面",
   "faceText1": "绑定人脸识别",
   "faceText2": "请保持摄像头已打开并无遮挡",
   "faceText3": "开始验证",
   "faceText4": "重试一次",
-  "checkPasswordHasSpace": "不能包含空格"
+  "checkPasswordHasSpace": "不能包含空格",
+  "backToVerify": "返回验证页",
+  "usePhoneOpen": "请在手机打开",
+  "noValidator": "没有验证器请",
+  "clickTodownload": "点击下载",
+  "mfaText1": "扫码添加 MFA，在手机查看并输入 6 位数字安全码。",
+  "backToMFA": "返回 MFA 绑定",
+  "timeoutLDAP": "请求超时，LDAP 配置错误",
+  "noQuestions": "没有问题，",
+  "goToLogin": "直接登录",
+  "autoJumpToLogin": "后将自动跳转登录页"
 }

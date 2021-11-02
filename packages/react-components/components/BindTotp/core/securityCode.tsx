@@ -62,15 +62,15 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
 
   return (
     <>
-      <p className="authing-g2-mfa-title">MFA 绑定</p>
+      <p className="authing-g2-mfa-title">{t('user.mfaBind')}</p>
       <p
         className="authing-g2-mfa-tips"
         style={{
           textAlign: 'left',
         }}
       >
-        请在手机打开 Google Authenticator / Microsoft
-        Authenticator（没有验证器请{' '}
+        {t('common.usePhoneOpen')} Google Authenticator / Microsoft
+        Authenticator（{t('common.noValidator')}{' '}
         <span
           style={{
             color: '#396AFF',
@@ -78,9 +78,9 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
           }}
           onClick={onJump}
         >
-          点击下载
+          {t('common.clickTodownload')}
         </span>
-        ） 扫码添加 MFA，在手机查看并输入 6 位数字安全码。
+        ） {t('common.mfaText1')}
       </p>
       <img className="g2-mfa-bindTotp-qrcode" src={qrcode} alt="qrcode" />
       <Form
@@ -111,7 +111,7 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
             setVerifyCode={setSaftyCode}
           />
         </Form.Item>
-        <p>数字安全码</p>
+        <p>{t('user.numberSafteyCode')}</p>
         <SubmitButton text={t('user.nextStep')} ref={submitButtonRef} />
       </Form>
     </>

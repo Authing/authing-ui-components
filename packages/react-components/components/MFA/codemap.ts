@@ -8,14 +8,14 @@ export const codeMap: Record<number, GuardModuleAction> = {
   },
   1700: {
     action: 'insideFix',
-    message: '校验失败，组件内部自行处理',
+    message: 'verification failed, let components inside fix is fine.',
   },
   1701: {
     action: 'insideFix',
-    message: '校验失败，组件内部自行处理',
+    message: 'verification failed, let components inside fix is fine.',
   },
   1702: {
     action: 'insideFix',
-    message: '校验失败，组件内部自行处理',
+    message: 'verification failed, let components inside fix is fine.',
   },
 }

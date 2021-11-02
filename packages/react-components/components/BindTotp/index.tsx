@@ -11,6 +11,7 @@ import { ShieldSpin, Spin } from '../ShieldSpin'
 import { BindSuccess } from './core/bindSuccess'
 import { SecurityCode } from './core/securityCode'
 import { GuardBindTotpViewProps } from './props'
+import { useTranslation } from 'react-i18next'
 import './styles.less'
 const window: Window = require('global/window')
 
@@ -26,7 +27,7 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
   __changeModule,
 }) => {
   const { get, post } = useGuardHttp()
-
+  const { t } = useTranslation()
   const [secret, setSecret] = useState('')
   const [qrcode, setQrcode] = useState('')
   const [user, setUser] = useState<User>()
@@ -59,8 +60,8 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
         __changeModule?.(GuardModuleType.LOGIN, {})
         return
       }
-    } catch (error) {
-      message.error(error.message)
+    } catch (error: any) {
+      message.error(error?.message)
     }
 
     const { data } = await post<any>(
@@ -74,7 +75,6 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
   }, [initData.mfaToken])
 
   const onBind = () => {
-    console.log('绑定完成', user)
     if (user) onLogin?.(user, authClient)
   }
 
@@ -110,7 +110,7 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
           <div className="g2-view-back">
             <span onClick={onBack}>
               <IconFont type="authing-back" />
-              <span>返回验证页</span>
+              <span>{t('common.backToVerify')}</span>
             </span>
           </div>
           <div className="g2-mfa-content g2-mfa-bindTotp">

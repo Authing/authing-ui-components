@@ -55,12 +55,12 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
         captchaCode,
       })
       props.onLogin(200, user)
-    } catch (error) {
-      if (typeof error.message === 'string') {
-        let e = { code: 2333, data: {}, message: '请求超时，LDAP 配置错误' }
+    } catch (error: any) {
+      if (typeof error?.message === 'string') {
+        let e = { code: 2333, data: {}, message: t('common.timeoutLDAP') }
         try {
-          e = JSON.parse(error.message)
-          console.log('解析 error.message 错误，检查 error', error)
+          e = JSON.parse(error?.message)
+          console.log('paser error.message error，cheke error', error)
           // onFail && onFail(errorData)
           submitButtonRef.current.onSpin(false)
           return
@@ -100,7 +100,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
         <Form.Item
           className="authing-g2-input-form"
           name="password"
-          rules={[{ required: true, message: '密码不能为空' }]}
+          rules={[{ required: true, message: t('common.passwordNotNull') }]}
         >
           <Input.Password
             className="authing-g2-input"

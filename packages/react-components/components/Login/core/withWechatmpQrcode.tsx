@@ -29,7 +29,6 @@ export const LoginWithWechatmpQrcode = (
         setLoading(false)
       },
       onStart(timer) {
-        // console.log('开始扫码')
         timerRef.current = timer
       },
       onSuccess(user) {
@@ -39,7 +38,6 @@ export const LoginWithWechatmpQrcode = (
       onError: (message) => {
         // config.qrCodeScanOptions?.onError?.(message)
         // onFail && onFail(`${message}`)
-        console.log('扫码错误', message)
       },
     })
     return () => clearInterval(timerRef.current)

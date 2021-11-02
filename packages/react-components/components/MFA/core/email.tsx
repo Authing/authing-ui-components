@@ -42,8 +42,8 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
         return
       }
       onBind(email)
-    } catch (e) {
-      const error = JSON.parse(e.message)
+    } catch (e: any) {
+      const error = JSON.parse(e?.message)
       submitButtonRef.current.onError()
       Message.error(error.message)
     } finally {
@@ -52,7 +52,7 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
   }
   return (
     <>
-      <p className="authing-g2-mfa-title">绑定电子邮箱</p>
+      <p className="authing-g2-mfa-title">{t('common.bindEmail')}</p>
       <p className="authing-g2-mfa-tips">{t('common.bindEmailDoc')}</p>
       <Form
         form={form}
@@ -132,8 +132,8 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
       })
 
       onVerify(200, user)
-    } catch (e) {
-      const error = JSON.parse(e.message)
+    } catch (e: any) {
+      const error = JSON.parse(e?.message)
       onVerify(error.code as number, error)
     } finally {
       submitButtonRef.current?.onSpin(false)

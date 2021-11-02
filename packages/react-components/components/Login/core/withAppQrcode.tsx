@@ -26,17 +26,14 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
         setLoading(false)
       },
       onStart(timer) {
-        // console.log('开始扫码')
         timerRef.current = timer
       },
       onSuccess(user) {
-        // console.log('扫码完成', user)
         props.onLogin(200, user)
       },
       onError: (message) => {
         // config.qrCodeScanOptions?.onError?.(message)
         // onFail && onFail(`${message}`)
-        // console.log('扫码错误', message)
       },
     })
     return () => clearInterval(timerRef.current)

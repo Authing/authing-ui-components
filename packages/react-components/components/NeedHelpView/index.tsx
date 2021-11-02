@@ -46,7 +46,7 @@ export const GuardNeedHelpView = (props: any) => {
             className="icon"
           />
 
-          <div className="title">问题反馈</div>
+          <div className="title">{t('common.problem.title')}</div>
         </div>
         <div className="g2-view-tabs">
           <DescribeQuestions
@@ -57,12 +57,12 @@ export const GuardNeedHelpView = (props: any) => {
         </div>
         <div className="g2-tips-line ">
           <div className="back-to-login">
-            <span className="gray">没有问题，</span>
+            <span className="gray">{t('common.noQuestions')}</span>
             <span
               className="link-like"
               onClick={() => props.__changeModule(GuardModuleType.LOGIN)}
             >
-              直接登录
+              {t('common.goToLogin')}
             </span>
           </div>
         </div>
@@ -90,7 +90,9 @@ export const GuardNeedHelpView = (props: any) => {
           }}
           text={t('common.backLoginPage')}
         />
-        <div className="timer-tip">{countDown} 后将自动跳转登录页</div>
+        <div className="timer-tip">
+          {countDown} {t('common.pToLogin')}
+        </div>
       </div>
     </div>
   )
