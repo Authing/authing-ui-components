@@ -70,7 +70,7 @@ const insertedRecord: Record<STYLE_RECORD_KEY, any> = {
 }
 export const insertStyles = (
   styles: string | any,
-  recordKey: STYLE_RECORD_KEY
+  recordKey?: STYLE_RECORD_KEY
 ) => {
   let styleElt, styleSheet
   if ((document as any).createStyleSheet) {
@@ -97,7 +97,9 @@ export const insertStyles = (
     }
   }
 
-  insertedRecord[recordKey] = styleElt
+  if (recordKey) {
+    insertedRecord[recordKey] = styleElt
+  }
 }
 
 export const removeStyles = (recordKey: STYLE_RECORD_KEY) => {

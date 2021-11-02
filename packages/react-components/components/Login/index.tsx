@@ -98,6 +98,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     const action = codeMap[code]
     if (code === 200) {
       return (data: any) => {
+        message.success(t('common.LoginSuccess'))
         props.onLogin?.(data, client!) // 登录成功
       }
     }
