@@ -90,6 +90,7 @@ const mergeConfig = (
     // 注册协议
     agreementEnabled: config.agreementEnabled ?? publicConfig.agreementEnabled,
     agreements: config.agreements ?? publicConfig.agreements,
+    contentCss: config.contentCss ?? publicConfig.css,
   }
 
   return mergedPublicConfig
