@@ -25,7 +25,7 @@
   "retryAfterTime": "{{time}} 秒",
   "sendVerifyCode": "发送验证码",
   "emailFormatError": "输入有效的邮箱",
-  "phoneFormateError": "手机号格式不正确",
+  "phoneFormateError": "请输入有效的手机号",
   "authoriztion": "授权",
   "authApp": "授权应用",
   "authAppSomePermisson": "{{name}} 申请访问您的账户信息，授权 {{name}} 以下权限",
@@ -191,7 +191,7 @@
   "downloadTotpAppDocs": "请使用手机扫码下载验证器",
   "bindTotp": "绑定 OTP",
   "checkEmail": "无法使用此邮箱，请选择其他邮箱",
-  "checkPhone": "该手机号已被注册",
+  "checkPhone": "无法使用此手机号，请选择其他手机号",
   "loginFailCheck": "温馨提示：你的密码错误，还可以尝试 {{number}} 次",
   "useRecoveryCodetips": "登录成功后，我们将生成一个新的恢复代码。",
   "bindSuccess": "完成绑定",
@@ -216,5 +216,6 @@
   "autoJumpToLogin": "后将自动跳转登录页",
   "passwordAgain": "请确认密码",
   "isMissing": "{{name}}未填写",
-  "password": "密码"
+  "password": "密码",
+  "captchaCode": "验证码"
 }

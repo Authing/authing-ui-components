@@ -25,6 +25,7 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
   onChange,
   form,
   onSendCodeBefore,
+  maxLength,
   ...inputProps
 }) => {
   const { t } = useTranslation()
@@ -67,7 +68,7 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
             value={value}
             onChange={onChange}
             {...inputProps}
-            maxLength={4}
+            maxLength={maxLength}
           />
         </Col>
         <Col offset={1} span={8}>

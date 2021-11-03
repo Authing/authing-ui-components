@@ -32,6 +32,8 @@ export const LoginWithPhoneCode = (props: any) => {
 
   let client = useAuthClient()
 
+  const verifyCodeLength = props.verifyCodeLength ?? 4
+
   const onFinish = async (values: any) => {
     submitButtonRef.current.onSpin(true)
     // onBeforeLogin
@@ -110,8 +112,9 @@ export const LoginWithPhoneCode = (props: any) => {
             autoComplete="one-time-code"
             size="large"
             placeholder={t('common.inputFourVerifyCode', {
-              length: 4,
+              length: verifyCodeLength,
             })}
+            maxLength={verifyCodeLength}
             prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
             method="phone"
             data={''}

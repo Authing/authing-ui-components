@@ -24,7 +24,7 @@
   "inputLdapPwd": "LDAP Password",
   "inputLdapUsername": "LDAP Username",
   "inputLoginPwd": "Password",
-  "inputPhone": "Phone Number",
+  "inputPhone": "Phone number",
   "inputPhoneOrEmail": "Enter Phone number or Email",
   "inputPwdAgain": "Enter password again",
   "inputPwdLimit": "Enter 6-20 digit password",

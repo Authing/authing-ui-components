@@ -8,6 +8,7 @@ import { useAuthClient } from '../../Guard/authClient'
 import { SendCode } from '../../SendCode'
 import { useDebounce } from '../../_utils/hooks'
 import {
+  fieldRequiredRule,
   getDeviceName,
   getRequiredRules,
   getUserRegisterParams,
@@ -115,7 +116,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
       ),
       name: 'phone',
       rules: [
-        ...getRequiredRules(t('common.phoneNotNull')),
+        ...fieldRequiredRule(t('common.phoneNumber')),
         {
           validator: (_: any, value: string) => {
             if (value) {
@@ -152,7 +153,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         />
       ),
       name: 'code',
-      rules: getRequiredRules(t('common.captchaCodeNotNull')),
+      rules: fieldRequiredRule(t('common.captchaCode')),
     },
   ]
 

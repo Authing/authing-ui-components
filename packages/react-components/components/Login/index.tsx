@@ -22,6 +22,7 @@ import { ChangeLanguage } from '../ChangeLanguage'
 import { i18n } from '../_utils/locales'
 
 import './styles.less'
+import { config } from 'process'
 
 const inputWays = [
   LoginMethods.Password,
@@ -230,6 +231,9 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                   tab={t('login.verifyCodeLogin')}
                 >
                   <LoginWithPhoneCode
+                    verifyCodeLength={
+                      props.config.__publicConfig__?.verifyCodeLength
+                    }
                     autoRegister={autoRegister}
                     onBeforeLogin={onBeforeLogin}
                     onLogin={onLogin}
