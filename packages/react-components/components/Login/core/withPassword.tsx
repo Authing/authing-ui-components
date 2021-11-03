@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useGuardHttp } from '../../_utils/guradHttp'
 import { useAuthClient } from '../../Guard/authClient'
-import { getUserRegisterParams } from '../../_utils'
+import { fieldRequiredRule, getUserRegisterParams } from '../../_utils'
 import { ErrorCode } from '../../_utils/GuardErrorCode'
 import { LoginMethods } from '../../'
 import SubmitButton from '../../SubmitButton'
@@ -97,7 +97,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         <Form.Item
           name="account"
           className="authing-g2-input-form"
-          rules={[{ required: true, message: t('common.accNotNull') }]}
+          rules={fieldRequiredRule(t('common.account'))}
         >
           <Input
             className="authing-g2-input"
@@ -112,7 +112,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         <Form.Item
           name="password"
           className="authing-g2-input-form"
-          rules={[{ required: true, message: t('common.passwordNotNull') }]}
+          rules={fieldRequiredRule(t('common.password'))}
         >
           <Input.Password
             className="authing-g2-input"
@@ -126,7 +126,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
           <Form.Item
             className="authing-g2-input-form"
             name="captchaCode"
-            rules={[{ required: true, message: t('login.inputCaptchaCode') }]}
+            rules={fieldRequiredRule(t('common.captchaCode'))}
           >
             <Input
               className="authing-g2-input add-after"

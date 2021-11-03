@@ -6,7 +6,7 @@ import { useAuthClient } from '../../Guard/authClient'
 import { UserOutlined, SafetyOutlined } from '@ant-design/icons'
 import { LoginMethods } from '../../'
 import { SendCode } from '../../SendCode'
-import { validate } from '../../_utils'
+import { fieldRequiredRule, validate } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
 import { InputNumber } from '../../InputNumber'
 
@@ -75,7 +75,7 @@ export const LoginWithPhoneCode = (props: any) => {
           className="authing-g2-input-form"
           name="phone"
           rules={[
-            { required: true, message: t('common.phoneNotNull') },
+            ...fieldRequiredRule(t('common.phone')),
             {
               validator: async (_, value: StoreValue) => {
                 if (!value) {
@@ -105,7 +105,7 @@ export const LoginWithPhoneCode = (props: any) => {
         <Form.Item
           className="authing-g2-input-form"
           name="code"
-          rules={[{ required: true, message: t('common.inputVerifyCode') }]}
+          rules={fieldRequiredRule(t('common.captchaCode'))}
         >
           <SendCode
             className="authing-g2-input"

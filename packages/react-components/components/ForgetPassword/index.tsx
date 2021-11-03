@@ -43,7 +43,7 @@ export const GuardForgetPassword = (props: any) => {
           className="link-like back-to-login"
           onClick={() => props.__changeModule(GuardModuleType.LOGIN)}
         >
-          {t('login.otherAccLogin')}
+          {t('common.backLoginPage')}
         </div>
       </div>
     </div>

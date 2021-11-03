@@ -217,5 +217,7 @@
   "passwordAgain": "请确认密码",
   "isMissing": "{{name}}未填写",
   "password": "密码",
-  "captchaCode": "验证码"
+  "captchaCode": "验证码",
+  "account": "账号",
+  "phone": "手机号"
 }

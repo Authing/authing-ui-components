@@ -217,5 +217,7 @@
   "passwordAgain": "Confirm password",
   "isMissing": "{{name}} is missing",
   "password": "Password",
-  "captchaCode": "Digit code"
+  "captchaCode": "Digit code",
+  "account": "Account",
+  "phone": "Phone number"
 }
