@@ -288,7 +288,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
 
       const shape = config.socialConnectionsBtnShape
 
-      if (shape === 'rectangle') {
+      if (shape === 'button') {
         return (
           <Button
             key={item.provider}
@@ -311,7 +311,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
               : item.name_en ?? item.provider}
           </Button>
         )
-      } else if (shape === 'round') {
+      } else if (shape === 'icon') {
         return (
           <Tooltip
             key={item.provider}

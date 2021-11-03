@@ -6,6 +6,7 @@ import { LoginMethods } from '../../'
 import { ErrorCode } from '../../_utils/GuardErrorCode'
 import { useAuthClient } from '../../Guard/authClient'
 import SubmitButton from '../../SubmitButton'
+import { fieldRequiredRule } from '../../_utils'
 
 interface LoginWithLDAPProps {
   // configs
@@ -87,7 +88,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
         <Form.Item
           className="authing-g2-input-form"
           name="account"
-          rules={[{ required: true, message: t('common.accNotNull') }]}
+          rules={fieldRequiredRule(t('common.account'))}
         >
           <Input
             className="authing-g2-input"
@@ -100,7 +101,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
         <Form.Item
           className="authing-g2-input-form"
           name="password"
-          rules={[{ required: true, message: t('common.passwordNotNull') }]}
+          rules={fieldRequiredRule(t('common.password'))}
         >
           <Input.Password
             className="authing-g2-input"

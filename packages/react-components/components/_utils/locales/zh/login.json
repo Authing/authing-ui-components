@@ -48,7 +48,7 @@
   "accBind": "账号绑定",
   "releaseBind": "解除绑定",
   "pwdLogin": "密码登录",
-  "verifyCodeLogin": "验证码登录",
+  "verifyCodeLogin": "手机号登录",
   "appScanLogin": "APP 扫码登录",
   "scanLogin": "扫码登录",
   "ldapLogin": "LDAP 登录",

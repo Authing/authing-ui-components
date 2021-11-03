@@ -26,7 +26,7 @@ export interface LoginConfig extends IG2Config {
   loginMethods: LoginMethods[]
   passwordLoginMethods: PasswordLoginMethods[]
   socialConnections?: SocialConnectionProvider[]
-  socialConnectionsBtnShape?: 'default' | 'rectangle' | 'round'
+  socialConnectionsBtnShape?: 'default' | 'button' | 'icon'
   enterpriseConnections?: string[]
   qrCodeScanOptions?: Parameters<QrCodeAuthenticationClient['startScanning']>[1]
   publicKey?: string
