@@ -277,6 +277,15 @@
   resolved "https://registry.nlark.com/@authing/jose/download/@authing/jose-1.0.5.tgz#d3e9c58aac74f47e5048a791d69c68f8bc52d7d8"
   integrity sha1-0+nFiqx09H5QSKeR1pxo+LxS19g=
 
+"@authing/native-js-ui-components@^2.4.53":
+  version "2.4.53"
+  resolved "https://registry.npmjs.org/@authing/native-js-ui-components/-/native-js-ui-components-2.4.53.tgz#80dca4309a14f88d0986785ca82333d725b472b3"
+  integrity sha512-0L6x0jV5bQm477fqP8i/8aIo2cX19Cjcn///2k/kqsHCzSh+M0HpkchliioPgkXdsAQCRSUuQMVPAeX+ZclMXg==
+  dependencies:
+    "@authing/react-ui-components" "^2.4.53"
+    react "16.14.0"
+    react-dom "16.14.0"
+
 "@authing/react-ui-components@^2.4.53":
   version "2.4.53"
   resolved "https://registry.npmjs.org/@authing/react-ui-components/-/react-ui-components-2.4.53.tgz#bbca309ed286f97e17f8674d110778673ff800c4"
