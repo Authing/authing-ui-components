@@ -216,5 +216,6 @@
   "useRecoveryCodetips": "After successful login, we will generate a new recovery code.",
   "passwordAgain": "Confirm password",
   "isMissing": "{{name}} is missing",
-  "password": "Password"
+  "password": "Password",
+  "captchaCode": "Digit code"
 }
