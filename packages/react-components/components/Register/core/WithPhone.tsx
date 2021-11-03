@@ -10,7 +10,6 @@ import { useDebounce } from '../../_utils/hooks'
 import {
   fieldRequiredRule,
   getDeviceName,
-  getRequiredRules,
   getUserRegisterParams,
   VALIDATE_PATTERN,
 } from '../../_utils'

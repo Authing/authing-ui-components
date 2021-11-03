@@ -22,7 +22,6 @@ import { ChangeLanguage } from '../ChangeLanguage'
 import { i18n } from '../_utils/locales'
 
 import './styles.less'
-import { config } from 'process'
 
 const inputWays = [
   LoginMethods.Password,

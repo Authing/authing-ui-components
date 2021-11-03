@@ -12,7 +12,6 @@ import {
   fieldRequiredRule,
   getDeviceName,
   getPasswordValidate,
-  getRequiredRules,
   getUserRegisterParams,
   VALIDATE_PATTERN,
 } from '../../_utils'
