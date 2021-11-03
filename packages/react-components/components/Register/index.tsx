@@ -99,12 +99,6 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
         </Tabs>
       </div>
       <div className="g2-tips-line">
-        <div
-          className="link-like"
-          onClick={() => __changeModule?.(GuardModuleType.FORGET_PWD, {})}
-        >
-          {t('login.forgetPwd')}
-        </div>
         <span className="back-to-login">
           <span className="gray">{t('common.alreadyHasAcc')}</span>
           <span

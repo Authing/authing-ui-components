@@ -30,6 +30,17 @@ export const getRequiredRules = (msg: string): Rule[] => {
   ]
 }
 
+export const fieldRequiredRule = (fieldRequiredRule: string): Rule[] => {
+  return [
+    {
+      required: true,
+      message: i18n.t('common.isMissing', {
+        name: fieldRequiredRule,
+      }),
+    },
+  ]
+}
+
 export function getDeviceName() {
   if (typeof window === 'undefined') {
     return null
@@ -245,10 +256,7 @@ export const getPasswordValidate = (
   strength: PasswordStrength = PasswordStrength.NoCheck,
   customPasswordStrength: any = {}
 ): Rule[] => {
-  const required = {
-    required: true,
-    message: i18n.t('common.passwordNotNull'),
-  }
+  const required = fieldRequiredRule(i18n.t('common.password'))[0]
 
   const validateMap: Record<PasswordStrength, Rule[]> = {
     [PasswordStrength.NoCheck]: [required],
@@ -284,7 +292,6 @@ export const getPasswordValidate = (
       required,
       {
         validator(r, v) {
-          console.log(r, v)
           if (v && (v.length < 6 || getSymbolTypeLength(v) < 3)) {
             console.log(
               PASSWORD_STRENGTH_TEXT_MAP[PasswordStrength.High].validateMessage

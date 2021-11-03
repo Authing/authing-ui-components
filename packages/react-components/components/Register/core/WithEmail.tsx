@@ -9,6 +9,7 @@ import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
 import { useAuthClient } from '../../Guard/authClient'
 import { useDebounce } from '../../_utils/hooks'
 import {
+  fieldRequiredRule,
   getDeviceName,
   getPasswordValidate,
   getRequiredRules,
@@ -142,7 +143,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
       ),
       name: 'email',
       rules: [
-        ...getRequiredRules(t('common.emailNotNull')),
+        ...fieldRequiredRule(t('common.emailLabel')),
         {
           validator: (rule, value) => {
             if (value) {
@@ -198,6 +199,10 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
       ),
       name: 'new-password',
       rules: [
+        ...getPasswordValidate(
+          publicConfig?.passwordStrength,
+          publicConfig?.customPasswordStrength
+        ),
         {
           validator: (_, value) => {
             if (value !== form.getFieldValue('password')) {
@@ -207,10 +212,6 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
             }
           },
         },
-        ...getPasswordValidate(
-          publicConfig?.passwordStrength,
-          publicConfig?.customPasswordStrength
-        ),
       ],
     },
   ]
