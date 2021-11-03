@@ -22,6 +22,8 @@ export const ResetPassword = (props: ResetPasswordProps) => {
   let client = useAuthClient()
   let submitButtonRef = useRef<any>(null)
 
+  const verifyCodeLength = props.publicConfig.verifyCodeLength ?? 4
+
   const onFinish = async (values: any) => {
     let identify = values.identify
     let code = values.code
@@ -105,9 +107,10 @@ export const ResetPassword = (props: ResetPasswordProps) => {
             autoComplete="one-time-code"
             size="large"
             placeholder={t('common.inputFourVerifyCode', {
-              length: 4,
+              length: verifyCodeLength,
             })}
             prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
+            maxLength={verifyCodeLength}
             method={codeMethod}
             data={identify}
             onSendCodeBefore={async () => {
