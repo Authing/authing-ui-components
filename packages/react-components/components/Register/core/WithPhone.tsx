@@ -6,17 +6,20 @@ import { useAsyncFn } from 'react-use'
 import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
 import { useAuthClient } from '../../Guard/authClient'
 import { SendCode } from '../../SendCode'
-import { useDebounce } from '../../_utils/hooks'
 import {
   fieldRequiredRule,
   getDeviceName,
   getUserRegisterParams,
-  VALIDATE_PATTERN,
 } from '../../_utils'
-import { useGuardHttp } from '../../_utils/guradHttp'
 import { Agreements } from '../components/Agreements'
 import SubmitButton from '../../SubmitButton'
 import { InputNumber } from '../../InputNumber'
+import {
+  ICheckProps,
+  PhoneFormItem,
+  ValidatorFormItemProps,
+} from '../../ValidatorRules'
+import { Rule } from 'antd/lib/form'
 
 export interface RegisterWithPhoneProps {
   onRegister: Function
@@ -33,30 +36,13 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   const submitButtonRef = useRef<any>(null)
   const authClient = useAuthClient()
   const [form] = Form.useForm()
-  const { get } = useGuardHttp()
   const [phone, setPhone] = useState<string>('')
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
   const [validated, setValidated] = useState(false)
-  const [isFind, setIsFind] = useState<boolean>(false)
+
+  const ref = useRef<ICheckProps>(null)
 
   const verifyCodeLength = publicConfig?.verifyCodeLength ?? 4
-
-  // 检查手机号是否已经被注册过了 by my son donglyc
-  const handleCheckPhone = useDebounce(async (value: any) => {
-    const phone: string = value.phone
-
-    if (phone && phone.length === 11) {
-      let { data } = await get(`/api/v2/users/find`, {
-        userPoolId: publicConfig?.userPoolId,
-        key: form.getFieldValue('phone'),
-        type: 'phone',
-      })
-      setIsFind(Boolean(data))
-      form.validateFields(['phone'])
-    } else {
-      setIsFind(false)
-    }
-  }, 1000)
 
   const [, onFinish] = useAsyncFn(
     async (values: any) => {
@@ -99,7 +85,14 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
     { loading: false }
   )
 
-  const formItems = [
+  const formItems: {
+    component: React.ReactNode
+    name: string
+    rules?: Rule[]
+    FormItemFC?: React.ForwardRefExoticComponent<
+      ValidatorFormItemProps & React.RefAttributes<ICheckProps>
+    >
+  }[] = [
     {
       component: (
         <InputNumber
@@ -114,26 +107,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         />
       ),
       name: 'phone',
-      rules: [
-        ...fieldRequiredRule(t('common.phoneNumber')),
-        {
-          validator: (_: any, value: string) => {
-            if (value) {
-              if (VALIDATE_PATTERN.phone.test(value)) {
-                if (isFind) {
-                  return Promise.reject(t('common.checkPhone'))
-                } else {
-                  return Promise.resolve()
-                }
-              } else {
-                return Promise.reject(new Error(t('common.phoneFormateError')))
-              }
-            } else {
-              return Promise.resolve()
-            }
-          },
-        },
-      ],
+      FormItemFC: PhoneFormItem,
     },
     {
       component: (
@@ -164,19 +138,36 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         autoComplete="off"
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
-        onValuesChange={handleCheckPhone}
+        onValuesChange={() => {
+          console.log('============')
+          ref.current?.check()
+        }}
       >
-        {formItems.map((item) => (
-          <Form.Item
-            key={item.name}
-            name={item.name}
-            rules={item.rules}
-            className="authing-g2-input-form"
-            validateFirst={true}
-          >
-            {item.component}
-          </Form.Item>
-        ))}
+        {formItems.map((item) =>
+          item.FormItemFC ? (
+            <item.FormItemFC
+              ref={ref}
+              key={item.name}
+              name={item.name}
+              className="authing-g2-input-form"
+              validateFirst={true}
+              userPoolId={publicConfig?.userPoolId!}
+              form={form}
+            >
+              {item.component}
+            </item.FormItemFC>
+          ) : (
+            <Form.Item
+              key={item.name}
+              name={item.name}
+              rules={item.rules}
+              className="authing-g2-input-form"
+              validateFirst={true}
+            >
+              {item.component}
+            </Form.Item>
+          )
+        )}
         {Boolean(agreements?.length) && (
           <Agreements
             onChange={setAcceptedAgreements}

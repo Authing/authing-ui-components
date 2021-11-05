@@ -7,17 +7,18 @@ import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
 import { useAuthClient } from '../../Guard/authClient'
-import { useDebounce } from '../../_utils/hooks'
 import {
-  fieldRequiredRule,
   getDeviceName,
   getPasswordValidate,
   getUserRegisterParams,
-  VALIDATE_PATTERN,
 } from '../../_utils'
-import { useGuardHttp } from '../../_utils/guradHttp'
 import { Agreements } from '../components/Agreements'
 import SubmitButton from '../../SubmitButton'
+import {
+  EmailFormItem,
+  ICheckProps,
+  ValidatorFormItemProps,
+} from '../../ValidatorRules'
 
 export interface RegisterWithEmailProps {
   onRegister: Function
@@ -36,29 +37,11 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
   const submitButtonRef = useRef<any>(null)
 
   const authClient = useAuthClient()
-  const { get } = useGuardHttp()
   const [form] = Form.useForm()
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
   const [validated, setValidated] = useState(false)
-  const [isFind, setIsFind] = useState<boolean>(false)
-
-  // 检查手机号是否已经被注册过了 by my son donglyc
-  const handleCheckEmail = useDebounce(async (value: any) => {
-    const email: string = value?.email
-
-    if (value.email && VALIDATE_PATTERN.email.test(email)) {
-      let { data } = await get<boolean>(`/api/v2/users/find`, {
-        userPoolId: publicConfig?.userPoolId,
-        key: form.getFieldValue('email'),
-        type: 'email',
-      })
-      setIsFind(Boolean(data))
-      form.validateFields(['email'])
-    } else {
-      setIsFind(false)
-    }
-  }, 1000)
+  const ref = useRef<ICheckProps>(null)
 
   const [, onFinish] = useAsyncFn(
     async (values: any) => {
@@ -128,7 +111,10 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
   const formItems: {
     component: React.ReactNode
     name: string
-    rules: Rule[]
+    rules?: Rule[]
+    FormItemFC?: React.ForwardRefExoticComponent<
+      ValidatorFormItemProps & React.RefAttributes<ICheckProps>
+    >
   }[] = [
     {
       component: (
@@ -141,26 +127,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         />
       ),
       name: 'email',
-      rules: [
-        ...fieldRequiredRule(t('common.emailLabel')),
-        {
-          validator: (rule, value) => {
-            if (value) {
-              if (VALIDATE_PATTERN.email.test(value)) {
-                if (isFind) {
-                  return Promise.reject(t('common.checkEmail'))
-                } else {
-                  return Promise.resolve()
-                }
-              } else {
-                return Promise.reject(new Error(t('common.emailFormatError')))
-              }
-            } else {
-              return Promise.resolve()
-            }
-          },
-        },
-      ],
+      FormItemFC: EmailFormItem,
     },
     {
       component: (
@@ -223,19 +190,35 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         autoComplete="off"
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
-        onValuesChange={handleCheckEmail}
+        onValuesChange={() => {
+          ref.current?.check()
+        }}
       >
-        {formItems.map((item) => (
-          <Form.Item
-            key={item.name}
-            name={item.name}
-            rules={item.rules}
-            className="authing-g2-input-form"
-            validateFirst={true}
-          >
-            {item.component}
-          </Form.Item>
-        ))}
+        {formItems.map((item) =>
+          item.FormItemFC ? (
+            <item.FormItemFC
+              ref={ref}
+              key={item.name}
+              name={item.name}
+              className="authing-g2-input-form"
+              validateFirst={true}
+              userPoolId={publicConfig?.userPoolId!}
+              form={form}
+            >
+              {item.component}
+            </item.FormItemFC>
+          ) : (
+            <Form.Item
+              key={item.name}
+              name={item.name}
+              rules={item.rules}
+              className="authing-g2-input-form"
+              validateFirst={true}
+            >
+              {item.component}
+            </Form.Item>
+          )
+        )}
         {Boolean(agreements?.length) && (
           <Agreements
             onChange={setAcceptedAgreements}

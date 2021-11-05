@@ -34,11 +34,7 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
       })
 
       if (!bindable) {
-        Message.error(
-          t('common.unBindEmaileDoc', {
-            email: email,
-          })
-        )
+        Message.error(t('common.checkEmail'))
         return
       }
       onBind(email)
@@ -69,7 +65,7 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
             },
             {
               pattern: VALIDATE_PATTERN.email,
-              message: t('login.emailError'),
+              message: t('common.emailFormatError'),
             },
           ]}
         >
