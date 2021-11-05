@@ -91,5 +91,6 @@
   "wechatmpQrcode": "公众号关注登录",
   "inputEmailUsername": "请输入邮箱或用户名",
   "inputUsername": "请输入用户名",
-  "moreWays": "更多登录"
+  "moreWays": "更多登录",
+  "inputCorrectPhoneOrEmail": "请输入有效的手机号或邮箱"
 }

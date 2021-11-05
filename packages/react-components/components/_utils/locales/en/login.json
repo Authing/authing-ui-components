@@ -91,5 +91,6 @@
   "wechatmpQrcode": "WechatMp QRcode\t",
   "inputEmailUsername": "Please enter email or account",
   "inputUsername": "Username",
-  "moreWays": "Scan"
+  "moreWays": "Scan",
+  "inputCorrectPhoneOrEmail": "Enter a valid Email or Phone number"
 }

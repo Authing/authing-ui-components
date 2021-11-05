@@ -9,6 +9,7 @@ import { SendCode } from '../../SendCode'
 import { fieldRequiredRule, validate } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
 import { InputNumber } from '../../InputNumber'
+import { PhoneFormItem } from '../../ValidatorRules'
 
 // const formatPhone = (value: any) => {
 //   if (!value) {
@@ -71,25 +72,7 @@ export const LoginWithPhoneCode = (props: any) => {
         onFinishFailed={() => submitButtonRef.current.onError()}
         autoComplete="off"
       >
-        <Form.Item
-          className="authing-g2-input-form"
-          name="phone"
-          rules={[
-            ...fieldRequiredRule(t('common.phone')),
-            {
-              validator: async (_, value: StoreValue) => {
-                if (!value) {
-                  return
-                }
-                if (validate('phone', value)) {
-                  return
-                } else {
-                  throw new Error(t('common.phoneFormateError'))
-                }
-              },
-            },
-          ]}
-        >
+        <PhoneFormItem className="authing-g2-input-form" name="phone">
           <InputNumber
             className="authing-g2-input"
             autoComplete="tel"
@@ -101,7 +84,7 @@ export const LoginWithPhoneCode = (props: any) => {
             placeholder={t('login.inputPhone')}
             prefix={<UserOutlined style={{ color: '#878A95' }} />}
           />
-        </Form.Item>
+        </PhoneFormItem>
         <Form.Item
           className="authing-g2-input-form"
           name="code"

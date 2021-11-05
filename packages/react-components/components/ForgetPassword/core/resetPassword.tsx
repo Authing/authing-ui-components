@@ -7,7 +7,7 @@ import { UserOutlined, SafetyOutlined, LockOutlined } from '@ant-design/icons'
 import { SendCode } from '../../SendCode'
 
 import { useAuthClient } from '../../Guard/authClient'
-import { getPasswordValidate, validate } from '../../_utils'
+import { fieldRequiredRule, getPasswordValidate, validate } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
 
 interface ResetPasswordProps {
@@ -63,7 +63,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
           name="identify"
           validateFirst={true}
           rules={[
-            { required: true, message: t('login.inputPhoneOrEmail') },
+            ...fieldRequiredRule(t('common.account')),
             {
               validator: async (_, value: StoreValue) => {
                 if (!value) {
@@ -72,7 +72,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
                 if (validate('email', value) || validate('phone', value)) {
                   return
                 } else {
-                  throw new Error(t('login.inputCorrectPhone'))
+                  throw new Error(t('login.inputCorrectPhoneOrEmail'))
                 }
               },
             },
@@ -100,7 +100,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
         <Form.Item
           className="authing-g2-input-form"
           name="code"
-          rules={[{ required: true, message: t('common.inputVerifyCode') }]}
+          rules={[...fieldRequiredRule(t('common.captchaCode'))]}
         >
           <SendCode
             className="authing-g2-input"

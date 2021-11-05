@@ -1,8 +1,9 @@
 import { FormInstance, FormItemProps } from 'antd/lib/form'
 
 export interface ValidatorFormItemProps extends FormItemProps {
-  userPoolId: string
-  form: FormInstance
+  userPoolId?: string
+  form?: FormInstance
+  checkRepeat?: boolean
 }
 
 export interface ICheckProps {

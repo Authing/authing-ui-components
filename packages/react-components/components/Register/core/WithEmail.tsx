@@ -204,6 +204,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
               validateFirst={true}
               userPoolId={publicConfig?.userPoolId!}
               form={form}
+              checkRepeat={true}
             >
               {item.component}
             </item.FormItemFC>

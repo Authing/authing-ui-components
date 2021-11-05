@@ -5,6 +5,7 @@ import SubmitButton from '../../SubmitButton'
 import { UserOutlined, PlusOutlined } from '@ant-design/icons'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { useGuardHttp } from '../../_utils/guradHttp'
+import { fieldRequiredRule } from '../../_utils'
 
 interface describeQuestionsProps {
   appId: string
@@ -131,12 +132,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
           className="authing-g2-input-form"
           name="identify"
           label={t('common.problem.form.phone')}
-          rules={[
-            {
-              required: true,
-              message: t('common.problem.form.inputConcatWays'),
-            },
-          ]}
+          rules={fieldRequiredRule(t('common.problem.form.phone'))}
         >
           <Input
             className="authing-g2-input"

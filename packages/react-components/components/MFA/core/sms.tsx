@@ -72,6 +72,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
           userPoolId={config.__publicConfig__.userPoolId}
           form={form}
           ref={ref}
+          checkRepeat={true}
         >
           <Input
             className="authing-g2-input"

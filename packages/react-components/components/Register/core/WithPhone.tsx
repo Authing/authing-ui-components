@@ -139,7 +139,6 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
         onValuesChange={() => {
-          console.log('============')
           ref.current?.check()
         }}
       >
@@ -153,6 +152,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
               validateFirst={true}
               userPoolId={publicConfig?.userPoolId!}
               form={form}
+              checkRepeat={true}
             >
               {item.component}
             </item.FormItemFC>
