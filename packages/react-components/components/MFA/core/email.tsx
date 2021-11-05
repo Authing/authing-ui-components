@@ -7,23 +7,26 @@ import { useTranslation } from 'react-i18next'
 import { VerifyCodeInput } from '../../VerifyCodeInput'
 import { useAuthClient } from '../../Guard/authClient'
 import { SendCodeBtn } from '../../SendCode/SendCodeBtn'
-import { VALIDATE_PATTERN } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
+import { EmailFormItem, ICheckProps } from '../../ValidatorRules'
 
 const CODE_LEN = 4
 
 interface BindMFAEmailProps {
   mfaToken: string
   onBind: (email: string) => void
+  config: any
 }
 export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
   mfaToken,
   onBind,
+  config,
 }) => {
   const authClient = useAuthClient()
   const submitButtonRef = useRef<any>(null)
   const { t } = useTranslation()
   const [form] = Form.useForm()
+  const ref = useRef<ICheckProps>(null)
 
   const onFinish = async ({ email }: any) => {
     submitButtonRef.current?.onSpin(true)
@@ -54,20 +57,16 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
         form={form}
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
+        onValuesChange={() => {
+          ref.current?.check()
+        }}
       >
-        <Form.Item
+        <EmailFormItem
           className="authing-g2-input-form"
           name="email"
-          rules={[
-            {
-              required: true,
-              message: t('login.inputEmail'),
-            },
-            {
-              pattern: VALIDATE_PATTERN.email,
-              message: t('common.emailFormatError'),
-            },
-          ]}
+          userPoolId={config.__publicConfig__.userPoolId}
+          form={form}
+          ref={ref}
         >
           <Input
             className="authing-g2-input"
@@ -76,7 +75,7 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
             placeholder={t('login.inputEmail')}
             prefix={<UserOutlined style={{ color: '#878A95' }} />}
           />
-        </Form.Item>
+        </EmailFormItem>
 
         <SubmitButton text={t('common.sure')} ref={submitButtonRef} />
       </Form>
@@ -193,7 +192,8 @@ export const MFAEmail: React.FC<{
   mfaToken: string
   email?: string
   mfaLogin: any
-}> = ({ email: userEmail, mfaToken, mfaLogin }) => {
+  config: any
+}> = ({ email: userEmail, mfaToken, mfaLogin, config }) => {
   const [email, setEmail] = useState(userEmail)
   const sendCodeRef = useRef<HTMLButtonElement>(null)
 
@@ -210,6 +210,7 @@ export const MFAEmail: React.FC<{
         />
       ) : (
         <BindMFAEmail
+          config={config}
           mfaToken={mfaToken}
           onBind={(email: string) => {
             console.log('email', email)

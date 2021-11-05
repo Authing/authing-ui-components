@@ -7,21 +7,28 @@ import { useTranslation } from 'react-i18next'
 import { VerifyCodeInput } from '../../VerifyCodeInput'
 import { useAuthClient } from '../../Guard/authClient'
 import { SendCodeBtn } from '../../SendCode/SendCodeBtn'
-import { VALIDATE_PATTERN } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
+import { ICheckProps, PhoneFormItem } from '../../ValidatorRules'
 
 const CODE_LEN = 4
 
 export interface BindMFASmsProps {
   mfaToken: string
   onBind: (phone: string) => void
+  config: any
 }
 
-export const BindMFASms: React.FC<BindMFASmsProps> = ({ mfaToken, onBind }) => {
+export const BindMFASms: React.FC<BindMFASmsProps> = ({
+  mfaToken,
+  onBind,
+  config,
+}) => {
   const authClient = useAuthClient()
   const submitButtonRef = useRef<any>(null)
   const { t } = useTranslation()
   const [form] = Form.useForm()
+
+  const ref = useRef<ICheckProps>(null)
   const onFinish = async ({ phone }: any) => {
     submitButtonRef.current.onSpin(true)
     try {
@@ -54,20 +61,17 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({ mfaToken, onBind }) => {
         form={form}
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
+        onValuesChange={() => {
+          console.log(config.__publicConfig__.userPoolId)
+          ref.current?.check()
+        }}
       >
-        <Form.Item
+        <PhoneFormItem
           className="authing-g2-input-form"
           name="phone"
-          rules={[
-            {
-              required: true,
-              message: t('common.phoneNotNull'),
-            },
-            {
-              pattern: VALIDATE_PATTERN.phone,
-              message: t('login.phoneError'),
-            },
-          ]}
+          userPoolId={config.__publicConfig__.userPoolId}
+          form={form}
+          ref={ref}
         >
           <Input
             className="authing-g2-input"
@@ -76,7 +80,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({ mfaToken, onBind }) => {
             placeholder={t('login.inputPhone')}
             prefix={<UserOutlined style={{ color: '#878A95' }} />}
           />
-        </Form.Item>
+        </PhoneFormItem>
         <SubmitButton text={t('common.sure')} ref={submitButtonRef} />
       </Form>
     </>
@@ -193,7 +197,8 @@ export const MFASms: React.FC<{
   mfaToken: string
   phone?: string
   mfaLogin: any
-}> = ({ phone: userPhone, mfaToken, mfaLogin }) => {
+  config: any
+}> = ({ phone: userPhone, mfaToken, mfaLogin, config }) => {
   const [phone, setPhone] = useState(userPhone)
   const sendCodeRef = useRef<HTMLButtonElement>(null)
 
@@ -210,6 +215,7 @@ export const MFASms: React.FC<{
         />
       ) : (
         <BindMFASms
+          config={config}
           mfaToken={mfaToken}
           onBind={(phone: string) => {
             setPhone(phone)

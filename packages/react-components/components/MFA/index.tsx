@@ -14,15 +14,17 @@ import './styles.less'
 const window: Window = require('global/window')
 
 const ComponentsMapping: Record<MFAType, (props: any) => React.ReactNode> = {
-  [MFAType.EMAIL]: ({ initData, mfaLogin }) => (
+  [MFAType.EMAIL]: ({ config, initData, mfaLogin }) => (
     <MFAEmail
+      config={config}
       mfaToken={initData.mfaToken}
       email={initData.email}
       mfaLogin={mfaLogin}
     />
   ),
-  [MFAType.SMS]: ({ initData, mfaLogin }) => (
+  [MFAType.SMS]: ({ config, initData, mfaLogin }) => (
     <MFASms
+      config={config}
       mfaToken={initData.mfaToken}
       phone={initData.phone}
       mfaLogin={mfaLogin}
