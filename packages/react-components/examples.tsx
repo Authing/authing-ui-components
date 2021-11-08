@@ -24,7 +24,7 @@ const App = () => {
       <Button onClick={() => setVisible(true)}>开启</Button>
 
       <Guard
-        appId="610271b10cd9106606c73d57"
+        appId="616ead5f920489795cc65c3c"
         onLogin={(u) => message.info('🏁 用户业务层终点，登录完成。')}
         onBeforeLogin={(loginInfo, authClient) => {
           console.log('🪝onBeforeLogin 触发，返回 promise 或布尔', loginInfo)

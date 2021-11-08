@@ -2,6 +2,7 @@ import { message } from 'antd'
 import { CompleteInfoEvents } from '../CompleteInfo/props'
 import { LoginEvents } from '../Login/props'
 import { RegisterEvents } from '../Register/props'
+import { i18n } from '../_utils/locales'
 
 export interface GuardEvents
   extends LoginEvents,
@@ -15,21 +16,30 @@ export const guardEventsFilter = (props: any) => {
     events[eventName as keyof GuardEvents] = props[eventName]
   })
 
-  return events
+  return guardEventsHijacking(events)
 }
 
-// const eventsMapping: Partial<GuardEvents> = {
-//   onLogin: (...props) => {
-//     message.success('登录成功')
-//     return props
-//   },
-// }
+const eventsMapping: Partial<GuardEvents> = {
+  onLogin: (...props) => {
+    message.success(i18n.t('common.LoginSuccess'))
+    return props
+  },
+}
 
-// export const guardEventsHijacking = (events: GuardEvents): GuardEvents => {
-//   const newEvents: GuardEvents = {}
-//   (Object.keys(eventsMapping) as ).forEach(eventsKey => {
-//     newEvents[eventsKey] =
-//   })
+export const guardEventsHijacking = (events: GuardEvents): GuardEvents => {
+  const newEvents: GuardEvents = {}
+  Object.keys(eventsMapping).forEach((eventsKey) => {
+    // @ts-ignore
+    newEvents[eventsKey] = (...props) => {
+      // @ts-ignore
+      const newProps = eventsMapping[eventsKey](...props)
+      // @ts-ignore
+      events[eventsKey]?.(newProps)
+    }
+  })
 
-//   return events
-// }
+  return {
+    ...events,
+    ...newEvents,
+  }
+}
