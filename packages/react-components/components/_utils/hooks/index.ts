@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react'
+import { useRef, useCallback, useEffect } from 'react'
 import { GuardModuleType } from '../../Guard/module'
 import { useModule } from '../../context/module/context'
 
@@ -32,6 +32,14 @@ export const useDebounce = (
 ) => {
   const timer = useRef<{ time: any }>({ time: null })
   const errorBody = useRef<{ body: any }>({ body: null })
+
+  useEffect(() => {
+    return () => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      timer.current.time && clearInterval(timer.current.time)
+    }
+  }, [])
+
   return useCallback(
     (...args: any[]) => {
       if (timer.current.time) {

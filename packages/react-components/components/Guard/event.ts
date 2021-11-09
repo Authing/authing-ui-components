@@ -24,6 +24,11 @@ const eventsMapping: Partial<GuardEvents> = {
     message.success(i18n.t('common.LoginSuccess'))
     return props
   },
+
+  onRegister: (...props) => {
+    message.success(i18n.t('common.registrationSuccess'))
+    return props
+  },
 }
 
 export const guardEventsHijacking = (events: GuardEvents): GuardEvents => {

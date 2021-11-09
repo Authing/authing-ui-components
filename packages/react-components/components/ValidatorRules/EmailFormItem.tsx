@@ -8,14 +8,14 @@ import React, {
 } from 'react'
 import { fieldRequiredRule, VALIDATE_PATTERN } from '../_utils'
 import { useGuardHttp } from '../_utils/guradHttp'
-import { useDebounce } from '../_utils/hooks'
 import { useTranslation } from 'react-i18next'
 import { ICheckProps, ValidatorFormItemProps } from '.'
 import { Rule } from 'antd/lib/form'
+import { useDebounce } from '../_utils/hooks'
 
 const checkError = (message: string) => Promise.reject(new Error(message))
 
-const checkSuccess = (message?: string) => Promise.resolve(message)
+const checkSuccess = (message?: string) => Promise.resolve(message ?? '')
 
 export const EmailFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
   (props, ref) => {
@@ -37,7 +37,6 @@ export const EmailFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
       setChecked(Boolean(data))
       form?.validateFields(['email'])
     }, 1000)
-
     useImperativeHandle(ref, () => ({
       check: () => {
         setChecked(false)
