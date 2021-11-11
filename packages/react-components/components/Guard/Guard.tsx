@@ -5,7 +5,7 @@ import React, {
   useReducer,
   useState,
 } from 'react'
-import { ConfigProvider, Modal } from 'antd'
+import { ConfigProvider, message, Modal } from 'antd'
 
 import { GuardLoginView } from '../Login'
 
@@ -31,6 +31,7 @@ import { GuardCompleteInfoView } from '../CompleteInfo'
 import { GuardRecoveryCodeView } from '../RecoveryCode'
 import './styles.less'
 import { IconFont } from '../AuthingGuard/IconFont'
+import { GuardErrorView } from '../Error'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -38,7 +39,7 @@ const ComponentsMapping: Record<
   GuardModuleType,
   (props: GuardViewProps) => React.ReactNode
 > = {
-  [GuardModuleType.ERROR]: (props) => <div>Todo Error Module</div>,
+  [GuardModuleType.ERROR]: (props) => <GuardErrorView {...props} />,
   [GuardModuleType.LOGIN]: (props) => <GuardLoginView {...props} />,
   [GuardModuleType.MFA]: (props) => <GuardMFAView {...props} />,
   [GuardModuleType.REGISTER]: (props) => <GuardRegisterView {...props} />,
@@ -82,6 +83,9 @@ export const Guard = (props: GuardProps) => {
 
   // 初始化 Loading 标识
   const [initSettingEnd, setInitSettingEnd] = useState(false)
+
+  const [initError, setInitError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
 
   // Config
   const [guardConfig, setGuardConfig] = useState<GuardConfig>(
@@ -156,13 +160,16 @@ export const Guard = (props: GuardProps) => {
       const guardStateMachine = new GuardStateMachine(onChangeModule, initState)
       guardStateMachine.setConfig(mergedConfig)
       setGuardStateMachine(guardStateMachine)
-
-      // 初始化 结束
-      setInitSettingEnd(true)
     } catch (error: any) {
       onLoadError?.(error)
 
+      setErrorMessage(error.message)
+      setInitError(true)
+
       console.error(error)
+    } finally {
+      // 初始化 结束
+      setInitSettingEnd(true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appId, config, onLoad, onLoadError])
@@ -177,6 +184,8 @@ export const Guard = (props: GuardProps) => {
 
   const renderModule = useMemo(() => {
     if (initSettingEnd) {
+      if (initError)
+        return <GuardErrorView initData={{ messages: errorMessage }} />
       return ComponentsMapping[moduleState.moduleName]({
         appId,
         initData: moduleState.initData,
@@ -196,10 +205,12 @@ export const Guard = (props: GuardProps) => {
     }
   }, [
     appId,
+    errorMessage,
     events,
     guardConfig,
     guardStateMachine,
     historyNext,
+    initError,
     initSettingEnd,
     moduleState.initData,
     moduleState.moduleName,
