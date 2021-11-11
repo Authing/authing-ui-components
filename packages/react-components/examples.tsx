@@ -24,7 +24,7 @@ const App = () => {
       <Button onClick={() => setVisible(true)}>开启</Button>
 
       <Guard
-        appId="616ead5f920489795cc65c3c"
+        appId="610271b10cd9106606c73d57"
         onLogin={(u) => message.info('🏁 用户业务层终点，登录完成。')}
         onLoad={(authClint) => console.log('🪝 onLoad', authClint)}
         onLoadError={(error) => console.log('🪝 onLoadError', error)}
@@ -73,6 +73,7 @@ const App = () => {
           // lang: 'en-US',
           // lang: 'zh-CN',
           mode: GuardMode.Modal,
+          logo: '',
           // clickCloseable: false, // clickCloseable	Modal 模式时是否隐藏登录框右上角的关闭按钮
           // escCloseable: true, //
           // target: '#c1',
