@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { message, Tabs } from 'antd'
+import { Tabs } from 'antd'
 import { RegisterMethods, User } from 'authing-js-sdk'
 import { ChangeLanguage } from '../ChangeLanguage'
 import { useAuthClient } from '../Guard/authClient'

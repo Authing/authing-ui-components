@@ -104,7 +104,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         onRegister(code, data, message)
       }
     },
-    [form],
+    [form, acceptedAgreements],
     { loading: false }
   )
 

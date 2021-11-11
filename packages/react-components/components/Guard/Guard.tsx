@@ -5,7 +5,7 @@ import React, {
   useReducer,
   useState,
 } from 'react'
-import { ConfigProvider, message, Modal } from 'antd'
+import { ConfigProvider, Modal } from 'antd'
 
 import { GuardLoginView } from '../Login'
 
