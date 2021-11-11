@@ -49,7 +49,7 @@ const defaultConfig: LoginConfig = {
 
 export interface LoginEvents extends IG2Events {
   onLogin?: (user: User, authClient: AuthenticationClient) => void
-  onLoginError?: (user: User, authClient: AuthenticationClient) => void
+  onLoginError?: (errorMessages: any) => void
   onLoginTabChange?: (activeTab: LoginMethods) => void
   onBeforeLogin?: (
     loginInfo:
@@ -59,22 +59,6 @@ export interface LoginEvents extends IG2Events {
       | PhoneCodeLoginParams,
     authClient: AuthenticationClient
   ) => boolean | Promise<boolean>
-  // pwd 开头的是重置密码的场景用的
-  onPwdEmailSend?: (authClient: AuthenticationClient) => void
-  onPwdEmailSendError?: (
-    error: CommonMessage,
-    authClient: AuthenticationClient
-  ) => void
-  onPwdPhoneSend?: (authClient: AuthenticationClient) => void
-  onPwdPhoneSendError?: (
-    error: CommonMessage,
-    authClient: AuthenticationClient
-  ) => void
-  onPwdReset?: (authClient: AuthenticationClient) => void
-  onPwdResetError?: (
-    error: CommonMessage,
-    authClient: AuthenticationClient
-  ) => void
 }
 
 export interface GuardLoginProps extends IG2FCProps, LoginEvents {

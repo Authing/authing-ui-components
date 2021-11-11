@@ -1,5 +1,6 @@
 import { message } from 'antd'
 import { CompleteInfoEvents } from '../CompleteInfo/props'
+import { ForgetPasswordEvents } from '../ForgetPassword/props'
 import { LoginEvents } from '../Login/props'
 import { RegisterEvents } from '../Register/props'
 import { i18n } from '../_utils/locales'
@@ -7,7 +8,8 @@ import { i18n } from '../_utils/locales'
 export interface GuardEvents
   extends LoginEvents,
     RegisterEvents,
-    CompleteInfoEvents {}
+    CompleteInfoEvents,
+    ForgetPasswordEvents {}
 
 export const guardEventsFilter = (props: any) => {
   const events: GuardEvents = {}

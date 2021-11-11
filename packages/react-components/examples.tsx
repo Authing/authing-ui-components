@@ -26,12 +26,18 @@ const App = () => {
       <Guard
         appId="616ead5f920489795cc65c3c"
         onLogin={(u) => message.info('🏁 用户业务层终点，登录完成。')}
-        onBeforeLogin={(loginInfo, authClient) => {
-          console.log('🪝onBeforeLogin 触发，返回 promise 或布尔', loginInfo)
+        onLoad={(authClint) => console.log('🪝 onLoad', authClint)}
+        onLoadError={(error) => console.log('🪝 onLoadError', error)}
+        onBeforeLogin={(m) => {
+          console.log('🪝onBeforeLogin 触发，返回 promise 或布尔', m)
           return new Promise((resolve) => {
             resolve(true)
           })
         }}
+        onRegister={(user, authClint) => {
+          console.log('🪝 onRegister 触发', user, authClint)
+        }}
+        onRegisterError={(e) => console.log('🪝 onRegisterError 触发', e)}
         onLoginError={() => {
           console.log('❌ onLoginError 触发')
         }}

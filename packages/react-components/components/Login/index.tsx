@@ -105,7 +105,6 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     if (!action) {
       return () => {
         console.error('未捕获 code', code)
-        // props.onLoginError?.(data, client) // 未捕获 code
       }
     }
 
@@ -118,7 +117,6 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     }
     if (action?.action === 'message') {
       return (initData?: any) => {
-        // props.onLoginError?.(data, client!) // 未捕获 code
         message.error(initData?.__message)
       }
     }
@@ -132,6 +130,13 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
 
   const onLogin = (code: any, data: any, message?: string) => {
     const callback = __codePaser?.(code)
+    if (code !== 200) {
+      props.onLoginError?.({
+        code,
+        data,
+        message,
+      })
+    }
     if (!data) {
       data = {}
     }

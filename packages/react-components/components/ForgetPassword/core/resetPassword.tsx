@@ -13,6 +13,8 @@ import SubmitButton from '../../SubmitButton'
 interface ResetPasswordProps {
   onReset: any
   publicConfig: any
+  onSend: (type: 'email' | 'phone') => void
+  onSendError: (type: 'email' | 'phone', error: any) => void
 }
 export const ResetPassword = (props: ResetPasswordProps) => {
   const { t } = useTranslation()
@@ -31,7 +33,6 @@ export const ResetPassword = (props: ResetPasswordProps) => {
     let context = new Promise(() => {})
 
     if (codeMethod === 'email') {
-      // let r = await
       context = client.resetPasswordByEmailCode(identify, code, newPassword)
     }
     if (codeMethod === 'phone') {
@@ -40,9 +41,11 @@ export const ResetPassword = (props: ResetPasswordProps) => {
 
     context
       .then((r) => {
+        props.onSend(codeMethod)
         props.onReset(r)
       })
       .catch((e) => {
+        props.onSendError(codeMethod, e)
         props.onReset(e)
       })
   }

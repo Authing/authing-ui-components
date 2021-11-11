@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Tabs } from 'antd'
+import { message, Tabs } from 'antd'
 import { RegisterMethods, User } from 'authing-js-sdk'
 import { ChangeLanguage } from '../ChangeLanguage'
 import { useAuthClient } from '../Guard/authClient'
@@ -38,6 +38,14 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
     () => ({
       onRegister: (code: number, data: any = {}, message?: string) => {
         const callback = __codePaser(code)
+
+        if (code !== 200) {
+          registerEvents.onRegisterError?.({
+            code,
+            data,
+            message,
+          })
+        }
 
         callback?.({
           ...data,

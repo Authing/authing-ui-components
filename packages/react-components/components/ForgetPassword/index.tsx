@@ -6,19 +6,38 @@ import { GuardModuleType } from '../Guard/module'
 import { ResetPassword } from './core/resetPassword'
 
 import { ImagePro } from '../ImagePro'
+import { ForgetPasswordViewProps } from './props'
+import { useAuthClient } from '../Guard/authClient'
+import { CommonMessage } from '..'
 
-export const GuardForgetPassword = (props: any) => {
+export const GuardForgetPassword: React.FC<ForgetPasswordViewProps> = (
+  props
+) => {
   const { t } = useTranslation()
   let publicConfig = props.config.__publicConfig__
+  const authClient = useAuthClient()
 
   const onReset = (res: any) => {
     let code = res.code
-    if ([2001, 2004].includes(code)) {
+    if (code !== 200) {
+      props.onPwdResetError?.(res, authClient)
       message.error(res.message)
       return
     }
+    props.onPwdReset?.(authClient)
     // 返回登录
-    props.__changeModule(GuardModuleType.LOGIN)
+    props.__changeModule?.(GuardModuleType.LOGIN)
+  }
+
+  const onSend = (type: 'phone' | 'email') => {
+    if (type === 'phone') props.onPwdPhoneSend?.(authClient)
+    if (type === 'email') props.onPwdEmailSend?.(authClient)
+  }
+  const onSendError = (type: 'phone' | 'email', error: any) => {
+    if (type === 'phone')
+      props.onPwdPhoneSendError?.(error as CommonMessage, authClient)
+    if (type === 'email')
+      props.onPwdEmailSendError?.(error as CommonMessage, authClient)
   }
 
   return (
@@ -36,12 +55,17 @@ export const GuardForgetPassword = (props: any) => {
         <div className="title-explain">{t('user.resetpasswordText1')}</div>
       </div>
       <div className="g2-view-tabs">
-        <ResetPassword onReset={onReset} publicConfig={publicConfig} />
+        <ResetPassword
+          onReset={onReset}
+          publicConfig={publicConfig}
+          onSend={onSend}
+          onSendError={onSendError}
+        />
       </div>
       <div className="g2-tips-line">
         <div
           className="link-like back-to-login"
-          onClick={() => props.__changeModule(GuardModuleType.LOGIN)}
+          onClick={() => props.__changeModule?.(GuardModuleType.LOGIN)}
         >
           {t('common.backLoginPage')}
         </div>
