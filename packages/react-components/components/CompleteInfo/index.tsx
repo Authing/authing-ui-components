@@ -4,7 +4,7 @@ import { ImagePro } from '../ImagePro'
 import { GuardModuleType } from '../Guard/module'
 
 import { CompleteInfo } from './core/completeInfo'
-import { GuardCompleteInfoViewProps } from './props'
+import { GuardCompleteInfoViewProps } from './interface'
 
 import './styles.less'
 

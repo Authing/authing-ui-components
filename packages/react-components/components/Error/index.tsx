@@ -1,6 +1,6 @@
 import React from 'react'
 import { ImagePro } from '../ImagePro'
-import { GuardErrorViewProps } from './props'
+import { GuardErrorViewProps } from './interface'
 
 import './styles.less'
 

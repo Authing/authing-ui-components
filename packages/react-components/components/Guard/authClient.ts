@@ -3,11 +3,11 @@ import { AuthenticationClient } from 'authing-js-sdk'
 import { ErrorCode } from '../_utils/GuardErrorCode'
 
 import packageConfig from '../../package.json'
-import { GuardConfig } from './config'
+import { GuardLocalConfig } from './config'
 
 let authClient: AuthenticationClient
 
-export const initAuthClient = (config: GuardConfig, appId: string) => {
+export const initAuthClient = (config: GuardLocalConfig, appId: string) => {
   const host = config.__appHost__ ?? config.host
   const lang = config.lang
 

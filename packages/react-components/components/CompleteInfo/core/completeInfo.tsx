@@ -7,7 +7,7 @@ import { UploadImage } from '../../AuthingGuard/Forms/UploadImage'
 import { useAuthClient } from '../../Guard/authClient'
 import { i18n } from '../../_utils/locales'
 import { useGuardHttp } from '../../_utils/guradHttp'
-import { GuardCompleteInfoViewProps } from '../props'
+import { GuardCompleteInfoViewProps } from '../interface'
 import SubmitButton from '../../SubmitButton'
 
 export interface CompleteInfoProps {

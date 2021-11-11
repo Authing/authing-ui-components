@@ -3,9 +3,8 @@ import ReactDOM from 'react-dom'
 
 import reportWebVitals from './reportWebVitals'
 import { Button, message } from 'antd'
-import { Guard } from './components'
-
-import { GuardMode } from './components/Type'
+import { GuardMode, RegisterMethods } from './components'
+import { Guard } from './components/Guard'
 
 const App = () => {
   let [visible, setVisible] = useState(true)
@@ -52,6 +51,7 @@ const App = () => {
         }}
         visible={visible}
         config={{
+          registerMethods: [RegisterMethods.Email],
           // autoRegister: true,
           // defaultRegisterMethod: RegisterMethods.Phone,
           // disableRegister: false,

@@ -1,17 +1,8 @@
 import { AuthenticationClient, CommonMessage } from 'authing-js-sdk'
 import { Lang } from 'authing-js-sdk/build/main/types'
+import { GuardMode } from '..'
 import { ApplicationConfig } from '../AuthingGuard/api'
 import { GuardModuleType } from '../Guard/module'
-
-export enum GuardMode {
-  Modal = 'modal',
-  Normal = 'normal',
-}
-
-export enum GuardScenes {
-  Login = 'login',
-  Register = 'register',
-}
 export interface IG2FCProps extends IG2Events {
   appId: string
   config?: Partial<IG2Config>

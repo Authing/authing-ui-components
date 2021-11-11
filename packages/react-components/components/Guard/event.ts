@@ -1,6 +1,6 @@
 import { message } from 'antd'
-import { CompleteInfoEvents } from '../CompleteInfo/props'
-import { ForgetPasswordEvents } from '../ForgetPassword/props'
+import { CompleteInfoEvents } from '../CompleteInfo/interface'
+import { ForgetPasswordEvents } from '../ForgetPassword/interface'
 import { LoginEvents } from '../Login/props'
 import { RegisterEvents } from '../Register/props'
 import { i18n } from '../_utils/locales'

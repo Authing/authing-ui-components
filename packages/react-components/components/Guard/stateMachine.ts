@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { GuardComponentConifg, GuardConfig } from './config'
+import { GuardComponentConifg, GuardLocalConfig } from './config'
 import { GuardModuleType } from './module'
 const window: Window = require('global/window')
 
@@ -107,7 +107,7 @@ export class GuardStateMachine {
     }
   }
 
-  setConfig = (config: GuardConfig) => {
+  setConfig = (config: GuardLocalConfig) => {
     this.config = config
   }
 }

@@ -3,7 +3,7 @@ import React, { ReactNode, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ImagePro } from '../ImagePro'
 import { IconFont } from '../IconFont'
-import { GuardDownloadATViewProps } from './props'
+import { GuardDownloadATViewProps } from './interface'
 import './styles.less'
 const window: Window = require('global/window')
 

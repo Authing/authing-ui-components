@@ -1,14 +1,10 @@
 import { LoginMethods, RegisterMethods } from 'authing-js-sdk'
 import { IG2Config } from '../Type'
 import { ApplicationConfig } from '../AuthingGuard/api'
-import { LoginConfig } from '../Login/props'
-import { RegisterConfig } from '../Register/props'
 import { assembledAppHost } from '.'
 import { GuardHttp } from './guradHttp'
 import { AuthingResponse } from './http'
-import { GuardComponentConifg } from '../Guard/config'
-
-export interface GuardConfig extends RegisterConfig, LoginConfig {}
+import { GuardComponentConifg, GuardLocalConfig } from '../Guard/config'
 
 let publicConfigMap: Record<string, ApplicationConfig> = {}
 
@@ -21,7 +17,7 @@ export const initConfig = async (
   appId: string,
   config: Partial<IG2Config>,
   defaultConfig: IG2Config
-): Promise<{ config: GuardConfig; publicConfig: ApplicationConfig }> => {
+): Promise<{ config: GuardLocalConfig; publicConfig: ApplicationConfig }> => {
   if (!getPublicConfig(appId))
     await requestPublicConfig(appId, config.host ?? defaultConfig.host)
   const mergedConfig = mergeConfig(
@@ -47,8 +43,8 @@ const mergeConfig = (
   config: GuardComponentConifg,
   defaultConfig: IG2Config,
   publicConfig: ApplicationConfig
-): GuardConfig => {
-  const mergedPublicConfig: GuardConfig = {
+): GuardLocalConfig => {
+  const mergedPublicConfig: GuardLocalConfig = {
     ...defaultConfig,
     ...config,
     title: config.title ?? publicConfig.name,

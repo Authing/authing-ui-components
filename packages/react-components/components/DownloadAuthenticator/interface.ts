@@ -6,7 +6,7 @@ const defaultConfig: DownloadATConfig = {
   ...getDefaultG2Config(),
 }
 
-export const getDefaultLoginConfig = (): DownloadATConfig => ({
+export const getDefaultDownloadAuthenticatorConfig = (): DownloadATConfig => ({
   ...getDefaultG2Config(),
   ...defaultConfig,
 })

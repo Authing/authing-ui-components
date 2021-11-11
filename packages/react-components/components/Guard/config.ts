@@ -1,13 +1,13 @@
 import { getDefaultLoginConfig, LoginConfig } from '../Login/props'
 import { getDefaultRegisterConfig, RegisterConfig } from '../Register/props'
 
-export interface GuardComponentConifg extends Partial<GuardConfig> {}
+export interface GuardComponentConifg extends Partial<GuardLocalConfig> {}
 
-export interface GuardConfig extends RegisterConfig, LoginConfig {}
+export interface GuardLocalConfig extends RegisterConfig, LoginConfig {}
 
-let defaultConfig: GuardConfig
+let defaultConfig: GuardLocalConfig
 
-export const getDefaultGuardConfig = (): GuardConfig => {
+export const getDefaultGuardLocalConfig = (): GuardLocalConfig => {
   if (!defaultConfig) {
     defaultConfig = {
       ...getDefaultLoginConfig(),

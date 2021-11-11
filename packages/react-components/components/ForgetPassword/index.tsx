@@ -6,7 +6,7 @@ import { GuardModuleType } from '../Guard/module'
 import { ResetPassword } from './core/resetPassword'
 
 import { ImagePro } from '../ImagePro'
-import { ForgetPasswordViewProps } from './props'
+import { ForgetPasswordViewProps } from './interface'
 import { useAuthClient } from '../Guard/authClient'
 import { CommonMessage } from '..'
 

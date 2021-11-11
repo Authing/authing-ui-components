@@ -10,7 +10,7 @@ import { IconFont } from '../IconFont'
 import { ShieldSpin, Spin } from '../ShieldSpin'
 import { BindSuccess } from './core/bindSuccess'
 import { SecurityCode } from './core/securityCode'
-import { GuardBindTotpViewProps } from './props'
+import { GuardBindTotpViewProps } from './interface'
 import { useTranslation } from 'react-i18next'
 import './styles.less'
 const window: Window = require('global/window')
@@ -21,7 +21,7 @@ enum BindTotpType {
 }
 
 export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
-  config: GuardConfig,
+  config: GuardLocalConfig,
   initData,
   onLogin,
   __changeModule,

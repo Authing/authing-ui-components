@@ -11,12 +11,12 @@ import { GuardLoginView } from '../Login'
 
 import { initAuthClient } from './authClient'
 import { GuardEvents, guardEventsFilter } from './event'
-import { initConfig, GuardConfig } from '../_utils/config'
+import { initConfig } from '../_utils/config'
 import { insertStyles } from '../_utils'
 import { initGuardHttp } from '../_utils/guradHttp'
 import { initI18n } from '..//_utils/locales'
-import { GuardMode, IG2FCProps } from '../Type'
-import { getDefaultGuardConfig } from './config'
+import { IG2FCProps } from '../Type'
+import { getDefaultGuardLocalConfig, GuardLocalConfig } from './config'
 import { ShieldSpin } from '../ShieldSpin'
 import { GuardModuleType } from './module'
 import { GuardMFAView } from '../MFA'
@@ -32,6 +32,7 @@ import { GuardRecoveryCodeView } from '../RecoveryCode'
 import './styles.less'
 import { IconFont } from '../AuthingGuard/IconFont'
 import { GuardErrorView } from '../Error'
+import { GuardMode } from '..'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -57,12 +58,12 @@ const ComponentsMapping: Record<
 }
 
 export interface GuardProps extends GuardEvents, IG2FCProps {
-  config?: Partial<GuardConfig>
+  config?: Partial<GuardLocalConfig>
   visible?: boolean
 }
 
 interface GuardViewProps extends GuardProps {
-  config: GuardConfig
+  config: GuardLocalConfig
   initData: any
 }
 
@@ -88,8 +89,8 @@ export const Guard = (props: GuardProps) => {
   const [errorMessage, setErrorMessage] = useState('')
 
   // Config
-  const [guardConfig, setGuardConfig] = useState<GuardConfig>(
-    getDefaultGuardConfig()
+  const [GuardLocalConfig, setGuardLocalConfig] = useState<GuardLocalConfig>(
+    getDefaultGuardLocalConfig()
   )
 
   // 状态机
@@ -138,10 +139,10 @@ export const Guard = (props: GuardProps) => {
       const { config: mergedConfig, publicConfig } = await initConfig(
         appId,
         config ?? {},
-        getDefaultGuardConfig()
+        getDefaultGuardLocalConfig()
       )
 
-      setGuardConfig(mergedConfig)
+      setGuardLocalConfig(mergedConfig)
 
       // Rest 初始化
       const httpClient = initGuardHttp(mergedConfig?.host!)
@@ -179,8 +180,8 @@ export const Guard = (props: GuardProps) => {
   }, [initGuardSetting])
 
   useEffect(() => {
-    insertStyles(guardConfig.contentCss)
-  }, [guardConfig.contentCss])
+    insertStyles(GuardLocalConfig.contentCss)
+  }, [GuardLocalConfig.contentCss])
 
   const renderModule = useMemo(() => {
     if (initSettingEnd) {
@@ -189,7 +190,7 @@ export const Guard = (props: GuardProps) => {
       return ComponentsMapping[moduleState.moduleName]({
         appId,
         initData: moduleState.initData,
-        config: guardConfig,
+        config: GuardLocalConfig,
         ...events,
         __changeModule: (moduleName, initData) => {
           historyNext(initData)
@@ -207,7 +208,7 @@ export const Guard = (props: GuardProps) => {
     appId,
     errorMessage,
     events,
-    guardConfig,
+    GuardLocalConfig,
     guardStateMachine,
     historyNext,
     initError,
