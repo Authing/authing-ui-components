@@ -52,7 +52,7 @@ const mergeConfig = (
     ...defaultConfig,
     ...config,
     title: config.title ?? publicConfig.name,
-    logo: config.logo ?? publicConfig.logo,
+    logo: !!config.logo ? config.logo : publicConfig.logo,
     loginMethods:
       config?.loginMethods ??
       (publicConfig.loginTabs?.list as LoginMethods[]) ??
@@ -92,6 +92,8 @@ const mergeConfig = (
     agreements: config.agreements ?? publicConfig.agreements,
     contentCss: config.contentCss ?? publicConfig.css,
   }
+
+  console.log('config', mergedPublicConfig, publicConfig)
 
   return mergedPublicConfig
 }
