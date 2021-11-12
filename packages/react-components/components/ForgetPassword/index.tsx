@@ -50,7 +50,6 @@ export const GuardForgetPassword: React.FC<ForgetPasswordViewProps> = (
           alt=""
           className="icon"
         />
-        {/* <img src={props.config?.logo} alt="" className="icon" /> */}
         <div className="title">{t('login.resetPwd')}</div>
         <div className="title-explain">{t('user.resetpasswordText1')}</div>
       </div>
