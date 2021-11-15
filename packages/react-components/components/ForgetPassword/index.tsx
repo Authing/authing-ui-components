@@ -26,7 +26,11 @@ export const GuardForgetPassword: React.FC<ForgetPasswordViewProps> = (
     }
     props.onPwdReset?.(authClient)
     // 返回登录
-    props.__changeModule?.(GuardModuleType.LOGIN)
+    const initData = {
+      title: t('common.resetSuccess'),
+      message: t('common.resetSuccessMessage'),
+    }
+    props.__changeModule?.(GuardModuleType.SUBMIT_SUCCESS, { ...initData })
   }
 
   const onSend = (type: 'phone' | 'email') => {

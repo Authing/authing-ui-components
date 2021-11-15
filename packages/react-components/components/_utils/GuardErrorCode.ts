@@ -5,4 +5,5 @@ export enum ErrorCode {
   USER_EXISTENCE = 2026,
   LOGIN_INVALID = 2021,
   PASSWORD_ERROR = 2333,
+  USER_NOT_EXIST = 2004,
 }

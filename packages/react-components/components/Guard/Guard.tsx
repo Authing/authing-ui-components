@@ -33,6 +33,7 @@ import './styles.less'
 import { IconFont } from '../AuthingGuard/IconFont'
 import { GuardErrorView } from '../Error'
 import { GuardMode } from '..'
+import { GuardSubmitSuccessView } from '../SubmitSuccess'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -58,6 +59,9 @@ const ComponentsMapping: Record<
   ),
   [GuardModuleType.RECOVERY_CODE]: (props) => (
     <GuardRecoveryCodeView {...props} />
+  ),
+  [GuardModuleType.SUBMIT_SUCCESS]: (props) => (
+    <GuardSubmitSuccessView {...props} />
   ),
 }
 

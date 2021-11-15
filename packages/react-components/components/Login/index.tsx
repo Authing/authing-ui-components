@@ -212,7 +212,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                 setLoginWay(k)
                 props.onLoginTabChange?.(k)
               }}
-              activeKey={loginWay}
+              // activeKey={loginWay}
             >
               {ms?.includes(LoginMethods.Password) && (
                 <Tabs.TabPane

@@ -67,15 +67,21 @@ export const MFAMethods: React.FC<MFAMethodsProps> = ({
   )
   return (
     <>
-      <div
-        style={{
-          minHeight: 32,
-        }}
-      />
-      <div className="g2-mfa-method">
-        <div className="g2-mfa-method-title">{t('login.otherVerifyWay')}</div>
-        {otherMethods}
-      </div>
+      {otherMethods.length !== 1 && (
+        <>
+          <div
+            style={{
+              minHeight: 32,
+            }}
+          />
+          <div className="g2-mfa-method">
+            <div className="g2-mfa-method-title">
+              {t('login.otherVerifyWay')}
+            </div>
+            {otherMethods}
+          </div>
+        </>
+      )}
     </>
   )
 }

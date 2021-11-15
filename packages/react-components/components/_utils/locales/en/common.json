@@ -219,5 +219,8 @@
   "password": "Password",
   "captchaCode": "Digit code",
   "account": "Account",
-  "phone": "Phone number"
+  "phone": "Phone number",
+  "pToLogin": "seconds later back",
+  "resetSuccess": "Reset successfully",
+  "resetSuccessMessage": "The password is reset successfully, you can continue to log in with the new password"
 }

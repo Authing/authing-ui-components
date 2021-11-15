@@ -130,7 +130,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
           rules={[
             {
               validator(_, value) {
-                if (value.indexOf(' ') !== -1) {
+                if ((value ?? '') && value.indexOf(' ') !== -1) {
                   return Promise.reject(t('common.checkPasswordHasSpace'))
                 }
                 return Promise.resolve()

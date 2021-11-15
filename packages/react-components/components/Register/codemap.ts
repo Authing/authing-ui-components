@@ -9,7 +9,7 @@ export const codeMap: Record<number, GuardModuleAction> = {
     // 需要输入图形验证码
     action: 'message',
   },
-  2333: {
+  [ErrorCode.PASSWORD_ERROR]: {
     // 密码错误
     action: 'message',
   },

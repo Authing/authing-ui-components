@@ -1,6 +1,4 @@
-import { message } from 'antd'
 import { AuthenticationClient } from 'authing-js-sdk'
-import { ErrorCode } from '../_utils/GuardErrorCode'
 
 import packageConfig from '../../package.json'
 import { GuardLocalConfig } from './config'
@@ -19,21 +17,9 @@ export const initAuthClient = (config: GuardLocalConfig, appId: string) => {
         lang,
         requestFrom: `Guard-${packageConfig.framework}@${packageConfig.version}`,
         onError: (code, msg: any) => {
-          if (code === 2020) {
-            return
-          }
+          // if ([].includes(code)) message.error(msg)
 
-          if ([ErrorCode.USER_EXISTENCE].includes(code)) {
-            message.error(msg)
-          } else {
-            message.error(msg)
-          }
-
-          // if ([ErrorCode.OTP_MFA_CODE, ErrorCode.APP_MFA_CODE].includes(code)) {
-          //   message.info(msg)
-          //   return
-          // }
-          // message.error(msg)
+          console.error(code, msg)
         },
       })
     } catch (error) {
