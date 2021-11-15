@@ -81,9 +81,9 @@ export const PhoneFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
     return (
       <Form.Item
         validateFirst={true}
-        {...formItemProps}
         name="phone"
         rules={[...rules, ...(formItemProps?.rules ?? [])]}
+        {...formItemProps}
       />
     )
   }

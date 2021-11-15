@@ -5,7 +5,7 @@ import SubmitButton from '../../SubmitButton'
 import { UserOutlined, PlusOutlined } from '@ant-design/icons'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { useGuardHttp } from '../../_utils/guradHttp'
-import { fieldRequiredRule } from '../../_utils'
+import { fieldRequiredRule, validate } from '../../_utils'
 
 interface describeQuestionsProps {
   appId: string
@@ -132,7 +132,22 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
           className="authing-g2-input-form"
           name="identify"
           label={t('common.problem.form.phone')}
-          rules={fieldRequiredRule(t('common.problem.form.phone'))}
+          validateFirst={true}
+          rules={[
+            ...fieldRequiredRule(t('common.problem.form.phone')),
+            {
+              validator: async (_, value) => {
+                if (!value) {
+                  return
+                }
+                if (validate('email', value) || validate('phone', value)) {
+                  return
+                } else {
+                  throw new Error(t('login.inputCorrectPhoneOrEmail'))
+                }
+              },
+            },
+          ]}
         >
           <Input
             className="authing-g2-input"
@@ -172,7 +187,14 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
           name="description"
           label={t('common.problem.form.questionDescript')}
         >
-          <Input.TextArea className="authing-g2-input" />
+          <Input.TextArea
+            className="authing-g2-input"
+            maxLength={200}
+            showCount
+            style={{
+              marginBottom: 10,
+            }}
+          />
         </Form.Item>
 
         <div className="authing-g2-input-form">

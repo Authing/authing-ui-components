@@ -25,19 +25,9 @@ export const FormItemAccount: React.FC<FormItemAccountProps> = (props) => {
 
     switch (methods[0]) {
       case 'phone-password':
-        return (
-          <PhoneFormItem
-            rules={fieldRequiredRule(t('common.phoneNumber'))}
-            {...formItemPtops}
-          />
-        )
+        return <PhoneFormItem {...formItemPtops} />
       case 'email-password':
-        return (
-          <EmailFormItem
-            rules={fieldRequiredRule(t('common.emailLabel'))}
-            {...formItemPtops}
-          />
-        )
+        return <EmailFormItem {...formItemPtops} />
       case 'username-password':
         return (
           <FormItem

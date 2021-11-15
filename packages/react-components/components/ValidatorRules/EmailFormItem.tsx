@@ -54,6 +54,7 @@ export const EmailFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
         ...fieldRequiredRule(t('common.emailLabel')),
         {
           validator: (_: any, value: any) => {
+            console.log(value)
             if (!VALIDATE_PATTERN.email.test(value))
               return checkError(t('common.emailFormatError'))
 
@@ -66,15 +67,17 @@ export const EmailFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
           validator,
         })
 
+      console.log(rules)
+
       return rules
     }, [checkRepeat, t, validator])
 
     return (
       <Form.Item
         validateFirst={true}
-        {...formItemProps}
         name="email"
         rules={[...rules, ...(formItemProps?.rules ?? [])]}
+        {...formItemProps}
       />
     )
   }
