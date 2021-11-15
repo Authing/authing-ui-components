@@ -88,6 +88,9 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   let ms = props.config?.loginMethods
   let { autoRegister, langRange } = props.config
 
+  const firstInputWay = inputWays.filter((way) => ms.includes(way))[0]
+  const firstQRcodeWay = qrcodeWays.filter((way) => ms.includes(way))[0]
+
   let { disableResetPwd, disableRegister } = useDisables({
     config: props.config,
     loginWay,
@@ -177,9 +180,9 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
             className="switch-img"
             onClick={() => {
               if (inputWays.includes(loginWay)) {
-                setLoginWay(LoginMethods.WxMinQr)
+                setLoginWay(firstQRcodeWay)
               } else if (qrcodeWays.includes(loginWay)) {
-                setLoginWay(LoginMethods.Password)
+                setLoginWay(firstInputWay)
               }
             }}
           >
