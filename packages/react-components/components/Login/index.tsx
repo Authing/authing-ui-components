@@ -225,6 +225,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                     host={props.config.host}
                     onLogin={onLogin}
                     onBeforeLogin={onBeforeLogin}
+                    passwordLoginMethods={props.config.passwordLoginMethods}
                   />
                 </Tabs.TabPane>
               )}

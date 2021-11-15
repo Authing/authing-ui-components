@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { Form, Input } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
@@ -9,6 +9,7 @@ import { fieldRequiredRule, getUserRegisterParams } from '../../_utils'
 import { ErrorCode } from '../../_utils/GuardErrorCode'
 import { LoginMethods } from '../../'
 import SubmitButton from '../../SubmitButton'
+import { PasswordLoginMethods } from '../../AuthingGuard/api'
 
 interface LoginWithPasswordProps {
   // configs
@@ -19,6 +20,7 @@ interface LoginWithPasswordProps {
   // events
   onLogin: any
   onBeforeLogin: any
+  passwordLoginMethods: PasswordLoginMethods[]
 }
 
 export const LoginWithPassword = (props: LoginWithPasswordProps) => {
@@ -36,6 +38,43 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   const getCaptchaUrl = () => `${captchaUrl}?r=${+new Date()}`
 
   const encrypt = client.options.encryptFunction
+  const loginMethodsText = useMemo<
+    Record<
+      PasswordLoginMethods,
+      {
+        t: string
+        sort: number
+      }
+    >
+  >(
+    () => ({
+      'email-password': {
+        t: t('common.email'),
+        sort: 2,
+      },
+      'phone-password': {
+        t: t('common.phoneNumber'),
+        sort: 1,
+      },
+      'username-password': {
+        t: t('common.username'),
+        sort: 0,
+      },
+    }),
+    [t]
+  )
+
+  const accountPlaceholder = useMemo(
+    () =>
+      t('login.inputAccount', {
+        text: props.passwordLoginMethods
+          ?.map((item) => loginMethodsText[item])
+          .sort((a, b) => a.sort - b.sort)
+          .map((item) => item.t)
+          .join(' / '),
+      }),
+    [loginMethodsText, props.passwordLoginMethods, t]
+  )
 
   const onFinish = async (values: any) => {
     setRemainCount(0)
@@ -103,9 +142,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
             className="authing-g2-input"
             autoComplete="email,username,tel"
             size="large"
-            placeholder={`${t('login.inputUsername')} / ${t(
-              'common.phoneNumber'
-            )} / ${t('common.email')}`}
+            placeholder={accountPlaceholder}
             prefix={<UserOutlined style={{ color: '#878A95' }} />}
           />
         </Form.Item>

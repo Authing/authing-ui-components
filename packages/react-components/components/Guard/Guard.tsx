@@ -5,7 +5,7 @@ import React, {
   useReducer,
   useState,
 } from 'react'
-import { ConfigProvider, Modal } from 'antd'
+import { ConfigProvider, message, Modal } from 'antd'
 
 import { GuardLoginView } from '../Login'
 
@@ -35,6 +35,10 @@ import { GuardErrorView } from '../Error'
 import { GuardMode } from '..'
 
 const PREFIX_CLS = 'authing-ant'
+
+message.config({
+  prefixCls: `${PREFIX_CLS}-message`,
+})
 
 const ComponentsMapping: Record<
   GuardModuleType,

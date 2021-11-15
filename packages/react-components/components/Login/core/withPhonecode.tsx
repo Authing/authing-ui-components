@@ -78,6 +78,7 @@ export const LoginWithPhoneCode = (props: any) => {
             type="tel"
             size="large"
             // 只有 InputNumber formatter、controls API
+            maxLength={11}
             // formatter={formatPhone}
             // parser={(value) => (value ? value.replaceAll('-', '') : '')}
             placeholder={t('login.inputPhone')}
