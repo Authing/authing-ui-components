@@ -1,15 +1,17 @@
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Form, Input } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 
-import { useGuardHttp } from '../../_utils/guradHttp'
-import { useAuthClient } from '../../Guard/authClient'
-import { fieldRequiredRule, getUserRegisterParams } from '../../_utils'
-import { ErrorCode } from '../../_utils/GuardErrorCode'
-import { LoginMethods } from '../../'
-import SubmitButton from '../../SubmitButton'
-import { PasswordLoginMethods } from '../../AuthingGuard/api'
+import { useGuardHttp } from '../../../_utils/guradHttp'
+import { useAuthClient } from '../../../Guard/authClient'
+import { fieldRequiredRule, getUserRegisterParams } from '../../../_utils'
+import { ErrorCode } from '../../../_utils/GuardErrorCode'
+import SubmitButton from '../../../SubmitButton'
+import { PasswordLoginMethods } from '../../../AuthingGuard/api'
+import { LoginMethods } from '../../..'
+import { FormItemAccount } from './FormItemAccount'
+import { InputAccount } from './InputAccount'
 
 interface LoginWithPasswordProps {
   // configs
@@ -38,43 +40,6 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   const getCaptchaUrl = () => `${captchaUrl}?r=${+new Date()}`
 
   const encrypt = client.options.encryptFunction
-  const loginMethodsText = useMemo<
-    Record<
-      PasswordLoginMethods,
-      {
-        t: string
-        sort: number
-      }
-    >
-  >(
-    () => ({
-      'email-password': {
-        t: t('common.email'),
-        sort: 2,
-      },
-      'phone-password': {
-        t: t('common.phoneNumber'),
-        sort: 1,
-      },
-      'username-password': {
-        t: t('common.username'),
-        sort: 0,
-      },
-    }),
-    [t]
-  )
-
-  const accountPlaceholder = useMemo(
-    () =>
-      t('login.inputAccount', {
-        text: props.passwordLoginMethods
-          ?.map((item) => loginMethodsText[item])
-          .sort((a, b) => a.sort - b.sort)
-          .map((item) => item.t)
-          .join(' / '),
-      }),
-    [loginMethodsText, props.passwordLoginMethods, t]
-  )
 
   const onFinish = async (values: any) => {
     setRemainCount(0)
@@ -133,19 +98,19 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         onFinishFailed={() => submitButtonRef.current.onError()}
         autoComplete="off"
       >
-        <Form.Item
+        <FormItemAccount
           name="account"
           className="authing-g2-input-form"
-          rules={fieldRequiredRule(t('common.account'))}
+          passwordLoginMethods={props.passwordLoginMethods}
         >
-          <Input
+          <InputAccount
             className="authing-g2-input"
             autoComplete="email,username,tel"
             size="large"
-            placeholder={accountPlaceholder}
             prefix={<UserOutlined style={{ color: '#878A95' }} />}
+            passwordLoginMethods={props.passwordLoginMethods}
           />
-        </Form.Item>
+        </FormItemAccount>
         <Form.Item
           name="password"
           className="authing-g2-input-form"

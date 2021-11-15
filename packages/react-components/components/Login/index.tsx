@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { message, Tabs } from 'antd'
 import { intersection } from 'lodash'
 
-import { LoginWithPassword } from './core/withPassword'
+import { LoginWithPassword } from './core/withPassword/index'
 import { LoginWithPhoneCode } from './core/withPhonecode'
 import { LoginWithLDAP } from './core/withLDAP'
 import { LoginWithAD } from './core/withAD'
