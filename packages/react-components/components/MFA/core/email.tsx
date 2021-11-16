@@ -4,13 +4,13 @@ import { Form } from 'antd'
 import { EmailScene, User } from 'authing-js-sdk'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { VerifyCodeInput } from '../../VerifyCodeInput'
+import { VerifyCodeInput } from '../VerifyCodeInput'
 import { useAuthClient } from '../../Guard/authClient'
 import { SendCodeBtn } from '../../SendCode/SendCodeBtn'
 import SubmitButton from '../../SubmitButton'
 import { EmailFormItem, ICheckProps } from '../../ValidatorRules'
-
-const CODE_LEN = 4
+import { MFAConfig } from '../props'
+import { VerifyCodeFormItem } from '../VerifyCodeInput/VerifyCodeFormItem'
 
 interface BindMFAEmailProps {
   mfaToken: string
@@ -90,6 +90,7 @@ interface VerifyMFAEmailProps {
   mfaToken: string
   onVerify: (code: number, data: any) => void
   sendCodeRef: React.RefObject<HTMLButtonElement>
+  codeLength: number
 }
 
 export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
@@ -97,12 +98,12 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
   mfaToken,
   onVerify,
   sendCodeRef,
+  codeLength,
 }) => {
   const authClient = useAuthClient()
   const submitButtonRef = useRef<any>(null)
   const { t } = useTranslation()
   const [form] = Form.useForm()
-  const [MfaCode, setMFACode] = useState(new Array(CODE_LEN).fill(''))
   const [sent, setSent] = useState(false)
 
   const sendVerifyCode = async () => {
@@ -119,11 +120,13 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
 
   const onFinish = async (values: any) => {
     submitButtonRef.current?.onSpin(true)
+    const mfaCode = form.getFieldValue('mfaCode')
+
     try {
       const user: User = await authClient.mfa.verifyAppEmailMfa({
         mfaToken,
         email: email!,
-        code: MfaCode.join(''),
+        code: mfaCode.join(''),
       })
 
       onVerify(200, user)
@@ -148,27 +151,12 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current?.onError()}
       >
-        <Form.Item
-          name="mfaCode"
-          className="g2-mfa-totp-verify-input"
-          rules={[
-            {
-              validateTrigger: [],
-              validator() {
-                if (MfaCode.some((item) => !item)) {
-                  return Promise.reject(t('login.inputFullMfaCode'))
-                }
-                return Promise.resolve()
-              },
-            },
-          ]}
+        <VerifyCodeFormItem
+          codeLength={codeLength}
+          ruleKeyword={t('common.captchaCode')}
         >
-          <VerifyCodeInput
-            length={CODE_LEN}
-            verifyCode={MfaCode}
-            setVerifyCode={setMFACode}
-          />
-        </Form.Item>
+          <VerifyCodeInput length={codeLength} />
+        </VerifyCodeFormItem>
 
         <SendCodeBtn
           btnRef={sendCodeRef}
@@ -190,10 +178,12 @@ export const MFAEmail: React.FC<{
   mfaToken: string
   email?: string
   mfaLogin: any
-  config: any
+  config: MFAConfig
 }> = ({ email: userEmail, mfaToken, mfaLogin, config }) => {
   const [email, setEmail] = useState(userEmail)
   const sendCodeRef = useRef<HTMLButtonElement>(null)
+
+  const codeLength = config.__publicConfig__?.verifyCodeLength
 
   return (
     <>
@@ -205,6 +195,7 @@ export const MFAEmail: React.FC<{
             mfaLogin(code, data)
           }}
           sendCodeRef={sendCodeRef}
+          codeLength={codeLength ?? 4}
         />
       ) : (
         <BindMFAEmail

@@ -2,6 +2,7 @@ import { Form, Checkbox, Typography } from 'antd'
 import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import SubmitButton from '../../SubmitButton'
+import { common } from '../../_utils/locales/en'
 
 const { Paragraph } = Typography
 
@@ -21,10 +22,11 @@ export const BindSuccess: React.FC<BindSuccessProps> = ({ secret, onBind }) => {
     submitButtonRef.current?.onSpin(true)
     try {
       await form.validateFields()
-      submitButtonRef.current?.onSpin(true)
       onBind()
+    } catch (e: any) {
+      submitButtonRef.current?.onError()
     } finally {
-      submitButtonRef.current?.onSpin(true)
+      submitButtonRef.current?.onSpin(false)
     }
   }
 
@@ -37,14 +39,24 @@ export const BindSuccess: React.FC<BindSuccessProps> = ({ secret, onBind }) => {
         <Paragraph copyable>{secret}</Paragraph>
       </div>
 
-      <Form form={form} onFinish={bindSuccess} style={{ width: '100%' }}>
+      <Form
+        form={form}
+        onFinish={bindSuccess}
+        style={{ width: '100%' }}
+        onFinishFailed={() => submitButtonRef.current?.onError()}
+      >
         <Form.Item
-          className="authing-g2-input-form"
+          className="authing-g2-input-form g2-mfa-totp-verify-input"
           name="remember"
           rules={[
             {
-              required: true,
-              message: t('common.pleaseRecordKey'),
+              validator: (_, value) => {
+                console.log(value)
+                if (!value) {
+                  return Promise.reject(t('common.pleaseRecordKey'))
+                }
+                return Promise.resolve()
+              },
             },
           ]}
           valuePropName="checked"

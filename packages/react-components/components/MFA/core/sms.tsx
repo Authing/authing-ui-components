@@ -9,9 +9,8 @@ import { useAuthClient } from '../../Guard/authClient'
 import { SendCodeBtn } from '../../SendCode/SendCodeBtn'
 import SubmitButton from '../../SubmitButton'
 import { ICheckProps, PhoneFormItem } from '../../ValidatorRules'
-
-const CODE_LEN = 4
-
+import { VerifyCodeFormItem } from '../VerifyCodeInput/VerifyCodeFormItem'
+import { MFAConfig } from '../props'
 export interface BindMFASmsProps {
   mfaToken: string
   onBind: (phone: string) => void
@@ -94,6 +93,7 @@ export interface VerifyMFASmsProps {
   phone: string
   onVerify: (code: number, data: any) => void
   sendCodeRef: React.RefObject<HTMLButtonElement>
+  codeLength: number
 }
 
 export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
@@ -101,6 +101,7 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   phone,
   onVerify,
   sendCodeRef,
+  codeLength = 4,
 }) => {
   const authClient = useAuthClient()
   const submitButtonRef = useRef<any>(null)
@@ -154,23 +155,12 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
       >
-        <Form.Item
-          name="mfaCode"
-          className="g2-mfa-totp-verify-input"
-          validateTrigger={false}
-          rules={[
-            {
-              validator(_, value: string[]) {
-                if ((value ?? []).join('').length !== CODE_LEN) {
-                  return Promise.reject(t('login.inputFullMfaCode'))
-                }
-                return Promise.resolve()
-              },
-            },
-          ]}
+        <VerifyCodeFormItem
+          codeLength={codeLength}
+          ruleKeyword={t('common.captchaCode')}
         >
-          <VerifyCodeInput length={CODE_LEN} />
-        </Form.Item>
+          <VerifyCodeInput length={codeLength} />
+        </VerifyCodeFormItem>
 
         <SendCodeBtn
           btnRef={sendCodeRef}
@@ -192,10 +182,12 @@ export const MFASms: React.FC<{
   mfaToken: string
   phone?: string
   mfaLogin: any
-  config: any
+  config: MFAConfig
 }> = ({ phone: userPhone, mfaToken, mfaLogin, config }) => {
   const [phone, setPhone] = useState(userPhone)
   const sendCodeRef = useRef<HTMLButtonElement>(null)
+
+  const codeLength = config.__publicConfig__?.verifyCodeLength
 
   return (
     <>
@@ -206,6 +198,7 @@ export const MFASms: React.FC<{
           onVerify={(code, data) => {
             mfaLogin(code, data)
           }}
+          codeLength={codeLength ?? 4}
           sendCodeRef={sendCodeRef}
         />
       ) : (

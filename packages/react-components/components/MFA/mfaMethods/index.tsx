@@ -66,7 +66,6 @@ export const MFAMethods: React.FC<MFAMethodsProps> = ({
     [applicationMfa, currentMethod, onChangeMethod]
   )
 
-  console.log(otherMethods)
   return (
     <>
       {otherMethods.length !== 0 && (

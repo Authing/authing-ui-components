@@ -20,10 +20,10 @@ interface VerifyCodeInputProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
+  length = 4,
   size = '46px',
-  gutter = '24px',
+  gutter = length > 4 ? '14px' : '24px',
   className,
-  length = 6,
   onEenter,
   showDivider,
   onChange,
@@ -106,7 +106,7 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
   }, [length, onChange, setVerifyCode, verifyCode])
 
   return (
-    <div ref={codeInputRef} className="g2-code-input" {...rest}>
+    <div ref={codeInputRef} className="authing-g2-code-input" {...rest}>
       {new Array(length).fill(0).map((_, index) => (
         <Fragment key={index}>
           <Input
@@ -119,7 +119,7 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
               lineHeight: size,
               marginLeft: index === 0 ? 0 : gutter,
             }}
-            className="g2-code-input-item"
+            className="authing-g2-code-input-item"
             size="large"
             autoFocus={index === 0}
             onKeyDown={(evt) => handleKeyDown(evt, index)}
@@ -136,7 +136,7 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
             type="tel"
           />
           {showDivider && index === Math.floor(length / 2 - 1) && (
-            <Divider className="g2-code-input-divider" />
+            <Divider className="authing-g2-code-input-divider" />
           )}
         </Fragment>
       ))}

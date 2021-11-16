@@ -4,24 +4,32 @@ import { useTranslation } from 'react-i18next'
 
 export interface VerifyCodeFormItemProps extends FormItemProps {
   codeLength: number
-  rulesKeyword?: string
+  ruleKeyword?: string
 }
 
 export const VerifyCodeFormItem: React.FC<VerifyCodeFormItemProps> = (
   props
 ) => {
-  const { codeLength, ...formItemProps } = props
   const { t } = useTranslation()
+  const {
+    codeLength,
+    ruleKeyword = t('common.totpCode'),
+    ...formItemProps
+  } = props
   return (
     <Form.Item
       name="mfaCode"
       className="g2-mfa-totp-verify-input"
-      validateTrigger={false}
+      // validateTrigger={'onBlur'}
       rules={[
         {
           validator(_, value: string[]) {
             if ((value ?? []).join('').length !== codeLength) {
-              return Promise.reject(t('login.inputFullMfaCode'))
+              return Promise.reject(
+                t('common.isMissing', {
+                  name: ruleKeyword,
+                })
+              )
             }
             return Promise.resolve()
           },

@@ -1,13 +1,14 @@
 import { Form, message } from 'antd'
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
-import { VerifyCodeInput } from '../../VerifyCodeInput'
+
 import { GuardModuleType } from '../../Guard/module'
 import { useGuardHttp } from '../../_utils/guradHttp'
 import SubmitButton from '../../SubmitButton'
-
-const CODE_LEN = 6
+import { ImagePro } from '../../ImagePro'
+import { VerifyCodeFormItem } from '../../MFA/VerifyCodeInput/VerifyCodeFormItem'
+import { VerifyCodeInput } from '../../MFA/VerifyCodeInput'
 export interface SecurityCodeProps {
   mfaToken: string
   qrcode: string
@@ -22,7 +23,6 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
   changeModule,
 }) => {
   const [form] = Form.useForm()
-  const [saftyCode, setSaftyCode] = useState(new Array(CODE_LEN).fill(''))
   const submitButtonRef = useRef<any>(null)
 
   const { t } = useTranslation()
@@ -35,7 +35,11 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
 
   const [, bindTotp] = useAsyncFn(async () => {
     submitButtonRef.current.onSpin(true)
+
     try {
+      await form.validateFields()
+      const saftyCode = form.getFieldValue('saftyCode')
+
       const { code, data, message: resMessage } = await post(
         '/api/v2/mfa/totp/associate/confirm',
         {
@@ -51,14 +55,17 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
       )
 
       if (code !== 200) {
+        submitButtonRef.current.onError()
         message.error(resMessage)
       } else {
         onNext(data)
       }
+    } catch (e: any) {
+      submitButtonRef.current.onError()
     } finally {
       submitButtonRef.current?.onSpin(false)
     }
-  }, [mfaToken, saftyCode])
+  }, [mfaToken])
 
   return (
     <>
@@ -82,35 +89,17 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
         </span>
         ） {t('common.mfaText1')}
       </p>
-      <img className="g2-mfa-bindTotp-qrcode" src={qrcode} alt="qrcode" />
+      <ImagePro className="g2-mfa-bindTotp-qrcode" src={qrcode} alt="qrcode" />
       <Form
         className="g2-mfa-bindTotp-securityCode-form"
         form={form}
         onSubmitCapture={() => {}}
         onFinish={bindTotp}
+        onFinishFailed={() => submitButtonRef.current.onError()}
       >
-        <Form.Item
-          name="mfaCode"
-          className="g2-mfa-totp-verify-input"
-          rules={[
-            {
-              validateTrigger: [],
-              validator(r, v, cb) {
-                if (saftyCode.some((item) => !item)) {
-                  cb(t('login.inputFullMfaCode'))
-                  return
-                }
-                cb()
-              },
-            },
-          ]}
-        >
-          <VerifyCodeInput
-            length={CODE_LEN}
-            verifyCode={saftyCode}
-            setVerifyCode={setSaftyCode}
-          />
-        </Form.Item>
+        <VerifyCodeFormItem codeLength={6} name="saftyCode">
+          <VerifyCodeInput length={6} showDivider={true} gutter={'10px'} />
+        </VerifyCodeFormItem>
         <p>{t('user.numberSafteyCode')}</p>
         <SubmitButton text={t('user.nextStep')} ref={submitButtonRef} />
       </Form>

@@ -222,5 +222,6 @@
   "phone": "手机号",
   "pToLogin": "秒后返回登录",
   "resetSuccess": "重置成功",
-  "resetSuccessMessage": "密码重置成功，您可以使用新密码继续登录"
+  "resetSuccessMessage": "密码重置成功，您可以使用新密码继续登录",
+  "totpCode": "安全码"
 }

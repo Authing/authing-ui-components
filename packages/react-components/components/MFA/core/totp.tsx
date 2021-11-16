@@ -1,16 +1,14 @@
 import { Form } from 'antd'
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
-import { VerifyCodeInput } from '../../VerifyCodeInput'
 import { GuardModuleType } from '../../Guard/module'
 import { useGuardHttp } from '../../_utils/guradHttp'
 import { GuardMFAInitData, MFAConfig } from '../props'
 import { message as Message } from 'antd'
 import SubmitButton from '../../SubmitButton'
-
-const CODE_LEN = 6
-
+import { VerifyCodeFormItem } from '../VerifyCodeInput/VerifyCodeFormItem'
+import { VerifyCodeInput } from '../VerifyCodeInput'
 export interface BindMFATotpProps {
   initData: GuardMFAInitData
   changeModule: any
@@ -52,15 +50,15 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
 
   const { post } = useGuardHttp()
 
-  const [MFACode, setMFACode] = useState(new Array(6).fill(''))
-
   const [, onFinish] = useAsyncFn(async () => {
     submitButtonRef.current.onSpin(true)
+
+    const mfaCode = form.getFieldValue('mfaCode')
     try {
       const { code, data, message } = await post(
         '/api/v2/mfa/totp/verify',
         {
-          totp: MFACode.join(''),
+          totp: mfaCode.join(''),
         },
         {
           headers: {
@@ -78,35 +76,22 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
     } finally {
       submitButtonRef.current.onSpin(false)
     }
-  }, [mfaToken, MFACode])
+  }, [mfaToken])
 
   return (
     <>
       <p className="authing-g2-mfa-title">{t('login.accPwdLoginVerify')}</p>
       <p className="authing-g2-mfa-tips">{t('login.inputSixCode')}</p>
-      <Form form={form} onSubmitCapture={() => {}} onFinish={onFinish}>
-        <Form.Item
-          name="mfaCode"
-          className="g2-mfa-totp-verify-input g2-mfa-verifyCode-formItem"
-          rules={[
-            {
-              validateTrigger: [],
-              validator(r, v, cb) {
-                if (MFACode.some((item) => !item)) {
-                  cb(t('login.inputFullMfaCode'))
-                  return
-                }
-                cb()
-              },
-            },
-          ]}
-        >
-          <VerifyCodeInput
-            length={CODE_LEN}
-            verifyCode={MFACode}
-            setVerifyCode={setMFACode}
-          />
-        </Form.Item>
+      <Form
+        form={form}
+        onSubmitCapture={() => {}}
+        onFinish={onFinish}
+        onFinishFailed={() => submitButtonRef.current.onError()}
+      >
+        <VerifyCodeFormItem codeLength={6}>
+          <VerifyCodeInput length={6} showDivider={true} gutter={'10px'} />
+        </VerifyCodeFormItem>
+
         <SubmitButton text={t('common.sure')} ref={submitButtonRef} />
       </Form>
     </>
