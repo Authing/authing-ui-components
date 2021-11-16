@@ -1,10 +1,10 @@
 import { UserOutlined } from '@ant-design/icons'
-import { Input, message as Message } from 'antd'
+import { Input, message, message as Message } from 'antd'
 import { Form } from 'antd'
 import { User } from 'authing-js-sdk'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { VerifyCodeInput } from '../../VerifyCodeInput'
+import { VerifyCodeInput } from '../VerifyCodeInput'
 import { useAuthClient } from '../../Guard/authClient'
 import { SendCodeBtn } from '../../SendCode/SendCodeBtn'
 import SubmitButton from '../../SubmitButton'
@@ -31,6 +31,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
   const ref = useRef<ICheckProps>(null)
   const onFinish = async ({ phone }: any) => {
     submitButtonRef.current.onSpin(true)
+    await form.validateFields()
     try {
       const bindable = await authClient.mfa.phoneOrEmailBindable({
         mfaToken,
@@ -106,17 +107,16 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   const { t } = useTranslation()
   const [form] = Form.useForm()
 
-  const [MfaCode, setMFACode] = useState(new Array(CODE_LEN).fill(''))
-  const [sending, setSending] = useState(false)
   const [sent, setSent] = useState(false)
 
   const onFinish = async (values: any) => {
     submitButtonRef.current.onSpin(true)
+    const mfaCode = form.getFieldValue('mfaCode')
     try {
       const user: User = await authClient.mfa.verifyAppSmsMfa({
         mfaToken,
         phone: phone!,
-        code: MfaCode.join(''),
+        code: mfaCode.join(''),
       })
       // TODO
       onVerify(200, user)
@@ -130,15 +130,14 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   }
 
   const sendVerifyCode = async () => {
-    setSending(true)
     try {
       await authClient.sendSmsCode(phone!)
       setSent(true)
       return true
     } catch (e) {
+      const errorMessage = JSON.parse(e.message)
+      message.error(errorMessage.message)
       return false
-    } finally {
-      setSending(false)
     }
   }
 
@@ -146,9 +145,7 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
     <>
       <h3 className="authing-g2-mfa-title">{t('login.inputPhoneCode')}</h3>
       <p className="authing-g2-mfa-tips">
-        {sending
-          ? t('login.sendingVerifyCode')
-          : sent
+        {sent
           ? `${t('login.verifyCodeSended')} ${phone}`
           : t('login.clickSent')}
       </p>
@@ -159,11 +156,12 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
       >
         <Form.Item
           name="mfaCode"
+          className="g2-mfa-totp-verify-input"
+          validateTrigger={false}
           rules={[
             {
-              validateTrigger: [],
-              validator() {
-                if (MfaCode.some((item) => !item)) {
+              validator(_, value: string[]) {
+                if ((value ?? []).join('').length !== CODE_LEN) {
                   return Promise.reject(t('login.inputFullMfaCode'))
                 }
                 return Promise.resolve()
@@ -171,11 +169,7 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
             },
           ]}
         >
-          <VerifyCodeInput
-            length={CODE_LEN}
-            verifyCode={MfaCode}
-            setVerifyCode={setMFACode}
-          />
+          <VerifyCodeInput length={CODE_LEN} />
         </Form.Item>
 
         <SendCodeBtn

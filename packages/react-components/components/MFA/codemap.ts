@@ -18,4 +18,7 @@ export const codeMap: Record<number, GuardModuleAction> = {
     action: 'insideFix',
     message: 'verification failed, let components inside fix is fine.',
   },
+  500: {
+    action: 'message',
+  },
 }

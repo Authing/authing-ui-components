@@ -11,6 +11,7 @@ import { GuardMFAViewProps, MFAType } from './props'
 import { useAuthClient } from '../Guard/authClient'
 import { codeMap } from './codemap'
 import './styles.less'
+import { message } from 'antd'
 const window: Window = require('global/window')
 
 const ComponentsMapping: Record<MFAType, (props: any) => React.ReactNode> = {
@@ -88,6 +89,12 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
       return () => {}
     }
 
+    if (action?.action === 'message') {
+      return (data: any) => {
+        message.error(data.message)
+      }
+    }
+
     // 最终结果
     return () => {
       // props.onLoginError?.(data, client!) // 未捕获 code
@@ -98,7 +105,6 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
   const mfaLogin = (code: any, data: any, message?: string) => {
     const callback = __codePaser?.(code)
 
-    console.log('data', data)
     if (!data) {
       data = {}
     }

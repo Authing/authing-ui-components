@@ -87,7 +87,7 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
       <Form form={form} onSubmitCapture={() => {}} onFinish={onFinish}>
         <Form.Item
           name="mfaCode"
-          className="g2-mfa-totp-verify-input"
+          className="g2-mfa-totp-verify-input g2-mfa-verifyCode-formItem"
           rules={[
             {
               validateTrigger: [],

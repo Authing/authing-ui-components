@@ -1,5 +1,5 @@
 import { UserOutlined } from '@ant-design/icons'
-import { Input, message as Message } from 'antd'
+import { Input, message, message as Message } from 'antd'
 import { Form } from 'antd'
 import { EmailScene, User } from 'authing-js-sdk'
 import React, { useRef, useState } from 'react'
@@ -30,6 +30,7 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
 
   const onFinish = async ({ email }: any) => {
     submitButtonRef.current?.onSpin(true)
+    await form.validateFields()
     try {
       const bindable = await authClient.mfa.phoneOrEmailBindable({
         mfaToken,
@@ -102,19 +103,17 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const [MfaCode, setMFACode] = useState(new Array(CODE_LEN).fill(''))
-  const [sending, setSending] = useState(false)
   const [sent, setSent] = useState(false)
 
   const sendVerifyCode = async () => {
     try {
-      setSending(true)
       await authClient.sendEmail(email!, EmailScene.MfaVerify)
       setSent(true)
       return true
     } catch (e) {
+      const errorMessage = JSON.parse(e.message)
+      message.error(errorMessage.message)
       return false
-    } finally {
-      setSending(false)
     }
   }
 
@@ -140,9 +139,7 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
     <>
       <p className="authing-g2-mfa-title">{t('login.inputEmailCode')}</p>
       <p className="authing-g2-mfa-tips">
-        {sending
-          ? t('login.sendingVerifyCode')
-          : sent
+        {sent
           ? `${t('login.verifyCodeSended')} ${email}`
           : t('login.clickSent')}
       </p>

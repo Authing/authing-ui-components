@@ -61,7 +61,7 @@
   "otherVerifyWay": "Other verification methods",
   "sendingVerifyCode": "Verification code sending",
   "verifyCodeSended": "Verification code has been sent to",
-  "clickSent": " ",
+  "clickSent": "Click  send",
   "bindEmailInfo": "You have not bound the mailbox, please enter the binding",
   "bindPhoneInfo": "You have not yet bound your phone number, please enter it below",
   "dontBindPhone": "You have not bound your phone number, please enter your phone number to bind",
