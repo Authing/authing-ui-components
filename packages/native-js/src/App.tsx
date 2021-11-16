@@ -20,7 +20,6 @@ function App() {
     })
 
     guard.on('close', () => {
-      console.log('关闭')
       setTimeout(() => {
         guard.show()
       }, 2000)
