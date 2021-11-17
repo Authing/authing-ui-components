@@ -22,7 +22,6 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
   onBind,
   config,
 }) => {
-  const authClient = useAuthClient()
   const submitButtonRef = useRef<any>(null)
   const { t } = useTranslation()
   const [form] = Form.useForm()
@@ -32,15 +31,6 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
     submitButtonRef.current?.onSpin(true)
     await form.validateFields()
     try {
-      const bindable = await authClient.mfa.phoneOrEmailBindable({
-        mfaToken,
-        email,
-      })
-
-      if (!bindable) {
-        Message.error(t('common.checkEmail'))
-        return
-      }
       onBind(email)
     } catch (e: any) {
       const error = JSON.parse(e?.message)

@@ -2,7 +2,7 @@ import { UserOutlined } from '@ant-design/icons'
 import { Input, message, message as Message } from 'antd'
 import { Form } from 'antd'
 import { User } from 'authing-js-sdk'
-import React, { useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VerifyCodeInput } from '../VerifyCodeInput'
 import { useAuthClient } from '../../Guard/authClient'
@@ -11,6 +11,7 @@ import SubmitButton from '../../SubmitButton'
 import { ICheckProps, PhoneFormItem } from '../../ValidatorRules'
 import { VerifyCodeFormItem } from '../VerifyCodeInput/VerifyCodeFormItem'
 import { MFAConfig } from '../props'
+import { InputNumber } from '../../InputNumber'
 export interface BindMFASmsProps {
   mfaToken: string
   onBind: (phone: string) => void
@@ -32,22 +33,10 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
     submitButtonRef.current.onSpin(true)
     await form.validateFields()
     try {
-      const bindable = await authClient.mfa.phoneOrEmailBindable({
-        mfaToken,
-        phone,
-      })
-      if (!bindable) {
-        Message.error(
-          t('common.unBindEmaileDoc', {
-            email: phone,
-          })
-        )
-        return
-      }
-
       onBind(phone)
     } catch (e) {
       // do nothing
+      submitButtonRef.current?.onError()
     } finally {
       submitButtonRef.current?.onSpin(false)
     }
@@ -62,7 +51,6 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
         onValuesChange={() => {
-          console.log(config.__publicConfig__.userPoolId)
           ref.current?.check()
         }}
       >
@@ -74,7 +62,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
           ref={ref}
           checkRepeat={true}
         >
-          <Input
+          <InputNumber
             className="authing-g2-input"
             autoComplete="tel"
             size="large"

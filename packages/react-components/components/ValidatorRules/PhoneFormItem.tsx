@@ -6,7 +6,7 @@ import React, {
   useMemo,
   useState,
 } from 'react'
-import { fieldRequiredRule, VALIDATE_PATTERN } from '../_utils'
+import { fieldRequiredRule, sleep, VALIDATE_PATTERN } from '../_utils'
 import { useGuardHttp } from '../_utils/guradHttp'
 import { useDebounce } from '../_utils/hooks'
 import { useTranslation } from 'react-i18next'
@@ -25,6 +25,8 @@ export const PhoneFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
     const { t } = useTranslation()
     const [checked, setChecked] = useState(false)
 
+    const [isReady, setIsReady] = useState(false)
+
     const checkPhone = useDebounce(async () => {
       const phone = form?.getFieldValue('phone')
       if (!(phone && VALIDATE_PATTERN.phone.test(phone))) {
@@ -37,25 +39,33 @@ export const PhoneFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
       })
 
       setChecked(Boolean(data))
+      setIsReady(true)
       form?.validateFields(['phone'])
-    }, 1000)
+    }, 500)
 
     useImperativeHandle(ref, () => ({
       check: () => {
         setChecked(false)
+        setIsReady(false)
         checkPhone()
       },
     }))
 
-    const validator = useCallback(
-      (_: any, value: any) => {
-        if (!VALIDATE_PATTERN.phone.test(value))
-          return checkError(t('common.phoneFormateError'))
+    const checkReady = useCallback(async (): Promise<boolean> => {
+      if (isReady) return true
 
-        if (checked) return checkError(t('common.checkPhone'))
+      await sleep(100)
+
+      return await checkReady()
+    }, [isReady])
+
+    const validator = useCallback(
+      async (_: any, value: any) => {
+        if ((await checkReady()) && checked)
+          return checkError(t('common.checkPhone'))
         else return checkSuccess()
       },
-      [checked, t]
+      [checkReady, checked, t]
     )
 
     const rules = useMemo<Rule[]>(() => {
