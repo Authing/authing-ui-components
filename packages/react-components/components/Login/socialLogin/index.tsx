@@ -357,13 +357,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
     enterpriseConnectionObjs.length > 0 ? (
       <>
         {!noLoginMethods && <div className="g2-social-login-title">OR</div>}
-        <Space
-          size={12}
-          className="g2-guard-full-width-space"
-          direction="vertical"
-        >
-          {idpButtons}
-        </Space>
+        <div className="g2-social-login-list">{idpButtons}</div>
       </>
     ) : null
 

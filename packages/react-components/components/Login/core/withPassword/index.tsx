@@ -74,6 +74,10 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     }
     const { code, message, data } = await post(url, body)
 
+    if (code !== 200) {
+      submitButtonRef.current.onError()
+    }
+
     if (code === ErrorCode.INPUT_CAPTCHACODE) {
       setVerifyCodeUrl(getCaptchaUrl())
       setShowCaptcha(true)
@@ -83,9 +87,6 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         setRemainCount((data as any)?.remainCount ?? 0)
       }
     }
-    // if (Object.values(ErrorCode).includes(code)) {
-    //   setButtonContent('error')
-    // }
     submitButtonRef.current.onSpin(false)
     props.onLogin(code, data, message)
   }

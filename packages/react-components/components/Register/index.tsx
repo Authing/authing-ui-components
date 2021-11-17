@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Tabs } from 'antd'
+import { message, Tabs } from 'antd'
 import { RegisterMethods, User } from 'authing-js-sdk'
 import { ChangeLanguage } from '../ChangeLanguage'
 import { useAuthClient } from '../Guard/authClient'
@@ -8,6 +8,7 @@ import { GuardModuleType } from '../Guard/module'
 import { RegisterWithEmail } from './core/WithEmail'
 import { RegisterWithPhone } from './core/WithPhone'
 import { GuardRegisterViewProps } from './props'
+import { codeMap } from './codemap'
 
 export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
   config,
@@ -21,6 +22,8 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
   const authClient = useAuthClient()
 
   const __codePaser = (code: number) => {
+    const action = codeMap[code]
+
     if (code === 200) {
       return (user: User) => {
         // TODO 用户信息补全 等待后端接口修改
@@ -30,6 +33,18 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
           registerEvents.onRegister?.(user, authClient)
           __changeModule?.(GuardModuleType.LOGIN, {})
         }
+      }
+    }
+
+    if (!action) {
+      return () => {
+        console.error('未捕获 code', code)
+      }
+    }
+
+    if (action?.action === 'message') {
+      return (initData?: any) => {
+        message.error(initData?.__message)
       }
     }
   }

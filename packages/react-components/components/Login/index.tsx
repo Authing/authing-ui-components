@@ -96,6 +96,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     loginWay,
     autoRegister,
   })
+  console.log('disableResetPwd', disableResetPwd)
 
   const __codePaser = (code: number) => {
     const action = codeMap[code]

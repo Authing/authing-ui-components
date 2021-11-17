@@ -64,7 +64,7 @@ const mergeConfig = (
     // 禁止重制密码
     disableResetPwd: !!(
       config.disableResetPwd ??
-      !publicConfig.ssoPageComponentDisplay?.registerBtn
+      !publicConfig.ssoPageComponentDisplay?.forgetPasswordBtn
     ),
     // 是否自动注册
     autoRegister:

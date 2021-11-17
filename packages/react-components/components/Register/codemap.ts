@@ -5,12 +5,8 @@ export const codeMap: Record<number, GuardModuleAction> = {
   [ErrorCode.USER_EXISTENCE]: {
     action: 'message',
   },
-  [ErrorCode.INPUT_CAPTCHACODE]: {
-    // 需要输入图形验证码
-    action: 'message',
-  },
-  [ErrorCode.PASSWORD_ERROR]: {
-    // 密码错误
+  // 频繁注册
+  1002: {
     action: 'message',
   },
 }

@@ -100,8 +100,11 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         submitButtonRef.current.onSpin(false)
         onRegister(200, user)
       } catch ({ code, data, message }) {
-        submitButtonRef.current.onSpin(false)
+        submitButtonRef.current.onError()
+
         onRegister(code, data, message)
+      } finally {
+        submitButtonRef.current.onSpin(false)
       }
     },
     [form, acceptedAgreements],
