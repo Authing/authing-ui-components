@@ -93,12 +93,14 @@ export const defaultLocalesConfig: LocalesConfig = {
 export const defaultHeaders: {
   'userpool-id': string
   'app-id': string
+  'tenant-id': string
   'sdk-version': string
   'request-from': string
   lang: string
 } = {
   'userpool-id': 'x-authing-userpool-id',
   'app-id': 'x-authing-app-id',
+  'tenant-id': 'x-authing-app-tenant-id',
   'request-from': 'x-authing-request-from',
   'sdk-version': 'x-authing-sdk-version',
   lang: 'x-authing-lang',

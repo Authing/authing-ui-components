@@ -5,7 +5,11 @@ import { GuardLocalConfig } from './config'
 
 let authClient: AuthenticationClient
 
-export const initAuthClient = (config: GuardLocalConfig, appId: string) => {
+export const initAuthClient = (
+  config: GuardLocalConfig,
+  appId: string,
+  tenantId?: string
+) => {
   const host = config.__appHost__ ?? config.host
   const lang = config.lang
 
@@ -13,6 +17,7 @@ export const initAuthClient = (config: GuardLocalConfig, appId: string) => {
     try {
       authClient = new AuthenticationClient({
         appHost: host,
+        tenantId: tenantId,
         appId,
         lang,
         requestFrom: `Guard-${packageConfig.framework}@${packageConfig.version}`,

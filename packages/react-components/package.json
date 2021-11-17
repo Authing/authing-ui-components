@@ -1,13 +1,13 @@
 {
   "name": "@authing/react-ui-components",
-  "version": "3.0.2-alpha.2",
+  "version": "3.0.2-alpha.3",
   "framework": "React",
   "private": false,
   "main": "lib/index.min.js",
   "typings": "lib/index.d.ts",
   "dependencies": {
     "antd": "^4.8.0",
-    "authing-js-sdk": "4.22.24",
+    "authing-js-sdk": "4.22.24-alpha",
     "face-api.js": "^0.22.2",
     "global": "^4.4.0",
     "qs": "^6.9.4",

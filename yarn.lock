@@ -4699,10 +4699,10 @@ authing-js-sdk@4.22.18:
     jsencrypt "^3.1.0"
     jwt-decode "^2.2.0"
 
-authing-js-sdk@4.22.24:
-  version "4.22.24"
-  resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.22.24.tgz#4de4d74d67eac7f9cdae97bc11e9ac9c1b945117"
-  integrity sha512-3hFSMtC0q3TITi1Fl9m5Fb4AF9fuJRTop0DNTkZ41Z4aAefpDsKVePaUIUppxlh8GmaEgUM/gXLHQOMtj8/gAQ==
+authing-js-sdk@4.22.24-alpha:
+  version "4.22.24-alpha"
+  resolved "https://registry.npmmirror.com/authing-js-sdk/download/authing-js-sdk-4.22.24-alpha.tgz?cache=0&sync_timestamp=1637130333113&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fauthing-js-sdk%2Fdownload%2Fauthing-js-sdk-4.22.24-alpha.tgz#299ac8e74ccf2baf4a6286e7f5350a603653a411"
+  integrity sha512-e+cIvsXrHSDHmZIaPG9/snNZu12loPTNJEeIn+Q09BDIzIJJFmQ53DAzq+uUQNA+gQ24QmnJTbzUf/Ue8J6kKA==
   dependencies:
     "@authing/jose" "^1.0.3"
     axios "^0.19.2"
