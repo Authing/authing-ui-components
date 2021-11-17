@@ -26,6 +26,8 @@ export const initConfig = async (
     getPublicConfig(appId)
   )
 
+  console.log('initConfig')
+
   return {
     config: {
       ...mergedConfig,
@@ -88,8 +90,6 @@ const mergeConfig = (
     agreements: config.agreements ?? publicConfig.agreements,
     contentCss: config.contentCss ?? publicConfig.css,
   }
-
-  console.log('config', mergedPublicConfig, publicConfig)
 
   return mergedPublicConfig
 }

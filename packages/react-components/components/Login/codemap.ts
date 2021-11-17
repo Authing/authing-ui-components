@@ -37,6 +37,11 @@ export const codeMap: Record<number, GuardModuleAction> = {
     action: 'message',
   },
   2042: {
+    // 禁止未验证邮箱注册
+    action: 'message',
+  },
+  2001: {
+    // 验证码过期
     action: 'message',
   },
 }

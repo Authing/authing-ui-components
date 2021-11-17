@@ -96,7 +96,6 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     loginWay,
     autoRegister,
   })
-  console.log('disableResetPwd', disableResetPwd)
 
   const __codePaser = (code: number) => {
     const action = codeMap[code]
@@ -107,7 +106,8 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     }
 
     if (!action) {
-      return () => {
+      return (initData?: any) => {
+        initData?.__messag && message.error(initData?.__messag)
         console.error('未捕获 code', code)
       }
     }

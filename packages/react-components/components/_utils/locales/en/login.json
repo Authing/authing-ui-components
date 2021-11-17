@@ -13,7 +13,7 @@
   "fourVerifyCode": "{{length}}-digit verification code",
   "getBackPwd": "Reset password",
   "inputAdPwd": "Enter AD password",
-  "inputCaptchaCode": "Enter graphic verification code",
+  "inputCaptchaCode": "Digit code",
   "inputConfirmPwd": "Enter confirm password",
   "inputCorrectPhone": "Enter correct phone number or email address",
   "inputEmail": "Email",

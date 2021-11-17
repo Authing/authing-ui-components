@@ -12,6 +12,8 @@ import { PasswordLoginMethods } from '../../../AuthingGuard/api'
 import { LoginMethods } from '../../..'
 import { FormItemAccount } from './FormItemAccount'
 import { InputAccount } from './InputAccount'
+import { ImagePro } from '../../../ImagePro'
+import { GraphicVerifyCode } from './GraphicVerifyCode'
 
 interface LoginWithPasswordProps {
   // configs
@@ -131,19 +133,12 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
             name="captchaCode"
             rules={fieldRequiredRule(t('common.captchaCode'))}
           >
-            <Input
-              className="authing-g2-input add-after"
+            <GraphicVerifyCode
+              className="authing-g2-input"
               size="large"
               placeholder={t('login.inputCaptchaCode')}
-              addonAfter={
-                <img
-                  className="g2-captcha-code-image"
-                  src={verifyCodeUrl}
-                  alt={t('login.captchaCode')}
-                  style={{ height: '2em', cursor: 'pointer' }}
-                  onClick={() => setVerifyCodeUrl(getCaptchaUrl())}
-                />
-              }
+              verifyCodeUrl={verifyCodeUrl}
+              changeCode={() => setVerifyCodeUrl(getCaptchaUrl())}
             />
           </Form.Item>
         )}

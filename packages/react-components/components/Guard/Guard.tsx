@@ -86,7 +86,7 @@ interface ModuleState {
 }
 
 export const Guard = (props: GuardProps) => {
-  const { appId, config, onLoad, onLoadError } = props
+  const { appId, config } = props
   // 整合一下 所有的事件
   const events = guardEventsFilter(props)
 
@@ -163,14 +163,14 @@ export const Guard = (props: GuardProps) => {
       // Authing JS SDK
       const authClient = initAuthClient(mergedConfig, appId)
 
-      onLoad?.(authClient)
+      events?.onLoad?.(authClient)
 
       // 状态机 初始化
       const guardStateMachine = new GuardStateMachine(onChangeModule, initState)
       guardStateMachine.setConfig(mergedConfig)
       setGuardStateMachine(guardStateMachine)
     } catch (error: any) {
-      onLoadError?.(error)
+      events?.onLoadError?.(error)
 
       setErrorMessage(error.message)
       setInitError(true)
@@ -181,10 +181,11 @@ export const Guard = (props: GuardProps) => {
       setInitSettingEnd(true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [appId, config, onLoad, onLoadError])
+  }, [])
 
   useEffect(() => {
     initGuardSetting()
+    console.log('useEffect')
   }, [initGuardSetting])
 
   useEffect(() => {

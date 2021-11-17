@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { getClassnames } from '../_utils'
 import './styles.less'
 
-export interface ImageProProps {
+export interface ImageProProps
+  extends React.ImgHTMLAttributes<HTMLImageElement> {
   src: string
   className?: string
   alt?: string
@@ -15,7 +16,7 @@ export interface ImageProProps {
 }
 
 export const ImagePro = (props: ImageProProps) => {
-  let { borderRadius, noSpin } = props
+  let { borderRadius, noSpin, alt, style, ...imgProps } = props
   let [loaded, setLoaded] = useState(noSpin === true ? true : false)
   let w: number | string = 0
   let h: number | string = 0
@@ -40,11 +41,11 @@ export const ImagePro = (props: ImageProProps) => {
       ])}
     >
       <img
-        src={props.src}
-        style={{ width: w, height: h, borderRadius: borderRadius }}
+        {...imgProps}
+        style={{ width: w, height: h, borderRadius: borderRadius, ...style }}
         className="g2-base-imagepro"
         draggable={false}
-        alt={props?.alt || 'image'}
+        alt={alt || 'image'}
         onLoad={() => setLoaded(true)}
       />
     </div>
