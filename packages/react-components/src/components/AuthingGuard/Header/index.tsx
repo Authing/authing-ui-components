@@ -19,7 +19,10 @@ export const GuardHeader: FC<HeaderProps> = (props) => {
       {Boolean(logo) && (
         <Avatar className="authing-guard-logo" src={logo} size={50}></Avatar>
       )}
-      <div className="authing-guard-title">{title}</div>
+      <div className="authing-guard-title-container">
+        <div className="authing-guard-title">{title}</div>
+        <div className="authing-guard-description">{title}</div>
+      </div>
     </div>
   )
 }

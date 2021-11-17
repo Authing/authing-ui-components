@@ -95,10 +95,12 @@ export const defaultHeaders: {
   'app-id': string
   'sdk-version': string
   'request-from': string
+  'tenant-id': string
   lang: string
 } = {
   'userpool-id': 'x-authing-userpool-id',
   'app-id': 'x-authing-app-id',
+  'tenant-id': 'x-authing-app-tenant-id',
   'request-from': 'x-authing-request-from',
   'sdk-version': 'x-authing-sdk-version',
   lang: 'x-authing-lang',

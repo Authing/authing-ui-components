@@ -1,32 +1,36 @@
-import React, { useEffect } from 'react'
-import './App.css'
-import { AuthingGuard, GuardMode } from './components'
+import React, { useEffect } from "react";
+import "./App.css";
+import { AuthingGuard, GuardMode } from "./components";
 
 function App() {
   useEffect(() => {
-    const guard = new AuthingGuard('59f86b4832eb28071bdd9214', {
-      target: '.App',
-      apiHost: 'http://console.authing.localhost:3000',
-      mode: GuardMode.Modal,
-    })
+    const guard = new AuthingGuard(
+      "6191cf610f772aa56dc70637",
+      {
+        target: ".App",
+        appHost: "https://core.dev2.authing-inc.co/",
+        mode: GuardMode.Modal,
+      },
+      "6194a41abf23c1d5268b362a"
+    );
 
     // @ts-ignore
-    window.guard = guard
+    window.guard = guard;
 
-    // guard.show()
+    guard.show();
 
-    guard.on('load', (e) => {
-      console.log('加载啊', e)
-    })
+    guard.on("load", (e: any) => {
+      console.log("加载啊", e);
+    });
 
-    guard.on('close', () => {
+    guard.on("close", () => {
       setTimeout(() => {
-        guard.show()
-      }, 2000)
-    })
-  }, [])
+        guard.show();
+      }, 2000);
+    });
+  }, []);
 
-  return <div className="App"></div>
+  return <div className="App"></div>;
 }
 
-export default App
+export default App;

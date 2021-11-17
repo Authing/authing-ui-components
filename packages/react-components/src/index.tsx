@@ -1,7 +1,7 @@
 import { Button } from 'antd'
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import { initAuthClient, Lang } from './components'
+import { Lang } from './components'
 import { AuthingGuard } from './components/AuthingGuard'
 
 import {
@@ -20,9 +20,8 @@ const App = () => {
   const [title, setTitle] = useState('标题')
 
   const config: UserConfig = {
-    title,
     mode: GuardMode.Modal,
-    // appHost: 'https://sample-sso.authing.cn',
+    appHost: 'https://core.dev2.authing-inc.co/',
     // apiHost: 'http://console.authing.localhost:3000',
     // apiHost: 'http://192.168.50.57:3000',
     // loginMethods: Object.values(LoginMethods),
@@ -55,16 +54,6 @@ const App = () => {
     // `,
     // // autoRegister: true,
     // socialConnections: [SocialConnections.AppleWeb],
-    passwordLoginMethods: ['username-password'],
-    localesConfig: {
-      defaultLang: 'en-US',
-      isShowChange: true,
-      onChange: (value) => {
-        console.log('...........')
-        console.log(value)
-      },
-    },
-    lang: lang,
   }
 
   const [visible, setVisible] = useState(false)
@@ -73,10 +62,10 @@ const App = () => {
   //   setTimeout(() => setVisible(true), 3000)
   // }, [])
 
-  initAuthClient({
-    appId: '60c02a89a9e0431e271d9ff0',
-    // appHost: 'http://console.authing.localhost:3000',
-  })
+  // initAuthClient({
+  //   appId: '60c02a89a9e0431e271d9ff0',
+  //   // appHost: 'http://console.authing.localhost:3000',
+  // })
 
   return (
     // eslint-disable-next-line react/jsx-no-undef
@@ -125,7 +114,8 @@ const App = () => {
         }}
         // onLoad={(a) => console.log(a, '加载完成')}
         // onPwdResetError={(e) => console.log(e)}
-        appId="60c02a89a9e0431e271d9ff0"
+        appId="6191cf610f772aa56dc70637"
+        tenantId="6194a41abf23c1d5268b362a"
         // appId="5fd877fb0ba0421962eced94"
         config={config}
       />
