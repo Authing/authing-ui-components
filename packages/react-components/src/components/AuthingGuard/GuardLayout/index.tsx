@@ -184,7 +184,7 @@ const useGuardConfig = () => {
       ? ''
       : userConfig.title ?? appConfig.name ?? defaultGuardConfig.title
 
-    const description = loading ? '' : appConfig.name ?? ''
+    const description = loading ? '' : appConfig.description ?? ''
 
     // 应用 logo
     const logo = loading
