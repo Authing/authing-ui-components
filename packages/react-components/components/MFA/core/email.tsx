@@ -48,8 +48,8 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
         form={form}
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
-        onValuesChange={() => {
-          ref.current?.check()
+        onValuesChange={(value) => {
+          ref.current?.check(value)
         }}
       >
         <EmailFormItem

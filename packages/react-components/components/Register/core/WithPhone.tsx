@@ -138,8 +138,8 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         autoComplete="off"
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
-        onValuesChange={() => {
-          ref.current?.check()
+        onValuesChange={(values) => {
+          ref.current?.check(values)
         }}
       >
         {formItems.map((item) =>

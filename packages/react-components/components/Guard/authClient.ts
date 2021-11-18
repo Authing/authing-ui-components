@@ -13,8 +13,6 @@ export const initAuthClient = (
   const host = config.__appHost__ ?? config.host
   const lang = config.lang
 
-  debugger
-
   if (!authClient) {
     try {
       authClient = new AuthenticationClient({
@@ -24,8 +22,6 @@ export const initAuthClient = (
         lang,
         requestFrom: `Guard-${packageConfig.framework}@${packageConfig.version}`,
         onError: (code, msg: any) => {
-          // if ([].includes(code)) message.error(msg)
-
           console.error(code, msg)
         },
       })

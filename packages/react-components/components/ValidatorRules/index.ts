@@ -6,9 +6,15 @@ export interface ValidatorFormItemProps extends FormItemProps {
   checkRepeat?: boolean
 }
 
-export interface ICheckProps {
-  check: () => void
+export interface ValidatorFormItemMetaProps extends ValidatorFormItemProps {
+  userPoolId?: string
+  form?: FormInstance
+  checkRepeat?: boolean
+  method: 'email' | 'phone'
 }
 
-export { EmailFormItem } from './EmailFormItem'
-export { PhoneFormItem } from './PhoneFormItem'
+export interface ICheckProps {
+  check: (values: any) => void
+}
+
+export { EmailFormItem, PhoneFormItem } from './ValidatorFormItem'

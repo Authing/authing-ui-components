@@ -37,14 +37,15 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
     }
 
     if (!action) {
-      return () => {
+      return (initData?: any) => {
+        message.error(initData?._message)
         console.error('未捕获 code', code)
       }
     }
 
     if (action?.action === 'message') {
       return (initData?: any) => {
-        message.error(initData?.__message)
+        message.error(initData?._message)
       }
     }
   }

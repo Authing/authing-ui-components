@@ -49,8 +49,8 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
         form={form}
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
-        onValuesChange={() => {
-          ref.current?.check()
+        onValuesChange={(values) => {
+          ref.current?.check(values)
         }}
       >
         <PhoneFormItem

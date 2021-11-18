@@ -41,7 +41,7 @@ export const guardEventsHijacking = (events: GuardEvents): GuardEvents => {
       // @ts-ignore
       const newProps = eventsMapping[eventsKey](...props)
       // @ts-ignore
-      events[eventsKey]?.(newProps)
+      events[eventsKey]?.(...newProps)
     }
   })
 

@@ -17,7 +17,10 @@ const App = () => {
       <Guard
         appId="6191cf610f772aa56dc70637"
         tenantId="6194a41abf23c1d5268b362a"
-        onLogin={(u) => message.info('🏁 用户业务层终点，登录完成。')}
+        onLogin={(u) => {
+          message.info('🏁 用户业务层终点，登录完成。')
+          console.log(u)
+        }}
         onLoad={(authClint) => console.log('🪝 onLoad', authClint)}
         onLoadError={(error) => console.log('🪝 onLoadError', error)}
         onBeforeLogin={(m) => {

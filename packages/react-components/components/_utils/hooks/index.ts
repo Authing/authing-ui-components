@@ -52,11 +52,11 @@ export const useDebounce = (
         timer.current.time = null
         errorBody.current.body = res
       }, delay)
-      if (errorBody.current.body) {
-        return Promise.reject(errorBody.current.body)
-      } else {
-        return Promise.resolve()
-      }
+      // if (errorBody.current.body) {
+      //   return Promise.reject(errorBody.current.body)
+      // } else {
+      //   return Promise.resolve()
+      // }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [timer.current, delay]
