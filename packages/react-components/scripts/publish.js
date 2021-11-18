@@ -25,7 +25,7 @@ if (build.code !== 0) {
   $.exit(1)
 }
 
-$.exec(`git tab ${version}`)
+// $.exec(`git tab ${version}`)
 
 var tag = getVersionTag(version)
 
