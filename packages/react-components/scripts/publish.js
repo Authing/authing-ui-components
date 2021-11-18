@@ -13,7 +13,7 @@ const getVersionTag = (version) => {
 
   if (tagIndexArr.length === 0) return ''
 
-  const tagName = version.slice(tagIndexArr[0], version.length)
+  const tagName = tagIndexArr[0]
 
   return tagName
 }
