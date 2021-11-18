@@ -2,7 +2,7 @@ import { LoginMethods, RegisterMethods } from 'authing-js-sdk'
 import { IG2Config } from '../Type'
 import { ApplicationConfig } from '../AuthingGuard/api'
 import { assembledAppHost } from '.'
-import { GuardHttp } from './guradHttp'
+import { getGuardHttp, GuardHttp, useGuardHttp } from './guradHttp'
 import { AuthingResponse } from './http'
 import { GuardComponentConifg, GuardLocalConfig } from '../Guard/config'
 
@@ -25,8 +25,6 @@ export const initConfig = async (
     defaultConfig,
     getPublicConfig(appId)
   )
-
-  console.log('initConfig')
 
   return {
     config: {
@@ -100,11 +98,10 @@ const requestPublicConfig = async (
 ): Promise<ApplicationConfig> => {
   let res: AuthingResponse<ApplicationConfig>
 
-  const guardHttp = new GuardHttp(host)
-  guardHttp.setAppId(appId)
+  const { get } = getGuardHttp()
 
   try {
-    res = await guardHttp.get<ApplicationConfig>(
+    res = await get<ApplicationConfig>(
       `/api/v2/applications/${appId}/public-config`
     )
   } catch (error) {

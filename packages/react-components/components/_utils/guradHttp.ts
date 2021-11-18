@@ -32,6 +32,10 @@ export class GuardHttp {
     this.headers['x-authing-app-id'] = appId
   }
 
+  setTenantId(tenantId: string) {
+    this.headers['x-authing-app-tenant-id'] = tenantId
+  }
+
   public getHeaders = () => this.headers
 
   public get = async <T>(

@@ -66,6 +66,7 @@ const ComponentsMapping: Record<
 }
 
 export interface GuardProps extends GuardEvents, IG2FCProps {
+  tenantId?: string
   config?: Partial<GuardLocalConfig>
   visible?: boolean
 }
@@ -86,7 +87,7 @@ interface ModuleState {
 }
 
 export const Guard = (props: GuardProps) => {
-  const { appId, config } = props
+  const { appId, tenantId, config } = props
   // 整合一下 所有的事件
   const events = guardEventsFilter(props)
 
@@ -143,6 +144,13 @@ export const Guard = (props: GuardProps) => {
   // 初始化 Guard 一系列的东西
   const initGuardSetting = useCallback(async () => {
     try {
+      // Rest 初始化
+      const httpClient = initGuardHttp(
+        config?.host ?? getDefaultGuardLocalConfig().host
+      )
+      httpClient.setAppId(appId)
+      tenantId && httpClient.setTenantId(tenantId)
+
       // Config 初始化
       const { config: mergedConfig, publicConfig } = await initConfig(
         appId,
@@ -150,20 +158,14 @@ export const Guard = (props: GuardProps) => {
         getDefaultGuardLocalConfig()
       )
 
-      debugger
-
-      setGuardLocalConfig(mergedConfig)
-
-      // Rest 初始化
-      const httpClient = initGuardHttp(mergedConfig?.host!)
-      httpClient.setAppId(appId)
       httpClient.setUserpoolId(publicConfig.userPoolId)
+      setGuardLocalConfig(mergedConfig)
 
       // TODO  国际化 这部分有点小问题 等待优化
       initI18n({}, mergedConfig.lang)
 
       // Authing JS SDK
-      const authClient = initAuthClient(mergedConfig, appId)
+      const authClient = initAuthClient(mergedConfig, appId, tenantId)
 
       events?.onLoad?.(authClient)
 
