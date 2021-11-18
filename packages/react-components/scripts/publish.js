@@ -18,8 +18,6 @@ const getVersionTag = (version) => {
   return tagName
 }
 
-version.search('alpha')
-
 var build = $.exec('yarn build:lib')
 
 if (build.code !== 0) {
