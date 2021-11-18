@@ -98,7 +98,7 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
         ...fieldRequiredRule(methodContent.field),
         {
           validator: (_: any, value: any) => {
-            if (!VALIDATE_PATTERN.email.test(value))
+            if (!methodContent.pattern.test(value))
               return checkError(methodContent.checkErrorMessage)
 
             return checkSuccess()
@@ -115,6 +115,7 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
       checkRepeat,
       methodContent.checkErrorMessage,
       methodContent.field,
+      methodContent.pattern,
       validator,
     ])
 

@@ -7,7 +7,7 @@
   "typings": "lib/index.d.ts",
   "dependencies": {
     "antd": "^4.8.0",
-    "authing-js-sdk": "4.22.26-alpha",
+    "authing-js-sdk": "4.22.26-alpha.2",
     "face-api.js": "^0.22.2",
     "global": "^4.4.0",
     "qs": "^6.9.4",
