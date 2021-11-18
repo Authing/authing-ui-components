@@ -22,7 +22,7 @@
     "start": "PORT=3006 node scripts/start.js",
     "build": "node scripts/build.js",
     "build:lib": "node scripts/lib.js",
-    "test": "node scripts/test.js",
+    "test": "node scripts/test.js"
   },
   "publishConfig": {
     "access": "public",
