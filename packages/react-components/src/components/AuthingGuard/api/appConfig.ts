@@ -75,6 +75,7 @@ export interface ApplicationConfig {
   css: string
   name: string
   logo: string
+  description?: string
   redirectUris: string[]
   registerDisabled: boolean
   registerTabs: {

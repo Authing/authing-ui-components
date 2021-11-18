@@ -353,6 +353,7 @@ export interface GuardEventsHandler {
 export interface UserConfig {
   logo?: string
   title?: string
+  description?: string
   zIndex?: number
   isSSO?: boolean
   mode?: GuardMode
