@@ -9,6 +9,8 @@ export const initAuthClient = (config: GuardLocalConfig, appId: string) => {
   const host = config.__appHost__ ?? config.host
   const lang = config.lang
 
+  debugger
+
   if (!authClient) {
     try {
       authClient = new AuthenticationClient({

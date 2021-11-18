@@ -1,4 +1,3 @@
-import { Row, Col } from 'antd'
 import Input, { InputProps } from 'antd/lib/input'
 import React from 'react'
 import { useTranslation } from 'react-i18next'

@@ -12,7 +12,6 @@ import { PasswordLoginMethods } from '../../../AuthingGuard/api'
 import { LoginMethods } from '../../..'
 import { FormItemAccount } from './FormItemAccount'
 import { InputAccount } from './InputAccount'
-import { ImagePro } from '../../../ImagePro'
 import { GraphicVerifyCode } from './GraphicVerifyCode'
 
 interface LoginWithPasswordProps {

@@ -2,7 +2,6 @@ import { Form, Checkbox, Typography } from 'antd'
 import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import SubmitButton from '../../SubmitButton'
-import { common } from '../../_utils/locales/en'
 
 const { Paragraph } = Typography
 

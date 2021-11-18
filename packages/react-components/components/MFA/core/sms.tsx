@@ -1,8 +1,8 @@
 import { UserOutlined } from '@ant-design/icons'
-import { Input, message, message as Message } from 'antd'
+import { message } from 'antd'
 import { Form } from 'antd'
 import { User } from 'authing-js-sdk'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VerifyCodeInput } from '../VerifyCodeInput'
 import { useAuthClient } from '../../Guard/authClient'
@@ -23,7 +23,6 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
   onBind,
   config,
 }) => {
-  const authClient = useAuthClient()
   const submitButtonRef = useRef<any>(null)
   const { t } = useTranslation()
   const [form] = Form.useForm()

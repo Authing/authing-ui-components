@@ -4699,17 +4699,6 @@ authing-js-sdk@4.22.18:
     jsencrypt "^3.1.0"
     jwt-decode "^2.2.0"
 
-authing-js-sdk@4.22.24:
-  version "4.22.24"
-  resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.22.24.tgz#4de4d74d67eac7f9cdae97bc11e9ac9c1b945117"
-  integrity sha512-3hFSMtC0q3TITi1Fl9m5Fb4AF9fuJRTop0DNTkZ41Z4aAefpDsKVePaUIUppxlh8GmaEgUM/gXLHQOMtj8/gAQ==
-  dependencies:
-    "@authing/jose" "^1.0.3"
-    axios "^0.19.2"
-    crypto-js "^4.0.0"
-    jsencrypt "^3.1.0"
-    jwt-decode "^2.2.0"
-
 autoprefixer@9.8.6, autoprefixer@^9.5.1, autoprefixer@^9.6.1, autoprefixer@^9.6.5:
   version "9.8.6"
   resolved "https://registry.npm.taobao.org/autoprefixer/download/autoprefixer-9.8.6.tgz#3b73594ca1bf9266320c5acf1588d74dea74210f"

@@ -1,12 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 
 import reportWebVitals from './reportWebVitals'
-import { Input, message } from 'antd'
+import { message } from 'antd'
 import { Guard } from './components/Guard'
 
 const App = () => {
-  const [data, setData] = useState('123')
   return (
     <div
       style={{
@@ -15,7 +14,6 @@ const App = () => {
         justifyContent: 'center',
       }}
     >
-      <Input onChange={(e) => setData(e.target.value)} />
       <Guard
         appId="618e093c3a9138c729fe7d0b"
         onLogin={(u) => message.info('🏁 用户业务层终点，登录完成。')}
@@ -35,8 +33,7 @@ const App = () => {
           console.log('❌ onLoginError 触发')
         }}
         onLoginTabChange={(key) => {
-          // console.log('📁 onLoginTabChange 触发', key)
-          console.log('📁 onLoginTabChange 触发', data)
+          console.log('📁 onLoginTabChange 触发', key)
         }}
         onRegisterTabChange={(registerMethod) => {
           console.log('📁 onRegisterTabChange 触发', registerMethod)

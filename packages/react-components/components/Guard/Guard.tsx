@@ -13,7 +13,7 @@ import { initAuthClient } from './authClient'
 import { GuardEvents, guardEventsFilter } from './event'
 import { initConfig } from '../_utils/config'
 import { insertStyles } from '../_utils'
-import { initGuardHttp } from '../_utils/guradHttp'
+import { getGuardHttp, initGuardHttp } from '../_utils/guradHttp'
 import { initI18n } from '..//_utils/locales'
 import { IG2FCProps } from '../Type'
 import { getDefaultGuardLocalConfig, GuardLocalConfig } from './config'
@@ -149,6 +149,8 @@ export const Guard = (props: GuardProps) => {
         config ?? {},
         getDefaultGuardLocalConfig()
       )
+
+      debugger
 
       setGuardLocalConfig(mergedConfig)
 
