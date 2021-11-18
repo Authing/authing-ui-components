@@ -2,7 +2,7 @@ import { LoginMethods, RegisterMethods } from 'authing-js-sdk'
 import { IG2Config } from '../Type'
 import { ApplicationConfig } from '../AuthingGuard/api'
 import { assembledAppHost } from '.'
-import { getGuardHttp, GuardHttp, useGuardHttp } from './guradHttp'
+import { getGuardHttp } from './guradHttp'
 import { AuthingResponse } from './http'
 import { GuardComponentConifg, GuardLocalConfig } from '../Guard/config'
 
