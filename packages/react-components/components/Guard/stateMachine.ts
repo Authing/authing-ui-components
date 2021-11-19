@@ -24,6 +24,9 @@ export type ChangeModuleEvent = (
   nextModelu: GuardModuleType,
   initData?: any
 ) => void
+
+let guardStateMachine: GuardStateMachine
+
 export class GuardStateMachine {
   // 计数器
   private order: number = 0
@@ -131,3 +134,19 @@ export const useHistoryHijack = (back?: () => void) => {
 
   return [next]
 }
+
+export const initGuardStateMachine = (
+  changeMouleEvent: ChangeModuleEvent,
+  initData: ModuleState
+) => {
+  guardStateMachine = new GuardStateMachine(changeMouleEvent, initData)
+  return guardStateMachine
+}
+
+export const getGuardStateMachine = () => {
+  if (!guardStateMachine) throw new Error('Please initialize GuardStateMachine')
+
+  return guardStateMachine
+}
+
+export const useGuardStateMachine = () => getGuardStateMachine()

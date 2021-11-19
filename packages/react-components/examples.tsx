@@ -15,8 +15,9 @@ const App = () => {
       }}
     >
       <Guard
-        appId="618e093c3a9138c729fe7d0b"
-        // tenantId="6194a41abf23c1d5268b362a"
+        // appId="618e093c3a9138c729fe7d0b"
+        appId="6191cf610f772aa56dc70637"
+        tenantId="6194a41abf23c1d5268b362a1"
         onLogin={(u) => {
           message.info('🏁 用户业务层终点，登录完成。')
           console.log(u)
@@ -42,38 +43,36 @@ const App = () => {
         onRegisterTabChange={(registerMethod) => {
           console.log('📁 onRegisterTabChange 触发', registerMethod)
         }}
-        config={
-          {
-            // host: 'https://core.dev2.authing-inc.co/',
-            // registerMethods: [RegisterMethods.Email],
-            // autoRegister: true,
-            // defaultRegisterMethod: RegisterMethods.Phone,
-            // disableRegister: false,
-            // disableResetPwd: false,
-            // defaultLoginMethod: LoginMethods.WxMinQr, // 指定默认登录方式，如果这个方式不存在于 LoginMethods，那么就当作没有传入
-            // loginMethods: [],
-            // LoginMethods.Password,
-            //   LoginMethods.PhoneCode,
-            // LoginMethods.WxMinQr,
-            // ],
-            // socialConnections: [
-            //   SocialConnectionProvider.ALIPAY,
-            //   SocialConnectionProvider.APPLE_WEB,
-            // ], // 指定可选的社会化登录方式
-            // qrCodeScanOptions?: Parameters<QrCodeAuthenticationClient['startScanning']>[1]
-            // passwordLoginMethods?: PasswordLoginMethods[]
-            // enterpriseConnections: [] // 这个有啥用？
-            // publicKey?: string
-            // lang: 'en-US',
-            // lang: 'zh-CN',
-            // mode: GuardMode.Modal,
-            // logo: '',
-            // clickCloseable: false, // clickCloseable	Modal 模式时是否隐藏登录框右上角的关闭按钮
-            // escCloseable: true, //
-            // target: '#c1',
-            // socialConnectionsBtnShape: 'rectangle',
-          }
-        }
+        config={{
+          host: 'https://core.dev2.authing-inc.co/',
+          // registerMethods: [RegisterMethods.Email],
+          // autoRegister: true,
+          // defaultRegisterMethod: RegisterMethods.Phone,
+          // disableRegister: false,
+          // disableResetPwd: false,
+          // defaultLoginMethod: LoginMethods.WxMinQr, // 指定默认登录方式，如果这个方式不存在于 LoginMethods，那么就当作没有传入
+          // loginMethods: [],
+          // LoginMethods.Password,
+          //   LoginMethods.PhoneCode,
+          // LoginMethods.WxMinQr,
+          // ],
+          // socialConnections: [
+          //   SocialConnectionProvider.ALIPAY,
+          //   SocialConnectionProvider.APPLE_WEB,
+          // ], // 指定可选的社会化登录方式
+          // qrCodeScanOptions?: Parameters<QrCodeAuthenticationClient['startScanning']>[1]
+          // passwordLoginMethods?: PasswordLoginMethods[]
+          // enterpriseConnections: [] // 这个有啥用？
+          // publicKey?: string
+          // lang: 'en-US',
+          // lang: 'zh-CN',
+          // mode: GuardMode.Modal,
+          // logo: '',
+          // clickCloseable: false, // clickCloseable	Modal 模式时是否隐藏登录框右上角的关闭按钮
+          // escCloseable: true, //
+          // target: '#c1',
+          // socialConnectionsBtnShape: 'rectangle',
+        }}
       />
     </div>
   )

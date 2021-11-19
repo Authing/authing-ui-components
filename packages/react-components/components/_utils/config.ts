@@ -18,8 +18,7 @@ export const initConfig = async (
   config: Partial<IG2Config>,
   defaultConfig: IG2Config
 ): Promise<{ config: GuardLocalConfig; publicConfig: ApplicationConfig }> => {
-  if (!getPublicConfig(appId))
-    await requestPublicConfig(appId, config.host ?? defaultConfig.host)
+  if (!getPublicConfig(appId)) await requestPublicConfig(appId)
   const mergedConfig = mergeConfig(
     config,
     defaultConfig,
@@ -93,8 +92,7 @@ const mergeConfig = (
 }
 
 const requestPublicConfig = async (
-  appId: string,
-  host: string
+  appId: string
 ): Promise<ApplicationConfig> => {
   let res: AuthingResponse<ApplicationConfig>
 

@@ -13,7 +13,7 @@ import { initAuthClient } from './authClient'
 import { GuardEvents, guardEventsFilter } from './event'
 import { initConfig } from '../_utils/config'
 import { insertStyles } from '../_utils'
-import { initGuardHttp } from '../_utils/guradHttp'
+import { getGuardHttp, initGuardHttp } from '../_utils/guradHttp'
 import { initI18n } from '..//_utils/locales'
 import { IG2FCProps } from '../Type'
 import { getDefaultGuardLocalConfig, GuardLocalConfig } from './config'
@@ -22,7 +22,11 @@ import { GuardModuleType } from './module'
 import { GuardMFAView } from '../MFA'
 import { GuardRegisterView } from '../Register'
 import { GuardDownloadATView } from '../DownloadAuthenticator'
-import { GuardStateMachine, useHistoryHijack } from './stateMachine'
+import {
+  GuardStateMachine,
+  initGuardStateMachine,
+  useHistoryHijack,
+} from './stateMachine'
 import { GuardBindTotpView } from '../BindTotp'
 import { GuardForgetPassword } from '../ForgetPassword'
 import { GuardChangePassword } from '../ChangePassword'
@@ -32,7 +36,7 @@ import { GuardRecoveryCodeView } from '../RecoveryCode'
 import './styles.less'
 import { IconFont } from '../AuthingGuard/IconFont'
 import { GuardErrorView } from '../Error'
-import { GuardMode } from '..'
+import { AuthenticationClient, GuardMode } from '..'
 import { GuardSubmitSuccessView } from '../SubmitSuccess'
 
 const PREFIX_CLS = 'authing-ant'
@@ -65,6 +69,12 @@ const ComponentsMapping: Record<
   ),
 }
 
+// 首页 init 数据
+const initState: ModuleState = {
+  moduleName: GuardModuleType.LOGIN,
+  initData: {},
+}
+
 export interface GuardProps extends GuardEvents, IG2FCProps {
   tenantId?: string
   config?: Partial<GuardLocalConfig>
@@ -88,19 +98,18 @@ interface ModuleState {
 
 export const Guard = (props: GuardProps) => {
   const { appId, tenantId, config } = props
-  // 整合一下 所有的事件
-  const events = guardEventsFilter(props)
 
   // 初始化 Loading 标识
   const [initSettingEnd, setInitSettingEnd] = useState(false)
 
   const [initError, setInitError] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorData, setErrorData] = useState<any>()
 
   // Config
-  const [GuardLocalConfig, setGuardLocalConfig] = useState<GuardLocalConfig>(
-    getDefaultGuardLocalConfig()
-  )
+  const [GuardLocalConfig, setGuardLocalConfig] = useState<GuardLocalConfig>()
+
+  const [events, setEvents] = useState<GuardEvents>()
+  const [authClint, setAuthClint] = useState<AuthenticationClient>()
 
   // 状态机
   const [
@@ -110,12 +119,6 @@ export const Guard = (props: GuardProps) => {
 
   // 劫持浏览器 History
   const [historyNext] = useHistoryHijack(guardStateMachine?.back)
-
-  // 首页 init 数据
-  const initState: ModuleState = {
-    moduleName: GuardModuleType.LOGIN,
-    initData: {},
-  }
 
   // modules 定义
   const moduleReducer: (
@@ -141,16 +144,52 @@ export const Guard = (props: GuardProps) => {
     })
   }
 
-  // 初始化 Guard 一系列的东西
-  const initGuardSetting = useCallback(async () => {
-    try {
-      // Rest 初始化
-      const httpClient = initGuardHttp(
-        config?.host ?? getDefaultGuardLocalConfig().host
-      )
-      httpClient.setAppId(appId)
-      tenantId && httpClient.setTenantId(tenantId)
+  // HttpClint
+  useEffect(() => {
+    if (!appId) return
 
+    const httpClient = initGuardHttp(
+      config?.host ?? getDefaultGuardLocalConfig().host
+    )
+    httpClient.setAppId(appId)
+    tenantId && httpClient.setTenantId(tenantId)
+  }, [appId, config?.host, tenantId])
+
+  // I18n
+  useEffect(() => {
+    // TODO  国际化 这部分有点小问题 等待优化
+    initI18n({}, config?.lang)
+  }, [config?.lang])
+
+  // AuthClient
+  useEffect(() => {
+    if (appId && GuardLocalConfig) {
+      const authClint = initAuthClient(GuardLocalConfig, appId, tenantId)
+      setAuthClint(authClint)
+    }
+  }, [GuardLocalConfig, appId, tenantId])
+
+  // initEvents
+  useEffect(() => {
+    const events = guardEventsFilter(props)
+    setEvents(events)
+  }, [props])
+
+  // 状态机相关
+  useEffect(() => {
+    const guardStateMachine = initGuardStateMachine(onChangeModule, initState)
+    setGuardStateMachine(guardStateMachine)
+  }, [])
+
+  // 设置 config
+  useEffect(() => {
+    if (guardStateMachine && GuardLocalConfig)
+      guardStateMachine.setConfig(GuardLocalConfig)
+  }, [GuardLocalConfig, guardStateMachine])
+
+  const initPublicConfig = useCallback(async () => {
+    if (!config && !appId) return
+    try {
       // Config 初始化
       const { config: mergedConfig, publicConfig } = await initConfig(
         appId,
@@ -158,48 +197,41 @@ export const Guard = (props: GuardProps) => {
         getDefaultGuardLocalConfig()
       )
 
-      httpClient.setUserpoolId(publicConfig.userPoolId)
       setGuardLocalConfig(mergedConfig)
 
-      // TODO  国际化 这部分有点小问题 等待优化
-      initI18n({}, mergedConfig.lang)
-
-      // Authing JS SDK
-      const authClient = initAuthClient(mergedConfig, appId, tenantId)
-
-      events?.onLoad?.(authClient)
-
-      // 状态机 初始化
-      const guardStateMachine = new GuardStateMachine(onChangeModule, initState)
-      guardStateMachine.setConfig(mergedConfig)
-      setGuardStateMachine(guardStateMachine)
+      getGuardHttp().setUserpoolId(publicConfig.userPoolId)
     } catch (error: any) {
-      events?.onLoadError?.(error)
-
-      setErrorMessage(error.message)
+      setErrorData(error)
       setInitError(true)
-
-      console.error(error)
     } finally {
       // 初始化 结束
       setInitSettingEnd(true)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [appId, config])
 
   useEffect(() => {
-    initGuardSetting()
-    console.log('useEffect')
-  }, [initGuardSetting])
+    initPublicConfig()
+  }, [initPublicConfig])
 
   useEffect(() => {
-    insertStyles(GuardLocalConfig.contentCss)
-  }, [GuardLocalConfig.contentCss])
+    if (GuardLocalConfig && GuardLocalConfig.contentCss)
+      insertStyles(GuardLocalConfig.contentCss)
+  }, [GuardLocalConfig])
+
+  useEffect(() => {
+    if (GuardLocalConfig && authClint) events?.onLoad?.(authClint)
+  }, [GuardLocalConfig, authClint, events])
+
+  useEffect(() => {
+    if (initError) {
+      events?.onLoadError?.(errorData)
+    }
+  }, [errorData, events, initError])
 
   const renderModule = useMemo(() => {
-    if (initSettingEnd) {
-      if (initError)
-        return <GuardErrorView initData={{ messages: errorMessage }} />
+    if (initError)
+      return <GuardErrorView initData={{ messages: errorData?.message }} />
+    if (initSettingEnd && GuardLocalConfig) {
       return ComponentsMapping[moduleState.moduleName]({
         appId,
         initData: moduleState.initData,
@@ -218,16 +250,16 @@ export const Guard = (props: GuardProps) => {
       )
     }
   }, [
-    appId,
-    errorMessage,
-    events,
-    GuardLocalConfig,
-    guardStateMachine,
-    historyNext,
-    initError,
     initSettingEnd,
-    moduleState.initData,
+    GuardLocalConfig,
+    initError,
+    errorData?.message,
     moduleState.moduleName,
+    moduleState.initData,
+    appId,
+    events,
+    historyNext,
+    guardStateMachine,
   ])
 
   return (
