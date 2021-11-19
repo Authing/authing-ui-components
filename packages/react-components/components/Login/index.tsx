@@ -107,7 +107,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
 
     if (!action) {
       return (initData?: any) => {
-        initData?.__messag && message.error(initData?.__messag)
+        initData?._messag && message.error(initData?._messag)
         console.error('未捕获 code', code)
       }
     }
@@ -121,14 +121,15 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     }
     if (action?.action === 'message') {
       return (initData?: any) => {
-        message.error(initData?.__message)
+        message.error(initData?._message)
       }
     }
 
     // 最终结果
-    return () => {
+    return (initData?: any) => {
       // props.onLoginError?.(data, client!) // 未捕获 code
       console.error('last action at loginview')
+      message.error(initData?._message)
     }
   }
 
@@ -144,7 +145,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     if (!data) {
       data = {}
     }
-    data.__message = message
+    data._message = message
     callback?.(data)
   }
 

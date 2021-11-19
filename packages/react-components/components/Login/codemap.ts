@@ -11,7 +11,9 @@ export const codeMap: Record<number, GuardModuleAction> = {
     // 需要输入图形验证码
     action: 'message',
   },
-
+  500: {
+    action: 'message',
+  },
   1639: {
     // 首次登陆，跳转去修改密码
     action: 'changeModule',
