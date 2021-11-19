@@ -198,9 +198,13 @@ export const assembledAppHost = (identifier: string, host: string) => {
 
   const splitHost = hostUrl.hostname.split('.')
 
+  const port = hostUrl.port
+
   splitHost.shift()
 
-  return `${hostUrl.protocol}//${identifier}.${splitHost.join('.')}`
+  return `${hostUrl.protocol}//${identifier}.${splitHost.join('.')}${
+    port && `:${port}`
+  }`
 }
 
 export enum PasswordStrength {

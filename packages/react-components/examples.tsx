@@ -15,9 +15,9 @@ const App = () => {
       }}
     >
       <Guard
-        // appId="618e093c3a9138c729fe7d0b"
-        appId="6191cf610f772aa56dc70637"
-        tenantId="6194a41abf23c1d5268b362a1"
+        appId="619747787da1b9eb2e9ee7d5"
+        // appId="6191cf610f772aa56dc70637"
+        // tenantId="6194a41abf23c1d5268b362a1"
         onLogin={(u) => {
           message.info('🏁 用户业务层终点，登录完成。')
           console.log(u)
@@ -44,7 +44,8 @@ const App = () => {
           console.log('📁 onRegisterTabChange 触发', registerMethod)
         }}
         config={{
-          host: 'https://core.dev2.authing-inc.co/',
+          // host: 'https://core.dev2.authing-inc.co/',
+          host: 'http://core.authing.localhost:3000/',
           // registerMethods: [RegisterMethods.Email],
           // autoRegister: true,
           // defaultRegisterMethod: RegisterMethods.Phone,

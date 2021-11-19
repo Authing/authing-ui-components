@@ -27,6 +27,7 @@
   "needSameWithNewPwd": "需要与新密码一致",
   "confirmModify": "确认修改",
   "modifyPwd": "修改密码",
+  "modifyPwdText": "你的密码连续使用超过 {{number}} 个月，可能存在风险。请重新设置密码。",
   "personalInfo": "个人信息",
   "accPwd": "账号密码",
   "authenticationInfo": "认证信息",

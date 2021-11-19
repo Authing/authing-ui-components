@@ -13,7 +13,7 @@ import { initAuthClient } from './authClient'
 import { GuardEvents, guardEventsFilter } from './event'
 import { initConfig } from '../_utils/config'
 import { insertStyles } from '../_utils'
-import { getGuardHttp, initGuardHttp } from '../_utils/guradHttp'
+import { getGuardHttp, GuardHttp, initGuardHttp } from '../_utils/guradHttp'
 import { initI18n } from '..//_utils/locales'
 import { IG2FCProps } from '../Type'
 import { getDefaultGuardLocalConfig, GuardLocalConfig } from './config'
@@ -110,6 +110,7 @@ export const Guard = (props: GuardProps) => {
 
   const [events, setEvents] = useState<GuardEvents>()
   const [authClint, setAuthClint] = useState<AuthenticationClient>()
+  const [httpClint, setHttpClint] = useState<GuardHttp>()
 
   // 状态机
   const [
@@ -153,7 +154,14 @@ export const Guard = (props: GuardProps) => {
     )
     httpClient.setAppId(appId)
     tenantId && httpClient.setTenantId(tenantId)
+    setHttpClint(httpClient)
   }, [appId, config?.host, tenantId])
+
+  useEffect(() => {
+    if (httpClint && GuardLocalConfig && GuardLocalConfig.__appHost__) {
+      httpClint?.setBaseUrl(GuardLocalConfig.__appHost__)
+    }
+  }, [GuardLocalConfig, httpClint])
 
   // I18n
   useEffect(() => {

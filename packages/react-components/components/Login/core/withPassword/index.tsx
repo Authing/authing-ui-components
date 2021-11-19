@@ -45,7 +45,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   const onFinish = async (values: any) => {
     setRemainCount(0)
     // onBeforeLogin
-    submitButtonRef.current.onSpin(true)
+    submitButtonRef?.current.onSpin(true)
     let loginInfo = {
       type: LoginMethods.Password,
       data: {
@@ -56,7 +56,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     }
     let context = await props.onBeforeLogin(loginInfo)
     if (!context) {
-      submitButtonRef.current.onSpin(false)
+      submitButtonRef?.current.onSpin(false)
       return
     }
 
@@ -88,7 +88,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         setRemainCount((data as any)?.remainCount ?? 0)
       }
     }
-    submitButtonRef.current.onSpin(false)
+    submitButtonRef?.current.onSpin(false)
     props.onLogin(code, data, message)
   }
 

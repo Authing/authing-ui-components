@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { GuardModuleType } from '../Guard/module'
 import { ImagePro } from '../ImagePro'
 import { FirstLoginReset } from './core/firstLoginReset'
@@ -9,9 +10,7 @@ import { RotateReset } from './core/rotateReset'
 export const GuardChangePassword = (props: any) => {
   let { initData, config } = props
   let publicConfig = config.__publicConfig__
-  // let [resetType] = useState<'inital' | 'rotate'>(initData.type) //
-  // console.log('******', initData.type)
-  // let publicConfig = props.config.__publicConfig__
+  const { t } = useTranslation()
 
   const onReset = (res: any) => {
     let code = res.code
@@ -23,6 +22,22 @@ export const GuardChangePassword = (props: any) => {
     }
   }
 
+  const typeContent = useMemo(() => {
+    if (initData.type === 'inital') {
+      return {
+        title: `${t('common.welcome')} ${config.title}`,
+        explain: t('common.initPasswordText'),
+      }
+    } else {
+      return {
+        title: t('user.modifyPwd'),
+        explain: t('user.modifyPwdText', {
+          number: 1,
+        }),
+      }
+    }
+  }, [config.title, initData.type, t])
+
   return (
     <div className="g2-view-container">
       <div className="g2-view-header">
@@ -33,10 +48,8 @@ export const GuardChangePassword = (props: any) => {
           alt=""
           className="icon"
         />
-        <div className="title">欢迎访问 {config.title}</div>
-        <div className="title-explain">
-          你的密码连续使用超过 xxx，可能存在风险。请重新设置密码。
-        </div>
+        <div className="title">{typeContent.title}</div>
+        <div className="title-explain">{typeContent.explain}</div>
       </div>
       <div className="g2-view-tabs">
         {initData.type === 'inital' && (

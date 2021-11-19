@@ -223,5 +223,7 @@
   "pToLogin": "seconds later back",
   "resetSuccess": "Reset successfully",
   "resetSuccessMessage": "The password is reset successfully, you can continue to log in with the new password",
-  "totpCode": "Security code"
+  "totpCode": "Security code",
+  "welcome": "Welcome",
+  "initPasswordText": "To ensure account security, please set your initial password."
 }

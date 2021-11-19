@@ -36,6 +36,10 @@ export class GuardHttp {
     this.headers['x-authing-app-tenant-id'] = tenantId
   }
 
+  setBaseUrl(baseUrl: string) {
+    this.getRequestClient().setBaseUrl(baseUrl)
+  }
+
   public getHeaders = () => this.headers
 
   public get = async <T>(

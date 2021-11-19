@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form, Input } from 'antd'
+import { Form, Input, message } from 'antd'
 
 import { LockOutlined } from '@ant-design/icons'
 
@@ -21,12 +21,19 @@ export const FirstLoginReset = (props: FirstLoginResetProps) => {
 
   const onFinish = async (values: any) => {
     let newPassword = values.password
-    // let newPassword2 = values.password2
-    let res = await client.resetPasswordByFirstLoginToken({
-      token: props.initData.token,
-      password: newPassword,
-    })
-    props.onReset(res)
+    submitButtonRef.current?.onSpin(false)
+    try {
+      let res = await client.resetPasswordByFirstLoginToken({
+        token: props.initData.token,
+        password: newPassword,
+      })
+      props.onReset(res)
+    } catch (error) {
+      message.error(error.message)
+      submitButtonRef?.current?.onError()
+    } finally {
+      submitButtonRef.current?.onSpin(false)
+    }
   }
 
   return (
