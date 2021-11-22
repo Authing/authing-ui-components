@@ -114,8 +114,8 @@ const App = () => {
         }}
         // onLoad={(a) => console.log(a, '加载完成')}
         // onPwdResetError={(e) => console.log(e)}
-        appId="6191cf610f772aa56dc70637"
-        tenantId="6194a41abf23c1d5268b362a"
+        appId="6197432fb836ab624eecb490"
+        tenantId="619743436e35641b574bf603"
         // appId="5fd877fb0ba0421962eced94"
         config={config}
       />

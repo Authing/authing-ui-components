@@ -75,36 +75,36 @@ const useNormalLoginTabs = ({ onSuccess, onFail }: BaseFormProps) => {
   }
 
   const LOGIN_FORM_MAP = {
-    [LoginMethods.Password]: (
+    [LoginMethods.Password]: (props: any) => (
       <PasswordLoginForm
-        {...formProps}
+        {...props}
         ref={(v) => (formRef.current[LoginMethods.Password] = v!)}
       />
     ),
-    [LoginMethods.PhoneCode]: (
+    [LoginMethods.PhoneCode]: (props: any) => (
       <PhoneCodeLoginForm
-        {...formProps}
+        {...props}
         ref={(v) => (formRef.current[LoginMethods.PhoneCode] = v!)}
       />
     ),
-    [LoginMethods.AppQr]: (
-      <QrCodeLoginForm type={LoginMethods.AppQr} {...formProps} />
+    [LoginMethods.AppQr]: (props: any) => (
+      <QrCodeLoginForm type={LoginMethods.AppQr} {...props} />
     ),
-    [LoginMethods.WxMinQr]: (
-      <QrCodeLoginForm type={LoginMethods.WxMinQr} {...formProps} />
+    [LoginMethods.WxMinQr]: (props: any) => (
+      <QrCodeLoginForm type={LoginMethods.WxMinQr} {...props} />
     ),
-    [LoginMethods.LDAP]: (
+    [LoginMethods.LDAP]: (props: any) => (
       <LdapLoginForm
-        {...formProps}
+        {...props}
         ref={(v) => (formRef.current[LoginMethods.LDAP] = v!)}
       />
     ),
-    [LoginMethods.WechatMpQrcode]: (
-      <QrCodeLoginForm type={LoginMethods.WechatMpQrcode} {...formProps} />
+    [LoginMethods.WechatMpQrcode]: (props: any) => (
+      <QrCodeLoginForm type={LoginMethods.WechatMpQrcode} {...props} />
     ),
-    [LoginMethods.AD]: (
+    [LoginMethods.AD]: (props: any) => (
       <ADLoginForm
-        {...formProps}
+        {...props}
         ref={(v) => (formRef.current[LoginMethods.AD] = v!)}
       />
     ),
@@ -113,13 +113,29 @@ const useNormalLoginTabs = ({ onSuccess, onFail }: BaseFormProps) => {
   const {
     state: { config },
   } = useGuardContext()
-  const { loginMethods = [] } = config
+  const { loginMethods = [], loginMethodTitleMapping } = config
 
-  const tabs = loginMethods.map((item) => ({
-    key: item,
-    label: LOGIN_METHODS_MAP()?.[item]!,
-    component: LOGIN_FORM_MAP[item],
-  }))
+  const tabs = loginMethods.map((tab) => {
+    const idpId = tab.split(':').length > 1 ? tab.split(':')[1] : undefined
+
+    if (idpId) {
+      const type = tab.split(':')[0] as LoginMethods
+      return {
+        key: tab,
+        label: loginMethodTitleMapping[tab]!,
+        component: LOGIN_FORM_MAP[type]({
+          ...formProps,
+          idpId: idpId,
+        }),
+      }
+    } else {
+      return {
+        key: tab,
+        label: LOGIN_METHODS_MAP()?.[tab]!,
+        component: LOGIN_FORM_MAP[tab](formProps),
+      }
+    }
+  })
 
   return {
     tabs,

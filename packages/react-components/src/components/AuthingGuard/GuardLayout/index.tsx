@@ -168,6 +168,8 @@ const useGuardConfig = () => {
       appConfig.loginTabs?.default ||
       defaultGuardConfig.defaultLoginMethod
 
+    const loginMethodTitleMapping = appConfig.loginTabs?.title
+
     // 注册方式
     const registerMethods =
       userConfig.registerMethods ||
@@ -235,16 +237,19 @@ const useGuardConfig = () => {
         publicKey: appConfig.publicKey,
         agreementEnabled: appConfig.agreementEnabled,
         agreements: appConfig.agreements,
+        loginMethodTitleMapping: loginMethodTitleMapping,
       }
     )
   }, [
     userConfig,
     appConfig.loginTabs?.list,
     appConfig.loginTabs?.default,
+    appConfig.loginTabs?.title,
     appConfig.passwordTabConfig?.enabledLoginMethods,
     appConfig.registerTabs?.list,
     appConfig.registerTabs?.default,
     appConfig.name,
+    appConfig.description,
     appConfig.logo,
     appConfig.ssoPageComponentDisplay?.autoRegisterThenLoginHintInfo,
     appConfig.ssoPageComponentDisplay?.registerBtn,
