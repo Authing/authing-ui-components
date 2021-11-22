@@ -1,11 +1,12 @@
 import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form, Input } from 'antd'
+import { Form, Input, message } from 'antd'
 
 import { LockOutlined } from '@ant-design/icons'
 
 import { getPasswordValidate } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
+import { useAuthClient } from '../../Guard/authClient'
 
 interface RotateResetProps {
   onReset: any
@@ -16,16 +17,26 @@ interface RotateResetProps {
 export const RotateReset = (props: RotateResetProps) => {
   const { t } = useTranslation()
   let [form] = Form.useForm()
-  // let client = useAuthClient()
+  let authClient = useAuthClient()
   let submitButtonRef = useRef<any>(null)
 
   const onFinish = async (values: any) => {
-    // let newPassword = values.password
-    // let res = await client.resetPasswordByFirstLoginToken({
-    //   token: props.initData.token,
-    //   password: newPassword,
-    // })
-    // props.onReset(res)
+    let { password, oldPassword } = values
+    submitButtonRef?.current?.onSpin(true)
+
+    try {
+      let res = await authClient.resetPasswordByForceResetToken({
+        token: props.initData.token,
+        newPassword: password,
+        oldPassword: oldPassword,
+      })
+      props.onReset(res)
+    } catch (error) {
+      message.error(error.message)
+      submitButtonRef?.current?.onError()
+    } finally {
+      submitButtonRef?.current?.onSpin(false)
+    }
   }
 
   return (
