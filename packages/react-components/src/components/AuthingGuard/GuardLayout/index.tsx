@@ -165,6 +165,7 @@ const useGuardConfig = () => {
     // 默认登录方式
     const defaultLoginMethod =
       userConfig.defaultLoginMethod ||
+      appConfig.loginTabs?.defaultV2 ||
       appConfig.loginTabs?.default ||
       defaultGuardConfig.defaultLoginMethod
 

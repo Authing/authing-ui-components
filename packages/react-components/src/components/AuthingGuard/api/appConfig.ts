@@ -86,6 +86,7 @@ export interface ApplicationConfig {
   loginTabs: {
     list: string[]
     default: string
+    defaultV2?: string
     title: { [x: string]: string }
   }
   socialConnections: SocialConnectionItem[]
