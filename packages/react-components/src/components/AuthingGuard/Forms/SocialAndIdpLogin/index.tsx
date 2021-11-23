@@ -218,7 +218,7 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
       }
 
       const onLogin = () => {
-        authClient.social.authorize(item.provider, {
+        authClient.social.authorize(item.identifier, {
           onSuccess(user) {
             onSuccess(user)
           },
