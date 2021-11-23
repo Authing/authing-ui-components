@@ -115,27 +115,36 @@ const useNormalLoginTabs = ({ onSuccess, onFail }: BaseFormProps) => {
   } = useGuardContext()
   const { loginMethods = [], loginMethodTitleMapping } = config
 
-  const tabs = loginMethods.map((tab) => {
-    const idpId = tab.split(':').length > 1 ? tab.split(':')[1] : undefined
+  const tabs = loginMethods
+    .map((tab) => {
+      if (
+        !loginMethods.every(
+          (item) => !(item.split(':').length > 1 && item.split(':')[0] === tab)
+        )
+      )
+        return undefined
 
-    if (idpId) {
-      const type = tab.split(':')[0] as LoginMethods
-      return {
-        key: tab,
-        label: loginMethodTitleMapping[tab]!,
-        component: LOGIN_FORM_MAP[type]({
-          ...formProps,
-          idpId: idpId,
-        }),
+      const idpId = tab.split(':').length > 1 ? tab.split(':')[1] : undefined
+
+      if (idpId) {
+        const type = tab.split(':')[0] as LoginMethods
+        return {
+          key: tab,
+          label: loginMethodTitleMapping[tab]!,
+          component: LOGIN_FORM_MAP[type]({
+            ...formProps,
+            idpId: idpId,
+          }),
+        }
+      } else {
+        return {
+          key: tab,
+          label: LOGIN_METHODS_MAP()?.[tab]!,
+          component: LOGIN_FORM_MAP[tab](formProps),
+        }
       }
-    } else {
-      return {
-        key: tab,
-        label: LOGIN_METHODS_MAP()?.[tab]!,
-        component: LOGIN_FORM_MAP[tab](formProps),
-      }
-    }
-  })
+    })
+    .filter((i) => i !== undefined)
 
   return {
     tabs,
@@ -159,7 +168,13 @@ export const LoginLayout = () => {
   return (
     <>
       <AuthingTabs
-        tabs={tabs}
+        tabs={
+          tabs as {
+            key: LoginMethods
+            label: string
+            component: JSX.Element
+          }[]
+        }
         onTabClick={(t) =>
           setValue('activeTabs', {
             ...activeTabs,

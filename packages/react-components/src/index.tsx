@@ -21,7 +21,7 @@ const App = () => {
 
   const config: UserConfig = {
     mode: GuardMode.Modal,
-    appHost: 'http://x8u82x-demo.authing.localhost:3000',
+    appHost: 'https://core.dev2.authing-inc.co',
     // apiHost: 'http://console.authing.localhost:3000',
     // apiHost: 'http://192.168.50.57:3000',
     // loginMethods: Object.values(LoginMethods),
@@ -114,8 +114,8 @@ const App = () => {
         }}
         // onLoad={(a) => console.log(a, '加载完成')}
         // onPwdResetError={(e) => console.log(e)}
-        appId="619b4c2bf5263317ab5323e2"
-        tenantId="619b4c3dbec6292965ca071d"
+        appId="619c7976cd38c13a2222464f"
+        tenantId="619c864928b15c6421d12e35"
         // appId="5fd877fb0ba0421962eced94"
         config={config}
       />
