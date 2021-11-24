@@ -1,4 +1,4 @@
-import { getDefaultLoginConfig, LoginConfig } from '../Login/props'
+import { getDefaultLoginConfig, LoginConfig } from '../Login/interface'
 import { getDefaultRegisterConfig, RegisterConfig } from '../Register/props'
 
 export interface GuardComponentConifg extends Partial<GuardLocalConfig> {}

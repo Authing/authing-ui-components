@@ -26,7 +26,7 @@ import {
 import { useScreenSize } from '../../AuthingGuard/hooks/useScreenSize'
 import { useAuthClient } from '../../Guard/authClient'
 import { IconFont } from '../../IconFont'
-import { LoginConfig } from '../props'
+import { LoginConfig } from '../interface'
 import './style.less'
 
 export interface SocialLoginProps {

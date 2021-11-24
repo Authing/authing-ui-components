@@ -10,7 +10,7 @@ import { SendCodeBtn } from '../../SendCode/SendCodeBtn'
 import SubmitButton from '../../SubmitButton'
 import { ICheckProps, PhoneFormItem } from '../../ValidatorRules'
 import { VerifyCodeFormItem } from '../VerifyCodeInput/VerifyCodeFormItem'
-import { MFAConfig } from '../props'
+import { MFAConfig } from '../interface'
 import { InputNumber } from '../../InputNumber'
 export interface BindMFASmsProps {
   mfaToken: string

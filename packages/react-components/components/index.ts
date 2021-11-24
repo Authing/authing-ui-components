@@ -1,12 +1,9 @@
+export * from './_utils/config'
+export type { AuthenticationClientOptions } from 'authing-js-sdk'
+
 export * from './AuthingGuard/types'
 export * from './AuthingGuard/hooks'
-export type { AuthenticationClientOptions } from 'authing-js-sdk'
+export * from './AuthingGuard'
 
 export * from './Guard'
 export * from './Type'
-export * from './BindTotp/interface'
-export * from './CompleteInfo/interface'
-export * from './DownloadAuthenticator/interface'
-export * from './Error/interface'
-export * from './ForgetPassword/interface'
-export * from './_utils/config'

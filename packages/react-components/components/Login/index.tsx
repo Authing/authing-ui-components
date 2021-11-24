@@ -12,7 +12,7 @@ import { LoginWithWechatMiniQrcode } from './core/withWechatMiniQrcode'
 import { LoginWithWechatmpQrcode } from './core/withWechatmpQrcode'
 import { codeMap } from './codemap'
 import { SocialLogin } from './socialLogin'
-import { GuardLoginViewProps } from './props'
+import { GuardLoginViewProps } from './interface'
 
 import { useAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'

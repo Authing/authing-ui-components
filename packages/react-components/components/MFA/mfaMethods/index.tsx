@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from 'antd'
 import { IconFont } from '../../IconFont'
-import { GuardMFAInitData, MFAType } from '../props'
+import { GuardMFAInitData, MFAType } from '../interface'
 import { i18n } from '../../_utils/locales'
 import './style.less'
 

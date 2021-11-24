@@ -9,7 +9,7 @@ import { useAuthClient } from '../../Guard/authClient'
 import { SendCodeBtn } from '../../SendCode/SendCodeBtn'
 import SubmitButton from '../../SubmitButton'
 import { EmailFormItem, ICheckProps } from '../../ValidatorRules'
-import { MFAConfig } from '../props'
+import { MFAConfig } from '../interface'
 import { VerifyCodeFormItem } from '../VerifyCodeInput/VerifyCodeFormItem'
 
 interface BindMFAEmailProps {

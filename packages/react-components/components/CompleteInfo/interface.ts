@@ -7,7 +7,7 @@ const defaultConfig: CompleteInfoConfig = {
   ...getDefaultG2Config(),
 }
 
-export const getDefaultLoginConfig = (): CompleteInfoConfig => ({
+export const getDefaultCompleteInfoConfig = (): CompleteInfoConfig => ({
   ...getDefaultG2Config(),
   ...defaultConfig,
 })
