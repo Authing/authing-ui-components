@@ -7,7 +7,7 @@ import { useAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
 import { RegisterWithEmail } from './core/WithEmail'
 import { RegisterWithPhone } from './core/WithPhone'
-import { GuardRegisterViewProps } from './props'
+import { GuardRegisterViewProps } from './interface'
 import { codeMap } from './codemap'
 
 export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
