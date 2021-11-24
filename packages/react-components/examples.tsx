@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 
 import reportWebVitals from './reportWebVitals'
 import { message } from 'antd'
-import { Guard } from './components/Guard'
+import { Guard } from './components'
 
 const App = () => {
   return (
