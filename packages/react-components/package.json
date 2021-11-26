@@ -24,6 +24,7 @@
     "build:lib": "node scripts/lib.js",
     "pretty-quick": "pretty-quick",
     "prepare": "cd ../.. && husky install packages/react-components/.husky",
+    "prepublish": "node scripts/pre-publish.js",
     "start": "PORT=3006 node scripts/start.js",
     "version": "node ./scripts/generate-version"
   },
@@ -132,6 +133,7 @@
     "bfj": "^7.0.2",
     "camelcase": "^6.1.0",
     "case-sensitive-paths-webpack-plugin": "2.3.0",
+    "chalk": "^4.1.2",
     "css-loader": "4.3.0",
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
