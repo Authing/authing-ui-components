@@ -37,3 +37,5 @@ package-lock.json
 pnpm-lock.yaml
 .pnpm-debug.log
 /.history
+
+components/version/version.tsx

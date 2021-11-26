@@ -41,7 +41,10 @@ export {
 };
 
 export type EventListeners = {
-  [key in keyof GuardEventsHandlerKebab]: Exclude<Required<GuardEventsHandlerKebab>[key], undefined>[];
+  [key in keyof GuardEventsHandlerKebab]: Exclude<
+    Required<GuardEventsHandlerKebab>[key],
+    undefined
+  >[];
 };
 
 export class Guard {
@@ -72,14 +75,19 @@ export class Guard {
 
   private visible = this.config?.mode === GuardMode.Modal ? false : true;
 
-  private eventListeners = Object.values(GuardEventsCamelToKebabMap).reduce((acc, evtName) => {
-    return Object.assign({}, acc, {
-      [evtName]: [],
-    });
-  }, {} as EventListeners);
+  private eventListeners = Object.values(GuardEventsCamelToKebabMap).reduce(
+    (acc, evtName) => {
+      return Object.assign({}, acc, {
+        [evtName]: [],
+      });
+    },
+    {} as EventListeners
+  );
 
   private render(cb?: () => void) {
-    const evts: GuardEventsHandler = Object.entries(GuardEventsCamelToKebabMap).reduce((acc, [reactEvt, nativeEvt]) => {
+    const evts: GuardEventsHandler = Object.entries(
+      GuardEventsCamelToKebabMap
+    ).reduce((acc, [reactEvt, nativeEvt]) => {
       return Object.assign({}, acc, {
         [reactEvt]: (...rest: any) => {
           if (nativeEvt === "close") {
@@ -100,13 +108,20 @@ export class Guard {
     }, {} as GuardEventsHandler);
 
     return ReactDOM.render(
-      <ReactAuthingGuard {...(evts as GuardEvents)} appId={this.appId} config={this.config as GuardComponentConifg} />,
+      <ReactAuthingGuard
+        {...(evts as GuardEvents)}
+        appId={this.appId}
+        config={this.config as GuardComponentConifg}
+      />,
       Guard.getGuardContainer(this.config?.target),
       cb
     );
   }
 
-  on<T extends keyof GuardEventsHandlerKebab>(evt: T, handler: Exclude<GuardEventsHandlerKebab[T], undefined>) {
+  on<T extends keyof GuardEventsHandlerKebab>(
+    evt: T,
+    handler: Exclude<GuardEventsHandlerKebab[T], undefined>
+  ) {
     this.eventListeners[evt]!.push(handler as any);
   }
 

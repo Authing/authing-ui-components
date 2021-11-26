@@ -2,9 +2,11 @@
   "name": "@authing/react-ui-components",
   "version": "3.0.2-beta.7",
   "framework": "React",
+  "license": "MIT",
   "private": false,
   "main": "lib/index.min.js",
   "typings": "lib/index.d.ts",
+  "types": "react-app-env.d.ts",
   "dependencies": {
     "antd": "^4.8.0",
     "authing-js-sdk": "4.22.26-alpha.2",
@@ -13,16 +15,17 @@
     "qs": "^6.9.4",
     "react-use": "^17.3.1"
   },
-  "types": "react-app-env.d.ts",
   "peerDependencies": {
     "react": "16.14.0",
     "react-dom": "16.14.0"
   },
   "scripts": {
-    "start": "PORT=3006 node scripts/start.js",
     "build": "node scripts/build.js",
     "build:lib": "node scripts/lib.js",
-    "test": "node scripts/test.js"
+    "pretty-quick": "pretty-quick",
+    "prepare": "husky install",
+    "start": "PORT=3006 node scripts/start.js",
+    "version": "node ./scripts/generate-version"
   },
   "publishConfig": {
     "access": "public",
@@ -167,6 +170,7 @@
     "postcss-rename-selector": "^0.1.1",
     "postcss-safe-parser": "5.0.2",
     "prettier": "^2.1.2",
+    "pretty-quick": "^3.0.0",
     "query-string": "^7.0.0",
     "react": "16.14.0",
     "react-app-polyfill": "^2.0.0",

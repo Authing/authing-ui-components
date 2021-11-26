@@ -7,3 +7,5 @@ export * from './AuthingGuard'
 
 export * from './Guard'
 export * from './Type'
+
+export * from './version'
