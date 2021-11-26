@@ -24,7 +24,7 @@
     "build:lib": "node scripts/lib.js",
     "pretty-quick": "pretty-quick",
     "prepare": "cd ../.. && husky install packages/react-components/.husky",
-    "prepublish": "node scripts/pre-publish.js",
+    "prepublishOnly": "node scripts/pre-publish.js",
     "start": "PORT=3006 node scripts/start.js",
     "version": "node ./scripts/generate-version"
   },
