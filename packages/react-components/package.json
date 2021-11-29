@@ -1,12 +1,14 @@
 {
   "name": "@authing/react-ui-components",
-  "version": "3.0.2-beta.8",
-  "framework": "React",
-  "license": "MIT",
+  "version": "3.0.2-beta.10",
   "private": false,
   "main": "lib/index.min.js",
   "typings": "lib/index.d.ts",
   "types": "react-app-env.d.ts",
+  "files": [
+    "dist",
+    "lib"
+  ],
   "dependencies": {
     "antd": "^4.8.0",
     "authing-js-sdk": "4.22.26-alpha.2",
@@ -20,17 +22,19 @@
     "react-dom": "16.14.0"
   },
   "scripts": {
-    "build": "node scripts/build.js",
-    "build:lib": "node scripts/lib.js",
-    "log-tag": "node scripts/tag.js",
+    "build": "node ./scripts/build.js",
+    "build:lib": "node ./scripts/lib.js",
+    "clear": "clear:lib && clear:dist",
+    "clear:dist": "rm -rf dist",
+    "clear:lib": "rm -rf lib",
+    "log-tag": "node ./scripts/tag.js",
     "pretty-quick": "pretty-quick",
-    "prestart": "npm run log-tag && npm run version",
-    "preinstall": "npm run log-tag && npm run version",
-    "prepub": "npm run log-tag && npm run version",
+    "prepublishOnly": "node ./scripts/pre-publish.js",
+    "prestart": "npm run log-tag && npm run vegcrsion",
+    "prebuild:lib": "npm run log-tag && npm run version",
     "prepare": "cd ../.. && husky install packages/react-components/.husky",
-    "prepublishOnly": "node scripts/pre-publish.js",
-    "pub": "cross-env npm_guard_publish='true' && npm run build:lib && npm publish",
-    "start": "PORT=3006 node scripts/start.js",
+    "pub": "cross-env npm_guard_publish='true' node ./scripts/publish.js",
+    "start": "PORT=3006 node ./scripts/start.js",
     "version": "node ./scripts/generate-version"
   },
   "publishConfig": {
