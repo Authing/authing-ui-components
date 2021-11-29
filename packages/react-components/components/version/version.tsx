@@ -1,1 +1,3 @@
-export default '4.17.1'
+const version = 'dev'
+
+export default version

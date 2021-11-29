@@ -1,6 +1,5 @@
 import { AuthenticationClient } from 'authing-js-sdk'
-
-import packageConfig from '../../package.json'
+import version from '../version'
 import { GuardLocalConfig } from './config'
 
 let authClient: AuthenticationClient
@@ -20,7 +19,7 @@ export const initAuthClient = (
         tenantId: tenantId,
         appId,
         lang,
-        requestFrom: `Guard-${packageConfig.framework}@${packageConfig.version}`,
+        requestFrom: `Guard@${version}`,
         onError: (code, msg: any) => {
           console.error(code, msg)
         },

@@ -1,4 +1,4 @@
-import packageConfig from '../../package.json'
+import version from '../version'
 import { requestClient } from './http'
 
 let httpClient: GuardHttp
@@ -8,8 +8,8 @@ export class GuardHttp {
   private headers: Record<string, string> = {
     'x-authing-userpool-id': '',
     'x-authing-app-id': '',
-    'x-authing-sdk-version': packageConfig.version,
-    'x-authing-request-from': `Guard-${packageConfig.framework}@${packageConfig.version}`,
+    'x-authing-sdk-version': version,
+    'x-authing-request-from': `Guard@${version}`,
   }
 
   constructor(baseUrl: string) {

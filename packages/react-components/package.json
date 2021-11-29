@@ -22,10 +22,12 @@
   "scripts": {
     "build": "node scripts/build.js",
     "build:lib": "node scripts/lib.js",
+    "log-tag": "node scripts/tag.js",
     "pretty-quick": "pretty-quick",
     "prepare": "cd ../.. && husky install packages/react-components/.husky",
     "prepublishOnly": "node scripts/pre-publish.js",
-    "start": "PORT=3006 node scripts/start.js",
+    "pub": "npm run log-tag && cross-env npm_guard_publish='true' && npm run version && npm run build:lib && npm publish",
+    "start": "npm run log-tag && PORT=3006 node scripts/start.js",
     "version": "node ./scripts/generate-version"
   },
   "publishConfig": {
@@ -134,6 +136,7 @@
     "camelcase": "^6.1.0",
     "case-sensitive-paths-webpack-plugin": "2.3.0",
     "chalk": "^4.1.2",
+    "cross-env": "^7.0.3",
     "css-loader": "4.3.0",
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
