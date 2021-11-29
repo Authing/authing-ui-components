@@ -25,9 +25,11 @@
     "log-tag": "node scripts/tag.js",
     "pretty-quick": "pretty-quick",
     "prestart": "npm run log-tag && npm run version",
+    "preinstall": "npm run log-tag && npm run version",
+    "prepub": "npm run log-tag && npm run version",
     "prepare": "cd ../.. && husky install packages/react-components/.husky",
     "prepublishOnly": "node scripts/pre-publish.js",
-    "pub": "npm run log-tag && cross-env npm_guard_publish='true' && npm run version && npm run build:lib && npm publish",
+    "pub": "cross-env npm_guard_publish='true' && npm run build:lib && npm publish",
     "start": "PORT=3006 node scripts/start.js",
     "version": "node ./scripts/generate-version"
   },
