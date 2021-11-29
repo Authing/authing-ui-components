@@ -33,7 +33,7 @@
     "prestart": "npm run log-tag && npm run vegcrsion",
     "prebuild:lib": "npm run log-tag && npm run version",
     "prepare": "cd ../.. && husky install packages/react-components/.husky",
-    "pub": "cross-env npm_guard_publish='true' node ./scripts/publish.js",
+    "pub": "npm run build:lib && cross-env npm_guard_publish='true' node ./scripts/publish.js",
     "start": "PORT=3006 node ./scripts/start.js",
     "version": "node ./scripts/generate-version"
   },
