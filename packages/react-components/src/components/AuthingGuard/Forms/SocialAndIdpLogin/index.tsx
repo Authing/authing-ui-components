@@ -218,7 +218,7 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
       }
 
       const onLogin = () => {
-        authClient.social.authorize(item.provider, {
+        authClient.social.authorize(item.identifier, {
           onSuccess(user) {
             onSuccess(user)
           },
@@ -254,12 +254,12 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
           }
           onClick={onLogin}
         >
-          {item.tooltip?.[i18n.language as Lang] || item.name}
+          {item.tooltip?.[i18n.language as Lang] || item.displayName}
         </Button>
       ) : (
         <Tooltip
           key={item.provider}
-          title={item.tooltip?.[i18n.language as Lang] || item.name}
+          title={item.tooltip?.[i18n.language as Lang] || item.displayName}
         >
           <div className="authing-social-login-item" onClick={onLogin}>
             <IconFont type={iconType} />
