@@ -157,7 +157,7 @@ const useGuardConfig = () => {
       defaultGuardConfig.loginMethods
 
     // 扫码多源配置
-    const qrcodeTabsSettings = appConfig.qrcodeTabsSettings
+    const qrcodeTabsSettings = appConfig.qrcodeTabsSettings ?? {}
 
     // 账密登录的登录拆分
     const passwordLoginMethods =
@@ -168,7 +168,6 @@ const useGuardConfig = () => {
     // 默认登录方式
     const defaultLoginMethod =
       userConfig.defaultLoginMethod ||
-      appConfig.loginTabs?.defaultV2 ||
       appConfig.loginTabs?.default ||
       defaultGuardConfig.defaultLoginMethod
 

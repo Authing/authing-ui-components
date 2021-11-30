@@ -1,7 +1,7 @@
 import { message } from 'antd'
 import { User } from 'authing-js-sdk'
 import { FormInstance } from 'antd/lib/form'
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 
 import { useGuardContext } from '../../../context/global/context'
 import {
@@ -113,39 +113,40 @@ const useNormalLoginTabs = ({ onSuccess, onFail }: BaseFormProps) => {
   const {
     state: { config },
   } = useGuardContext()
-  const { loginMethods = [], loginMethodTitleMapping } = config
+  const {
+    loginMethods = [],
+    loginMethodTitleMapping,
+    qrcodeTabsSettings,
+  } = config
 
-  const tabs = loginMethods
-    .map((tab) => {
-      if (
-        !loginMethods.every(
-          (item) => !(item.split(':').length > 1 && item.split(':')[0] === tab)
-        )
+  let tabs: any[] = []
+
+  loginMethods.forEach((method: LoginMethods) => {
+    if (
+      [LoginMethods.WechatMpQrcode, LoginMethods.WxMinQr].includes(method) &&
+      qrcodeTabsSettings[method]
+    ) {
+      tabs.push(
+        ...qrcodeTabsSettings[method].map((idp) => {
+          console.log(idp)
+          return {
+            key: idp.id,
+            label: idp.title || loginMethodTitleMapping[method],
+            component: LOGIN_FORM_MAP[method]({
+              ...formProps,
+              idp,
+            }),
+          }
+        })
       )
-        return undefined
-
-      const idpId = tab.split(':').length > 1 ? tab.split(':')[1] : undefined
-
-      if (idpId) {
-        const type = tab.split(':')[0] as LoginMethods
-        return {
-          key: tab,
-          label: loginMethodTitleMapping[tab]!,
-          component: LOGIN_FORM_MAP[type]({
-            ...formProps,
-            idpId: idpId,
-          }),
-        }
-      } else {
-        return {
-          key: tab,
-          label: LOGIN_METHODS_MAP()?.[tab]!,
-          component: LOGIN_FORM_MAP[tab](formProps),
-        }
-      }
-    })
-    .filter((i) => i !== undefined)
-
+    } else {
+      tabs.push({
+        key: method,
+        label: LOGIN_METHODS_MAP()[method],
+        component: LOGIN_FORM_MAP[method](formProps),
+      })
+    }
+  })
   return {
     tabs,
   }
@@ -158,30 +159,37 @@ const SHOW_SOCIAL_LOGIN_TAB = [
 ]
 export const LoginLayout = () => {
   const {
-    state: { activeTabs },
+    state: { activeTabs, config },
     setValue,
   } = useGuardContext()
+  const { qrcodeTabsSettings } = config
 
   const { onFail, onSuccess } = useFormActions()
   const { tabs } = useNormalLoginTabs({ onSuccess, onFail })
 
+  const activeKey = useMemo(() => {
+    const activeTab = activeTabs[GuardScenes.Login]
+    if (
+      [LoginMethods.WechatMpQrcode, LoginMethods.WxMinQr].includes(activeTab) &&
+      qrcodeTabsSettings[activeTab]
+    ) {
+      return qrcodeTabsSettings[activeTab].find((item) => item.isDefault)?.id
+    }
+    return activeTab
+  }, [activeTabs, qrcodeTabsSettings])
+  console.log(activeKey)
+
   return (
     <>
       <AuthingTabs
-        tabs={
-          tabs as {
-            key: LoginMethods
-            label: string
-            component: JSX.Element
-          }[]
-        }
+        tabs={tabs}
         onTabClick={(t) =>
           setValue('activeTabs', {
             ...activeTabs,
             [GuardScenes.Login]: t,
           })
         }
-        activeKey={activeTabs[GuardScenes.Login]}
+        activeKey={activeKey}
       />
 
       {SHOW_SOCIAL_LOGIN_TAB.includes(activeTabs[GuardScenes.Login]) && (
