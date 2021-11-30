@@ -156,6 +156,9 @@ const useGuardConfig = () => {
       appConfig.loginTabs?.list ||
       defaultGuardConfig.loginMethods
 
+    // 扫码多源配置
+    const qrcodeTabsSettings = appConfig.qrcodeTabsSettings
+
     // 账密登录的登录拆分
     const passwordLoginMethods =
       userConfig.passwordLoginMethods ||
@@ -236,6 +239,7 @@ const useGuardConfig = () => {
         defaultRegisterMethod,
         enterpriseConnectionObjs,
         publicKey: appConfig.publicKey,
+        qrcodeTabsSettings,
         agreementEnabled: appConfig.agreementEnabled,
         agreements: appConfig.agreements,
         loginMethodTitleMapping: loginMethodTitleMapping,
@@ -244,8 +248,10 @@ const useGuardConfig = () => {
   }, [
     userConfig,
     appConfig.loginTabs?.list,
+    appConfig.loginTabs?.defaultV2,
     appConfig.loginTabs?.default,
     appConfig.loginTabs?.title,
+    appConfig.qrcodeTabsSettings,
     appConfig.passwordTabConfig?.enabledLoginMethods,
     appConfig.registerTabs?.list,
     appConfig.registerTabs?.default,
