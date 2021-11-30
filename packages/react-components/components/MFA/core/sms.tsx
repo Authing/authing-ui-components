@@ -8,7 +8,7 @@ import { VerifyCodeInput } from '../VerifyCodeInput'
 import { useAuthClient } from '../../Guard/authClient'
 import { SendCodeBtn } from '../../SendCode/SendCodeBtn'
 import SubmitButton from '../../SubmitButton'
-import { ICheckProps, PhoneFormItem } from '../../ValidatorRules'
+import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
 import { VerifyCodeFormItem } from '../VerifyCodeInput/VerifyCodeFormItem'
 import { MFAConfig } from '../interface'
 import { InputNumber } from '../../InputNumber'
@@ -53,7 +53,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
           ref.current?.check(values)
         }}
       >
-        <PhoneFormItem
+        <CustomFormItem.Phone
           className="authing-g2-input-form"
           name="phone"
           userPoolId={config.__publicConfig__.userPoolId}
@@ -68,7 +68,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
             placeholder={t('login.inputPhone')}
             prefix={<UserOutlined style={{ color: '#878A95' }} />}
           />
-        </PhoneFormItem>
+        </CustomFormItem.Phone>
         <SubmitButton text={t('common.sure')} ref={submitButtonRef} />
       </Form>
     </>

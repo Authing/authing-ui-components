@@ -8,7 +8,7 @@ import { VerifyCodeInput } from '../VerifyCodeInput'
 import { useAuthClient } from '../../Guard/authClient'
 import { SendCodeBtn } from '../../SendCode/SendCodeBtn'
 import SubmitButton from '../../SubmitButton'
-import { EmailFormItem, ICheckProps } from '../../ValidatorRules'
+import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
 import { MFAConfig } from '../interface'
 import { VerifyCodeFormItem } from '../VerifyCodeInput/VerifyCodeFormItem'
 
@@ -52,7 +52,7 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
           ref.current?.check(value)
         }}
       >
-        <EmailFormItem
+        <CustomFormItem.Email
           className="authing-g2-input-form"
           name="email"
           userPoolId={config.__publicConfig__.userPoolId}
@@ -67,7 +67,7 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
             placeholder={t('login.inputEmail')}
             prefix={<UserOutlined style={{ color: '#878A95' }} />}
           />
-        </EmailFormItem>
+        </CustomFormItem.Email>
 
         <SubmitButton text={t('common.sure')} ref={submitButtonRef} />
       </Form>

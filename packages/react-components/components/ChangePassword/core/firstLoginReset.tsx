@@ -5,8 +5,8 @@ import { Form, Input, message } from 'antd'
 import { LockOutlined } from '@ant-design/icons'
 
 import { useAuthClient } from '../../Guard/authClient'
-import { getPasswordValidate } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
+import CustomFormItem from '../../ValidatorRules'
 
 interface FirstLoginResetProps {
   onReset: any
@@ -47,23 +47,11 @@ export const FirstLoginReset = (props: FirstLoginResetProps) => {
         }}
         autoComplete="off"
       >
-        <Form.Item
+        <CustomFormItem.Password
           className="authing-g2-input-form"
           name="password"
-          rules={[
-            {
-              validator(_, value) {
-                if (value && value.indexOf(' ') !== -1) {
-                  return Promise.reject(t('common.checkPasswordHasSpace'))
-                }
-                return Promise.resolve()
-              },
-            },
-            ...getPasswordValidate(
-              props.publicConfig?.passwordStrength,
-              props.publicConfig?.customPasswordStrength
-            ),
-          ]}
+          passwordStrength={props.publicConfig.passwordStrength}
+          customPasswordStrength={props.publicConfig.customPasswordStrength}
         >
           <Input.Password
             className="authing-g2-input"
@@ -71,7 +59,7 @@ export const FirstLoginReset = (props: FirstLoginResetProps) => {
             placeholder={t('login.inputPwd')}
             prefix={<LockOutlined style={{ color: '#878A95' }} />}
           />
-        </Form.Item>
+        </CustomFormItem.Password>
         <Form.Item
           className="authing-g2-input-form"
           name="password2"

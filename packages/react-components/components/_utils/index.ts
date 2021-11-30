@@ -260,12 +260,22 @@ export const getPasswordValidate = (
   strength: PasswordStrength = PasswordStrength.NoCheck,
   customPasswordStrength: any = {}
 ): Rule[] => {
-  const required = fieldRequiredRule(i18n.t('common.password'))[0]
+  const required = [
+    fieldRequiredRule(i18n.t('common.password'))[0],
+    {
+      validator(_: any, value: any) {
+        if ((value ?? '').indexOf(' ') !== -1) {
+          return Promise.reject(i18n.t('common.checkPasswordHasSpace'))
+        }
+        return Promise.resolve()
+      },
+    },
+  ]
 
   const validateMap: Record<PasswordStrength, Rule[]> = {
-    [PasswordStrength.NoCheck]: [required],
+    [PasswordStrength.NoCheck]: [...required],
     [PasswordStrength.Low]: [
-      required,
+      ...required,
       {
         validator(r, v) {
           if (v && v.length < 6) {
@@ -278,7 +288,7 @@ export const getPasswordValidate = (
       },
     ],
     [PasswordStrength.Middle]: [
-      required,
+      ...required,
       {
         validator(r, v) {
           if (v && (v.length < 6 || getSymbolTypeLength(v) < 2)) {
@@ -293,7 +303,7 @@ export const getPasswordValidate = (
       },
     ],
     [PasswordStrength.High]: [
-      required,
+      ...required,
       {
         validator(r, v) {
           if (v && (v.length < 6 || getSymbolTypeLength(v) < 3)) {
@@ -311,7 +321,7 @@ export const getPasswordValidate = (
       },
     ],
     [PasswordStrength.AUTO]: [
-      required,
+      ...required,
       {
         pattern: customPasswordStrength?.regex,
         message: customPasswordStrength?.message,

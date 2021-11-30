@@ -7,8 +7,9 @@ import { UserOutlined, SafetyOutlined, LockOutlined } from '@ant-design/icons'
 import { SendCode } from '../../SendCode'
 
 import { useAuthClient } from '../../Guard/authClient'
-import { fieldRequiredRule, getPasswordValidate, validate } from '../../_utils'
+import { fieldRequiredRule, validate } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
+import CustomFormItem from '../../ValidatorRules'
 
 interface ResetPasswordProps {
   onReset: any
@@ -123,24 +124,11 @@ export const ResetPassword = (props: ResetPasswordProps) => {
             // form={form}
           />
         </Form.Item>
-        <Form.Item
+        <CustomFormItem.Password
           className="authing-g2-input-form"
           name="password"
-          validateFirst={true}
-          rules={[
-            {
-              validator(_, value) {
-                if ((value ?? '') && value.indexOf(' ') !== -1) {
-                  return Promise.reject(t('common.checkPasswordHasSpace'))
-                }
-                return Promise.resolve()
-              },
-            },
-            ...getPasswordValidate(
-              props.publicConfig?.passwordStrength,
-              props.publicConfig?.customPasswordStrength
-            ),
-          ]}
+          passwordStrength={props.publicConfig.passwordStrength}
+          customPasswordStrength={props.publicConfig.customPasswordStrength}
         >
           <Input.Password
             className="authing-g2-input"
@@ -148,7 +136,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
             placeholder={t('user.inputNewPwd')}
             prefix={<LockOutlined style={{ color: '#878A95' }} />}
           />
-        </Form.Item>
+        </CustomFormItem.Password>
         <Form.Item className="authing-g2-input-form submit-form">
           <SubmitButton
             className="forget-password"

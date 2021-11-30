@@ -11,7 +11,7 @@
   ],
   "dependencies": {
     "antd": "^4.8.0",
-    "authing-js-sdk": "4.22.26-alpha.2",
+    "authing-js-sdk": "4.22.26-alpha.13",
     "face-api.js": "^0.22.2",
     "global": "^4.4.0",
     "qs": "^6.9.4",
@@ -30,11 +30,12 @@
     "log-tag": "node ./scripts/tag.js",
     "pretty-quick": "pretty-quick",
     "prepublishOnly": "node ./scripts/pre-publish.js",
-    "prestart": "npm run log-tag && npm run vegcrsion",
+    "prestart": "npm run log-tag && npm run version",
     "prebuild:lib": "npm run log-tag && npm run version",
     "prepare": "cd ../.. && husky install packages/react-components/.husky",
     "pub": "npm run build:lib && cross-env npm_guard_publish='true' node ./scripts/publish.js",
     "start": "PORT=3006 node ./scripts/start.js",
+    "vite": "vite",
     "version": "node ./scripts/generate-version"
   },
   "publishConfig": {
@@ -133,6 +134,7 @@
     "@types/shortid": "^0.0.29",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
+    "@vitejs/plugin-react": "1.1.0",
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.6.0",
     "babel-loader": "8.1.0",
@@ -202,6 +204,7 @@
     "ts-pnp": "1.2.0",
     "typescript": "^4.0.3",
     "url-loader": "4.1.1",
+    "vite": "^2.6.14",
     "web-vitals": "^0.2.4",
     "webpack": "4.44.2",
     "webpack-bundle-analyzer": "^4.1.0",

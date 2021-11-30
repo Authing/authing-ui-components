@@ -7,18 +7,10 @@ import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
 import { useAuthClient } from '../../Guard/authClient'
-import {
-  getDeviceName,
-  getPasswordValidate,
-  getUserRegisterParams,
-} from '../../_utils'
+import { getDeviceName, getUserRegisterParams } from '../../_utils'
 import { Agreements } from '../components/Agreements'
 import SubmitButton from '../../SubmitButton'
-import {
-  EmailFormItem,
-  ICheckProps,
-  ValidatorFormItemProps,
-} from '../../ValidatorRules'
+import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
 
 export interface RegisterWithEmailProps {
   onRegister: Function
@@ -115,9 +107,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
     component: React.ReactNode
     name: string
     rules?: Rule[]
-    FormItemFC?: React.ForwardRefExoticComponent<
-      ValidatorFormItemProps & React.RefAttributes<ICheckProps>
-    >
+    FormItemFC?: any
   }[] = [
     {
       component: (
@@ -130,7 +120,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         />
       ),
       name: 'email',
-      FormItemFC: EmailFormItem,
+      FormItemFC: CustomFormItem.Email,
     },
     {
       component: (
@@ -142,20 +132,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         />
       ),
       name: 'password',
-      rules: [
-        {
-          validator(_, value) {
-            if ((value ?? '').indexOf(' ') !== -1) {
-              return Promise.reject(t('common.checkPasswordHasSpace'))
-            }
-            return Promise.resolve()
-          },
-        },
-        ...getPasswordValidate(
-          publicConfig?.passwordStrength,
-          publicConfig?.customPasswordStrength
-        ),
-      ],
+      FormItemFC: CustomFormItem.Password,
     },
     {
       component: (
@@ -168,10 +145,6 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
       ),
       name: 'new-password',
       rules: [
-        ...getPasswordValidate(
-          publicConfig?.passwordStrength,
-          publicConfig?.customPasswordStrength
-        ),
         {
           validator: (_, value) => {
             if (value !== form.getFieldValue('password')) {
@@ -211,6 +184,8 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
               userPoolId={publicConfig?.userPoolId!}
               form={form}
               checkRepeat={true}
+              passwordStrength={publicConfig?.passwordStrength}
+              customPasswordStrength={publicConfig?.customPasswordStrength}
             >
               {item.component}
             </item.FormItemFC>

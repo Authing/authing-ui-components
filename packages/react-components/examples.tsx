@@ -12,10 +12,11 @@ const App = () => {
         display: 'flex',
         width: '100vw',
         justifyContent: 'center',
+        WebkitUserSelect: 'none',
       }}
     >
       <Guard
-        appId="619747787da1b9eb2e9ee7d5"
+        appId="61a5c2901be5635c03b0978c"
         // appId="6191cf610f772aa56dc70637"
         // tenantId="6194a41abf23c1d5268b362a1"
         onLogin={(u) => {

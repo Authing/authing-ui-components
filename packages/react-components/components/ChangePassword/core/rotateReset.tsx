@@ -4,9 +4,9 @@ import { Form, Input, message } from 'antd'
 
 import { LockOutlined } from '@ant-design/icons'
 
-import { getPasswordValidate } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
 import { useAuthClient } from '../../Guard/authClient'
+import CustomFormItem from '../../ValidatorRules'
 
 interface RotateResetProps {
   onReset: any
@@ -30,7 +30,7 @@ export const RotateReset = (props: RotateResetProps) => {
         newPassword: password,
         oldPassword: oldPassword,
       })
-      props.onReset(res)
+      props.onReset({ code: 200, data: res })
     } catch (error) {
       message.error(error.message)
       submitButtonRef?.current?.onError()
@@ -62,23 +62,11 @@ export const RotateReset = (props: RotateResetProps) => {
             prefix={<LockOutlined style={{ color: '#878A95' }} />}
           />
         </Form.Item>
-        <Form.Item
+        <CustomFormItem.Password
           className="authing-g2-input-form"
           name="password"
-          rules={[
-            {
-              validator(_, value) {
-                if (value && value.indexOf(' ') !== -1) {
-                  return Promise.reject(t('common.checkPasswordHasSpace'))
-                }
-                return Promise.resolve()
-              },
-            },
-            ...getPasswordValidate(
-              props.publicConfig?.passwordStrength,
-              props.publicConfig?.customPasswordStrength
-            ),
-          ]}
+          passwordStrength={props.publicConfig.passwordStrength}
+          customPasswordStrength={props.publicConfig.customPasswordStrength}
         >
           <Input.Password
             className="authing-g2-input"
@@ -86,7 +74,7 @@ export const RotateReset = (props: RotateResetProps) => {
             placeholder={t('login.inputPwd')}
             prefix={<LockOutlined style={{ color: '#878A95' }} />}
           />
-        </Form.Item>
+        </CustomFormItem.Password>
         <Form.Item
           className="authing-g2-input-form"
           name="password2"

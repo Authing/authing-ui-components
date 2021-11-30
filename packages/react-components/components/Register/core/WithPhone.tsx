@@ -14,9 +14,8 @@ import {
 import { Agreements } from '../components/Agreements'
 import SubmitButton from '../../SubmitButton'
 import { InputNumber } from '../../InputNumber'
-import {
+import CustomFormItem, {
   ICheckProps,
-  PhoneFormItem,
   ValidatorFormItemProps,
 } from '../../ValidatorRules'
 import { Rule } from 'antd/lib/form'
@@ -107,7 +106,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         />
       ),
       name: 'phone',
-      FormItemFC: PhoneFormItem,
+      FormItemFC: CustomFormItem.Phone,
     },
     {
       component: (

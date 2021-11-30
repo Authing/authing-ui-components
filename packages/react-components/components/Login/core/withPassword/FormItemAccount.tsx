@@ -3,7 +3,7 @@ import FormItem from 'antd/lib/form/FormItem'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PasswordLoginMethods } from '../../../AuthingGuard/api'
-import { EmailFormItem, PhoneFormItem } from '../../../ValidatorRules'
+import CustomFormItem from '../../../ValidatorRules'
 import { fieldRequiredRule } from '../../../_utils'
 
 export interface FormItemAccountProps extends FormItemProps {
@@ -25,9 +25,9 @@ export const FormItemAccount: React.FC<FormItemAccountProps> = (props) => {
 
     switch (methods[0]) {
       case 'phone-password':
-        return <PhoneFormItem {...formItemPtops} />
+        return <CustomFormItem.Phone {...formItemPtops} />
       case 'email-password':
-        return <EmailFormItem {...formItemPtops} />
+        return <CustomFormItem.Email {...formItemPtops} />
       case 'username-password':
         return (
           <FormItem

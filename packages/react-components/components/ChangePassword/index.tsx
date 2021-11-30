@@ -1,3 +1,4 @@
+import { message } from 'antd'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { GuardModuleType } from '../Guard/module'
@@ -15,8 +16,11 @@ export const GuardChangePassword = (props: any) => {
   const onReset = (res: any) => {
     let code = res.code
     if (code === 200) {
+      message.success(t('common.updatePsswordSuccess'))
       // 返回登录
-      props.__changeModule(GuardModuleType.LOGIN)
+      setTimeout(() => {
+        props.__changeModule(GuardModuleType.LOGIN)
+      }, 500)
     } else {
       console.log('*** reset code no catched', res)
     }
