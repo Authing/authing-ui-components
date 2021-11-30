@@ -13,6 +13,7 @@ import {
   ApplicationConfig,
   PasswordLoginMethods,
   Agreement,
+  QrcodeTabsSettings,
 } from '../../../components/AuthingGuard/api'
 import { Lang } from './Locales'
 
@@ -412,6 +413,7 @@ export interface GuardConfig extends UserConfig {
   publicKey: ApplicationConfig['publicKey']
   agreementEnabled: boolean
   agreements: Agreement[]
+  qrcodeTabsSettings: QrcodeTabsSettings
 }
 
 export interface LocalesConfig {
