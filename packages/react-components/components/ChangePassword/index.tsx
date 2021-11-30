@@ -36,11 +36,11 @@ export const GuardChangePassword = (props: any) => {
       return {
         title: t('user.modifyPwd'),
         explain: t('user.modifyPwdText', {
-          number: 1,
+          number: initData.forcedCycle,
         }),
       }
     }
-  }, [config.title, initData.type, t])
+  }, [config.title, initData.forcedCycle, initData.type, t])
 
   return (
     <div className="g2-view-container">
