@@ -1,4 +1,8 @@
-import { Lang, Protocol } from '../types'
+import {
+  Lang,
+  LoginMethods,
+  Protocol,
+} from '../../../components/AuthingGuard/types'
 import {
   IAzureAdConnectionConfig,
   ICasConnectionConfig,
@@ -26,6 +30,15 @@ export const ApplicationMfaTypeLabel: () => Record<
   [ApplicationMfaType.SMS]: i18n.t('common.SMS'),
   [ApplicationMfaType.EMAIL]: i18n.t('common.EmailVerification'),
 })
+
+export type QrcodeTabsSettings = Record<
+  LoginMethods,
+  Array<{
+    id: string
+    title: string
+    isDefault?: boolean
+  }>
+>
 
 export interface OidcClientMetadata {
   grant_types: string[]
@@ -77,6 +90,7 @@ export interface ApplicationConfig {
   css: string
   name: string
   logo: string
+  description?: string
   redirectUris: string[]
   registerDisabled: boolean
   registerTabs: {
@@ -84,9 +98,13 @@ export interface ApplicationConfig {
     default: string
     title: { [x: string]: string }
   }
+
+  qrcodeTabsSettings: QrcodeTabsSettings
+
   loginTabs: {
     list: string[]
     default: string
+    defaultV2?: string
     title: { [x: string]: string }
   }
   socialConnections: SocialConnectionItem[]

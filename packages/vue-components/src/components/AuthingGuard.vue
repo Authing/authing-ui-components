@@ -12,23 +12,34 @@ import {
   GuardScenes,
   LoginMethods,
   RegisterMethods,
-} from '@authing/native-js-ui-components'
-import '@authing/native-js-ui-components/lib/index.min.css'
+} from "@authing/native-js-ui-components";
+import "@authing/native-js-ui-components/lib/index.min.css";
 
-export { getAuthClient, initAuthClient, GuardMode, GuardScenes, LoginMethods, RegisterMethods }
+export {
+  getAuthClient,
+  initAuthClient,
+  GuardMode,
+  GuardScenes,
+  LoginMethods,
+  RegisterMethods,
+};
 
 const format = (a, b) => {
-  return !a || a === 'false' ? b : true
-}
+  return !a || a === "false" ? b : true;
+};
 
-const callbackEvent = ['before-login', 'before-register']
+const callbackEvent = ["before-login", "before-register"];
 
 export default {
-  name: 'AuthingGuard',
+  name: "AuthingGuard",
   props: {
     appId: {
       type: String,
       required: true,
+    },
+    tenantId: {
+      type: String,
+      required: false,
     },
     config: {
       type: Object,
@@ -73,87 +84,100 @@ export default {
     return {
       localVisible: false,
       $guard: null,
-    }
+    };
   },
   watch: {
     visible: {
       immediate: true,
       handler(val) {
         if (val !== this.localVisible) {
-          this.localVisible = val
+          this.localVisible = val;
         }
       },
     },
     localVisible: {
       handler(val) {
         if (val !== this.visible) {
-          this.$emit('update:visible', val)
+          this.$emit("update:visible", val);
         }
 
         if (val) {
-          this.show()
+          this.show();
         } else {
-          this.hide()
+          this.hide();
         }
       },
     },
   },
   mounted() {
-    this.config = this.config || {}
-    this.config.mode = this.mode ? this.mode : this.config.mode
-    this.config.autoRegister = this.autoRegister ? this.autoRegister : this.config.autoRegister
-    this.config.isSSO = this.isSSO ? this.isSSO : this.config.isSSO
-    this.config.clickCloseable = this.clickCloseable ? this.clickCloseable : this.config.clickCloseable
-    this.config.escCloseable = this.escCloseable ? this.escCloseable : this.config.escCloseable
+    this.config = this.config || {};
+    this.config.mode = this.mode ? this.mode : this.config.mode;
+    this.config.autoRegister = this.autoRegister
+      ? this.autoRegister
+      : this.config.autoRegister;
+    this.config.isSSO = this.isSSO ? this.isSSO : this.config.isSSO;
+    this.config.clickCloseable = this.clickCloseable
+      ? this.clickCloseable
+      : this.config.clickCloseable;
+    this.config.escCloseable = this.escCloseable
+      ? this.escCloseable
+      : this.config.escCloseable;
 
     // this.config.autoRegister = format(this.autoRegister, this.config.autoRegister)
     // this.config.isSSO = format(this.isSSO, this.config.isSSO)
     // this.config.clickCloseable = format(this.clickCloseable, this.config.clickCloseable)
     // this.config.escCloseable = format(this.escCloseable, this.config.escCloseable)
 
-    const guard = new NativeAuthingGuard(this.appId, this.config)
+    const guard = new NativeAuthingGuard(
+      this.appId,
+      this.config,
+      this.tenantId
+    );
 
-    const evts = Object.values(GuardEventsCamelToKebabMap)
-    const kebabToCamelMap = Object.entries(GuardEventsCamelToKebabMap).reduce((acc, [camel, kebab]) => {
-      return Object.assign({}, acc, {
-        [kebab]: camel,
-      })
-    }, {})
+    const evts = Object.values(GuardEventsCamelToKebabMap);
+    const kebabToCamelMap = Object.entries(GuardEventsCamelToKebabMap).reduce(
+      (acc, [camel, kebab]) => {
+        return Object.assign({}, acc, {
+          [kebab]: camel,
+        });
+      },
+      {}
+    );
 
     const listeners = evts.reduce((acc, evtName) => {
       return Object.assign({}, acc, {
         [evtName]: (...rest) => {
-          if (evtName === 'close') {
-            this.localVisible = false
+          if (evtName === "close") {
+            this.localVisible = false;
           }
           if (!callbackEvent.includes(evtName)) {
-            this.$emit(evtName, ...rest)
+            this.$emit(evtName, ...rest);
           } else {
-            const camelEvtName = kebabToCamelMap[evtName]
+            const camelEvtName = kebabToCamelMap[evtName];
 
             if (this[camelEvtName]) {
-              return this[camelEvtName](...rest)
+              return this[camelEvtName](...rest);
             }
-            return true
+            return true;
           }
         },
-      })
-    }, {})
+      });
+    }, {});
 
-    evts.forEach((evtName) => guard.on(evtName, listeners[evtName]))
+    evts.forEach((evtName) => guard.on(evtName, listeners[evtName]));
 
     if (this.localVisible) {
-      guard.show()
+      guard.show();
     }
-    this.$guard = guard
+    this.$guard = guard;
   },
   methods: {
     show() {
-      this.$guard.show()
+      this.$guard.show();
     },
     hide() {
-      this.$guard.hide()
+      this.$guard.hide();
     },
   },
-}
+};
 </script>

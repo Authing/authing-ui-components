@@ -1,8 +1,7 @@
 {
   "name": "@authing/vue-ui-components",
   "description": "Authing Vue UI components",
-  "version": "2.4.53",
-  "framework": "Vue",
+  "version": "2.4.55-alpha.0",
   "keywords": [
     "vue",
     "vuejs",
@@ -34,7 +33,7 @@
     "registry": "https://registry.npmjs.org"
   },
   "dependencies": {
-    "@authing/native-js-ui-components": "^2.4.53"
+    "@authing/native-js-ui-components": "^2.4.55-alpha.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",

@@ -28,6 +28,7 @@ message.config({
 
 interface AuthingGuardProps extends GuardEventsHandler {
   appId: string
+  tenantId?: string
   config?: UserConfig
   visible?: boolean
   className?: string
@@ -36,6 +37,7 @@ interface AuthingGuardProps extends GuardEventsHandler {
 
 export const AuthingGuard: FC<AuthingGuardProps> = ({
   appId,
+  tenantId,
   config = {},
   visible,
   className,
@@ -71,9 +73,15 @@ export const AuthingGuard: FC<AuthingGuardProps> = ({
   requestClient.setBaseUrl(realHost)
   requestClient.setLangHeader(headers?.lang)
 
+  if (tenantId) {
+    requestClient.setTenantHeader(headers?.['tenant-id'])
+    requestClient.setTenantId(tenantId)
+  }
+
   const authClient = new AuthenticationClient({
     appHost: realHost!,
     appId,
+    tenantId,
     requestFrom: 'ui-components',
     lang: localesConfig.defaultLang ?? lang,
     headers,

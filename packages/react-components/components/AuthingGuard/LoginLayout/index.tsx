@@ -1,7 +1,7 @@
 import { message } from 'antd'
 import { User } from 'authing-js-sdk'
 import { FormInstance } from 'antd/lib/form'
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 
 import { useGuardContext } from '../../context/global/context'
 import {
@@ -75,36 +75,36 @@ const useNormalLoginTabs = ({ onSuccess, onFail }: BaseFormProps) => {
   }
 
   const LOGIN_FORM_MAP = {
-    [LoginMethods.Password]: (
+    [LoginMethods.Password]: (props: any) => (
       <PasswordLoginForm
-        {...formProps}
+        {...props}
         ref={(v) => (formRef.current[LoginMethods.Password] = v!)}
       />
     ),
-    [LoginMethods.PhoneCode]: (
+    [LoginMethods.PhoneCode]: (props: any) => (
       <PhoneCodeLoginForm
-        {...formProps}
+        {...props}
         ref={(v) => (formRef.current[LoginMethods.PhoneCode] = v!)}
       />
     ),
-    [LoginMethods.AppQr]: (
-      <QrCodeLoginForm type={LoginMethods.AppQr} {...formProps} />
+    [LoginMethods.AppQr]: (props: any) => (
+      <QrCodeLoginForm type={LoginMethods.AppQr} {...props} />
     ),
-    [LoginMethods.WxMinQr]: (
-      <QrCodeLoginForm type={LoginMethods.WxMinQr} {...formProps} />
+    [LoginMethods.WxMinQr]: (props: any) => (
+      <QrCodeLoginForm type={LoginMethods.WxMinQr} {...props} />
     ),
-    [LoginMethods.LDAP]: (
+    [LoginMethods.LDAP]: (props: any) => (
       <LdapLoginForm
-        {...formProps}
+        {...props}
         ref={(v) => (formRef.current[LoginMethods.LDAP] = v!)}
       />
     ),
-    [LoginMethods.WechatMpQrcode]: (
-      <QrCodeLoginForm type={LoginMethods.WechatMpQrcode} {...formProps} />
+    [LoginMethods.WechatMpQrcode]: (props: any) => (
+      <QrCodeLoginForm type={LoginMethods.WechatMpQrcode} {...props} />
     ),
-    [LoginMethods.AD]: (
+    [LoginMethods.AD]: (props: any) => (
       <ADLoginForm
-        {...formProps}
+        {...props}
         ref={(v) => (formRef.current[LoginMethods.AD] = v!)}
       />
     ),
@@ -113,14 +113,40 @@ const useNormalLoginTabs = ({ onSuccess, onFail }: BaseFormProps) => {
   const {
     state: { config },
   } = useGuardContext()
-  const { loginMethods = [] } = config
+  const {
+    loginMethods = [],
+    loginMethodTitleMapping,
+    qrcodeTabsSettings,
+  } = config
 
-  const tabs = loginMethods.map((item) => ({
-    key: item,
-    label: LOGIN_METHODS_MAP()?.[item]!,
-    component: LOGIN_FORM_MAP[item],
-  }))
+  let tabs: any[] = []
 
+  loginMethods.forEach((method: LoginMethods) => {
+    if (
+      [LoginMethods.WechatMpQrcode, LoginMethods.WxMinQr].includes(method) &&
+      qrcodeTabsSettings[method]
+    ) {
+      tabs.push(
+        ...qrcodeTabsSettings[method].map((idp) => {
+          console.log(idp)
+          return {
+            key: idp.id,
+            label: idp.title || loginMethodTitleMapping[method],
+            component: LOGIN_FORM_MAP[method]({
+              ...formProps,
+              idp,
+            }),
+          }
+        })
+      )
+    } else {
+      tabs.push({
+        key: method,
+        label: LOGIN_METHODS_MAP()[method],
+        component: LOGIN_FORM_MAP[method](formProps),
+      })
+    }
+  })
   return {
     tabs,
   }
@@ -133,12 +159,25 @@ const SHOW_SOCIAL_LOGIN_TAB = [
 ]
 export const LoginLayout = () => {
   const {
-    state: { activeTabs },
+    state: { activeTabs, config },
     setValue,
   } = useGuardContext()
+  const { qrcodeTabsSettings } = config
 
   const { onFail, onSuccess } = useFormActions()
   const { tabs } = useNormalLoginTabs({ onSuccess, onFail })
+
+  const activeKey = useMemo(() => {
+    const activeTab = activeTabs[GuardScenes.Login]
+    if (
+      [LoginMethods.WechatMpQrcode, LoginMethods.WxMinQr].includes(activeTab) &&
+      qrcodeTabsSettings[activeTab]
+    ) {
+      return qrcodeTabsSettings[activeTab].find((item) => item.isDefault)?.id
+    }
+    return activeTab
+  }, [activeTabs, qrcodeTabsSettings])
+  console.log(activeKey)
 
   return (
     <>
@@ -150,7 +189,7 @@ export const LoginLayout = () => {
             [GuardScenes.Login]: t,
           })
         }
-        activeKey={activeTabs[GuardScenes.Login]}
+        activeKey={activeKey}
       />
 
       {SHOW_SOCIAL_LOGIN_TAB.includes(activeTabs[GuardScenes.Login]) && (

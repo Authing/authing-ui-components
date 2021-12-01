@@ -13,7 +13,8 @@ import {
   ApplicationConfig,
   PasswordLoginMethods,
   Agreement,
-} from '../api'
+  QrcodeTabsSettings,
+} from '../../../components/AuthingGuard/api'
 import { Lang } from './Locales'
 
 export type { AuthenticationClient, CommonMessage, User } from 'authing-js-sdk'
@@ -353,6 +354,7 @@ export interface GuardEventsHandler {
 export interface UserConfig {
   logo?: string
   title?: string
+  description?: string
   zIndex?: number
   isSSO?: boolean
   mode?: GuardMode
@@ -411,6 +413,8 @@ export interface GuardConfig extends UserConfig {
   publicKey: ApplicationConfig['publicKey']
   agreementEnabled: boolean
   agreements: Agreement[]
+  loginMethodTitleMapping: Record<string, string>
+  qrcodeTabsSettings: QrcodeTabsSettings
 }
 
 export interface LocalesConfig {

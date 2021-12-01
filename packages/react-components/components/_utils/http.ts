@@ -17,6 +17,15 @@ requestClient.get = async <T>(
   query: Record<string, any> = {},
   init?: RequestInit
 ): Promise<AuthingResponse<T>> => {
+  const headers: Record<string, any> = {
+    ...init?.headers,
+    'Content-Type': 'application/json',
+    [requestClient.langHeader]: i18n.language,
+  }
+
+  if (requestClient.tenantId !== '')
+    headers[requestClient.tenantHeader] = requestClient.tenantId
+
   const res = await fetch(
     `${requestClient.baseUrl}${path}${qs.stringify(query, {
       addQueryPrefix: true,
@@ -24,10 +33,7 @@ requestClient.get = async <T>(
     {
       ...init,
       credentials: 'include',
-      headers: {
-        ...init?.headers,
-        [requestClient.langHeader]: i18n.language,
-      },
+      headers,
     }
   )
 
@@ -41,6 +47,15 @@ requestClient.post = async <T>(
     headers: any
   }
 ): Promise<AuthingResponse<T>> => {
+  const headers: Record<string, any> = {
+    ...config?.headers,
+    'Content-Type': 'application/json',
+    [requestClient.langHeader]: i18n.language,
+  }
+
+  if (requestClient.tenantId !== '')
+    headers[requestClient.tenantHeader] = requestClient.tenantId
+
   const res = await fetch(`${requestClient.baseUrl}${path}`, {
     method: 'POST',
     body: JSON.stringify(data),
@@ -79,7 +94,19 @@ requestClient.setBaseUrl = (base: string) => {
 }
 
 const DEFAULT_LANG_HEADER = 'x-authing-lang'
+const DEFAULT_TENANT_HEADER = 'x-authing-app-tenant-idåå'
 requestClient.langHeader = DEFAULT_LANG_HEADER
+requestClient.tenantHeader = DEFAULT_TENANT_HEADER
+requestClient.tenantId = ''
+
 requestClient.setLangHeader = (key: string | undefined) => {
   requestClient.langHeader = key || DEFAULT_LANG_HEADER
+}
+
+requestClient.setTenantHeader = (key: string | undefined) => {
+  requestClient.tenantHeader = key || DEFAULT_LANG_HEADER
+}
+
+requestClient.setTenantId = (tenantId: string) => {
+  requestClient.tenantId = tenantId
 }

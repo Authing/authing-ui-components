@@ -129,4 +129,4 @@ sonarqube-check:
     - sonar-scanner
   allow_failure: true
   only:
-    - develop # or the name of your main branch
+    - master

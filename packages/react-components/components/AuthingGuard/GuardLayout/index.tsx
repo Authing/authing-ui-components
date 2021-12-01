@@ -156,6 +156,9 @@ const useGuardConfig = () => {
       appConfig.loginTabs?.list ||
       defaultGuardConfig.loginMethods
 
+    // 扫码多源配置
+    const qrcodeTabsSettings = appConfig.qrcodeTabsSettings ?? {}
+
     // 账密登录的登录拆分
     const passwordLoginMethods =
       userConfig.passwordLoginMethods ||
@@ -167,6 +170,8 @@ const useGuardConfig = () => {
       userConfig.defaultLoginMethod ||
       appConfig.loginTabs?.default ||
       defaultGuardConfig.defaultLoginMethod
+
+    const loginMethodTitleMapping = appConfig.loginTabs?.title
 
     // 注册方式
     const registerMethods =
@@ -183,6 +188,8 @@ const useGuardConfig = () => {
     const title = loading
       ? ''
       : userConfig.title ?? appConfig.name ?? defaultGuardConfig.title
+
+    const description = loading ? '' : appConfig.description ?? ''
 
     // 应用 logo
     const logo = loading
@@ -218,6 +225,7 @@ const useGuardConfig = () => {
       {
         logo,
         title,
+        description,
         autoRegister,
         loginMethods,
         passwordLoginMethods,
@@ -230,18 +238,24 @@ const useGuardConfig = () => {
         defaultRegisterMethod,
         enterpriseConnectionObjs,
         publicKey: appConfig.publicKey,
+        qrcodeTabsSettings,
         agreementEnabled: appConfig.agreementEnabled,
         agreements: appConfig.agreements,
+        loginMethodTitleMapping: loginMethodTitleMapping,
       }
     )
   }, [
     userConfig,
     appConfig.loginTabs?.list,
+    appConfig.loginTabs?.defaultV2,
     appConfig.loginTabs?.default,
+    appConfig.loginTabs?.title,
+    appConfig.qrcodeTabsSettings,
     appConfig.passwordTabConfig?.enabledLoginMethods,
     appConfig.registerTabs?.list,
     appConfig.registerTabs?.default,
     appConfig.name,
+    appConfig.description,
     appConfig.logo,
     appConfig.ssoPageComponentDisplay?.autoRegisterThenLoginHintInfo,
     appConfig.ssoPageComponentDisplay?.registerBtn,

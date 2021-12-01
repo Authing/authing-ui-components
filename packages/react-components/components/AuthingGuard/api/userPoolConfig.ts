@@ -73,8 +73,10 @@ export interface ICasConnectionConfig {
 export interface SocialConnectionItem {
   name: string
   name_en: string
+  displayName: string
   logo: string
   description: string
+  identifier: string
   provider: SocialConnectionProvider
   authorizationUrl: string
   tooltip: Record<Lang, string>

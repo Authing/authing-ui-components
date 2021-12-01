@@ -65,8 +65,9 @@ export class AuthingGuardComponent implements OnInit, OnChanges {
     }
   }
 
-  @Input() visible?: boolean;
   @Input() appId: string;
+  @Input() visible?: boolean;
+  @Input() tenantId?: string;
   @Input() config?: UserConfig;
 
   @Output() onLoad = new EventEmitter<
@@ -110,7 +111,7 @@ export class AuthingGuardComponent implements OnInit, OnChanges {
   >();
 
   ngAfterViewInit() {
-    const guard = new AuthingGuard(this.appId, this.config);
+    const guard = new AuthingGuard(this.appId, this.config, this.tenantId);
 
     guard.on('load', (...rest) => this.onLoad.emit(rest));
     guard.on('load-error', (...rest) => this.onLoadError.emit(rest));
