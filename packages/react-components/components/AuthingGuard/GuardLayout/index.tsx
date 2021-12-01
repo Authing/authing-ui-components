@@ -247,7 +247,6 @@ const useGuardConfig = () => {
   }, [
     userConfig,
     appConfig.loginTabs?.list,
-    appConfig.loginTabs?.defaultV2,
     appConfig.loginTabs?.default,
     appConfig.loginTabs?.title,
     appConfig.qrcodeTabsSettings,

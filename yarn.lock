@@ -277,12 +277,12 @@
   resolved "https://registry.nlark.com/@authing/jose/download/@authing/jose-1.0.5.tgz#d3e9c58aac74f47e5048a791d69c68f8bc52d7d8"
   integrity sha1-0+nFiqx09H5QSKeR1pxo+LxS19g=
 
-"@authing/native-js-ui-components@^2.4.53":
-  version "2.4.53"
-  resolved "https://registry.npmjs.org/@authing/native-js-ui-components/-/native-js-ui-components-2.4.53.tgz#80dca4309a14f88d0986785ca82333d725b472b3"
-  integrity sha512-0L6x0jV5bQm477fqP8i/8aIo2cX19Cjcn///2k/kqsHCzSh+M0HpkchliioPgkXdsAQCRSUuQMVPAeX+ZclMXg==
+"@authing/native-js-ui-components@^2.4.55-alpha.0":
+  version "2.4.56"
+  resolved "https://registry.npmmirror.com/@authing/native-js-ui-components/download/@authing/native-js-ui-components-2.4.56.tgz#56ff4b40ebbb5347a3881505b6fe93d316634ec8"
+  integrity sha512-0klPVVFBbRf1TrrbY6bDXWW/iSqZoAhdoDMmcGN/lWS+0ifMfxP9BWIThZ9CNn2LIHwrJ/ONIdKVQAwa2rmLhg==
   dependencies:
-    "@authing/react-ui-components" "^2.4.53"
+    "@authing/react-ui-components" "^2.4.56"
     react "16.14.0"
     react-dom "16.14.0"
 
@@ -298,17 +298,10 @@
     qs "^6.9.4"
     react-use "^17.3.1"
 
-"@authing/react-ui-components@^2.4.53":
-  version "2.4.53"
-  resolved "https://registry.npmjs.org/@authing/react-ui-components/-/react-ui-components-2.4.53.tgz#bbca309ed286f97e17f8674d110778673ff800c4"
-  integrity sha512-Yn9gX5kSH32amhCsfcS5wtPKC7m+FPm1PO65Xzfs8DslYpMG3HdxMKOnawyFUf8vrpv0rW3dqTnaN9mfva3/Ag==
-  dependencies:
-    antd "^4.8.0"
-    authing-js-sdk "4.22.18"
-"@authing/react-ui-components@^2.4.53":
-  version "2.4.55"
-  resolved "https://registry.npmjs.org/@authing/react-ui-components/-/react-ui-components-2.4.55.tgz#3aadf5073eaa81c028e1aeb8ba0a167af0cfdd85"
-  integrity sha512-sZ9axdsJ/72UICACZtqmmzLF0F+HPhIKp7OEGX6Lw0esE2i9aSS2SF7o0vLkNwiEqzt+6ur+ZINfmbar2n608g==
+"@authing/react-ui-components@^2.4.56":
+  version "2.4.56"
+  resolved "https://registry.npmmirror.com/@authing/react-ui-components/download/@authing/react-ui-components-2.4.56.tgz#053b2920e2a1dc3e946a14c2af761f56c4b2dde8"
+  integrity sha512-+FeeexEmq5LnAZFeH2DMItqZZ57tAtFihx3Xrz+IrXIXSlcxbAr7dx8OkJ6XAXVQGNi2aNKuVmFw8kcQUKFDVQ==
   dependencies:
     antd "^4.8.0"
     authing-js-sdk "4.22.24-alpha"
@@ -3900,7 +3893,7 @@
     "@typescript-eslint/types" "4.9.0"
     eslint-visitor-keys "^2.0.0"
 
-"@vitejs/plugin-react@^1.1.0":
+"@vitejs/plugin-react@1.1.0":
   version "1.1.0"
   resolved "https://registry.npmmirror.com/@vitejs/plugin-react/download/@vitejs/plugin-react-1.1.0.tgz#8dc889a3b37d475c4c5196bfa9dd6052182d6a1e"
   integrity sha512-hRAqG6/lYf0mfDm/1r0U81vwPWMpyi87e4bFK+LvVQQeIgdh6TwvfuF20waenSGSumz6JH2bfk9DbxdgDLRp/w==
@@ -4989,32 +4982,21 @@ atob@^2.1.2:
   resolved "https://registry.npm.taobao.org/atob/download/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha1-bZUX654DDSQ2ZmZR6GvZ9vE1M8k=
 
-authing-js-sdk@4.22.24-alpha:
-  version "4.22.24-alpha"
-  resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.22.24-alpha.tgz#299ac8e74ccf2baf4a6286e7f5350a603653a411"
-  integrity sha512-e+cIvsXrHSDHmZIaPG9/snNZu12loPTNJEeIn+Q09BDIzIJJFmQ53DAzq+uUQNA+gQ24QmnJTbzUf/Ue8J6kKA==
-  dependencies:
-    "@authing/jose" "^1.0.3"
-    axios "^0.19.2"
-    crypto-js "^4.0.0"
-    jsencrypt "^3.1.0"
-    jwt-decode "^2.2.0"
-
-authing-js-sdk@4.22.26-alpha.9:
-  version "4.22.26-alpha.9"
-  resolved "https://registry.npmmirror.com/authing-js-sdk/download/authing-js-sdk-4.22.26-alpha.9.tgz#5c9aa703b3cb2c2b2c32b09c00cec5fa90f9af3d"
-  integrity sha512-ntUYVrdcKm28iXpQo19iBpQr9EyU8/ICs5p1fXXa19J+SKzpP5bhLEpSChbzfq6jVACvyNmTMGXikupppBpHHQ==
-  dependencies:
-    "@authing/jose" "^1.0.3"
-    axios "^0.19.2"
-    crypto-js "^4.0.0"
-    jsencrypt "^3.1.0"
-    jwt-decode "^2.2.0"
-
 authing-js-sdk@4.22.24:
   version "4.22.24"
   resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.22.24.tgz#4de4d74d67eac7f9cdae97bc11e9ac9c1b945117"
   integrity sha512-3hFSMtC0q3TITi1Fl9m5Fb4AF9fuJRTop0DNTkZ41Z4aAefpDsKVePaUIUppxlh8GmaEgUM/gXLHQOMtj8/gAQ==
+  dependencies:
+    "@authing/jose" "^1.0.3"
+    axios "^0.19.2"
+    crypto-js "^4.0.0"
+    jsencrypt "^3.1.0"
+    jwt-decode "^2.2.0"
+
+authing-js-sdk@4.22.24-alpha:
+  version "4.22.24-alpha"
+  resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.22.24-alpha.tgz#299ac8e74ccf2baf4a6286e7f5350a603653a411"
+  integrity sha512-e+cIvsXrHSDHmZIaPG9/snNZu12loPTNJEeIn+Q09BDIzIJJFmQ53DAzq+uUQNA+gQ24QmnJTbzUf/Ue8J6kKA==
   dependencies:
     "@authing/jose" "^1.0.3"
     axios "^0.19.2"
