@@ -7,6 +7,7 @@ import { LockOutlined } from '@ant-design/icons'
 import SubmitButton from '../../SubmitButton'
 import { useAuthClient } from '../../Guard/authClient'
 import CustomFormItem from '../../ValidatorRules'
+import { fieldRequiredRule } from '../../_utils'
 
 interface RotateResetProps {
   onReset: any
@@ -53,7 +54,7 @@ export const RotateReset = (props: RotateResetProps) => {
         <Form.Item
           className="authing-g2-input-form"
           name="oldPassword"
-          rules={[{ required: true }]}
+          rules={[...fieldRequiredRule(t('common.password'))]}
         >
           <Input.Password
             className="authing-g2-input"
@@ -75,9 +76,11 @@ export const RotateReset = (props: RotateResetProps) => {
             prefix={<LockOutlined style={{ color: '#878A95' }} />}
           />
         </CustomFormItem.Password>
-        <Form.Item
+        <CustomFormItem.Password
           className="authing-g2-input-form"
           name="password2"
+          passwordStrength={props.publicConfig.passwordStrength}
+          customPasswordStrength={props.publicConfig.customPasswordStrength}
           rules={[
             {
               validator(_, value) {
@@ -99,7 +102,7 @@ export const RotateReset = (props: RotateResetProps) => {
             placeholder={t('login.inputPwdAgain')}
             prefix={<LockOutlined style={{ color: '#878A95' }} />}
           />
-        </Form.Item>
+        </CustomFormItem.Password>
         <Form.Item className="authing-g2-input-form submit-form">
           <SubmitButton
             className="forget-password"
