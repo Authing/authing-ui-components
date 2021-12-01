@@ -1,10 +1,5 @@
 import React, { useEffect } from "react";
 import "./App.css";
-import { Guard } from "./components";
-
-function App() {
-  useEffect(() => {
-    const guard = new Guard("610271b10cd9106606c73d57");
 import { AuthingGuard, GuardMode } from "./components";
 
 function App() {
