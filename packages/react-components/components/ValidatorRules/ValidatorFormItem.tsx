@@ -28,6 +28,7 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
       form,
       checkRepeat = false,
       method,
+      name,
       ...formItemProps
     } = props
 
@@ -70,10 +71,11 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
     useImperativeHandle(ref, () => ({
       check: (values: any) => {
         setChecked(false)
-        if (values[method]) {
-          console.log('check', isReady)
+        // @ts-ignore
+        if (values[name ?? method]) {
           setIsReady(false)
-          checkField(values[method])
+          // @ts-ignore
+          checkField(values[name ?? method])
         }
       },
     }))
@@ -123,8 +125,8 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
       <Form.Item
         validateFirst={true}
         rules={[...rules, ...(formItemProps?.rules ?? [])]}
+        name={name ?? method}
         {...formItemProps}
-        name={method}
       />
     )
   }

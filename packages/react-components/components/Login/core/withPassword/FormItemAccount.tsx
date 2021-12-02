@@ -15,6 +15,7 @@ export const FormItemAccount: React.FC<FormItemAccountProps> = (props) => {
   const { t } = useTranslation()
 
   const runderTemplate = useMemo(() => {
+    debugger
     if (methods.length !== 1)
       return (
         <FormItem
