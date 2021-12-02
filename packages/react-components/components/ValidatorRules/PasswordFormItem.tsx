@@ -1,12 +1,7 @@
 import { Form } from 'antd'
-import { FormItemProps } from 'antd/lib/form'
 import React from 'react'
-import { getPasswordValidate, PasswordStrength } from '../_utils'
-
-export interface PasswordFormItemProps extends FormItemProps {
-  passwordStrength: PasswordStrength
-  customPasswordStrength: any
-}
+import { PasswordFormItemProps } from '.'
+import { getPasswordValidate } from '../_utils'
 
 export const PasswordFormItem: React.FC<PasswordFormItemProps> = (props) => {
   const {

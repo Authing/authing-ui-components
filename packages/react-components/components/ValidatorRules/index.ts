@@ -1,5 +1,6 @@
 import { FormInstance, FormItemProps } from 'antd/lib/form'
 import FormItem from 'antd/lib/form/FormItem'
+import { PasswordStrength } from '../_utils'
 import { PasswordFormItem } from './PasswordFormItem'
 import { EmailFormItem, PhoneFormItem } from './ValidatorFormItem'
 
@@ -16,11 +17,14 @@ export interface ValidatorFormItemMetaProps extends ValidatorFormItemProps {
   method: 'email' | 'phone'
 }
 
+export interface PasswordFormItemProps extends FormItemProps {
+  passwordStrength: PasswordStrength
+  customPasswordStrength: any
+}
+
 export interface ICheckProps {
   check: (values: any) => void
 }
-
-export type { PasswordFormItemProps } from './PasswordFormItem'
 
 type InternalFormItemType = typeof FormItem
 
