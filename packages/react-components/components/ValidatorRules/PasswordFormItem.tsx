@@ -2,24 +2,27 @@ import { Form } from 'antd'
 import React from 'react'
 import { PasswordFormItemProps } from '.'
 import { getPasswordValidate } from '../_utils'
+import { usePublicConfig } from '../_utils/context'
 
 export const PasswordFormItem: React.FC<PasswordFormItemProps> = (props) => {
-  const {
-    passwordStrength,
-    customPasswordStrength,
-    rules,
-    ...fromItemProos
-  } = props
+  const { rules, ...fromItemProos } = props
 
-  return (
+  const publicConfig = usePublicConfig()
+
+  return publicConfig ? (
     <Form.Item
       validateFirst={true}
       name="password"
       rules={[
-        ...getPasswordValidate(passwordStrength, customPasswordStrength),
+        ...getPasswordValidate(
+          publicConfig.passwordStrength,
+          publicConfig.customPasswordStrength
+        ),
         ...(rules ?? []),
       ]}
       {...fromItemProos}
     />
+  ) : (
+    <Form.Item {...props} />
   )
 }

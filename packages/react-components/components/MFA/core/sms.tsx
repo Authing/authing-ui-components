@@ -56,7 +56,6 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
         <CustomFormItem.Phone
           className="authing-g2-input-form"
           name="phone"
-          userPoolId={config.__publicConfig__.userPoolId}
           form={form}
           ref={ref}
           checkRepeat={true}

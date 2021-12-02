@@ -16,6 +16,7 @@ import {
 } from '.'
 import { Rule } from 'antd/lib/form'
 import { useDebounce } from '../_utils/hooks'
+import { usePublicConfig } from '../_utils/context'
 
 const checkError = (message: string) => Promise.reject(new Error(message))
 
@@ -23,14 +24,9 @@ const checkSuccess = (message?: string) => Promise.resolve(message ?? '')
 
 const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
   (props, ref) => {
-    const {
-      userPoolId,
-      form,
-      checkRepeat = false,
-      method,
-      name,
-      ...formItemProps
-    } = props
+    const { form, checkRepeat = false, method, name, ...formItemProps } = props
+
+    const publicConfig = usePublicConfig()
 
     const { get } = useGuardHttp()
     const { t } = useTranslation()
@@ -59,7 +55,7 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
         return
       }
       let { data } = await get<boolean>(`/api/v2/users/find`, {
-        userPoolId: userPoolId,
+        userPoolId: publicConfig?.userPoolId,
         key: value,
         type: method,
       })
@@ -108,6 +104,7 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
         },
       ]
       checkRepeat &&
+        Boolean(publicConfig) &&
         rules.push({
           validator,
         })
@@ -118,6 +115,7 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
       methodContent.checkErrorMessage,
       methodContent.field,
       methodContent.pattern,
+      publicConfig,
       validator,
     ])
 

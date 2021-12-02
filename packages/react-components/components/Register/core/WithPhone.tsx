@@ -149,7 +149,6 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
               name={item.name}
               className="authing-g2-input-form"
               validateFirst={true}
-              userPoolId={publicConfig?.userPoolId!}
               form={form}
               checkRepeat={true}
             >

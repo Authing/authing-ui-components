@@ -181,11 +181,8 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
               name={item.name}
               className="authing-g2-input-form"
               validateFirst={true}
-              userPoolId={publicConfig?.userPoolId!}
               form={form}
               checkRepeat={true}
-              passwordStrength={publicConfig?.passwordStrength}
-              customPasswordStrength={publicConfig?.customPasswordStrength}
             >
               {item.component}
             </item.FormItemFC>

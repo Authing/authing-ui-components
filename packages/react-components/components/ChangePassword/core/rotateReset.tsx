@@ -66,8 +66,6 @@ export const RotateReset = (props: RotateResetProps) => {
         <CustomFormItem.Password
           className="authing-g2-input-form"
           name="password"
-          passwordStrength={props.publicConfig.passwordStrength}
-          customPasswordStrength={props.publicConfig.customPasswordStrength}
         >
           <Input.Password
             className="authing-g2-input"
@@ -79,8 +77,6 @@ export const RotateReset = (props: RotateResetProps) => {
         <CustomFormItem.Password
           className="authing-g2-input-form"
           name="password2"
-          passwordStrength={props.publicConfig.passwordStrength}
-          customPasswordStrength={props.publicConfig.customPasswordStrength}
           rules={[
             {
               validator(_, value) {

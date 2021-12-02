@@ -38,6 +38,8 @@ import { IconFont } from '../AuthingGuard/IconFont'
 import { GuardErrorView } from '../Error'
 import { AuthenticationClient, GuardMode } from '..'
 import { GuardSubmitSuccessView } from '../SubmitSuccess'
+import { createGuardContext } from '../_utils/context'
+import { ApplicationConfig } from '../AuthingGuard/api'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -111,12 +113,15 @@ export const Guard = (props: GuardProps) => {
   const [events, setEvents] = useState<GuardEvents>()
   const [authClint, setAuthClint] = useState<AuthenticationClient>()
   const [httpClint, setHttpClint] = useState<GuardHttp>()
+  const [publicConfig, setPublicConfig] = useState<ApplicationConfig>()
 
   // 状态机
   const [
     guardStateMachine,
     setGuardStateMachine,
   ] = useState<GuardStateMachine>()
+
+  const { Context } = createGuardContext()
 
   // 劫持浏览器 History
   const [historyNext] = useHistoryHijack(guardStateMachine?.back)
@@ -206,6 +211,7 @@ export const Guard = (props: GuardProps) => {
       )
 
       setGuardLocalConfig(mergedConfig)
+      setPublicConfig(publicConfig)
 
       getGuardHttp().setUserpoolId(publicConfig.userPoolId)
     } catch (error: any) {
@@ -273,23 +279,25 @@ export const Guard = (props: GuardProps) => {
   return (
     // TODO 这部分缺失 Loging 态
     <ConfigProvider prefixCls={PREFIX_CLS}>
-      {config?.mode === GuardMode.Modal ? (
-        <Modal
-          className="authing-g2-render-module-modal"
-          closeIcon={
-            <IconFont type="authing-close-line" className="g2-modal-close" />
-          }
-          visible={props.visible}
-          onCancel={props.onClose}
-          keyboard={config.escCloseable}
-          maskClosable={false} //点击蒙层，是否允许关闭
-          getContainer={config.target ? config.target : false}
-        >
+      <Context.Provider value={publicConfig}>
+        {config?.mode === GuardMode.Modal ? (
+          <Modal
+            className="authing-g2-render-module-modal"
+            closeIcon={
+              <IconFont type="authing-close-line" className="g2-modal-close" />
+            }
+            visible={props.visible}
+            onCancel={props.onClose}
+            keyboard={config.escCloseable}
+            maskClosable={false} //点击蒙层，是否允许关闭
+            getContainer={config.target ? config.target : false}
+          >
+            <div className="authing-g2-render-module">{renderModule}</div>
+          </Modal>
+        ) : (
           <div className="authing-g2-render-module">{renderModule}</div>
-        </Modal>
-      ) : (
-        <div className="authing-g2-render-module">{renderModule}</div>
-      )}
+        )}
+      </Context.Provider>
     </ConfigProvider>
   )
 }

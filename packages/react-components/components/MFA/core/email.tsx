@@ -55,7 +55,6 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
         <CustomFormItem.Email
           className="authing-g2-input-form"
           name="email"
-          userPoolId={config.__publicConfig__.userPoolId}
           form={form}
           ref={ref}
           checkRepeat={true}
