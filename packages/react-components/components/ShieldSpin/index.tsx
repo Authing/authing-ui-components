@@ -1,6 +1,5 @@
 import React from 'react'
-import { ReactComponent as LoadShielding } from './loading.svg'
-
+import { ShieldSpinLoading } from './loading'
 interface IG2SpinProps {
   size?: number
 }
@@ -15,7 +14,7 @@ export const ShieldSpin = (props: IG2SpinProps) => {
         height: size,
       }}
     >
-      <LoadShielding />
+      <ShieldSpinLoading />
     </div>
   )
 }

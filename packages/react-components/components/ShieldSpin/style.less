@@ -1,0 +1,19 @@
+#path-f {
+  fill: none;
+  stroke: #eaebee;
+  stroke-width: 10;
+  stroke-dasharray: 100 220;
+  animation: dash 40s infinite linear forwards;
+}
+#path-b {
+  fill: none;
+  stroke: #0080ff;
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+@keyframes dash {
+  to {
+    stroke-dashoffset: 12000;
+  }
+}

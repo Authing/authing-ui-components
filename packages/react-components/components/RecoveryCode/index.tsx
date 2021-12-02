@@ -4,7 +4,6 @@ import { IconFont } from '../IconFont'
 import { UseCode } from './core/useCode'
 import { GuardRecoveryCodeViewProps } from './interface'
 import './style.less'
-const window: Window = require('global/window')
 
 export const GuardRecoveryCodeView: React.FC<GuardRecoveryCodeViewProps> = ({
   initData,

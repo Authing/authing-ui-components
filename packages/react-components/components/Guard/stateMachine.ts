@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { GuardComponentConifg, GuardLocalConfig } from './config'
 import { GuardModuleType } from './module'
-const window: Window = require('global/window')
 
 export interface ModuleState {
   moduleName: GuardModuleType

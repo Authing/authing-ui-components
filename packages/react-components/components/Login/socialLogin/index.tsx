@@ -399,8 +399,8 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         direction="vertical"
         className="g2-guard-full-width-space"
       >
-        {idp}
-        {socialLogin}
+        {!publicConfig?.ssoPageComponentDisplay.idpBtns || idp}
+        {!publicConfig?.ssoPageComponentDisplay.socialLoginBtns || socialLogin}
       </Space>
     </>
   )

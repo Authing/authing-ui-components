@@ -12,7 +12,6 @@ import { useAuthClient } from '../Guard/authClient'
 import { codeMap } from './codemap'
 import './styles.less'
 import { message } from 'antd'
-const window: Window = require('global/window')
 
 const ComponentsMapping: Record<MFAType, (props: any) => React.ReactNode> = {
   [MFAType.EMAIL]: ({ config, initData, mfaLogin }) => (

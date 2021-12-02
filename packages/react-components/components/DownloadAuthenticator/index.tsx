@@ -5,7 +5,6 @@ import { ImagePro } from '../ImagePro'
 import { IconFont } from '../IconFont'
 import { GuardDownloadATViewProps } from './interface'
 import './styles.less'
-const window: Window = require('global/window')
 
 enum DownloadType {
   IOS = 'ios',

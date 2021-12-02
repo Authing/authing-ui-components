@@ -13,7 +13,6 @@ import { SecurityCode } from './core/securityCode'
 import { GuardBindTotpViewProps } from './interface'
 import { useTranslation } from 'react-i18next'
 import './styles.less'
-const window: Window = require('global/window')
 
 enum BindTotpType {
   SECURITY_CODE = 'securityCode',
