@@ -1,5 +1,6 @@
 const fs = require('fs-extra')
 const path = require('path')
+const chalk = require('chalk')
 
 const { version } = require('../package.json')
 
@@ -8,3 +9,5 @@ fs.writeFileSync(
   `export default '${version}'`,
   'utf8'
 )
+
+console.log(chalk.green(`Generated version: ${version}`))

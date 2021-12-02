@@ -1,5 +1,8 @@
+const chalk = require('chalk')
+
 const feLog = () => {
-  console.log(`
+  console.log(
+    chalk.hex('#396AFF')(`
    ___        _   _     _              ______ _____ 
   / _ \\      | | | |   (_)             |  ___|  ___|
  / /_\\ \\_   _| |_| |__  _ _ __   __ _  | |_  | |__  
@@ -9,6 +12,7 @@ const feLog = () => {
                                  __/ |              
                                 |___/               
 `)
+  )
 }
 
 feLog()
