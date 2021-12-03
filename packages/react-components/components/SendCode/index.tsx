@@ -56,6 +56,8 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
       await authClient.sendSmsCode(phone)
       return true
     } catch (error) {
+      const { message: msg } = JSON.parse(error.message)
+      message.error(msg)
       return false
     }
   }
