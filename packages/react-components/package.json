@@ -33,7 +33,7 @@
     "prestart": "npm run log-tag && npm run version",
     "prebuild:lib": "npm run log-tag && npm run version",
     "prepare": "cd ../.. && husky install packages/react-components/.husky",
-    "pub": "npm run build:lib && cross-env npm_guard_publish='true' node ./scripts/publish.js",
+    "pub": "npm run build:lib && node ./scripts/publish.js",
     "start": "PORT=3006 node ./scripts/start.js",
     "vite": "vite",
     "version": "node ./scripts/generate-version"

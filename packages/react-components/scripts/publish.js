@@ -15,7 +15,7 @@ const getVersionTag = (version) => {
 var tag = getVersionTag(version)
 
 if (tag !== '') {
-  shell.exec(`npm publish --tag ${tag}`)
+  shell.exec(`npm publish --tag ${tag} --guard-publish`)
 } else {
-  shell.exec('npm publish')
+  shell.exec(`npm publish --guard-publish`)
 }
