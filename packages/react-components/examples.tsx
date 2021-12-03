@@ -16,7 +16,7 @@ const App = () => {
       }}
     >
       <Guard
-        appId="61a5c2901be5635c03b0978c"
+        appId="61a9bad738edd8f1dd9fe1cc"
         // appId="6191cf610f772aa56dc70637"
         // tenantId="6194a41abf23c1d5268b362a1"
         onLogin={(u) => {
