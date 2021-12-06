@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 
 import reportWebVitals from './reportWebVitals'
 import { message } from 'antd'
-import { AuthingGuard, Guard } from './components'
+import { Guard } from './components'
 
 const App = () => {
   return (
@@ -15,7 +15,7 @@ const App = () => {
         WebkitUserSelect: 'none',
       }}
     >
-      <AuthingGuard
+      <Guard
         appId="61a5c11a4eebd8b8c405fe29"
         // appId="6191cf610f772aa56dc70637"
         // tenantId="6194a41abf23c1d5268b362a1"
