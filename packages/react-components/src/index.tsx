@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom'
 import { Lang } from './components'
 import { AuthingGuard } from './components/AuthingGuard'
 
+import { SocialConnectionProvider } from 'authing-js-sdk'
+
 import {
   GuardMode,
   // LoginMethods,
@@ -21,8 +23,9 @@ const App = () => {
 
   const config: UserConfig = {
     mode: GuardMode.Modal,
-    appHost: 'https://core.dev2.authing-inc.co',
-    // apiHost: 'http://console.authing.localhost:3000',
+    // appHost: 'https://core.dev2.authing-inc.co',
+    apiHost: 'http://console.authing.localhost:3000',
+    // appHost: 'http://0w9ugz.authing.localhost:3000',
     // apiHost: 'http://192.168.50.57:3000',
     // loginMethods: Object.values(LoginMethods),
     // logo:
@@ -53,7 +56,7 @@ const App = () => {
     //   }
     // `,
     // // autoRegister: true,
-    // socialConnections: [SocialConnections.AppleWeb],
+    socialConnections: [SocialConnectionProvider.WECHATPC],
   }
 
   const [visible, setVisible] = useState(false)
@@ -70,6 +73,14 @@ const App = () => {
   return (
     // eslint-disable-next-line react/jsx-no-undef
     <>
+      <Button
+        type="primary"
+        onClick={() => {
+          //
+        }}
+      >
+        add socialConnections
+      </Button>
       <Button
         type="primary"
         onClick={() => {
@@ -114,8 +125,8 @@ const App = () => {
         }}
         // onLoad={(a) => console.log(a, '加载完成')}
         // onPwdResetError={(e) => console.log(e)}
-        appId="619c7976cd38c13a2222464f"
-        tenantId="61a5ed126cddae656cce9007"
+        appId="61ada57aef5ed526528ed5b6"
+        // tenantId="61a5ed126cddae656cce9007"
         // appId="5fd877fb0ba0421962eced94"
         config={config}
       />
