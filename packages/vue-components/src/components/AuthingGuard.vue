@@ -4,18 +4,11 @@
 
 <script>
 import {
-  getAuthClient,
-  initAuthClient,
   AuthingGuard as NativeAuthingGuard,
   GuardEventsCamelToKebabMap,
-  GuardMode,
-  GuardScenes,
-  LoginMethods,
-  RegisterMethods,
 } from "@authing/native-js-ui-components";
-import "@authing/native-js-ui-components/lib/index.min.css";
 
-export { getAuthClient, initAuthClient, GuardMode, GuardScenes, LoginMethods, RegisterMethods };
+import "@authing/native-js-ui-components/lib/index.min.css";
 
 const format = (a, b) => {
   return !a || a === "false" ? b : true;

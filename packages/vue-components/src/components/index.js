@@ -1,4 +1,21 @@
 import AuthingGuard from './AuthingGuard.vue'
 
-export * from './AuthingGuard.vue'
-export { AuthingGuard }
+import {
+  getAuthClient,
+  initAuthClient,
+  GuardMode,
+  GuardScenes,
+  LoginMethods,
+  RegisterMethods,
+} from "@authing/native-js-ui-components";
+
+
+export { 
+  AuthingGuard,
+  getAuthClient,
+  initAuthClient,
+  GuardMode,
+  GuardScenes,
+  LoginMethods,
+  RegisterMethods
+}
