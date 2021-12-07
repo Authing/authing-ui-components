@@ -77,6 +77,7 @@ export default {
     return {
       localVisible: false,
       $guard: null,
+      localConfig: this.config
     };
   },
   watch: {
@@ -103,19 +104,19 @@ export default {
     },
   },
   mounted() {
-    this.config = this.config || {};
-    this.config.mode = this.mode ? this.mode : this.config.mode;
-    this.config.autoRegister = this.autoRegister ? this.autoRegister : this.config.autoRegister;
-    this.config.isSSO = this.isSSO ? this.isSSO : this.config.isSSO;
-    this.config.clickCloseable = this.clickCloseable ? this.clickCloseable : this.config.clickCloseable;
-    this.config.escCloseable = this.escCloseable ? this.escCloseable : this.config.escCloseable;
+    this.localConfig = this.localConfig || {};
+    this.localConfig.mode = this.mode ? this.mode : this.localConfig.mode;
+    this.localConfig.autoRegister = this.autoRegister ? this.autoRegister : this.localConfig.autoRegister;
+    this.localConfig.isSSO = this.isSSO ? this.isSSO : this.localConfig.isSSO;
+    this.localConfig.clickCloseable = this.clickCloseable ? this.clickCloseable : this.localConfig.clickCloseable;
+    this.localConfig.escCloseable = this.escCloseable ? this.escCloseable : this.localConfig.escCloseable;
 
     // this.config.autoRegister = format(this.autoRegister, this.config.autoRegister)
     // this.config.isSSO = format(this.isSSO, this.config.isSSO)
     // this.config.clickCloseable = format(this.clickCloseable, this.config.clickCloseable)
     // this.config.escCloseable = format(this.escCloseable, this.config.escCloseable)
 
-    const guard = new NativeAuthingGuard(this.appId, this.config, this.tenantId);
+    const guard = new NativeAuthingGuard(this.appId, this.localConfig, this.tenantId);
 
     const evts = Object.values(GuardEventsCamelToKebabMap);
     const kebabToCamelMap = Object.entries(GuardEventsCamelToKebabMap).reduce((acc, [camel, kebab]) => {

@@ -8,7 +8,7 @@
     "authing"
   ],
   "license": "MIT",
-  "main": "lib/index.min.js",
+  "main": "src/components/index.js",
   "scripts": {
     "demo:serve": "vue-cli-service serve",
     "demo:build": "vue-cli-service build",
