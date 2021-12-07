@@ -466,6 +466,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
 
     try {
       // TODO sdk 发布正式版
+      // @ts-ignore
       const user = await authClient.updateProfile(internalFields, {
         phoneToken,
         emailToken,
