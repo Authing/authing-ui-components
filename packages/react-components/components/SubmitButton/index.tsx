@@ -16,10 +16,15 @@ const SubmitButton = (props: SubmitButtonProps, ref: any) => {
   let [shaking, setShaking] = useState(false) // 抖动状态会自动关闭
 
   useEffect(() => {
+    let timeOut: NodeJS.Timeout
     if (shaking === true) {
-      setTimeout(() => {
+      timeOut = setTimeout(() => {
         setShaking(false)
       }, 1000)
+    }
+
+    return () => {
+      clearTimeout(timeOut)
     }
   }, [shaking])
 
