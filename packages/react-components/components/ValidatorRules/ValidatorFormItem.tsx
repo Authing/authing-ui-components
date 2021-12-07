@@ -58,7 +58,9 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
     }, [method, t])
 
     const checkField = useDebounce(async (value: string) => {
+      console.log('请求接口,isReady', isReady)
       if (!(value && methodContent.pattern.test(value))) {
+        console.log('分支进去')
         setIsReady(true)
         return
       }
@@ -68,12 +70,15 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
         type: method,
       })
       setChecked(Boolean(data))
-      form?.validateFields([method])
+      console.log('请求完毕,checked', checked)
+      form?.validateFields([name ?? method])
       setIsReady(true)
     }, 500)
 
     useImperativeHandle(ref, () => ({
       check: (values: any) => {
+        // @ts-ignore
+        console.log('设置 ready false')
         setChecked(false)
         // @ts-ignore
         if (values[name ?? method]) {
@@ -89,17 +94,17 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
       do {
         await sleep(100)
       } while (isReady)
-
       return true
     }, [isReady])
 
     const validator = useCallback(async () => {
-      // console.log('checked', checked)
-      // console.log('checkReady', await checkReady())
-      if ((await checkReady()) && checked)
+      const ready = await checkReady()
+      console.log('isReady! checked:', checked)
+      // console.log('go validator', checked)
+      if (ready && checked) {
         return checkError(methodContent.checkErrorMessage)
-      else return checkSuccess()
-    }, [checkReady, checked, methodContent.checkErrorMessage])
+      } else return checkSuccess()
+    }, [checkReady, methodContent.checkErrorMessage, checked])
 
     const rules = useMemo<Rule[]>(() => {
       const rules = required ? [...fieldRequiredRule(methodContent.field)] : []

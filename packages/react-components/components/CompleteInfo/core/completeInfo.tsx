@@ -12,7 +12,7 @@ import SubmitButton from '../../SubmitButton'
 import { InputNumber } from '../../InputNumber'
 import { completeFieldsFilter } from '../utils'
 import { User } from 'authing-js-sdk'
-import CustomFormItem from '../../ValidatorRules'
+import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
 import { SendCode } from '../../SendCode'
 import { fieldRequiredRule } from '../../_utils'
 
@@ -51,6 +51,8 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
   const { get, post } = useGuardHttp()
   const { t } = useTranslation()
   const [form] = Form.useForm()
+  const refPhone = useRef<ICheckProps>(null)
+  const refEmail = useRef<ICheckProps>(null)
 
   const loadInitData = useCallback(async () => {
     await authClient.tokenProvider.clearUser()
@@ -150,17 +152,19 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         options={contryList}
         showSearch
         filterOption={filterOption}
-        // placeholder={i18n.t('common.pleaseInputOrSelectCountry')}
       ></Select>
     ),
     phone: (props: { required?: boolean }) => (
       <>
         <CustomFormItem.Phone
+          validateFirst={true}
           className="authing-g2-input-form"
           name="internal phone:phone"
           key="internal-phone:phoneadsf"
           label={i18n.t('common.phoneLabel')}
           required={props.required}
+          checkRepeat={true}
+          ref={refPhone}
         >
           <InputNumber
             className="authing-g2-input"
@@ -170,7 +174,6 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             size="large"
             maxLength={11}
             placeholder={t('login.inputPhone')}
-            // prefix={<UserOutlined style={{ color: '#878A95' }} />}
           />
         </CustomFormItem.Phone>
         <Form.Item
@@ -192,7 +195,6 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
               length: verifyCodeLength,
             })}
             maxLength={verifyCodeLength}
-            // prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
             method="phone"
             fieldName="internal phone:phone"
             data={''}
@@ -212,20 +214,21 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           checkRepeat={true}
           label={i18n.t('common.email')}
           required={props.required}
-          key="internal email:email"
+          key="internal email:email13"
+          validateFirst={true}
+          ref={refEmail}
         >
           <Input
             className="authing-g2-input"
             autoComplete="email"
             size="large"
             placeholder={t('login.inputEmail')}
-            // prefix={<UserOutlined style={{ color: '#878A95' }} />}
           />
         </CustomFormItem.Email>
         <Form.Item
           className="authing-g2-input-form"
           name="internal email:code"
-          key="internal email:code"
+          key="internal email:code1432"
           rules={
             props.required
               ? fieldRequiredRule(t('common.captchaCode'))
@@ -383,7 +386,6 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       }))
 
     try {
-      // TODO sdk 发布正式版
       const user = await authClient.updateProfile(internalFields, {
         phoneToken,
         emailToken,
@@ -402,7 +404,10 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       submitButtonRef.current?.onSpin(false)
       message.success(t('common.saveSuccess'))
       onRegisterInfoCompleted?.(user, udfs, authClient)
-    } catch (e) {
+    } catch (e: any) {
+      if (e?.message) {
+        message.error(e.message)
+      }
       // TODO
       submitButtonRef.current?.onSpin(false)
       onRegisterInfoCompletedError?.(e as any, udfs, authClient)
@@ -415,6 +420,11 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       form={form}
       onFinish={onFinish}
       onFinishFailed={() => submitButtonRef.current.onError()}
+      onValuesChange={(values) => {
+        console.log('值改变')
+        refPhone?.current?.check(values)
+        refEmail?.current?.check(values)
+      }}
     >
       {formFieldsV2}
 
