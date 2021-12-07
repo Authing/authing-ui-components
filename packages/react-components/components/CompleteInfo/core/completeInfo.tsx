@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Form, Input, message, Select, DatePicker } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
@@ -18,6 +18,7 @@ import { UserOutlined, SafetyOutlined } from '@ant-design/icons'
 import { fieldRequiredRule } from '../../_utils'
 
 export interface CompleteInfoProps {
+  user: User
   verifyCodeLength: number | undefined
   extendsFields: ExtendsField[]
   onRegisterInfoCompleted?: GuardCompleteInfoViewProps['onRegisterInfoCompleted']
@@ -41,21 +42,22 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
     extendsFields,
     onRegisterInfoCompleted,
     onRegisterInfoCompletedError,
+    user,
   } = props
   const authClient = useAuthClient()
   const submitButtonRef = useRef<any>(null)
   const [contryList, setContryList] = useState<any>([])
   const [fieldMetadata, setFieldMetadata] = useState<FieldMetadata[]>([])
-  const [user, setUser] = useState<User>()
+  // const [user, setUser] = useState<User>()
   const { get, post } = useGuardHttp()
   const { t } = useTranslation()
   const [form] = Form.useForm()
 
   const loadInitData = useCallback(async () => {
-    const currUser = await authClient.getCurrentUser()
-    if (currUser) {
-      setUser(currUser)
-    }
+    // const currUser = await authClient.getCurrentUser()
+    // if (currUser) {
+    //   setUser(currUser)
+    // }
     const { data: resCountryList } = await get<any>(`/api/v2/country-list`)
     const toMap =
       i18n.language === 'zh-CN' ? resCountryList?.zh : resCountryList?.en
@@ -73,7 +75,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       {}
     )
     setFieldMetadata(currFieldMetadata)
-  }, [setUser, authClient, get, setContryList, setFieldMetadata])
+  }, [get, setContryList, setFieldMetadata])
 
   useEffect(() => {
     loadInitData()
@@ -158,13 +160,14 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         <CustomFormItem.Phone
           className="authing-g2-input-form"
           name="internal phone:phone"
-          key="input-phone-input"
+          key="internal-phone:phoneadsf"
           label={i18n.t('common.phoneLabel')}
           required={props.required}
         >
           <InputNumber
             className="authing-g2-input"
             autoComplete="tel"
+            key="internal-phone:phone123"
             type="tel"
             size="large"
             maxLength={11}
@@ -175,7 +178,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         <Form.Item
           className="authing-g2-input-form"
           name="internal phone:code"
-          key="input-phone-code"
+          key="internal-phone:codea"
           rules={
             props.required
               ? fieldRequiredRule(t('common.captchaCode'))
@@ -185,6 +188,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           <SendCode
             className="authing-g2-input"
             autoComplete="one-time-code"
+            key="internal-phone:phone345"
             size="large"
             placeholder={t('common.inputFourVerifyCode', {
               length: verifyCodeLength,
@@ -210,7 +214,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           checkRepeat={true}
           label={i18n.t('common.email')}
           required={props.required}
-          key="input-email-input"
+          key="internal email:email"
         >
           <Input
             className="authing-g2-input"
@@ -223,7 +227,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         <Form.Item
           className="authing-g2-input-form"
           name="internal email:code"
-          key="input-email-code"
+          key="internal email:code"
           rules={
             props.required
               ? fieldRequiredRule(t('common.captchaCode'))
@@ -252,87 +256,171 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
     ),
   }
 
-  const formFields = extendsFields
-    .filter((each) => completeFieldsFilter(user as User, each))
-    .map((def) => {
-      const key = `${def.type} ${def.name}`
-
-      const label = i18n.language === 'zh-CN' ? def.label || def.name : def.name
-      const required = def.required || false
-      const rules = def.validateRules
-      const generateRules = () => {
-        const l = []
-        if (required) {
-          l.push({
-            required: true,
-            message: `${label} ${t('login.noEmpty')}`,
-          })
-        }
-        rules.forEach((rule) => {
-          switch (rule.type) {
-            case 'isNumber':
-              l.push({
-                type: 'number',
-                required,
-                message: rule.error || t('login.mustBeNumber'),
-              })
-              break
-            case 'regExp':
-              l.push({
-                required,
-                pattern: new RegExp(rule.content.replaceAll('/', '')),
-                message: rule.error,
-              })
-              break
-            default:
-              break
-          }
-        })
-        return l
-      }
-
-      const inputElement = () => {
-        if (
-          def.type === 'internal' &&
-          Object.keys(INTERNAL_INPUT_MAP).includes(def.name)
-        ) {
-          if (def.name === 'country') {
-            return INTERNAL_INPUT_MAP[def.name](contryList)
-          } else {
-            return INTERNAL_INPUT_MAP[def.name]({
-              required,
+  const formFieldsV2 = useMemo(() => {
+    return extendsFields
+      .filter((each) => completeFieldsFilter(user as User, each))
+      .map((def) => {
+        const key = `${def.type} ${def.name}`
+        const label =
+          i18n.language === 'zh-CN' ? def.label || def.name : def.name
+        const required = def.required || false
+        const rules = def.validateRules
+        const generateRules = () => {
+          const l = []
+          if (required) {
+            l.push({
+              required: true,
+              message: `${label} ${t('login.noEmpty')}`,
             })
           }
-        } else {
-          if (Object.keys(INPUT_MAP).includes(def.inputType)) {
-            if (def.inputType === 'select') {
-              const options =
-                fieldMetadata.find((field) => field.key === def.name)
-                  ?.options || []
-              return INPUT_MAP[def.inputType](options)
+          rules.forEach((rule) => {
+            switch (rule.type) {
+              case 'isNumber':
+                l.push({
+                  type: 'number',
+                  required,
+                  message: rule.error || t('login.mustBeNumber'),
+                })
+                break
+              case 'regExp':
+                l.push({
+                  required,
+                  pattern: new RegExp(rule.content.replaceAll('/', '')),
+                  message: rule.error,
+                })
+                break
+              default:
+                break
             }
-            return INPUT_MAP[def.inputType]()
-          }
-          return <Input type="text" className="authing-g2-input" />
+          })
+          return l
         }
-      }
-      if (def.type === 'internal' && ['phone', 'email'].includes(def.name)) {
-        return inputElement()
-      } else {
-        return (
-          <Form.Item
-            className="authing-g2-input-form"
-            rules={generateRules()}
-            key={key}
-            name={key}
-            label={label}
-            style={{ marginBottom: 8 }}
-          >
-            {inputElement()}
-          </Form.Item>
-        )
-      }
-    })
+
+        const inputElement = () => {
+          if (
+            def.type === 'internal' &&
+            Object.keys(INTERNAL_INPUT_MAP).includes(def.name)
+          ) {
+            if (def.name === 'country') {
+              return INTERNAL_INPUT_MAP[def.name](contryList)
+            } else {
+              return INTERNAL_INPUT_MAP[def.name]({
+                required,
+              })
+            }
+          } else {
+            if (Object.keys(INPUT_MAP).includes(def.inputType)) {
+              if (def.inputType === 'select') {
+                const options =
+                  fieldMetadata.find((field) => field.key === def.name)
+                    ?.options || []
+                return INPUT_MAP[def.inputType](options)
+              }
+              return INPUT_MAP[def.inputType]()
+            }
+            return <Input type="text" className="authing-g2-input" />
+          }
+        }
+        if (def.type === 'internal' && ['phone', 'email'].includes(def.name)) {
+          return inputElement()
+        } else {
+          return (
+            <Form.Item
+              className="authing-g2-input-form"
+              rules={generateRules()}
+              key={key}
+              name={key}
+              label={label}
+              style={{ marginBottom: 8 }}
+            >
+              {inputElement()}
+            </Form.Item>
+          )
+        }
+      })
+    // eslint-disable-next-line
+  }, [extendsFields, user])
+
+  // const formFields = extendsFields
+  //   .filter((each) => completeFieldsFilter(user as User, each))
+  //   .map((def) => {
+  //     const key = `${def.type} ${def.name}`
+  //     const label = i18n.language === 'zh-CN' ? def.label || def.name : def.name
+  //     const required = def.required || false
+  //     const rules = def.validateRules
+  //     const generateRules = () => {
+  //       const l = []
+  //       if (required) {
+  //         l.push({
+  //           required: true,
+  //           message: `${label} ${t('login.noEmpty')}`,
+  //         })
+  //       }
+  //       rules.forEach((rule) => {
+  //         switch (rule.type) {
+  //           case 'isNumber':
+  //             l.push({
+  //               type: 'number',
+  //               required,
+  //               message: rule.error || t('login.mustBeNumber'),
+  //             })
+  //             break
+  //           case 'regExp':
+  //             l.push({
+  //               required,
+  //               pattern: new RegExp(rule.content.replaceAll('/', '')),
+  //               message: rule.error,
+  //             })
+  //             break
+  //           default:
+  //             break
+  //         }
+  //       })
+  //       return l
+  //     }
+
+  //     const inputElement = () => {
+  //       if (
+  //         def.type === 'internal' &&
+  //         Object.keys(INTERNAL_INPUT_MAP).includes(def.name)
+  //       ) {
+  //         if (def.name === 'country') {
+  //           return INTERNAL_INPUT_MAP[def.name](contryList)
+  //         } else {
+  //           return INTERNAL_INPUT_MAP[def.name]({
+  //             required,
+  //           })
+  //         }
+  //       } else {
+  //         if (Object.keys(INPUT_MAP).includes(def.inputType)) {
+  //           if (def.inputType === 'select') {
+  //             const options =
+  //               fieldMetadata.find((field) => field.key === def.name)
+  //                 ?.options || []
+  //             return INPUT_MAP[def.inputType](options)
+  //           }
+  //           return INPUT_MAP[def.inputType]()
+  //         }
+  //         return <Input type="text" className="authing-g2-input" />
+  //       }
+  //     }
+  //     if (def.type === 'internal' && ['phone', 'email'].includes(def.name)) {
+  //       return inputElement()
+  //     } else {
+  //       return (
+  //         <Form.Item
+  //           className="authing-g2-input-form"
+  //           rules={generateRules()}
+  //           key={key}
+  //           name={key}
+  //           label={label}
+  //           style={{ marginBottom: 8 }}
+  //         >
+  //           {inputElement()}
+  //         </Form.Item>
+  //       )
+  //     }
+  //   })
 
   const [, onFinish] = useAsyncFn(async (values: any) => {
     submitButtonRef.current?.onSpin(true)
@@ -411,7 +499,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       onFinish={onFinish}
       onFinishFailed={() => submitButtonRef.current.onError()}
     >
-      {formFields}
+      {formFieldsV2}
 
       <Form.Item className="authing-g2-input-form">
         <SubmitButton

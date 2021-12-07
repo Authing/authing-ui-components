@@ -2,6 +2,7 @@ import { User } from 'authing-js-sdk'
 import { ExtendsField } from '../CompleteInfo/interface'
 
 export const completeFieldsFilter = (user: User, field: ExtendsField) => {
+  console.log('补全筛选', user, field)
   if (!user) {
     return true
   }

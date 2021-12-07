@@ -395,6 +395,7 @@ export const shoudGoToComplete = (
     allFieldsToComp &&
     allFieldsToComp.length > 0
   ) {
+    console.log('判断补全')
     // TODO 自动注册登录
     needGo = false
     const userFields = allFieldsToComp.filter(

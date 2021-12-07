@@ -87,7 +87,6 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
     const checkReady = useCallback(async (): Promise<boolean> => {
       if (isReady) return true
       do {
-        console.log('checkReady')
         await sleep(100)
       } while (isReady)
 
@@ -107,11 +106,13 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
       rules.push({
         validator: (_: any, value: any) => {
           if (value === '' || value === undefined) {
-            if (!methodContent.pattern.test(value))
-              return checkError(methodContent.checkErrorMessage)
-
             return checkSuccess()
           }
+
+          if (!methodContent.pattern.test(value))
+            return checkError(methodContent.formatErrorMessage)
+
+          return checkSuccess()
         },
       })
       checkRepeat &&
@@ -124,8 +125,8 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
       required,
       checkRepeat,
       methodContent.field,
-      methodContent.formatErrorMessage,
       methodContent.pattern,
+      methodContent.formatErrorMessage,
       publicConfig,
       validator,
     ])

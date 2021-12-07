@@ -34,6 +34,7 @@ export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
         <CompleteInfo
           extendsFields={config?.__publicConfig__?.extendsFields!}
           verifyCodeLength={config?.__publicConfig__?.verifyCodeLength}
+          user={initData?.user}
           onRegisterInfoCompleted={(user, udfs, authClient) => {
             onRegisterInfoCompleted?.(user, udfs, authClient)
             if (initData.context === 'register') {

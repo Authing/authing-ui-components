@@ -29,7 +29,10 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
       return (user: User) => {
         // TODO 用户信息补全 等待后端接口修改
         if (shoudGoToComplete(user, 'register', config.__publicConfig__)) {
-          __changeModule?.(GuardModuleType.COMPLETE_INFO, {})
+          __changeModule?.(GuardModuleType.COMPLETE_INFO, {
+            context: 'register',
+            user: user,
+          })
         } else {
           registerEvents.onRegister?.(user, authClient)
           __changeModule?.(GuardModuleType.LOGIN, {})

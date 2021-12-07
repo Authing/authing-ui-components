@@ -106,6 +106,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
         if (shoudGoToComplete(data, 'login', publicConfig)) {
           props.__changeModule?.(GuardModuleType.COMPLETE_INFO, {
             context: 'login',
+            user: data,
           })
         } else {
           props.onLogin?.(data, client!) // 登录成功
