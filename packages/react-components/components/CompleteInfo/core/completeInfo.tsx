@@ -54,10 +54,9 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
   const [form] = Form.useForm()
 
   const loadInitData = useCallback(async () => {
-    // const currUser = await authClient.getCurrentUser()
-    // if (currUser) {
-    //   setUser(currUser)
-    // }
+    await authClient.tokenProvider.clearUser()
+    await authClient.tokenProvider.setUser(user)
+
     const { data: resCountryList } = await get<any>(`/api/v2/country-list`)
     const toMap =
       i18n.language === 'zh-CN' ? resCountryList?.zh : resCountryList?.en
@@ -75,7 +74,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       {}
     )
     setFieldMetadata(currFieldMetadata)
-  }, [get, setContryList, setFieldMetadata])
+  }, [get, setContryList, setFieldMetadata, authClient, user])
 
   useEffect(() => {
     loadInitData()

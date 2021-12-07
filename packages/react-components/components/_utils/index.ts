@@ -342,7 +342,7 @@ export const shoudGoToComplete = (
   contextType: ComplateFiledsPlace,
   config: ApplicationConfig | undefined
 ) => {
-  console.log('需要补全吗？', user, contextType, config)
+  // console.log('需要补全吗？', user, contextType, config)
   // 先判断开关，再对比字段。
   let needGo = false
   // 判断新版本
@@ -395,7 +395,7 @@ export const shoudGoToComplete = (
     allFieldsToComp &&
     allFieldsToComp.length > 0
   ) {
-    console.log('判断补全')
+    // console.log('判断补全')
     // TODO 自动注册登录
     needGo = false
     const userFields = allFieldsToComp.filter(
