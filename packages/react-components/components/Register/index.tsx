@@ -9,6 +9,7 @@ import { RegisterWithEmail } from './core/WithEmail'
 import { RegisterWithPhone } from './core/WithPhone'
 import { GuardRegisterViewProps } from './interface'
 import { codeMap } from './codemap'
+import { shoudGoToComplete } from '../_utils'
 
 export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
   config,
@@ -27,7 +28,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
     if (code === 200) {
       return (user: User) => {
         // TODO 用户信息补全 等待后端接口修改
-        if (config.__publicConfig__!.extendsFieldsEnabled) {
+        if (shoudGoToComplete(user, 'register', config.__publicConfig__)) {
           __changeModule?.(GuardModuleType.COMPLETE_INFO, {})
         } else {
           registerEvents.onRegister?.(user, authClient)
@@ -53,6 +54,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
   const registerContextProps = useMemo(
     () => ({
       onRegister: (code: number, data: any = {}, message?: string) => {
+        console.log('注册 onRegister')
         const callback = __codePaser(code)
 
         if (code !== 200) {

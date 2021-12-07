@@ -49,12 +49,9 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
     // onLogin
     let account = values.account && values.account.trim()
     let password = values.password && values.password.trim()
-    let captchaCode = values.captchaCode && values.captchaCode.trim()
+    // let captchaCode = values.captchaCode && values.captchaCode.trim()
     try {
-      const user = await client.loginByLdap(account, password, {
-        autoRegister: props.autoRegister,
-        captchaCode,
-      })
+      const user = await client.loginByLdap(account, password)
       props.onLogin(200, user)
     } catch (error: any) {
       if (typeof error?.message === 'string') {

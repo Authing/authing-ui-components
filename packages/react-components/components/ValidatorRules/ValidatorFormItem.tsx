@@ -24,8 +24,14 @@ const checkSuccess = (message?: string) => Promise.resolve(message ?? '')
 
 const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
   (props, ref) => {
-    const { form, checkRepeat = false, method, name, ...formItemProps } = props
-
+    const {
+      form,
+      checkRepeat = false,
+      method,
+      name,
+      required,
+      ...formItemProps
+    } = props
     const publicConfig = usePublicConfig()
 
     const { get } = useGuardHttp()
@@ -92,25 +98,26 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
     }, [checkReady, checked, methodContent.checkErrorMessage])
 
     const rules = useMemo<Rule[]>(() => {
-      const rules = [
-        ...fieldRequiredRule(methodContent.field),
-        {
-          validator: (_: any, value: any) => {
-            if (!methodContent.pattern.test(value))
-              return checkError(methodContent.checkErrorMessage)
-
+      const rules = required ? [...fieldRequiredRule(methodContent.field)] : []
+      rules.push({
+        validator: (_: any, value: any) => {
+          if (value === '' || value === undefined) {
             return checkSuccess()
-          },
+          }
+          if (!methodContent.pattern.test(value))
+            return checkError(methodContent.checkErrorMessage)
+
+          return checkSuccess()
         },
-      ]
+      })
       checkRepeat &&
         Boolean(publicConfig) &&
         rules.push({
           validator,
         })
-
       return rules
     }, [
+      required,
       checkRepeat,
       methodContent.checkErrorMessage,
       methodContent.field,

@@ -2,10 +2,8 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ImagePro } from '../ImagePro'
 import { GuardModuleType } from '../Guard/module'
-
 import { CompleteInfo } from './core/completeInfo'
 import { GuardCompleteInfoViewProps } from './interface'
-
 import './styles.less'
 
 export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
@@ -13,6 +11,8 @@ export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
   onRegisterInfoCompleted,
   onRegisterInfoCompletedError,
   __changeModule,
+  initData,
+  onLogin,
 }) => {
   const { t } = useTranslation()
   return (
@@ -33,9 +33,14 @@ export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
       <div className="g2-view-tabs g2-completeInfo-content">
         <CompleteInfo
           extendsFields={config?.__publicConfig__?.extendsFields!}
+          verifyCodeLength={config?.__publicConfig__?.verifyCodeLength}
           onRegisterInfoCompleted={(user, udfs, authClient) => {
             onRegisterInfoCompleted?.(user, udfs, authClient)
-            __changeModule?.(GuardModuleType.LOGIN, {})
+            if (initData.context === 'register') {
+              __changeModule?.(GuardModuleType.LOGIN, {})
+            } else {
+              onLogin(user)
+            }
           }}
           onRegisterInfoCompletedError={onRegisterInfoCompletedError}
         />

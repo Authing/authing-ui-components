@@ -18,8 +18,8 @@ export const LdapLoginForm = forwardRef<FormInstance, PasswordLoginFormProps>(
     const { t } = useTranslation()
 
     const { state } = useGuardContext()
-    const { config, authClient, realHost, guardEvents } = state
-    const autoRegister = config.autoRegister
+    const { authClient, realHost, guardEvents } = state
+    // const autoRegister = config.autoRegister
 
     const [rawForm] = Form.useForm()
 
@@ -68,12 +68,9 @@ export const LdapLoginForm = forwardRef<FormInstance, PasswordLoginFormProps>(
       try {
         const identity = values.identity && values.identity.trim()
         const password = values.password && values.password.trim()
-        const captchaCode = values.captchaCode && values.captchaCode.trim()
+        // const captchaCode = values.captchaCode && values.captchaCode.trim()
 
-        const user = await authClient.loginByLdap(identity, password, {
-          autoRegister,
-          captchaCode,
-        })
+        const user = await authClient.loginByLdap(identity, password)
         onSuccess && onSuccess(user)
       } catch (error) {
         if (typeof error.message === 'string') {

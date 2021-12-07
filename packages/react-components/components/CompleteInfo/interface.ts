@@ -37,4 +37,16 @@ export interface GuardCompleteInfoProps extends IG2FCProps, CompleteInfoEvents {
 
 export interface GuardCompleteInfoViewProps extends GuardCompleteInfoProps {
   config: CompleteInfoConfig
+  initData: any
+  onLogin?: any
+}
+
+export type ExtendsFieldType = 'user' | 'internal'
+export interface ExtendsField {
+  type: ExtendsFieldType
+  name: string
+  label: string
+  inputType: string
+  required: boolean
+  validateRules: any[]
 }

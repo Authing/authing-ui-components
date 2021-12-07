@@ -22,6 +22,8 @@ import { ChangeLanguage } from '../ChangeLanguage'
 import { i18n } from '../_utils/locales'
 
 import './styles.less'
+import { usePublicConfig } from '../_utils/context'
+import { shoudGoToComplete } from '../_utils'
 
 const inputWays = [
   LoginMethods.Password,
@@ -82,7 +84,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   const [loginWay, setLoginWay] = useState(defaultMethod)
   const [canLoop, setCanLoop] = useState(false) // 允许轮询
   const client = useAuthClient()
-
+  const publicConfig = usePublicConfig()
   let publicKey = props.config?.publicKey!
   // let autoRegister = props.config?.autoRegister
   let ms = props.config?.loginMethods
@@ -101,7 +103,13 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     const action = codeMap[code]
     if (code === 200) {
       return (data: any) => {
-        props.onLogin?.(data, client!) // 登录成功
+        if (shoudGoToComplete(data, 'login', publicConfig)) {
+          props.__changeModule?.(GuardModuleType.COMPLETE_INFO, {
+            context: 'login',
+          })
+        } else {
+          props.onLogin?.(data, client!) // 登录成功
+        }
       }
     }
 
@@ -135,6 +143,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
 
   const onLogin = (code: any, data: any, message?: string) => {
     const callback = __codePaser?.(code)
+
     if (code !== 200) {
       props.onLoginError?.({
         code,

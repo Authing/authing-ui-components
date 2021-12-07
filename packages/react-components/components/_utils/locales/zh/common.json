@@ -71,6 +71,7 @@
   "companyLabel": "公司：",
   "birthdayLabel": "生日：",
   "registerDateLabel": "注册日期：",
+  "pleaseSelectDate": "请选择日期",
   "blogLabel": "个人博客：",
   "baseInfo": "基本信息",
   "bindEmail": "绑定邮箱",
@@ -94,6 +95,9 @@
   "bind": "绑定",
   "quesitons": "遇到问题？",
   "start": "开始",
+  "yes": "是",
+  "no": "否",
+  "pleaseInputOrSelectCountry": "请输入或选择国家",
   "problem": {
     "title": "问题反馈",
     "noProblem": "没有问题了，",

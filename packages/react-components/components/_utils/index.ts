@@ -3,7 +3,8 @@ import { Rule } from 'antd/lib/form'
 import qs from 'qs'
 import { useGuardContext } from '../context/global/context'
 import { i18n } from './locales'
-
+import { User } from 'authing-js-sdk'
+import { ApplicationConfig, ComplateFiledsPlace } from '../AuthingGuard/api'
 export * from './popupCenter'
 export * from './clipboard'
 
@@ -335,3 +336,92 @@ export const getPasswordValidate = (
 
 export const sleep = (delay: number) =>
   new Promise((resolve) => setTimeout(resolve, delay))
+
+export const shoudGoToComplete = (
+  user: User,
+  contextType: ComplateFiledsPlace,
+  config: ApplicationConfig | undefined
+) => {
+  console.log('需要补全吗？', user, contextType, config)
+  // 先判断开关，再对比字段。
+  let needGo = false
+  // 判断新版本
+  if (
+    config?.complateFiledsPlace &&
+    config.complateFiledsPlace.includes(contextType) &&
+    config?.extendsFields &&
+    config?.extendsFields?.length > 0
+  ) {
+    needGo = true
+  }
+  // 兼容老版本
+  if (
+    !config?.complateFiledsPlace &&
+    config?.extendsFieldsEnabled &&
+    config?.extendsFields &&
+    config?.extendsFields?.length > 0
+  ) {
+    needGo = true
+  }
+  // 对比字段
+  const allFieldsToComp = config?.extendsFields
+  if (
+    needGo &&
+    contextType === 'register' &&
+    allFieldsToComp &&
+    allFieldsToComp.length > 0
+  ) {
+    if (
+      user.email &&
+      allFieldsToComp?.length === 1 &&
+      allFieldsToComp[0]?.type === 'internal' &&
+      allFieldsToComp[0]?.name === 'email'
+    ) {
+      return false
+    }
+    if (
+      user.phone &&
+      allFieldsToComp?.length === 1 &&
+      allFieldsToComp[0]?.type === 'internal' &&
+      allFieldsToComp[0]?.name === 'phone'
+    ) {
+      return false
+    }
+    return true
+  }
+  if (
+    needGo &&
+    contextType === 'login' &&
+    allFieldsToComp &&
+    allFieldsToComp.length > 0
+  ) {
+    // TODO 自动注册登录
+    needGo = false
+    const userFields = allFieldsToComp.filter(
+      (item) => item.type === 'internal'
+    )
+    const udvs = allFieldsToComp.filter((item) => item.type !== 'internal')
+    for (const f of userFields) {
+      const currKey = f.name
+      // gender 特例
+      if (currKey === 'gender' && user['gender'] === 'U') {
+        return true
+      }
+      //@ts-ignore
+      if (!user[currKey] || user[currKey] === '') {
+        return true
+      }
+    }
+    if (!needGo) {
+      const { customData } = user
+      if (customData) {
+        for (const f of udvs) {
+          if (!customData[f.name] || customData[f.name] === '') {
+            return true
+          }
+        }
+      }
+    }
+  }
+  return needGo
+}

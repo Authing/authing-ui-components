@@ -16,6 +16,7 @@ export interface SendPhoneCodeProps extends InputProps {
   data: string
   form?: any
   onSendCodeBefore?: any // 点击的时候先做这个
+  fieldName?: string
 }
 
 export const SendCode: FC<SendPhoneCodeProps> = ({
@@ -26,6 +27,7 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
   form,
   onSendCodeBefore,
   maxLength,
+  fieldName,
   ...inputProps
 }) => {
   const { t } = useTranslation()
@@ -78,7 +80,9 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
             beforeSend={() => {
               return onSendCodeBefore()
                 .then(async (b: any) => {
-                  let phoneData = form ? form.getFieldValue(method) : data
+                  let phoneData = form
+                    ? form.getFieldValue(fieldName || method)
+                    : data
                   return method === 'phone'
                     ? await sendPhone(phoneData)
                     : await sendEmail(phoneData)

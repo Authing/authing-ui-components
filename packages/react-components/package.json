@@ -11,7 +11,7 @@
   ],
   "dependencies": {
     "antd": "^4.8.0",
-    "authing-js-sdk": "4.22.26-alpha.13",
+    "authing-js-sdk": "4.22.26-alpha.15",
     "face-api.js": "^0.22.2",
     "global": "^4.4.0",
     "qs": "^6.9.4",

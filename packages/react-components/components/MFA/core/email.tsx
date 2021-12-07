@@ -100,7 +100,7 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
       await authClient.sendEmail(email!, EmailScene.MfaVerify)
       setSent(true)
       return true
-    } catch (e) {
+    } catch (e: any) {
       const errorMessage = JSON.parse(e.message)
       message.error(errorMessage.message)
       return false

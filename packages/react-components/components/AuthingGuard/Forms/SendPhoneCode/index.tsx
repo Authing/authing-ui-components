@@ -41,7 +41,7 @@ export const SendPhoneCode: FC<SendPhoneCodeProps> = ({
           onSend?.()
           return true
         } catch (error) {
-          onError?.(error)
+          onError?.(error as any)
           return false
         }
       }}

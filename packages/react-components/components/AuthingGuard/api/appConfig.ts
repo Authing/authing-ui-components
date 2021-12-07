@@ -52,6 +52,8 @@ export interface InternalExtendsField {
   name: string
   label: string
   inputType: string
+  required: boolean
+  validateRules: any[]
 }
 
 export interface UserExtendsField {
@@ -60,6 +62,8 @@ export interface UserExtendsField {
   name: string
   label: string
   inputType: string
+  required: boolean
+  validateRules: any[]
 }
 
 export type ExtendsField = InternalExtendsField | UserExtendsField
@@ -80,6 +84,7 @@ export type PasswordLoginMethods =
   | 'email-password'
   | 'phone-password'
 
+export type ComplateFiledsPlace = 'register' | 'login'
 export interface ApplicationConfig {
   id: string
   cdnBase: string
@@ -109,6 +114,7 @@ export interface ApplicationConfig {
   }
   socialConnections: SocialConnectionItem[]
 
+  complateFiledsPlace: ComplateFiledsPlace[]
   extendsFieldsEnabled: boolean
   extendsFields: ExtendsField[]
 
