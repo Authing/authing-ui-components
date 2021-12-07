@@ -1,5 +1,5 @@
 import React from 'react'
-import { ShieldSpinLoading } from './loading'
+import { ReactComponent as ShieldSpinLoading } from './loading.svg'
 interface IG2SpinProps {
   size?: number
 }

@@ -45,12 +45,14 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
         return {
           field: t('common.emailLabel'),
           checkErrorMessage: t('common.checkEmail'),
+          formatErrorMessage: t('common.emailFormatError'),
           pattern: VALIDATE_PATTERN.email,
         }
       else
         return {
           field: t('common.phone'),
-          checkErrorMessage: t('common.phoneFormateError'),
+          checkErrorMessage: t('common.checkPhone'),
+          formatErrorMessage: t('common.phoneFormateError'),
           pattern: VALIDATE_PATTERN.phone,
         }
     }, [method, t])
@@ -85,13 +87,16 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
     const checkReady = useCallback(async (): Promise<boolean> => {
       if (isReady) return true
       do {
-        await sleep(200)
+        console.log('checkReady')
+        await sleep(100)
       } while (isReady)
 
       return true
     }, [isReady])
 
     const validator = useCallback(async () => {
+      // console.log('checked', checked)
+      // console.log('checkReady', await checkReady())
       if ((await checkReady()) && checked)
         return checkError(methodContent.checkErrorMessage)
       else return checkSuccess()
@@ -102,12 +107,11 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
       rules.push({
         validator: (_: any, value: any) => {
           if (value === '' || value === undefined) {
+            if (!methodContent.pattern.test(value))
+              return checkError(methodContent.checkErrorMessage)
+
             return checkSuccess()
           }
-          if (!methodContent.pattern.test(value))
-            return checkError(methodContent.checkErrorMessage)
-
-          return checkSuccess()
         },
       })
       checkRepeat &&
@@ -119,8 +123,8 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
     }, [
       required,
       checkRepeat,
-      methodContent.checkErrorMessage,
       methodContent.field,
+      methodContent.formatErrorMessage,
       methodContent.pattern,
       publicConfig,
       validator,
