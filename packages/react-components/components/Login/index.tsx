@@ -294,6 +294,11 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                 >
                   {t('login.forgetPwd')}
                 </span>
+                {errorNumber >= 2 && (
+                  <span style={{ margin: '0 4px' }} className="gray">
+                    丨
+                  </span>
+                )}
               </div>
             )}
 
@@ -304,9 +309,6 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                   props.__changeModule?.(GuardModuleType.ANY_QUESTIONS, {})
                 }
               >
-                <span style={{ margin: '0 4px' }} className="gray">
-                  丨
-                </span>
                 <IconFont
                   type={'authing-a-question-line1'}
                   // style={{ fontSize: 20, marginRight: 8 }}
