@@ -5,7 +5,19 @@ import reportWebVitals from './reportWebVitals'
 import { message } from 'antd'
 import { Guard, GuardMode } from './components'
 import { AuthingGuard } from './components/AuthingGuard'
+
 const App = () => {
+  // 移动端点击事件延时问题
+  var FastClick = require('fastclick')
+  if ('addEventListener' in document) {
+    document.addEventListener(
+      'DOMContentLoaded',
+      function () {
+        FastClick.attach(document.body)
+      },
+      false
+    )
+  }
   return (
     <div
       style={{
@@ -82,6 +94,7 @@ const App = () => {
       /> */}
       {/* 61af1af79e6b368e1264ab99 */}
       <Guard
+        visible={true}
         // appId="61a85ff3350caf330f1667ba"
         // appId="61a5c11a4eebd8b8c405fe29"
         appId="6170eae513f365acc8596985"
@@ -137,7 +150,7 @@ const App = () => {
           // publicKey?: string
           // lang: 'en-US',
           // lang: 'zh-CN',
-          // mode: GuardMode.Modal,
+          mode: GuardMode.Modal,
           // logo: '',
           // clickCloseable: false, // clickCloseable	Modal 模式时是否隐藏登录框右上角的关闭按钮
           // escCloseable: true, //
