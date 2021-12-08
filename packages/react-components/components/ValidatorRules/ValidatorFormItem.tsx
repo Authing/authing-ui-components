@@ -58,9 +58,7 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
     }, [method, t])
 
     const checkField = useDebounce(async (value: string) => {
-      console.log('请求接口,isReady', isReady)
       if (!(value && methodContent.pattern.test(value))) {
-        console.log('分支进去')
         setIsReady(true)
         return
       }
@@ -70,15 +68,12 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
         type: method,
       })
       setChecked(Boolean(data))
-      console.log('请求完毕,checked', checked)
       form?.validateFields([name ?? method])
       setIsReady(true)
     }, 500)
 
     useImperativeHandle(ref, () => ({
       check: (values: any) => {
-        // @ts-ignore
-        console.log('设置 ready false')
         setChecked(false)
         // @ts-ignore
         if (values[name ?? method]) {
@@ -94,30 +89,23 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
       do {
         await sleep(100)
       } while (isReady)
+
       return true
     }, [isReady])
 
     const validator = useCallback(async () => {
-      const ready = await checkReady()
-      console.log('isReady! checked:', checked)
-      // console.log('go validator', checked)
-      if (ready && checked) {
-        return checkError(methodContent.checkErrorMessage)
-      } else return checkSuccess()
-    }, [checkReady, methodContent.checkErrorMessage, checked])
+      if ((await checkReady()) && checked)
+        return checkError(methodContent.formatErrorMessage)
+      else return checkSuccess()
+    }, [checkReady, checked, methodContent.formatErrorMessage])
 
     const rules = useMemo<Rule[]>(() => {
       const rules = required ? [...fieldRequiredRule(methodContent.field)] : []
       rules.push({
         validator: (_: any, value: any) => {
-          if (value === '' || value === undefined) {
+          if (Boolean(value) && !methodContent.pattern.test(value))
             return checkSuccess()
-          }
-
-          if (!methodContent.pattern.test(value))
-            return checkError(methodContent.formatErrorMessage)
-
-          return checkSuccess()
+          else return checkError(methodContent.formatErrorMessage)
         },
       })
       checkRepeat &&
