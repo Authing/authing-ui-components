@@ -30,10 +30,12 @@ export const LoginWithWechatMiniQrcode = (
     appQrcodeClient.startScanning('authingGuardMiniQrcode', {
       autoExchangeUserInfo: true,
       ...props.qrCodeScanOptions,
+
       onCodeLoaded() {
         setLoading(false)
       },
       onStart(timer) {
+        setLoading(true)
         // console.log('开始扫码')
         timerRef.current = timer
       },
@@ -46,6 +48,9 @@ export const LoginWithWechatMiniQrcode = (
         // config.qrCodeScanOptions?.onError?.(message)
         // onFail && onFail(`${message}`)
         message.error(ms)
+      },
+      onCodeLoadFailed: () => {
+        setLoading(false)
       },
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps

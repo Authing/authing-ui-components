@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 
 import reportWebVitals from './reportWebVitals'
 import { message } from 'antd'
-import { Guard } from './components'
+import { Guard, GuardMode } from './components'
 import { AuthingGuard } from './components/AuthingGuard'
 const App = () => {
   return (
@@ -80,6 +80,7 @@ const App = () => {
           // socialConnectionsBtnShape: 'rectangle',
         }}
       /> */}
+      {/* 61af1af79e6b368e1264ab99 */}
       <Guard
         // appId="61a85ff3350caf330f1667ba"
         // appId="61a5c11a4eebd8b8c405fe29"
