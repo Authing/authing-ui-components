@@ -35,6 +35,12 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
         // config.qrCodeScanOptions?.onError?.(message)
         // onFail && onFail(`${message}`)
       },
+      onCodeLoadFailed: () => {
+        setLoading(false)
+      },
+      onRetry: () => {
+        setLoading(true)
+      },
     })
     return () => clearInterval(timerRef.current)
     // eslint-disable-next-line react-hooks/exhaustive-deps

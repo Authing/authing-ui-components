@@ -52,6 +52,9 @@ export const LoginWithWechatMiniQrcode = (
       onCodeLoadFailed: () => {
         setLoading(false)
       },
+      onRetry: () => {
+        setLoading(true)
+      },
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appQrcodeClient, props.canLoop, props.qrCodeScanOptions])
