@@ -113,6 +113,11 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         }}
         onFinishFailed={() => submitButtonRef.current.onError()}
         onValuesChange={(values) => {
+          if (values['password']) {
+            // password changed verify new password
+            form.validateFields(['new-password'])
+          }
+
           ref.current?.check(values)
         }}
       >
@@ -124,6 +129,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           validateFirst={true}
           form={form}
           checkRepeat={true}
+          required={true}
         >
           <Input
             className="authing-g2-input"
@@ -146,7 +152,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
             prefix={<LockOutlined style={{ color: '#878A95' }} />}
           />
         </CustomFormItem.Password>
-        <Form.Item
+        <CustomFormItem.Password
           key="new-password"
           name="new-password"
           rules={[
@@ -169,7 +175,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
             placeholder={t('common.passwordAgain')}
             prefix={<LockOutlined style={{ color: '#878A95' }} />}
           />
-        </Form.Item>
+        </CustomFormItem.Password>
         {Boolean(agreements?.length) && (
           <Agreements
             onChange={setAcceptedAgreements}
