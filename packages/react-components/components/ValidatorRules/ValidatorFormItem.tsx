@@ -103,9 +103,9 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
       const rules = required ? [...fieldRequiredRule(methodContent.field)] : []
       rules.push({
         validator: (_: any, value: any) => {
-          if (Boolean(value) && !methodContent.pattern.test(value))
-            return checkSuccess()
-          else return checkError(methodContent.formatErrorMessage)
+          if (!methodContent.pattern.test(value))
+            return checkError(methodContent.formatErrorMessage)
+          return checkSuccess()
         },
       })
       checkRepeat &&
@@ -114,15 +114,7 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
           validator,
         })
       return rules
-    }, [
-      required,
-      checkRepeat,
-      methodContent.field,
-      methodContent.pattern,
-      methodContent.formatErrorMessage,
-      publicConfig,
-      validator,
-    ])
+    }, [required, methodContent, checkRepeat, publicConfig, validator])
 
     return (
       <Form.Item

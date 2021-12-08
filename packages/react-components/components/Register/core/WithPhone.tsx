@@ -84,51 +84,6 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
     { loading: false }
   )
 
-  const formItems: {
-    component: React.ReactNode
-    name: string
-    rules?: Rule[]
-    FormItemFC?: React.ForwardRefExoticComponent<
-      ValidatorFormItemProps & React.RefAttributes<ICheckProps>
-    >
-  }[] = [
-    {
-      component: (
-        <InputNumber
-          className="authing-g2-input"
-          onChange={(e) => {
-            setPhone(e.target.value)
-          }}
-          size="large"
-          placeholder={t('login.inputPhone')}
-          prefix={<UserOutlined style={{ color: '#878A95' }} />}
-          maxLength={11}
-        />
-      ),
-      name: 'phone',
-      FormItemFC: CustomFormItem.Phone,
-    },
-    {
-      component: (
-        <SendCode
-          className="authing-g2-input"
-          autoComplete="one-time-code"
-          size="large"
-          placeholder={t('common.inputFourVerifyCode', {
-            length: verifyCodeLength,
-          })}
-          maxLength={verifyCodeLength}
-          prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
-          method="phone"
-          onSendCodeBefore={() => form.validateFields(['phone'])}
-          data={phone}
-        />
-      ),
-      name: 'code',
-      rules: fieldRequiredRule(t('common.captchaCode')),
-    },
-  ]
-
   return (
     <div className="authing-g2-register-email">
       <Form
@@ -141,31 +96,48 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           ref.current?.check(values)
         }}
       >
-        {formItems.map((item) =>
-          item.FormItemFC ? (
-            <item.FormItemFC
-              ref={ref}
-              key={item.name}
-              name={item.name}
-              className="authing-g2-input-form"
-              validateFirst={true}
-              form={form}
-              checkRepeat={true}
-            >
-              {item.component}
-            </item.FormItemFC>
-          ) : (
-            <Form.Item
-              key={item.name}
-              name={item.name}
-              rules={item.rules}
-              className="authing-g2-input-form"
-              validateFirst={true}
-            >
-              {item.component}
-            </Form.Item>
-          )
-        )}
+        <CustomFormItem.Phone
+          ref={ref}
+          key="phone"
+          name="phone"
+          className="authing-g2-input-form"
+          validateFirst={true}
+          form={form}
+          checkRepeat={true}
+          required={true}
+        >
+          <InputNumber
+            className="authing-g2-input"
+            onChange={(e) => {
+              setPhone(e.target.value)
+            }}
+            size="large"
+            placeholder={t('login.inputPhone')}
+            prefix={<UserOutlined style={{ color: '#878A95' }} />}
+            maxLength={11}
+          />
+        </CustomFormItem.Phone>
+        <Form.Item
+          key="code"
+          name="code"
+          rules={fieldRequiredRule(t('common.captchaCode'))}
+          className="authing-g2-input-form"
+          validateFirst={true}
+        >
+          <SendCode
+            className="authing-g2-input"
+            autoComplete="one-time-code"
+            size="large"
+            placeholder={t('common.inputFourVerifyCode', {
+              length: verifyCodeLength,
+            })}
+            maxLength={verifyCodeLength}
+            prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
+            method="phone"
+            onSendCodeBefore={() => form.validateFields(['phone'])}
+            data={phone}
+          />
+        </Form.Item>
         {Boolean(agreements?.length) && (
           <Agreements
             onChange={setAcceptedAgreements}

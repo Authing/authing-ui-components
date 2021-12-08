@@ -58,6 +58,7 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
           form={form}
           ref={ref}
           checkRepeat={true}
+          required={true}
         >
           <Input
             className="authing-g2-input"

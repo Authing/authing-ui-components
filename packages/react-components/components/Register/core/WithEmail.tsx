@@ -129,6 +129,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           validateFirst={true}
           form={form}
           checkRepeat={true}
+          required={true}
         >
           <Input
             className="authing-g2-input"

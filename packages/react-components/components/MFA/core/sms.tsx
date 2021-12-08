@@ -59,6 +59,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
           form={form}
           ref={ref}
           checkRepeat={true}
+          required={true}
         >
           <InputNumber
             className="authing-g2-input"
