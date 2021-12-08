@@ -22,7 +22,7 @@ const App = () => {
     <div
       style={{
         display: 'flex',
-        width: 'calc(100vw - 16px)',
+        width: '100vw',
         justifyContent: 'center',
         WebkitUserSelect: 'none',
       }}
@@ -94,7 +94,7 @@ const App = () => {
       /> */}
       {/* 61af1af79e6b368e1264ab99 */}
       <Guard
-        visible={true}
+        // visible={true}
         // appId="61a85ff3350caf330f1667ba"
         // appId="61a5c11a4eebd8b8c405fe29"
         appId="6170eae513f365acc8596985"
@@ -150,7 +150,7 @@ const App = () => {
           // publicKey?: string
           // lang: 'en-US',
           // lang: 'zh-CN',
-          mode: GuardMode.Modal,
+          // mode: GuardMode.Modal,
           // logo: '',
           // clickCloseable: false, // clickCloseable	Modal 模式时是否隐藏登录框右上角的关闭按钮
           // escCloseable: true, //
