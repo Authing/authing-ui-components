@@ -3,8 +3,19 @@
   display: flex;
   right: 16px;
 
+  &:hover {
+    .imgae-mask {
+      border-width: 0;
+      right: 50px;
+      top: 50px;
+    }
+    .switch-text {
+      display: flex;
+    }
+  }
+
   .switch-text {
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     background: rgba(84, 89, 104, 0.1);
@@ -15,15 +26,7 @@
     border-radius: 4px;
     color: #545968;
   }
-  .switch-img {
-    &:hover {
-      .imgae-mask {
-        border-width: 0;
-        right: 50px;
-        top: 50px;
-      }
-    }
-  }
+
   .imgae-mask {
     width: 0;
     height: 0;
