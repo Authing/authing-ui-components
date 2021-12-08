@@ -48,7 +48,14 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
           formatErrorMessage: t('common.emailFormatError'),
           pattern: VALIDATE_PATTERN.email,
         }
-      else
+      else if (method === 'username') {
+        return {
+          field: t('common.username'),
+          checkErrorMessage: t('common.checkUserName'),
+          formatErrorMessage: t('common.usernameFormatError'),
+          pattern: VALIDATE_PATTERN.username,
+        }
+      } else
         return {
           field: t('common.phone'),
           checkErrorMessage: t('common.checkPhone'),
@@ -64,6 +71,7 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
         setIsReady(true)
         return
       }
+
       let { data } = await get<boolean>(`/api/v2/users/find`, {
         userPoolId: publicConfig?.userPoolId,
         key: value,
@@ -153,4 +161,8 @@ export const EmailFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
 
 export const PhoneFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
   (props, ref) => <ValidatorFormItem ref={ref} {...props} method="phone" />
+)
+
+export const UserNameFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
+  (props, ref) => <ValidatorFormItem ref={ref} {...props} method="username" />
 )

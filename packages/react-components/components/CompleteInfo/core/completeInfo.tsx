@@ -53,6 +53,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
   const [form] = Form.useForm()
   const refPhone = useRef<ICheckProps>(null)
   const refEmail = useRef<ICheckProps>(null)
+  const refUserName = useRef<ICheckProps>(null)
 
   const loadInitData = useCallback(async () => {
     await authClient.tokenProvider.clearUser()
@@ -153,6 +154,27 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         showSearch
         filterOption={filterOption}
       ></Select>
+    ),
+    username: (props: any) => (
+      <CustomFormItem.UserName
+        validateFirst={true}
+        className="authing-g2-input-form"
+        name="internal username"
+        key="internal-usernameadsf"
+        label={i18n.t('common.username')}
+        required={props.required}
+        checkRepeat={true}
+        ref={refUserName}
+      >
+        <Input
+          className="authing-g2-input"
+          autoComplete="username"
+          key="internal-username:asdf"
+          size="large"
+          maxLength={11}
+          placeholder={t('login.inputUsername')}
+        />
+      </CustomFormItem.UserName>
     ),
     phone: (props: { required?: boolean }) => (
       <>
@@ -322,7 +344,10 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             return <Input type="text" className="authing-g2-input" />
           }
         }
-        if (def.type === 'internal' && ['phone', 'email'].includes(def.name)) {
+        if (
+          def.type === 'internal' &&
+          ['phone', 'email', 'username'].includes(def.name)
+        ) {
           return inputElement()
         } else {
           return (
@@ -424,6 +449,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         console.log('值改变')
         refPhone?.current?.check(values)
         refEmail?.current?.check(values)
+        refUserName?.current?.check(values)
       }}
     >
       {formFieldsV2}

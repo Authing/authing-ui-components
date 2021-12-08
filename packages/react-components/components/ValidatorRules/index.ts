@@ -1,7 +1,11 @@
 import { FormInstance, FormItemProps } from 'antd/lib/form'
 import FormItem from 'antd/lib/form/FormItem'
 import { PasswordFormItem } from './PasswordFormItem'
-import { EmailFormItem, PhoneFormItem } from './ValidatorFormItem'
+import {
+  EmailFormItem,
+  PhoneFormItem,
+  UserNameFormItem,
+} from './ValidatorFormItem'
 
 export interface ValidatorFormItemProps extends FormItemProps {
   form?: FormInstance
@@ -11,7 +15,7 @@ export interface ValidatorFormItemProps extends FormItemProps {
 export interface ValidatorFormItemMetaProps extends ValidatorFormItemProps {
   form?: FormInstance
   checkRepeat?: boolean
-  method: 'email' | 'phone'
+  method: 'email' | 'phone' | 'username'
 }
 
 export interface PasswordFormItemProps extends FormItemProps {}
@@ -26,6 +30,7 @@ interface FormItemInterface extends InternalFormItemType {
   Password: typeof PasswordFormItem
   Email: typeof EmailFormItem
   Phone: typeof PhoneFormItem
+  UserName: typeof UserNameFormItem
 }
 
 const CustomFormItem = FormItem as FormItemInterface
@@ -33,5 +38,6 @@ const CustomFormItem = FormItem as FormItemInterface
 CustomFormItem.Password = PasswordFormItem
 CustomFormItem.Email = EmailFormItem
 CustomFormItem.Phone = PhoneFormItem
+CustomFormItem.UserName = UserNameFormItem
 
 export default CustomFormItem
