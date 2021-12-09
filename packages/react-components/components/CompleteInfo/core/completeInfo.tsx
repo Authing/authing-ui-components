@@ -15,7 +15,7 @@ import { User } from 'authing-js-sdk'
 import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
 import { SendCode } from '../../SendCode'
 import { fieldRequiredRule } from '../../_utils'
-
+import './styles.less'
 export interface CompleteInfoProps {
   user: User
   verifyCodeLength: number | undefined
@@ -451,6 +451,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         refEmail?.current?.check(values)
         refUserName?.current?.check(values)
       }}
+      className="authing-g2-completeInfo-form"
     >
       {formFieldsV2}
 
