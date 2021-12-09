@@ -31,11 +31,11 @@ export const ApplicationMfaTypeLabel: () => Record<
 
 export type QrcodeTabsSettings = Record<
   LoginMethods,
-  {
+  Array<{
     id: string
     title: string
     isDefault?: boolean
-  }
+  }>
 >
 
 export interface OidcClientMetadata {
@@ -102,6 +102,7 @@ export interface ApplicationConfig {
   loginTabs: {
     list: string[]
     default: string
+    defaultV2?: string
     title: { [x: string]: string }
   }
   socialConnections: SocialConnectionItem[]

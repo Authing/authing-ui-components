@@ -14,6 +14,7 @@ export const QrCodeLoginForm: FC<QrLoginFormProps> = ({
   onFail,
   onSuccess,
   type,
+  idpId,
 }) => {
   const {
     state: { authClient, config },
@@ -31,6 +32,7 @@ export const QrCodeLoginForm: FC<QrLoginFormProps> = ({
 
   useEffect(() => {
     client.startScanning('authingGuardQrcode', {
+      extIdpConnId: idpId,
       autoExchangeUserInfo: true,
       ...config.qrCodeScanOptions,
       onStart(timer) {
@@ -46,7 +48,7 @@ export const QrCodeLoginForm: FC<QrLoginFormProps> = ({
       },
     })
     return () => clearInterval(timerRef.current)
-  }, [client, config.qrCodeScanOptions, onFail, onSuccess])
+  }, [client, config.qrCodeScanOptions, idpId, onFail, onSuccess])
 
   return (
     <div className="authing-guard-qr-form">
