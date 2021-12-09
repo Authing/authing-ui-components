@@ -192,7 +192,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
         <div className="g2-qrcode-switch">
           {/* <div className="switch-text">{switchText}</div> */}
           <Popover
-            placement="left"
+            placement="leftTop"
             content={switchText}
             overlayClassName="switch-text"
             getPopupContainer={(node: any) => {
@@ -307,9 +307,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                   {t('login.forgetPwd')}
                 </span>
                 {errorNumber >= 2 && (
-                  <span style={{ margin: '0 4px' }} className="gray">
-                    丨
-                  </span>
+                  <span style={{ margin: '0 4px', color: '#EAEBEE' }}>丨</span>
                 )}
               </div>
             )}
@@ -323,6 +321,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
               >
                 <IconFont
                   type={'authing-a-question-line1'}
+                  style={{ fontSize: 16, color: '#878A95' }}
                   // style={{ fontSize: 20, marginRight: 8 }}
                 />
               </div>
