@@ -13,6 +13,7 @@ import { LoginMethods } from '../../..'
 import { FormItemAccount } from './FormItemAccount'
 import { InputAccount } from './InputAccount'
 import { GraphicVerifyCode } from './GraphicVerifyCode'
+import { IconFont } from '../../../IconFont'
 
 interface LoginWithPasswordProps {
   // configs
@@ -123,6 +124,15 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
             size="large"
             placeholder={t('login.inputLoginPwd')}
             prefix={<LockOutlined style={{ color: '#878A95' }} />}
+            iconRender={(visible) => (
+              <span>
+                {visible ? (
+                  <IconFont type="authing-a-eye-line1" />
+                ) : (
+                  <IconFont type="authing-a-eye-close-line1" />
+                )}
+              </span>
+            )}
           />
         </Form.Item>
         {/* 图形验证码 */}
