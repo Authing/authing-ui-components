@@ -1,0 +1,33 @@
+{
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "files.associations": {
+    "*.mw.json": "jsonc",
+    "*.icon": "xml"
+  },
+  "cssModules.camelCase": true,
+  "editor.snippetSuggestions": "top",
+  "emmet.showSuggestionsAsSnippets": true,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "prettier.printWidth": 120,
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "i18n-ally.localesPaths": "src/locales",
+  "i18n-ally.displayLanguage": "zh",
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.annotations": true,
+  "i18n-ally.extract.targetPickingStrategy": "file-previous",
+  "i18n-ally.extract.keygenStrategy": "random",
+  "i18n-ally.namespace": true,
+  "i18n-ally.sourceLanguage": "zh"
+}
