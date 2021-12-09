@@ -48,7 +48,14 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
           formatErrorMessage: t('common.emailFormatError'),
           pattern: VALIDATE_PATTERN.email,
         }
-      else
+      else if (method === 'username') {
+        return {
+          field: t('common.username'),
+          checkErrorMessage: t('common.checkUserName'),
+          formatErrorMessage: t('common.usernameFormatError'),
+          pattern: VALIDATE_PATTERN.username,
+        }
+      } else
         return {
           field: t('common.phone'),
           checkErrorMessage: t('common.checkPhone'),
@@ -62,13 +69,14 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
         setIsReady(true)
         return
       }
+
       let { data } = await get<boolean>(`/api/v2/users/find`, {
         userPoolId: publicConfig?.userPoolId,
         key: value,
         type: method,
       })
       setChecked(Boolean(data))
-      form?.validateFields([method])
+      form?.validateFields([name ?? method])
       setIsReady(true)
     }, 500)
 
@@ -94,24 +102,17 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
     }, [isReady])
 
     const validator = useCallback(async () => {
-      // console.log('checked', checked)
-      // console.log('checkReady', await checkReady())
       if ((await checkReady()) && checked)
-        return checkError(methodContent.checkErrorMessage)
+        return checkError(methodContent.formatErrorMessage)
       else return checkSuccess()
-    }, [checkReady, checked, methodContent.checkErrorMessage])
+    }, [checkReady, checked, methodContent.formatErrorMessage])
 
     const rules = useMemo<Rule[]>(() => {
       const rules = required ? [...fieldRequiredRule(methodContent.field)] : []
       rules.push({
         validator: (_: any, value: any) => {
-          if (value === '' || value === undefined) {
-            return checkSuccess()
-          }
-
           if (!methodContent.pattern.test(value))
             return checkError(methodContent.formatErrorMessage)
-
           return checkSuccess()
         },
       })
@@ -121,15 +122,7 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
           validator,
         })
       return rules
-    }, [
-      required,
-      checkRepeat,
-      methodContent.field,
-      methodContent.pattern,
-      methodContent.formatErrorMessage,
-      publicConfig,
-      validator,
-    ])
+    }, [required, methodContent, checkRepeat, publicConfig, validator])
 
     return (
       <Form.Item
@@ -148,4 +141,8 @@ export const EmailFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
 
 export const PhoneFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
   (props, ref) => <ValidatorFormItem ref={ref} {...props} method="phone" />
+)
+
+export const UserNameFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
+  (props, ref) => <ValidatorFormItem ref={ref} {...props} method="username" />
 )

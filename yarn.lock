@@ -5004,10 +5004,10 @@ authing-js-sdk@4.22.24-alpha:
     jsencrypt "^3.1.0"
     jwt-decode "^2.2.0"
 
-authing-js-sdk@4.22.26-alpha.13:
-  version "4.22.26-alpha.13"
-  resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.22.26-alpha.13.tgz#2e477839a63af0e70374f8e09c4ea5bbf49da1ed"
-  integrity sha512-4hIqyXY7WOVYk9ca7OfSRyo4sY/AY5np3B/W1cOyYRnuVyLKfDHtI1cRmRig1j8jdZhS0xLNlgQqobDj5ILcnw==
+authing-js-sdk@4.22.26-alpha.15:
+  version "4.22.26-alpha.15"
+  resolved "https://registry.npmmirror.com/authing-js-sdk/download/authing-js-sdk-4.22.26-alpha.15.tgz#ea6f497ead5ad228610ea3e8b0e0ad1d4daade7d"
+  integrity sha512-bhYutJN/MvD6SZIWb6JOWbAuCXHVaaLfgVK0lZPyQJlDZt6QezQ+fpj8cIr6HtkdbO9qLmSc8C/UG5xp45xx/A==
   dependencies:
     axios "^0.19.2"
     crypto-js "^4.0.0"

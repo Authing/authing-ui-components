@@ -13,6 +13,8 @@
   "bind": "Bind",
   "yes": "Yes",
   "no": "No",
+  "usernameFormatError": "Enter a valid user name",
+  "checkUserName": "This username cannot be used. Please select another username",
   "pleaseInputOrSelectCountry": "Please input or select country",
   "pleaseSelectDate": "Please select date",
   "quesitons": "Help",

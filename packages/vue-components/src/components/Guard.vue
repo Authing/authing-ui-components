@@ -15,7 +15,14 @@ import {
 } from "@authing/native-js-ui-components";
 import "@authing/native-js-ui-components/lib/index.min.css";
 
-export { getAuthClient, initAuthClient, GuardMode, GuardScenes, LoginMethods, RegisterMethods };
+export {
+  getAuthClient,
+  initAuthClient,
+  GuardMode,
+  GuardScenes,
+  LoginMethods,
+  RegisterMethods,
+};
 
 const format = (a, b) => {
   return !a || a === "false" ? b : true;
@@ -101,10 +108,16 @@ export default {
   mounted() {
     this.config = this.config || {};
     this.config.mode = this.mode ? this.mode : this.config.mode;
-    this.config.autoRegister = this.autoRegister ? this.autoRegister : this.config.autoRegister;
+    this.config.autoRegister = this.autoRegister
+      ? this.autoRegister
+      : this.config.autoRegister;
     this.config.isSSO = this.isSSO ? this.isSSO : this.config.isSSO;
-    this.config.clickCloseable = this.clickCloseable ? this.clickCloseable : this.config.clickCloseable;
-    this.config.escCloseable = this.escCloseable ? this.escCloseable : this.config.escCloseable;
+    this.config.clickCloseable = this.clickCloseable
+      ? this.clickCloseable
+      : this.config.clickCloseable;
+    this.config.escCloseable = this.escCloseable
+      ? this.escCloseable
+      : this.config.escCloseable;
 
     // this.config.autoRegister = format(this.autoRegister, this.config.autoRegister)
     // this.config.isSSO = format(this.isSSO, this.config.isSSO)
@@ -114,11 +127,14 @@ export default {
     const guard = new NativeGuard(this.appId, this.config);
 
     const evts = Object.values(GuardEventsCamelToKebabMap);
-    const kebabToCamelMap = Object.entries(GuardEventsCamelToKebabMap).reduce((acc, [camel, kebab]) => {
-      return Object.assign({}, acc, {
-        [kebab]: camel,
-      });
-    }, {});
+    const kebabToCamelMap = Object.entries(GuardEventsCamelToKebabMap).reduce(
+      (acc, [camel, kebab]) => {
+        return Object.assign({}, acc, {
+          [kebab]: camel,
+        });
+      },
+      {}
+    );
 
     const listeners = evts.reduce((acc, evtName) => {
       return Object.assign({}, acc, {

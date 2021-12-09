@@ -85,6 +85,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   const [canLoop, setCanLoop] = useState(false) // 允许轮询
   const client = useAuthClient()
   const publicConfig = usePublicConfig()
+  const [errorNumber, setErrorNumber] = useState(0)
   let publicKey = props.config?.publicKey!
   // let autoRegister = props.config?.autoRegister
   let ms = props.config?.loginMethods
@@ -147,6 +148,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     const callback = __codePaser?.(code)
 
     if (code !== 200) {
+      setErrorNumber(errorNumber + 1)
       props.onLoginError?.({
         code,
         data,
@@ -304,23 +306,27 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                 >
                   {t('login.forgetPwd')}
                 </span>
-                <span style={{ margin: '0 4px' }} className="gray">
-                  丨
-                </span>
+                {errorNumber >= 2 && (
+                  <span style={{ margin: '0 4px' }} className="gray">
+                    丨
+                  </span>
+                )}
               </div>
             )}
 
-            <div
-              className="touch-tip"
-              onClick={() =>
-                props.__changeModule?.(GuardModuleType.ANY_QUESTIONS, {})
-              }
-            >
-              <IconFont
-                type={'authing-a-question-line1'}
-                // style={{ fontSize: 20, marginRight: 8 }}
-              />
-            </div>
+            {errorNumber >= 2 && (
+              <div
+                className="touch-tip"
+                onClick={() =>
+                  props.__changeModule?.(GuardModuleType.ANY_QUESTIONS, {})
+                }
+              >
+                <IconFont
+                  type={'authing-a-question-line1'}
+                  // style={{ fontSize: 20, marginRight: 8 }}
+                />
+              </div>
+            )}
 
             {!disableRegister && (
               <span className="go-to-register">

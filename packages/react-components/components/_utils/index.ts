@@ -16,6 +16,7 @@ export const VALIDATE_PATTERN = {
   phone: /^1[3-9]\d{9}$/,
   ip: /^((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}$/,
   host: /^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+.?$/,
+  username: /.?/,
 } as const
 
 export const validate = (type: keyof typeof VALIDATE_PATTERN, val: string) => {

@@ -12,9 +12,8 @@ import SubmitButton from '../../SubmitButton'
 import { InputNumber } from '../../InputNumber'
 import { completeFieldsFilter } from '../utils'
 import { User } from 'authing-js-sdk'
-import CustomFormItem from '../../ValidatorRules'
+import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
 import { SendCode } from '../../SendCode'
-import { UserOutlined, SafetyOutlined } from '@ant-design/icons'
 import { fieldRequiredRule } from '../../_utils'
 
 export interface CompleteInfoProps {
@@ -52,6 +51,9 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
   const { get, post } = useGuardHttp()
   const { t } = useTranslation()
   const [form] = Form.useForm()
+  const refPhone = useRef<ICheckProps>(null)
+  const refEmail = useRef<ICheckProps>(null)
+  const refUserName = useRef<ICheckProps>(null)
 
   const loadInitData = useCallback(async () => {
     await authClient.tokenProvider.clearUser()
@@ -151,17 +153,40 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         options={contryList}
         showSearch
         filterOption={filterOption}
-        // placeholder={i18n.t('common.pleaseInputOrSelectCountry')}
       ></Select>
+    ),
+    username: (props: any) => (
+      <CustomFormItem.UserName
+        validateFirst={true}
+        className="authing-g2-input-form"
+        name="internal username"
+        key="internal-usernameadsf"
+        label={i18n.t('common.username')}
+        required={props.required}
+        checkRepeat={true}
+        ref={refUserName}
+      >
+        <Input
+          className="authing-g2-input"
+          autoComplete="username"
+          key="internal-username:asdf"
+          size="large"
+          maxLength={11}
+          placeholder={t('login.inputUsername')}
+        />
+      </CustomFormItem.UserName>
     ),
     phone: (props: { required?: boolean }) => (
       <>
         <CustomFormItem.Phone
+          validateFirst={true}
           className="authing-g2-input-form"
           name="internal phone:phone"
           key="internal-phone:phoneadsf"
           label={i18n.t('common.phoneLabel')}
           required={props.required}
+          checkRepeat={true}
+          ref={refPhone}
         >
           <InputNumber
             className="authing-g2-input"
@@ -171,7 +196,6 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             size="large"
             maxLength={11}
             placeholder={t('login.inputPhone')}
-            prefix={<UserOutlined style={{ color: '#878A95' }} />}
           />
         </CustomFormItem.Phone>
         <Form.Item
@@ -193,7 +217,6 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
               length: verifyCodeLength,
             })}
             maxLength={verifyCodeLength}
-            prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
             method="phone"
             fieldName="internal phone:phone"
             data={''}
@@ -213,20 +236,21 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           checkRepeat={true}
           label={i18n.t('common.email')}
           required={props.required}
-          key="internal email:email"
+          key="internal email:email13"
+          validateFirst={true}
+          ref={refEmail}
         >
           <Input
             className="authing-g2-input"
             autoComplete="email"
             size="large"
             placeholder={t('login.inputEmail')}
-            prefix={<UserOutlined style={{ color: '#878A95' }} />}
           />
         </CustomFormItem.Email>
         <Form.Item
           className="authing-g2-input-form"
           name="internal email:code"
-          key="internal email:code"
+          key="internal email:code1432"
           rules={
             props.required
               ? fieldRequiredRule(t('common.captchaCode'))
@@ -241,7 +265,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
               length: verifyCodeLength,
             })}
             maxLength={verifyCodeLength}
-            prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
+            // prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
             method="email"
             data={''}
             fieldName="internal email:email"
@@ -320,7 +344,10 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             return <Input type="text" className="authing-g2-input" />
           }
         }
-        if (def.type === 'internal' && ['phone', 'email'].includes(def.name)) {
+        if (
+          def.type === 'internal' &&
+          ['phone', 'email', 'username'].includes(def.name)
+        ) {
           return inputElement()
         } else {
           return (
@@ -339,87 +366,6 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       })
     // eslint-disable-next-line
   }, [extendsFields, user])
-
-  // const formFields = extendsFields
-  //   .filter((each) => completeFieldsFilter(user as User, each))
-  //   .map((def) => {
-  //     const key = `${def.type} ${def.name}`
-  //     const label = i18n.language === 'zh-CN' ? def.label || def.name : def.name
-  //     const required = def.required || false
-  //     const rules = def.validateRules
-  //     const generateRules = () => {
-  //       const l = []
-  //       if (required) {
-  //         l.push({
-  //           required: true,
-  //           message: `${label} ${t('login.noEmpty')}`,
-  //         })
-  //       }
-  //       rules.forEach((rule) => {
-  //         switch (rule.type) {
-  //           case 'isNumber':
-  //             l.push({
-  //               type: 'number',
-  //               required,
-  //               message: rule.error || t('login.mustBeNumber'),
-  //             })
-  //             break
-  //           case 'regExp':
-  //             l.push({
-  //               required,
-  //               pattern: new RegExp(rule.content.replaceAll('/', '')),
-  //               message: rule.error,
-  //             })
-  //             break
-  //           default:
-  //             break
-  //         }
-  //       })
-  //       return l
-  //     }
-
-  //     const inputElement = () => {
-  //       if (
-  //         def.type === 'internal' &&
-  //         Object.keys(INTERNAL_INPUT_MAP).includes(def.name)
-  //       ) {
-  //         if (def.name === 'country') {
-  //           return INTERNAL_INPUT_MAP[def.name](contryList)
-  //         } else {
-  //           return INTERNAL_INPUT_MAP[def.name]({
-  //             required,
-  //           })
-  //         }
-  //       } else {
-  //         if (Object.keys(INPUT_MAP).includes(def.inputType)) {
-  //           if (def.inputType === 'select') {
-  //             const options =
-  //               fieldMetadata.find((field) => field.key === def.name)
-  //                 ?.options || []
-  //             return INPUT_MAP[def.inputType](options)
-  //           }
-  //           return INPUT_MAP[def.inputType]()
-  //         }
-  //         return <Input type="text" className="authing-g2-input" />
-  //       }
-  //     }
-  //     if (def.type === 'internal' && ['phone', 'email'].includes(def.name)) {
-  //       return inputElement()
-  //     } else {
-  //       return (
-  //         <Form.Item
-  //           className="authing-g2-input-form"
-  //           rules={generateRules()}
-  //           key={key}
-  //           name={key}
-  //           label={label}
-  //           style={{ marginBottom: 8 }}
-  //         >
-  //           {inputElement()}
-  //         </Form.Item>
-  //       )
-  //     }
-  //   })
 
   const [, onFinish] = useAsyncFn(async (values: any) => {
     submitButtonRef.current?.onSpin(true)
@@ -465,8 +411,6 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       }))
 
     try {
-      // TODO sdk 发布正式版
-      // @ts-ignore
       const user = await authClient.updateProfile(internalFields, {
         phoneToken,
         emailToken,
@@ -485,7 +429,10 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       submitButtonRef.current?.onSpin(false)
       message.success(t('common.saveSuccess'))
       onRegisterInfoCompleted?.(user, udfs, authClient)
-    } catch (e) {
+    } catch (e: any) {
+      if (e?.message) {
+        message.error(e.message)
+      }
       // TODO
       submitButtonRef.current?.onSpin(false)
       onRegisterInfoCompletedError?.(e as any, udfs, authClient)
@@ -498,6 +445,12 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       form={form}
       onFinish={onFinish}
       onFinishFailed={() => submitButtonRef.current.onError()}
+      onValuesChange={(values) => {
+        console.log('值改变')
+        refPhone?.current?.check(values)
+        refEmail?.current?.check(values)
+        refUserName?.current?.check(values)
+      }}
     >
       {formFieldsV2}
 

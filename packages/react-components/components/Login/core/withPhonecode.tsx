@@ -71,7 +71,11 @@ export const LoginWithPhoneCode = (props: any) => {
         onFinishFailed={() => submitButtonRef.current.onError()}
         autoComplete="off"
       >
-        <CustomFormItem.Phone className="authing-g2-input-form" name="phone">
+        <CustomFormItem.Phone
+          className="authing-g2-input-form"
+          name="phone"
+          required={true}
+        >
           <InputNumber
             className="authing-g2-input"
             autoComplete="tel"

@@ -1,6 +1,5 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Form, Input, message } from 'antd'
-import { Rule } from 'antd/lib/form'
 import { RegisterMethods } from 'authing-js-sdk'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -23,7 +22,6 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
   onRegister,
   onBeforeRegister,
   agreements,
-  publicConfig,
 }) => {
   const { t } = useTranslation()
   const submitButtonRef = useRef<any>(null)
@@ -103,61 +101,6 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
     { loading: false }
   )
 
-  const formItems: {
-    component: React.ReactNode
-    name: string
-    rules?: Rule[]
-    FormItemFC?: any
-  }[] = [
-    {
-      component: (
-        <Input
-          className="authing-g2-input"
-          autoComplete="email"
-          size="large"
-          placeholder={t('login.inputEmail')}
-          prefix={<UserOutlined style={{ color: '#878A95' }} />}
-        />
-      ),
-      name: 'email',
-      FormItemFC: CustomFormItem.Email,
-    },
-    {
-      component: (
-        <Input.Password
-          className="authing-g2-input"
-          size="large"
-          placeholder={t('login.inputPwd')}
-          prefix={<LockOutlined style={{ color: '#878A95' }} />}
-        />
-      ),
-      name: 'password',
-      FormItemFC: CustomFormItem.Password,
-    },
-    {
-      component: (
-        <Input.Password
-          className="authing-g2-input"
-          size="large"
-          placeholder={t('common.passwordAgain')}
-          prefix={<LockOutlined style={{ color: '#878A95' }} />}
-        />
-      ),
-      name: 'new-password',
-      rules: [
-        {
-          validator: (_, value) => {
-            if (value !== form.getFieldValue('password')) {
-              return Promise.reject(t('common.repeatPasswordDoc'))
-            } else {
-              return Promise.resolve()
-            }
-          },
-        },
-      ],
-    },
-  ]
-
   return (
     <div className="authing-g2-register-email">
       <Form
@@ -170,34 +113,69 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         }}
         onFinishFailed={() => submitButtonRef.current.onError()}
         onValuesChange={(values) => {
+          if (values['password']) {
+            // password changed verify new password
+            form.validateFields(['new-password'])
+          }
+
           ref.current?.check(values)
         }}
       >
-        {formItems.map((item) =>
-          item.FormItemFC ? (
-            <item.FormItemFC
-              ref={ref}
-              key={item.name}
-              name={item.name}
-              className="authing-g2-input-form"
-              validateFirst={true}
-              form={form}
-              checkRepeat={true}
-            >
-              {item.component}
-            </item.FormItemFC>
-          ) : (
-            <Form.Item
-              key={item.name}
-              name={item.name}
-              rules={item.rules}
-              className="authing-g2-input-form"
-              validateFirst={true}
-            >
-              {item.component}
-            </Form.Item>
-          )
-        )}
+        <CustomFormItem.Email
+          ref={ref}
+          key="email"
+          name="email"
+          className="authing-g2-input-form"
+          validateFirst={true}
+          form={form}
+          checkRepeat={true}
+          required={true}
+        >
+          <Input
+            className="authing-g2-input"
+            autoComplete="email"
+            size="large"
+            placeholder={t('login.inputEmail')}
+            prefix={<UserOutlined style={{ color: '#878A95' }} />}
+          />
+        </CustomFormItem.Email>
+        <CustomFormItem.Password
+          key="password"
+          name="password"
+          className="authing-g2-input-form"
+          validateFirst={true}
+        >
+          <Input.Password
+            className="authing-g2-input"
+            size="large"
+            placeholder={t('login.inputPwd')}
+            prefix={<LockOutlined style={{ color: '#878A95' }} />}
+          />
+        </CustomFormItem.Password>
+        <CustomFormItem.Password
+          key="new-password"
+          name="new-password"
+          rules={[
+            {
+              validator: (_, value) => {
+                if (value !== form.getFieldValue('password')) {
+                  return Promise.reject(t('common.repeatPasswordDoc'))
+                } else {
+                  return Promise.resolve()
+                }
+              },
+            },
+          ]}
+          className="authing-g2-input-form"
+          validateFirst={true}
+        >
+          <Input.Password
+            className="authing-g2-input"
+            size="large"
+            placeholder={t('common.passwordAgain')}
+            prefix={<LockOutlined style={{ color: '#878A95' }} />}
+          />
+        </CustomFormItem.Password>
         {Boolean(agreements?.length) && (
           <Agreements
             onChange={setAcceptedAgreements}

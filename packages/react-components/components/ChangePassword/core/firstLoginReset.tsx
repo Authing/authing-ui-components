@@ -50,6 +50,7 @@ export const FirstLoginReset = (props: FirstLoginResetProps) => {
         <CustomFormItem.Password
           className="authing-g2-input-form"
           name="password"
+          required={true}
         >
           <Input.Password
             className="authing-g2-input"
