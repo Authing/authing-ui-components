@@ -49,7 +49,8 @@ export const LoginWithWechatMiniQrcode = (
         // onFail && onFail(`${message}`)
         message.error(ms)
       },
-      onCodeLoadFailed: () => {
+      onCodeLoadFailed: (error: any) => {
+        message.error(error.message)
         setLoading(false)
       },
       onRetry: () => {

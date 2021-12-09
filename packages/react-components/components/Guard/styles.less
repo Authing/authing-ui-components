@@ -150,7 +150,7 @@
 
 .authing-g2-input-form {
   padding: 0 2px;
-  margin-bottom: 16px;
+  // margin-bottom: 16px;
   // &.submit-form {
   //   margin-top: 32px;
   // }
@@ -194,7 +194,7 @@
 
 .authing-g2-input {
   border: 1px solid #f5f6f7;
-  height: 46px;
+  // height: 46px;
   border-radius: 4px;
   background: #f5f6f7;
 
@@ -210,13 +210,15 @@
     // 通过这个方式 hack 浏览器自动填充：
     // 自动填充的浏览器可以说罪恶滔天，钉死在 mdn 的耻辱柱上：https://developer.mozilla.org/en-US/docs/Web/CSS/:autofill
     // 下方的 focused 同样需要这样处理
+    font-size: 14px;
     height: 0;
     background-color: #f5f6f7;
     padding: 1em 0.5em !important;
     background-clip: content-box !important;
     &::placeholder,
     &::-webkit-input-placeholder {
-      color: #a7a7a7;
+      // color: #a7a7a7;
+      color: #c8c9cc;
     }
   }
 

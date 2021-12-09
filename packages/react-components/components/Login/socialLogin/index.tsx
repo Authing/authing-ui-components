@@ -343,6 +343,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
           </Button>
         ) : (
           <Tooltip
+            overlayStyle={{ fontFamily: 'sans-serif' }}
             key={item.provider}
             title={item.tooltip?.[i18n.language as Lang] || item.name}
           >
