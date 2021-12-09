@@ -70,7 +70,12 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
         <Col span={15} className="g2-send-code-input-col">
           <InputNumber
             value={value}
-            onChange={onChange}
+            onChange={(e) => {
+              onChange?.(e)
+              if (maxLength && e.target.value.length >= maxLength) {
+                form.submit()
+              }
+            }}
             {...inputProps}
             maxLength={maxLength}
           />
