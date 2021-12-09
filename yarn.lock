@@ -272,20 +272,6 @@
     lodash "^4.17.15"
     resize-observer-polyfill "^1.5.0"
 
-"@authing/jose@^1.0.3":
-  version "1.0.5"
-  resolved "https://registry.nlark.com/@authing/jose/download/@authing/jose-1.0.5.tgz#d3e9c58aac74f47e5048a791d69c68f8bc52d7d8"
-  integrity sha1-0+nFiqx09H5QSKeR1pxo+LxS19g=
-
-"@authing/react-ui-components@^2.4.56":
-  version "2.4.57"
-  resolved "https://registry.npmmirror.com/@authing/react-ui-components/download/@authing/react-ui-components-2.4.57.tgz#86556862a0837cc33b087611808be7858d6ecce5"
-  integrity sha512-Xwsb+UVEicxIQE9GwgIK8qCaN/AFJyWvPCg5KwZi0hrVXcQK2g9Zv5uwcJBvnhFIyLwGHLte5qb8S7uFAajJ+A==
-  dependencies:
-    antd "^4.8.0"
-    authing-js-sdk "4.22.24-alpha"
-    qs "^6.9.4"
-
 "@babel/code-frame@7.10.4", "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.5.5":
   version "7.10.4"
   resolved "https://registry.npm.taobao.org/@babel/code-frame/download/@babel/code-frame-7.10.4.tgz#168da1a36e90da68ae8d49c0f1b48c7c6249213a"
@@ -4625,23 +4611,11 @@ atob@^2.1.2:
   resolved "https://registry.npm.taobao.org/atob/download/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha1-bZUX654DDSQ2ZmZR6GvZ9vE1M8k=
 
-authing-js-sdk@4.22.24-alpha:
-  version "4.22.24-alpha"
-  resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.22.24-alpha.tgz#299ac8e74ccf2baf4a6286e7f5350a603653a411"
-  integrity sha512-e+cIvsXrHSDHmZIaPG9/snNZu12loPTNJEeIn+Q09BDIzIJJFmQ53DAzq+uUQNA+gQ24QmnJTbzUf/Ue8J6kKA==
+authing-js-sdk@4.23.1:
+  version "4.23.1"
+  resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.23.1.tgz#8820959fd78c41a0c6e4850d723092711274a09d"
+  integrity sha512-V3Z8kM8h1Ux/3u0jNiQfsWJdqEyFfBjFx4K42SY0zjGKR5hI2YzoArDj+B2YXxusD2NXbDymyydcFcFVjQuqYw==
   dependencies:
-    "@authing/jose" "^1.0.3"
-    axios "^0.19.2"
-    crypto-js "^4.0.0"
-    jsencrypt "^3.1.0"
-    jwt-decode "^2.2.0"
-
-authing-js-sdk@4.22.26-alpha.9:
-  version "4.22.26-alpha.9"
-  resolved "https://registry.npmmirror.com/authing-js-sdk/download/authing-js-sdk-4.22.26-alpha.9.tgz#5c9aa703b3cb2c2b2c32b09c00cec5fa90f9af3d"
-  integrity sha512-ntUYVrdcKm28iXpQo19iBpQr9EyU8/ICs5p1fXXa19J+SKzpP5bhLEpSChbzfq6jVACvyNmTMGXikupppBpHHQ==
-  dependencies:
-    "@authing/jose" "^1.0.3"
     axios "^0.19.2"
     crypto-js "^4.0.0"
     jsencrypt "^3.1.0"
