@@ -10,7 +10,7 @@ import {
 
 import {
   UserConfig,
-  AuthingGuard,
+  Guard as NativeGuard,
   GuardEventsHandler,
 } from '@authing/native-js-ui-components';
 @Component({
@@ -23,7 +23,7 @@ import {
 export class GuardComponent implements OnInit, OnChanges {
   constructor() {}
 
-  guard: AuthingGuard;
+  guard: NativeGuard;
 
   ngOnInit(): void {}
 
@@ -81,7 +81,7 @@ export class GuardComponent implements OnInit, OnChanges {
   >();
 
   ngAfterViewInit() {
-    const guard = new AuthingGuard(this.appId, this.config, this.tenantId);
+    const guard = new NativeGuard(this.appId, this.config);
 
     guard.on('load', (...rest) => this.onLoad.emit(rest));
     guard.on('load-error', (...rest) => this.onLoadError.emit(rest));
