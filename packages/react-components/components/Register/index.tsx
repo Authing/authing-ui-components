@@ -98,15 +98,18 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
     [registerContextProps, t]
   )
 
-  const renderTab = useMemo(
-    () =>
-      config?.registerMethods?.map((method) => (
-        <Tabs.TabPane tab={tabMapping[method].name} key={method}>
-          {tabMapping[method].component}
-        </Tabs.TabPane>
-      )),
-    [config?.registerMethods, tabMapping]
-  )
+  const renderTab = useMemo(() => {
+    const { registerMethods, defaultRegisterMethod } = config
+    const index = registerMethods.indexOf(defaultRegisterMethod)
+    const element = registerMethods.splice(index, 1)[0]
+    registerMethods.unshift(element)
+    return registerMethods?.map((method) => (
+      <Tabs.TabPane tab={tabMapping[method].name} key={method}>
+        {tabMapping[method].component}
+      </Tabs.TabPane>
+    ))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [config?.defaultRegisterMethod, tabMapping])
 
   return (
     <div className="g2-view-container">
@@ -118,6 +121,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
         </div>
       </div>
       <div className="g2-view-tabs">
+        {console.log(config, 'config?.defaultRegisterMethod}')}
         <Tabs
           defaultActiveKey={config?.defaultRegisterMethod}
           onChange={(activeKey) => {

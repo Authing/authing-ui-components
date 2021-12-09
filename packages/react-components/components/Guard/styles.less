@@ -173,13 +173,13 @@
     border-radius: 4px;
     .authing-ant-select-selector {
       height: 100% !important;
-      border-color: #f5f6f7 !important;
+      // border-color: #f5f6f7 !important;
       background-color: #f5f6f7 !important;
       .authing-ant-select-selection-item {
         line-height: 42px;
       }
       &:hover {
-        border-color: #eeeff1 !important;
+        // border-color: #eeeff1 !important;
         background-color: #eeeff1 !important;
       }
     }
@@ -210,7 +210,8 @@
     background-clip: content-box !important;
     &::placeholder,
     &::-webkit-input-placeholder {
-      color: #a7a7a7;
+      font-size: 14px;
+      color: #c8c9cc;
     }
   }
 
@@ -349,7 +350,6 @@
   .authing-ant-upload-list-picture-card-container {
     height: 56px;
     width: 56px;
-
     .authing-ant-upload-list-item-list-type-picture-card {
       padding: 4px;
     }
@@ -363,6 +363,12 @@
     transition: 0.2s all;
     &:hover {
       background: #eeeff1;
+    }
+  }
+  .authing-g2-questions-upload-self {
+    .anticon-plus {
+      font-size: 18px;
+      color: #545968;
     }
   }
 }
