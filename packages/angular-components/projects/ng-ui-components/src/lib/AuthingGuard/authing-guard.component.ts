@@ -8,40 +8,10 @@ import {
   OnChanges,
 } from '@angular/core';
 import {
-  User,
-  GuardMode,
   UserConfig,
-  GuardScenes,
   AuthingGuard,
-  LoginMethods,
-  getAuthClient,
-  CommonMessage,
-  initAuthClient,
-  RegisterMethods,
   GuardEventsHandler,
-  AuthenticationClient,
-  GuardEventsHandlerKebab,
-  AuthenticationClientOptions,
 } from '@authing/native-js-ui-components';
-
-export type {
-  User,
-  UserConfig,
-  CommonMessage,
-  GuardEventsHandler,
-  AuthenticationClient,
-  GuardEventsHandlerKebab,
-  AuthenticationClientOptions,
-};
-
-export {
-  GuardMode,
-  GuardScenes,
-  LoginMethods,
-  getAuthClient,
-  initAuthClient,
-  RegisterMethods,
-};
 
 @Component({
   selector: 'authing-guard',

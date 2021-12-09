@@ -18,6 +18,10 @@ import {
   GuardEventsHandler,
 } from '@authing/native-js-ui-components';
 
+// export * from './lib/AuthingGuard/authing-guard.service';
+// export * from './lib/AuthingGuard/authing-guard.component';
+// export * from './lib/AuthingGuard/authing-guard.module';
+
 export * from './lib/Guard/guard.service';
 export * from './lib/Guard/guard.component';
 export * from './lib/Guard/guard.module';

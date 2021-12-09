@@ -6,4 +6,6 @@ import { GuardComponent } from './guard.component';
   imports: [],
   exports: [GuardComponent],
 })
-export class AuthingGuardModule { }
+export class GuardModule {
+  constructor() {}
+}

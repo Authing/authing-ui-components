@@ -8,11 +8,14 @@ import {
   OnChanges,
 } from '@angular/core';
 
+// npm run build:lib 时，找不到 Guard 和 GuardConfig 的定义，
+// 原因是 projects/ng-ui-components/node_modules/@authing/native-js-ui-components/lib/index.d.ts 中没有 Guard 和 GuardConfig 的定义
 import {
-  UserConfig,
-  Guard as NativeGuard,
+  Guard,
+  GuardConfig,
   GuardEventsHandler,
 } from '@authing/native-js-ui-components';
+
 @Component({
   selector: 'authing-guard',
   template: `<div id="authing_guard_container"></div>`,
@@ -23,7 +26,7 @@ import {
 export class GuardComponent implements OnInit, OnChanges {
   constructor() {}
 
-  guard: NativeGuard;
+  guard: Guard;
 
   ngOnInit(): void {}
 
@@ -38,7 +41,7 @@ export class GuardComponent implements OnInit, OnChanges {
   @Input() appId: string;
   @Input() visible?: boolean;
   @Input() tenantId?: string;
-  @Input() config?: UserConfig;
+  @Input() config?: GuardConfig;
 
   @Output() onLoad = new EventEmitter<
     Parameters<GuardEventsHandler['onLoad']>
@@ -81,25 +84,27 @@ export class GuardComponent implements OnInit, OnChanges {
   >();
 
   ngAfterViewInit() {
-    const guard = new NativeGuard(this.appId, this.config);
+    const guard = new Guard(this.appId, this.config);
 
-    guard.on('load', (...rest) => this.onLoad.emit(rest));
-    guard.on('load-error', (...rest) => this.onLoadError.emit(rest));
-    guard.on('login', (...rest) => this.onLogin.emit(rest));
-    guard.on('login-error', (...rest) => this.onLoginError.emit(rest));
-    guard.on('register', (...rest) => this.onRegister.emit(rest));
-    guard.on('register-error', (...rest) => this.onRegisterError.emit(rest));
-    guard.on('pwd-email-send', (...rest) => this.onPwdEmailSend.emit(rest));
-    guard.on('pwd-email-send-error', (...rest) =>
-      this.onPwdEmailSendError.emit(rest)
-    );
-    guard.on('pwd-phone-send', (...rest) => this.onPwdPhoneSend.emit(rest));
-    guard.on('pwd-phone-send-error', (...rest) =>
-      this.onPwdPhoneSendError.emit(rest)
-    );
-    guard.on('pwd-reset', (...rest) => this.onPwdReset.emit(rest));
-    guard.on('pwd-reset-error', (...rest) => this.onPwdResetError.emit(rest));
-    guard.on('close', (...rest) => this.onClose.emit(rest));
+    // 以下第二个函数的参数类型与定义的不一致，需检查
+    
+    // guard.on('load', (...rest) => this.onLoad.emit(rest));
+    // guard.on('load-error', (...rest) => this.onLoadError.emit(rest));
+    // guard.on('login', (...rest) => this.onLogin.emit(rest));
+    // guard.on('login-error', (...rest) => this.onLoginError.emit(rest));
+    // guard.on('register', (...rest) => this.onRegister.emit(rest));
+    // guard.on('register-error', (...rest) => this.onRegisterError.emit(rest));
+    // guard.on('pwd-email-send', (...rest) => this.onPwdEmailSend.emit(rest));
+    // guard.on('pwd-email-send-error', (...rest) =>
+    //   this.onPwdEmailSendError.emit(rest)
+    // );
+    // guard.on('pwd-phone-send', (...rest) => this.onPwdPhoneSend.emit(rest));
+    // guard.on('pwd-phone-send-error', (...rest) =>
+    //   this.onPwdPhoneSendError.emit(rest)
+    // );
+    // guard.on('pwd-reset', (...rest) => this.onPwdReset.emit(rest));
+    // guard.on('pwd-reset-error', (...rest) => this.onPwdResetError.emit(rest));
+    // guard.on('close', (...rest) => this.onClose.emit(rest));
 
     if (this.visible) {
       guard.show();
