@@ -5004,10 +5004,10 @@ authing-js-sdk@4.22.24-alpha:
     jsencrypt "^3.1.0"
     jwt-decode "^2.2.0"
 
-authing-js-sdk@4.22.26-alpha.15:
-  version "4.22.26-alpha.15"
-  resolved "https://registry.npmmirror.com/authing-js-sdk/download/authing-js-sdk-4.22.26-alpha.15.tgz#ea6f497ead5ad228610ea3e8b0e0ad1d4daade7d"
-  integrity sha512-bhYutJN/MvD6SZIWb6JOWbAuCXHVaaLfgVK0lZPyQJlDZt6QezQ+fpj8cIr6HtkdbO9qLmSc8C/UG5xp45xx/A==
+authing-js-sdk@4.22.26-alpha.18:
+  version "4.22.26-alpha.18"
+  resolved "https://registry.npmmirror.com/authing-js-sdk/download/authing-js-sdk-4.22.26-alpha.18.tgz#b3aaefb005381653f51dddcc8a653d53886b69e1"
+  integrity sha512-9Bm5hAbUgTiFPGtJEZ5lz8JA8YtjN2rjB4x+HShD7x5ofyQouGqH8e4xO9EPpW/opAqFiPcWvsdPHApAk1fGDg==
   dependencies:
     axios "^0.19.2"
     crypto-js "^4.0.0"
@@ -8905,6 +8905,11 @@ fast-shallow-equal@^1.0.0:
   version "1.0.0"
   resolved "https://registry.nlark.com/fast-shallow-equal/download/fast-shallow-equal-1.0.0.tgz#d4dcaf6472440dcefa6f88b98e3251e27f25628b"
   integrity sha1-1NyvZHJEDc76b4i5jjJR4n8lYos=
+
+fastclick@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.npmmirror.com/fastclick/download/fastclick-1.0.6.tgz#161625b27b1a5806405936bda9a2c1926d06be6a"
+  integrity sha1-FhYlsnsaWAZAWTa9qaLBkm0Gvmo=
 
 fastest-stable-stringify@^2.0.2:
   version "2.0.2"
