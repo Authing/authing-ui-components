@@ -2,13 +2,13 @@ import React, { useRef } from 'react'
 import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useAuthClient } from '../../Guard/authClient'
-import { UserOutlined, SafetyOutlined } from '@ant-design/icons'
 import { LoginMethods } from '../../'
 import { SendCode } from '../../SendCode'
 import { fieldRequiredRule } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
 import { InputNumber } from '../../InputNumber'
 import CustomFormItem from '../../ValidatorRules'
+import { IconFont } from '../../IconFont'
 
 // const formatPhone = (value: any) => {
 //   if (!value) {
@@ -86,7 +86,12 @@ export const LoginWithPhoneCode = (props: any) => {
             // formatter={formatPhone}
             // parser={(value) => (value ? value.replaceAll('-', '') : '')}
             placeholder={t('login.inputPhone')}
-            prefix={<UserOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-user-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
           />
         </CustomFormItem.Phone>
         <Form.Item
@@ -102,7 +107,13 @@ export const LoginWithPhoneCode = (props: any) => {
               length: verifyCodeLength,
             })}
             maxLength={verifyCodeLength}
-            prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
+            // prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-shield-check-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
             method="phone"
             data={''}
             form={form}

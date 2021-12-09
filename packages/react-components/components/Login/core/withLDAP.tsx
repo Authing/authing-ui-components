@@ -1,12 +1,13 @@
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Form, Input } from 'antd'
 import { LoginMethods } from '../../'
 import { ErrorCode } from '../../_utils/GuardErrorCode'
 import { useAuthClient } from '../../Guard/authClient'
 import SubmitButton from '../../SubmitButton'
 import { fieldRequiredRule } from '../../_utils'
+import { IconFont } from '../../IconFont'
+import { InputPassword } from './withPassword/inputPassword'
 
 interface LoginWithLDAPProps {
   // configs
@@ -92,7 +93,12 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
             autoComplete="email,username,tel"
             size="large"
             placeholder={t('login.inputLdapUsername')}
-            prefix={<UserOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-user-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
           />
         </Form.Item>
         <Form.Item
@@ -100,11 +106,17 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
           name="password"
           rules={fieldRequiredRule(t('common.password'))}
         >
-          <Input.Password
+          <InputPassword
             className="authing-g2-input"
             size="large"
             placeholder={t('login.inputLdapPwd')}
-            prefix={<LockOutlined style={{ color: '#878A95' }} />}
+            // prefix={<LockOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-lock-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
           />
         </Form.Item>
         {showCaptcha && (

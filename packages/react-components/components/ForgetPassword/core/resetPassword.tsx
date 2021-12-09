@@ -2,14 +2,13 @@ import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Form, Input } from 'antd'
 import { StoreValue } from 'antd/lib/form/interface'
-
-import { UserOutlined, SafetyOutlined, LockOutlined } from '@ant-design/icons'
 import { SendCode } from '../../SendCode'
-
 import { useAuthClient } from '../../Guard/authClient'
 import { fieldRequiredRule, validate } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
 import CustomFormItem from '../../ValidatorRules'
+import { InputPassword } from '../../Login/core/withPassword/inputPassword'
+import { IconFont } from '../../IconFont'
 
 interface ResetPasswordProps {
   onReset: any
@@ -98,7 +97,12 @@ export const ResetPassword = (props: ResetPasswordProps) => {
                 setCodeMethod('phone')
               }
             }}
-            prefix={<UserOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-user-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
           />
         </Form.Item>
         <Form.Item
@@ -113,7 +117,12 @@ export const ResetPassword = (props: ResetPasswordProps) => {
             placeholder={t('common.inputFourVerifyCode', {
               length: verifyCodeLength,
             })}
-            prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-shield-check-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
             maxLength={verifyCodeLength}
             method={codeMethod}
             data={identify}
@@ -128,11 +137,16 @@ export const ResetPassword = (props: ResetPasswordProps) => {
           className="authing-g2-input-form"
           name="password"
         >
-          <Input.Password
+          <InputPassword
             className="authing-g2-input"
             size="large"
             placeholder={t('user.inputNewPwd')}
-            prefix={<LockOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-lock-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
           />
         </CustomFormItem.Password>
         <Form.Item className="authing-g2-input-form submit-form">

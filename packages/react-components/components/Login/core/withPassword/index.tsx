@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react'
-import { Form, Input } from 'antd'
+import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
-
 import { useGuardHttp } from '../../../_utils/guradHttp'
 import { useAuthClient } from '../../../Guard/authClient'
 import { fieldRequiredRule, getUserRegisterParams } from '../../../_utils'
@@ -13,6 +12,7 @@ import { FormItemAccount } from './FormItemAccount'
 import { InputAccount } from './InputAccount'
 import { GraphicVerifyCode } from './GraphicVerifyCode'
 import { IconFont } from '../../../IconFont'
+import { InputPassword } from './inputPassword'
 
 interface LoginWithPasswordProps {
   // configs
@@ -123,7 +123,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
           className="authing-g2-input-form"
           rules={fieldRequiredRule(t('common.password'))}
         >
-          <Input.Password
+          <InputPassword
             className="authing-g2-input"
             size="large"
             placeholder={t('login.inputLoginPwd')}
@@ -133,15 +133,6 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
                 style={{ color: '#878A95' }}
               />
             }
-            iconRender={(visible) => (
-              <span>
-                {visible ? (
-                  <IconFont type="authing-a-eye-line1" />
-                ) : (
-                  <IconFont type="authing-a-eye-close-line1" />
-                )}
-              </span>
-            )}
           />
         </Form.Item>
         {/* 图形验证码 */}
