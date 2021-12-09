@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react'
 import { Form, Input } from 'antd'
-import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 
 import { useGuardHttp } from '../../../_utils/guradHttp'
@@ -110,7 +109,12 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
             className="authing-g2-input"
             autoComplete="email,username,tel"
             size="large"
-            prefix={<UserOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-user-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
             passwordLoginMethods={props.passwordLoginMethods}
           />
         </FormItemAccount>
@@ -123,7 +127,12 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
             className="authing-g2-input"
             size="large"
             placeholder={t('login.inputLoginPwd')}
-            prefix={<LockOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-lock-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
             iconRender={(visible) => (
               <span>
                 {visible ? (
