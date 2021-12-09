@@ -15,8 +15,8 @@
     "face-api.js": "^0.22.2",
     "fastclick": "^1.0.6",
     "global": "^4.4.0",
-    "react-use": "^17.3.1",
-    "qs": "^6.9.4"
+    "qs": "^6.9.4",
+    "react-use": "^17.3.1"
   },
   "peerDependencies": {
     "react": "16.14.0",

@@ -1,6 +1,6 @@
 {
   "name": "@authing/ng-ui-components",
-  "version": "2.4.56-alpha.0",
+  "version": "3.0.0-rc.0",
   "peerDependencies": {
     "@angular/common": "^10.2.0",
     "@angular/core": "^10.2.0"
