@@ -302,6 +302,10 @@
   version "2.4.56"
   resolved "https://registry.npmmirror.com/@authing/react-ui-components/download/@authing/react-ui-components-2.4.56.tgz#053b2920e2a1dc3e946a14c2af761f56c4b2dde8"
   integrity sha512-+FeeexEmq5LnAZFeH2DMItqZZ57tAtFihx3Xrz+IrXIXSlcxbAr7dx8OkJ6XAXVQGNi2aNKuVmFw8kcQUKFDVQ==
+"@authing/react-ui-components@^2.4.56":
+  version "2.4.57"
+  resolved "https://registry.npmmirror.com/@authing/react-ui-components/download/@authing/react-ui-components-2.4.57.tgz#86556862a0837cc33b087611808be7858d6ecce5"
+  integrity sha512-Xwsb+UVEicxIQE9GwgIK8qCaN/AFJyWvPCg5KwZi0hrVXcQK2g9Zv5uwcJBvnhFIyLwGHLte5qb8S7uFAajJ+A==
   dependencies:
     antd "^4.8.0"
     authing-js-sdk "4.22.24-alpha"

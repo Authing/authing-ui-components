@@ -5,7 +5,9 @@
     "build:lib": "node scripts/postintall.js && lerna run build:lib --stream",
     "build:demo": "node scripts/buildDemo.js",
     "publish:lib": "lerna publish from-package",
+    "publish:rc": "lerna publish from-package --canary --pre-dist-tag=rc --preid=rc",
     "build:publish": "lerna version && yarn build:lib && yarn publish:lib",
+    "build:publish:rc": "lerna version && yarn build:lib && yarn publish:rc",
     "clean": "lerna clean",
     "postinstall": "node scripts/postintall.js"
   },
