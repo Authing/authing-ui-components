@@ -4,6 +4,7 @@ import {
   AuthenticationClient,
   GuardScenes,
 } from 'ng-ui-components';
+import { User } from '@authing/native-js-ui-components';
 
 @Component({
   selector: 'app-root',
@@ -13,12 +14,12 @@ import {
 export class AppComponent {
   title = 'demo';
   visible = true;
-  appId = '5fa5053e252697ad5302ce7e';
+  appId = '61b04e9d9c7862a906c32355';
   config = {
     target: '#authing_guard_container',
     mode: 'modal',
 
-    apiHost: 'http://console.authing.localhost:3000',
+    apiHost: 'https://lb68p7-demo.authing.cn',
     // loginMethods: Object.values(LoginMethods),
     logo:
       'https://files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png',
@@ -32,15 +33,19 @@ export class AppComponent {
     // autoRegister: true,
   };
 
-  onLoad(e: AuthenticationClient) {
+  onLoad(e: AuthenticationClient): void {
     console.log('ffffff', e);
   }
 
-  onLoginError([msg]: [msg: CommonMessage, client: AuthenticationClient]) {
+  onLoginError([msg]: [msg: CommonMessage, client: AuthenticationClient]): void {
     console.log(msg);
   }
 
-  onClose() {
+  onClose(): void {
     this.visible = false;
+  }
+
+  onLogin([user]: [User, AuthenticationClient]): void {
+    console.log('onLogin by Guard in Angular: ', user);
   }
 }
