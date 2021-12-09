@@ -4,8 +4,20 @@ import ReactDOM from 'react-dom'
 import reportWebVitals from './reportWebVitals'
 import { message } from 'antd'
 import { Guard } from './components'
+// import { AuthingGuard } from './components/AuthingGuard'
 
 const App = () => {
+  // 移动端点击事件延时问题
+  var FastClick = require('fastclick')
+  if ('addEventListener' in document) {
+    document.addEventListener(
+      'DOMContentLoaded',
+      function () {
+        FastClick.attach(document.body)
+      },
+      false
+    )
+  }
   return (
     <div
       style={{

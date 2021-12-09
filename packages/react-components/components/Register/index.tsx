@@ -129,7 +129,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
       </div>
       <div className="g2-tips-line">
         <span className="back-to-login">
-          <span className="gray">{t('common.alreadyHasAcc')}</span>
+          {/* <span className="gray">{t('common.alreadyHasAcc')}</span> */}
           <span
             className="link-like"
             onClick={() => __changeModule?.(GuardModuleType.LOGIN, {})}

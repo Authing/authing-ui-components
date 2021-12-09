@@ -16,9 +16,9 @@ import SubmitButton from '../../SubmitButton'
 import { InputNumber } from '../../InputNumber'
 import CustomFormItem, {
   ICheckProps,
-  ValidatorFormItemProps,
+  // ValidatorFormItemProps,
 } from '../../ValidatorRules'
-import { Rule } from 'antd/lib/form'
+// import { Rule } from 'antd/lib/form'
 
 export interface RegisterWithPhoneProps {
   onRegister: Function
