@@ -3,7 +3,7 @@ import {
   CommonMessage,
   AuthenticationClient,
   GuardScenes,
-} from 'ng-ui-components';
+} from '../../../ng-ui-components/src/public-api';
 import { User } from '@authing/native-js-ui-components';
 
 @Component({
