@@ -115,6 +115,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         </FormItemAccount>
         <Form.Item
           name="password"
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           rules={fieldRequiredRule(t('common.password'))}
         >
@@ -129,6 +130,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         {showCaptcha && (
           <Form.Item
             className="authing-g2-input-form"
+            validateTrigger={['onBlur', 'onChange']}
             name="captchaCode"
             rules={fieldRequiredRule(t('common.captchaCode'))}
           >

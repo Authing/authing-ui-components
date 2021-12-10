@@ -18,6 +18,7 @@ export const FormItemAccount: React.FC<FormItemAccountProps> = (props) => {
     if (methods.length !== 1)
       return (
         <FormItem
+          validateTrigger={['onBlur', 'onChange']}
           rules={fieldRequiredRule(t('common.account'))}
           {...formItemPtops}
         />
@@ -29,12 +30,7 @@ export const FormItemAccount: React.FC<FormItemAccountProps> = (props) => {
       case 'email-password':
         return <CustomFormItem.Email {...formItemPtops} />
       case 'username-password':
-        return (
-          <FormItem
-            rules={fieldRequiredRule(t('common.username'))}
-            {...formItemPtops}
-          />
-        )
+        return <CustomFormItem.UserName {...formItemPtops} />
     }
   }, [formItemPtops, methods, t])
 
