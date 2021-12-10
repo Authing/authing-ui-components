@@ -25,8 +25,6 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
   const [form] = Form.useForm()
   const submitButtonRef = useRef<any>(null)
 
-  const [necessity, setNecessity] = useState(true)
-
   const { t } = useTranslation()
 
   const { post } = useGuardHttp()
@@ -97,21 +95,19 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
         onSubmitCapture={() => {}}
         onFinish={bindTotp}
         onFinishFailed={(e) => {
-          setNecessity(false)
           submitButtonRef.current.onError()
         }}
       >
-        <VerifyCodeFormItem codeLength={6} name="saftyCode">
-          <VerifyCodeInput
-            length={6}
-            showDivider={true}
-            gutter={'10px'}
-            onChange={(data: any) => setNecessity(true)}
-          />
+        <VerifyCodeFormItem
+          codeLength={6}
+          name="saftyCode"
+          ruleKeyword={t('user.numberSafteyCode')}
+        >
+          <VerifyCodeInput length={6} showDivider={true} gutter={'10px'} />
         </VerifyCodeFormItem>
-        <p style={{ color: necessity ? '' : 'red' }}>
+        {/* <p style={{ color: necessity ? '' : 'red' }}>
           {necessity ? t('user.numberSafteyCode') : '数字安全码未填写'}
-        </p>
+        </p> */}
         <SubmitButton text={t('user.nextStep')} ref={submitButtonRef} />
       </Form>
     </>
