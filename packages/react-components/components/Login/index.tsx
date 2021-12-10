@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { message, Tabs } from 'antd'
+import { message, Popover, Tabs } from 'antd'
 import { intersection } from 'lodash'
 
 import { LoginWithPassword } from './core/withPassword/index'
@@ -190,28 +190,40 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
       {/* 两种方式都需要渲染的时候，才出现切换按钮 */}
       {renderInputWay && renderQrcodeWay && (
         <div className="g2-qrcode-switch">
-          <div className="switch-text">{switchText}</div>
-          <div
-            className="switch-img"
-            onClick={() => {
-              if (inputWays.includes(loginWay)) {
-                setLoginWay(firstQRcodeWay)
-              } else if (qrcodeWays.includes(loginWay)) {
-                setLoginWay(firstInputWay)
+          {/* <div className="switch-text">{switchText}</div> */}
+          <Popover
+            placement="left"
+            content={switchText}
+            overlayClassName="switch-text"
+            getPopupContainer={(node: any) => {
+              if (node) {
+                return node.parentElement
               }
+              return document.body
             }}
           >
-            <div className="imgae-mask" />
-            <IconFont
-              type="authing-a-erweima22"
-              className={`qrcode-switch-image ${inputNone}`}
-            />
-            <IconFont
-              type="authing-diannao"
-              style={{ marginTop: '-6px' }}
-              className={`qrcode-switch-image ${qrcodeNone}`}
-            />
-          </div>
+            <div
+              className="switch-img"
+              onClick={() => {
+                if (inputWays.includes(loginWay)) {
+                  setLoginWay(firstQRcodeWay)
+                } else if (qrcodeWays.includes(loginWay)) {
+                  setLoginWay(firstInputWay)
+                }
+              }}
+            >
+              <div className="imgae-mask" />
+              <IconFont
+                type="authing-a-erweima22"
+                className={`qrcode-switch-image ${inputNone}`}
+              />
+              <IconFont
+                type="authing-diannao"
+                style={{ marginTop: '-6px' }}
+                className={`qrcode-switch-image ${qrcodeNone}`}
+              />
+            </div>
+          </Popover>
         </div>
       )}
 
@@ -318,7 +330,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
 
             {!disableRegister && (
               <span className="go-to-register">
-                <span className="gray">{t('common.noAccYet')}</span>
+                {/* <span className="gray">{t('common.noAccYet')}</span> */}
                 <span
                   className="link-like"
                   onClick={() =>

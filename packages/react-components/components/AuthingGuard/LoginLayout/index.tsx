@@ -121,14 +121,20 @@ const useNormalLoginTabs = ({ onSuccess, onFail }: BaseFormProps) => {
 
   let tabs: any[] = []
 
-  loginMethods.forEach((method: LoginMethods) => {
+  // 兼容 密码登陆 donglyc
+  let filterLoginMethods = loginMethods.filter(
+    (d) => d.indexOf('password') === -1
+  )
+  const hasPassword = loginMethods.some((d) => d.indexOf('password') !== -1)
+  if (hasPassword) filterLoginMethods.push(LoginMethods.Password)
+
+  filterLoginMethods.forEach((method: LoginMethods) => {
     if (
       [LoginMethods.WechatMpQrcode, LoginMethods.WxMinQr].includes(method) &&
       qrcodeTabsSettings[method]
     ) {
       tabs.push(
         ...qrcodeTabsSettings[method].map((idp) => {
-          console.log(idp)
           return {
             key: idp.id,
             label: idp.title || loginMethodTitleMapping[method],
@@ -177,7 +183,6 @@ export const LoginLayout = () => {
     }
     return activeTab
   }, [activeTabs, qrcodeTabsSettings])
-  console.log(activeKey)
 
   return (
     <>
