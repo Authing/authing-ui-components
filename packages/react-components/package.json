@@ -30,7 +30,6 @@
     "clear:lib": "rm -rf lib",
     "log-tag": "node ./scripts/tag.js",
     "pretty-quick": "pretty-quick",
-    "prepublishOnly": "node ./scripts/pre-publish.js",
     "prestart": "npm run log-tag && npm run version",
     "prebuild:lib": "npm run log-tag && npm run version",
     "prepare": "cd ../.. && husky install packages/react-components/.husky",
