@@ -23,7 +23,7 @@
   "inputFullMfaCode": "Enter verification code",
   "inputLdapPwd": "LDAP Password",
   "inputLdapUsername": "LDAP Username",
-  "inputLoginPwd": "Password",
+  "inputLoginPwd": "Enter Password",
   "inputPhone": "Phone number",
   "inputPhoneOrEmail": "Enter Phone number or Email",
   "inputPwdAgain": "Enter password again",

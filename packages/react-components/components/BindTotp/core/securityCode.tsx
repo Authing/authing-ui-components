@@ -1,5 +1,5 @@
 import { Form, message } from 'antd'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 
@@ -25,6 +25,8 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
   const [form] = Form.useForm()
   const submitButtonRef = useRef<any>(null)
 
+  const [necessity, setNecessity] = useState(true)
+
   const { t } = useTranslation()
 
   const { post } = useGuardHttp()
@@ -39,7 +41,6 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
     try {
       await form.validateFields()
       const saftyCode = form.getFieldValue('saftyCode')
-
       const { code, data, message: resMessage } = await post(
         '/api/v2/mfa/totp/associate/confirm',
         {
@@ -95,12 +96,22 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
         form={form}
         onSubmitCapture={() => {}}
         onFinish={bindTotp}
-        onFinishFailed={() => submitButtonRef.current.onError()}
+        onFinishFailed={(e) => {
+          setNecessity(false)
+          submitButtonRef.current.onError()
+        }}
       >
         <VerifyCodeFormItem codeLength={6} name="saftyCode">
-          <VerifyCodeInput length={6} showDivider={true} gutter={'10px'} />
+          <VerifyCodeInput
+            length={6}
+            showDivider={true}
+            gutter={'10px'}
+            onChange={(data: any) => setNecessity(true)}
+          />
         </VerifyCodeFormItem>
-        <p>{t('user.numberSafteyCode')}</p>
+        <p style={{ color: necessity ? '' : 'red' }}>
+          {necessity ? t('user.numberSafteyCode') : '数字安全码未填写'}
+        </p>
         <SubmitButton text={t('user.nextStep')} ref={submitButtonRef} />
       </Form>
     </>

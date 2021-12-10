@@ -240,6 +240,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
             <Tabs
               onChange={(k: any) => {
                 setLoginWay(k)
+                message.destroy()
                 props.onLoginTabChange?.(k)
               }}
               activeKey={loginWay}
