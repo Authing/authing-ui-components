@@ -8,7 +8,6 @@ import {
   OnChanges,
 } from '@angular/core';
 
-// @authing/native-js-ui-components/lib/index.d.ts 中没有 Guard 和 GuardConfig 的定义，需要加上
 import {
   Guard,
   GuardConfig,
