@@ -49,8 +49,18 @@
     cursor: pointer;
     font-size: 14px;
     color: #878a95;
-    .g2-icon {
-      margin-right: 8px;
+    .g2-view-back-hover {
+      &:hover {
+        color: #396aff;
+      }
+      .g2-icon {
+        margin-right: 8px;
+        &.g2-view-back-icon {
+          font-size: 22px;
+          margin-right: 5px;
+          transform: translateY(2px);
+        }
+      }
     }
   }
   .g2-view-header {
@@ -179,14 +189,12 @@
     border-radius: 4px;
     .authing-ant-select-selector {
       height: 100% !important;
-      // border-color: #f5f6f7 !important;
       background-color: #f5f6f7 !important;
       .authing-ant-select-selection-item {
         line-height: 42px;
-      }
-      &:hover {
-        // border-color: #eeeff1 !important;
-        background-color: #eeeff1 !important;
+        &:hover {
+          background-color: #eeeff1 !important;
+        }
       }
     }
   }
@@ -507,5 +515,15 @@
 .authing-g2-questions-textarea {
   > textarea {
     resize: none;
+  }
+}
+
+.authing-g2-question-option {
+  background: none !important;
+  &.authing-g2-question-option-active {
+    color: #396aff;
+  }
+  &:hover {
+    background: #f5f6f7 !important;
   }
 }

@@ -25,12 +25,13 @@ const App = () => {
         width: '100vw',
         justifyContent: 'center',
         WebkitUserSelect: 'none',
+        minHeight: '100vh',
         background: '#F5F7FA',
       }}
     >
       <Guard
-        appId="61b1d3c6a7d941462bbadfb1"
-        // appId="61a85ff3350caf330f1667ba"
+        // appId="61b1d3c6a7d941462bbadfb1"
+        appId="6170eae513f365acc8596985"
         // appId="6191cf610f772aa56dc70637"
         // tenantId="6194a41abf23c1d5268b362a1"
         onLogin={(u) => {

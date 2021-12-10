@@ -168,7 +168,7 @@
   "unAppId": "Please pass in the App ID",
   "welcomeDoc": "Welcome to join {{name}}, in order to have a better experience, please improve your information first",
   "copied": "Copied",
-  "bindEmailDoc": "You have not bound the mailbox yet, please enter the mailbox to bind",
+  "bindEmailDoc": "please enter the mailbox to bind",
   "copy": "Copy",
   "emailNotNull": "Email is missing",
   "setPassword": "Set password",

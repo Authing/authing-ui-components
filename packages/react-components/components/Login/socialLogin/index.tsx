@@ -354,13 +354,17 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         )
       }
     })
-  const idp =
-    enterpriseConnectionObjs.length > 0 ? (
-      <>
-        {!noLoginMethods && <div className="g2-social-login-title">OR</div>}
-        <div className="g2-social-login-list">{idpButtons}</div>
-      </>
-    ) : null
+  const idp = enterpriseConnectionObjs.length ? (
+    <>
+      {!noLoginMethods && (
+        <div className="g2-social-login-title">
+          {i18n.t('login.otherLoginWay')}
+        </div>
+      )}
+      <div className="g2-social-login-list">{idpButtons}</div>
+    </>
+  ) : null
+  // eslint-disable-next-line react-hooks/exhaustive-deps
 
   // let socialLogin
   // const shape = config.socialConnectionsBtnShape
