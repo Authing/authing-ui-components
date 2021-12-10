@@ -115,7 +115,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
     <div className="g2-view-container">
       <div className="g2-view-back">
         <span onClick={onBack}>
-          <IconFont type="authing-back" />
+          <IconFont type="authing-arrow-left-s-line" />
           <span>{t('common.backLoginPage')}</span>
         </span>
       </div>

@@ -93,5 +93,5 @@
   "inputUsername": "Username",
   "moreWays": "Scan",
   "inputCorrectPhoneOrEmail": "Enter a valid Email or Phone number",
-  "sendCodeTimeout": "Failed to send verification code"
+  "sendCodeTimeout": "Sending failed, please try later"
 }

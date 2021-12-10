@@ -93,5 +93,5 @@
   "inputUsername": "请输入用户名",
   "moreWays": "更多登录",
   "inputCorrectPhoneOrEmail": "请输入有效的手机号或邮箱",
-  "sendCodeTimeout": "发送验证码失败"
+  "sendCodeTimeout": "发送失败,请稍后尝试"
 }
