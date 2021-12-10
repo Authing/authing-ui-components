@@ -103,9 +103,9 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
 
     const validator = useCallback(async () => {
       if ((await checkReady()) && checked)
-        return checkError(methodContent.formatErrorMessage)
+        return checkError(methodContent.checkErrorMessage)
       else return checkSuccess()
-    }, [checkReady, checked, methodContent.formatErrorMessage])
+    }, [checkReady, checked, methodContent.checkErrorMessage])
 
     const rules = useMemo<Rule[]>(() => {
       const rules = required ? [...fieldRequiredRule(methodContent.field)] : []

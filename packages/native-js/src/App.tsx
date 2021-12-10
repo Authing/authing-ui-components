@@ -1,18 +1,13 @@
 import React, { useEffect } from "react";
 import "./App.css";
-import { AuthingGuard, GuardMode } from "./components";
+import { Guard, GuardMode } from "./components";
 
 function App() {
   useEffect(() => {
-    const guard = new AuthingGuard(
-      "6191cf610f772aa56dc70637",
-      {
-        target: ".App",
-        appHost: "https://core.dev2.authing-inc.co/",
-        mode: GuardMode.Modal,
-      },
-      "6194a41abf23c1d5268b362a"
-    );
+    const guard = new Guard("6191cf610f772aa56dc70637", {
+      target: ".App",
+      mode: GuardMode.Modal,
+    });
 
     // @ts-ignore
     window.guard = guard;

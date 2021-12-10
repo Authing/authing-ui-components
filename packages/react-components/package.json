@@ -1,6 +1,6 @@
 {
   "name": "@authing/react-ui-components",
-  "version": "3.0.2-beta.13",
+  "version": "3.0.0-rc.0",
   "private": false,
   "main": "lib/index.min.js",
   "typings": "lib/index.d.ts",
@@ -30,7 +30,6 @@
     "clear:lib": "rm -rf lib",
     "log-tag": "node ./scripts/tag.js",
     "pretty-quick": "pretty-quick",
-    "prepublishOnly": "node ./scripts/pre-publish.js",
     "prestart": "npm run log-tag && npm run version",
     "prebuild:lib": "npm run log-tag && npm run version",
     "prepare": "cd ../.. && husky install packages/react-components/.husky",
