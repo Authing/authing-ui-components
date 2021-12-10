@@ -51,6 +51,7 @@ export const RotateReset = (props: RotateResetProps) => {
         autoComplete="off"
       >
         <Form.Item
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           name="oldPassword"
           rules={[...fieldRequiredRule(t('common.password'))]}

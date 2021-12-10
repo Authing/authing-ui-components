@@ -198,6 +198,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           />
         </CustomFormItem.Phone>
         <Form.Item
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           name="internal phone:code"
           key="internal-phone:codea"
@@ -247,6 +248,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           />
         </CustomFormItem.Email>
         <Form.Item
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           name="internal email:code"
           key="internal email:code1432"
@@ -351,6 +353,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         } else {
           return (
             <Form.Item
+              validateTrigger={['onBlur', 'onChange']}
               className="authing-g2-input-form"
               rules={generateRules()}
               key={key}

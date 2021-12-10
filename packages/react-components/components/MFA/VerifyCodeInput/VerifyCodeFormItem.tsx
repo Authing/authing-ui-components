@@ -14,6 +14,7 @@ export const VerifyCodeFormItem: React.FC<VerifyCodeFormItemProps> = (
   const { codeLength, ruleKeyword, ...formItemProps } = props
   return (
     <Form.Item
+      validateTrigger={['onBlur', 'onChange']}
       name="mfaCode"
       className="g2-mfa-totp-verify-input"
       // validateTrigger={'onBlur'}

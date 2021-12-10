@@ -63,6 +63,7 @@ export const FirstLoginReset = (props: FirstLoginResetProps) => {
           />
         </CustomFormItem.Password>
         <Form.Item
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           name="password2"
           rules={[

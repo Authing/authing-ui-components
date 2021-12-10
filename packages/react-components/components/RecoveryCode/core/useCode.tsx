@@ -44,6 +44,7 @@ export const UseCode: React.FC<UseCodeProps> = ({ mfaToken }) => {
         onFinishFailed={() => submitButtonRef.current.onError()}
       >
         <Form.Item
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           name="recoveryCode"
           rules={[
