@@ -218,7 +218,7 @@
   "timeoutLDAP": "Request timed out, LDAP configuration error",
   "totpText1": "Please keep the recovery code properly",
   "totpText2": "If your MFA is lost, you will need a recovery code",
-  "usePhoneOpen": "",
+  "usePhoneOpen": "Please open Google Authenticator or Microsoft Authenticator on your phone",
   "useRecoveryCodetips": "After successful login, we will generate a new recovery code.",
   "passwordAgain": "Confirm password",
   "isMissing": "{{name}} is missing",

@@ -211,7 +211,7 @@
   "faceText4": "重试一次",
   "checkPasswordHasSpace": "不能包含空格",
   "backToVerify": "返回验证页",
-  "usePhoneOpen": "请在手机打开",
+  "usePhoneOpen": "请在手机打开 Google Authenticator 或 Microsoft Authenticator",
   "noValidator": "没有验证器请",
   "clickTodownload": "点击下载",
   "mfaText1": "扫码添加 OTP，在手机查看并输入 6 位数字安全码。",
