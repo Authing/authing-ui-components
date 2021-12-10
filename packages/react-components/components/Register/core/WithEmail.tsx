@@ -112,8 +112,8 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           onFinish(values)
         }}
         onFinishFailed={() => submitButtonRef.current.onError()}
-        onValuesChange={(values) => {
-          if (values['password']) {
+        onValuesChange={(_, values) => {
+          if (values['password'] && values['new-password']) {
             // password changed verify new password
             form.validateFields(['new-password'])
           }
@@ -157,6 +157,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           name="new-password"
           rules={[
             {
+              validateTrigger: 'onBlur',
               validator: (_, value) => {
                 if (value !== form.getFieldValue('password')) {
                   return Promise.reject(t('common.repeatPasswordDoc'))
