@@ -3,7 +3,7 @@ import {
   CommonMessage,
   AuthenticationClient,
   GuardScenes,
-} from '../../../ng-ui-components/src/public-api';
+} from 'ng-ui-components';
 import { User } from '@authing/native-js-ui-components';
 
 @Component({
@@ -17,7 +17,7 @@ export class AppComponent {
   appId = '61b04e9d9c7862a906c32355';
   config = {
     target: '#authing_guard_container',
-    mode: 'modal',
+    mode: 'normal',
 
     apiHost: 'https://lb68p7-demo.authing.cn',
     // loginMethods: Object.values(LoginMethods),

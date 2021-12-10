@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { GuardModule } from '../../../ng-ui-components/src/lib/Guard/guard.module';
+import { GuardModule } from 'ng-ui-components';
 
 import { AppComponent } from './app.component';
 
