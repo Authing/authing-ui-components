@@ -28,6 +28,7 @@ export const ChangeLanguage = (props: any) => {
         }}
       >
         <IconFont
+          style={{ fontSize: 16 }}
           type={
             i18n.language === 'zh-CN'
               ? 'authing-a-yingwen1'
