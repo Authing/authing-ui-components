@@ -1,7 +1,7 @@
 import Form, { FormItemProps } from 'antd/lib/form'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-
+import './style.less'
 export interface VerifyCodeFormItemProps extends FormItemProps {
   codeLength: number
   ruleKeyword?: string
@@ -11,11 +11,7 @@ export const VerifyCodeFormItem: React.FC<VerifyCodeFormItemProps> = (
   props
 ) => {
   const { t } = useTranslation()
-  const {
-    codeLength,
-    ruleKeyword = t('common.totpCode'),
-    ...formItemProps
-  } = props
+  const { codeLength, ruleKeyword, ...formItemProps } = props
   return (
     <Form.Item
       name="mfaCode"
@@ -25,10 +21,13 @@ export const VerifyCodeFormItem: React.FC<VerifyCodeFormItemProps> = (
         {
           validator(_, value: string[]) {
             if ((value ?? []).join('').length !== codeLength) {
+              // return Promise.reject()
               return Promise.reject(
-                t('common.isMissing', {
-                  name: ruleKeyword,
-                })
+                ruleKeyword
+                  ? t('common.isMissing', {
+                      name: ruleKeyword,
+                    })
+                  : null
               )
             }
             return Promise.resolve()

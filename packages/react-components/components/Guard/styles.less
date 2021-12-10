@@ -55,7 +55,7 @@
   }
   .g2-view-header {
     user-select: none;
-    padding: 44px var(--sidePadding) 0;
+    padding: 24px var(--sidePadding) 0;
     .icon {
       width: 48px;
       height: 48px;
@@ -63,6 +63,7 @@
       margin-bottom: 8px;
     }
     .title {
+      color: #282d3c;
       font-weight: 600;
       font-size: 24px;
       white-space: nowrap;
@@ -174,7 +175,7 @@
   .authing-g2-select {
     border: 1px solid #f5f6f7;
     border-color: #f5f6f7;
-    height: 46px;
+    // height: 46px;
     border-radius: 4px;
     .authing-ant-select-selector {
       height: 100% !important;
@@ -193,7 +194,7 @@
 
 .authing-g2-input {
   border: 1px solid #f5f6f7;
-  height: 46px;
+  // height: 46px;
   border-radius: 4px;
   background: #f5f6f7;
 
@@ -209,13 +210,15 @@
     // 通过这个方式 hack 浏览器自动填充：
     // 自动填充的浏览器可以说罪恶滔天，钉死在 mdn 的耻辱柱上：https://developer.mozilla.org/en-US/docs/Web/CSS/:autofill
     // 下方的 focused 同样需要这样处理
+    font-size: 14px;
     height: 0;
     background-color: #f5f6f7;
     padding: 1em 0.5em !important;
     background-clip: content-box !important;
     &::placeholder,
     &::-webkit-input-placeholder {
-      color: #a7a7a7;
+      // color: #a7a7a7;
+      color: #c8c9cc;
     }
   }
 
@@ -424,6 +427,7 @@
   .authing-ant-modal-content {
     width: var(--containerWidth);
     border-radius: 8px;
+    margin: auto;
   }
   .authing-ant-modal-body {
     padding: 0;
@@ -467,4 +471,25 @@
 
 *[class*='authing-'].authing-ant-input-prefix {
   margin-right: 0px;
+}
+
+.authing-ant-form-item-with-help {
+  margin-bottom: 0 !important;
+}
+// form 必填 icon 后置
+.authing-g2-form-required-item-icon-after {
+  label.authing-ant-form-item-required:not(.authing-ant-form-item-required-mark-optional)::before {
+    display: none;
+  }
+
+  label.authing-ant-form-item-required:not(.authing-ant-form-item-required-mark-optional)::after {
+    display: inline-block;
+    margin-right: 4px;
+    margin-top: 4px;
+    color: #ff4d4f;
+    font-size: 14px;
+    font-family: SimSun, sans-serif;
+    line-height: 1;
+    content: '*';
+  }
 }

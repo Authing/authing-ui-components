@@ -1,7 +1,7 @@
-import { LockOutlined } from '@ant-design/icons'
 import { Form, Input } from 'antd'
 import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { IconFont } from '../../IconFont'
 import SubmitButton from '../../SubmitButton'
 import { useGuardHttp } from '../../_utils/guradHttp'
 
@@ -58,7 +58,12 @@ export const UseCode: React.FC<UseCodeProps> = ({ mfaToken }) => {
             autoComplete="email"
             size="large"
             placeholder={t('login.inputRecoverCode')}
-            prefix={<LockOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-lock-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
           />
         </Form.Item>
 

@@ -343,6 +343,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
           </Button>
         ) : (
           <Tooltip
+            overlayStyle={{ fontFamily: 'sans-serif' }}
             key={item.provider}
             title={item.tooltip?.[i18n.language as Lang] || item.name}
           >
@@ -390,7 +391,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         <div
           style={{
             flex: 1,
-            minHeight: 47,
+            minHeight: 32,
           }}
         />
       )}

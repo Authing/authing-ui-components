@@ -9,9 +9,9 @@ export const ChangeLanguage = (props: any) => {
     return <></>
   }
 
-  let switchText = '简体中文'
+  let switchText = 'English'
   if (i18n.language === 'en-US') {
-    switchText = 'English'
+    switchText = '简体中文'
   }
   return (
     <div className="g2-change-language-container">
@@ -27,7 +27,13 @@ export const ChangeLanguage = (props: any) => {
           }
         }}
       >
-        <IconFont type="authing-global-line" />
+        <IconFont
+          type={
+            i18n.language === 'zh-CN'
+              ? 'authing-a-yingwen1'
+              : 'authing-zhongwen'
+          }
+        />
         <span className="g2-change-language-text">{switchText}</span>
       </span>
     </div>

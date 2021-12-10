@@ -1,13 +1,12 @@
 import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form, Input, message } from 'antd'
-
-import { LockOutlined } from '@ant-design/icons'
-
+import { Form, message } from 'antd'
 import SubmitButton from '../../SubmitButton'
 import { useAuthClient } from '../../Guard/authClient'
 import CustomFormItem from '../../ValidatorRules'
 import { fieldRequiredRule } from '../../_utils'
+import { InputPassword } from '../../InputPassword'
+import { IconFont } from '../../IconFont'
 
 interface RotateResetProps {
   onReset: any
@@ -56,22 +55,32 @@ export const RotateReset = (props: RotateResetProps) => {
           name="oldPassword"
           rules={[...fieldRequiredRule(t('common.password'))]}
         >
-          <Input.Password
+          <InputPassword
             className="authing-g2-input"
             size="large"
             placeholder={t('user.inputCurrPwd')}
-            prefix={<LockOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-lock-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
           />
         </Form.Item>
         <CustomFormItem.Password
           className="authing-g2-input-form"
           name="password"
         >
-          <Input.Password
+          <InputPassword
             className="authing-g2-input"
             size="large"
             placeholder={t('login.inputPwd')}
-            prefix={<LockOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-lock-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
           />
         </CustomFormItem.Password>
         <CustomFormItem.Password
@@ -92,11 +101,16 @@ export const RotateReset = (props: RotateResetProps) => {
             },
           ]}
         >
-          <Input.Password
+          <InputPassword
             className="authing-g2-input"
             size="large"
             placeholder={t('login.inputPwdAgain')}
-            prefix={<LockOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-lock-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
           />
         </CustomFormItem.Password>
         <Form.Item className="authing-g2-input-form submit-form">
