@@ -60,6 +60,10 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
       await authClient.sendSmsCode(phone)
       return true
     } catch (error) {
+      if (error.code === 'ECONNABORTED') {
+        message.error(t('login.sendCodeTimeout'))
+        return false
+      }
       const { message: msg } = JSON.parse(error.message)
       message.error(msg)
       return false
@@ -96,7 +100,6 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
                     : await sendEmail(phoneData)
                 })
                 .catch((e: any) => {
-                  // console.log('e', e)
                   return false
                 })
             }}
