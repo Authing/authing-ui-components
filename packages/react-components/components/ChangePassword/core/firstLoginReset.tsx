@@ -4,9 +4,8 @@ import { Form, message } from 'antd'
 import { useAuthClient } from '../../Guard/authClient'
 import SubmitButton from '../../SubmitButton'
 import CustomFormItem from '../../ValidatorRules'
-import { InputPassword } from '../../Login/core/withPassword/inputPassword'
 import { IconFont } from '../../IconFont'
-
+import { InputPassword } from '../../InputPassword'
 interface FirstLoginResetProps {
   onReset: any
   publicConfig: any

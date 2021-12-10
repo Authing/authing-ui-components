@@ -12,7 +12,7 @@ import { FormItemAccount } from './FormItemAccount'
 import { InputAccount } from './InputAccount'
 import { GraphicVerifyCode } from './GraphicVerifyCode'
 import { IconFont } from '../../../IconFont'
-import { InputPassword } from './inputPassword'
+import { InputPassword } from '../../../InputPassword'
 
 interface LoginWithPasswordProps {
   // configs

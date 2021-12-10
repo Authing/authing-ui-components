@@ -17,6 +17,7 @@ export interface SendPhoneCodeProps extends InputProps {
   form?: any
   onSendCodeBefore?: any // 点击的时候先做这个
   fieldName?: string
+  autoSubmit?: boolean //验证码输入完毕是否自动提交
 }
 
 export const SendCode: FC<SendPhoneCodeProps> = ({
@@ -24,6 +25,7 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
   data,
   value,
   onChange,
+  autoSubmit = false,
   form,
   onSendCodeBefore,
   maxLength,
@@ -72,8 +74,9 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
             value={value}
             onChange={(e) => {
               onChange?.(e)
+              if (!autoSubmit) return
               if (maxLength && e.target.value.length >= maxLength) {
-                form.submit()
+                form?.submit()
               }
             }}
             {...inputProps}

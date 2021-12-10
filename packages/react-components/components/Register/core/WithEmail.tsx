@@ -10,7 +10,7 @@ import { Agreements } from '../components/Agreements'
 import SubmitButton from '../../SubmitButton'
 import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
-import { InputPassword } from '../../Login/core/withPassword/inputPassword'
+import { InputPassword } from '../../InputPassword'
 
 export interface RegisterWithEmailProps {
   onRegister: Function

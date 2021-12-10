@@ -110,6 +110,7 @@ export const LoginWithPhoneCode = (props: any) => {
               length: verifyCodeLength,
             })}
             maxLength={verifyCodeLength}
+            autoSubmit={true}
             // prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
             prefix={
               <IconFont

@@ -5,7 +5,7 @@ import SubmitButton from '../../SubmitButton'
 import { useAuthClient } from '../../Guard/authClient'
 import CustomFormItem from '../../ValidatorRules'
 import { fieldRequiredRule } from '../../_utils'
-import { InputPassword } from '../../Login/core/withPassword/inputPassword'
+import { InputPassword } from '../../InputPassword'
 import { IconFont } from '../../IconFont'
 
 interface RotateResetProps {

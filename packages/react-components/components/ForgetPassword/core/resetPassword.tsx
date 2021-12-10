@@ -7,9 +7,8 @@ import { useAuthClient } from '../../Guard/authClient'
 import { fieldRequiredRule, validate } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
 import CustomFormItem from '../../ValidatorRules'
-import { InputPassword } from '../../Login/core/withPassword/inputPassword'
 import { IconFont } from '../../IconFont'
-
+import { InputPassword } from '../../InputPassword'
 interface ResetPasswordProps {
   onReset: any
   publicConfig: any

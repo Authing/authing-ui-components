@@ -7,8 +7,7 @@ import { useAuthClient } from '../../Guard/authClient'
 import SubmitButton from '../../SubmitButton'
 import { fieldRequiredRule } from '../../_utils'
 import { IconFont } from '../../IconFont'
-import { InputPassword } from './withPassword/inputPassword'
-
+import { InputPassword } from '../../InputPassword'
 interface LoginWithLDAPProps {
   // configs
   publicKey: string
