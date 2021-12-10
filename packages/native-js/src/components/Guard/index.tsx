@@ -17,8 +17,10 @@ import {
   AuthenticationClientOptions,
 } from "@authing/react-ui-components";
 import "@authing/react-ui-components/lib/index.min.css";
-import { GuardConfig } from "@authing/react-ui-components/components";
-import { GuardComponentConifg } from "@authing/react-ui-components/components/Guard/config";
+import {
+  GuardComponentConifg,
+  GuardLocalConfig,
+} from "@authing/react-ui-components/components/Guard/config";
 import { GuardEvents } from "@authing/react-ui-components/components/Guard/event";
 
 export type {
@@ -48,7 +50,10 @@ export type EventListeners = {
 };
 
 export class Guard {
-  constructor(private appId: string, private config?: GuardConfig) {
+  constructor(
+    private appId: string,
+    private config?: Partial<GuardLocalConfig>
+  ) {
     this.render();
   }
 
@@ -112,6 +117,7 @@ export class Guard {
         {...(evts as GuardEvents)}
         appId={this.appId}
         config={this.config as GuardComponentConifg}
+        visible={this.visible}
       />,
       Guard.getGuardContainer(this.config?.target),
       cb
