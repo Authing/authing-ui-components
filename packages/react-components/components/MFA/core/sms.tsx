@@ -1,4 +1,3 @@
-import { UserOutlined } from '@ant-design/icons'
 import { message } from 'antd'
 import { Form } from 'antd'
 import { User } from 'authing-js-sdk'
@@ -12,6 +11,7 @@ import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
 import { VerifyCodeFormItem } from '../VerifyCodeInput/VerifyCodeFormItem'
 import { MFAConfig } from '../interface'
 import { InputNumber } from '../../InputNumber'
+import { IconFont } from '../../IconFont'
 export interface BindMFASmsProps {
   mfaToken: string
   onBind: (phone: string) => void
@@ -66,7 +66,12 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
             autoComplete="tel"
             size="large"
             placeholder={t('login.inputPhone')}
-            prefix={<UserOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-user-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
           />
         </CustomFormItem.Phone>
         <SubmitButton text={t('common.sure')} ref={submitButtonRef} />

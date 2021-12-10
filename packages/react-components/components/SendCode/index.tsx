@@ -17,6 +17,7 @@ export interface SendPhoneCodeProps extends InputProps {
   form?: any
   onSendCodeBefore?: any // 点击的时候先做这个
   fieldName?: string
+  autoSubmit?: boolean //验证码输入完毕是否自动提交
 }
 
 export const SendCode: FC<SendPhoneCodeProps> = ({
@@ -24,6 +25,7 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
   data,
   value,
   onChange,
+  autoSubmit = false,
   form,
   onSendCodeBefore,
   maxLength,
@@ -58,6 +60,10 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
       await authClient.sendSmsCode(phone)
       return true
     } catch (error) {
+      if (error.code === 'ECONNABORTED') {
+        message.error(t('login.sendCodeTimeout'))
+        return false
+      }
       const { message: msg } = JSON.parse(error.message)
       message.error(msg)
       return false
@@ -70,7 +76,13 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
         <Col span={15} className="g2-send-code-input-col">
           <InputNumber
             value={value}
-            onChange={onChange}
+            onChange={(e) => {
+              onChange?.(e)
+              if (!autoSubmit) return
+              if (maxLength && e.target.value.length >= maxLength) {
+                form?.submit()
+              }
+            }}
             {...inputProps}
             maxLength={maxLength}
           />
@@ -88,7 +100,6 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
                     : await sendEmail(phoneData)
                 })
                 .catch((e: any) => {
-                  // console.log('e', e)
                   return false
                 })
             }}

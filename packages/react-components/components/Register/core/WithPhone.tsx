@@ -1,4 +1,3 @@
-import { SafetyOutlined, UserOutlined } from '@ant-design/icons'
 import { Form } from 'antd'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -18,6 +17,7 @@ import CustomFormItem, {
   ICheckProps,
   // ValidatorFormItemProps,
 } from '../../ValidatorRules'
+import { IconFont } from '../../IconFont'
 // import { Rule } from 'antd/lib/form'
 
 export interface RegisterWithPhoneProps {
@@ -113,7 +113,13 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
             }}
             size="large"
             placeholder={t('login.inputPhone')}
-            prefix={<UserOutlined style={{ color: '#878A95' }} />}
+            // prefix={<UserOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-user-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
             maxLength={11}
           />
         </CustomFormItem.Phone>
@@ -132,7 +138,13 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
               length: verifyCodeLength,
             })}
             maxLength={verifyCodeLength}
-            prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
+            // prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-shield-check-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
             method="phone"
             onSendCodeBefore={() => form.validateFields(['phone'])}
             data={phone}

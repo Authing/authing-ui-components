@@ -23,7 +23,7 @@
   "inputFullMfaCode": "Enter verification code",
   "inputLdapPwd": "LDAP Password",
   "inputLdapUsername": "LDAP Username",
-  "inputLoginPwd": "Password",
+  "inputLoginPwd": "Enter Password",
   "inputPhone": "Phone number",
   "inputPhoneOrEmail": "Enter Phone number or Email",
   "inputPwdAgain": "Enter password again",
@@ -92,5 +92,6 @@
   "inputEmailUsername": "Please enter email or account",
   "inputUsername": "Username",
   "moreWays": "Scan",
-  "inputCorrectPhoneOrEmail": "Enter a valid Email or Phone number"
+  "inputCorrectPhoneOrEmail": "Enter a valid Email or Phone number",
+  "sendCodeTimeout": "Sending failed, please try later"
 }

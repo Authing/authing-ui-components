@@ -7,7 +7,7 @@ import './styles.less'
 export const GuardErrorView: React.FC<GuardErrorViewProps> = (props) => {
   const messages = props?.initData?.messages
     ? `出错了～：${props?.initData?.messages} `
-    : `未知的错误～ 请您联系管理员进行处理`
+    : `未知的错误～ 请你联系管理员进行处理`
   const imgSrc = require('../assets/images/error.png').default
 
   return (
