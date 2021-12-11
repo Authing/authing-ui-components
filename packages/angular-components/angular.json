@@ -73,8 +73,7 @@
               "projects/demo/src/assets"
             ],
             "styles": [
-              "projects/demo/src/styles.scss",
-              "node_modules/@authing/native-js-ui-components/lib/index.min.css"
+              "projects/demo/src/styles.scss"
             ],
             "scripts": []
           },

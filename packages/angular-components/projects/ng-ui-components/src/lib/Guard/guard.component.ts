@@ -10,8 +10,8 @@ import {
 
 import {
   Guard,
-  GuardConfig,
   GuardEventsHandler,
+  GuardLocalConfig
 } from '@authing/native-js-ui-components';
 
 @Component({
@@ -39,7 +39,7 @@ export class GuardComponent implements OnInit, OnChanges {
   @Input() appId: string;
   @Input() visible?: boolean;
   @Input() tenantId?: string;
-  @Input() config?: GuardConfig;
+  @Input() config?: Partial<GuardLocalConfig>;
 
   @Output() onLoad = new EventEmitter<
     Parameters<GuardEventsHandler['onLoad']>
