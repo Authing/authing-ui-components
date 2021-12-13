@@ -11,7 +11,7 @@ import {
 import {
   Guard,
   GuardEventsHandler,
-  GuardLocalConfig
+  GuardLocalConfig,
 } from '@authing/native-js-ui-components';
 
 @Component({
@@ -83,7 +83,7 @@ export class GuardComponent implements OnInit, OnChanges {
 
   ngAfterViewInit() {
     const guard = new Guard(this.appId, this.config);
-    
+
     guard.on('load', (...rest) => this.onLoad.emit(rest));
     guard.on('load-error', (...rest) => this.onLoadError.emit(rest));
     guard.on('login', (...rest) => this.onLogin.emit(rest));

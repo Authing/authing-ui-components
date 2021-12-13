@@ -12,7 +12,8 @@ import {
 } from './face_deps'
 import { ImagePro } from '../../ImagePro'
 import SubmitButton from '../../SubmitButton'
-
+import { message } from 'antd'
+import { faceErrorMessage } from '../../_utils/errorFace'
 const useDashoffset = (percent: number) => {
   // 接受 0 - 1，返回 0-700 之间的偏移量
   let offset = percent * 7
@@ -57,8 +58,11 @@ export const MFAFace = (props: any) => {
         videoRef.current!.srcObject = stream
       })
       .catch((e) => {
+        const msg = faceErrorMessage(e)
+        message.error(t(msg))
+
         // 没有设备，或没有授权
-        console.error(e)
+        // console.error(e)
         // setVideoType(VideoAction.ERROR)
         // setProgressStatus('exception')
         // setPercent(100)
@@ -68,7 +72,7 @@ export const MFAFace = (props: any) => {
     return () => {
       interval.current && clearInterval(interval.current)
     }
-  }, [faceState, interval, props.config, cdnBase])
+  }, [faceState, interval, props.config, cdnBase, t])
 
   // 监听 faceState
   useEffect(() => {
@@ -230,8 +234,13 @@ export const MFAFace = (props: any) => {
 
           <SubmitButton
             onClick={() => {
-              setFaceState('identifying')
-              autoShoot()
+              // 设置状态之前 校验是否支持面容 （api 和 设备）
+              if (navigator.mediaDevices) {
+                setFaceState('identifying')
+                autoShoot()
+              } else {
+                message.error(t('login.mediaDevicesSupport'))
+              }
             }}
             text={t('common.faceText3')}
             className="mfa-face"

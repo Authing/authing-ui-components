@@ -94,5 +94,10 @@
   "inputUsername": "请输入用户名",
   "moreWays": "更多登录",
   "inputCorrectPhoneOrEmail": "请输入有效的手机号或邮箱",
-  "sendCodeTimeout": "发送失败,请稍后尝试"
+  "sendCodeTimeout": "发送失败,请稍后尝试",
+  "mediaDevicesSupport": "当前设备暂不支持人脸识别",
+  "AuthorizationCamera": "请先开启授权",
+  "checkPreferences": "请检查偏好设置",
+  "requireError": "无法满足要求错误",
+  "hardwareSupport": "硬件不支持"
 }
