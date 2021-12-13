@@ -44,6 +44,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
         props.onReset(r)
       })
       .catch((e) => {
+        submitButtonRef.current.onError()
         props.onSendError(codeMethod, e)
         props.onReset(e)
       })
