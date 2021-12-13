@@ -9,7 +9,7 @@ import { RegisterWithEmail } from './core/WithEmail'
 import { RegisterWithPhone } from './core/WithPhone'
 import { GuardRegisterViewProps } from './interface'
 import { codeMap } from './codemap'
-import { shoudGoToComplete } from '../_utils'
+import { shoudGoToComplete, tabSort } from '../_utils'
 
 export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
   config,
@@ -100,10 +100,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
 
   const renderTab = useMemo(() => {
     const { registerMethods, defaultRegisterMethod } = config
-    const index = registerMethods.indexOf(defaultRegisterMethod)
-    const element = registerMethods.splice(index, 1)[0]
-    registerMethods.unshift(element)
-    return registerMethods?.map((method) => (
+    return tabSort(defaultRegisterMethod, registerMethods)?.map((method) => (
       <Tabs.TabPane tab={tabMapping[method].name} key={method}>
         {tabMapping[method].component}
       </Tabs.TabPane>

@@ -83,6 +83,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
         autoComplete="off"
       >
         <Form.Item
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           name="account"
           rules={fieldRequiredRule(t('common.account'))}
@@ -101,6 +102,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
           />
         </Form.Item>
         <Form.Item
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           name="password"
           rules={fieldRequiredRule(t('common.password'))}
@@ -120,6 +122,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
         </Form.Item>
         {showCaptcha && (
           <Form.Item
+            validateTrigger={['onBlur', 'onChange']}
             className="authing-g2-input-form"
             name="captchaCode"
             rules={[{ required: true, message: t('login.inputCaptchaCode') }]}

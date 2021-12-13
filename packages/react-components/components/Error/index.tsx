@@ -1,13 +1,14 @@
 import React from 'react'
 import { ImagePro } from '../ImagePro'
 import { GuardErrorViewProps } from './interface'
+import { i18n } from '../_utils/locales'
 
 import './styles.less'
 
 export const GuardErrorView: React.FC<GuardErrorViewProps> = (props) => {
   const messages = props?.initData?.messages
-    ? `出错了～：${props?.initData?.messages} `
-    : `未知的错误～ 请你联系管理员进行处理`
+    ? `${i18n.t('user.error')}：${props?.initData?.messages} `
+    : `${i18n.t('user.contactAdministrator')}`
   const imgSrc = require('../assets/images/error.png').default
 
   return (

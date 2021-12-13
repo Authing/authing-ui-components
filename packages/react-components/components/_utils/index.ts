@@ -3,7 +3,7 @@ import { Rule } from 'antd/lib/form'
 import qs from 'qs'
 import { useGuardContext } from '../context/global/context'
 import { i18n } from './locales'
-import { User } from 'authing-js-sdk'
+import { RegisterMethods, User } from 'authing-js-sdk'
 import { ApplicationConfig, ComplateFiledsPlace } from '../AuthingGuard/api'
 export * from './popupCenter'
 export * from './clipboard'
@@ -36,6 +36,7 @@ export const fieldRequiredRule = (fieldRequiredRule: string): Rule[] => {
   return [
     {
       required: true,
+      validateTrigger: ['onChange'],
       message: i18n.t('common.isMissing', {
         name: fieldRequiredRule,
       }),
@@ -264,8 +265,9 @@ export const getPasswordValidate = (
   customPasswordStrength: any = {}
 ): Rule[] => {
   const required = [
-    fieldRequiredRule(i18n.t('common.password'))[0],
+    ...fieldRequiredRule(i18n.t('common.password')),
     {
+      validateTrigger: 'onBlur',
       validator(_: any, value: any) {
         if ((value ?? '').indexOf(' ') !== -1) {
           return Promise.reject(i18n.t('common.checkPasswordHasSpace'))
@@ -280,6 +282,7 @@ export const getPasswordValidate = (
     [PasswordStrength.Low]: [
       ...required,
       {
+        validateTrigger: 'onBlur',
         validator(r, v) {
           if (v && v.length < 6) {
             return Promise.reject(
@@ -293,6 +296,7 @@ export const getPasswordValidate = (
     [PasswordStrength.Middle]: [
       ...required,
       {
+        validateTrigger: 'onBlur',
         validator(r, v) {
           if (v && (v.length < 6 || getSymbolTypeLength(v) < 2)) {
             return Promise.reject(
@@ -308,11 +312,9 @@ export const getPasswordValidate = (
     [PasswordStrength.High]: [
       ...required,
       {
+        validateTrigger: 'onBlur',
         validator(r, v) {
           if (v && (v.length < 6 || getSymbolTypeLength(v) < 3)) {
-            console.log(
-              PASSWORD_STRENGTH_TEXT_MAP[PasswordStrength.High].validateMessage
-            )
             return Promise.reject(
               PASSWORD_STRENGTH_TEXT_MAP[
                 PasswordStrength.High
@@ -326,6 +328,7 @@ export const getPasswordValidate = (
     [PasswordStrength.AUTO]: [
       ...required,
       {
+        validateTrigger: 'onBlur',
         pattern: customPasswordStrength?.regex,
         message: customPasswordStrength?.message,
       },
@@ -426,4 +429,14 @@ export const shoudGoToComplete = (
     }
   }
   return needGo
+}
+
+export const tabSort = (
+  defaultValue: RegisterMethods,
+  tabList: RegisterMethods[]
+): RegisterMethods[] => {
+  const index = tabList.indexOf(defaultValue)
+  const element = tabList.splice(index, 1)[0]
+  tabList.unshift(element)
+  return tabList
 }
