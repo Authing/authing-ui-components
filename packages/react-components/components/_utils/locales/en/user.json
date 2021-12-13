@@ -81,5 +81,5 @@
   "contactAdministrator": "Unknown error ~ please contact the administrator for processing",
   "resetpasswordText1": "Enter your registered phone number/email, enter the verification code received, and we will reset your password.",
   "pleaseDownloadAuthenticator": "Open Google Authenticator or Microsoft Authenticator on your phone and scan below QR code",
-  "modifyPwdText": "Your password has been used continuously for more than {{number}} months, which may be risky. \nPlease reset your password."
+  "modifyPwdText": "Your password has been used continuously for more than {{number}} months, which may be risky. Please reset your password."
 }

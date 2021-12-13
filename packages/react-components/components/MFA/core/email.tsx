@@ -124,6 +124,7 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
       onVerify(200, user)
     } catch (e: any) {
       const error = JSON.parse(e?.message)
+      submitButtonRef.current?.onError()
       onVerify(error.code as number, error)
     } finally {
       submitButtonRef.current?.onSpin(false)

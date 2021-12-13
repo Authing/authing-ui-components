@@ -35,10 +35,12 @@ const App = () => {
         // appId="61a85ff3350caf330f1667ba"
         // appId="6191cf610f772aa56dc70637"
         // tenantId="6194a41abf23c1d5268b362a1"
+        // visible={true}
         onLogin={(u) => {
           message.info('🏁 用户业务层终点，登录完成。')
           console.log(u)
         }}
+        // visible={true}
         onLoad={(authClint) => console.log('🪝 onLoad', authClint)}
         onLoadError={(error) => console.log('🪝 onLoadError', error)}
         onBeforeLogin={(m) => {

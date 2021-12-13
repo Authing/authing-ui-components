@@ -190,7 +190,7 @@ export const MFAFace = (props: any) => {
       interval.current = setInterval(() => autoShoot(), 500)
     }
     const videoDom = videoRef.current!
-    if (videoDom.paused || videoDom.ended || !isFaceDetectionModelLoaded()) {
+    if (videoDom?.paused || videoDom?.ended || !isFaceDetectionModelLoaded()) {
       return
     }
     const options = getFaceDetectorOptions()
