@@ -98,6 +98,7 @@ export const LoginWithPhoneCode = (props: any) => {
           />
         </CustomFormItem.Phone>
         <Form.Item
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           name="code"
           rules={fieldRequiredRule(t('common.captchaCode'))}

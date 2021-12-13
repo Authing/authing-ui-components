@@ -110,11 +110,9 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
     const rules = useMemo<Rule[]>(() => {
       const rules = required ? [...fieldRequiredRule(methodContent.field)] : []
       rules.push({
-        validator: (_: any, value: any) => {
-          if (!methodContent.pattern.test(value))
-            return checkError(methodContent.formatErrorMessage)
-          return checkSuccess()
-        },
+        validateTrigger: 'onBlur',
+        pattern: methodContent.pattern,
+        message: methodContent.formatErrorMessage,
       })
       checkRepeat &&
         Boolean(publicConfig) &&
@@ -127,6 +125,7 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
     return (
       <Form.Item
         validateFirst={true}
+        validateTrigger={['onBlur', 'onChange']}
         rules={[...rules, ...(formItemProps?.rules ?? [])]}
         name={name ?? method}
         {...formItemProps}

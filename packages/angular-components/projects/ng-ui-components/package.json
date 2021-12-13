@@ -6,12 +6,8 @@
     "@angular/core": "^10.2.0"
   },
   "dependencies": {
-    "@authing/native-js-ui-components": "^2.4.56-alpha.0",
     "tslib": "^2.0.0"
   },
-  "bundledDependencies": [
-    "@authing/native-js-ui-components"
-  ],
   "publishConfig": {
     "access": "public",
     "directory": "../../dist/ng-ui-components",

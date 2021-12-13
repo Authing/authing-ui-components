@@ -62,6 +62,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
         autoComplete="off"
       >
         <Form.Item
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           name="identify"
           validateFirst={true}
@@ -106,6 +107,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
           />
         </Form.Item>
         <Form.Item
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           name="code"
           rules={[...fieldRequiredRule(t('common.captchaCode'))]}

@@ -11,6 +11,7 @@ export const PasswordFormItem: React.FC<PasswordFormItemProps> = (props) => {
 
   return publicConfig ? (
     <Form.Item
+      validateTrigger={['onChange', 'onBlur']}
       validateFirst={true}
       name="password"
       rules={[

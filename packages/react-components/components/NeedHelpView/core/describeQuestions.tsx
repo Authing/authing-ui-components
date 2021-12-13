@@ -130,6 +130,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
         autoComplete="off"
       >
         <Form.Item
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           name="identify"
           label={t('common.problem.form.phone')}
@@ -164,6 +165,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
           />
         </Form.Item>
         <Form.Item
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           label={t('common.problem.form.question')}
           name="questionPicker"
@@ -189,6 +191,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
         </div>
 
         <Form.Item
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           name="description"
           label={t('common.problem.form.questionDescript')}

@@ -1,6 +1,6 @@
 {
   "name": "@authing/native-js-ui-components",
-  "version": "3.0.0-rc.0",
+  "version": "3.0.0-rc.1",
   "framework": "Native",
   "private": false,
   "main": "lib/index.min.js",

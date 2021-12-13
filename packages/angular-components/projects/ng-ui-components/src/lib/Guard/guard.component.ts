@@ -7,53 +7,24 @@ import {
   Input,
   OnChanges,
 } from '@angular/core';
+
 import {
-  User,
-  GuardMode,
-  UserConfig,
-  GuardScenes,
-  AuthingGuard,
-  LoginMethods,
-  getAuthClient,
-  CommonMessage,
-  initAuthClient,
-  RegisterMethods,
+  Guard,
   GuardEventsHandler,
-  AuthenticationClient,
-  GuardEventsHandlerKebab,
-  AuthenticationClientOptions,
+  GuardLocalConfig
 } from '@authing/native-js-ui-components';
-
-export type {
-  User,
-  UserConfig,
-  CommonMessage,
-  GuardEventsHandler,
-  AuthenticationClient,
-  GuardEventsHandlerKebab,
-  AuthenticationClientOptions,
-};
-
-export {
-  GuardMode,
-  GuardScenes,
-  LoginMethods,
-  getAuthClient,
-  initAuthClient,
-  RegisterMethods,
-};
 
 @Component({
   selector: 'authing-guard',
   template: `<div id="authing_guard_container"></div>`,
   styles: [],
-  styleUrls: ['./authing-guard.component.scss'],
+  styleUrls: ['./guard.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class AuthingGuardComponent implements OnInit, OnChanges {
+export class GuardComponent implements OnInit, OnChanges {
   constructor() {}
 
-  guard: AuthingGuard;
+  guard: Guard;
 
   ngOnInit(): void {}
 
@@ -68,7 +39,7 @@ export class AuthingGuardComponent implements OnInit, OnChanges {
   @Input() appId: string;
   @Input() visible?: boolean;
   @Input() tenantId?: string;
-  @Input() config?: UserConfig;
+  @Input() config?: Partial<GuardLocalConfig>;
 
   @Output() onLoad = new EventEmitter<
     Parameters<GuardEventsHandler['onLoad']>
@@ -111,8 +82,8 @@ export class AuthingGuardComponent implements OnInit, OnChanges {
   >();
 
   ngAfterViewInit() {
-    const guard = new AuthingGuard(this.appId, this.config, this.tenantId);
-
+    const guard = new Guard(this.appId, this.config);
+    
     guard.on('load', (...rest) => this.onLoad.emit(rest));
     guard.on('load-error', (...rest) => this.onLoadError.emit(rest));
     guard.on('login', (...rest) => this.onLogin.emit(rest));
