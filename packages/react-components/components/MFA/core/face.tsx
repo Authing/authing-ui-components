@@ -193,7 +193,6 @@ export const MFAFace = (props: any) => {
     if (videoDom?.paused || videoDom?.ended || !isFaceDetectionModelLoaded()) {
       return
     }
-    debugger
     const options = getFaceDetectorOptions()
     const result = await detectSingleFace(videoDom, options)
 
