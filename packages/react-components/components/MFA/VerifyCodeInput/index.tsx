@@ -44,16 +44,20 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
       } else {
         val = String(num)
       }
+
       const codes = [...verifyCode]
       codes[index] = val.split('').slice(-1)[0] || ''
       setVerifyCode(codes)
-      onChange?.(codes)
+
+      if (codes.length >= length) {
+        onChange?.(codes)
+      }
 
       if (val && inputRef.current[index + 1]) {
         inputRef.current[index + 1].focus()
       }
     },
-    [verifyCode, onChange]
+    [verifyCode, length, onChange]
   )
 
   const handleKeyDown = (evt: any, index: number) => {

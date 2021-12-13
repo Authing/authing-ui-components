@@ -363,8 +363,8 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           )
         }
       })
-    // eslint-disable-next-line
-  }, [extendsFields, user])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [contryList, extendsFields, fieldMetadata, t, user])
 
   const [, onFinish] = useAsyncFn(async (values: any) => {
     submitButtonRef.current?.onSpin(true)

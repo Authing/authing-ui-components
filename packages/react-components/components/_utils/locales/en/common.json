@@ -73,7 +73,7 @@
   "operateSuccess": "Successful operation",
   "perfectUserInfo": "Improve user information",
   "personalCenter": "Authing Account",
-  "phoneFormateError": "Enter a valid phone number",
+  "phoneFormateError": "Please verify your phone number first",
   "phoneLabel": "Phone",
   "phoneNumber": "Phone number",
   "picExtError": "Picture format error",

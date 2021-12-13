@@ -26,7 +26,7 @@
   "sendVerifyCode": "发送验证码",
   "emailFormatError": "输入有效的邮箱",
   "usernameFormatError": "输入有效的用户名",
-  "phoneFormateError": "请输入有效的手机号",
+  "phoneFormateError": "请先验证手机号",
   "authoriztion": "授权",
   "authApp": "授权应用",
   "authAppSomePermisson": "{{name}} 申请访问你的账户信息，授权 {{name}} 以下权限",

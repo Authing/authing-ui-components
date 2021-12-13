@@ -67,6 +67,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
       try {
         await form.validateFields()
         setValidated(true)
+
         if (agreements?.length && !acceptedAgreements) {
           submitButtonRef.current.onError()
           // submitButtonRef.current.onSpin(false)
@@ -93,7 +94,6 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
       } catch (error: any) {
         const { code, data, message } = error
         submitButtonRef.current.onError()
-
         onRegister(code, data, message)
       } finally {
         submitButtonRef.current.onSpin(false)
@@ -114,14 +114,13 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           onFinish(values)
         }}
         onFinishFailed={() => submitButtonRef.current.onError()}
-        onValuesChange={(values) => {
-          if (values['password']) {
-            // password changed verify new password
-            form.validateFields(['new-password'])
-          }
-
-          ref.current?.check(values)
-        }}
+        // onValuesChange={(values) => {
+        //   if (values['password']) {
+        //     // password changed verify new password
+        //     form.validateFields(['new-password'])
+        //   }
+        //   ref.current?.check(values)
+        // }}
       >
         <CustomFormItem.Email
           ref={ref}
