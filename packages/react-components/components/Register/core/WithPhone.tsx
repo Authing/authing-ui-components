@@ -52,6 +52,8 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         setValidated(true)
 
         if (agreements?.length && !acceptedAgreements) {
+          submitButtonRef.current.onError()
+          // submitButtonRef.current.onSpin(false)
           return
         }
 
@@ -78,9 +80,11 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
       } catch ({ code, data, message }) {
         submitButtonRef.current.onSpin(false)
         onRegister(code, data, message)
+      } finally {
+        submitButtonRef.current.onSpin(false)
       }
     },
-    [form],
+    [form, acceptedAgreements],
     { loading: false }
   )
 

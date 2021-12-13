@@ -68,7 +68,8 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         await form.validateFields()
         setValidated(true)
         if (agreements?.length && !acceptedAgreements) {
-          submitButtonRef.current.onSpin(false)
+          submitButtonRef.current.onError()
+          // submitButtonRef.current.onSpin(false)
           return
         }
         const { email, password } = values

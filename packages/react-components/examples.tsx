@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 
 import reportWebVitals from './reportWebVitals'
 import { message } from 'antd'
-import { Guard } from './components'
+import { Guard, GuardMode } from './components'
 // import { AuthingGuard } from './components/AuthingGuard'
 
 const App = () => {
@@ -33,6 +33,7 @@ const App = () => {
         // appId="61a85ff3350caf330f1667ba"
         // appId="6191cf610f772aa56dc70637"
         // tenantId="6194a41abf23c1d5268b362a1"
+        visible={true}
         onLogin={(u) => {
           message.info('🏁 用户业务层终点，登录完成。')
           console.log(u)
@@ -83,7 +84,7 @@ const App = () => {
           // publicKey?: string
           // lang: 'en-US',
           // lang: 'zh-CN',
-          // mode: GuardMode.Modal,
+          mode: GuardMode.Modal,
           // logo: '',
           // clickCloseable: false, // clickCloseable	Modal 模式时是否隐藏登录框右上角的关闭按钮
           // escCloseable: true, //
