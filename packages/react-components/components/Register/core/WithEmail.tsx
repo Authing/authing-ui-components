@@ -1,4 +1,3 @@
-import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Form, Input, message } from 'antd'
 import { RegisterMethods } from 'authing-js-sdk'
 import React, { useRef, useState } from 'react'
@@ -10,6 +9,8 @@ import { getDeviceName, getUserRegisterParams } from '../../_utils'
 import { Agreements } from '../components/Agreements'
 import SubmitButton from '../../SubmitButton'
 import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
+import { IconFont } from '../../IconFont'
+import { InputPassword } from '../../InputPassword'
 
 export interface RegisterWithEmailProps {
   onRegister: Function
@@ -88,7 +89,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         )
         submitButtonRef.current.onSpin(false)
         onRegister(200, user)
-      } catch (error) {
+      } catch (error: any) {
         const { code, data, message } = error
         submitButtonRef.current.onError()
 
@@ -112,8 +113,8 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           onFinish(values)
         }}
         onFinishFailed={() => submitButtonRef.current.onError()}
-        onValuesChange={(values) => {
-          if (values['password']) {
+        onValuesChange={(_, values) => {
+          if (values['password'] && values['new-password']) {
             // password changed verify new password
             form.validateFields(['new-password'])
           }
@@ -136,7 +137,13 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
             autoComplete="email"
             size="large"
             placeholder={t('login.inputEmail')}
-            prefix={<UserOutlined style={{ color: '#878A95' }} />}
+            // prefix={<UserOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-user-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
           />
         </CustomFormItem.Email>
         <CustomFormItem.Password
@@ -145,11 +152,16 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           className="authing-g2-input-form"
           validateFirst={true}
         >
-          <Input.Password
+          <InputPassword
             className="authing-g2-input"
             size="large"
             placeholder={t('login.inputPwd')}
-            prefix={<LockOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-lock-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
           />
         </CustomFormItem.Password>
         <CustomFormItem.Password
@@ -157,6 +169,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           name="new-password"
           rules={[
             {
+              validateTrigger: 'onBlur',
               validator: (_, value) => {
                 if (value !== form.getFieldValue('password')) {
                   return Promise.reject(t('common.repeatPasswordDoc'))
@@ -169,11 +182,17 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           className="authing-g2-input-form"
           validateFirst={true}
         >
-          <Input.Password
+          <InputPassword
             className="authing-g2-input"
             size="large"
             placeholder={t('common.passwordAgain')}
-            prefix={<LockOutlined style={{ color: '#878A95' }} />}
+            // prefix={<LockOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-lock-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
           />
         </CustomFormItem.Password>
         {Boolean(agreements?.length) && (

@@ -1,8 +1,6 @@
 import React, { useRef, useState } from 'react'
-import { Form, Input } from 'antd'
-import { UserOutlined, LockOutlined } from '@ant-design/icons'
+import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
-
 import { useGuardHttp } from '../../../_utils/guradHttp'
 import { useAuthClient } from '../../../Guard/authClient'
 import { fieldRequiredRule, getUserRegisterParams } from '../../../_utils'
@@ -13,6 +11,8 @@ import { LoginMethods } from '../../..'
 import { FormItemAccount } from './FormItemAccount'
 import { InputAccount } from './InputAccount'
 import { GraphicVerifyCode } from './GraphicVerifyCode'
+import { IconFont } from '../../../IconFont'
+import { InputPassword } from '../../../InputPassword'
 
 interface LoginWithPasswordProps {
   // configs
@@ -109,26 +109,38 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
             className="authing-g2-input"
             autoComplete="email,username,tel"
             size="large"
-            prefix={<UserOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-user-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
             passwordLoginMethods={props.passwordLoginMethods}
           />
         </FormItemAccount>
         <Form.Item
           name="password"
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           rules={fieldRequiredRule(t('common.password'))}
         >
-          <Input.Password
+          <InputPassword
             className="authing-g2-input"
             size="large"
             placeholder={t('login.inputLoginPwd')}
-            prefix={<LockOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-lock-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
           />
         </Form.Item>
         {/* 图形验证码 */}
         {showCaptcha && (
           <Form.Item
             className="authing-g2-input-form"
+            validateTrigger={['onBlur', 'onChange']}
             name="captchaCode"
             rules={fieldRequiredRule(t('common.captchaCode'))}
           >

@@ -15,7 +15,6 @@ import { User } from 'authing-js-sdk'
 import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
 import { SendCode } from '../../SendCode'
 import { fieldRequiredRule } from '../../_utils'
-
 export interface CompleteInfoProps {
   user: User
   verifyCodeLength: number | undefined
@@ -199,6 +198,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           />
         </CustomFormItem.Phone>
         <Form.Item
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           name="internal phone:code"
           key="internal-phone:codea"
@@ -248,6 +248,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           />
         </CustomFormItem.Email>
         <Form.Item
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           name="internal email:code"
           key="internal email:code1432"
@@ -352,6 +353,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         } else {
           return (
             <Form.Item
+              validateTrigger={['onBlur', 'onChange']}
               className="authing-g2-input-form"
               rules={generateRules()}
               key={key}
@@ -451,6 +453,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         refEmail?.current?.check(values)
         refUserName?.current?.check(values)
       }}
+      className="authing-g2-completeInfo-form authing-g2-form-required-item-icon-after"
     >
       {formFieldsV2}
 

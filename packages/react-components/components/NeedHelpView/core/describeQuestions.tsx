@@ -2,10 +2,11 @@ import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Form, Input, Modal, Select, Upload } from 'antd'
 import SubmitButton from '../../SubmitButton'
-import { UserOutlined, PlusOutlined } from '@ant-design/icons'
+import { PlusOutlined } from '@ant-design/icons'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { useGuardHttp } from '../../_utils/guradHttp'
 import { fieldRequiredRule, validate } from '../../_utils'
+import { IconFont } from '../../IconFont'
 
 interface describeQuestionsProps {
   appId: string
@@ -129,6 +130,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
         autoComplete="off"
       >
         <Form.Item
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           name="identify"
           label={t('common.problem.form.phone')}
@@ -154,10 +156,16 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
             autoComplete="tel"
             size="large"
             placeholder={t('login.inputPhoneOrEmail')}
-            prefix={<UserOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-user-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
           />
         </Form.Item>
         <Form.Item
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           label={t('common.problem.form.question')}
           name="questionPicker"
@@ -183,6 +191,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
         </div>
 
         <Form.Item
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           name="description"
           label={t('common.problem.form.questionDescript')}

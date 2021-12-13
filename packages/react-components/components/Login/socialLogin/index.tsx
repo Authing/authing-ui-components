@@ -306,9 +306,9 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
               marginBottom: 8,
             }}
           >
-            {i18n.language === 'zh-CN'
-              ? item.name
-              : item.name_en ?? item.provider}
+            {item.displayName ??
+              (i18n.language === 'zh-CN' ? item.name : item.name_en) ??
+              item.provider}
           </Button>
         )
       } else if (shape === 'icon') {
@@ -337,12 +337,13 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
             }
             onClick={onLogin}
           >
-            {i18n.language === 'zh-CN'
-              ? item.name
-              : item.name_en ?? item.provider}
+            {item.displayName ??
+              (i18n.language === 'zh-CN' ? item.name : item.name_en) ??
+              item.provider}
           </Button>
         ) : (
           <Tooltip
+            overlayStyle={{ fontFamily: 'sans-serif' }}
             key={item.provider}
             title={item.tooltip?.[i18n.language as Lang] || item.name}
           >
@@ -390,7 +391,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         <div
           style={{
             flex: 1,
-            minHeight: 47,
+            minHeight: 32,
           }}
         />
       )}

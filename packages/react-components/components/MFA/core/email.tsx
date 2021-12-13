@@ -1,4 +1,3 @@
-import { UserOutlined } from '@ant-design/icons'
 import { Input, message, message as Message } from 'antd'
 import { Form } from 'antd'
 import { EmailScene, User } from 'authing-js-sdk'
@@ -11,6 +10,7 @@ import SubmitButton from '../../SubmitButton'
 import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
 import { MFAConfig } from '../interface'
 import { VerifyCodeFormItem } from '../VerifyCodeInput/VerifyCodeFormItem'
+import { IconFont } from '../../IconFont'
 
 interface BindMFAEmailProps {
   mfaToken: string
@@ -65,7 +65,12 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
             autoComplete="email"
             size="large"
             placeholder={t('login.inputEmail')}
-            prefix={<UserOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-user-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
           />
         </CustomFormItem.Email>
 

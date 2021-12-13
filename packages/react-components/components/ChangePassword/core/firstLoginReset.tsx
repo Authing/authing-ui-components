@@ -1,13 +1,11 @@
 import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form, Input, message } from 'antd'
-
-import { LockOutlined } from '@ant-design/icons'
-
+import { Form, message } from 'antd'
 import { useAuthClient } from '../../Guard/authClient'
 import SubmitButton from '../../SubmitButton'
 import CustomFormItem from '../../ValidatorRules'
-
+import { IconFont } from '../../IconFont'
+import { InputPassword } from '../../InputPassword'
 interface FirstLoginResetProps {
   onReset: any
   publicConfig: any
@@ -28,7 +26,7 @@ export const FirstLoginReset = (props: FirstLoginResetProps) => {
         password: newPassword,
       })
       props.onReset(res)
-    } catch (error) {
+    } catch (error: any) {
       message.error(error.message)
       submitButtonRef?.current?.onError()
     } finally {
@@ -52,14 +50,20 @@ export const FirstLoginReset = (props: FirstLoginResetProps) => {
           name="password"
           required={true}
         >
-          <Input.Password
+          <InputPassword
             className="authing-g2-input"
             size="large"
             placeholder={t('login.inputPwd')}
-            prefix={<LockOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-lock-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
           />
         </CustomFormItem.Password>
         <Form.Item
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           name="password2"
           rules={[
@@ -77,11 +81,16 @@ export const FirstLoginReset = (props: FirstLoginResetProps) => {
             },
           ]}
         >
-          <Input.Password
+          <InputPassword
             className="authing-g2-input"
             size="large"
             placeholder={t('login.inputPwdAgain')}
-            prefix={<LockOutlined style={{ color: '#878A95' }} />}
+            prefix={
+              <IconFont
+                type="authing-a-lock-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
           />
         </Form.Item>
 
