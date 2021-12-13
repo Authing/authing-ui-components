@@ -252,6 +252,7 @@ export const Guard = (props: GuardProps) => {
         config: GuardLocalConfig,
         ...events,
         __changeModule: (moduleName, initData) => {
+          message.destroy()
           historyNext(initData)
           guardStateMachine?.next(moduleName, initData)
         },

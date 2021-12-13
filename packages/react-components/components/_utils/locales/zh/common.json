@@ -29,8 +29,8 @@
   "phoneFormateError": "请输入有效的手机号",
   "authoriztion": "授权",
   "authApp": "授权应用",
-  "authAppSomePermisson": "{{name}} 申请访问您的账户信息，授权 {{name}} 以下权限",
-  "visitPersonalAccData": "访问您的个人用户数据",
+  "authAppSomePermisson": "{{name}} 申请访问你的账户信息，授权 {{name}} 以下权限",
+  "visitPersonalAccData": "访问你的个人用户数据",
   "chooseRole": "选择角色",
   "administrator": "管理员",
   "authingBackendSystem": "Authing 后台管理系统",
@@ -112,42 +112,42 @@
     "locked": "账号被锁定",
     "other": "其他",
     "noVerifyTip": {
-      "tip": "如果没有手机验证码，建议您进行以下操作：",
-      "type1": "1. 检查您的手机是否停机/无网络",
-      "type2": "2. 检查您的手机号是否输入正确",
-      "type3": "3. 检查您的验证码短信是否被屏蔽"
+      "tip": "如果没有手机验证码，建议你进行以下操作：",
+      "type1": "1. 检查你的手机是否停机/无网络",
+      "type2": "2. 检查你的手机号是否输入正确",
+      "type3": "3. 检查你的验证码短信是否被屏蔽"
     },
     "noLoginTip": {
-      "tip": "如果没有手机验证码，建议您进行以下操作：",
-      "type1": "1. 检查您的用户名与密码输入是否正确",
-      "type2": "2. 检查您的手机是否停机/无网络"
+      "tip": "如果没有手机验证码，建议你进行以下操作：",
+      "type1": "1. 检查你的用户名与密码输入是否正确",
+      "type2": "2. 检查你的手机是否停机/无网络"
     },
     "noRegisterTip": {
-      "tip": "如果无法注册，建议您进行以下操作：",
-      "type1": "1. 检查您的帐号是否已注册",
-      "type2": "2. 检查您的注册手机号是否输入正确",
-      "type3": "3. 检查您的验证码短信是否被屏蔽"
+      "tip": "如果无法注册，建议你进行以下操作：",
+      "type1": "1. 检查你的帐号是否已注册",
+      "type2": "2. 检查你的注册手机号是否输入正确",
+      "type3": "3. 检查你的验证码短信是否被屏蔽"
     },
     "noAccountTip": {
-      "tip": "如果帐号丢失，建议您进行以下操作：",
-      "type1": "1. 检查您的用户名与密码输入是否正确",
-      "type2": "2. 检查您的手机是否停机/无网络"
+      "tip": "如果帐号丢失，建议你进行以下操作：",
+      "type1": "1. 检查你的用户名与密码输入是否正确",
+      "type2": "2. 检查你的手机是否停机/无网络"
     },
     "noResetPassTip": {
-      "tip": "如果无法重置密码，建议您进行以下操作：",
-      "type1": "1. 检查您的手机是否停机/无网络",
-      "type2": "2. 检查您的设置的密码是否正确"
+      "tip": "如果无法重置密码，建议你进行以下操作：",
+      "type1": "1. 检查你的手机是否停机/无网络",
+      "type2": "2. 检查你的设置的密码是否正确"
     },
     "otherTip": {
       "tip": "其他：",
-      "type1": "请在下栏描述您遇到的问题"
+      "type1": "请在下栏描述你遇到的问题"
     },
     "successTip": "提交成功",
-    "successTipMsg": "您的信息已经提交给应用管理员，会尽快处理您的反馈，请您耐心等待。",
+    "successTipMsg": "你的信息已经提交给应用管理员，会尽快处理你的反馈，请你耐心等待。",
     "form": {
       "phone": "联系方式",
       "inputConcatWays": "请输入联系方式",
-      "phonePlaceholder": "请输入您的邮箱或手机号（必填）",
+      "phonePlaceholder": "请输入你的邮箱或手机号（必填）",
       "question": "相关问题",
       "questionDescript": "问题描述",
       "questionClip": "问题截图",
@@ -165,8 +165,8 @@
   "backLoginPage": "返回登录",
   "LoginSuccess": "登录成功",
   "unAppId": "请传入应用 ID",
-  "welcomeDoc": "欢迎加入 {{name}} ，为了更好的使用体验，请先完善您的个人信息",
-  "bindEmailDoc": "您暂未绑定邮箱，请输入邮箱进行绑定",
+  "welcomeDoc": "欢迎加入 {{name}} ，为了更好的使用体验，请先完善您的资料信息",
+  "bindEmailDoc": "请输入邮箱进行绑定",
   "unBindEmaileDoc": "{{email}} 已被其他账号绑定",
   "copied": "已复制",
   "copy": "复制",
@@ -203,7 +203,7 @@
   "bindSuccess": "完成绑定",
   "pleaseRecordKey": "请记录密钥",
   "totpText1": "请妥善保存恢复代码",
-  "totpText2": "如果您的 MFA 丢失时，您将需要一个恢复代码",
+  "totpText2": "如果你的 MFA 丢失时，你将需要一个恢复代码",
   "otpText1": "为了保障访问安全，请前往 OTP 绑定页面",
   "faceText1": "绑定人脸识别",
   "faceText2": "请保持摄像头已打开并无遮挡",
@@ -228,7 +228,7 @@
   "phone": "手机号",
   "pToLogin": "秒后返回登录",
   "resetSuccess": "重置成功",
-  "resetSuccessMessage": "密码重置成功，您可以使用新密码继续登录",
+  "resetSuccessMessage": "密码重置成功，你可以使用新密码继续登录",
   "totpCode": "安全码",
   "welcome": "欢迎访问",
   "initPasswordText": "为了保障账号安全，请设置你的初始密码。",

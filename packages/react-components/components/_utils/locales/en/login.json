@@ -59,11 +59,12 @@
   "inputEmailCode": "Enter email verification code",
   "inputSmsCode": "Please enter the SMS verification code",
   "otherVerifyWay": "Other verification methods",
+  "otherLoginWay": "OR",
   "sendingVerifyCode": "Verification code sending",
   "verifyCodeSended": "Verification code has been sent to",
   "clickSent": "Click  send",
   "bindEmailInfo": "You have not bound the mailbox, please enter the binding",
-  "bindPhoneInfo": "You have not yet bound your phone number, please enter it below",
+  "bindPhoneInfo": "Please enter the phone number to bind",
   "dontBindPhone": "You have not bound your phone number, please enter your phone number to bind",
   "dontbindEmail": "You have not bound the mailbox, please enter the mailbox binding",
   "emailError": "Email format error",
@@ -92,5 +93,6 @@
   "inputEmailUsername": "Please enter email or account",
   "inputUsername": "Username",
   "moreWays": "Scan",
-  "inputCorrectPhoneOrEmail": "Enter a valid Email or Phone number"
+  "inputCorrectPhoneOrEmail": "Enter a valid Email or Phone number",
+  "sendCodeTimeout": "Sending failed, please try later"
 }
