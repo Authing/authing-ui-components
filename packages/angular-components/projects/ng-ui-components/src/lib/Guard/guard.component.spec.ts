@@ -8,9 +8,8 @@ describe('GuardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GuardComponent ]
-    })
-    .compileComponents();
+      declarations: [GuardComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

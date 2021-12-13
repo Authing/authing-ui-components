@@ -94,5 +94,10 @@
   "inputUsername": "Username",
   "moreWays": "Scan",
   "inputCorrectPhoneOrEmail": "Enter a valid Email or Phone number",
-  "sendCodeTimeout": "Sending failed, please try later"
+  "sendCodeTimeout": "Sending failed, please try later",
+  "mediaDevicesSupport": "The current device does not support face recognition",
+  "AuthorizationCamera": "Please enable authorization first",
+  "requireError": "Unable to meet the request error",
+  "hardwareSupport": "Hardware does not support",
+  "checkPreferences": "Please check preferences"
 }

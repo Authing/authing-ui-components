@@ -37,7 +37,10 @@ export class AppComponent {
     console.log('ffffff', e);
   }
 
-  onLoginError([msg]: [msg: CommonMessage, client: AuthenticationClient]): void {
+  onLoginError([msg]: [
+    msg: CommonMessage,
+    client: AuthenticationClient
+  ]): void {
     console.log(msg);
   }
 
