@@ -46,7 +46,7 @@
   }
   .g2-view-back {
     margin-top: 26px;
-    padding-left: 38px;
+    padding-left: var(--sidePadding);
     cursor: pointer;
     font-size: 14px;
     color: #878a95;
@@ -63,6 +63,11 @@
         }
       }
     }
+  }
+  .g2-mfa-content,
+  .g2-mfa-method {
+    margin: 0 !important;
+    padding: 0 var(--sidePadding) !important;
   }
   .g2-view-header {
     user-select: none;
