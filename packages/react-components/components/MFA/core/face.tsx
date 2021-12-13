@@ -235,6 +235,7 @@ export const MFAFace = (props: any) => {
           <SubmitButton
             onClick={() => {
               // 设置状态之前 校验是否支持面容 （api 和 设备）
+              // TODO 之后添加人脸识别插件支持 减小包体积
               if (navigator.mediaDevices) {
                 setFaceState('identifying')
                 autoShoot()
