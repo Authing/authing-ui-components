@@ -130,6 +130,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         <Form.Item
           key="code"
           name="code"
+          validateTrigger={['onBlur', 'onChange']}
           rules={fieldRequiredRule(t('common.captchaCode'))}
           className="authing-g2-input-form"
           validateFirst={true}
