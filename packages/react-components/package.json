@@ -1,6 +1,6 @@
 {
   "name": "@authing/react-ui-components",
-  "version": "2.4.59",
+  "version": "2.4.60",
   "private": false,
   "main": "lib/index.min.js",
   "typings": "lib/index.d.ts",
@@ -10,8 +10,8 @@
     "qs": "^6.9.4"
   },
   "peerDependencies": {
-    "react": "16.14.0",
-    "react-dom": "16.14.0"
+    "react": "^15.0.1 || ^16.0.0 || ^17.0.0",
+    "react-dom": "^15.0.1 || ^16.0.0 || ^17.0.0"
   },
   "scripts": {
     "start": "PORT=3006 node scripts/start.js",
