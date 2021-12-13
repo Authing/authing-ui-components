@@ -1,4 +1,6 @@
 import React from 'react'
+
+//@ts-ignore
 import { ReactComponent as ShieldSpinLoading } from './loading.svg'
 interface IG2SpinProps {
   size?: number

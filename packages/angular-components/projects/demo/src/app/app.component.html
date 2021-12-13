@@ -7,15 +7,14 @@
 <!-- * * * * * * * to get started with your project! * * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
-<style></style>
-
 <authing-guard
   [appId]="appId"
   [config]="config"
   [visible]="visible"
   (onLoginError)="onLoginError($event)"
   (onLoad)="onLoad($event)"
-  (onClose)="onClose($event)"
+  (onClose)="onClose()"
+  (onLogin)="onLogin($event)"
 ></authing-guard>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->

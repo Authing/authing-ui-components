@@ -272,20 +272,6 @@
     lodash "^4.17.15"
     resize-observer-polyfill "^1.5.0"
 
-"@authing/jose@^1.0.3":
-  version "1.0.5"
-  resolved "https://registry.nlark.com/@authing/jose/download/@authing/jose-1.0.5.tgz#d3e9c58aac74f47e5048a791d69c68f8bc52d7d8"
-  integrity sha1-0+nFiqx09H5QSKeR1pxo+LxS19g=
-
-"@authing/native-js-ui-components@^2.4.56-alpha.0":
-  version "2.4.58"
-  resolved "https://registry.npmmirror.com/@authing/native-js-ui-components/download/@authing/native-js-ui-components-2.4.58.tgz#b3528939b4a07bd53887e13b78e209a638af31e7"
-  integrity sha512-DnSY8tJc4nGoOlJHHZpnFRc3tOR+K5hsCKo/tE7LvIGAuikaRZxP9kO78uLE0u/48P82VReI6ngU9s8MIBl1BA==
-  dependencies:
-    "@authing/react-ui-components" "^2.4.58"
-    react "16.14.0"
-    react-dom "16.14.0"
-
 "@authing/react-ui-components@3.0.0-rc.0":
   version "3.0.0-rc.0"
   resolved "https://registry.npmjs.org/@authing/react-ui-components/-/react-ui-components-3.0.0-rc.0.tgz#d9a1bc456afa46198d5979ba70165b0dde32fe7e"
@@ -298,15 +284,6 @@
     global "^4.4.0"
     qs "^6.9.4"
     react-use "^17.3.1"
-
-"@authing/react-ui-components@^2.4.58":
-  version "2.4.58"
-  resolved "https://registry.npmmirror.com/@authing/react-ui-components/download/@authing/react-ui-components-2.4.58.tgz#6f80da3be0abf359dbe197cbe2dcaae840f04f2f"
-  integrity sha512-serfprbwG+vji6bkOSqTh0PJnrzCZMcBBzOPMmTVe5b6+OfDqMfNIUsOG1EinD46m7lZQnjRG6Gf0C3BxFE6rA==
-  dependencies:
-    antd "^4.8.0"
-    authing-js-sdk "4.22.24-alpha"
-    qs "^6.9.4"
 
 "@babel/code-frame@7.10.4", "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.5.5":
   version "7.10.4"
@@ -4982,17 +4959,6 @@ atob@^2.1.2:
   version "2.1.2"
   resolved "https://registry.npm.taobao.org/atob/download/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha1-bZUX654DDSQ2ZmZR6GvZ9vE1M8k=
-
-authing-js-sdk@4.22.24-alpha:
-  version "4.22.24-alpha"
-  resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.22.24-alpha.tgz#299ac8e74ccf2baf4a6286e7f5350a603653a411"
-  integrity sha512-e+cIvsXrHSDHmZIaPG9/snNZu12loPTNJEeIn+Q09BDIzIJJFmQ53DAzq+uUQNA+gQ24QmnJTbzUf/Ue8J6kKA==
-  dependencies:
-    "@authing/jose" "^1.0.3"
-    axios "^0.19.2"
-    crypto-js "^4.0.0"
-    jsencrypt "^3.1.0"
-    jwt-decode "^2.2.0"
 
 authing-js-sdk@4.22.26-alpha.18:
   version "4.22.26-alpha.18"
