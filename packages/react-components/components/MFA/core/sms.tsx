@@ -67,10 +67,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
             size="large"
             placeholder={t('login.inputPhone')}
             prefix={
-              <IconFont
-                type="authing-a-user-line1"
-                style={{ color: '#878A95' }}
-              />
+              <IconFont type="authing-phone" style={{ color: '#878A95' }} />
             }
           />
         </CustomFormItem.Phone>
@@ -100,8 +97,6 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   const { t } = useTranslation()
   const [form] = Form.useForm()
 
-  const [sent, setSent] = useState(false)
-
   const onFinish = async (values: any) => {
     submitButtonRef.current.onSpin(true)
     const mfaCode = form.getFieldValue('mfaCode')
@@ -125,7 +120,6 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   const sendVerifyCode = async () => {
     try {
       await authClient.sendSmsCode(phone!)
-      setSent(true)
       return true
     } catch (e) {
       const errorMessage = JSON.parse(e.message)
@@ -138,9 +132,10 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
     <>
       <h3 className="authing-g2-mfa-title">{t('login.inputPhoneCode')}</h3>
       <p className="authing-g2-mfa-tips">
-        {sent
-          ? `${t('login.verifyCodeSended')} ${phone}`
-          : t('login.clickSent')}
+        {`${t('login.verifyCodeSended')} ${phone.replace(
+          /^(\d{3})\d{4}(\d+)/,
+          '$1****$2'
+        )}`}
       </p>
       <Form
         form={form}

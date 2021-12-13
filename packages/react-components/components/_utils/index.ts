@@ -3,7 +3,7 @@ import { Rule } from 'antd/lib/form'
 import qs from 'qs'
 import { useGuardContext } from '../context/global/context'
 import { i18n } from './locales'
-import { User } from 'authing-js-sdk'
+import { RegisterMethods, User } from 'authing-js-sdk'
 import { ApplicationConfig, ComplateFiledsPlace } from '../AuthingGuard/api'
 export * from './popupCenter'
 export * from './clipboard'
@@ -429,4 +429,14 @@ export const shoudGoToComplete = (
     }
   }
   return needGo
+}
+
+export const tabSort = (
+  defaultValue: RegisterMethods,
+  tabList: RegisterMethods[]
+): RegisterMethods[] => {
+  const index = tabList.indexOf(defaultValue)
+  const element = tabList.splice(index, 1)[0]
+  tabList.unshift(element)
+  return tabList
 }

@@ -9,7 +9,7 @@ import { RegisterWithEmail } from './core/WithEmail'
 import { RegisterWithPhone } from './core/WithPhone'
 import { GuardRegisterViewProps } from './interface'
 import { codeMap } from './codemap'
-import { shoudGoToComplete } from '../_utils'
+import { shoudGoToComplete, tabSort } from '../_utils'
 
 export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
   config,
@@ -98,15 +98,15 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
     [registerContextProps, t]
   )
 
-  const renderTab = useMemo(
-    () =>
-      config?.registerMethods?.map((method) => (
-        <Tabs.TabPane tab={tabMapping[method].name} key={method}>
-          {tabMapping[method].component}
-        </Tabs.TabPane>
-      )),
-    [config?.registerMethods, tabMapping]
-  )
+  const renderTab = useMemo(() => {
+    const { registerMethods, defaultRegisterMethod } = config
+    return tabSort(defaultRegisterMethod, registerMethods)?.map((method) => (
+      <Tabs.TabPane tab={tabMapping[method].name} key={method}>
+        {tabMapping[method].component}
+      </Tabs.TabPane>
+    ))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [config?.defaultRegisterMethod, tabMapping])
 
   return (
     <div className="g2-view-container">
@@ -118,6 +118,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
         </div>
       </div>
       <div className="g2-view-tabs">
+        {console.log(config, 'config?.defaultRegisterMethod}')}
         <Tabs
           defaultActiveKey={config?.defaultRegisterMethod}
           onChange={(activeKey) => {

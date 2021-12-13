@@ -16,7 +16,6 @@ interface describeQuestionsProps {
 
 export const DescribeQuestions = (props: describeQuestionsProps) => {
   const { t } = useTranslation()
-
   // 不清楚为什么放出去之后，i18n 的结果全是 undefeated
   const typeProblemMap: any = {
     0: [
@@ -178,7 +177,15 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
             }}
           >
             {typeOperations?.map(({ value, label }) => (
-              <Select.Option key={value} value={value}>
+              <Select.Option
+                key={value}
+                value={value}
+                className={`authing-g2-question-option ${
+                  typeProblem === value
+                    ? 'authing-g2-question-option-active'
+                    : ''
+                }`}
+              >
                 {label}
               </Select.Option>
             ))}

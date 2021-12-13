@@ -25,6 +25,8 @@ const App = () => {
         width: '100vw',
         justifyContent: 'center',
         WebkitUserSelect: 'none',
+        minHeight: '100vh',
+        background: '#F5F7FA',
       }}
     >
       <Guard
