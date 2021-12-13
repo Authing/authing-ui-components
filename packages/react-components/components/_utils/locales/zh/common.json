@@ -26,7 +26,7 @@
   "sendVerifyCode": "发送验证码",
   "emailFormatError": "输入有效的邮箱",
   "usernameFormatError": "输入有效的用户名",
-  "phoneFormateError": "请输入有效的手机号",
+  "phoneFormateError": "请先验证手机号",
   "authoriztion": "授权",
   "authApp": "授权应用",
   "authAppSomePermisson": "{{name}} 申请访问你的账户信息，授权 {{name}} 以下权限",
@@ -112,13 +112,13 @@
     "locked": "账号被锁定",
     "other": "其他",
     "noVerifyTip": {
-      "tip": "如果没有手机验证码，建议你进行以下操作：",
+      "tip": "如果无法收到手机验证码，建议你进行以下操作：",
       "type1": "1. 检查你的手机是否停机/无网络",
       "type2": "2. 检查你的手机号是否输入正确",
       "type3": "3. 检查你的验证码短信是否被屏蔽"
     },
     "noLoginTip": {
-      "tip": "如果没有手机验证码，建议你进行以下操作：",
+      "tip": "如果无法收到手机验证码，建议你进行以下操作：",
       "type1": "1. 检查你的用户名与密码输入是否正确",
       "type2": "2. 检查你的手机是否停机/无网络"
     },
@@ -211,7 +211,7 @@
   "faceText4": "重试一次",
   "checkPasswordHasSpace": "不能包含空格",
   "backToVerify": "返回验证页",
-  "usePhoneOpen": "请在手机打开",
+  "usePhoneOpen": "请在手机打开 Google Authenticator 或 Microsoft Authenticator",
   "noValidator": "没有验证器请",
   "clickTodownload": "点击下载",
   "mfaText1": "扫码添加 OTP，在手机查看并输入 6 位数字安全码。",

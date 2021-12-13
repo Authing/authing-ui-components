@@ -35,7 +35,6 @@ export const LoginWithWechatMiniQrcode = (
         setLoading(false)
       },
       onStart(timer) {
-        setLoading(true)
         // console.log('开始扫码')
         timerRef.current = timer
       },

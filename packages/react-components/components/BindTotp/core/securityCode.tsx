@@ -75,8 +75,7 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
           textAlign: 'left',
         }}
       >
-        {t('common.usePhoneOpen')} Google Authenticator or Microsoft
-        Authenticator（{t('common.noValidator')}{' '}
+        {t('common.usePhoneOpen')}（{t('common.noValidator')}{' '}
         <span
           style={{
             color: '#396AFF',

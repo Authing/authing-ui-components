@@ -67,8 +67,10 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
       try {
         await form.validateFields()
         setValidated(true)
+
         if (agreements?.length && !acceptedAgreements) {
-          submitButtonRef.current.onSpin(false)
+          submitButtonRef.current.onError()
+          // submitButtonRef.current.onSpin(false)
           return
         }
         const { email, password } = values
@@ -92,7 +94,6 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
       } catch (error: any) {
         const { code, data, message } = error
         submitButtonRef.current.onError()
-
         onRegister(code, data, message)
       } finally {
         submitButtonRef.current.onSpin(false)

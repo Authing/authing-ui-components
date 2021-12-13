@@ -73,7 +73,7 @@
   "operateSuccess": "Successful operation",
   "perfectUserInfo": "Improve user information",
   "personalCenter": "Authing Account",
-  "phoneFormateError": "Enter a valid phone number",
+  "phoneFormateError": "Please verify your phone number first",
   "phoneLabel": "Phone",
   "phoneNumber": "Phone number",
   "picExtError": "Picture format error",
@@ -113,13 +113,13 @@
     "locked": "Account is locked",
     "other": "Other",
     "noVerifyTip": {
-      "tip": "If you do not receive the mobile phone verification code, we suggest you do the following:",
+      "tip": "If you cannot receive the mobile phone verification code, I suggest you do the following:",
       "type1": "1. Check if your mobile phone is turned off or offline.",
       "type2": "2. Check if your phone number has been entered correctly.",
       "type3": "3. Check if your SMS with the verification code is blocked."
     },
     "noLoginTip": {
-      "tip": "If you don't receive the verification code, please do the following steps to solve this issue: ",
+      "tip": "If you cannot receive the mobile phone verification code, I suggest you do the following:",
       "type1": "1. Check if your username and password have been entered correctly.",
       "type2": "2. Check if your mobile phone is turned off or offline."
     },
@@ -218,7 +218,7 @@
   "timeoutLDAP": "Request timed out, LDAP configuration error",
   "totpText1": "Please keep the recovery code properly",
   "totpText2": "If your MFA is lost, you will need a recovery code",
-  "usePhoneOpen": "",
+  "usePhoneOpen": "Please open Google Authenticator or Microsoft Authenticator on your phone",
   "useRecoveryCodetips": "After successful login, we will generate a new recovery code.",
   "passwordAgain": "Confirm password",
   "isMissing": "{{name}} is missing",
