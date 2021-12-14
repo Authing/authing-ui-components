@@ -247,14 +247,13 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         ? item.provider === SocialConnectionProvider.WECHATMP
         : item.provider !== SocialConnectionProvider.WECHATMP
     )
-    .map((item) => {
+    .map((item: any) => {
       const iconType = `authing-${item.provider.replace(/:/g, '-')}`
 
       const authorization_params: Record<string, any> = {}
       if (item.provider === SocialConnectionProvider.BAIDU) {
         authorization_params.display = screenSize
       }
-
       const onLogin = () => {
         authClient.social.authorize(item.provider, {
           onSuccess(user) {
@@ -291,7 +290,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       if (shape === 'button') {
         return (
           <Button
-            key={item.provider}
+            key={item.id}
             block
             size="large"
             className="g2-guard-third-login-btn"
@@ -314,7 +313,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       } else if (shape === 'icon') {
         return (
           <Tooltip
-            key={item.provider}
+            key={item.id}
             title={item.tooltip?.[i18n.language as Lang] || item.name}
           >
             <div className="g2-social-login-item" onClick={onLogin}>
@@ -325,7 +324,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       } else {
         return noLoginMethods ? (
           <Button
-            key={item.provider}
+            key={item.id}
             block
             size="large"
             className="g2-guard-third-login-btn"
@@ -344,7 +343,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         ) : (
           <Tooltip
             overlayStyle={{ fontFamily: 'sans-serif' }}
-            key={item.provider}
+            key={item.id}
             title={item.tooltip?.[i18n.language as Lang] || item.name}
           >
             <div className="g2-social-login-item" onClick={onLogin}>

@@ -10,6 +10,7 @@ import { RegisterWithPhone } from './core/WithPhone'
 import { GuardRegisterViewProps } from './interface'
 import { codeMap } from './codemap'
 import { shoudGoToComplete, tabSort } from '../_utils'
+import { i18n } from '../_utils/locales'
 
 export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
   config,
@@ -74,11 +75,19 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
         })
       },
       onBeforeRegister: registerEvents.onBeforeRegister,
-      agreements: agreementEnabled ? config?.agreements ?? [] : [],
+      agreements: agreementEnabled
+        ? config?.agreements?.filter((agree) => agree.lang === i18n.language) ??
+          []
+        : [],
       publicConfig: config.__publicConfig__,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [agreementEnabled, config?.agreements, registerEvents.onBeforeRegister]
+    [
+      agreementEnabled,
+      config?.agreements,
+      registerEvents.onBeforeRegister,
+      i18n.language,
+    ]
   )
 
   const tabMapping: Record<

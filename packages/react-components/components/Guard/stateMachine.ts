@@ -55,8 +55,14 @@ export class GuardStateMachine {
       initData,
     }
     this.changeMouleEvent(nextModelu, initData)
-
-    this.historyPush(moduleData)
+    // 快照history
+    if (
+      moduleData.moduleName === this.moduleStateHistory.slice(-1)[0].moduleName
+    ) {
+      window.history.back()
+    } else {
+      this.historyPush(moduleData)
+    }
     console.log('next Log', this.stateMachineLog)
     console.log('next History', this.moduleStateHistory)
   }
@@ -69,7 +75,6 @@ export class GuardStateMachine {
       ...initData,
       ...backModule.initData,
     })
-
     this.moduleStateHistory.splice(0, 1)
     console.log('back Log', this.stateMachineLog)
   }
@@ -123,7 +128,6 @@ export const useHistoryHijack = (back?: () => void) => {
     const onPopstate = () => {
       back?.()
     }
-
     back && window?.addEventListener('popstate', onPopstate)
 
     return () => {
