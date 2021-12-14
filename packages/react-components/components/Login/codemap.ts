@@ -46,4 +46,7 @@ export const codeMap: Record<number, GuardModuleAction> = {
     // 验证码过期
     action: 'message',
   },
+  1576: {
+    action: 'message',
+  },
 }
