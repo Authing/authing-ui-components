@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { message } from 'antd'
 import { ShieldSpin } from '../../ShieldSpin'
-import { useAuthClient } from '../../Guard/authClient'
+import { useGuardAuthClient } from '../../Guard/authClient'
 
 interface LoginWithWechatMiniQrcodeProps {
   onLogin: any
@@ -13,7 +13,7 @@ export const LoginWithWechatMiniQrcode = (
   props: LoginWithWechatMiniQrcodeProps
 ) => {
   const timerRef = useRef<any>()
-  const client = useAuthClient()
+  const client = useGuardAuthClient()
   const [loading, setLoading] = useState(true)
   const appQrcodeClient = client.wxqrcode
 

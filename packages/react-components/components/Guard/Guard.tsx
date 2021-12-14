@@ -9,7 +9,7 @@ import { ConfigProvider, message, Modal } from 'antd'
 
 import { GuardLoginView } from '../Login'
 
-import { initAuthClient } from './authClient'
+import { initGuardAuthClient } from './authClient'
 import { GuardEvents, guardEventsFilter } from './event'
 import { initConfig } from '../_utils/config'
 import { insertStyles } from '../_utils'
@@ -191,7 +191,7 @@ export const Guard = (props: GuardProps) => {
   // AuthClient
   useEffect(() => {
     if (appId && GuardLocalConfig) {
-      const authClint = initAuthClient(GuardLocalConfig, appId, tenantId)
+      const authClint = initGuardAuthClient(GuardLocalConfig, appId, tenantId)
       setAuthClint(authClint)
     }
   }, [GuardLocalConfig, appId, tenantId])

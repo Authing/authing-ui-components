@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Form, message } from 'antd'
 import SubmitButton from '../../SubmitButton'
-import { useAuthClient } from '../../Guard/authClient'
+import { useGuardAuthClient } from '../../Guard/authClient'
 import CustomFormItem from '../../ValidatorRules'
 import { fieldRequiredRule } from '../../_utils'
 import { InputPassword } from '../../InputPassword'
@@ -17,7 +17,7 @@ interface RotateResetProps {
 export const RotateReset = (props: RotateResetProps) => {
   const { t } = useTranslation()
   let [form] = Form.useForm()
-  let authClient = useAuthClient()
+  let authClient = useGuardAuthClient()
   let submitButtonRef = useRef<any>(null)
 
   const onFinish = async (values: any) => {

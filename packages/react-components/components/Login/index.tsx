@@ -14,7 +14,7 @@ import { codeMap } from './codemap'
 import { SocialLogin } from './socialLogin'
 import { GuardLoginViewProps } from './interface'
 
-import { useAuthClient } from '../Guard/authClient'
+import { useGuardAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
 import { LoginMethods } from '../AuthingGuard/types'
 import { IconFont } from '../IconFont'
@@ -83,7 +83,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   const { t } = useTranslation()
   const [loginWay, setLoginWay] = useState(defaultMethod)
   const [canLoop, setCanLoop] = useState(false) // 允许轮询
-  const client = useAuthClient()
+  const client = useGuardAuthClient()
   const publicConfig = usePublicConfig()
   const [errorNumber, setErrorNumber] = useState(0)
   let publicKey = props.config?.publicKey!

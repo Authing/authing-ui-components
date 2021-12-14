@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Form, message } from 'antd'
-import { useAuthClient } from '../../Guard/authClient'
+import { useGuardAuthClient } from '../../Guard/authClient'
 import SubmitButton from '../../SubmitButton'
 import CustomFormItem from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
@@ -14,7 +14,7 @@ interface FirstLoginResetProps {
 export const FirstLoginReset = (props: FirstLoginResetProps) => {
   const { t } = useTranslation()
   let [form] = Form.useForm()
-  let client = useAuthClient()
+  let client = useGuardAuthClient()
   let submitButtonRef = useRef<any>(null)
 
   const onFinish = async (values: any) => {

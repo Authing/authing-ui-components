@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useGuardHttp } from '../../../_utils/guradHttp'
-import { useAuthClient } from '../../../Guard/authClient'
+import { useGuardAuthClient } from '../../../Guard/authClient'
 import { fieldRequiredRule, getUserRegisterParams } from '../../../_utils'
 import { ErrorCode } from '../../../_utils/GuardErrorCode'
 import SubmitButton from '../../../SubmitButton'
@@ -29,7 +29,7 @@ interface LoginWithPasswordProps {
 export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   let { t } = useTranslation()
   let { post } = useGuardHttp()
-  let client = useAuthClient()
+  let client = useGuardAuthClient()
 
   let submitButtonRef = useRef<any>(null)
 

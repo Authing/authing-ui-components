@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ShieldSpin } from '../../ShieldSpin'
-import { useAuthClient } from '../../Guard/authClient'
+import { useGuardAuthClient } from '../../Guard/authClient'
 
 interface LoginWithAppQrcodeProps {
   onLogin: any
@@ -10,7 +10,7 @@ interface LoginWithAppQrcodeProps {
 
 export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
   const timerRef = useRef<any>()
-  const client = useAuthClient()
+  const client = useGuardAuthClient()
   const [loading, setLoading] = useState(true)
   const appQrcodeClient = client.qrcode
 

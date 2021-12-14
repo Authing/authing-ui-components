@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { message, Tabs } from 'antd'
 import { RegisterMethods, User } from 'authing-js-sdk'
 import { ChangeLanguage } from '../ChangeLanguage'
-import { useAuthClient } from '../Guard/authClient'
+import { useGuardAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
 import { RegisterWithEmail } from './core/WithEmail'
 import { RegisterWithPhone } from './core/WithPhone'
@@ -21,7 +21,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
   const { t } = useTranslation()
   const agreementEnabled = config?.agreementEnabled
   const { langRange } = config
-  const authClient = useAuthClient()
+  const authClient = useGuardAuthClient()
 
   const __codePaser = (code: number) => {
     const action = codeMap[code]

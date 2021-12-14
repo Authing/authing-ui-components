@@ -24,7 +24,7 @@ import {
   OTP_MFA_CODE,
 } from '../../AuthingGuard/constants'
 import { useScreenSize } from '../../AuthingGuard/hooks/useScreenSize'
-import { useAuthClient } from '../../Guard/authClient'
+import { useGuardAuthClient } from '../../Guard/authClient'
 import { IconFont } from '../../IconFont'
 import { LoginConfig } from '../interface'
 import './style.less'
@@ -52,7 +52,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
 
   const [screenSize] = useScreenSize()
 
-  const authClient = useAuthClient()
+  const authClient = useGuardAuthClient()
 
   useEffect(() => {
     const onMessage = (evt: MessageEvent) => {

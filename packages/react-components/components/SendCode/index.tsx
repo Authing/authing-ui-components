@@ -6,7 +6,7 @@ import { SendCodeBtn } from './SendCodeBtn'
 
 import './style.less'
 import { useTranslation } from 'react-i18next'
-import { useAuthClient } from '../Guard/authClient'
+import { useGuardAuthClient } from '../Guard/authClient'
 import { validate } from '../_utils'
 import { InputProps } from 'antd/lib/input'
 import { InputNumber } from '../InputNumber'
@@ -34,7 +34,7 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
 }) => {
   const { t } = useTranslation()
 
-  const authClient = useAuthClient()
+  const authClient = useGuardAuthClient()
 
   const sendEmail = async (email: string) => {
     if (!email) {

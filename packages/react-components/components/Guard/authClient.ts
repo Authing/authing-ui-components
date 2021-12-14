@@ -4,7 +4,7 @@ import { GuardLocalConfig } from './config'
 
 let authClient: AuthenticationClient
 
-export const initAuthClient = (
+export const initGuardAuthClient = (
   config: GuardLocalConfig,
   appId: string,
   tenantId?: string
@@ -32,12 +32,12 @@ export const initAuthClient = (
   return authClient
 }
 
-export const getAuthClient = () => {
+export const getGuardAuthClient = () => {
   if (!authClient) {
-    throw new Error('Please initialize AuthClient')
+    throw new Error('Please initialize GuardAuthClient')
   }
 
   return authClient
 }
 
-export const useAuthClient = () => getAuthClient()
+export const useGuardAuthClient = () => getGuardAuthClient()

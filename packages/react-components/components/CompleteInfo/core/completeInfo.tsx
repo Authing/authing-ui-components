@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { ExtendsField } from '../../AuthingGuard/api'
 import { UploadImage } from '../../AuthingGuard/Forms/UploadImage'
-import { useAuthClient } from '../../Guard/authClient'
+import { useGuardAuthClient } from '../../Guard/authClient'
 import { i18n } from '../../_utils/locales'
 import { useGuardHttp } from '../../_utils/guradHttp'
 import { GuardCompleteInfoViewProps } from '../interface'
@@ -42,7 +42,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
     onRegisterInfoCompletedError,
     user,
   } = props
-  const authClient = useAuthClient()
+  const authClient = useGuardAuthClient()
   const submitButtonRef = useRef<any>(null)
   const [contryList, setContryList] = useState<any>([])
   const [fieldMetadata, setFieldMetadata] = useState<FieldMetadata[]>([])
