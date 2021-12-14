@@ -1,4 +1,4 @@
-import { Form } from 'antd'
+import { Form, message } from 'antd'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
@@ -52,6 +52,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         setValidated(true)
 
         if (agreements?.length && !acceptedAgreements) {
+          message.error(t('common.protocolTips'))
           submitButtonRef.current.onError()
           // submitButtonRef.current.onSpin(false)
           return

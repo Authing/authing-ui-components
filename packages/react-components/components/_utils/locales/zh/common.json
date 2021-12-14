@@ -232,5 +232,6 @@
   "totpCode": "安全码",
   "welcome": "欢迎访问",
   "initPasswordText": "为了保障账号安全，请设置你的初始密码。",
-  "updatePsswordSuccess": "修改密码成功，请重新登录"
+  "updatePsswordSuccess": "修改密码成功，请重新登录",
+  "protocolTips": "请先勾选所需协议"
 }
