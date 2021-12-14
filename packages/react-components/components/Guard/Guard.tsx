@@ -40,6 +40,7 @@ import { AuthenticationClient, GuardMode } from '..'
 import { GuardSubmitSuccessView } from '../SubmitSuccess'
 import { createGuardContext } from '../_utils/context'
 import { ApplicationConfig } from '../AuthingGuard/api'
+import { SessionData, trackSession } from './sso'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -140,7 +141,7 @@ export const Guard = (props: GuardProps) => {
   // Modules Reducer
   const [moduleState, changeModule] = useReducer(moduleReducer, initState)
 
-  // 切换 Module
+  // Change Module
   const onChangeModule = (moduleName: GuardModuleType, initData: any = {}) => {
     changeModule({
       type: moduleName,
@@ -161,6 +162,19 @@ export const Guard = (props: GuardProps) => {
     tenantId && httpClient.setTenantId(tenantId)
     setHttpClint(httpClient)
   }, [appId, config?.host, tenantId])
+
+  // SSO 登录
+  useEffect(() => {
+    if (!config?.isSSO || !authClint || !events || !httpClint) return
+
+    trackSession().then((sessionData) => {
+      // 这个接口没有 code, data, 直接返回了数据
+      let typedData = (sessionData as unknown) as SessionData
+      if (typedData.userInfo) {
+        events?.onLogin?.(typedData.userInfo, authClint!)
+      }
+    })
+  }, [appId, authClint, config?.isSSO, events, httpClint])
 
   useEffect(() => {
     if (httpClint && GuardLocalConfig && GuardLocalConfig.__appHost__) {

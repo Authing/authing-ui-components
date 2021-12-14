@@ -3,7 +3,9 @@ import { getDefaultRegisterConfig, RegisterConfig } from '../Register/interface'
 
 export interface GuardComponentConifg extends Partial<GuardLocalConfig> {}
 
-export interface GuardLocalConfig extends RegisterConfig, LoginConfig {}
+export interface GuardLocalConfig extends RegisterConfig, LoginConfig {
+  isSSO?: boolean
+}
 
 let defaultConfig: GuardLocalConfig
 

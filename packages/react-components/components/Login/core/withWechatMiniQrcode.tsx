@@ -48,8 +48,8 @@ export const LoginWithWechatMiniQrcode = (
         // onFail && onFail(`${message}`)
         message.error(ms)
       },
-      onCodeLoadFailed: (error: any) => {
-        message.error(error.message)
+      onCodeLoadFailed: ({ message: mes }: any) => {
+        message.error(JSON.parse(mes).message)
         setLoading(false)
       },
       onRetry: () => {
