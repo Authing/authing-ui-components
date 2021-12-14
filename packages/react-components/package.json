@@ -1,6 +1,6 @@
 {
   "name": "@authing/react-ui-components",
-  "version": "3.0.0-rc.1",
+  "version": "3.0.0-rc.3",
   "private": false,
   "main": "lib/index.min.js",
   "typings": "lib/index.d.ts",
@@ -19,8 +19,8 @@
     "react-use": "^17.3.1"
   },
   "peerDependencies": {
-    "react": "16.14.0",
-    "react-dom": "16.14.0"
+    "react": ">=16.9.0",
+    "react-dom": ">=16.9.0"
   },
   "scripts": {
     "build": "node ./scripts/build.js",
