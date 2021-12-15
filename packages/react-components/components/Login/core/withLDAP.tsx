@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Form, Input } from 'antd'
 import { LoginMethods } from '../../'
 import { ErrorCode } from '../../_utils/GuardErrorCode'
-import { useAuthClient } from '../../Guard/authClient'
+import { useGuardAuthClient } from '../../Guard/authClient'
 import SubmitButton from '../../SubmitButton'
 import { fieldRequiredRule } from '../../_utils'
 import { IconFont } from '../../IconFont'
@@ -20,7 +20,7 @@ interface LoginWithLDAPProps {
 }
 
 export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
-  let client = useAuthClient()
+  let client = useGuardAuthClient()
   const { t } = useTranslation()
   let submitButtonRef = useRef<any>(null)
 

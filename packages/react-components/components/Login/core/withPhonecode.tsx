@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { useAuthClient } from '../../Guard/authClient'
+import { useGuardAuthClient } from '../../Guard/authClient'
 import { LoginMethods } from '../../'
 import { SendCode } from '../../SendCode'
 import { fieldRequiredRule } from '../../_utils'
@@ -30,7 +30,7 @@ export const LoginWithPhoneCode = (props: any) => {
   let submitButtonRef = useRef<any>(null)
   const { t } = useTranslation()
 
-  let client = useAuthClient()
+  let client = useGuardAuthClient()
 
   const verifyCodeLength = props.verifyCodeLength ?? 4
 

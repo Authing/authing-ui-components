@@ -4,7 +4,7 @@ import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
-import { useAuthClient } from '../../Guard/authClient'
+import { useGuardAuthClient } from '../../Guard/authClient'
 import { getDeviceName, getUserRegisterParams } from '../../_utils'
 import { Agreements } from '../components/Agreements'
 import SubmitButton from '../../SubmitButton'
@@ -27,7 +27,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
   const { t } = useTranslation()
   const submitButtonRef = useRef<any>(null)
 
-  const authClient = useAuthClient()
+  const authClient = useGuardAuthClient()
   const [form] = Form.useForm()
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)

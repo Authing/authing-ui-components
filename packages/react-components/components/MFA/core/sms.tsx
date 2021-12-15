@@ -4,7 +4,7 @@ import { User } from 'authing-js-sdk'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VerifyCodeInput } from '../VerifyCodeInput'
-import { useAuthClient } from '../../Guard/authClient'
+import { useGuardAuthClient } from '../../Guard/authClient'
 import { SendCodeBtn } from '../../SendCode/SendCodeBtn'
 import SubmitButton from '../../SubmitButton'
 import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
@@ -92,7 +92,7 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   sendCodeRef,
   codeLength = 4,
 }) => {
-  const authClient = useAuthClient()
+  const authClient = useGuardAuthClient()
   const submitButtonRef = useRef<any>(null)
   const { t } = useTranslation()
   const [form] = Form.useForm()

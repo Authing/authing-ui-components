@@ -7,7 +7,7 @@ import { ResetPassword } from './core/resetPassword'
 
 import { ImagePro } from '../ImagePro'
 import { ForgetPasswordViewProps } from './interface'
-import { useAuthClient } from '../Guard/authClient'
+import { useGuardAuthClient } from '../Guard/authClient'
 import { CommonMessage } from '..'
 import { ChangeLanguage } from '../ChangeLanguage'
 
@@ -17,7 +17,7 @@ export const GuardForgetPassword: React.FC<ForgetPasswordViewProps> = (
   let { langRange } = props.config
   const { t } = useTranslation()
   let publicConfig = props.config.__publicConfig__
-  const authClient = useAuthClient()
+  const authClient = useGuardAuthClient()
 
   const onReset = (res: any) => {
     let code = res.code

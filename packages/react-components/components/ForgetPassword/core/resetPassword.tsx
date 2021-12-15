@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Form, Input } from 'antd'
 import { StoreValue } from 'antd/lib/form/interface'
 import { SendCode } from '../../SendCode'
-import { useAuthClient } from '../../Guard/authClient'
+import { useGuardAuthClient } from '../../Guard/authClient'
 import { fieldRequiredRule, validate } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
 import CustomFormItem from '../../ValidatorRules'
@@ -20,7 +20,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
   let [form] = Form.useForm()
   let [identify, setIdentify] = useState('')
   let [codeMethod, setCodeMethod] = useState<'phone' | 'email'>('phone')
-  let client = useAuthClient()
+  let client = useGuardAuthClient()
   let submitButtonRef = useRef<any>(null)
 
   const verifyCodeLength = props.publicConfig.verifyCodeLength ?? 4

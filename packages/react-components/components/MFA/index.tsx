@@ -8,7 +8,7 @@ import { MFAFace } from './core/face'
 import { MFATotp } from './core/totp'
 import { MFAMethods } from './mfaMethods'
 import { GuardMFAViewProps, MFAType } from './interface'
-import { useAuthClient } from '../Guard/authClient'
+import { useGuardAuthClient } from '../Guard/authClient'
 import { codeMap } from './codemap'
 import './styles.less'
 import { message } from 'antd'
@@ -59,7 +59,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
       initData.applicationMfa?.sort((a, b) => a.sort - b.sort)[0].mfaPolicy
   )
   const [showMethods, setShowMethods] = useState(true)
-  const client = useAuthClient()
+  const client = useGuardAuthClient()
   const { t } = useTranslation()
 
   const onBack = () => window.history.back()

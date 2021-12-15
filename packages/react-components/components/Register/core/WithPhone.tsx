@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
-import { useAuthClient } from '../../Guard/authClient'
+import { useGuardAuthClient } from '../../Guard/authClient'
 import { SendCode } from '../../SendCode'
 import {
   fieldRequiredRule,
@@ -33,7 +33,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
 }) => {
   const { t } = useTranslation()
   const submitButtonRef = useRef<any>(null)
-  const authClient = useAuthClient()
+  const authClient = useGuardAuthClient()
   const [form] = Form.useForm()
   const [phone, setPhone] = useState<string>('')
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)

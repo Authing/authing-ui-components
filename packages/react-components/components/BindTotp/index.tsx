@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { ErrorCode } from '../_utils/GuardErrorCode'
 import { useGuardHttp } from '../_utils/guradHttp'
-import { useAuthClient } from '../Guard/authClient'
+import { useGuardAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
 import { IconFont } from '../IconFont'
 import { ShieldSpin, Spin } from '../ShieldSpin'
@@ -34,7 +34,7 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
     BindTotpType.SECURITY_CODE
   )
 
-  const authClient = useAuthClient()
+  const authClient = useGuardAuthClient()
 
   const [bindInfo, fetchBindInfo] = useAsyncFn(async () => {
     const query = {
