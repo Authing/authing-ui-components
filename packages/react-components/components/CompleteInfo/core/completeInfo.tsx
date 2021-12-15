@@ -129,9 +129,21 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       />
     ),
     string: () => (
-      <Input type="text" size="large" className="authing-g2-input" />
+      <Input
+        type="text"
+        size="large"
+        className="authing-g2-input"
+        autoComplete="off"
+      />
     ),
-    text: () => <Input type="text" size="large" className="authing-g2-input" />,
+    text: () => (
+      <Input
+        type="text"
+        size="large"
+        className="authing-g2-input"
+        autoComplete="off"
+      />
+    ),
   }
   const INTERNAL_INPUT_MAP: Record<
     string,
@@ -342,7 +354,13 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
               }
               return INPUT_MAP[def.inputType]()
             }
-            return <Input type="text" className="authing-g2-input" />
+            return (
+              <Input
+                type="text"
+                className="authing-g2-input"
+                autoComplete="off"
+              />
+            )
           }
         }
         if (
