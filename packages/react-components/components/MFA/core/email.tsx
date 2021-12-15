@@ -66,7 +66,10 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
             size="large"
             placeholder={t('login.inputEmail')}
             prefix={
-              <IconFont type="authing-mail" style={{ color: '#878A95' }} />
+              <IconFont
+                type="authing-a-mail-line3"
+                style={{ color: '#878A95' }}
+              />
             }
           />
         </CustomFormItem.Email>

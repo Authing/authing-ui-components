@@ -60,9 +60,6 @@ export const LoginWithPhoneCode = (props: any) => {
         submitButtonRef.current.onError()
         props.onLogin(e.code, e.data, e.message)
       })
-      .finally(() => {
-        submitButtonRef.current.onSpin(false)
-      })
   }
 
   return (

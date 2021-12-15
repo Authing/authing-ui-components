@@ -67,7 +67,10 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
             size="large"
             placeholder={t('login.inputPhone')}
             prefix={
-              <IconFont type="authing-phone" style={{ color: '#878A95' }} />
+              <IconFont
+                type="authing-a-smartphone-line1"
+                style={{ color: '#878A95' }}
+              />
             }
           />
         </CustomFormItem.Phone>
