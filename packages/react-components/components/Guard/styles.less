@@ -189,24 +189,22 @@
 }
 .authing-g2-input-form {
   .authing-g2-select {
-    border: 1px solid #f5f6f7;
-    border-color: #f5f6f7;
-    // height: 46px;
-    border-radius: 4px;
-    .authing-ant-select-selector {
-      height: 100% !important;
-      background-color: #f5f6f7 !important;
-      .authing-ant-select-selection-item {
-        line-height: 42px;
-      }
-    }
-    // affix-wrapper 特殊处理 hover
     &:hover {
       border-color: #eeeff1 !important;
       background: #eeeff1;
-      // border-color: #618eff;
     }
-
+    border: 1px solid #f5f6f7;
+    border-radius: 4px;
+    .authing-ant-select-selector {
+      outline: 0;
+      border-color: #f5f6f7 !important;
+      height: 100% !important;
+      background-color: #f5f6f7;
+      &:hover {
+        border-color: #eeeff1 !important;
+        background: #eeeff1;
+      }
+    }
     // focus
     &.authing-ant-select-focused {
       border-color: #618eff;
@@ -214,19 +212,37 @@
       outline: 0;
       box-shadow: 0 0 0 2px rgba(57, 106, 255, 0.2);
       .authing-ant-select-selector {
+        border-color: #eeeff1 !important;
         background: #fff !important;
       }
     }
   }
 
-  .authing-ant-select:not(.authing-ant-select-customize-input)
-    .authing-ant-select-selector {
-    border: unset !important;
-  }
-  // .authing-ant-select:not(.authing-ant-select-disabled):hover
+  // .authing-ant-select:not(.authing-ant-select-customize-input)
   //   .authing-ant-select-selector {
-  //   border-color: #d9d9d9;
+  //   border-color: #f5f6f7;
   // }
+  &.authing-ant-form-item-has-error {
+    .authing-g2-select {
+      &:hover {
+        border-color: #eeeff1 !important;
+        background: #eeeff1;
+      }
+      // focus
+      &.authing-ant-select-focused {
+        .authing-ant-select-selector {
+          border-color: #eeeff1 !important;
+        }
+        border-color: #ff4d4f;
+        border-right-width: 1px !important;
+        outline: 0;
+        box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
+        .authing-ant-select-selector {
+          background: #fff !important;
+        }
+      }
+    }
+  }
 }
 
 .authing-g2-input {
@@ -547,6 +563,7 @@
   > textarea {
     resize: none;
     background: #f5f6f7;
+    border: 1px solid #f5f6f7;
     &:hover {
       border-color: #eeeff1 !important;
       // border-color: #618eff;
@@ -579,26 +596,20 @@ strong {
   }
   .authing-g2-input {
     &:hover {
-      border-color: #eeeff1 !important;
+      border-color: #eeeff1;
     }
-    // focus
     &.authing-ant-picker-focused {
       background: #fff;
-      border-color: #618eff;
-      border-right-width: 1px !important;
-      outline: 0;
-      box-shadow: 0 0 0 2px rgba(57, 106, 255, 0.2);
     }
   }
-
-  .authing-ant-select-selector {
-    padding: 4px 11px !important;
-    .authing-ant-select-selection-item {
-      line-height: 30px !important;
-    }
-    .authing-ant-select-selection-search {
-      display: flex;
-      align-items: center;
-    }
+}
+.authing-ant-select-selector {
+  padding: 3px 11px !important;
+  .authing-ant-select-selection-item {
+    line-height: 30px !important;
+  }
+  .authing-ant-select-selection-search {
+    display: flex;
+    align-items: center;
   }
 }
