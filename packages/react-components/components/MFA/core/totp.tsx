@@ -74,8 +74,10 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
       )
 
       if (code !== 200) {
-        mfaLogin(200, message)
-        Message.error(message)
+        mfaLogin(code, {
+          message,
+        })
+        submitButtonRef.current.onError()
       } else {
         mfaLogin(200, data)
       }

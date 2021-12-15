@@ -11,28 +11,32 @@ export const VerifyCodeFormItem: React.FC<VerifyCodeFormItemProps> = (
   props
 ) => {
   const { t } = useTranslation()
-  const { codeLength, ruleKeyword, ...formItemProps } = props
+  const {
+    codeLength,
+    ruleKeyword = t('common.captchaCode'),
+    ...formItemProps
+  } = props
   return (
     <Form.Item
       validateTrigger={['onBlur', 'onChange']}
       name="mfaCode"
       className="g2-mfa-totp-verify-input"
-      // validateTrigger={'onBlur'}
       rules={[
         {
-          validator(_, value: string[]) {
-            if ((value ?? []).join('').length !== codeLength) {
-              // return Promise.reject()
-              return Promise.reject(
-                ruleKeyword
-                  ? t('common.isMissing', {
-                      name: ruleKeyword,
-                    })
-                  : null
-              )
-            }
-            return Promise.resolve()
-          },
+          type: 'array',
+          validateTrigger: ['onBlur'],
+          message: t('common.isMissing', {
+            name: ruleKeyword,
+          }),
+          required: true,
+        },
+        {
+          type: 'array',
+          validateTrigger: ['onChange'],
+          message: t('common.fullCaptchaCode', {
+            name: ruleKeyword,
+          }),
+          min: codeLength,
         },
       ]}
       {...formItemProps}

@@ -26,7 +26,7 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
   className,
   onEenter,
   showDivider,
-  onChange,
+  onChange: onChangeProps,
   value,
   ...rest
 }) => {
@@ -35,6 +35,15 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
   const codeInputRef = useRef<HTMLDivElement>(null)
 
   const [verifyCode, setVerifyCode] = useState(value ?? [])
+
+  const onChange = useCallback(
+    (codes: string[]) => {
+      const filteredCodes = codes.filter((code) => !!code)
+      setVerifyCode(filteredCodes)
+      onChangeProps?.(filteredCodes)
+    },
+    [onChangeProps]
+  )
 
   const handleChange = useCallback(
     (val: string | undefined = '', index: number) => {
@@ -47,31 +56,28 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
 
       const codes = [...verifyCode]
       codes[index] = val.split('').slice(-1)[0] || ''
-      setVerifyCode(codes)
 
-      if (codes.length >= length) {
-        onChange?.(codes)
-      }
+      onChange(codes as string[])
 
-      if (val && inputRef.current[index + 1]) {
+      if (!!val && inputRef.current[index + 1]) {
         inputRef.current[index + 1].focus()
       }
     },
-    [verifyCode, length, onChange]
+    [verifyCode, onChange]
   )
 
   const handleKeyDown = (evt: any, index: number) => {
     const currentVal = verifyCode[index]
 
-    switch (evt.keyCode) {
-      case 8:
+    switch (evt.key) {
+      case 'Backspace':
         if (!currentVal && inputRef.current[index - 1]) {
           handleChange('', index - 1)
           inputRef.current[index - 1].focus()
         }
         break
 
-      case 13:
+      case 'Enter':
         onEenter?.()
         break
       default:
@@ -91,13 +97,11 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
       if (paste && !isNaN(parseInt(paste))) {
         if (paste.length < length) {
           const data = verifyCode.map((_i, index) => paste?.[index] ?? '')
-          setVerifyCode(data)
-          onChange?.(data)
+          onChange(data)
           inputRef.current[paste.length].focus()
         } else {
           const data = paste.slice(0, length).split('')
-          setVerifyCode(data)
-          onChange?.(data)
+          onChange(data)
           inputRef.current[length - 1].focus()
         }
       }
