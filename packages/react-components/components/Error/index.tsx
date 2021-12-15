@@ -1,20 +1,19 @@
 import React from 'react'
-import { ImagePro } from '../ImagePro'
 import { GuardErrorViewProps } from './interface'
 import { i18n } from '../_utils/locales'
 
 import './styles.less'
+import { IconFont } from '../IconFont'
 
 export const GuardErrorView: React.FC<GuardErrorViewProps> = (props) => {
   const messages = props?.initData?.messages
     ? `${i18n.t('user.error')}：${props?.initData?.messages} `
     : `${i18n.t('user.contactAdministrator')}`
-  const imgSrc = require('../assets/images/error.png').default
 
   return (
     <div className="g2-view-container">
       <div className="g2-error-content">
-        <ImagePro width={240} height={162} src={imgSrc} alt="guard error img" />
+        <IconFont type="authing-img-error" />
         <span>{messages}</span>
       </div>
     </div>
