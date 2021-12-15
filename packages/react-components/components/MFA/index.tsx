@@ -73,9 +73,9 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
     }
 
     if (!action) {
-      return () => {
+      return (data: any) => {
         console.error('not catch code', code)
-        // props.onLoginError?.(data, client) // 未捕获 code
+        message.error(data.message)
       }
     }
 
@@ -96,7 +96,6 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
 
     // 最终结果
     return () => {
-      // props.onLoginError?.(data, client!) // 未捕获 code
       console.error('last action at mfaview')
     }
   }

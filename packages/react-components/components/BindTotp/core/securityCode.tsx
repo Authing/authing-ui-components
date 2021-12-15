@@ -104,9 +104,7 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
         >
           <VerifyCodeInput length={6} showDivider={true} gutter={'10px'} />
         </VerifyCodeFormItem>
-        {/* <p style={{ color: necessity ? '' : 'red' }}>
-          {necessity ? t('user.numberSafteyCode') : '数字安全码未填写'}
-        </p> */}
+
         <SubmitButton text={t('user.nextStep')} ref={submitButtonRef} />
       </Form>
     </>
