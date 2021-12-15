@@ -220,7 +220,6 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
               />
               <IconFont
                 type="authing-diannao"
-                style={{ marginTop: '-6px' }}
                 className={`qrcode-switch-image ${qrcodeNone}`}
               />
             </div>
@@ -323,7 +322,6 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                 <IconFont
                   type={'authing-a-question-line1'}
                   style={{ fontSize: 16 }}
-                  // style={{ fontSize: 20, marginRight: 8 }}
                 />
               </div>
             )}

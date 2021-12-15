@@ -38,7 +38,6 @@
   min-height: 610px;
   box-sizing: border-box;
   padding: 16px;
-  padding-bottom: 32px;
   border-radius: 8px;
   position: relative;
   .none {
@@ -189,17 +188,56 @@
 }
 .authing-g2-input-form {
   .authing-g2-select {
+    &:hover {
+      border-color: #eeeff1 !important;
+      background: #eeeff1;
+    }
     border: 1px solid #f5f6f7;
-    border-color: #f5f6f7;
-    // height: 46px;
     border-radius: 4px;
     .authing-ant-select-selector {
+      outline: 0;
+      border-color: #f5f6f7 !important;
       height: 100% !important;
-      background-color: #f5f6f7 !important;
-      .authing-ant-select-selection-item {
-        line-height: 42px;
-        &:hover {
-          background-color: #eeeff1 !important;
+      background-color: #f5f6f7;
+      &:hover {
+        border-color: #eeeff1 !important;
+        background: #eeeff1;
+      }
+    }
+    // focus
+    &.authing-ant-select-focused {
+      border-color: #618eff;
+      border-right-width: 1px !important;
+      outline: 0;
+      box-shadow: 0 0 0 2px rgba(57, 106, 255, 0.2);
+      .authing-ant-select-selector {
+        border-color: #eeeff1 !important;
+        background: #fff !important;
+      }
+    }
+  }
+
+  // .authing-ant-select:not(.authing-ant-select-customize-input)
+  //   .authing-ant-select-selector {
+  //   border-color: #f5f6f7;
+  // }
+  &.authing-ant-form-item-has-error {
+    .authing-g2-select {
+      &:hover {
+        border-color: #eeeff1 !important;
+        background: #eeeff1;
+      }
+      // focus
+      &.authing-ant-select-focused {
+        .authing-ant-select-selector {
+          border-color: #eeeff1 !important;
+        }
+        border-color: #ff4d4f;
+        border-right-width: 1px !important;
+        outline: 0;
+        box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
+        .authing-ant-select-selector {
+          background: #fff !important;
         }
       }
     }
@@ -241,7 +279,6 @@
     border-color: #eeeff1;
     background: #eeeff1;
     // border-color: #618eff;
-
     .authing-ant-input {
       background: #eeeff1;
     }
@@ -352,6 +389,8 @@
   }
   .touch-tip {
     color: #d4d6dc;
+    display: flex;
+    align-items: center;
     cursor: pointer;
     &:hover {
       color: #878a95;
@@ -377,6 +416,7 @@
   }
   // authing-ant-upload authing-ant-upload-select
   .authing-ant-upload-select-picture-card {
+    border-radius: 4px;
     height: 56px;
     width: 56px;
     border: none;
@@ -424,7 +464,7 @@
 }
 
 .g2-change-language-container {
-  margin: auto 0 20px;
+  margin: auto 0;
   padding-top: 10px;
   text-align: center;
   .g2-change-language-button {
@@ -521,6 +561,18 @@
 .authing-g2-questions-textarea {
   > textarea {
     resize: none;
+    background: #f5f6f7;
+    border: 1px solid #f5f6f7;
+    &:hover {
+      border-color: #eeeff1 !important;
+      // border-color: #618eff;
+    }
+    &:focus {
+      background: #fff;
+    }
+    // &:focus{
+
+    // }
   }
 }
 
@@ -531,5 +583,32 @@
   }
   &:hover {
     background: #f5f6f7 !important;
+  }
+}
+strong {
+  font-weight: normal !important;
+}
+
+.authing-g2-completeInfo-form {
+  input:hover {
+    border-color: #eeeff1 !important;
+  }
+  .authing-g2-input {
+    &:hover {
+      border-color: #eeeff1;
+    }
+    &.authing-ant-picker-focused {
+      background: #fff;
+    }
+  }
+}
+.authing-ant-select-selector {
+  padding: 3px 11px !important;
+  .authing-ant-select-selection-item {
+    line-height: 30px !important;
+  }
+  .authing-ant-select-selection-search {
+    display: flex;
+    align-items: center;
   }
 }

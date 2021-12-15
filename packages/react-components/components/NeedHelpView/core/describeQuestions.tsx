@@ -165,7 +165,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
         </Form.Item>
         <Form.Item
           validateTrigger={['onBlur', 'onChange']}
-          className="authing-g2-input-form"
+          className="authing-g2-input-form "
           label={t('common.problem.form.question')}
           name="questionPicker"
           initialValue={typeProblem}

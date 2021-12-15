@@ -7,7 +7,7 @@ export const InputPassword: FC<PasswordProps> = (props) => {
     <Input.Password
       {...props}
       iconRender={(visible) => (
-        <span>
+        <span style={{ display: 'block', height: '100%', lineHeight: '28px' }}>
           {visible ? (
             <IconFont type="authing-a-eye-line1" />
           ) : (
