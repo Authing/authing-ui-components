@@ -92,7 +92,7 @@
   "wechatmpQrcode": "WechatMp QRcode\t",
   "inputEmailUsername": "Please enter email or account",
   "inputUsername": "Username",
-  "moreWays": "Scan",
+  "moreWays": "More Login",
   "inputCorrectPhoneOrEmail": "Enter a valid Email or Phone number",
   "sendCodeTimeout": "Sending failed, please try later",
   "mediaDevicesSupport": "The current device does not support face recognition",
