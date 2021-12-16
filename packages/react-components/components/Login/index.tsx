@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { message, Popover, Tabs } from 'antd'
+import { message, Popover, Tabs, Tooltip } from 'antd'
 import { intersection } from 'lodash'
 
 import { LoginWithPassword } from './core/withPassword/index'
@@ -313,17 +313,19 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
             )}
 
             {errorNumber >= 2 && (
-              <div
-                className="touch-tip"
-                onClick={() =>
-                  props.__changeModule?.(GuardModuleType.ANY_QUESTIONS, {})
-                }
-              >
-                <IconFont
-                  type={'authing-a-question-line1'}
-                  style={{ fontSize: 16 }}
-                />
-              </div>
+              <Tooltip title={t('common.problem.title')}>
+                <div
+                  className="touch-tip"
+                  onClick={() =>
+                    props.__changeModule?.(GuardModuleType.ANY_QUESTIONS, {})
+                  }
+                >
+                  <IconFont
+                    type={'authing-a-question-line1'}
+                    style={{ fontSize: 16 }}
+                  />
+                </div>
+              </Tooltip>
             )}
 
             {!disableRegister && (
