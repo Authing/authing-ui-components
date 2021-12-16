@@ -172,6 +172,8 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   useEffect(() => {
     if (qrcodeWays.includes(loginWay)) {
       setCanLoop(true)
+    } else {
+      setCanLoop(false)
     }
     message.destroy()
     // 可以设定 = fasle 的时候关闭 qrcode 的几个定时器
@@ -207,8 +209,10 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
               className="switch-img"
               onClick={() => {
                 if (inputWays.includes(loginWay)) {
+                  console.log(firstQRcodeWay)
                   setLoginWay(firstQRcodeWay)
                 } else if (qrcodeWays.includes(loginWay)) {
+                  console.log(firstInputWay)
                   setLoginWay(firstInputWay)
                 }
               }}

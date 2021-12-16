@@ -57,6 +57,7 @@ export const LoginWithPhoneCode = (props: any) => {
         props.onLogin(200, u)
       })
       .catch((e) => {
+        submitButtonRef.current.onSpin(false)
         submitButtonRef.current.onError()
         props.onLogin(e.code, e.data, e.message)
       })

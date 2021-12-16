@@ -165,7 +165,7 @@
   "backLoginPage": "返回登录",
   "LoginSuccess": "登录成功",
   "unAppId": "请传入应用 ID",
-  "welcomeDoc": "欢迎加入 {{name}} ，为了更好的使用体验，请先完善您的资料信息",
+  "welcomeDoc": "欢迎加入 {{name}} ，为了更好的使用体验，请先完善你的个人信息",
   "bindEmailDoc": "请输入邮箱进行绑定",
   "unBindEmaileDoc": "{{email}} 已被其他账号绑定",
   "copied": "已复制",
