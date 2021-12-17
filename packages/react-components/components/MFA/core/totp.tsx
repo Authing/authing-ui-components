@@ -84,7 +84,6 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
       submitButtonRef.current.onSpin(false)
     }
   }, [mfaToken])
-
   return (
     <>
       <p className="authing-g2-mfa-title">{t('login.accPwdLoginVerify')}</p>
@@ -96,7 +95,12 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
         onFinishFailed={() => submitButtonRef.current.onError()}
       >
         <VerifyCodeFormItem codeLength={6}>
-          <VerifyCodeInput length={6} showDivider={true} gutter={'10px'} />
+          <VerifyCodeInput
+            length={6}
+            showDivider={true}
+            gutter={'10px'}
+            onFinish={onFinish}
+          />
         </VerifyCodeFormItem>
 
         <SubmitButton text={t('common.sure')} ref={submitButtonRef} />

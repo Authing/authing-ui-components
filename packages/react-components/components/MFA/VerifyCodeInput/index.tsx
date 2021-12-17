@@ -18,6 +18,7 @@ interface VerifyCodeInputProps extends React.HTMLAttributes<HTMLDivElement> {
   showDivider?: boolean
   onChange?: any
   value?: Array<number | string>
+  onFinish?: any
 }
 
 export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
@@ -29,6 +30,7 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
   showDivider,
   onChange: onChangeProps,
   value,
+  onFinish,
   ...rest
 }) => {
   const inputRef = useRef<any[]>([])
@@ -63,13 +65,16 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
       if (!!val && inputRef.current[index + 1]) {
         inputRef.current[index + 1].focus()
       }
+      // 输入完验证码 直接 finish 提交
+      if (codes.filter((code) => code).length >= length) {
+        onFinish?.()
+      }
     },
-    [verifyCode, onChange]
+    [verifyCode, onChange, length, onFinish]
   )
 
   const handleKeyDown = (evt: any, index: number) => {
     const currentVal = verifyCode[index]
-
     switch (evt.key) {
       case 'Backspace':
         if (!currentVal && inputRef.current[index - 1]) {
@@ -81,6 +86,7 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
       case 'Enter':
         onEenter?.()
         break
+
       default:
         break
     }
