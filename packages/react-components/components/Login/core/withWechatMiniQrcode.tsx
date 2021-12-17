@@ -18,12 +18,6 @@ export const LoginWithWechatMiniQrcode = (
   const appQrcodeClient = client.wxqrcode
 
   useEffect(() => {
-    return () => {
-      clearInterval(timerRef.current)
-    }
-  }, [])
-
-  useEffect(() => {
     if (!props.canLoop) {
       return
     }
@@ -56,6 +50,8 @@ export const LoginWithWechatMiniQrcode = (
         setLoading(true)
       },
     })
+    return () => clearInterval(timerRef.current)
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appQrcodeClient, props.canLoop, props.qrCodeScanOptions])
 
