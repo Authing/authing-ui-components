@@ -133,6 +133,7 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
             autoFocus={index === 0}
             onKeyDown={(evt) => handleKeyDown(evt, index)}
             value={verifyCode[index]}
+            maxLength={1}
             onChange={(evt) => {
               evt.persist()
               // @ts-ignore
