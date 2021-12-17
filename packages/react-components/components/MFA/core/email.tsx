@@ -151,7 +151,7 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
           codeLength={codeLength}
           ruleKeyword={t('common.captchaCode')}
         >
-          <VerifyCodeInput length={codeLength} />
+          <VerifyCodeInput length={codeLength} onFinish={onFinish} />
         </VerifyCodeFormItem>
 
         <SendCodeBtn
