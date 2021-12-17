@@ -18,13 +18,13 @@ export const VerifyCodeFormItem: React.FC<VerifyCodeFormItemProps> = (
   } = props
   return (
     <Form.Item
-      validateTrigger={['onBlur', 'onChange']}
+      validateTrigger={['onChange']}
       name="mfaCode"
       className="g2-mfa-totp-verify-input"
       rules={[
         {
           type: 'array',
-          validateTrigger: ['onBlur'],
+          validateTrigger: ['onChange'],
           message: t('common.isMissing', {
             name: ruleKeyword,
           }),
@@ -32,7 +32,7 @@ export const VerifyCodeFormItem: React.FC<VerifyCodeFormItemProps> = (
         },
         {
           type: 'array',
-          validateTrigger: ['onChange'],
+          validateTrigger: [''],
           message: t('common.fullCaptchaCode', {
             name: ruleKeyword,
           }),

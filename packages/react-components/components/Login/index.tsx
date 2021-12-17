@@ -173,7 +173,6 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     if (qrcodeWays.includes(loginWay)) {
       setCanLoop(true)
     }
-    message.destroy()
     // 可以设定 = fasle 的时候关闭 qrcode 的几个定时器
     // 不关的话，第二次进入会更快，也没什么代价（只有轮询）
   }, [loginWay])
@@ -206,6 +205,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
             <div
               className="switch-img"
               onClick={() => {
+                message.destroy()
                 if (inputWays.includes(loginWay)) {
                   setLoginWay(firstQRcodeWay)
                 } else if (qrcodeWays.includes(loginWay)) {
@@ -240,6 +240,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
             <Tabs
               onChange={(k: any) => {
                 setLoginWay(k)
+                message.destroy()
                 props.onLoginTabChange?.(k)
               }}
               activeKey={loginWay}
