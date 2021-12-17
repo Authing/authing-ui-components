@@ -156,6 +156,7 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
 
         <SendCodeBtn
           btnRef={sendCodeRef}
+          setSent={setSent}
           beforeSend={() => sendVerifyCode()}
           type="link"
         />

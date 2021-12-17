@@ -101,7 +101,7 @@
   "welcomeJoinAndPerfect": "Welcome to join {{name}}, in order to have a better experience, please improve your information first",
   "start": "Start ",
   "problem": {
-    "title": "How can we help you?",
+    "title": "How can we help you ?",
     "noProblem": "No more questions,",
     "goLogin": " Log in",
     "verifyTip": "Contact information is required!",

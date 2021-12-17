@@ -8,9 +8,10 @@ const TIME = 60
 export interface SendCodeProps extends ButtonProps {
   beforeSend: () => Promise<boolean>
   btnRef?: React.RefObject<HTMLButtonElement>
+  setSent?: (value: boolean) => void
 }
 
-const useSentCounter = () => {
+const useSentCounter = (effect: any) => {
   const [countDown, setCountDown] = useState(0)
   const timerRef = useRef<any>(0)
 
@@ -21,8 +22,9 @@ const useSentCounter = () => {
   useEffect(() => {
     if (countDown <= 0) {
       clearInterval(timerRef.current)
+      effect?.(false)
     }
-  }, [countDown])
+  }, [countDown, effect])
 
   const enabled = useMemo(() => countDown <= 0, [countDown])
 
@@ -46,9 +48,10 @@ const useSentCounter = () => {
 export const SendCodeBtn: FC<SendCodeProps> = ({
   beforeSend,
   btnRef,
+  setSent,
   ...buttonProps
 }) => {
-  const { enabled, send, countDown } = useSentCounter()
+  const { enabled, send, countDown } = useSentCounter(setSent)
   const [loading, setLoading] = useState(false)
   const { t } = useTranslation()
   const disabled = useMemo(() => {

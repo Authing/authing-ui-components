@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { message, Popover, Tabs } from 'antd'
+import { message, Popover, Tabs, Tooltip } from 'antd'
 import { intersection } from 'lodash'
 
 import { LoginWithPassword } from './core/withPassword/index'
@@ -172,6 +172,8 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   useEffect(() => {
     if (qrcodeWays.includes(loginWay)) {
       setCanLoop(true)
+    } else {
+      setCanLoop(false)
     }
     // 可以设定 = fasle 的时候关闭 qrcode 的几个定时器
     // 不关的话，第二次进入会更快，也没什么代价（只有轮询）
@@ -207,8 +209,10 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
               onClick={() => {
                 message.destroy()
                 if (inputWays.includes(loginWay)) {
+                  console.log(firstQRcodeWay)
                   setLoginWay(firstQRcodeWay)
                 } else if (qrcodeWays.includes(loginWay)) {
+                  console.log(firstInputWay)
                   setLoginWay(firstInputWay)
                 }
               }}
@@ -314,17 +318,19 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
             )}
 
             {errorNumber >= 2 && (
-              <div
-                className="touch-tip"
-                onClick={() =>
-                  props.__changeModule?.(GuardModuleType.ANY_QUESTIONS, {})
-                }
-              >
-                <IconFont
-                  type={'authing-a-question-line1'}
-                  style={{ fontSize: 16 }}
-                />
-              </div>
+              <Tooltip title={t('common.problem.title')}>
+                <div
+                  className="touch-tip"
+                  onClick={() =>
+                    props.__changeModule?.(GuardModuleType.ANY_QUESTIONS, {})
+                  }
+                >
+                  <IconFont
+                    type={'authing-a-question-line1'}
+                    style={{ fontSize: 16 }}
+                  />
+                </div>
+              </Tooltip>
             )}
 
             {!disableRegister && (
