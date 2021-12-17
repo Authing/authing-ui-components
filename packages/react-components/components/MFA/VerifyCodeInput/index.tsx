@@ -1,4 +1,4 @@
-import { Divider, Input } from 'antd'
+import { Divider } from 'antd'
 import React, {
   FC,
   Fragment,
@@ -139,6 +139,7 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
             autoFocus={index === 0}
             onKeyDown={(evt) => handleKeyDown(evt, index)}
             value={verifyCode[index]}
+            maxLength={1}
             onChange={(evt) => {
               evt.persist()
               // @ts-ignore
