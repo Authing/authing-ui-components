@@ -1,10 +1,14 @@
 import { Input } from 'antd'
 import { PasswordProps } from 'antd/lib/input'
-import React, { FC } from 'react'
+import React from 'react'
 import { IconFont } from '../AuthingGuard/IconFont'
-export const InputPassword: FC<PasswordProps> = (props) => {
+export const InputPassword = React.forwardRef<
+  React.RefObject<Input>,
+  PasswordProps
+>((props, ref) => {
   return (
     <Input.Password
+      ref={ref}
       {...props}
       iconRender={(visible) => (
         <span style={{ display: 'block', height: '100%', lineHeight: '28px' }}>
@@ -17,4 +21,4 @@ export const InputPassword: FC<PasswordProps> = (props) => {
       )}
     />
   )
-}
+})

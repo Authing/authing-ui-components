@@ -39,3 +39,4 @@ pnpm-lock.yaml
 /.history
 
 components/version/version.tsx
+examples.tsx
