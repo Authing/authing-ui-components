@@ -7,6 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
+import { InputNumber } from '../../InputNumber'
 import './style.less'
 
 interface VerifyCodeInputProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -117,7 +118,7 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
     <div ref={codeInputRef} className="authing-g2-code-input" {...rest}>
       {new Array(length).fill(0).map((_, index) => (
         <Fragment key={index}>
-          <Input
+          <InputNumber
             ref={(el) => (inputRef.current[index] = el)}
             style={{
               width: size,
@@ -138,6 +139,7 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
               if (evt.nativeEvent.isComposing) {
                 return
               }
+
               handleChange(evt.target.value, index)
             }}
             pattern="[0-9]*"
