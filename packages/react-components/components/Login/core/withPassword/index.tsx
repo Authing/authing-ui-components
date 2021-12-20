@@ -37,8 +37,12 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   const [verifyCodeUrl, setVerifyCodeUrl] = useState('')
   const [remainCount, setRemainCount] = useState(0)
 
-  const captchaUrl = `${props.host}/api/v2/security/captcha`
-  const getCaptchaUrl = () => `${captchaUrl}?r=${+new Date()}`
+  const getCaptchaUrl = () => {
+    const url = new URL(props.host!)
+    url.pathname = '/api/v2/security/captcha'
+    url.search = `?r=${+new Date()}`
+    return url.href
+  }
 
   const encrypt = client.options.encryptFunction
 

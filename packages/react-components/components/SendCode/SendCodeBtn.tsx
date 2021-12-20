@@ -24,6 +24,8 @@ const useSentCounter = (effect: any) => {
     if (countDown <= 0) {
       clearInterval(timerRef.current)
       effect?.(false)
+    } else {
+      effect?.(true)
     }
   }, [countDown, effect])
 

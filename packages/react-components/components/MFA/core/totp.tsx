@@ -8,7 +8,7 @@ import { GuardMFAInitData, MFAConfig } from '../interface'
 import SubmitButton from '../../SubmitButton'
 import { VerifyCodeFormItem } from '../VerifyCodeInput/VerifyCodeFormItem'
 import { VerifyCodeInput } from '../VerifyCodeInput'
-import { ReactComponent as Otp } from '../../assets/svg/img_otp.svg'
+import { IconFont } from '../../IconFont'
 
 export interface BindMFATotpProps {
   initData: GuardMFAInitData
@@ -28,7 +28,7 @@ export const BindMFATotp: React.FC<BindMFATotpProps> = ({
       <p className="authing-g2-mfa-tips">{t('common.otpText1')}</p>
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Otp style={{ width: 247, height: 131 }} />
+        <IconFont type="authing-otp" style={{ width: 247, height: 131 }} />
       </div>
       <SubmitButton
         text={t('common.sure')}

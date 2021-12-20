@@ -1,8 +1,8 @@
 import React from 'react'
 import { GuardErrorViewProps } from './interface'
 import { i18n } from '../_utils/locales'
-import { ReactComponent as ErrorLogo } from '../assets/svg/img_error.svg'
 import './styles.less'
+import { IconFont } from '../IconFont'
 
 export const GuardErrorView: React.FC<GuardErrorViewProps> = (props) => {
   const messages = props?.initData?.messages
@@ -13,7 +13,7 @@ export const GuardErrorView: React.FC<GuardErrorViewProps> = (props) => {
     <div className="g2-view-container">
       <div className="g2-error-content">
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <ErrorLogo style={{ width: 240, height: 160 }} />
+          <IconFont type="authing-bianzu" style={{ width: 240, height: 160 }} />
         </div>
         <span>{messages}</span>
       </div>

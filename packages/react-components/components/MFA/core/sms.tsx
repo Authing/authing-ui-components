@@ -1,7 +1,7 @@
 import { message } from 'antd'
 import { Form } from 'antd'
 import { User } from 'authing-js-sdk'
-import React, { useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VerifyCodeInput } from '../VerifyCodeInput'
 import { useGuardAuthClient } from '../../Guard/authClient'
@@ -99,6 +99,7 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   const submitButtonRef = useRef<any>(null)
   const { t } = useTranslation()
   const [form] = Form.useForm()
+  const [sended, setSended] = useState<boolean>(false)
 
   const onFinish = async (values: any) => {
     submitButtonRef.current.onSpin(true)
@@ -120,6 +121,17 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
     }
   }
 
+  const tips = useMemo(
+    () =>
+      sended
+        ? `${t('login.verifyCodeSended')} ${phone.replace(
+            /^(\d{3})\d{4}(\d+)/,
+            '$1****$2'
+          )}`
+        : '',
+    [phone, sended, t]
+  )
+
   const sendVerifyCode = async () => {
     try {
       await authClient.sendSmsCode(phone!)
@@ -138,12 +150,7 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   return (
     <>
       <h3 className="authing-g2-mfa-title">{t('login.inputPhoneCode')}</h3>
-      <p className="authing-g2-mfa-tips">
-        {`${t('login.verifyCodeSended')} ${phone.replace(
-          /^(\d{3})\d{4}(\d+)/,
-          '$1****$2'
-        )}`}
-      </p>
+      <p className="authing-g2-mfa-tips">{tips}</p>
       <Form
         form={form}
         onFinish={onFinish}
@@ -160,6 +167,7 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
           btnRef={sendCodeRef}
           beforeSend={() => sendVerifyCode()}
           type="link"
+          setSent={setSended}
         />
 
         <SubmitButton

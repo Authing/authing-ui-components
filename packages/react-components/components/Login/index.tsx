@@ -209,10 +209,8 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
               onClick={() => {
                 message.destroy()
                 if (inputWays.includes(loginWay)) {
-                  console.log(firstQRcodeWay)
                   setLoginWay(firstQRcodeWay)
                 } else if (qrcodeWays.includes(loginWay)) {
-                  console.log(firstInputWay)
                   setLoginWay(firstInputWay)
                 }
               }}
@@ -257,7 +255,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                   <LoginWithPassword
                     publicKey={publicKey}
                     autoRegister={autoRegister}
-                    host={props.config.host}
+                    host={props.config.__appHost__}
                     onLogin={onLogin}
                     onBeforeLogin={onBeforeLogin}
                     passwordLoginMethods={props.config.passwordLoginMethods}
@@ -287,7 +285,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                   <LoginWithLDAP
                     publicKey={publicKey}
                     autoRegister={autoRegister}
-                    host={props.config.host}
+                    host={props.config.__appHost__}
                     onLogin={onLogin}
                     onBeforeLogin={onBeforeLogin}
                   />
