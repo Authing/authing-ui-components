@@ -43,7 +43,11 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
 
     if (!action) {
       return (initData?: any) => {
-        message.error(initData?._message)
+        message.error(
+          initData?._message === 'Network Error'
+            ? t('common.error4network')
+            : initData?._message
+        )
         console.error('未捕获 code', code)
       }
     }
@@ -60,7 +64,6 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
       onRegister: (code: number, data: any = {}, message?: string) => {
         console.log('注册 onRegister')
         const callback = __codePaser(code)
-
         if (code !== 200) {
           registerEvents.onRegisterError?.({
             code,

@@ -234,5 +234,6 @@
   "initPasswordText": "为了保障账号安全，请设置你的初始密码。",
   "updatePsswordSuccess": "修改密码成功，请重新登录",
   "protocolTips": "请先勾选所需协议",
-  "fullCaptchaCode": "请填写完整的{{name}}"
+  "fullCaptchaCode": "请填写完整的{{name}}",
+  "error4network": "网络错误，请稍后尝试"
 }

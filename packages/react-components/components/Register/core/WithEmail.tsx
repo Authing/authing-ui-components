@@ -94,6 +94,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         onRegister(200, user)
       } catch (error: any) {
         const { code, data, message } = error
+
         submitButtonRef.current.onError()
         onRegister(code, data, message)
       } finally {
