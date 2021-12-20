@@ -440,3 +440,13 @@ export const tabSort = (
   tabList.unshift(element)
   return tabList
 }
+
+export const mailDesensitization = (mail: string) => {
+  const mailArr = mail.split('@')
+  const mailName = mailArr[0].substr(0, 1) + '***'
+  return mailName + '@' + mailArr[1]
+}
+
+export const phoneDesensitization = (phone: string) => {
+  return phone.replace(/(\d{3})\d*(\d{4})/, '$1****$2')
+}

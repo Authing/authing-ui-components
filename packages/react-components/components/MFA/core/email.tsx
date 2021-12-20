@@ -11,6 +11,7 @@ import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
 import { MFAConfig } from '../interface'
 import { VerifyCodeFormItem } from '../VerifyCodeInput/VerifyCodeFormItem'
 import { IconFont } from '../../IconFont'
+import { mailDesensitization } from '../../_utils'
 
 interface BindMFAEmailProps {
   mfaToken: string
@@ -143,8 +144,8 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
       <p className="authing-g2-mfa-title">{t('login.inputEmailCode')}</p>
       <p className="authing-g2-mfa-tips">
         {sent
-          ? `${t('login.verifyCodeSended')} ${email}`
-          : t('login.clickSent')}
+          ? `${t('login.verifyCodeSended')} ${mailDesensitization(email)}`
+          : ''}
       </p>
       <Form
         form={form}

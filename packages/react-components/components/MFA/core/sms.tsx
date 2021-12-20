@@ -12,6 +12,7 @@ import { VerifyCodeFormItem } from '../VerifyCodeInput/VerifyCodeFormItem'
 import { MFAConfig } from '../interface'
 import { InputNumber } from '../../InputNumber'
 import { IconFont } from '../../IconFont'
+import { phoneDesensitization } from '../../_utils'
 export interface BindMFASmsProps {
   mfaToken: string
   onBind: (phone: string) => void
@@ -99,7 +100,7 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   const submitButtonRef = useRef<any>(null)
   const { t } = useTranslation()
   const [form] = Form.useForm()
-  const [sended, setSended] = useState<boolean>(false)
+  const [sent, setSent] = useState<boolean>(false)
 
   const onFinish = async (values: any) => {
     submitButtonRef.current.onSpin(true)
@@ -123,13 +124,10 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
 
   const tips = useMemo(
     () =>
-      sended
-        ? `${t('login.verifyCodeSended')} ${phone.replace(
-            /^(\d{3})\d{4}(\d+)/,
-            '$1****$2'
-          )}`
+      sent
+        ? `${t('login.verifyCodeSended')} ${phoneDesensitization(phone)}`
         : '',
-    [phone, sended, t]
+    [phone, sent, t]
   )
 
   const sendVerifyCode = async () => {
@@ -167,7 +165,7 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
           btnRef={sendCodeRef}
           beforeSend={() => sendVerifyCode()}
           type="link"
-          setSent={setSended}
+          setSent={setSent}
         />
 
         <SubmitButton
