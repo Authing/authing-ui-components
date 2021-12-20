@@ -3,7 +3,7 @@ name: Bug report
 about: For reporting bugs or errors in the Authing UI Component
 title: 'Issue: Open an issue'
 labels: bug
-assignees: zhaoyiming0803, yelexin, liaochangjiang, Xuancaosu
+assignees: liaochangjiang, Xuancaosu, yelexin, zhaoyiming0803
 
 ---
 
