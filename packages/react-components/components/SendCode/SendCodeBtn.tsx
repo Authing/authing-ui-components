@@ -9,6 +9,7 @@ export interface SendCodeProps extends ButtonProps {
   beforeSend: () => Promise<boolean>
   btnRef?: React.RefObject<HTMLButtonElement>
   setSent?: (value: boolean) => void
+  sendDesc?: string
 }
 
 const useSentCounter = (effect: any) => {
@@ -45,15 +46,17 @@ const useSentCounter = (effect: any) => {
   }
 }
 
-export const SendCodeBtn: FC<SendCodeProps> = ({
-  beforeSend,
-  btnRef,
-  setSent,
-  ...buttonProps
-}) => {
+export const SendCodeBtn: FC<SendCodeProps> = (props) => {
+  const { t } = useTranslation()
+  const {
+    sendDesc = t('login.clickSent'),
+    beforeSend,
+    btnRef,
+    setSent,
+    ...buttonProps
+  } = props
   const { enabled, send, countDown } = useSentCounter(setSent)
   const [loading, setLoading] = useState(false)
-  const { t } = useTranslation()
   const disabled = useMemo(() => {
     return !enabled || loading
   }, [enabled, loading])
@@ -87,7 +90,7 @@ export const SendCodeBtn: FC<SendCodeProps> = ({
       {loading === false && (
         <span>
           {enabled
-            ? t('common.sendVerifyCode')
+            ? sendDesc
             : t('common.retryAfterTime', {
                 time: countDown,
               })}

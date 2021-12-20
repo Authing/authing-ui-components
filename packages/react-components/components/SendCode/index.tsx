@@ -59,7 +59,7 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
     try {
       await authClient.sendSmsCode(phone)
       return true
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === 'ECONNABORTED') {
         message.error(t('login.sendCodeTimeout'))
         return false
@@ -103,6 +103,7 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
                   return false
                 })
             }}
+            sendDesc={t('common.sendVerifyCode')}
           />
         </Col>
       </Row>

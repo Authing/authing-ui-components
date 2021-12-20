@@ -124,7 +124,11 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
     try {
       await authClient.sendSmsCode(phone!)
       return true
-    } catch (e) {
+    } catch (e: any) {
+      if (e.code === 'ECONNABORTED') {
+        message.error(t('login.sendCodeTimeout'))
+        return false
+      }
       const errorMessage = JSON.parse(e.message)
       message.error(errorMessage.message)
       return false

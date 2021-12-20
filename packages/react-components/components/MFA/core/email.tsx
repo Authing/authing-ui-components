@@ -107,6 +107,10 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
       setSent(true)
       return true
     } catch (e: any) {
+      if (e.code === 'ECONNABORTED') {
+        message.error(t('login.sendCodeTimeout'))
+        return false
+      }
       const errorMessage = JSON.parse(e.message)
       message.error(errorMessage.message)
       return false
