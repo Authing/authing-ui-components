@@ -23,7 +23,7 @@ Otherwise please fill in as much of the template below as possible.
 
 - **Version**:
 <!--
-Check package.json version
+Check package.json、node、npm version
 -->
 
 - **Platform**:
