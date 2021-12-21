@@ -96,7 +96,7 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
       if (isReady) return true
       do {
         await sleep(100)
-      } while (isReady)
+      } while (!isReady)
 
       return true
     }, [isReady])
