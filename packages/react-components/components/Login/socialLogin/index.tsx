@@ -105,7 +105,6 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
   } else {
     enterpriseConnectionObjs = config.__publicConfig__?.identityProviders || []
   }
-
   const idpButtons = enterpriseConnectionObjs.map((i) => {
     if (i.protocol === Protocol.OIDC) {
       const configItem = i.config as OIDCConnectionConfig
@@ -255,7 +254,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         authorization_params.display = screenSize
       }
       const onLogin = () => {
-        authClient.social.authorize(item.provider, {
+        authClient.social.authorize(item.identifier, {
           onSuccess(user) {
             // TODO
             // onSuccess(user)
