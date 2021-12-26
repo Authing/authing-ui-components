@@ -343,7 +343,11 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
           <Tooltip
             overlayStyle={{ fontFamily: 'sans-serif' }}
             key={item.id}
-            title={item.tooltip?.[i18n.language as Lang] || item.name}
+            title={
+              item.displayName ||
+              item.tooltip?.[i18n.language as Lang] ||
+              item.name
+            }
           >
             <div className="g2-social-login-item" onClick={onLogin}>
               <IconFont type={`${iconType}-fill`} />

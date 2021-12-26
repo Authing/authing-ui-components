@@ -466,7 +466,6 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       onFinish={onFinish}
       onFinishFailed={() => submitButtonRef.current.onError()}
       onValuesChange={(values) => {
-        console.log('值改变')
         refPhone?.current?.check(values)
         refEmail?.current?.check(values)
         refUserName?.current?.check(values)

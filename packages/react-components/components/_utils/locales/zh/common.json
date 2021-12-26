@@ -153,7 +153,9 @@
       "questionClip": "问题截图",
       "upload": "上传图片",
       "submit": "提交"
-    }
+    },
+    "lockedTips": "如果你的账号被锁定，请联系管理员解锁后再尝试登录",
+    "noLoginTips": "如果无法登录，建议你进行以下操作："
   },
   "low": "低",
   "middle": "中",
@@ -235,5 +237,9 @@
   "updatePsswordSuccess": "修改密码成功，请重新登录",
   "protocolTips": "请先勾选所需协议",
   "fullCaptchaCode": "请填写完整的{{name}}",
-  "error4network": "网络错误，请稍后尝试"
+  "error4network": "网络错误，请稍后尝试",
+  "removeFile": "移除文件",
+  "feedback": "问题反馈",
+  "backFeedback": "返回问题反馈",
+  "laterBackFeedbck": "秒后返回问题反馈"
 }

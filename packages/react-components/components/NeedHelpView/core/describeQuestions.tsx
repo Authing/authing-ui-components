@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form, Input, Modal, Select, Upload } from 'antd'
+import { Form, Input, Modal, Progress, Select, Tooltip, Upload } from 'antd'
 import SubmitButton from '../../SubmitButton'
-import { PlusOutlined } from '@ant-design/icons'
+import { DeleteOutlined, EyeOutlined, PlusOutlined } from '@ant-design/icons'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { useGuardHttp } from '../../_utils/guradHttp'
 import { fieldRequiredRule, validate } from '../../_utils'
@@ -25,7 +25,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
       t('common.problem.noVerifyTip.type3'),
     ],
     1: [
-      t('common.problem.noLoginTip.tip'),
+      t('common.problem.noLoginTips'),
       t('common.problem.noLoginTip.type1'),
       t('common.problem.noLoginTip.type2'),
     ],
@@ -45,8 +45,8 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
       t('common.problem.noResetPassTip.type1'),
       t('common.problem.noResetPassTip.type2'),
     ],
-    5: [t('common.problem.otherTip.tip'), t('common.problem.otherTip.type1')],
-    6: [t('common.problem.otherTip.tip'), t('common.problem.otherTip.type1')],
+    5: [t('common.problem.lockedTips')],
+    6: [],
   }
 
   const typeOperations = [
@@ -234,8 +234,49 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
                 })
                 setUploadUrl(imgUrl)
               }}
+              itemRender={(n, file) => {
+                return (
+                  <>
+                    {file.status === 'uploading' ? (
+                      <div
+                        style={{
+                          padding: 6,
+                          borderRadius: 2,
+                          border: '1px solid #d9d9d9',
+                        }}
+                      >
+                        <Progress
+                          showInfo={false}
+                          style={{
+                            margin: 1,
+                          }}
+                          width={40}
+                          type="circle"
+                          percent={file.percent}
+                        />
+                      </div>
+                    ) : (
+                      n
+                    )}
+                  </>
+                )
+              }}
+              // showUploadList={{
+              //   showRemoveIcon: true,
+              //   removeIcon: (
+              //     <Tooltip title={t('common.removeFile')}>
+              //       <DeleteOutlined />
+              //     </Tooltip>
+              //   ),
+              //   // showPreviewIcon: true,
+              //   // previewIcon: (
+              //   //   <Tooltip title={t('common.removeFile')}>
+              //   //     <EyeOutlined />
+              //   //   </Tooltip>
+              //   // ),
+              // }}
             >
-              {fileList.length >= 5 ? null : <PlusOutlined />}
+              {fileList.length < 4 && <PlusOutlined />}
             </Upload>
           </div>
         </div>

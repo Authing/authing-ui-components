@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { message, Popover, Tabs, Tooltip } from 'antd'
 import { intersection } from 'lodash'
@@ -104,7 +104,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     const action = codeMap[code]
     if (code === 200) {
       return (data: any) => {
-        if (shoudGoToComplete(data, 'login', publicConfig)) {
+        if (shoudGoToComplete(data, 'login', publicConfig, autoRegister)) {
           console.log('登陆成功，用户为', data)
           props.__changeModule?.(GuardModuleType.COMPLETE_INFO, {
             context: 'login',
@@ -118,7 +118,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
 
     if (!action) {
       return (initData?: any) => {
-        initData?._messag && message.error(initData?._messag)
+        initData?._message && message.error(initData?._messag)
         console.error('未捕获 code', code)
       }
     }
@@ -293,7 +293,13 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
               )}
               {ms?.includes(LoginMethods.AD) && (
                 <Tabs.TabPane key={LoginMethods.AD} tab={t('login.adLogin')}>
-                  <LoginWithAD onLogin={onLogin} />
+                  <LoginWithAD
+                    publicKey={publicKey}
+                    autoRegister={autoRegister}
+                    // host={props.config.__appHost__}
+                    onLogin={onLogin}
+                    onBeforeLogin={onBeforeLogin}
+                  />
                 </Tabs.TabPane>
               )}
             </Tabs>
@@ -316,7 +322,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
             )}
 
             {errorNumber >= 2 && (
-              <Tooltip title={t('common.problem.title')}>
+              <Tooltip title={t('common.feedback')}>
                 <div
                   className="touch-tip"
                   onClick={() =>

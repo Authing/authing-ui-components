@@ -62,9 +62,19 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
   const client = useGuardAuthClient()
   const { t } = useTranslation()
 
-  const onBack = () => window.history.back()
+  const onBack = () => {
+    if (currentMethod === MFAType.FACE) {
+      setCurrentMethod(
+        initData.current ??
+          initData.applicationMfa?.sort((a, b) => a.sort - b.sort)[0].mfaPolicy
+      )
+      setShowMethods(true)
+      return
+    }
+    window.history.back()
+  }
 
-  const __codePaser = (code: number) => {
+  const __codePaser = (code: number, msg?: string) => {
     const action = codeMap[code]
     if (code === 200) {
       return (data: any) => {
@@ -90,7 +100,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
 
     if (action?.action === 'message') {
       return (data: any) => {
-        message.error(data.message)
+        data.message ? message.error(data.message) : message.error(msg)
       }
     }
 
@@ -101,7 +111,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
   }
 
   const mfaLogin = (code: any, data: any, message?: string) => {
-    const callback = __codePaser?.(code)
+    const callback = __codePaser?.(code, message)
 
     if (!data) {
       data = {}
@@ -118,7 +128,11 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
             className="g2-view-back-icon"
             type="authing-arrow-left-s-line"
           />
-          <span>{t('common.backLoginPage')}</span>
+          <span>
+            {currentMethod === MFAType.FACE
+              ? t('common.backToVerify')
+              : t('common.backLoginPage')}
+          </span>
         </div>
       </div>
       <div className="g2-mfa-content">

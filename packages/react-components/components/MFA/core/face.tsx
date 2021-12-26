@@ -116,6 +116,9 @@ export const MFAFace = (props: any) => {
       cooldown.current = 6
       setFaceState('retry')
     }
+    if (code === 500) {
+      message = '识别失败'
+    }
     props.mfaLogin(code, data, message)
   }
 
@@ -257,6 +260,7 @@ export const MFAFace = (props: any) => {
         <video
           className="video-round"
           ref={videoRef}
+          style={{ transform: 'rotateY(180deg)' }}
           // onLoadedMetadata={() => onIdentify()}
           id="inputVideo"
           autoPlay

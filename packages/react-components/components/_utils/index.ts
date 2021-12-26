@@ -344,7 +344,8 @@ export const sleep = (delay: number) =>
 export const shoudGoToComplete = (
   user: User,
   contextType: ComplateFiledsPlace,
-  config: ApplicationConfig | undefined
+  config: ApplicationConfig | undefined,
+  autoRegister?: boolean
 ) => {
   // console.log('需要补全吗？', user, contextType, config)
   // 先判断开关，再对比字段。
@@ -352,7 +353,7 @@ export const shoudGoToComplete = (
   // 判断新版本
   if (
     config?.complateFiledsPlace &&
-    config.complateFiledsPlace.includes(contextType) &&
+    (config.complateFiledsPlace.includes(contextType) || autoRegister) &&
     config?.extendsFields &&
     config?.extendsFields?.length > 0
   ) {
