@@ -1,5 +1,9 @@
 # Authing UI Components
 
+<div align=center><img src="https://files.authing.co/authing-console/authing-logo-new-20210924.svg"></div>
+
+<br/>
+
 [Authing](https://authing.cn) 是一个企业级身份认证提供商，其集成了 OAuth、LDAP、OIDC 等多种身份认证和授权解决方案。此仓库包含了 Authing 提供的一些 UI 组件。
 
 ## 登录组件（Guard）
@@ -67,8 +71,14 @@ Guard 内置了多因素认证（MFA）功能，当你的[应用开启了多因�
 
 你可以在你的原生 JavaScript 项目中引入 `@authing/native-js-ui-components` 包，详情请见 [原生 JavaScript 登录组件使用文档](https://docs.authing.cn/v2/reference/ui-components/native-javascript.html)。
 
-### 获取帮助
+## 参与贡献
+- Fork it
+- Create your feature branch (git checkout -b my-new-feature)
+- Commit your changes (git commit -am 'Add some feature')
+- Push to the branch (git push origin my-new-feature)
+- Create new Pull Request
+## 获取帮助
 
-Join us on Gitter: [#authing-chat](https://forum.authing.cn/)
+Join us on forum: [#authing-chat](https://forum.authing.cn/)
 
 详细使用文档请查看 [Guard for Web](https://docs.authing.cn/v2/reference/ui-components/)
