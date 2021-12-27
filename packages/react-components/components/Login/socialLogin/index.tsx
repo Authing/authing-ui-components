@@ -21,6 +21,7 @@ import {
 import {
   APP_MFA_CODE,
   HIDE_SOCIALS,
+  HIDE_SOCIALS_SHOWIN_ENTERPRISE,
   OTP_MFA_CODE,
 } from '../../AuthingGuard/constants'
 import { useScreenSize } from '../../AuthingGuard/hooks/useScreenSize'
@@ -105,7 +106,85 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
   } else {
     enterpriseConnectionObjs = config.__publicConfig__?.identityProviders || []
   }
-  const idpButtons = enterpriseConnectionObjs.map((i) => {
+
+  let socialConnectionObjs: SocialConnectionItem[]
+
+  if (!config.socialConnections) {
+    socialConnectionObjs = [...(publicConfig?.socialConnections || [])]
+  } else {
+    const socials = config.socialConnections
+    socialConnectionObjs =
+      publicConfig?.socialConnections?.filter?.((item) =>
+        socials.includes(item.provider)
+      ) ?? []
+  }
+
+  // 某些社会化登录会在 tabs 中显示，或者无法在 Guard 中使用，所以底部不显示了
+  socialConnectionObjs = socialConnectionObjs?.filter(
+    (item) => !HIDE_SOCIALS.includes(item.provider)
+  )
+  // 某些在企业身份源创建的社交身份源归为企业身份源方式显示
+  socialConnectionObjs = socialConnectionObjs?.filter((item: any) => {
+    if (HIDE_SOCIALS_SHOWIN_ENTERPRISE.includes(item.provider)) {
+      enterpriseConnectionObjs.push(item)
+      return false
+    }
+    return true
+  })
+  const idpButtons = enterpriseConnectionObjs.map((i: any) => {
+    if (i?.provider) {
+      // 社交身份源
+      const iconType = `authing-${i.provider.replace(/:/g, '-')}`
+
+      const onLogin = () => {
+        authClient.social.authorize(i.identifier, {
+          onSuccess(user) {
+            // TODO
+            // onSuccess(user)
+            onGuardLogin(200, user)
+          },
+          onError(code, msg) {
+            try {
+              const parsedMsg = JSON.parse(msg)
+              const {
+                code: authingCode,
+                message: authingMessage,
+                data: authingData,
+              } = parsedMsg
+              // if ([OTP_MFA_CODE, APP_MFA_CODE].includes(authingCode)) {
+              //   // TODO
+              //   onGuardLogin(authingCode, authingData, authingMessage)
+              //   return
+              // }
+              onGuardLogin(authingCode, authingData, authingMessage)
+            } catch (e) {
+              // do nothing...
+            }
+
+            message.error(msg)
+          },
+        })
+      }
+      return (
+        <Button
+          key={i.identifier}
+          className="g2-guard-third-login-btn"
+          block
+          size="large"
+          icon={
+            <IconFont
+              type={`${iconType}-fill`}
+              style={{ fontSize: 20, marginRight: 8 }}
+            />
+          }
+          onClick={onLogin}
+        >
+          {t('login.loginBy', {
+            name: i.displayName,
+          })}
+        </Button>
+      )
+    }
     if (i.protocol === Protocol.OIDC) {
       const configItem = i.config as OIDCConnectionConfig
       const state = shortid.generate()
@@ -222,24 +301,6 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       return null
     }
   })
-
-  let socialConnectionObjs: SocialConnectionItem[]
-
-  if (!config.socialConnections) {
-    socialConnectionObjs = [...(publicConfig?.socialConnections || [])]
-  } else {
-    const socials = config.socialConnections
-    socialConnectionObjs =
-      publicConfig?.socialConnections?.filter?.((item) =>
-        socials.includes(item.provider)
-      ) ?? []
-  }
-
-  // 某些社会化登录会在 tabs 中显示，或者无法在 Guard 中使用，所以底部不显示了
-  socialConnectionObjs = socialConnectionObjs?.filter(
-    (item) => !HIDE_SOCIALS.includes(item.provider)
-  )
-
   const socialLoginButtons = socialConnectionObjs
     .filter((item) =>
       isWechatBrowser()

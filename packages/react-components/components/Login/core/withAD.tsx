@@ -8,7 +8,6 @@ import { InputPassword } from '../../InputPassword'
 import SubmitButton from '../../SubmitButton'
 import { fieldRequiredRule } from '../../_utils'
 import { usePublicConfig } from '../../_utils/context'
-import { ErrorCode } from '../../_utils/GuardErrorCode'
 
 interface LoginWithADProps {
   // configs

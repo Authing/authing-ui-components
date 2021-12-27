@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { message, Popover, Tabs, Tooltip } from 'antd'
 import { intersection } from 'lodash'
@@ -77,9 +77,11 @@ const useSwitchStates = (loginWay: LoginMethods) => {
   return { switchText, inputNone, qrcodeNone }
 }
 export const GuardLoginView = (props: GuardLoginViewProps) => {
-  let [defaultMethod, renderInputWay, renderQrcodeWay] = useMethods(
-    props.config
-  )
+  const { config } = props
+
+  let [defaultMethod, renderInputWay, renderQrcodeWay] = useMethods(config)
+  const agreementEnabled = config?.agreementEnabled
+
   const { t } = useTranslation()
   const [loginWay, setLoginWay] = useState(defaultMethod)
   const [canLoop, setCanLoop] = useState(false) // 允许轮询
@@ -187,6 +189,20 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   //     </div>
   //   )
   // }
+  const agreements = useMemo(
+    () =>
+      //availableAt 0或者null-注册时，1-登录时，2-注册和登录时 注册登录合并时应该登录注册协议全部显示
+      agreementEnabled
+        ? config?.agreements?.filter(
+            (agree) =>
+              agree.lang === i18n.language &&
+              (autoRegister || !!agree?.availableAt)
+          ) ?? []
+        : [],
+
+    [agreementEnabled, autoRegister, config?.agreements]
+  )
+
   return (
     <div className="g2-view-container">
       {/* 两种方式都需要渲染的时候，才出现切换按钮 */}
@@ -259,6 +275,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                     onLogin={onLogin}
                     onBeforeLogin={onBeforeLogin}
                     passwordLoginMethods={props.config.passwordLoginMethods}
+                    agreements={agreements}
                   />
                 </Tabs.TabPane>
               )}

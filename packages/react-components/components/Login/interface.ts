@@ -7,7 +7,7 @@ import {
 } from '../Type'
 import { SocialConnectionProvider } from 'authing-js-sdk'
 import { QrCodeAuthenticationClient } from 'authing-js-sdk/build/main/lib/authentication/QrCodeAuthenticationClient'
-import { PasswordLoginMethods } from '../AuthingGuard/api'
+import { Agreement, PasswordLoginMethods } from '../AuthingGuard/api'
 import {
   PasswordLoginParams,
   LDAPLoginParams,
@@ -30,6 +30,8 @@ export interface LoginConfig extends IG2Config {
   enterpriseConnections?: string[]
   qrCodeScanOptions?: Parameters<QrCodeAuthenticationClient['startScanning']>[1]
   publicKey?: string
+  agreementEnabled?: boolean
+  agreements?: Agreement[]
 }
 
 const defaultConfig: LoginConfig = {

@@ -353,7 +353,16 @@ export const shoudGoToComplete = (
   // 判断新版本
   if (
     config?.complateFiledsPlace &&
-    (config.complateFiledsPlace.includes(contextType) || autoRegister) &&
+    config.complateFiledsPlace.includes(contextType) &&
+    config?.extendsFields &&
+    config?.extendsFields?.length > 0
+  ) {
+    needGo = true
+  }
+  //autoRegister 开启注册登录合并后 就不区分登录注册场景 只要 complateFiledsPlace 有值即可
+  if (
+    autoRegister &&
+    config?.complateFiledsPlace &&
     config?.extendsFields &&
     config?.extendsFields?.length > 0
   ) {
