@@ -126,7 +126,13 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
   // 某些在企业身份源创建的社交身份源归为企业身份源方式显示
   socialConnectionObjs = socialConnectionObjs?.filter((item: any) => {
     if (HIDE_SOCIALS_SHOWIN_ENTERPRISE.includes(item.provider)) {
-      enterpriseConnectionObjs.push(item)
+      if (
+        !enterpriseConnectionObjs.find(
+          (connection: any) => connection.identifier === item.identifier
+        )
+      ) {
+        enterpriseConnectionObjs.push(item)
+      }
       return false
     }
     return true

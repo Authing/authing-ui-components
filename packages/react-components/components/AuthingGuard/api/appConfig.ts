@@ -160,6 +160,7 @@ export interface ApplicationConfig {
   customPasswordStrength: any
   passwordStrength: PasswordStrength
   verifyCodeLength: number
+  websocket: string
 }
 
 export const fetchAppConfig = (appId: string) =>

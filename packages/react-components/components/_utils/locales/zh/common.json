@@ -241,5 +241,7 @@
   "removeFile": "移除文件",
   "feedback": "问题反馈",
   "backFeedback": "返回问题反馈",
-  "laterBackFeedbck": "秒后返回问题反馈"
+  "laterBackFeedbck": "秒后返回问题反馈",
+  "loginProtocolTips": "请勾选登录协议",
+  "registerProtocolTips": "请勾选注册协议"
 }

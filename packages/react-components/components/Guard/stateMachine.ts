@@ -57,7 +57,9 @@ export class GuardStateMachine {
     this.changeMouleEvent(nextModelu, initData)
     // 快照history
     if (
-      moduleData.moduleName === this.moduleStateHistory.slice(-1)[0].moduleName
+      this.moduleStateHistory.slice(1, 2)[0] &&
+      moduleData.moduleName ===
+        this.moduleStateHistory.slice(1, 2)[0].moduleName
     ) {
       window.history.back()
     } else {

@@ -44,9 +44,8 @@ export const LoginWithPhoneCode = (props: any) => {
   const onFinish = async (values: any) => {
     setValidated(true)
     if (agreements?.length && !acceptedAgreements) {
-      message.error(t('common.protocolTips'))
+      message.error(t('common.loginProtocolTips'))
       submitButtonRef.current.onError()
-      // submitButtonRef.current.onSpin(false)
       return
     }
     // onBeforeLogin

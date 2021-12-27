@@ -239,5 +239,7 @@
   "removeFile": "Remove file",
   "feedback": "Need help ？",
   "laterBackFeedbck": "Return question feedback in seconds",
-  "backFeedback": "Back to problem feedback"
+  "backFeedback": "Back to problem feedback",
+  "loginProtocolTips": "Please check the login protocol",
+  "registerProtocolTips": "Please check the registration agreement"
 }

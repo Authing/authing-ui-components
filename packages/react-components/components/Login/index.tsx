@@ -182,13 +182,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   }, [loginWay])
 
   let { switchText, inputNone, qrcodeNone } = useSwitchStates(loginWay)
-  // if (loading) {
-  //   return (
-  //     <div className="g2-view-container">
-  //       <LoadShielding />
-  //     </div>
-  //   )
-  // }
+
   const agreements = useMemo(
     () =>
       //availableAt 0或者null-注册时，1-登录时，2-注册和登录时 注册登录合并时应该登录注册协议全部显示

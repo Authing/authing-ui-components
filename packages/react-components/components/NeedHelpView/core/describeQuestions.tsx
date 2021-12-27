@@ -109,9 +109,19 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
   }
 
   const handlePreview = async (file: any) => {
+    let url
+    if (file.status === 'error' || file.response) {
+      url = await new Promise((resolve) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file.originFileObj)
+        reader.onload = () => resolve(reader.result)
+      })
+    } else {
+      url = file.response.data.url
+    }
     // setPreviewImage(file.url);
     // file 没有 url 属性，需要改成下面的用法
-    let url = file.response.data.url
+    // let url = file.response.data.url
     setPreviewImage(url)
     setPreviewVisible(true)
   }
@@ -261,20 +271,6 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
                   </>
                 )
               }}
-              // showUploadList={{
-              //   showRemoveIcon: true,
-              //   removeIcon: (
-              //     <Tooltip title={t('common.removeFile')}>
-              //       <DeleteOutlined />
-              //     </Tooltip>
-              //   ),
-              //   // showPreviewIcon: true,
-              //   // previewIcon: (
-              //   //   <Tooltip title={t('common.removeFile')}>
-              //   //     <EyeOutlined />
-              //   //   </Tooltip>
-              //   // ),
-              // }}
             >
               {fileList.length < 4 && <PlusOutlined />}
             </Upload>
