@@ -69,6 +69,6 @@ Guard 内置了多因素认证（MFA）功能，当你的[应用开启了多因�
 
 ### 获取帮助
 
-Join us on Gitter: [#authing-chat](https://gitter.im/authing-chat/community)
+Join us on Gitter: [#authing-chat](https://forum.authing.cn/)
 
 详细使用文档请查看 [Guard for Web](https://docs.authing.cn/v2/reference/ui-components/)
