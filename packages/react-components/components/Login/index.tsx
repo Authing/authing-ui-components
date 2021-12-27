@@ -291,6 +291,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                     autoRegister={autoRegister}
                     onBeforeLogin={onBeforeLogin}
                     onLogin={onLogin}
+                    agreements={agreements}
                   />
                 </Tabs.TabPane>
               )}
@@ -305,6 +306,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                     host={props.config.__appHost__}
                     onLogin={onLogin}
                     onBeforeLogin={onBeforeLogin}
+                    agreements={agreements}
                   />
                 </Tabs.TabPane>
               )}
@@ -316,6 +318,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                     // host={props.config.__appHost__}
                     onLogin={onLogin}
                     onBeforeLogin={onBeforeLogin}
+                    agreements={agreements}
                   />
                 </Tabs.TabPane>
               )}

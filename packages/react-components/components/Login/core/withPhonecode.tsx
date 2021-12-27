@@ -1,5 +1,5 @@
-import React, { useRef } from 'react'
-import { Form } from 'antd'
+import React, { useRef, useState } from 'react'
+import { Form, message } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { LoginMethods } from '../../'
@@ -9,6 +9,7 @@ import SubmitButton from '../../SubmitButton'
 import { InputNumber } from '../../InputNumber'
 import CustomFormItem from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
+import { Agreements } from '../../Register/components/Agreements'
 
 // const formatPhone = (value: any) => {
 //   if (!value) {
@@ -26,6 +27,12 @@ import { IconFont } from '../../IconFont'
 //   }
 // }
 export const LoginWithPhoneCode = (props: any) => {
+  const { agreements } = props
+
+  const [acceptedAgreements, setAcceptedAgreements] = useState(false)
+
+  const [validated, setValidated] = useState(false)
+
   let [form] = Form.useForm()
   let submitButtonRef = useRef<any>(null)
   const { t } = useTranslation()
@@ -35,8 +42,16 @@ export const LoginWithPhoneCode = (props: any) => {
   const verifyCodeLength = props.verifyCodeLength ?? 4
 
   const onFinish = async (values: any) => {
-    submitButtonRef.current.onSpin(true)
+    setValidated(true)
+    if (agreements?.length && !acceptedAgreements) {
+      message.error(t('common.protocolTips'))
+      submitButtonRef.current.onError()
+      // submitButtonRef.current.onSpin(false)
+      return
+    }
     // onBeforeLogin
+    submitButtonRef.current.onSpin(true)
+
     let loginInfo = {
       type: LoginMethods.Password,
       data: {
@@ -111,7 +126,7 @@ export const LoginWithPhoneCode = (props: any) => {
               length: verifyCodeLength,
             })}
             maxLength={verifyCodeLength}
-            autoSubmit={true}
+            autoSubmit={!Boolean(agreements?.length)}
             // prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
             prefix={
               <IconFont
@@ -125,6 +140,13 @@ export const LoginWithPhoneCode = (props: any) => {
             onSendCodeBefore={() => form.validateFields(['phone'])}
           />
         </Form.Item>
+        {Boolean(agreements?.length) && (
+          <Agreements
+            onChange={setAcceptedAgreements}
+            agreements={agreements}
+            showError={validated}
+          />
+        )}
         <Form.Item>
           <SubmitButton
             text={

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form, Input } from 'antd'
+import { Form, Input, message } from 'antd'
 import { LoginMethods } from '../../'
 import { ErrorCode } from '../../_utils/GuardErrorCode'
 import { useGuardAuthClient } from '../../Guard/authClient'
@@ -8,6 +8,8 @@ import SubmitButton from '../../SubmitButton'
 import { fieldRequiredRule } from '../../_utils'
 import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
+import { Agreements } from '../../Register/components/Agreements'
+import { Agreement } from '../../AuthingGuard/api'
 interface LoginWithLDAPProps {
   // configs
   publicKey: string
@@ -17,9 +19,15 @@ interface LoginWithLDAPProps {
   // events
   onLogin: any
   onBeforeLogin: any
+  agreements: Agreement[]
 }
 
 export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
+  const { agreements } = props
+
+  const [acceptedAgreements, setAcceptedAgreements] = useState(false)
+
+  const [validated, setValidated] = useState(false)
   let client = useGuardAuthClient()
   const { t } = useTranslation()
   let submitButtonRef = useRef<any>(null)
@@ -30,6 +38,13 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
   const getCaptchaUrl = () => `${captchaUrl}?r=${+new Date()}`
 
   const onFinish = async (values: any) => {
+    setValidated(true)
+    if (agreements?.length && !acceptedAgreements) {
+      message.error(t('common.protocolTips'))
+      submitButtonRef.current.onError()
+      // submitButtonRef.current.onSpin(false)
+      return
+    }
     // onBeforeLogin
     submitButtonRef.current.onSpin(true)
     let loginInfo = {
@@ -143,7 +158,13 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
             />
           </Form.Item>
         )}
-
+        {Boolean(agreements?.length) && (
+          <Agreements
+            onChange={setAcceptedAgreements}
+            agreements={agreements}
+            showError={validated}
+          />
+        )}
         <Form.Item>
           <SubmitButton
             text={t('common.login')}

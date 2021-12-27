@@ -1,10 +1,12 @@
-import { Form, Input } from 'antd'
+import { Form, Input, message } from 'antd'
 import { LoginMethods } from 'authing-js-sdk'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Agreement } from '../../AuthingGuard/api'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
+import { Agreements } from '../../Register/components/Agreements'
 import SubmitButton from '../../SubmitButton'
 import { fieldRequiredRule } from '../../_utils'
 import { usePublicConfig } from '../../_utils/context'
@@ -18,9 +20,16 @@ interface LoginWithADProps {
   // events
   onLogin: any
   onBeforeLogin: any
+  agreements: Agreement[]
 }
 
 export const LoginWithAD = (props: LoginWithADProps) => {
+  const { agreements } = props
+
+  const [acceptedAgreements, setAcceptedAgreements] = useState(false)
+
+  const [validated, setValidated] = useState(false)
+
   const publicConfig = usePublicConfig()
   const { t } = useTranslation()
 
@@ -29,6 +38,13 @@ export const LoginWithAD = (props: LoginWithADProps) => {
   let submitButtonRef = useRef<any>(null)
 
   const onFinish = async (values: any) => {
+    setValidated(true)
+    if (agreements?.length && !acceptedAgreements) {
+      message.error(t('common.protocolTips'))
+      submitButtonRef.current.onError()
+      // submitButtonRef.current.onSpin(false)
+      return
+    }
     // onBeforeLogin
     submitButtonRef.current.onSpin(true)
     let loginInfo = {
@@ -113,6 +129,13 @@ export const LoginWithAD = (props: LoginWithADProps) => {
                 }
               />
             </Form.Item>
+            {Boolean(agreements?.length) && (
+              <Agreements
+                onChange={setAcceptedAgreements}
+                agreements={agreements}
+                showError={validated}
+              />
+            )}
             <Form.Item>
               <SubmitButton
                 text={t('common.login')}

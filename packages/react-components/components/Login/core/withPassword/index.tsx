@@ -33,6 +33,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   const { agreements } = props
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
+
   const [validated, setValidated] = useState(false)
 
   let { t } = useTranslation()
