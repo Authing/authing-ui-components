@@ -90,7 +90,6 @@ requestClient.postForm = async <T>(
 
 requestClient.baseUrl = ''
 requestClient.setBaseUrl = (base: string) => {
-  console.log(base)
   requestClient.baseUrl = base.replace(/\/$/, '')
 }
 

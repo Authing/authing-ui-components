@@ -120,7 +120,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
 
     if (!action) {
       return (initData?: any) => {
-        initData?._message && message.error(initData?._messag)
+        initData?._message && message.error(initData?._message)
         console.error('未捕获 code', code)
       }
     }
