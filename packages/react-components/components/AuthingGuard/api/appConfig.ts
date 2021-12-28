@@ -77,6 +77,7 @@ export interface Agreement {
   title: string
   required: boolean
   lang: Lang
+  availableAt?: number
 }
 
 export type PasswordLoginMethods =
@@ -159,6 +160,7 @@ export interface ApplicationConfig {
   customPasswordStrength: any
   passwordStrength: PasswordStrength
   verifyCodeLength: number
+  websocket: string
 }
 
 export const fetchAppConfig = (appId: string) =>

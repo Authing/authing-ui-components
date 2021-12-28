@@ -20,6 +20,7 @@ export const codeMap: Record<number, GuardModuleAction> = {
   },
   500: {
     action: 'message',
+    // message: 'verification failed, let components inside fix is fine.',
   },
   6001: {
     action: 'message',

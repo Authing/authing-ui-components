@@ -13,7 +13,6 @@ export interface FormItemAccountProps extends FormItemProps {
 export const FormItemAccount: React.FC<FormItemAccountProps> = (props) => {
   const { passwordLoginMethods: methods, ...formItemPtops } = props
   const { t } = useTranslation()
-
   const runderTemplate = useMemo(() => {
     if (methods.length !== 1)
       return (

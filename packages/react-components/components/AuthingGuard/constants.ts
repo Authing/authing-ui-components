@@ -41,6 +41,14 @@ export const HIDE_SOCIALS = [
   'wechat:mobile',
 ]
 
+export const HIDE_SOCIALS_SHOWIN_ENTERPRISE = [
+  'dingtalk',
+  'lark-public',
+  'lark-internal',
+  'wechatwork:corp:qrconnect',
+  'wechatwork:service-provider:qrconnect',
+]
+
 // 企业版 MFA 支持的方式
 export enum ApplicationMfaType {
   SMS = 'SMS',

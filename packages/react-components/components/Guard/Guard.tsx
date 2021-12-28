@@ -6,15 +6,13 @@ import React, {
   useState,
 } from 'react'
 import { ConfigProvider, message, Modal } from 'antd'
-
 import { GuardLoginView } from '../Login'
-
 import { initGuardAuthClient } from './authClient'
 import { GuardEvents, guardEventsFilter } from './event'
 import { initConfig } from '../_utils/config'
 import { insertStyles } from '../_utils'
 import { getGuardHttp, GuardHttp, initGuardHttp } from '../_utils/guradHttp'
-import { initI18n } from '..//_utils/locales'
+import { i18n, initI18n } from '..//_utils/locales'
 import { IG2FCProps } from '../Type'
 import { getDefaultGuardLocalConfig, GuardLocalConfig } from './config'
 import { ShieldSpin } from '../ShieldSpin'
@@ -41,8 +39,20 @@ import { GuardSubmitSuccessView } from '../SubmitSuccess'
 import { createGuardContext } from '../_utils/context'
 import { ApplicationConfig } from '../AuthingGuard/api'
 import { SessionData, trackSession } from './sso'
+import zhCN from 'antd/lib/locale/zh_CN'
+import enUS from 'antd/lib/locale/en_US'
+import 'moment/locale/zh-cn'
 
 const PREFIX_CLS = 'authing-ant'
+export enum LangMAP {
+  zhCn = 'zh-CN',
+  enUs = 'en-US',
+}
+
+const langMap = {
+  [LangMAP.zhCn]: zhCN,
+  [LangMAP.enUs]: enUS,
+}
 
 message.config({
   prefixCls: `${PREFIX_CLS}-message`,
@@ -292,7 +302,10 @@ export const Guard = (props: GuardProps) => {
 
   return (
     // TODO 这部分缺失 Loging 态
-    <ConfigProvider prefixCls={PREFIX_CLS}>
+    <ConfigProvider
+      prefixCls={PREFIX_CLS}
+      locale={langMap[i18n.language as LangMAP]}
+    >
       <Context.Provider value={publicConfig}>
         {config?.mode === GuardMode.Modal ? (
           <Modal

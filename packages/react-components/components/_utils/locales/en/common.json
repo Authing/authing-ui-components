@@ -101,7 +101,7 @@
   "welcomeJoinAndPerfect": "Welcome to join {{name}}, in order to have a better experience, please improve your information first",
   "start": "Start ",
   "problem": {
-    "title": "How can we help you ?",
+    "title": "Tell us your problem",
     "noProblem": "No more questions,",
     "goLogin": " Log in",
     "verifyTip": "Contact information is required!",
@@ -235,5 +235,11 @@
   "updatePsswordSuccess": "Change the password successfully, please log in again",
   "protocolTips": "Please check the required agreement first",
   "fullCaptchaCode": "Please fill in the complete",
-  "error4network": "Network error, please try later"
+  "error4network": "Network error, please try later",
+  "removeFile": "Remove file",
+  "feedback": "Need help ？",
+  "laterBackFeedbck": "Return question feedback in seconds",
+  "backFeedback": "Back to problem feedback",
+  "loginProtocolTips": "Please check the login protocol",
+  "registerProtocolTips": "Please check the registration agreement"
 }

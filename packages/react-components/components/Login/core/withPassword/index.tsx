@@ -1,18 +1,19 @@
 import React, { useRef, useState } from 'react'
-import { Form } from 'antd'
+import { Form, message } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useGuardHttp } from '../../../_utils/guradHttp'
 import { useGuardAuthClient } from '../../../Guard/authClient'
 import { fieldRequiredRule, getUserRegisterParams } from '../../../_utils'
 import { ErrorCode } from '../../../_utils/GuardErrorCode'
 import SubmitButton from '../../../SubmitButton'
-import { PasswordLoginMethods } from '../../../AuthingGuard/api'
+import { Agreement, PasswordLoginMethods } from '../../../AuthingGuard/api'
 import { LoginMethods } from '../../..'
 import { FormItemAccount } from './FormItemAccount'
 import { InputAccount } from './InputAccount'
 import { GraphicVerifyCode } from './GraphicVerifyCode'
 import { IconFont } from '../../../IconFont'
 import { InputPassword } from '../../../InputPassword'
+import { Agreements } from '../../../Register/components/Agreements'
 
 interface LoginWithPasswordProps {
   // configs
@@ -24,9 +25,17 @@ interface LoginWithPasswordProps {
   onLogin: any
   onBeforeLogin: any
   passwordLoginMethods: PasswordLoginMethods[]
+
+  agreements: Agreement[]
 }
 
 export const LoginWithPassword = (props: LoginWithPasswordProps) => {
+  const { agreements } = props
+
+  const [acceptedAgreements, setAcceptedAgreements] = useState(false)
+
+  const [validated, setValidated] = useState(false)
+
   let { t } = useTranslation()
   let { post } = useGuardHttp()
   let client = useGuardAuthClient()
@@ -47,6 +56,13 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   const encrypt = client.options.encryptFunction
 
   const onFinish = async (values: any) => {
+    setValidated(true)
+    if (agreements?.length && !acceptedAgreements) {
+      message.error(t('common.loginProtocolTips'))
+      submitButtonRef.current.onError()
+      // submitButtonRef.current.onSpin(false)
+      return
+    }
     setRemainCount(0)
     // onBeforeLogin
     submitButtonRef?.current.onSpin(true)
@@ -77,7 +93,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
       customData: getUserRegisterParams(),
       autoRegister: props.autoRegister,
     }
-    const { code, message, data } = await post(url, body)
+    const { code, message: msg, data } = await post(url, body)
 
     if (code !== 200) {
       submitButtonRef.current.onError()
@@ -93,7 +109,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
       }
     }
     submitButtonRef?.current.onSpin(false)
-    props.onLogin(code, data, message)
+    props.onLogin(code, data, msg)
   }
 
   return (
@@ -172,6 +188,13 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
           </span>
         )}
 
+        {Boolean(agreements?.length) && (
+          <Agreements
+            onChange={setAcceptedAgreements}
+            agreements={agreements}
+            showError={validated}
+          />
+        )}
         <Form.Item>
           <SubmitButton
             text={

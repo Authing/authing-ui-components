@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { message, Popover, Tabs, Tooltip } from 'antd'
 import { intersection } from 'lodash'
@@ -77,9 +77,11 @@ const useSwitchStates = (loginWay: LoginMethods) => {
   return { switchText, inputNone, qrcodeNone }
 }
 export const GuardLoginView = (props: GuardLoginViewProps) => {
-  let [defaultMethod, renderInputWay, renderQrcodeWay] = useMethods(
-    props.config
-  )
+  const { config } = props
+
+  let [defaultMethod, renderInputWay, renderQrcodeWay] = useMethods(config)
+  const agreementEnabled = config?.agreementEnabled
+
   const { t } = useTranslation()
   const [loginWay, setLoginWay] = useState(defaultMethod)
   const [canLoop, setCanLoop] = useState(false) // 允许轮询
@@ -104,7 +106,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     const action = codeMap[code]
     if (code === 200) {
       return (data: any) => {
-        if (shoudGoToComplete(data, 'login', publicConfig)) {
+        if (shoudGoToComplete(data, 'login', publicConfig, autoRegister)) {
           console.log('登陆成功，用户为', data)
           props.__changeModule?.(GuardModuleType.COMPLETE_INFO, {
             context: 'login',
@@ -118,7 +120,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
 
     if (!action) {
       return (initData?: any) => {
-        initData?._messag && message.error(initData?._messag)
+        initData?._message && message.error(initData?._message)
         console.error('未捕获 code', code)
       }
     }
@@ -180,13 +182,21 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   }, [loginWay])
 
   let { switchText, inputNone, qrcodeNone } = useSwitchStates(loginWay)
-  // if (loading) {
-  //   return (
-  //     <div className="g2-view-container">
-  //       <LoadShielding />
-  //     </div>
-  //   )
-  // }
+
+  const agreements = useMemo(
+    () =>
+      //availableAt 0或者null-注册时，1-登录时，2-注册和登录时 注册登录合并时应该登录注册协议全部显示
+      agreementEnabled
+        ? config?.agreements?.filter(
+            (agree) =>
+              agree.lang === i18n.language &&
+              (autoRegister || !!agree?.availableAt)
+          ) ?? []
+        : [],
+
+    [agreementEnabled, autoRegister, config?.agreements]
+  )
+
   return (
     <div className="g2-view-container">
       {/* 两种方式都需要渲染的时候，才出现切换按钮 */}
@@ -259,6 +269,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                     onLogin={onLogin}
                     onBeforeLogin={onBeforeLogin}
                     passwordLoginMethods={props.config.passwordLoginMethods}
+                    agreements={agreements}
                   />
                 </Tabs.TabPane>
               )}
@@ -274,6 +285,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                     autoRegister={autoRegister}
                     onBeforeLogin={onBeforeLogin}
                     onLogin={onLogin}
+                    agreements={agreements}
                   />
                 </Tabs.TabPane>
               )}
@@ -288,12 +300,20 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                     host={props.config.__appHost__}
                     onLogin={onLogin}
                     onBeforeLogin={onBeforeLogin}
+                    agreements={agreements}
                   />
                 </Tabs.TabPane>
               )}
               {ms?.includes(LoginMethods.AD) && (
                 <Tabs.TabPane key={LoginMethods.AD} tab={t('login.adLogin')}>
-                  <LoginWithAD onLogin={onLogin} />
+                  <LoginWithAD
+                    publicKey={publicKey}
+                    autoRegister={autoRegister}
+                    // host={props.config.__appHost__}
+                    onLogin={onLogin}
+                    onBeforeLogin={onBeforeLogin}
+                    agreements={agreements}
+                  />
                 </Tabs.TabPane>
               )}
             </Tabs>
@@ -316,7 +336,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
             )}
 
             {errorNumber >= 2 && (
-              <Tooltip title={t('common.problem.title')}>
+              <Tooltip title={t('common.feedback')}>
                 <div
                   className="touch-tip"
                   onClick={() =>

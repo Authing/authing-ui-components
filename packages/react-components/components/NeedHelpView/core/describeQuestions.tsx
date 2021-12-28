@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form, Input, Modal, Select, Upload } from 'antd'
+import { Form, Input, Modal, Progress, Select, Upload } from 'antd'
 import SubmitButton from '../../SubmitButton'
 import { PlusOutlined } from '@ant-design/icons'
 import { UploadFile } from 'antd/lib/upload/interface'
@@ -25,7 +25,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
       t('common.problem.noVerifyTip.type3'),
     ],
     1: [
-      t('common.problem.noLoginTip.tip'),
+      t('common.problem.noLoginTips'),
       t('common.problem.noLoginTip.type1'),
       t('common.problem.noLoginTip.type2'),
     ],
@@ -45,8 +45,8 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
       t('common.problem.noResetPassTip.type1'),
       t('common.problem.noResetPassTip.type2'),
     ],
-    5: [t('common.problem.otherTip.tip'), t('common.problem.otherTip.type1')],
-    6: [t('common.problem.otherTip.tip'), t('common.problem.otherTip.type1')],
+    5: [t('common.problem.lockedTips')],
+    6: [],
   }
 
   const typeOperations = [
@@ -109,9 +109,19 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
   }
 
   const handlePreview = async (file: any) => {
+    let url
+    if (file.status === 'error' || file.response) {
+      url = await new Promise((resolve) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file.originFileObj)
+        reader.onload = () => resolve(reader.result)
+      })
+    } else {
+      url = file.response.data.url
+    }
     // setPreviewImage(file.url);
     // file 没有 url 属性，需要改成下面的用法
-    let url = file.response.data.url
+    // let url = file.response.data.url
     setPreviewImage(url)
     setPreviewVisible(true)
   }
@@ -234,8 +244,35 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
                 })
                 setUploadUrl(imgUrl)
               }}
+              itemRender={(n, file) => {
+                return (
+                  <>
+                    {file.status === 'uploading' ? (
+                      <div
+                        style={{
+                          padding: 6,
+                          borderRadius: 2,
+                          border: '1px solid #d9d9d9',
+                        }}
+                      >
+                        <Progress
+                          showInfo={false}
+                          style={{
+                            margin: 1,
+                          }}
+                          width={40}
+                          type="circle"
+                          percent={file.percent}
+                        />
+                      </div>
+                    ) : (
+                      n
+                    )}
+                  </>
+                )
+              }}
             >
-              {fileList.length >= 5 ? null : <PlusOutlined />}
+              {fileList.length < 4 && <PlusOutlined />}
             </Upload>
           </div>
         </div>

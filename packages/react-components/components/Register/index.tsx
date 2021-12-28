@@ -78,9 +78,11 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
         })
       },
       onBeforeRegister: registerEvents.onBeforeRegister,
+      //availableAt 0或者null-注册时，1-登录时，2-注册和登录时
       agreements: agreementEnabled
-        ? config?.agreements?.filter((agree) => agree.lang === i18n.language) ??
-          []
+        ? config?.agreements?.filter(
+            (agree) => agree.lang === i18n.language && agree?.availableAt !== 1
+          ) ?? []
         : [],
       publicConfig: config.__publicConfig__,
     }),

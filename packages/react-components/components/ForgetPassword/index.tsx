@@ -32,7 +32,9 @@ export const GuardForgetPassword: React.FC<ForgetPasswordViewProps> = (
       title: t('common.resetSuccess'),
       message: t('common.resetSuccessMessage'),
     }
-    props.__changeModule?.(GuardModuleType.SUBMIT_SUCCESS, { ...initData })
+    props.__changeModule?.(GuardModuleType.SUBMIT_SUCCESS, {
+      ...initData,
+    })
   }
 
   const onSend = (type: 'phone' | 'email') => {

@@ -63,7 +63,6 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
           pattern: VALIDATE_PATTERN.phone,
         }
     }, [method, t])
-
     const checkField = useDebounce(async (value: string) => {
       if (!(value && methodContent.pattern.test(value))) {
         setIsReady(true)
@@ -135,13 +134,19 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
 )
 
 export const EmailFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
-  (props, ref) => <ValidatorFormItem ref={ref} {...props} method="email" />
+  (props, ref) => (
+    <ValidatorFormItem ref={ref} {...props} method="email" required />
+  )
 )
 
 export const PhoneFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
-  (props, ref) => <ValidatorFormItem ref={ref} {...props} method="phone" />
+  (props, ref) => (
+    <ValidatorFormItem ref={ref} {...props} method="phone" required />
+  )
 )
 
 export const UserNameFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
-  (props, ref) => <ValidatorFormItem ref={ref} {...props} method="username" />
+  (props, ref) => (
+    <ValidatorFormItem ref={ref} {...props} method="username" required />
+  )
 )

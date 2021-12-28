@@ -17,8 +17,10 @@ export const GuardSubmitSuccessView: React.FC<GuardSubmitSuccessViewProps> = (
   const {
     title = t('common.problem.successTip'),
     message = t('common.problem.successTipMsg'),
+    text = t('common.backLoginPage'),
+    countDesc = t('common.pToLogin'),
+    changeModule = GuardModuleType.LOGIN,
   } = initData ?? {}
-
   const cdnBase = config?.__publicConfig__?.cdnBase
 
   useEffect(() => {
@@ -34,7 +36,7 @@ export const GuardSubmitSuccessView: React.FC<GuardSubmitSuccessViewProps> = (
   useEffect(() => {
     if (countDown <= 0) {
       clearInterval(timerRef.current)
-      props.__changeModule?.(GuardModuleType.LOGIN)
+      props.__changeModule?.(changeModule)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countDown])
@@ -53,12 +55,13 @@ export const GuardSubmitSuccessView: React.FC<GuardSubmitSuccessViewProps> = (
         <div className="message">{message}</div>
         <SubmitButton
           onClick={() => {
-            props.__changeModule?.(GuardModuleType.LOGIN)
+            props.__changeModule?.(changeModule)
           }}
-          text={t('common.backLoginPage')}
+          text={text as string}
         />
         <div className="timer-tip">
-          {countDown} {t('common.pToLogin')}
+          {/* {countDown} {t('common.laterBackFeedbck')} */}
+          {countDown} {countDesc}
         </div>
       </div>
     </div>
