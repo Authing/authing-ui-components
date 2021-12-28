@@ -49,4 +49,7 @@ export const codeMap: Record<number, GuardModuleAction> = {
   1576: {
     action: 'message',
   },
+  2029: {
+    action: 'message',
+  },
 }

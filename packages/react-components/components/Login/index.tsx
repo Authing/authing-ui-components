@@ -129,8 +129,10 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     if (action?.action === 'changeModule') {
       let m = action.module ? action.module : GuardModuleType.ERROR
       let init = action.initData ? action.initData : {}
-      return (initData?: any) =>
+      return (initData?: any) => {
+        console.log('modulename', m, initData)
         props.__changeModule?.(m, { ...initData, ...init })
+      }
     }
     if (action?.action === 'message') {
       return (initData?: any) => {
