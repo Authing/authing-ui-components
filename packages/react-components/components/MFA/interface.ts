@@ -1,10 +1,13 @@
 import { getDefaultG2Config, IG2Config, IG2Events, IG2FCProps } from '../Type'
 import { AuthenticationClient, User } from '..'
 
-export interface MFAConfig extends IG2Config {}
+export interface MFAConfig extends IG2Config {
+  autoRegister: boolean
+}
 
 const defaultConfig: MFAConfig = {
   ...getDefaultG2Config(),
+  autoRegister: false,
 }
 
 export const getDefaultMFAConfig = (): MFAConfig => ({
