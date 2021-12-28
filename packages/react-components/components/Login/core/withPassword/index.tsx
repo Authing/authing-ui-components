@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Form, message } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useGuardHttp } from '../../../_utils/guradHttp'
@@ -27,11 +27,11 @@ interface LoginWithPasswordProps {
   passwordLoginMethods: PasswordLoginMethods[]
 
   agreements: Agreement[]
+  loginWay?: LoginMethods
 }
 
 export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   const { agreements } = props
-
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
 
   const [validated, setValidated] = useState(false)
@@ -45,7 +45,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   const [showCaptcha, setShowCaptcha] = useState(false)
   const [verifyCodeUrl, setVerifyCodeUrl] = useState('')
   const [remainCount, setRemainCount] = useState(0)
-
+  const [accountLock, setAccountLock] = useState(false)
   const getCaptchaUrl = () => {
     const url = new URL(props.host!)
     url.pathname = '/api/v2/security/captcha'
@@ -108,10 +108,21 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         setRemainCount((data as any)?.remainCount ?? 0)
       }
     }
+    if (
+      code === ErrorCode.ACCOUNT_LOCK ||
+      code === ErrorCode.MULTIPLE_ERROR_LOCK
+    ) {
+      // 账号锁定
+      setAccountLock(true)
+    }
     submitButtonRef?.current.onSpin(false)
     props.onLogin(code, data, msg)
   }
 
+  useEffect(() => {
+    setRemainCount(0)
+    setAccountLock(false)
+  }, [props.loginWay])
   return (
     <div className="authing-g2-login-password">
       <Form
@@ -173,18 +184,30 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
             />
           </Form.Item>
         )}
-        {remainCount !== 0 && (
+        {remainCount !== 0 && !accountLock && (
           <span
             style={{
               marginBottom: 23,
               fontSize: 12,
-              color: '#E63333',
+              color: '#E8353E',
               display: 'block',
             }}
           >
             {t('common.loginFailCheck', {
               number: remainCount,
             })}
+          </span>
+        )}
+        {accountLock && (
+          <span
+            style={{
+              marginBottom: 23,
+              fontSize: 12,
+              color: '#E8353E',
+              display: 'block',
+            }}
+          >
+            {'账号被锁定，请点击「遇到问题」进行反馈'}
           </span>
         )}
 

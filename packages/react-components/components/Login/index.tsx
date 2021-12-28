@@ -88,6 +88,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   const client = useGuardAuthClient()
   const publicConfig = usePublicConfig()
   const [errorNumber, setErrorNumber] = useState(0)
+  const [accountLock, setAccountLock] = useState(false)
   let publicKey = props.config?.publicKey!
   // let autoRegister = props.config?.autoRegister
   let ms = props.config?.loginMethods
@@ -120,7 +121,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
 
     if (!action) {
       return (initData?: any) => {
-        initData?._message && message.error(initData?._message)
+        // initData?._message && message.error(initData?._message)
         console.error('未捕获 code', code)
       }
     }
@@ -138,7 +139,11 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
         message.error(initData?._message)
       }
     }
-
+    if (action?.action === 'accountLock') {
+      return (initData?: any) => {
+        setAccountLock(true)
+      }
+    }
     // 最终结果
     return (initData?: any) => {
       // props.onLoginError?.(data, client!) // 未捕获 code
@@ -149,7 +154,6 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
 
   const onLogin = (code: any, data: any, message?: string) => {
     const callback = __codePaser?.(code)
-
     if (code !== 200) {
       setErrorNumber(errorNumber + 1)
       props.onLoginError?.({
@@ -263,6 +267,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                   tab={t('login.pwdLogin')}
                 >
                   <LoginWithPassword
+                    loginWay={loginWay}
                     publicKey={publicKey}
                     autoRegister={autoRegister}
                     host={props.config.__appHost__}
@@ -329,13 +334,13 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                 >
                   {t('login.forgetPwd')}
                 </span>
-                {errorNumber >= 2 && (
+                {(errorNumber >= 2 || accountLock) && (
                   <span style={{ margin: '0 4px', color: '#EAEBEE' }}>丨</span>
                 )}
               </div>
             )}
 
-            {errorNumber >= 2 && (
+            {(errorNumber >= 2 || accountLock) && (
               <Tooltip title={t('common.feedback')}>
                 <div
                   className="touch-tip"
