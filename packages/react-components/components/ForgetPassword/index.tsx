@@ -77,7 +77,7 @@ export const GuardForgetPassword: React.FC<ForgetPasswordViewProps> = (
           {t('common.backLoginPage')}
         </div>
       </div>
-      <ChangeLanguage langRange={langRange} onLangChange={props.onLangChange} />
+      {/* <ChangeLanguage langRange={langRange} onLangChange={props.onLangChange} /> */}
     </div>
   )
 }
