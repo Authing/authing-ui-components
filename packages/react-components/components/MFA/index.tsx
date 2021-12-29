@@ -76,8 +76,10 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
   const onBack = () => {
     if (currentMethod === MFAType.FACE && mfaBackState === 'check') {
       setCurrentMethod(
-        initData.current ??
-          initData.applicationMfa?.sort((a, b) => a.sort - b.sort)[0].mfaPolicy
+        initData.applicationMfa.find((item) => item.mfaPolicy === MFAType.FACE)
+          ? MFAType.FACE
+          : initData.applicationMfa?.sort((a, b) => a.sort - b.sort)[0]
+              .mfaPolicy
       )
       setShowMethods(true)
       setMfaBackState('login')
