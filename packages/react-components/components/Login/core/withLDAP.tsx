@@ -74,10 +74,8 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
         let e = { code: 2333, data: {}, message: t('common.timeoutLDAP') }
         try {
           e = JSON.parse(error?.message)
-          console.log('paser error.message error，cheke error', error)
           // onFail && onFail(errorData)
           submitButtonRef.current.onSpin(false)
-          return
         } catch {}
         if (e.code === ErrorCode.INPUT_CAPTCHACODE) {
           setVerifyCodeUrl(getCaptchaUrl())

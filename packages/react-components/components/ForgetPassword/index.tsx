@@ -9,12 +9,12 @@ import { ImagePro } from '../ImagePro'
 import { ForgetPasswordViewProps } from './interface'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { CommonMessage } from '..'
-import { ChangeLanguage } from '../ChangeLanguage'
+// import { ChangeLanguage } from '../ChangeLanguage'
 
 export const GuardForgetPassword: React.FC<ForgetPasswordViewProps> = (
   props
 ) => {
-  let { langRange } = props.config
+  // let { langRange } = props.config
   const { t } = useTranslation()
   let publicConfig = props.config.__publicConfig__
   const authClient = useGuardAuthClient()
@@ -77,7 +77,7 @@ export const GuardForgetPassword: React.FC<ForgetPasswordViewProps> = (
           {t('common.backLoginPage')}
         </div>
       </div>
-      <ChangeLanguage langRange={langRange} onLangChange={props.onLangChange} />
+      {/* <ChangeLanguage langRange={langRange} onLangChange={props.onLangChange} /> */}
     </div>
   )
 }

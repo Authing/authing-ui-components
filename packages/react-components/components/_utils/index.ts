@@ -438,6 +438,7 @@ export const shoudGoToComplete = (
       }
     }
   }
+  console.log(needGo)
   return needGo
 }
 

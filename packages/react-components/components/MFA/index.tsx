@@ -138,18 +138,15 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
 
   return (
     <div className="g2-view-container">
-      <div className="g2-view-back">
-        <div onClick={onBack} className="g2-view-back-hover">
-          <IconFont
-            className="g2-view-back-icon"
-            type="authing-arrow-left-s-line"
-          />
+      <div className="g2-view-back" style={{ display: 'inherit' }}>
+        <span onClick={onBack} className="g2-view-mfa-back-hover">
+          <IconFont type="authing-arrow-left-s-line" style={{ fontSize: 24 }} />
           <span>
             {currentMethod === MFAType.FACE
               ? t('common.backToVerify')
               : t('common.backLoginPage')}
           </span>
-        </div>
+        </span>
       </div>
       <div className="g2-mfa-content">
         {ComponentsMapping[currentMethod]({

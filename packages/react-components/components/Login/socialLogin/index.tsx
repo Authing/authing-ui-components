@@ -58,22 +58,24 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
   useEffect(() => {
     const onMessage = (evt: MessageEvent) => {
       // TODO: event.origin是指发送的消息源，一定要进行验证！！！
-
       const { code, message: errMsg, data, event } = evt.data
 
-      const { source, eventType } = event || {}
+      // const { source, eventType } = event || {}
 
-      // 社会化登录是用 authing-js-sdk 实现的，不用再在这里回调了
-      if (source === 'authing' && eventType === 'socialLogin') {
-        return
-      }
+      // // 社会化登录是用 authing-js-sdk 实现的，不用再在这里回调了
+      // if (source === 'authing' && eventType === 'socialLogin') {
+      //   return
+      // }
 
       try {
         const parsedMsg = JSON.parse(errMsg)
-        const { code: authingCode } = parsedMsg
+        const {
+          code: authingCode,
+          message: authingMessage,
+          data: authingData,
+        } = parsedMsg
         if ([OTP_MFA_CODE, APP_MFA_CODE].includes(authingCode)) {
-          //   onFail(parsedMsg)
-          // TODO
+          onGuardLogin(authingCode, authingData, authingMessage)
           return
         }
       } catch (e) {
@@ -84,9 +86,15 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         if (code === 200) {
           localStorage.setItem('_authing_token', data?.token)
           //   onSuccess(data)
-          // TODO
+          onGuardLogin(200, data)
         } else {
-          message.error(errMsg)
+          try {
+            const parsedMsg = JSON.parse(errMsg)
+            const { message: errorMessage } = parsedMsg
+            message.error(errorMessage)
+          } catch (err) {
+            message.error(errMsg)
+          }
         }
       }
     }
@@ -94,7 +102,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
     return () => {
       window.removeEventListener('message', onMessage)
     }
-  }, [])
+  }, [onGuardLogin])
 
   let enterpriseConnectionObjs: ApplicationConfig['identityProviders']
 
@@ -166,7 +174,6 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
             } catch (e) {
               // do nothing...
             }
-
             message.error(msg)
           },
         })
@@ -335,6 +342,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
                 message: authingMessage,
                 data: authingData,
               } = parsedMsg
+
               // if ([OTP_MFA_CODE, APP_MFA_CODE].includes(authingCode)) {
               //   // TODO
               //   onGuardLogin(authingCode, authingData, authingMessage)
@@ -344,7 +352,6 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
             } catch (e) {
               // do nothing...
             }
-
             message.error(msg)
           },
           authorization_params,

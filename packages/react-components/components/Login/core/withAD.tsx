@@ -71,9 +71,7 @@ export const LoginWithAD = (props: LoginWithADProps) => {
         // let e = { code: 2333, data: {}, message: t('common.timeoutLDAP') }
         let e = JSON.parse(error?.message)
         try {
-          console.log('paser error.message error，cheke error', error)
           submitButtonRef.current.onSpin(false)
-          return
         } catch {}
 
         submitButtonRef.current.onSpin(false)

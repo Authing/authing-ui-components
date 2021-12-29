@@ -30,13 +30,17 @@ export const codeMap: Record<number, GuardModuleAction> = {
     initData: { type: 'rotate' },
   },
 
-  2333: {
-    // 密码错误
-    action: 'message',
-  },
+  // 2333: {
+  //   // 密码错误
+  //   action: 'message',
+  // },
   2057: {
-    // 密码错误太多次
-    action: 'message',
+    // 多次错误登录导致账号锁定
+    action: 'accountLock',
+  },
+  2005: {
+    // 账号锁定
+    action: 'accountLock',
   },
   2042: {
     // 禁止未验证邮箱注册
@@ -47,6 +51,9 @@ export const codeMap: Record<number, GuardModuleAction> = {
     action: 'message',
   },
   1576: {
+    action: 'message',
+  },
+  2029: {
     action: 'message',
   },
 }

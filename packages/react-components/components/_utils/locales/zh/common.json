@@ -243,5 +243,6 @@
   "backFeedback": "返回问题反馈",
   "laterBackFeedbck": "秒后返回问题反馈",
   "loginProtocolTips": "请勾选登录协议",
-  "registerProtocolTips": "请勾选注册协议"
+  "registerProtocolTips": "请勾选注册协议",
+  "accountLock": "账号被锁定，请点击「遇到问题」进行反馈"
 }
