@@ -19,11 +19,11 @@ export const ChangeLanguage = (props: any) => {
         className="g2-change-language-button"
         onClick={() => {
           if (i18n.language === 'zh-CN') {
-            changeLang('en-US')
             props.onLangChange?.('en-US')
+            changeLang('en-US')
           } else if (i18n.language === 'en-US') {
-            changeLang('zh-CN')
             props.onLangChange?.('zh-CN')
+            changeLang('zh-CN')
           }
         }}
       >

@@ -60,7 +60,6 @@ export const GuardSubmitSuccessView: React.FC<GuardSubmitSuccessViewProps> = (
           text={text as string}
         />
         <div className="timer-tip">
-          {/* {countDown} {t('common.laterBackFeedbck')} */}
           {countDown} {countDesc}
         </div>
       </div>
