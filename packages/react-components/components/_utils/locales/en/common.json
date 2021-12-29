@@ -241,5 +241,6 @@
   "laterBackFeedbck": "Return question feedback in seconds",
   "backFeedback": "Back to problem feedback",
   "loginProtocolTips": "Please check the login protocol",
-  "registerProtocolTips": "Please check the registration agreement"
+  "registerProtocolTips": "Please check the registration agreement",
+  "accountLock": "The account is locked, please click \"Encountered a problem\" to give feedback"
 }
