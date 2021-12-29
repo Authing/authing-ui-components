@@ -420,11 +420,13 @@ export const shoudGoToComplete = (
       const currKey = f.name
       // gender 特例
       if (currKey === 'gender' && user['gender'] === 'U') {
-        return true
+        needGo = true
+        break
       }
       //@ts-ignore
       if (!user[currKey] || user[currKey] === '') {
-        return true
+        needGo = true
+        break
       }
     }
     if (!needGo) {
@@ -432,13 +434,13 @@ export const shoudGoToComplete = (
       if (customData) {
         for (const f of udvs) {
           if (!customData[f.name] || customData[f.name] === '') {
-            return true
+            needGo = true
+            break
           }
         }
       }
     }
   }
-  console.log(needGo)
   return needGo
 }
 

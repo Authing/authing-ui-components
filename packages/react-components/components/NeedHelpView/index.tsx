@@ -6,15 +6,9 @@ import { GuardModuleType } from '../Guard/module'
 
 export const GuardNeedHelpView = (props: any) => {
   const { t } = useTranslation()
-  const initData = {
-    title: t('common.problem.successTip'),
-    message: t('common.problem.successTipMsg'),
-    text: t('common.backFeedback'),
-    countDesc: t('common.laterBackFeedbck'),
-    changeModule: GuardModuleType.ANY_QUESTIONS,
-  }
+
   const onSuccess = () => {
-    props.__changeModule?.(GuardModuleType.SUBMIT_SUCCESS, { ...initData })
+    props.__changeModule?.(GuardModuleType.SUBMIT_SUCCESS)
   }
 
   return (

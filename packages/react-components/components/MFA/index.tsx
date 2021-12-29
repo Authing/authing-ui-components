@@ -14,6 +14,13 @@ import './styles.less'
 import { message } from 'antd'
 import { shoudGoToComplete } from '../_utils'
 import { usePublicConfig } from '../_utils/context'
+interface MFABackStateContextType {
+  setMfaBackState: React.Dispatch<React.SetStateAction<string>>
+  mfaBackState: string
+}
+export const MFABackStateContext = React.createContext<
+  MFABackStateContextType | undefined
+>(undefined)
 
 const ComponentsMapping: Record<MFAType, (props: any) => React.ReactNode> = {
   [MFAType.EMAIL]: ({ config, initData, mfaLogin }) => (
@@ -61,18 +68,19 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
       initData.applicationMfa?.sort((a, b) => a.sort - b.sort)[0].mfaPolicy
   )
   const publicConfig = usePublicConfig()
-
+  const [mfaBackState, setMfaBackState] = useState<string>('login')
   const [showMethods, setShowMethods] = useState(true)
   const client = useGuardAuthClient()
   const { t } = useTranslation()
   let { autoRegister } = config
   const onBack = () => {
-    if (currentMethod === MFAType.FACE) {
+    if (currentMethod === MFAType.FACE && mfaBackState === 'check') {
       setCurrentMethod(
         initData.current ??
           initData.applicationMfa?.sort((a, b) => a.sort - b.sort)[0].mfaPolicy
       )
       setShowMethods(true)
+      setMfaBackState('login')
       return
     }
     window.history.back()
@@ -137,35 +145,43 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
   }
 
   return (
-    <div className="g2-view-container">
-      <div className="g2-view-back" style={{ display: 'inherit' }}>
-        <span onClick={onBack} className="g2-view-mfa-back-hover">
-          <IconFont type="authing-arrow-left-s-line" style={{ fontSize: 24 }} />
-          <span>
-            {currentMethod === MFAType.FACE
-              ? t('common.backToVerify')
-              : t('common.backLoginPage')}
+    // 返回验证页和返回登录页 需要获取内部 face 模式下的状态
+    <MFABackStateContext.Provider
+      value={{ setMfaBackState: setMfaBackState, mfaBackState: mfaBackState }}
+    >
+      <div className="g2-view-container">
+        <div className="g2-view-back" style={{ display: 'inherit' }}>
+          <span onClick={onBack} className="g2-view-mfa-back-hover">
+            <IconFont
+              type="authing-arrow-left-s-line"
+              style={{ fontSize: 24 }}
+            />
+            <span>
+              {currentMethod === MFAType.FACE && mfaBackState === 'check'
+                ? t('common.backToVerify')
+                : t('common.backLoginPage')}
+            </span>
           </span>
-        </span>
+        </div>
+        <div className="g2-mfa-content">
+          {ComponentsMapping[currentMethod]({
+            config: config,
+            initData: initData,
+            changeModule: __changeModule,
+            mfaLogin: mfaLogin,
+            setShowMethods: setShowMethods,
+          })}
+        </div>
+        {showMethods && (
+          <MFAMethods
+            applicationMfa={initData.applicationMfa}
+            method={currentMethod}
+            onChangeMethod={(type) => {
+              setCurrentMethod(type)
+            }}
+          />
+        )}
       </div>
-      <div className="g2-mfa-content">
-        {ComponentsMapping[currentMethod]({
-          config: config,
-          initData: initData,
-          changeModule: __changeModule,
-          mfaLogin: mfaLogin,
-          setShowMethods: setShowMethods,
-        })}
-      </div>
-      {showMethods && (
-        <MFAMethods
-          applicationMfa={initData.applicationMfa}
-          method={currentMethod}
-          onChangeMethod={(type) => {
-            setCurrentMethod(type)
-          }}
-        />
-      )}
-    </div>
+    </MFABackStateContext.Provider>
   )
 }
