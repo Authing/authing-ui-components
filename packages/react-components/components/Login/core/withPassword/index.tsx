@@ -207,7 +207,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
               display: 'block',
             }}
           >
-            {'账号被锁定，请点击「遇到问题」进行反馈'}
+            {t('common.accountLock')}
           </span>
         )}
 
