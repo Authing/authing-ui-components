@@ -84,13 +84,17 @@ export const MFAFace = (props: any) => {
 
   // 监听 faceState
   useEffect(() => {
-    if (faceState === 'identifying' || faceState === 'retry') {
+    // if (faceState === 'identifying' || faceState === 'retry') {
+    //   props.setShowMethods(false)
+    // } else {
+    //   props.setShowMethods(true)
+    // }
+    if (mfaBackContext?.mfaBackState === 'check') {
       props.setShowMethods(false)
     } else {
       props.setShowMethods(true)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [faceState])
+  }, [mfaBackContext?.mfaBackState, props])
 
   // 上传文件
   const uploadImage = async (blob: Blob) => {
