@@ -92,6 +92,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
       captchaCode,
       customData: getUserRegisterParams(),
       autoRegister: props.autoRegister,
+      withCustomData: true,
     }
     const { code, message: msg, data } = await post(url, body)
 

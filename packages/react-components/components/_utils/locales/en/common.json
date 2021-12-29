@@ -154,7 +154,9 @@
       "upload": "Upload pictures",
       "submit": "Submit",
       "inputConcatWays": "Please enter contact information"
-    }
+    },
+    "noLoginTips": "If you cannot log in, we suggest you do the following:",
+    "lockedTips": "If your account is locked, please contact the administrator to unlock it and try to log in again"
   },
   "high": "High",
   "low": "Low",
@@ -242,5 +244,5 @@
   "backFeedback": "Back to problem feedback",
   "loginProtocolTips": "Please check the login protocol",
   "registerProtocolTips": "Please check the registration agreement",
-  "accountLock": "The account is locked, please click \"Encountered a problem\" to give feedback"
+  "accountLock": "The account is locked, please click 「Need help」 to give feedback"
 }

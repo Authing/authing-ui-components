@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import { detectSingleFace } from 'face-api.js'
 import { useGuardHttp } from '../../_utils/guradHttp'
@@ -14,6 +20,7 @@ import { ImagePro } from '../../ImagePro'
 import SubmitButton from '../../SubmitButton'
 import { message } from 'antd'
 import { faceErrorMessage } from '../../_utils/errorFace'
+import { MFABackStateContext } from '..'
 const useDashoffset = (percent: number) => {
   // 接受 0 - 1，返回 0-700 之间的偏移量
   let offset = percent * 7
@@ -24,6 +31,7 @@ const useDashoffset = (percent: number) => {
 }
 
 export const MFAFace = (props: any) => {
+  const mfaBackContext = useContext(MFABackStateContext)
   let { postForm, post } = useGuardHttp()
   let { t } = useTranslation()
   const [faceState, setFaceState] = useState('ready') // ready, identifying, retry
@@ -76,13 +84,17 @@ export const MFAFace = (props: any) => {
 
   // 监听 faceState
   useEffect(() => {
-    if (faceState === 'identifying' || faceState === 'retry') {
+    // if (faceState === 'identifying' || faceState === 'retry') {
+    //   props.setShowMethods(false)
+    // } else {
+    //   props.setShowMethods(true)
+    // }
+    if (mfaBackContext?.mfaBackState === 'check') {
       props.setShowMethods(false)
     } else {
       props.setShowMethods(true)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [faceState])
+  }, [mfaBackContext?.mfaBackState, props])
 
   // 上传文件
   const uploadImage = async (blob: Blob) => {
@@ -225,7 +237,7 @@ export const MFAFace = (props: any) => {
     <div>
       <h3 className="authing-g2-mfa-title">{t('common.faceText1')}</h3>
       <p className="authing-g2-mfa-tips">{t('common.faceText2')}</p>
-      {faceState === 'ready' && (
+      {(faceState === 'ready' || mfaBackContext?.mfaBackState === 'login') && (
         <>
           <ImagePro
             className="g2-mfa-face-image"
@@ -241,6 +253,8 @@ export const MFAFace = (props: any) => {
               // TODO 之后添加人脸识别插件支持 减小包体积
               if (navigator.mediaDevices) {
                 setFaceState('identifying')
+                mfaBackContext?.setMfaBackState &&
+                  mfaBackContext.setMfaBackState('check')
                 autoShoot()
               } else {
                 message.error(t('login.mediaDevicesSupport'))
@@ -254,7 +268,10 @@ export const MFAFace = (props: any) => {
       <div
         className="g2-mfa-face-identifying"
         style={{
-          display: faceState !== 'ready' ? 'flex' : 'none',
+          display:
+            faceState !== 'ready' && mfaBackContext?.mfaBackState !== 'login'
+              ? 'flex'
+              : 'none',
         }}
       >
         <video
