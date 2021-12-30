@@ -1,6 +1,6 @@
 import { Col, message, Row } from 'antd'
 import React, { FC } from 'react'
-import { EmailScene } from 'authing-js-sdk'
+import { EmailScene, SceneType } from 'authing-js-sdk'
 
 import { SendCodeBtn } from './SendCodeBtn'
 
@@ -18,9 +18,11 @@ export interface SendPhoneCodeProps extends InputProps {
   onSendCodeBefore?: any // 点击的时候先做这个
   fieldName?: string
   autoSubmit?: boolean //验证码输入完毕是否自动提交
+  scene?: SceneType
 }
 
 export const SendCode: FC<SendPhoneCodeProps> = ({
+  scene,
   method,
   data,
   value,
@@ -57,7 +59,7 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
 
   const sendPhone = async (phone: string) => {
     try {
-      await authClient.sendSmsCode(phone)
+      await authClient.sendSmsCode(phone, '', scene)
       return true
     } catch (error: any) {
       if (error.code === 'ECONNABORTED') {

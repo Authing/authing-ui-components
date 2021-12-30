@@ -9,6 +9,7 @@ import SubmitButton from '../../SubmitButton'
 import CustomFormItem from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
+import { SceneType } from 'authing-js-sdk'
 interface ResetPasswordProps {
   onReset: any
   publicConfig: any
@@ -125,6 +126,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
                 style={{ color: '#878A95' }}
               />
             }
+            scene={SceneType.SCENE_TYPE_RESET}
             maxLength={verifyCodeLength}
             method={codeMethod}
             data={identify}

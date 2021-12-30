@@ -18,6 +18,7 @@ import CustomFormItem, {
   // ValidatorFormItemProps,
 } from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
+import { SceneType } from 'authing-js-sdk'
 // import { Rule } from 'antd/lib/form'
 
 export interface RegisterWithPhoneProps {
@@ -149,6 +150,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
               length: verifyCodeLength,
             })}
             maxLength={verifyCodeLength}
+            scene={SceneType.SCENE_TYPE_REGISTER}
             // prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
             prefix={
               <IconFont

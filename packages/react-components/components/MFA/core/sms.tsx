@@ -1,6 +1,6 @@
 import { message } from 'antd'
 import { Form } from 'antd'
-import { User } from 'authing-js-sdk'
+import { SceneType, User } from 'authing-js-sdk'
 import React, { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VerifyCodeInput } from '../VerifyCodeInput'
@@ -132,7 +132,7 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
 
   const sendVerifyCode = async () => {
     try {
-      await authClient.sendSmsCode(phone!)
+      await authClient.sendSmsCode(phone!, '', SceneType.SCENE_TYPE_MFA_VERIFY)
       return true
     } catch (e: any) {
       if (e.code === 'ECONNABORTED') {
