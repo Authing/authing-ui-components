@@ -25,7 +25,6 @@ jobs:
       ALIYUN_ACCESS_KEY_SECRET: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
       OSS_REGION_PROD: ${{ secrets.OSS_REGION_PROD }}
       CDN_OSS_PROD: ${{ secrets.CDN_OSS_PROD }}
-      CI: false
     
     steps:
 
@@ -43,6 +42,8 @@ jobs:
       - name: build lib
         run: |
           npm run build:lib
+        env:
+          CI: false
           
       - name: lerna version
         run: |
