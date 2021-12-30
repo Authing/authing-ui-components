@@ -87,6 +87,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
           _message: message,
         })
       },
+      registeContext: config.registeContext,
       onBeforeRegister: registerEvents.onBeforeRegister,
       //availableAt 0或者null-注册时，1-登录时，2-注册和登录时
       agreements: agreementEnabled

@@ -239,6 +239,7 @@ export const Guard = (props: GuardProps) => {
 
       getGuardHttp().setUserpoolId(publicConfig.userPoolId)
     } catch (error: any) {
+      console.error(error)
       setErrorData(error)
       setInitError(true)
     } finally {

@@ -24,12 +24,14 @@ export interface RegisterWithPhoneProps {
   onRegister: Function
   agreements: Agreement[]
   publicConfig?: ApplicationConfig
+  registeContext?: any
 }
 
 export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   onRegister,
   agreements,
   publicConfig,
+  registeContext,
 }) => {
   const { t } = useTranslation()
   const submitButtonRef = useRef<any>(null)
@@ -60,6 +62,8 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
 
         const { phone, password = '', code } = values
 
+        const context = registeContext ?? {}
+
         // 注册
         const user = await authClient.registerByPhoneCode(
           phone,
@@ -71,6 +75,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
             device: getDeviceName(),
           },
           {
+            context,
             generateToken: true,
             params: getUserRegisterParams(),
           }

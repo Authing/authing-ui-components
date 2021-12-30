@@ -15,6 +15,7 @@ export interface RegisterConfig extends IG2Config {
   publicKey?: string
   agreementEnabled?: boolean
   agreements?: Agreement[]
+  registeContext?: any
 }
 
 const defaultConfig: RegisterConfig = {

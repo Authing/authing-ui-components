@@ -35,8 +35,8 @@ const isOriginMatched = (
 }
 
 export const corsVerification = (
-  allowedOrigins: string[],
-  corsWhitelist: string[]
+  allowedOrigins: string[] = [],
+  corsWhitelist: string[] = []
 ) => {
   if (allowedOrigins.length > 0) {
     const origin = window.location.origin

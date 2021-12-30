@@ -17,12 +17,14 @@ export interface RegisterWithEmailProps {
   onBeforeRegister?: Function
   publicConfig?: ApplicationConfig
   agreements: Agreement[]
+  registeContext?: any
 }
 
 export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
   onRegister,
   onBeforeRegister,
   agreements,
+  registeContext,
 }) => {
   const { t } = useTranslation()
   const submitButtonRef = useRef<any>(null)
@@ -76,6 +78,8 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         }
         const { email, password } = values
 
+        const context = registeContext ?? {}
+
         // 注册
         const user = await authClient.registerByEmail(
           email,
@@ -86,6 +90,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
             device: getDeviceName(),
           },
           {
+            context,
             generateToken: true,
             params: getUserRegisterParams(),
           }
