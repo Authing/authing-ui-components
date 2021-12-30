@@ -82,12 +82,6 @@ const ComponentsMapping: Record<
   ),
 }
 
-// 首页 init 数据
-const initState: ModuleState = {
-  moduleName: GuardModuleType.LOGIN,
-  initData: {},
-}
-
 export interface GuardProps extends GuardEvents, IG2FCProps {
   tenantId?: string
   config?: Partial<GuardLocalConfig>
@@ -111,6 +105,12 @@ interface ModuleState {
 
 export const Guard = (props: GuardProps) => {
   const { appId, tenantId, config } = props
+
+  // 首页 init 数据
+  const initState: ModuleState = {
+    moduleName: config?.defaultScenes ?? GuardModuleType.LOGIN,
+    initData: config?.defaultInitData ?? {},
+  }
 
   // 初始化 Loading 标识
   const [initSettingEnd, setInitSettingEnd] = useState(false)
