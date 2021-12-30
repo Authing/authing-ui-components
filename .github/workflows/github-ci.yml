@@ -9,8 +9,11 @@ on:
       email:
         description: 'Please enter your github email'
         required: true
+      version:
+        description: 'Please enter your release version'
+        required: true
         
- jobs:
+jobs:
 
   readyGo:
 
@@ -31,24 +34,37 @@ on:
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
-
-      - name: get version from package.json
-        id: version
-        uses: ashley-taylor/read-json-property-action@v1.0
-        with:
-          path: ./package.json
-          property: version
           
-      - name: publish
+      - name: install global package
         run: |
           npm install yarn -g
+          npm install lerna -g
+      
+      - name: build lib
+        run: |
           yarn
-          yarn build:lib
+          npm run build:lib
+          
+      - name: publish
+        if: ${{ github.ref_name == 'master' }}
+        run: |
           npm config set //registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN
-          npm publish $PUBLISH_OPTS
-          echo "记得同步 taobao 源哦： https://npm.taobao.org/sync/authing-js-sdk 🚀"
+          lerna version $VERSION --yes
+          npm run build:publish
+          echo "build:publish successfully, 记得同步 taobao 源哦： https://npm.taobao.org/sync/authing-js-sdk 🚀"
         env:
-          VERESION: ${{ steps.version.outputs.value }}
+          VERESION: ${{ github.event.inputs.version }}
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+          
+      - name: publish-rc
+        if: ${{ github.ref_name != 'master' }}
+        run: |
+          npm config set //registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN
+          lerna version $VERSION --yes
+          npm run build:publish:rc
+          echo "build:publish:rc successfully, 记得同步 taobao 源哦： https://npm.taobao.org/sync/authing-js-sdk 🚀"
+        env:
+          VERESION: ${{ github.event.inputs.version }}
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
       
       - name: setup-oss
@@ -64,15 +80,15 @@ on:
         if: ${{ github.ref_name == 'master' }}
         run: |
           echo "上传打包到 CDN"
-          echo "VERSION: ${{ steps.version.outputs.value }}"
+          echo "VERSION: $VERSION"
           ossutil cp -f -r packages/angular-components/dist/ng-ui-components/bundles oss://$CDN_OSS_PROD/packages/ng-ui-components/$VERESION/
           ossutil cp -f -r packages/native-js/lib oss://$CDN_OSS_PROD/native-js-ui-components/$VERESION/
           ossutil cp -f -r packages/react-components/lib oss://$CDN_OSS_PROD/packages/react-ui-components/$VERESION/
           ossutil cp -f -r packages/vue-components/lib oss://$CDN_OSS_PROD/packages/vue-ui-components/$VERESION/
         env:
-          VERESION: ${{ steps.version.outputs.value }}
+          VERESION: ${{ github.event.inputs.version }}
           
-       - name: set-git-config
+      - name: set-git-config
         if: ${{ github.ref_name == 'master' }}
         run: |
           git config --global user.email ${{ github.event.inputs.email }}
@@ -90,4 +106,4 @@ on:
               sha: context.sha
             })
         env:
-          VERESION: ${{ steps.version.outputs.value }}
+          VERESION: ${{ github.event.inputs.version }}
