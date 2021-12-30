@@ -37,9 +37,7 @@ requestClient.get = async <T>(
       headers,
     }
   )
-  if (res.status === 500) {
-    message.error(i18n.t('common.unknownError'))
-  }
+
   return res.json()
 }
 
@@ -69,9 +67,7 @@ requestClient.post = async <T>(
       [requestClient.langHeader]: i18n.language,
     },
   })
-  if (res.status === 500) {
-    message.error(i18n.t('common.unknownError'))
-  }
+
   return res.json()
 }
 

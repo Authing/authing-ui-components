@@ -127,12 +127,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
         data.message ? message.error(data.message) : message.error(msg)
       }
     }
-    // 错误拦截
-    if (action?.action === 'errorIntercept') {
-      return (initData?: any) => {
-        message.error(t('common.unknownError'))
-      }
-    }
+
     // 最终结果
     return () => {
       console.error('last action at mfaview')

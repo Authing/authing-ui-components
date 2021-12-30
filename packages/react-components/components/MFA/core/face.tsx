@@ -129,7 +129,7 @@ export const MFAFace = (props: any) => {
       setFaceState('retry')
     }
     if (code === 500) {
-      message = '识别失败'
+      message = t('common.checkfail')
     }
     props.mfaLogin(code, data, message)
   }

@@ -247,5 +247,6 @@
   "accountLock": "账号被锁定，请点击「遇到问题」进行反馈",
   "corsErrorMessage": "当前域名不在允许访问的域名列表中。",
   "corsErrorMessage2": "如果有疑问可以<a href=\"https://docs.authing.cn/v2/guides/security/config-domain.html\">参考文档</a>",
-  "unknownError": "未知错误"
+  "unknownError": "未知错误",
+  "checkfail": "识别失败"
 }
