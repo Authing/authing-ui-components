@@ -34,6 +34,11 @@ jobs:
         with:
           node-version: 12.14.0
           registry-url: https://registry.npmjs.org/
+      
+      - name: set-git-config
+        run: |
+          git config --global user.email ${{ github.event.inputs.email }}
+          git config --global user.name ${{ github.event.inputs.name }}
           
       - name: install package
         run: |
@@ -88,12 +93,6 @@ jobs:
           ossutil cp -f -r packages/vue-components/lib oss://$CDN_OSS_PROD/packages/vue-ui-components/$VERSION/
         env:
           VERSION: ${{ github.event.inputs.version }}
-          
-      - name: set-git-config
-        if: ${{ github.ref_name == 'master' }}
-        run: |
-          git config --global user.email ${{ github.event.inputs.email }}
-          git config --global user.name ${{ github.event.inputs.name }}
     
       - name: release
         if: ${{ github.ref_name == 'master' }}
