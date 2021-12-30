@@ -60,6 +60,10 @@ const useDisables = (data: any) => {
     disableResetPwd = true
     disableRegister = true
   }
+  if (loginWay === LoginMethods.AD) {
+    disableResetPwd = true
+    disableRegister = true
+  }
   if (autoRegister === true) {
     disableRegister = true
   }
@@ -248,6 +252,11 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
         <div className="title">
           {t('common.login')} {props.config?.title}
         </div>
+        {!!publicConfig?.welcomeMessage && (
+          <div className="title-description">
+            {publicConfig?.welcomeMessage[i18n.language]}
+          </div>
+        )}
       </div>
 
       {renderInputWay && (

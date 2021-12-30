@@ -106,9 +106,12 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
         <Spin />
       ) : (
         <div className="g2-view-container">
-          <div className="g2-view-back">
-            <span onClick={onBack}>
-              <IconFont type="authing-back" />
+          <div className="g2-view-back" style={{ display: 'inherit' }}>
+            <span onClick={onBack} className="g2-view-mfa-back-hover">
+              <IconFont
+                type="authing-arrow-left-s-line"
+                style={{ fontSize: 24 }}
+              />
               <span>{t('common.backToVerify')}</span>
             </span>
           </div>

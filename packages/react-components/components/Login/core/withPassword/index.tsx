@@ -92,6 +92,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
       captchaCode,
       customData: getUserRegisterParams(),
       autoRegister: props.autoRegister,
+      withCustomData: true,
     }
     const { code, message: msg, data } = await post(url, body)
 
@@ -106,6 +107,10 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     if (code === ErrorCode.PASSWORD_ERROR) {
       if ((data as any)?.remainCount) {
         setRemainCount((data as any)?.remainCount ?? 0)
+        submitButtonRef?.current.onSpin(false)
+        // TODO 临时拦截密码错误限制不报 message
+        props.onLogin(9999, data, msg)
+        return
       }
     }
     if (

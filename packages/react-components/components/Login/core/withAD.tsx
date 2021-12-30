@@ -63,21 +63,22 @@ export const LoginWithAD = (props: LoginWithADProps) => {
     // onLogin
     let account = values.account && values.account.trim()
     let password = values.password && values.password.trim()
-    try {
-      const user = await client.loginByAd(account, password)
-      props.onLogin(200, user)
-    } catch (error: any) {
-      if (typeof error?.message === 'string') {
-        // let e = { code: 2333, data: {}, message: t('common.timeoutLDAP') }
-        let e = JSON.parse(error?.message)
-        try {
-          submitButtonRef.current.onSpin(false)
-        } catch {}
-
+    await client
+      .loginByAd(account, password)
+      .then((user) => {
+        props.onLogin(200, user)
+      })
+      .catch((error: any) => {
+        if (typeof error?.message === 'string') {
+          // let e = { code: 2333, data: {}, message: t('common.timeoutLDAP') }
+          let e = JSON.parse(error?.message)
+          submitButtonRef.current.onError()
+          props.onLogin(e.code, e.data, e.message)
+        }
+      })
+      .finally(() => {
         submitButtonRef.current.onSpin(false)
-        props.onLogin(e.code, e.data, e.message)
-      }
-    }
+      })
   }
 
   return (

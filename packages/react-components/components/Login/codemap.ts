@@ -30,10 +30,10 @@ export const codeMap: Record<number, GuardModuleAction> = {
     initData: { type: 'rotate' },
   },
 
-  // 2333: {
-  //   // 密码错误
-  //   action: 'message',
-  // },
+  2333: {
+    // 密码错误
+    action: 'message',
+  },
   2057: {
     // 多次错误登录导致账号锁定
     action: 'accountLock',
