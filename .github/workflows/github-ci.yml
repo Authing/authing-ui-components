@@ -25,24 +25,22 @@ jobs:
       ALIYUN_ACCESS_KEY_SECRET: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
       OSS_REGION_PROD: ${{ secrets.OSS_REGION_PROD }}
       CDN_OSS_PROD: ${{ secrets.CDN_OSS_PROD }}
-      
     
     steps:
 
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: 12
+          node-version: 16
           registry-url: https://registry.npmjs.org/
           
-      - name: install global package
+      - name: install package
         run: |
           npm install yarn -g
-          npm install lerna -g
+          yarn
       
       - name: build lib
         run: |
-          yarn
           npm run build:lib
           
       - name: lerna version
