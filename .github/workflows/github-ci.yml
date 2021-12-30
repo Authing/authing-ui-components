@@ -48,7 +48,7 @@ jobs:
         run: |
           lerna version $VERSION --yes
         env:
-          VERESION: ${{ github.event.inputs.version }}
+          VERSION: ${{ github.event.inputs.version }}
           
       - name: publish lib
         if: ${{ github.ref_name == 'master' }}
@@ -82,12 +82,12 @@ jobs:
         run: |
           echo "上传打包到 CDN"
           echo "VERSION: $VERSION"
-          ossutil cp -f -r packages/angular-components/dist/ng-ui-components/bundles oss://$CDN_OSS_PROD/packages/ng-ui-components/$VERESION/
-          ossutil cp -f -r packages/native-js/lib oss://$CDN_OSS_PROD/native-js-ui-components/$VERESION/
-          ossutil cp -f -r packages/react-components/lib oss://$CDN_OSS_PROD/packages/react-ui-components/$VERESION/
-          ossutil cp -f -r packages/vue-components/lib oss://$CDN_OSS_PROD/packages/vue-ui-components/$VERESION/
+          ossutil cp -f -r packages/angular-components/dist/ng-ui-components/bundles oss://$CDN_OSS_PROD/packages/ng-ui-components/$VERSION/
+          ossutil cp -f -r packages/native-js/lib oss://$CDN_OSS_PROD/native-js-ui-components/$VERSION/
+          ossutil cp -f -r packages/react-components/lib oss://$CDN_OSS_PROD/packages/react-ui-components/$VERSION/
+          ossutil cp -f -r packages/vue-components/lib oss://$CDN_OSS_PROD/packages/vue-ui-components/$VERSION/
         env:
-          VERESION: ${{ github.event.inputs.version }}
+          VERSION: ${{ github.event.inputs.version }}
           
       - name: set-git-config
         if: ${{ github.ref_name == 'master' }}
@@ -103,8 +103,8 @@ jobs:
             github.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: "refs/tags/${{ env.VERESION }}",
+              ref: "refs/tags/${{ env.VERSION }}",
               sha: context.sha
             })
         env:
-          VERESION: ${{ github.event.inputs.version }}
+          VERSION: ${{ github.event.inputs.version }}
