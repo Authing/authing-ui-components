@@ -60,6 +60,10 @@ const useDisables = (data: any) => {
     disableResetPwd = true
     disableRegister = true
   }
+  if (loginWay === LoginMethods.AD) {
+    disableResetPwd = true
+    disableRegister = true
+  }
   if (autoRegister === true) {
     disableRegister = true
   }

@@ -66,26 +66,30 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
     let account = values.account && values.account.trim()
     let password = values.password && values.password.trim()
     // let captchaCode = values.captchaCode && values.captchaCode.trim()
-    try {
-      const user = await client.loginByLdap(account, password)
-      props.onLogin(200, user)
-    } catch (error: any) {
-      if (typeof error?.message === 'string') {
-        let e = { code: 2333, data: {}, message: t('common.timeoutLDAP') }
-        try {
-          e = JSON.parse(error?.message)
-          // onFail && onFail(errorData)
-          submitButtonRef.current.onSpin(false)
-        } catch {}
-        if (e.code === ErrorCode.INPUT_CAPTCHACODE) {
-          setVerifyCodeUrl(getCaptchaUrl())
-          setShowCaptcha(true)
+    await client
+      .loginByLdap(account, password)
+      .then((user) => {
+        props.onLogin(200, user)
+      })
+      .catch((error: any) => {
+        if (typeof error?.message === 'string') {
+          let e = { code: 2333, data: {}, message: t('common.timeoutLDAP') }
+          try {
+            e = JSON.parse(error?.message)
+            // onFail && onFail(errorData)
+          } catch {}
+          if (e.code === ErrorCode.INPUT_CAPTCHACODE) {
+            setVerifyCodeUrl(getCaptchaUrl())
+            setShowCaptcha(true)
+          }
+          submitButtonRef.current.onError()
+          props.onLogin(e.code, e.data, e.message)
+          // onFail && onFail(error)
         }
+      })
+      .finally(() => {
         submitButtonRef.current.onSpin(false)
-        props.onLogin(e.code, e.data, e.message)
-        // onFail && onFail(error)
-      }
-    }
+      })
   }
 
   return (
