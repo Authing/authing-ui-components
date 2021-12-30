@@ -301,7 +301,6 @@ export const Guard = (props: GuardProps) => {
   ])
 
   return (
-    // TODO 这部分缺失 Loging 态
     <ConfigProvider
       prefixCls={PREFIX_CLS}
       locale={langMap[i18n.language as LangMAP]}
@@ -316,7 +315,7 @@ export const Guard = (props: GuardProps) => {
             visible={props.visible}
             onCancel={props.onClose}
             keyboard={config.escCloseable}
-            maskClosable={false} //点击蒙层，是否允许关闭
+            maskClosable={false} // 点击蒙层，是否允许关闭
             getContainer={config.target ? config.target : false}
           >
             <div className="authing-g2-render-module">{renderModule}</div>
