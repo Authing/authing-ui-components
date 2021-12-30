@@ -12,7 +12,7 @@ export const codeMap: Record<number, GuardModuleAction> = {
     action: 'message',
   },
   500: {
-    action: 'message',
+    action: 'errorIntercept',
   },
   1639: {
     // 首次登陆，跳转去修改密码
@@ -22,7 +22,10 @@ export const codeMap: Record<number, GuardModuleAction> = {
     // 借助 1639 强行 mock 一下
     // initData: { type: 'rotate' },
   },
-
+  1002: {
+    // 登录太频繁
+    action: 'message',
+  },
   2058: {
     // 密码轮换，跳转去修改密码
     action: 'changeModule',

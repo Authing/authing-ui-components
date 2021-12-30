@@ -25,7 +25,7 @@ export const initGuardAuthClient = (
         },
         websocketHost: config.__publicConfig__?.websocket,
       })
-    } catch (error) {
+    } catch (error: any) {
       throw error
     }
   }
