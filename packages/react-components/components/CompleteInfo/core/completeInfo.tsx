@@ -11,7 +11,7 @@ import { GuardCompleteInfoViewProps } from '../interface'
 import SubmitButton from '../../SubmitButton'
 import { InputNumber } from '../../InputNumber'
 import { completeFieldsFilter } from '../utils'
-import { User } from 'authing-js-sdk'
+import { SceneType, User } from 'authing-js-sdk'
 import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
 import { SendCode } from '../../SendCode'
 import { fieldRequiredRule } from '../../_utils'
@@ -228,6 +228,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             placeholder={t('common.inputFourVerifyCode', {
               length: verifyCodeLength,
             })}
+            scene={SceneType.SCENE_TYPE_COMPLETE_PHONE}
             maxLength={verifyCodeLength}
             method="phone"
             fieldName="internal phone:phone"

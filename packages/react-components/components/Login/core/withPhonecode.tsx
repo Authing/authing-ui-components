@@ -10,7 +10,7 @@ import { InputNumber } from '../../InputNumber'
 import CustomFormItem from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
 import { Agreements } from '../../Register/components/Agreements'
-
+import { SceneType } from 'authing-js-sdk'
 // const formatPhone = (value: any) => {
 //   if (!value) {
 //     return ''
@@ -26,6 +26,7 @@ import { Agreements } from '../../Register/components/Agreements'
 //     return `${a}-${b}-${c}`
 //   }
 // }
+
 export const LoginWithPhoneCode = (props: any) => {
   const { agreements } = props
 
@@ -75,7 +76,7 @@ export const LoginWithPhoneCode = (props: any) => {
         props.onLogin(e.code, e.data, e.message)
       })
       .finally(() => {
-        submitButtonRef.current.onSpin(false)
+        submitButtonRef.current?.onSpin(false)
       })
   }
 
@@ -124,6 +125,7 @@ export const LoginWithPhoneCode = (props: any) => {
             placeholder={t('common.inputFourVerifyCode', {
               length: verifyCodeLength,
             })}
+            scene={SceneType.SCENE_TYPE_LOGIN}
             maxLength={verifyCodeLength}
             autoSubmit={!Boolean(agreements?.length)}
             // prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
