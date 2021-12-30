@@ -35,7 +35,7 @@ jobs:
           node-version: 12.14.0
           registry-url: https://registry.npmjs.org/
       
-      - name: set-git-config
+      - name: set git config
         run: |
           git config --global user.email ${{ github.event.inputs.email }}
           git config --global user.name ${{ github.event.inputs.name }}
@@ -59,7 +59,7 @@ jobs:
         if: ${{ github.ref_name == 'master' }}
         run: |
           npm config set //registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN
-          npm run publish:lib
+          lerna publish from-package --yes
           echo "publish:lib successfully 🚀"
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
@@ -68,12 +68,12 @@ jobs:
         if: ${{ github.ref_name != 'master' }}
         run: |
           npm config set //registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN
-          npm run publish:rc
+          lerna publish from-package --yes --canary --pre-dist-tag=rc --preid=rc
           echo "publish:rc successfully 🚀"
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
       
-      - name: setup-oss
+      - name: setup oss
         if: ${{ github.ref_name == 'master' }}
         uses: yizhoumo/setup-ossutil@v1
         with: 
@@ -82,7 +82,7 @@ jobs:
           access-key-id: ${{ secrets.ALIYUN_ACCESS_KEY }}
           access-key-secret: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
           
-      - name: upload-oss
+      - name: upload oss
         if: ${{ github.ref_name == 'master' }}
         run: |
           echo "上传打包到 CDN"
