@@ -276,9 +276,14 @@ export const Guard = (props: GuardProps) => {
         initData: moduleState.initData,
         config: GuardLocalConfig,
         ...events,
-        __changeModule: (moduleName, initData) => {
-          historyNext(initData)
-          guardStateMachine?.next(moduleName, initData)
+        __changeModule: async (moduleName, initData) => {
+          if (!events?.onBeforeChangeModule) {
+            historyNext(initData)
+            guardStateMachine?.next(moduleName, initData)
+          } else if (await events.onBeforeChangeModule(moduleName, initData)) {
+            historyNext(initData)
+            guardStateMachine?.next(moduleName, initData)
+          }
         },
       })
     } else {

@@ -1,4 +1,5 @@
 import { message } from 'antd'
+import { GuardModuleType } from '.'
 import { CompleteInfoEvents } from '../CompleteInfo/interface'
 import { ForgetPasswordEvents } from '../ForgetPassword/interface'
 import { LoginEvents } from '../Login/interface'
@@ -9,7 +10,12 @@ export interface GuardEvents
   extends LoginEvents,
     RegisterEvents,
     CompleteInfoEvents,
-    ForgetPasswordEvents {}
+    ForgetPasswordEvents {
+  onBeforeChangeModule?: (
+    key: GuardModuleType,
+    initData?: any
+  ) => boolean | Promise<boolean>
+}
 
 export const guardEventsFilter = (props: any) => {
   const events: GuardEvents = {}
