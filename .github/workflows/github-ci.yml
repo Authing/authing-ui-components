@@ -45,26 +45,28 @@ jobs:
           yarn
           npm run build:lib
           
-      - name: publish
+      - name: lerna version
+        run: |
+          lerna version $VERSION --yes
+        env:
+          VERESION: ${{ github.event.inputs.version }}
+          
+      - name: publish lib
         if: ${{ github.ref_name == 'master' }}
         run: |
           npm config set //registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN
-          lerna version $VERSION --yes
-          npm run build:publish
-          echo "build:publish successfully, 记得同步 taobao 源哦： https://npm.taobao.org/sync/authing-js-sdk 🚀"
+          npm run publish:lib
+          echo "publish:lib successfully 🚀"
         env:
-          VERESION: ${{ github.event.inputs.version }}
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
           
       - name: publish-rc
         if: ${{ github.ref_name != 'master' }}
         run: |
           npm config set //registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN
-          lerna version $VERSION --yes
-          npm run build:publish:rc
-          echo "build:publish:rc successfully, 记得同步 taobao 源哦： https://npm.taobao.org/sync/authing-js-sdk 🚀"
+          npm run publish:rc
+          echo "publish:rc successfully 🚀"
         env:
-          VERESION: ${{ github.event.inputs.version }}
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
       
       - name: setup-oss
