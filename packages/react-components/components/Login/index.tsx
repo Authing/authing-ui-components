@@ -148,6 +148,12 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
         setAccountLock(true)
       }
     }
+    // 错误拦截
+    if (action?.action === 'errorIntercept') {
+      return (initData?: any) => {
+        message.error(t('common.unknownError'))
+      }
+    }
     // 最终结果
     return (initData?: any) => {
       // props.onLoginError?.(data, client!) // 未捕获 code

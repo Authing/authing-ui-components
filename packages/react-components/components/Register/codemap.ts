@@ -9,4 +9,7 @@ export const codeMap: Record<number, GuardModuleAction> = {
   1002: {
     action: 'message',
   },
+  500: {
+    action: 'errorIntercept',
+  },
 }

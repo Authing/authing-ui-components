@@ -57,6 +57,16 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
         message.error(initData?._message)
       }
     }
+    // 错误拦截
+    if (action?.action === 'errorIntercept') {
+      return (initData?: any) => {
+        message.error(t('common.unknownError'))
+      }
+    }
+    // 最终结果
+    return () => {
+      console.error('last action at register')
+    }
   }
 
   const registerContextProps = useMemo(

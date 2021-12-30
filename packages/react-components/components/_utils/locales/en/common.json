@@ -244,5 +244,6 @@
   "backFeedback": "Back to problem feedback",
   "loginProtocolTips": "Please check the login protocol",
   "registerProtocolTips": "Please check the registration agreement",
-  "accountLock": "The account is locked, please click 「Need help」 to give feedback"
+  "accountLock": "The account is locked, please click 「Need help」 to give feedback",
+  "unknownError": "unknown mistake"
 }

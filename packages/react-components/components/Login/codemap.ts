@@ -12,7 +12,7 @@ export const codeMap: Record<number, GuardModuleAction> = {
     action: 'message',
   },
   500: {
-    action: 'message',
+    action: 'errorIntercept',
   },
   1639: {
     // 首次登陆，跳转去修改密码
