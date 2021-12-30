@@ -244,5 +244,7 @@
   "laterBackFeedbck": "秒后返回问题反馈",
   "loginProtocolTips": "请勾选登录协议",
   "registerProtocolTips": "请勾选注册协议",
-  "accountLock": "账号被锁定，请点击「遇到问题」进行反馈"
+  "accountLock": "账号被锁定，请点击「遇到问题」进行反馈",
+  "corsErrorMessage": "当前域名不在允许访问的域名列表中。",
+  "corsErrorMessage2": "如果有疑问可以<a href=\"https://docs.authing.cn/v2/guides/security/config-domain.html\">参考文档</a>"
 }

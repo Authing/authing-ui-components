@@ -5,6 +5,7 @@ import { assembledAppHost } from '.'
 import { getGuardHttp } from './guradHttp'
 import { AuthingResponse } from './http'
 import { GuardComponentConifg, GuardLocalConfig } from '../Guard/config'
+import { corsVerification } from './corsVerification'
 
 let publicConfigMap: Record<string, ApplicationConfig> = {}
 
@@ -109,6 +110,8 @@ const requestPublicConfig = async (
 
   if (res.code !== 200 || !res.data)
     throw new Error(res?.message ?? 'Please check your config')
+
+  corsVerification(res.data.allowedOrigins, res.data.corsWhitelist)
 
   setPublicConfig(appId, res.data)
 

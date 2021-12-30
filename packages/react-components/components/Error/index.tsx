@@ -6,7 +6,7 @@ import { IconFont } from '../IconFont'
 
 export const GuardErrorView: React.FC<GuardErrorViewProps> = (props) => {
   const messages = props?.initData?.messages
-    ? `${i18n.t('user.error')}：${props?.initData?.messages} `
+    ? `${props?.initData?.messages} `
     : `${i18n.t('user.contactAdministrator')}`
 
   return (
@@ -15,7 +15,11 @@ export const GuardErrorView: React.FC<GuardErrorViewProps> = (props) => {
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <IconFont type="authing-bianzu" style={{ width: 240, height: 160 }} />
         </div>
-        <span>{messages}</span>
+        <div className="g2-error-message">{i18n.t('user.error')}</div>
+        <span
+          className="g2-error-message-text"
+          dangerouslySetInnerHTML={{ __html: messages }}
+        />
       </div>
     </div>
   )

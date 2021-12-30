@@ -88,6 +88,8 @@ export type PasswordLoginMethods =
 export type ComplateFiledsPlace = 'register' | 'login'
 export interface ApplicationConfig {
   id: string
+  allowedOrigins: string[]
+  corsWhitelist: string[]
   cdnBase: string
   userPoolId: string
   rootUserPoolId: string

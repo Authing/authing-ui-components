@@ -77,7 +77,7 @@
   "emailBind": "邮箱绑定",
   "bindEmailTips": "为了你的账户安全，请绑定邮箱。",
   "personalMfa": "个人 MFA",
-  "error": "出错了～",
+  "error": "错误信息",
   "contactAdministrator": "未知的错误～ 请你联系管理员进行处理",
   "personalMfaTips": "绑定个人 MFA 后，你可以在登录时进行二次验证，更有效的保障你的账户安全。",
   "resetpasswordText1": "输入你的注册电话/邮箱，输入收到的验证码，我们将为你进行密码重置。",

@@ -1,4 +1,4 @@
-import { ConfigProvider, message, Modal } from 'antd'
+import { ConfigProvider, message } from 'antd'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   AuthenticationClient,
