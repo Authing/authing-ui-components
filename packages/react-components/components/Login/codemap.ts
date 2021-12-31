@@ -32,7 +32,10 @@ export const codeMap: Record<number, GuardModuleAction> = {
     module: GuardModuleType.CHANGE_PWD,
     initData: { type: 'rotate' },
   },
-
+  2820002: {
+    // ldap url报错信息
+    action: 'message',
+  },
   2333: {
     // 密码错误
     action: 'message',

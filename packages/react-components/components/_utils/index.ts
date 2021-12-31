@@ -361,6 +361,7 @@ export const shoudGoToComplete = (
   }
 
   //autoRegister 开启注册登录合并后 就不区分登录注册场景 只要 complateFiledsPlace 有值即可
+
   if (
     autoRegister &&
     config?.complateFiledsPlace &&
