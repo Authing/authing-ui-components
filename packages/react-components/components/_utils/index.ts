@@ -352,7 +352,7 @@ export const shoudGoToComplete = (
   let needGo = false
   // 判断新版本
   if (
-    config?.complateFiledsPlace &&
+    config?.complateFiledsPlace?.length &&
     config.complateFiledsPlace.includes(contextType) &&
     config?.extendsFields &&
     config?.extendsFields?.length > 0
@@ -364,7 +364,7 @@ export const shoudGoToComplete = (
 
   if (
     autoRegister &&
-    config?.complateFiledsPlace &&
+    config?.complateFiledsPlace?.length &&
     config?.extendsFields &&
     config?.extendsFields?.length > 0
   ) {
@@ -372,7 +372,7 @@ export const shoudGoToComplete = (
   }
   // 兼容老版本
   if (
-    !config?.complateFiledsPlace &&
+    !config?.complateFiledsPlace?.length &&
     config?.extendsFieldsEnabled &&
     config?.extendsFields &&
     config?.extendsFields?.length > 0
