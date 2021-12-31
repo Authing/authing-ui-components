@@ -319,8 +319,10 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         : item.provider !== SocialConnectionProvider.WECHATMP
     )
     .map((item: any) => {
-      const iconType = `authing-${item.provider.replace(/:/g, '-')}`
-
+      let iconType = `authing-${item.provider.replace(/:/g, '-')}`
+      if (item.provider === SocialConnectionProvider.WECHATMP) {
+        iconType = `authing-wechat-pc`
+      }
       const authorization_params: Record<string, any> = {}
       if (item.provider === SocialConnectionProvider.BAIDU) {
         authorization_params.display = screenSize

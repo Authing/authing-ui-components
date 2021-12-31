@@ -35,7 +35,7 @@ export const REGISTER_METHODS_MAP = () => ({
 export const HIDE_SOCIALS = [
   'wechat:miniprogram:app-launch',
   'wechat:miniprogram:qrconnect',
-  'wechat:webpage-authorization',
+  // 'wechat:webpage-authorization',
   'wechat:miniprogram:default',
   'wechatwork:addressbook',
   'wechat:mobile',
