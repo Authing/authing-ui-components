@@ -37,6 +37,13 @@ jobs:
         with:
           node-version: 12.14.0
           registry-url: https://registry.npmjs.org/
+          
+      - name: before scripts
+        run: |
+          echo "Current branch: ${{ github.ref_name }}"
+          echo "Current publish version: ${{ github.event.inputs.version }}"
+          echo "Current user.name: ${{ github.event.inputs.name }}"
+          echo "Current user.email: ${{ github.event.inputs.email }}"
       
       - name: set git config
         run: |
