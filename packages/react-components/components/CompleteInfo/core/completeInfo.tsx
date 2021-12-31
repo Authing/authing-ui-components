@@ -301,7 +301,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         const label =
           i18n.language === 'zh-CN' ? def.label || def.name : def.name
         const required = def.required || false
-        const rules = def.validateRules
+        const rules = def.validateRules ?? []
         const generateRules = () => {
           const l = []
           if (required) {
