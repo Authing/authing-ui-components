@@ -19,7 +19,6 @@ export const LdapLoginForm = forwardRef<FormInstance, PasswordLoginFormProps>(
 
     const { state } = useGuardContext()
     const { config, authClient, realHost, guardEvents } = state
-    const autoRegister = config.autoRegister
 
     const [rawForm] = Form.useForm()
 

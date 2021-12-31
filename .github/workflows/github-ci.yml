@@ -62,7 +62,7 @@ jobs:
         if: ${{ github.ref_name == 'master' }}
         run: |
           npm config set //registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN
-          lerna publish from-package --yes
+          npm run publish:lib
           echo "publish:lib successfully 🚀"
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
@@ -71,7 +71,7 @@ jobs:
         if: ${{ github.ref_name != 'master' }}
         run: |
           npm config set //registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN
-          lerna publish from-package --yes --canary --pre-dist-tag=rc --preid=rc
+          npm run publish:rc
           echo "publish:rc successfully 🚀"
         env:
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
