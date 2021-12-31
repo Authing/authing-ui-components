@@ -59,7 +59,6 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
     const onMessage = (evt: MessageEvent) => {
       // TODO: event.origin是指发送的消息源，一定要进行验证！！！
       const { code, message: errMsg, data, event } = evt.data
-
       // const { source, eventType } = event || {}
 
       // // 社会化登录是用 authing-js-sdk 实现的，不用再在这里回调了
@@ -86,7 +85,6 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         if (code === 200) {
           localStorage.setItem('_authing_token', data?.token)
           //   onSuccess(data)
-          onGuardLogin(200, data)
         } else {
           try {
             const parsedMsg = JSON.parse(errMsg)
