@@ -7,6 +7,11 @@ export const codeMap: Record<number, GuardModuleAction> = {
     action: 'changeModule',
     module: GuardModuleType.MFA,
   },
+  [ErrorCode.OTP_MFA_CODE]: {
+    // 跳转去 mfa 验证
+    action: 'changeModule',
+    module: GuardModuleType.MFA,
+  },
   [ErrorCode.INPUT_CAPTCHACODE]: {
     // 需要输入图形验证码
     action: 'message',
