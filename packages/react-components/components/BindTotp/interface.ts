@@ -2,10 +2,13 @@ import { getDefaultG2Config, IG2Config, IG2Events, IG2FCProps } from '../Type'
 import { AuthenticationClient, User } from '..'
 import { GuardMFAInitData } from '../MFA/interface'
 
-export interface BindTotpConfig extends IG2Config {}
+export interface BindTotpConfig extends IG2Config {
+  autoRegister: boolean
+}
 
 const defaultConfig: BindTotpConfig = {
   ...getDefaultG2Config(),
+  autoRegister: false,
 }
 
 export const getDefaultMFAConfig = (): BindTotpConfig => ({

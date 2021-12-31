@@ -13,6 +13,8 @@ import { SecurityCode } from './core/securityCode'
 import { GuardBindTotpViewProps } from './interface'
 import { useTranslation } from 'react-i18next'
 import './styles.less'
+import { shoudGoToComplete } from '../_utils'
+import { usePublicConfig } from '../_utils/context'
 
 enum BindTotpType {
   SECURITY_CODE = 'securityCode',
@@ -20,7 +22,7 @@ enum BindTotpType {
 }
 
 export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
-  config: GuardLocalConfig,
+  config,
   initData,
   onLogin,
   __changeModule,
@@ -30,6 +32,7 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
   const [secret, setSecret] = useState('')
   const [qrcode, setQrcode] = useState('')
   const [user, setUser] = useState<User>()
+  const publicConfig = usePublicConfig()
   const [bindTotpType, setBindTotpType] = useState<BindTotpType>(
     BindTotpType.SECURITY_CODE
   )
@@ -74,7 +77,17 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
   }, [initData.mfaToken])
 
   const onBind = () => {
-    if (user) onLogin?.(user, authClient)
+    if (user) {
+      if (shoudGoToComplete(user, 'login', publicConfig, config.autoRegister)) {
+        console.log('登陆成功，用户为', user)
+        __changeModule?.(GuardModuleType.COMPLETE_INFO, {
+          context: 'login',
+          user: user,
+        })
+      } else {
+        onLogin?.(user, authClient) // 登录成功
+      }
+    }
   }
 
   const onNext = (user: User) => {
