@@ -1,5 +1,6 @@
 import { ErrorCode } from '../_utils/GuardErrorCode'
 import { GuardModuleAction, GuardModuleType } from '../Guard/module'
+import { MFAType } from '../MFA/interface'
 
 export const codeMap: Record<number, GuardModuleAction> = {
   [ErrorCode.APP_MFA_CODE]: {
@@ -11,6 +12,10 @@ export const codeMap: Record<number, GuardModuleAction> = {
     // 跳转去 mfa 验证
     action: 'changeModule',
     module: GuardModuleType.MFA,
+    initData: {
+      current: MFAType.TOTP,
+      totpMfaEnabled: true,
+    },
   },
   [ErrorCode.INPUT_CAPTCHACODE]: {
     // 需要输入图形验证码
