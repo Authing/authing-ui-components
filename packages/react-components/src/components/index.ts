@@ -5,3 +5,4 @@ export * from './AuthingGuard/hooks'
 export type { AuthenticationClientOptions } from 'authing-js-sdk'
 
 export { AuthingGuard }
+
