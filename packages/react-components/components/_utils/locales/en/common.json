@@ -244,7 +244,7 @@
   "backFeedback": "Back to problem feedback",
   "loginProtocolTips": "Please check the login protocol",
   "registerProtocolTips": "Please check the registration agreement",
-  "accountLock": "The account is locked, please click 「Need help」 to give feedback",
+  "accountLock": "The account is locked, please click the question mark below to give feedback",
   "corsErrorMessage": "The current domain name is not in the list of allowed domain names",
   "unknownError": "unknown mistake",
   "corsErrorMessage2": "If you have any questions, you can <a href=\"https://docs.authing.cn/v2/guides/security/config-domain.html\">refer to the document</a>",
