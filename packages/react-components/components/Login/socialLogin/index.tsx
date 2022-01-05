@@ -29,6 +29,7 @@ import { useGuardAuthClient } from '../../Guard/authClient'
 import { IconFont } from '../../IconFont'
 import { LoginConfig } from '../interface'
 import './style.less'
+import { useMediaSize } from '../../_utils/hooks'
 
 export interface SocialLoginProps {
   appId: string
@@ -54,6 +55,8 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
   const [screenSize] = useScreenSize()
 
   const authClient = useGuardAuthClient()
+
+  const { isPhoneMedia } = useMediaSize()
 
   useEffect(() => {
     const onMessage = (evt: MessageEvent) => {
@@ -102,6 +105,39 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       window.removeEventListener('message', onMessage)
     }
   }, [onGuardLogin])
+
+  useEffect(() => {
+    const containerDOM = document.getElementsByClassName('g2-view-header')?.[0]
+
+    if (isPhoneMedia && noLoginMethods) {
+      if (containerDOM) {
+        containerDOM.classList.add('g2-view-header-mobile')
+      }
+    } else {
+      containerDOM.classList.remove('g2-view-header-mobile')
+    }
+    return () => {
+      containerDOM.classList.remove('g2-view-header-mobile')
+    }
+  })
+
+  useEffect(() => {
+    if (noLoginMethods) {
+      const containerDOM = document.getElementsByClassName(
+        'g2-view-container'
+      )?.[0]
+
+      if (containerDOM) {
+        // @ts-ignore
+        containerDOM.style['min-height'] = '410px'
+
+        return () => {
+          // @ts-ignore
+          containerDOM.style['min-height'] = '610px'
+        }
+      }
+    }
+  }, [noLoginMethods])
 
   let enterpriseConnectionObjs: ApplicationConfig['identityProviders']
 

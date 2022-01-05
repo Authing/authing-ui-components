@@ -40,6 +40,15 @@
   padding: 16px;
   border-radius: 8px;
   position: relative;
+
+  &.g2-view-register {
+    justify-content: space-between;
+  }
+
+  &.g2-view-login {
+    justify-content: space-between;
+  }
+
   .none {
     display: none;
   }
@@ -65,6 +74,14 @@
   .g2-view-header {
     user-select: none;
     padding: 24px var(--sidePadding) 0;
+
+    &.g2-view-header-mobile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 100px;
+      margin-bottom: 62px;
+    }
     .icon {
       width: 48px;
       height: 48px;
@@ -460,8 +477,7 @@
 }
 
 .g2-change-language-container {
-  margin: auto 0;
-  padding-top: 10px;
+  margin: 35px 0 8px 0;
   text-align: center;
   .g2-change-language-button {
     display: flex;

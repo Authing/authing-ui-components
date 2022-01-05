@@ -129,35 +129,37 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
   }, [config?.defaultRegisterMethod, tabMapping])
 
   return (
-    <div className="g2-view-container">
-      <div className="g2-view-header">
-        <img src={config?.logo} alt="" className="icon" />
+    <div className="g2-view-container g2-view-register">
+      <div className="g2-view-container-inner">
+        <div className="g2-view-header">
+          <img src={config?.logo} alt="" className="icon" />
 
-        <div className="title">
-          {t('common.welcomeJoin', { name: config?.title })}
+          <div className="title">
+            {t('common.welcomeJoin', { name: config?.title })}
+          </div>
         </div>
-      </div>
-      <div className="g2-view-tabs">
-        {console.log(config, 'config?.defaultRegisterMethod}')}
-        <Tabs
-          defaultActiveKey={config?.defaultRegisterMethod}
-          onChange={(activeKey) => {
-            registerEvents.onRegisterTabChange?.(activeKey as RegisterMethods)
-          }}
-        >
-          {renderTab}
-        </Tabs>
-      </div>
-      <div className="g2-tips-line">
-        <span className="back-to-login">
-          {/* <span className="gray">{t('common.alreadyHasAcc')}</span> */}
-          <span
-            className="link-like"
-            onClick={() => __changeModule?.(GuardModuleType.LOGIN, {})}
+        <div className="g2-view-tabs">
+          {console.log(config, 'config?.defaultRegisterMethod}')}
+          <Tabs
+            defaultActiveKey={config?.defaultRegisterMethod}
+            onChange={(activeKey) => {
+              registerEvents.onRegisterTabChange?.(activeKey as RegisterMethods)
+            }}
           >
-            {t('common.backLoginPage')}
+            {renderTab}
+          </Tabs>
+        </div>
+        <div className="g2-tips-line">
+          <span className="back-to-login">
+            {/* <span className="gray">{t('common.alreadyHasAcc')}</span> */}
+            <span
+              className="link-like"
+              onClick={() => __changeModule?.(GuardModuleType.LOGIN, {})}
+            >
+              {t('common.backLoginPage')}
+            </span>
           </span>
-        </span>
+        </div>
       </div>
       <ChangeLanguage langRange={langRange} onLangChange={onLangChange} />
     </div>

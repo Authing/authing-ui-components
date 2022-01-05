@@ -1,6 +1,7 @@
 import { useRef, useCallback, useEffect } from 'react'
 import { GuardModuleType } from '../../Guard/module'
 import { useModule } from '../../context/module/context'
+import { useMediaQuery } from 'react-responsive'
 
 export const useChangeModule = () => {
   const { module, changeModule, setInitData } = useModule()
@@ -61,4 +62,14 @@ export const useDebounce = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [timer.current, delay]
   )
+}
+
+export const useMediaSize = () => {
+  const isPhoneMedia = useMediaQuery({
+    maxWidth: 450,
+  })
+
+  return {
+    isPhoneMedia,
+  }
 }
