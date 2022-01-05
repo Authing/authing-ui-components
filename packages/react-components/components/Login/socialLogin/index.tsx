@@ -387,6 +387,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
           <Tooltip
             key={item.id}
             title={item.tooltip?.[i18n.language as Lang] || item.name}
+            trigger={['hover', 'click', 'contextMenu']}
           >
             <div className="g2-social-login-item" onClick={onLogin}>
               <IconFont type={`${iconType}-fill`} />
@@ -421,6 +422,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
               item.tooltip?.[i18n.language as Lang] ||
               item.name
             }
+            trigger={['hover', 'click', 'contextMenu']}
           >
             <div className="g2-social-login-item" onClick={onLogin}>
               <IconFont type={`${iconType}-fill`} />

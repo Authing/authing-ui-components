@@ -4,4 +4,5 @@
 build/*
 lib/*
 iconfont.js
+node_modules/*
 components/version/version.tsx

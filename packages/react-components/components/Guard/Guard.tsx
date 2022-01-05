@@ -216,6 +216,8 @@ export const Guard = (props: GuardProps) => {
   useEffect(() => {
     const guardStateMachine = initGuardStateMachine(onChangeModule, initState)
     setGuardStateMachine(guardStateMachine)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // 设置 config
