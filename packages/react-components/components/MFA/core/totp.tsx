@@ -42,11 +42,13 @@ export const BindMFATotp: React.FC<BindMFATotpProps> = ({
 export interface VerifyMFATotpProps {
   mfaToken: string
   mfaLogin: any
+  changeModule: any
 }
 
 export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
   mfaToken,
   mfaLogin,
+  changeModule,
 }) => {
   const { t } = useTranslation()
   const [form] = Form.useForm()
@@ -104,6 +106,18 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
         </VerifyCodeFormItem>
 
         <SubmitButton text={t('common.sure')} ref={submitButtonRef} />
+        <p className="authing-g2-mfa-totp-recoveryCode">
+          {t('common.hasLooseSaftyCode')}
+          <span
+            onClick={() => {
+              changeModule(GuardModuleType.RECOVERY_CODE, {
+                mfaToken,
+              })
+            }}
+          >
+            {t('common.useRecoverCode')}
+          </span>
+        </p>
       </Form>
     </>
   )
@@ -124,7 +138,11 @@ export const MFATotp: React.FC<MFATotpProps> = ({
   return (
     <>
       {initData.totpMfaEnabled ? (
-        <VerifyMFATotp mfaToken={initData.mfaToken} mfaLogin={mfaLogin} />
+        <VerifyMFATotp
+          mfaToken={initData.mfaToken}
+          mfaLogin={mfaLogin}
+          changeModule={changeModule}
+        />
       ) : (
         <BindMFATotp initData={initData} changeModule={changeModule} />
       )}

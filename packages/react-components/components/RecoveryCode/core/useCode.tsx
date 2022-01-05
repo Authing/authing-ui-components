@@ -1,15 +1,17 @@
-import { Form, Input } from 'antd'
+import { Form, Input, message } from 'antd'
 import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { User } from '../..'
 import { IconFont } from '../../IconFont'
 import SubmitButton from '../../SubmitButton'
 import { useGuardHttp } from '../../_utils/guradHttp'
 
 export interface UseCodeProps {
   mfaToken: string
+  onSubmit: (recoveryCode: string, user: User) => void
 }
 
-export const UseCode: React.FC<UseCodeProps> = ({ mfaToken }) => {
+export const UseCode: React.FC<UseCodeProps> = ({ mfaToken, onSubmit }) => {
   const { t } = useTranslation()
 
   const [form] = Form.useForm()
@@ -19,17 +21,31 @@ export const UseCode: React.FC<UseCodeProps> = ({ mfaToken }) => {
   const onFinish = async () => {
     submitButtonRef.current?.onSpin(true)
 
-    await post(
-      '/api/v2/mfa/totp/recovery',
-      {
-        recoveryCode: form.getFieldValue('recoveryCode'),
-      },
-      {
-        headers: {
-          authorization: mfaToken,
+    try {
+      const res = await post(
+        '/api/v2/mfa/totp/recovery',
+        {
+          recoveryCode: form.getFieldValue('recoveryCode'),
         },
+        {
+          headers: {
+            authorization: mfaToken,
+          },
+        }
+      )
+      if (res.code === 200) {
+        // @ts-ignore
+        onSubmit(res.recoveryCode, res.data)
+      } else {
+        message.error(res.message)
+        submitButtonRef.current?.onError()
       }
-    )
+    } catch (error) {
+      // TODO: handle error
+      submitButtonRef.current?.onError()
+    } finally {
+      submitButtonRef.current?.onSpin(false)
+    }
   }
 
   let submitButtonRef = useRef<any>(null)

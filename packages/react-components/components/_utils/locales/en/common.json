@@ -248,5 +248,6 @@
   "corsErrorMessage": "The current domain name is not in the list of allowed domain names",
   "unknownError": "unknown mistake",
   "corsErrorMessage2": "If you have any questions, you can <a href=\"https://docs.authing.cn/v2/guides/security/config-domain.html\">refer to the document</a>",
-  "checkfail": "Recognition failure"
+  "checkfail": "Recognition failure",
+  "totpGenerateCode": "Generate a new recovery code for you, please record this key safely"
 }

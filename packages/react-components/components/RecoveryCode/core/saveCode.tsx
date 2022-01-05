@@ -1,21 +1,18 @@
-import { Form, Checkbox, Typography } from 'antd'
+import { Checkbox, Form, Typography } from 'antd'
 import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import SubmitButton from '../../SubmitButton'
 
 const { Paragraph } = Typography
 
-export interface BindSuccessProps {
-  onBind: any
+export const SaveCode: React.FC<{
   secret: string
-}
-
-export const BindSuccess: React.FC<BindSuccessProps> = ({ secret, onBind }) => {
-  // const [isSaved, setIsSaved] = useState(false)
-  const submitButtonRef = useRef<any>(null)
-  const [form] = Form.useForm()
-
+  onBind: any
+}> = (props) => {
+  const { secret, onBind } = props
   const { t } = useTranslation()
+  const [form] = Form.useForm()
+  const submitButtonRef = useRef<any>(null)
 
   const bindSuccess = async () => {
     submitButtonRef.current?.onSpin(true)
@@ -31,8 +28,8 @@ export const BindSuccess: React.FC<BindSuccessProps> = ({ secret, onBind }) => {
 
   return (
     <>
-      <p className="authing-g2-mfa-title">{t('common.totpText1')}</p>
-      <p className="authing-g2-mfa-tips">{t('common.totpText2')}</p>
+      <p className="authing-g2-mfa-title">{t('common.useRecoverCode')}</p>
+      <p className="authing-g2-mfa-tips">{t('common.totpGenerateCode')}</p>
 
       <div className="g2-mfa-bindTotp-copySecret">
         <Paragraph copyable>{secret}</Paragraph>
@@ -45,7 +42,7 @@ export const BindSuccess: React.FC<BindSuccessProps> = ({ secret, onBind }) => {
         onFinishFailed={() => submitButtonRef.current?.onError()}
       >
         <Form.Item
-          className="authing-g2-input-form g2-mfa-totp-verify-input"
+          className="authing-g2-input-form g2-mfa-totp-recoveryCode-input"
           name="remember"
           rules={[
             {
@@ -64,7 +61,7 @@ export const BindSuccess: React.FC<BindSuccessProps> = ({ secret, onBind }) => {
           </Checkbox>
         </Form.Item>
 
-        <SubmitButton text={t('common.bindSuccess')} ref={submitButtonRef} />
+        <SubmitButton text={t('common.confirm')} ref={submitButtonRef} />
       </Form>
     </>
   )
