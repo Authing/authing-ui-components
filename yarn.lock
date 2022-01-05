@@ -272,6 +272,20 @@
     lodash "^4.17.15"
     resize-observer-polyfill "^1.5.0"
 
+"@authing/react-ui-components@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.npmjs.org/@authing/react-ui-components/-/react-ui-components-3.0.0.tgz#32c4a64cc24f71a51c04a908a5e53a89415fa584"
+  integrity sha512-khpql0I8Stc2TVYb+1NDDRhhdJaEU5uqiECFpiN8tU/7qu00+j2noZT/ndvsaY7ta2QAPMXTWTswT3AU1iWMpQ==
+  dependencies:
+    antd "^4.8.0"
+    authing-js-sdk "4.23.8-alpha.3"
+    face-api.js "^0.22.2"
+    fastclick "^1.0.6"
+    global "^4.4.0"
+    qs "^6.9.4"
+    react-use "^17.3.1"
+    wildcard "^1.1.2"
+
 "@babel/code-frame@7.10.4", "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.5.5":
   version "7.10.4"
   resolved "https://registry.npm.taobao.org/@babel/code-frame/download/@babel/code-frame-7.10.4.tgz#168da1a36e90da68ae8d49c0f1b48c7c6249213a"
