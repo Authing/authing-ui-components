@@ -134,9 +134,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
         <div className="g2-view-header">
           <img src={config?.logo} alt="" className="icon" />
 
-          <div className="title">
-            {t('common.welcomeJoin', { name: config?.title })}
-          </div>
+          <div className="title">{config?.title}</div>
         </div>
         <div className="g2-view-tabs">
           {console.log(config, 'config?.defaultRegisterMethod}')}

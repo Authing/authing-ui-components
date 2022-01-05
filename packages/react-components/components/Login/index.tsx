@@ -251,9 +251,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
 
         <div className="g2-view-header">
           <img src={props.config?.logo} alt="" className="icon" />
-          <div className="title">
-            {t('common.login')} {props.config?.title}
-          </div>
+          <div className="title">{props.config?.title}</div>
           {!!publicConfig?.welcomeMessage && (
             <div className="title-description">
               {publicConfig?.welcomeMessage[i18n.language]}
