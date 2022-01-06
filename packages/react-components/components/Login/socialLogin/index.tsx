@@ -130,14 +130,15 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
   })
 
   useEffect(() => {
-    if (noLoginMethods) {
+    if (noLoginMethods && !isPhoneMedia) {
+      // pc 下
       const containerDOM = document.getElementsByClassName(
         'g2-view-container'
       )?.[0]
 
       if (containerDOM) {
         // @ts-ignore
-        containerDOM.style['min-height'] = '90vh'
+        containerDOM.style['min-height'] = '410px'
 
         return () => {
           // @ts-ignore
@@ -145,7 +146,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         }
       }
     }
-  }, [noLoginMethods])
+  }, [isPhoneMedia, noLoginMethods])
 
   let enterpriseConnectionObjs: ApplicationConfig['identityProviders']
 
