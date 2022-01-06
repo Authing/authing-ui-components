@@ -137,10 +137,13 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       )?.[0]
 
       if (containerDOM) {
+        containerDOM.classList.add('g2-view-container-space')
         // @ts-ignore
         containerDOM.style['min-height'] = '410px'
 
         return () => {
+          containerDOM.classList.remove('g2-view-container-space')
+
           // @ts-ignore
           containerDOM.style['min-height'] = '610px'
         }
@@ -494,7 +497,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
   const socialLogin =
     socialLoginButtons.length > 0 && noLoginMethods ? (
       <Space
-        size={12}
+        size={noLoginMethods ? 0 : 12}
         className="g2-guard-full-width-space no-login-methods"
         direction="vertical"
       >
@@ -522,7 +525,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         />
       )}
       <Space
-        size={12}
+        size={noLoginMethods ? 0 : 12}
         direction="vertical"
         className="g2-guard-full-width-space"
       >
