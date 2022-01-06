@@ -137,13 +137,10 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       )?.[0]
 
       if (containerDOM) {
-        containerDOM.classList.add('g2-view-container-space')
         // @ts-ignore
         containerDOM.style['min-height'] = '410px'
 
         return () => {
-          containerDOM.classList.remove('g2-view-container-space')
-
           // @ts-ignore
           containerDOM.style['min-height'] = '610px'
         }
