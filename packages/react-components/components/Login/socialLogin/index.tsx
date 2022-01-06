@@ -108,16 +108,24 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
 
   useEffect(() => {
     const containerDOM = document.getElementsByClassName('g2-view-header')?.[0]
+    const innerContainer = document.querySelector(
+      '.g2-view-login>.g2-view-container-inner'
+    )
 
     if (isPhoneMedia && noLoginMethods) {
       if (containerDOM) {
         containerDOM.classList.add('g2-view-header-mobile')
       }
+      if (innerContainer) {
+        innerContainer.classList.add('g2-view-login-mobile-inner')
+      }
     } else {
       containerDOM.classList.remove('g2-view-header-mobile')
+      innerContainer?.classList.remove('g2-view-login-mobile-inner')
     }
     return () => {
       containerDOM.classList.remove('g2-view-header-mobile')
+      innerContainer?.classList.remove('g2-view-login-mobile-inner')
     }
   })
 
@@ -129,7 +137,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
 
       if (containerDOM) {
         // @ts-ignore
-        containerDOM.style['min-height'] = '410px'
+        containerDOM.style['min-height'] = '90vh'
 
         return () => {
           // @ts-ignore
