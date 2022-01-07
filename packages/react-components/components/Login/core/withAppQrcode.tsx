@@ -22,9 +22,15 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
     appQrcodeClient.startScanning('authingGuardAppQrcode', {
       autoExchangeUserInfo: true,
       ...props.qrCodeScanOptions,
-      onCodeLoaded() {
+      onCodeShow() {
+        console.log('sdk over')
         setLoading(false)
       },
+
+      // onCodeLoaded() {
+      //   console.log('sdk over')
+      //   setLoading(false)
+      // },
       onStart(timer) {
         timerRef.current = timer
       },
