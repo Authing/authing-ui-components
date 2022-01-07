@@ -137,13 +137,10 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       )?.[0]
 
       if (containerDOM) {
-        containerDOM.classList.add('g2-view-container-space')
         // @ts-ignore
         containerDOM.style['min-height'] = '410px'
 
         return () => {
-          containerDOM.classList.remove('g2-view-container-space')
-
           // @ts-ignore
           containerDOM.style['min-height'] = '610px'
         }
@@ -431,7 +428,11 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
           </Button>
         )
       } else if (shape === 'icon') {
-        return (
+        return isPhoneMedia ? (
+          <div className="g2-social-login-item" onClick={onLogin}>
+            <IconFont type={`${iconType}-fill`} />
+          </div>
+        ) : (
           <Tooltip
             key={item.id}
             title={item.tooltip?.[i18n.language as Lang] || item.name}
@@ -461,6 +462,10 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
               (i18n.language === 'zh-CN' ? item.name : item.name_en) ??
               item.provider}
           </Button>
+        ) : isPhoneMedia ? (
+          <div className="g2-social-login-item" onClick={onLogin}>
+            <IconFont type={`${iconType}-fill`} />
+          </div>
         ) : (
           <Tooltip
             overlayStyle={{ fontFamily: 'sans-serif' }}
