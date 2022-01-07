@@ -39,17 +39,9 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
   const [verifyCode, setVerifyCode] = useState(value ?? [])
   const [focusIndex, setFocusIndex] = useState<number>(0)
 
-  // 验证码填写完成后 直接触发 onFinish
-  useEffect(() => {
-    if (verifyCode.filter((code) => Boolean(code)).length >= length) {
-      onFinish?.(verifyCode)
-    }
-  }, [length, onFinish, verifyCode])
-
   // 聚焦控制
   useEffect(() => {
     inputRef.current[focusIndex].focus()
-    // inputRef.current[focusIndex].select()
   }, [focusIndex])
 
   const onChange = useCallback(
@@ -76,8 +68,13 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
       if (Boolean(val) && Boolean(inputRef.current[index + 1])) {
         setFocusIndex(index + 1)
       }
+
+      // 验证码填写完成后 直接触发 onFinish
+      if (codes.filter((code) => Boolean(code)).length >= length) {
+        onFinish?.(codes)
+      }
     },
-    [onChange, verifyCode]
+    [length, onChange, onFinish, verifyCode]
   )
 
   const handleKeyDown = (evt: any, index: number) => {
