@@ -12,7 +12,6 @@ import { InputNumber } from '../InputNumber'
 export interface SendPhoneCodeProps extends InputProps {
   form?: any
   beforeSend?: any // 点击的时候先做这个
-  fieldName?: string
   autoSubmit?: boolean //验证码输入完毕是否自动提交
 }
 
@@ -23,7 +22,6 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
   form,
   beforeSend,
   maxLength,
-  fieldName,
   ...inputProps
 }) => {
   const { t } = useTranslation()

@@ -17,7 +17,14 @@ export interface SendCodeByPhoneProps extends InputProps {
 }
 
 export const SendCodeByPhone: FC<SendCodeByPhoneProps> = (props) => {
-  const { scene, data, form, onSendCodeBefore, fieldName } = props
+  const {
+    scene,
+    data,
+    form,
+    onSendCodeBefore,
+    fieldName,
+    ...remainProps
+  } = props
   const { t } = useTranslation()
 
   const authClient = useGuardAuthClient()
@@ -49,7 +56,8 @@ export const SendCodeByPhone: FC<SendCodeByPhoneProps> = (props) => {
               return false
             })
         }}
-        {...props}
+        form={form}
+        {...remainProps}
       />
     </>
   )

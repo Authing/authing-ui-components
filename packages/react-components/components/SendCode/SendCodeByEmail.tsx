@@ -18,7 +18,14 @@ export interface SendCodeByEmailProps extends InputProps {
 }
 
 export const SendCodeByEmail: FC<SendCodeByEmailProps> = (props) => {
-  const { scene, data, form, onSendCodeBefore, fieldName } = props
+  const {
+    scene,
+    data,
+    form,
+    onSendCodeBefore,
+    fieldName,
+    ...remainProps
+  } = props
   const { t } = useTranslation()
 
   const authClient = useGuardAuthClient()
@@ -54,7 +61,8 @@ export const SendCodeByEmail: FC<SendCodeByEmailProps> = (props) => {
             return false
           })
       }}
-      {...props}
+      form={form}
+      {...remainProps}
     />
   )
 }
