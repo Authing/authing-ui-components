@@ -127,8 +127,7 @@ export const LoginWithPhoneCode = (props: any) => {
             })}
             scene={SceneType.SCENE_TYPE_LOGIN}
             maxLength={verifyCodeLength}
-            autoSubmit={!Boolean(agreements?.length)}
-            // prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
+            // autoSubmit={!Boolean(agreements?.length)}
             prefix={
               <IconFont
                 type="authing-a-shield-check-line1"

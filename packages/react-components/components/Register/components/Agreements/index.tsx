@@ -59,7 +59,12 @@ export const Agreements: FC<AgreementsProps> = ({
                 !acceptList.includes(item.id) &&
                 'authing-agreements-item-invalid',
             ])}
-            onClick={() => toggleItemCheck(item.id)}
+            onClick={(e: any) => {
+              e.persist()
+              if (e.target.nodeName !== 'A') {
+                toggleItemCheck(item.id)
+              }
+            }}
           >
             <Space align="start" size={5}>
               <Checkbox

@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import './styles.less'
 import { shoudGoToComplete } from '../_utils'
 import { usePublicConfig } from '../_utils/context'
+import { MFAType } from '../MFA/interface'
 
 enum BindTotpType {
   SECURITY_CODE = 'securityCode',
@@ -110,7 +111,7 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
   )
 
   const onBack = () => {
-    window.history.back()
+    __changeModule?.(GuardModuleType.MFA, { current: MFAType.TOTP })
   }
 
   return (
