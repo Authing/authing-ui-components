@@ -1,4 +1,4 @@
-import { Divider } from 'antd'
+import { Divider, Input } from 'antd'
 import React, {
   FC,
   Fragment,
@@ -7,7 +7,6 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { InputNumber } from '../../InputNumber'
 import './style.less'
 
 interface VerifyCodeInputProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -38,12 +37,26 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
   const codeInputRef = useRef<HTMLDivElement>(null)
 
   const [verifyCode, setVerifyCode] = useState(value ?? [])
+  const [focusIndex, setFocusIndex] = useState<number>(0)
+
+  // 验证码填写完成后 直接触发 onFinish
+  useEffect(() => {
+    if (verifyCode.filter((code) => Boolean(code)).length >= length) {
+      onFinish?.(verifyCode)
+    }
+  }, [length, onFinish, verifyCode])
+
+  // 聚焦控制
+  useEffect(() => {
+    inputRef.current[focusIndex].focus()
+    // inputRef.current[focusIndex].select()
+  }, [focusIndex])
 
   const onChange = useCallback(
     (codes: string[]) => {
-      const filteredCodes = codes.filter((code) => !!code)
-      setVerifyCode(filteredCodes)
-      onChangeProps?.(filteredCodes)
+      // const filteredCodes = codes.filter((code) => !!code)
+      setVerifyCode(codes)
+      onChangeProps?.(codes)
     },
     [onChangeProps]
   )
@@ -56,21 +69,15 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
       } else {
         val = String(num)
       }
-
       const codes = [...verifyCode]
       codes[index] = val.split('').slice(-1)[0] || ''
-
       onChange(codes as string[])
 
-      if (!!val && inputRef.current[index + 1]) {
-        inputRef.current[index + 1].focus()
-      }
-      // 输入完验证码 直接 finish 提交
-      if (codes.filter((code) => code).length >= length) {
-        onFinish?.()
+      if (Boolean(val) && Boolean(inputRef.current[index + 1])) {
+        setFocusIndex(index + 1)
       }
     },
-    [verifyCode, onChange, length, onFinish]
+    [onChange, verifyCode]
   )
 
   const handleKeyDown = (evt: any, index: number) => {
@@ -87,6 +94,20 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
         onEenter?.()
         break
 
+      case 'Left':
+      case 'ArrowLeft':
+        evt.preventDefault()
+        if (inputRef.current[index - 1]) {
+          inputRef.current[index - 1].focus()
+        }
+        break
+      case 'Right':
+      case 'ArrowRight':
+        evt.preventDefault()
+        if (inputRef.current[index + 1]) {
+          inputRef.current[index + 1].focus()
+        }
+        break
       default:
         break
     }
@@ -105,11 +126,11 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
         if (paste.length < length) {
           const data = verifyCode.map((_i, index) => paste?.[index] ?? '')
           onChange(data)
-          inputRef.current[paste.length].focus()
+          setFocusIndex(paste.length)
         } else {
           const data = paste.slice(0, length).split('')
           onChange(data)
-          inputRef.current[length - 1].focus()
+          setFocusIndex(length - 1)
         }
       }
     }
@@ -122,41 +143,43 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
 
   return (
     <div ref={codeInputRef} className="authing-g2-code-input" {...rest}>
-      {new Array(length).fill(0).map((_, index) => (
-        <Fragment key={index}>
-          <InputNumber
-            ref={(el) => (inputRef.current[index] = el)}
-            style={{
-              width: size,
-              minWidth: size,
-              minHeight: size,
-              height: size,
-              lineHeight: size,
-              marginLeft: index === 0 ? 0 : gutter,
-            }}
-            className="authing-g2-code-input-item"
-            size="large"
-            autoFocus={index === 0}
-            onKeyDown={(evt) => handleKeyDown(evt, index)}
-            value={verifyCode[index]}
-            maxLength={1}
-            onChange={(evt) => {
-              evt.persist()
-              // @ts-ignore
-              if (evt.nativeEvent.isComposing) {
-                return
-              }
+      {new Array(length).fill(0).map((_, index) => {
+        return (
+          <Fragment key={index}>
+            <Input
+              ref={(el) => (inputRef.current[index] = el)}
+              style={{
+                width: size,
+                minWidth: size,
+                minHeight: size,
+                height: size,
+                lineHeight: size,
+                marginLeft: index === 0 ? 0 : gutter,
+              }}
+              className="authing-g2-code-input-item"
+              size="large"
+              autoFocus={index === 0}
+              onKeyDown={(evt) => handleKeyDown(evt, index)}
+              value={verifyCode[index]}
+              maxLength={1}
+              onChange={(evt) => {
+                evt.persist()
+                // @ts-ignore
+                if (evt.nativeEvent.isComposing) {
+                  return
+                }
 
-              handleChange(evt.target.value, index)
-            }}
-            pattern="[0-9]*"
-            type="tel"
-          />
-          {showDivider && index === Math.floor(length / 2 - 1) && (
-            <Divider className="authing-g2-code-input-divider" />
-          )}
-        </Fragment>
-      ))}
+                handleChange(evt.target.value, index)
+              }}
+              pattern="[0-9]*"
+              type="tel"
+            />
+            {showDivider && index === Math.floor(length / 2 - 1) && (
+              <Divider className="authing-g2-code-input-divider" />
+            )}
+          </Fragment>
+        )
+      })}
     </div>
   )
 }

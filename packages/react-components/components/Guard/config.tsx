@@ -1,6 +1,9 @@
+import React from 'react'
+import { ReactNode } from 'react'
 import { GuardModuleType } from '.'
 import { getDefaultLoginConfig, LoginConfig } from '../Login/interface'
 import { getDefaultRegisterConfig, RegisterConfig } from '../Register/interface'
+import { ShieldSpin } from '../ShieldSpin'
 
 export interface GuardComponentConifg extends Partial<GuardLocalConfig> {}
 
@@ -8,17 +11,23 @@ export interface GuardLocalConfig extends RegisterConfig, LoginConfig {
   isSSO?: boolean
   defaultScenes?: GuardModuleType
   defaultInitData?: any
+  showLoading?: boolean
+  loadingComponent?: ReactNode
 }
 
-let defaultConfig: GuardLocalConfig
+let defaultConfig: GuardLocalConfig = {
+  ...getDefaultLoginConfig(),
+  ...getDefaultRegisterConfig(),
+  isSSO: false,
+  defaultInitData: {},
+  showLoading: true,
+  loadingComponent: (
+    <div className="g2-init-setting-loading">
+      <ShieldSpin size={100} />
+    </div>
+  ),
+}
 
 export const getDefaultGuardLocalConfig = (): GuardLocalConfig => {
-  if (!defaultConfig) {
-    defaultConfig = {
-      ...getDefaultLoginConfig(),
-      ...getDefaultRegisterConfig(),
-    }
-  }
-
   return defaultConfig
 }

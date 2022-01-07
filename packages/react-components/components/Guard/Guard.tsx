@@ -15,7 +15,6 @@ import { getGuardHttp, GuardHttp, initGuardHttp } from '../_utils/guradHttp'
 import { i18n, initI18n } from '..//_utils/locales'
 import { IG2FCProps } from '../Type'
 import { getDefaultGuardLocalConfig, GuardLocalConfig } from './config'
-import { ShieldSpin } from '../ShieldSpin'
 import { GuardModuleType } from './module'
 import { GuardMFAView } from '../MFA'
 import { GuardRegisterView } from '../Register'
@@ -289,17 +288,15 @@ export const Guard = (props: GuardProps) => {
         },
       })
     } else {
-      return (
-        <div className="g2-init-setting-loading">
-          <ShieldSpin size={100} />
-        </div>
-      )
+      return GuardLocalConfig?.showLoading
+        ? GuardLocalConfig?.loadingComponent
+        : null
     }
   }, [
-    initSettingEnd,
-    GuardLocalConfig,
     initError,
     errorData?.message,
+    initSettingEnd,
+    GuardLocalConfig,
     moduleState.moduleName,
     moduleState.initData,
     appId,

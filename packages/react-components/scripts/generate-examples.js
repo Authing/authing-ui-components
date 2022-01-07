@@ -30,7 +30,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 reportWebVitals()
 `
 
-fs.access(`../${fileName}`, fs.constants.F_OK, (err) => {
+fs.access(`${fileName}`, fs.constants.F_OK, (err) => {
   if (err !== null) {
     fs.writeFileSync(path.join(__dirname, '..', fileName), fileContent, 'utf8')
   }
