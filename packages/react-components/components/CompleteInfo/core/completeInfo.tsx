@@ -11,10 +11,11 @@ import { GuardCompleteInfoViewProps } from '../interface'
 import SubmitButton from '../../SubmitButton'
 import { InputNumber } from '../../InputNumber'
 import { completeFieldsFilter } from '../utils'
-import { SceneType, User } from 'authing-js-sdk'
+import { EmailScene, SceneType, User } from 'authing-js-sdk'
 import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
-import { SendCode } from '../../SendCode'
 import { fieldRequiredRule } from '../../_utils'
+import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
+import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
 export interface CompleteInfoProps {
   user: User
   verifyCodeLength: number | undefined
@@ -220,7 +221,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
               : undefined
           }
         >
-          <SendCode
+          <SendCodeByPhone
             className="authing-g2-input"
             autoComplete="one-time-code"
             key="internal-phone:phone345"
@@ -230,7 +231,6 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             })}
             scene={SceneType.SCENE_TYPE_COMPLETE_PHONE}
             maxLength={verifyCodeLength}
-            method="phone"
             fieldName="internal phone:phone"
             data={''}
             form={form}
@@ -271,7 +271,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
               : undefined
           }
         >
-          <SendCode
+          <SendCodeByEmail
             className="authing-g2-input"
             autoComplete="one-time-code"
             size="large"
@@ -279,9 +279,8 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
               length: verifyCodeLength,
             })}
             maxLength={verifyCodeLength}
-            // prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
-            method="email"
             data={''}
+            scene={EmailScene.VerifyCode}
             fieldName="internal email:email"
             form={form}
             onSendCodeBefore={() =>

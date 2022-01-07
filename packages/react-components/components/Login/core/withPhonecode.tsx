@@ -3,7 +3,6 @@ import { Form, message } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { LoginMethods } from '../../'
-import { SendCode } from '../../SendCode'
 import { fieldRequiredRule } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
 import { InputNumber } from '../../InputNumber'
@@ -11,6 +10,7 @@ import CustomFormItem from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
 import { Agreements } from '../../Register/components/Agreements'
 import { SceneType } from 'authing-js-sdk'
+import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
 // const formatPhone = (value: any) => {
 //   if (!value) {
 //     return ''
@@ -118,7 +118,7 @@ export const LoginWithPhoneCode = (props: any) => {
           name="code"
           rules={fieldRequiredRule(t('common.captchaCode'))}
         >
-          <SendCode
+          <SendCodeByPhone
             className="authing-g2-input"
             autoComplete="one-time-code"
             size="large"
@@ -134,7 +134,6 @@ export const LoginWithPhoneCode = (props: any) => {
                 style={{ color: '#878A95' }}
               />
             }
-            method="phone"
             data={''}
             form={form}
             onSendCodeBefore={() => form.validateFields(['phone'])}

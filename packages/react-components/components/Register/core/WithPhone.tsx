@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
 import { useGuardAuthClient } from '../../Guard/authClient'
-import { SendCode } from '../../SendCode'
 import {
   fieldRequiredRule,
   getDeviceName,
@@ -19,6 +18,7 @@ import CustomFormItem, {
 } from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
 import { SceneType } from 'authing-js-sdk'
+import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
 // import { Rule } from 'antd/lib/form'
 
 export interface RegisterWithPhoneProps {
@@ -142,7 +142,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           className="authing-g2-input-form"
           validateFirst={true}
         >
-          <SendCode
+          <SendCodeByPhone
             className="authing-g2-input"
             autoComplete="one-time-code"
             size="large"
@@ -158,7 +158,6 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
                 style={{ color: '#878A95' }}
               />
             }
-            method="phone"
             onSendCodeBefore={() => form.validateFields(['phone'])}
             data={phone}
           />
