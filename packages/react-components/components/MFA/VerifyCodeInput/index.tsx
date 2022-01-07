@@ -70,8 +70,8 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
       }
 
       // 验证码填写完成后 直接触发 onFinish
-      if (verifyCode.filter((code) => Boolean(code)).length >= length) {
-        onFinish?.(verifyCode)
+      if (codes.filter((code) => Boolean(code)).length >= length) {
+        onFinish?.(codes)
       }
     },
     [length, onChange, onFinish, verifyCode]
