@@ -1,15 +1,16 @@
-import React, { useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Form, Input } from 'antd'
 import { StoreValue } from 'antd/lib/form/interface'
-import { SendCode } from '../../SendCode'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { fieldRequiredRule, validate } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
 import CustomFormItem from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
-import { SceneType } from 'authing-js-sdk'
+import { EmailScene, SceneType } from 'authing-js-sdk'
+import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
+import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
 interface ResetPasswordProps {
   onReset: any
   publicConfig: any
@@ -51,6 +52,61 @@ export const ResetPassword = (props: ResetPasswordProps) => {
       })
   }
 
+  const SendCode = useCallback(
+    (props: any) => {
+      return (
+        <>
+          {codeMethod === 'phone' && (
+            <SendCodeByPhone
+              {...props}
+              className="authing-g2-input"
+              autoComplete="one-time-code"
+              size="large"
+              placeholder={t('common.inputFourVerifyCode', {
+                length: verifyCodeLength,
+              })}
+              prefix={
+                <IconFont
+                  type="authing-a-shield-check-line1"
+                  style={{ color: '#878A95' }}
+                />
+              }
+              scene={SceneType.SCENE_TYPE_RESET}
+              maxLength={verifyCodeLength}
+              data={identify}
+              onSendCodeBefore={async () => {
+                await form.validateFields(['identify'])
+              }}
+            />
+          )}
+          {codeMethod === 'email' && (
+            <SendCodeByEmail
+              {...props}
+              className="authing-g2-input"
+              autoComplete="one-time-code"
+              size="large"
+              placeholder={t('common.inputFourVerifyCode', {
+                length: verifyCodeLength,
+              })}
+              prefix={
+                <IconFont
+                  type="authing-a-shield-check-line1"
+                  style={{ color: '#878A95' }}
+                />
+              }
+              scene={EmailScene.ResetPassword}
+              maxLength={verifyCodeLength}
+              data={identify}
+              onSendCodeBefore={async () => {
+                await form.validateFields(['identify'])
+              }}
+            />
+          )}
+        </>
+      )
+    },
+    [codeMethod, form, identify, t, verifyCodeLength]
+  )
   return (
     <div className="authing-g2-login-phone-code">
       <Form
@@ -113,29 +169,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
           name="code"
           rules={[...fieldRequiredRule(t('common.captchaCode'))]}
         >
-          <SendCode
-            className="authing-g2-input"
-            autoComplete="one-time-code"
-            size="large"
-            placeholder={t('common.inputFourVerifyCode', {
-              length: verifyCodeLength,
-            })}
-            prefix={
-              <IconFont
-                type="authing-a-shield-check-line1"
-                style={{ color: '#878A95' }}
-              />
-            }
-            scene={SceneType.SCENE_TYPE_RESET}
-            maxLength={verifyCodeLength}
-            method={codeMethod}
-            data={identify}
-            onSendCodeBefore={async () => {
-              await form.validateFields(['identify'])
-            }}
-
-            // form={form}
-          />
+          <SendCode />
         </Form.Item>
         <CustomFormItem.Password
           className="authing-g2-input-form"
