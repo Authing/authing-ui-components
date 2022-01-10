@@ -244,6 +244,14 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
                 })
                 setUploadUrl(imgUrl)
               }}
+              beforeUpload={(file) => {
+                if (
+                  ['image/png', 'image/jpeg', 'image/jpg'].includes(file.type)
+                ) {
+                  return true
+                }
+                return Promise.reject(file)
+              }}
               itemRender={(n, file) => {
                 return (
                   <>
