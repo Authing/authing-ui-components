@@ -137,7 +137,6 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
           <div className="title">{config?.title}</div>
         </div>
         <div className="g2-view-tabs">
-          {console.log(config, 'config?.defaultRegisterMethod}')}
           <Tabs
             defaultActiveKey={config?.defaultRegisterMethod}
             onChange={(activeKey) => {
