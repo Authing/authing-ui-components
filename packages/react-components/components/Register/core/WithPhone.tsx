@@ -83,9 +83,9 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         )
         submitButtonRef.current.onSpin(false)
         onRegister(200, user)
-      } catch ({ code, data, message }) {
+      } catch (error: any) {
+        const { code, message, data } = error
         submitButtonRef.current.onError()
-        // submitButtonRef.current.onSpin(false)
         onRegister(code, data, message)
       } finally {
         submitButtonRef.current.onSpin(false)
