@@ -14,9 +14,12 @@ interface SubmitButtonProps {
 const SubmitButton = (props: SubmitButtonProps, ref: any) => {
   let [spin, setSpin] = useState(false) // spin 状态需要手动设置关闭
   let [shaking, setShaking] = useState(false) // 抖动状态会自动关闭
-
+  // form input
   const inputs = document.getElementsByClassName('authing-g2-input')
-
+  // 必选协议
+  const agreements = document.getElementsByClassName(
+    'authing-agreements-item-invalid'
+  )
   useEffect(() => {
     let timeOut: NodeJS.Timeout
     if (shaking === true) {
@@ -25,18 +28,24 @@ const SubmitButton = (props: SubmitButtonProps, ref: any) => {
         Array.from(inputs).forEach((input) => {
           input.classList.remove('shaking')
         })
-      }, 1000)
+        Array.from(agreements).forEach((agreement) => {
+          agreement.classList.remove('shaking')
+        })
+      }, 820)
     }
 
     return () => {
       clearTimeout(timeOut)
     }
-  }, [inputs, shaking])
+  }, [agreements, inputs, shaking])
 
   useImperativeHandle(ref, () => ({
     onError: (text?: string) => {
       Array.from(inputs).forEach((input) => {
         input.classList.add('shaking')
+      })
+      Array.from(agreements).forEach((agreement) => {
+        agreement.classList.add('shaking')
       })
       setShaking(true)
     },
