@@ -5,6 +5,7 @@ import React, {
   useEffect,
 } from 'react'
 import { Button } from 'antd'
+import { useShaking } from '../_utils/hooks'
 
 interface SubmitButtonProps {
   text?: string
@@ -14,39 +15,25 @@ interface SubmitButtonProps {
 const SubmitButton = (props: SubmitButtonProps, ref: any) => {
   let [spin, setSpin] = useState(false) // spin 状态需要手动设置关闭
   let [shaking, setShaking] = useState(false) // 抖动状态会自动关闭
-  // form input
-  const inputs = document.getElementsByClassName('authing-g2-input')
-  // 必选协议
-  const agreements = document.getElementsByClassName(
-    'authing-agreements-item-invalid'
-  )
+  let { MountShaking, UnMountShaking } = useShaking() // 协议和 form input 抖动的挂载和卸载
+
   useEffect(() => {
     let timeOut: NodeJS.Timeout
     if (shaking === true) {
       timeOut = setTimeout(() => {
         setShaking(false)
-        Array.from(inputs).forEach((input) => {
-          input.classList.remove('shaking')
-        })
-        Array.from(agreements).forEach((agreement) => {
-          agreement.classList.remove('shaking')
-        })
+        UnMountShaking()
       }, 820)
     }
 
     return () => {
       clearTimeout(timeOut)
     }
-  }, [agreements, inputs, shaking])
+  }, [UnMountShaking, shaking])
 
   useImperativeHandle(ref, () => ({
     onError: (text?: string) => {
-      Array.from(inputs).forEach((input) => {
-        input.classList.add('shaking')
-      })
-      Array.from(agreements).forEach((agreement) => {
-        agreement.classList.add('shaking')
-      })
+      MountShaking()
       setShaking(true)
     },
     onSpin: (sp: boolean) => {
