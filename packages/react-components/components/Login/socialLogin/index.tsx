@@ -217,7 +217,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
             } catch (e) {
               // do nothing...
             }
-            message.error(msg)
+            // message.error(msg)
           },
         })
       }
@@ -388,14 +388,14 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
 
               // if ([OTP_MFA_CODE, APP_MFA_CODE].includes(authingCode)) {
               //   // TODO
-              //   onGuardLogin(authingCode, authingData, authingMessage)
+              //   // onGuardLogin(authingCode, authingData, authingMessage)
               //   return
               // }
               onGuardLogin(authingCode, authingData, authingMessage)
             } catch (e) {
               // do nothing...
             }
-            message.error(msg)
+            // message.error(msg)
           },
           authorization_params,
         })
