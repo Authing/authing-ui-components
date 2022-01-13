@@ -81,6 +81,11 @@ export const useShaking = () => {
   const agreements = document.getElementsByClassName(
     'authing-agreements-item-invalid'
   )
+  const saftyCode = document.getElementsByClassName('authing-g2-code-input')
+
+  const bindTotpSecretSave = document.getElementsByClassName(
+    'g2-mfa-bindTotp-secretSave'
+  )
   // 挂载 shaking
   const MountShaking = () => {
     Array.from(inputs).forEach((input) => {
@@ -89,6 +94,8 @@ export const useShaking = () => {
     Array.from(agreements).forEach((agreement) => {
       agreement.classList.add('shaking')
     })
+    saftyCode[0] && saftyCode[0].classList.add('shaking')
+    bindTotpSecretSave[0] && bindTotpSecretSave[0].classList.add('shaking')
   }
   // 卸载 shaking
   const UnMountShaking = () => {
@@ -98,6 +105,8 @@ export const useShaking = () => {
     Array.from(agreements).forEach((agreement) => {
       agreement.classList.remove('shaking')
     })
+    saftyCode[0] && saftyCode[0].classList.remove('shaking')
+    bindTotpSecretSave[0] && bindTotpSecretSave[0].classList.remove('shaking')
   }
   return { MountShaking, UnMountShaking }
 }

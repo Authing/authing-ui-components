@@ -51,7 +51,7 @@ export const BindSuccess: React.FC<BindSuccessProps> = ({ secret, onBind }) => {
             {
               validator: (_, value) => {
                 if (!value) {
-                  return Promise.reject(t('common.pleaseRecordKey'))
+                  return Promise.reject()
                 }
                 return Promise.resolve()
               },
