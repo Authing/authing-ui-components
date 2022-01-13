@@ -23,7 +23,7 @@ const SubmitButton = (props: SubmitButtonProps, ref: any) => {
       timeOut = setTimeout(() => {
         setShaking(false)
         UnMountShaking()
-      }, 820)
+      }, 1000)
     }
 
     return () => {
