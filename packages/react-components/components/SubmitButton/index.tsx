@@ -5,6 +5,7 @@ import React, {
   useEffect,
 } from 'react'
 import { Button } from 'antd'
+import { useShaking } from '../_utils/hooks'
 
 interface SubmitButtonProps {
   text?: string
@@ -14,22 +15,25 @@ interface SubmitButtonProps {
 const SubmitButton = (props: SubmitButtonProps, ref: any) => {
   let [spin, setSpin] = useState(false) // spin 状态需要手动设置关闭
   let [shaking, setShaking] = useState(false) // 抖动状态会自动关闭
+  let { MountShaking, UnMountShaking } = useShaking() // 协议和 form input 抖动的挂载和卸载
 
   useEffect(() => {
     let timeOut: NodeJS.Timeout
     if (shaking === true) {
       timeOut = setTimeout(() => {
         setShaking(false)
+        UnMountShaking()
       }, 1000)
     }
 
     return () => {
       clearTimeout(timeOut)
     }
-  }, [shaking])
+  }, [UnMountShaking, shaking])
 
   useImperativeHandle(ref, () => ({
     onError: (text?: string) => {
+      MountShaking()
       setShaking(true)
     },
     onSpin: (sp: boolean) => {
@@ -38,7 +42,8 @@ const SubmitButton = (props: SubmitButtonProps, ref: any) => {
   }))
 
   let propsCls = props.className ? props.className : ''
-  let shakingCls = shaking ? 'shaking' : ''
+  // let shakingCls = shaking ? 'shaking' : ''
+  let shakingCls = ''
   return (
     <Button
       size="large"

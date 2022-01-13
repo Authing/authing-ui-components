@@ -73,3 +73,31 @@ export const useMediaSize = () => {
     isPhoneMedia,
   }
 }
+// shaking 抖动
+export const useShaking = () => {
+  // form input
+  const inputs = document.getElementsByClassName('authing-g2-input')
+  // 必选协议
+  const agreements = document.getElementsByClassName(
+    'authing-agreements-item-invalid'
+  )
+  // 挂载 shaking
+  const MountShaking = () => {
+    Array.from(inputs).forEach((input) => {
+      input.classList.add('shaking')
+    })
+    Array.from(agreements).forEach((agreement) => {
+      agreement.classList.add('shaking')
+    })
+  }
+  // 卸载 shaking
+  const UnMountShaking = () => {
+    Array.from(inputs).forEach((input) => {
+      input.classList.remove('shaking')
+    })
+    Array.from(agreements).forEach((agreement) => {
+      agreement.classList.remove('shaking')
+    })
+  }
+  return { MountShaking, UnMountShaking }
+}
