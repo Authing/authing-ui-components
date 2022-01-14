@@ -1,4 +1,4 @@
-import { Form, Input, message } from 'antd'
+import { Form, Input } from 'antd'
 import { LoginMethods } from 'authing-js-sdk'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

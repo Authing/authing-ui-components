@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { Form, message } from 'antd'
+import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { LoginMethods } from '../../'
