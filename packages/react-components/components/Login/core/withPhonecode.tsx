@@ -45,7 +45,7 @@ export const LoginWithPhoneCode = (props: any) => {
   const onFinish = async (values: any) => {
     setValidated(true)
     if (agreements?.length && !acceptedAgreements) {
-      message.error(t('common.loginProtocolTips'))
+      // message.error(t('common.loginProtocolTips'))
       submitButtonRef.current.onError()
       return
     }

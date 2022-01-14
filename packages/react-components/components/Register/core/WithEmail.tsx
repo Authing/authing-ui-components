@@ -71,7 +71,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         setValidated(true)
 
         if (agreements?.length && !acceptedAgreements) {
-          message.error(t('common.registerProtocolTips'))
+          // message.error(t('common.registerProtocolTips'))
           submitButtonRef.current.onError()
           // submitButtonRef.current.onSpin(false)
           return
