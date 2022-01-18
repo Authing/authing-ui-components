@@ -11,7 +11,7 @@
   ],
   "dependencies": {
     "antd": "^4.8.0",
-    "authing-js-sdk": "4.23.11-alpha.1",
+    "authing-js-sdk": "4.23.13-alpha.2",
     "face-api.js": "^0.22.2",
     "fastclick": "^1.0.6",
     "global": "^4.4.0",
