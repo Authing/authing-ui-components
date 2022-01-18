@@ -252,5 +252,6 @@
   "totpGenerateCode": "Generate a new recovery code for you, please record this key safely",
   "verifyCodeLogin": "Verify Code",
   "phoneVerifyCode": "Phone Code",
-  "emailVerifyCode": "Email Code"
+  "emailVerifyCode": "Email Code",
+  "phoneOrEmail": "Phone / Email"
 }

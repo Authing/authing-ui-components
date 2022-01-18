@@ -1,19 +1,20 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react'
-import { Form, Input } from 'antd'
+import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { useGuardAuthClient } from '../../Guard/authClient'
-import { fieldRequiredRule, validate } from '../../_utils'
-import SubmitButton from '../../SubmitButton'
-import { IconFont } from '../../IconFont'
-import { Agreements } from '../../Register/components/Agreements'
+import { useGuardAuthClient } from '../../../Guard/authClient'
+import { fieldRequiredRule, validate } from '../../../_utils'
+import SubmitButton from '../../../SubmitButton'
+import { IconFont } from '../../../IconFont'
+import { Agreements } from '../../../Register/components/Agreements'
 import { EmailScene, SceneType } from 'authing-js-sdk'
-import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
-import { usePublicConfig } from '../../_utils/context'
-import { VerifyLoginMethods } from '../../AuthingGuard/api'
-import { StoreValue } from 'antd/lib/form/interface'
-import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
+import { SendCodeByPhone } from '../../../SendCode/SendCodeByPhone'
+import { usePublicConfig } from '../../../_utils/context'
+import { VerifyLoginMethods } from '../../../AuthingGuard/api'
+import { SendCodeByEmail } from '../../../SendCode/SendCodeByEmail'
+import { FormItemIdentify } from './FormItemIdentify'
+import { InputIdentify } from './inputIdentify'
 
-export const LoginWithPhoneCode = (props: any) => {
+export const LoginWithVerifyCode = (props: any) => {
   const config = usePublicConfig()
 
   const { agreements } = props
@@ -58,7 +59,7 @@ export const LoginWithPhoneCode = (props: any) => {
                   style={{ color: '#878A95' }}
                 />
               }
-              scene={SceneType.SCENE_TYPE_RESET}
+              scene={SceneType.SCENE_TYPE_LOGIN}
               maxLength={verifyCodeLength}
               data={identify}
               onSendCodeBefore={async () => {
@@ -81,7 +82,7 @@ export const LoginWithPhoneCode = (props: any) => {
                   style={{ color: '#878A95' }}
                 />
               }
-              scene={EmailScene.ResetPassword}
+              scene={EmailScene.MfaVerify}
               maxLength={verifyCodeLength}
               data={identify}
               onSendCodeBefore={async () => {
@@ -93,40 +94,6 @@ export const LoginWithPhoneCode = (props: any) => {
       )
     },
     [currentMethod, form, identify, t, verifyCodeLength]
-  )
-
-  const verifyMethodsText = useMemo<
-    Record<
-      VerifyLoginMethods,
-      {
-        t: string
-        sort: number
-      }
-    >
-  >(
-    () => ({
-      'email-code': {
-        t: t('common.email'),
-        sort: 2,
-      },
-      'phone-code': {
-        t: t('common.phoneNumber'),
-        sort: 1,
-      },
-    }),
-    [t]
-  )
-
-  const inputPlaceholder = useMemo(
-    () =>
-      t('login.inputAccount', {
-        text: methods
-          ?.map((item) => verifyMethodsText[item])
-          .sort((a, b) => a.sort - b.sort)
-          .map((item) => item.t)
-          .join(' / '),
-      }),
-    [methods, t, verifyMethodsText]
   )
 
   const loginByPhoneCode = async (values: any) => {
@@ -196,50 +163,10 @@ export const LoginWithPhoneCode = (props: any) => {
         onFinishFailed={() => submitButtonRef.current.onError()}
         autoComplete="off"
       >
-        <Form.Item
-          validateTrigger={['onBlur', 'onChange']}
-          className="authing-g2-input-form"
-          name="identify"
-          validateFirst={true}
-          rules={[
-            ...fieldRequiredRule(t('common.account')),
-            {
-              validator: async (_, value: StoreValue) => {
-                if (!value) {
-                  return
-                }
-
-                if (methods.length === 1) {
-                  if (
-                    methods[0] === 'phone-code' &&
-                    !validate('phone', value)
-                  ) {
-                    throw new Error(t('common.phoneFormateError'))
-                  }
-
-                  if (
-                    methods[0] === 'email-code' &&
-                    !validate('email', value)
-                  ) {
-                    throw new Error(t('common.emailFormatError'))
-                  }
-                } else if (
-                  validate('email', value) ||
-                  validate('phone', value)
-                ) {
-                  return
-                } else {
-                  throw new Error(t('login.inputCorrectPhone'))
-                }
-              },
-            },
-          ]}
-        >
-          <Input
+        <FormItemIdentify name="identify" className="authing-g2-input-form">
+          <InputIdentify
             className="authing-g2-input"
-            autoComplete="tel"
             size="large"
-            placeholder={inputPlaceholder}
             value={identify}
             onChange={(e) => {
               let v = e.target.value
@@ -258,7 +185,7 @@ export const LoginWithPhoneCode = (props: any) => {
               />
             }
           />
-        </Form.Item>
+        </FormItemIdentify>
         <Form.Item
           validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"

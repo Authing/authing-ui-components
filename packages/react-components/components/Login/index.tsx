@@ -4,7 +4,6 @@ import { message, Popover, Tabs, Tooltip } from 'antd'
 import { intersection } from 'lodash'
 
 import { LoginWithPassword } from './core/withPassword/index'
-import { LoginWithPhoneCode } from './core/withPhonecode'
 import { LoginWithLDAP } from './core/withLDAP'
 import { LoginWithAD } from './core/withAD'
 import { LoginWithAppQrcode } from './core/withAppQrcode'
@@ -24,6 +23,7 @@ import { i18n } from '../_utils/locales'
 import './styles.less'
 import { usePublicConfig } from '../_utils/context'
 import { shoudGoToComplete } from '../_utils'
+import { LoginWithVerifyCode } from './core/withVerifyCode'
 
 const inputWays = [
   LoginMethods.Password,
@@ -306,7 +306,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                     key={LoginMethods.PhoneCode}
                     tab={verifyCodeLogin}
                   >
-                    <LoginWithPhoneCode
+                    <LoginWithVerifyCode
                       verifyCodeLength={
                         props.config.__publicConfig__?.verifyCodeLength
                       }
