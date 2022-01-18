@@ -279,10 +279,10 @@ export const Guard = (props: GuardProps) => {
         ...events,
         __changeModule: async (moduleName, initData) => {
           if (!events?.onBeforeChangeModule) {
-            historyNext(initData)
+            historyNext(moduleName)
             guardStateMachine?.next(moduleName, initData)
           } else if (await events.onBeforeChangeModule(moduleName, initData)) {
-            historyNext(initData)
+            historyNext(moduleName)
             guardStateMachine?.next(moduleName, initData)
           }
         },
