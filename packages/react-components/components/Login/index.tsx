@@ -107,6 +107,20 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     autoRegister,
   })
 
+  const verifyCodeLogin = useMemo(() => {
+    const methods = publicConfig?.verifyCodeTabConfig.enabledLoginMethods ?? [
+      'phone-code',
+    ]
+
+    if (methods.length === 1 && methods[0] === 'phone-code') {
+      return t('common.phoneVerifyCode')
+    } else if (methods.length === 1 && methods[0] === 'email-code') {
+      return t('common.emailVerifyCode')
+    }
+
+    return t('common.verifyCodeLogin')
+  }, [publicConfig?.verifyCodeTabConfig.enabledLoginMethods, t])
+
   const __codePaser = (code: number) => {
     const action = codeMap[code]
     if (code === 200) {
@@ -290,7 +304,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                 {ms?.includes(LoginMethods.PhoneCode) && (
                   <Tabs.TabPane
                     key={LoginMethods.PhoneCode}
-                    tab={t('login.verifyCodeLogin')}
+                    tab={verifyCodeLogin}
                   >
                     <LoginWithPhoneCode
                       verifyCodeLength={

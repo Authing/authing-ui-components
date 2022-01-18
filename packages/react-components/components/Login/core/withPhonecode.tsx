@@ -151,7 +151,7 @@ export const LoginWithPhoneCode = (props: any) => {
     } catch (e) {
       const error = JSON.parse(e.message)
       submitButtonRef.current.onError()
-      props.onLogin(error.code, {}, error.message)
+      props.onLogin(error.code, error.data, error.message)
     } finally {
       submitButtonRef.current?.onSpin(false)
     }
@@ -267,56 +267,6 @@ export const LoginWithPhoneCode = (props: any) => {
         >
           <SendCode />
         </Form.Item>
-        {/* <CustomFormItem.Phone
-          className="authing-g2-input-form"
-          name="phone"
-          required={true}
-        >
-          <InputNumber
-            className="authing-g2-input"
-            autoComplete="tel"
-            type="tel"
-            size="large"
-            // 只有 InputNumber formatter、controls API
-            maxLength={11}
-            // formatter={formatPhone}
-            // parser={(value) => (value ? value.replaceAll('-', '') : '')}
-            placeholder={inputPlaceholder}
-            prefix={
-              <IconFont
-                type="authing-a-user-line1"
-                style={{ color: '#878A95' }}
-              />
-            }
-          />
-        </CustomFormItem.Phone>
-        <Form.Item
-          validateTrigger={['onBlur', 'onChange']}
-          className="authing-g2-input-form"
-          name="code"
-          rules={fieldRequiredRule(t('common.captchaCode'))}
-        >
-          <SendCodeByPhone
-            className="authing-g2-input"
-            autoComplete="one-time-code"
-            size="large"
-            placeholder={t('common.inputFourVerifyCode', {
-              length: verifyCodeLength,
-            })}
-            scene={SceneType.SCENE_TYPE_LOGIN}
-            maxLength={verifyCodeLength}
-            // autoSubmit={!Boolean(agreements?.length)}
-            prefix={
-              <IconFont
-                type="authing-a-shield-check-line1"
-                style={{ color: '#878A95' }}
-              />
-            }
-            data={''}
-            form={form}
-            onSendCodeBefore={() => form.validateFields(['phone'])}
-          />
-        </Form.Item> */}
         {Boolean(agreements?.length) && (
           <Agreements
             onChange={setAcceptedAgreements}
