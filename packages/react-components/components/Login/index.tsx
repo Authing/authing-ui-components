@@ -108,7 +108,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   })
 
   const verifyCodeLogin = useMemo(() => {
-    const methods = publicConfig?.verifyCodeTabConfig.enabledLoginMethods ?? [
+    const methods = publicConfig?.verifyCodeTabConfig?.enabledLoginMethods ?? [
       'phone-code',
     ]
 
@@ -119,7 +119,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     }
 
     return t('common.verifyCodeLogin')
-  }, [publicConfig?.verifyCodeTabConfig.enabledLoginMethods, t])
+  }, [publicConfig, t])
 
   const __codePaser = (code: number) => {
     const action = codeMap[code]

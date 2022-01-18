@@ -162,7 +162,7 @@ export interface ApplicationConfig {
   protocol: Protocol
   oidcConfig: OidcClientMetadata
   passwordTabConfig: ApplicationPasswordTabConfig
-  verifyCodeTabConfig: ApplicationVerifyCodeTabConfig
+  verifyCodeTabConfig?: ApplicationVerifyCodeTabConfig
 
   agreementEnabled: boolean
   agreements: Agreement[]
