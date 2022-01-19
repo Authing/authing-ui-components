@@ -5,6 +5,8 @@ import { GuardModuleType } from '../Guard/module'
 import { CompleteInfo } from './core/completeInfo'
 import { GuardCompleteInfoViewProps } from './interface'
 import './styles.less'
+import { IconFont } from '../IconFont'
+import { useGuardAuthClient } from '../Guard/authClient'
 
 export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
   config,
@@ -15,16 +17,51 @@ export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
   onLogin,
 }) => {
   const { t } = useTranslation()
+
+  const authClient = useGuardAuthClient()
+
+  const user = initData.user
+
+  const skipComplateFileds =
+    config?.__publicConfig__?.skipComplateFileds ?? false
+
+  const onSuccess = (
+    udfs: {
+      definition: any
+      value: any
+    }[]
+  ) => {
+    onRegisterInfoCompleted?.(user, udfs, authClient)
+    if (initData.context === 'register') {
+      __changeModule?.(GuardModuleType.LOGIN, {})
+    } else {
+      onLogin(user)
+    }
+  }
+
   return (
     <div className="g2-view-container">
       <div className="g2-view-header">
-        <ImagePro
-          src={config?.logo}
-          size={48}
-          borderRadius={4}
-          alt=""
-          className="icon"
-        />
+        <div className="g2-completeInfo-header">
+          <ImagePro
+            src={config?.logo}
+            size={48}
+            borderRadius={4}
+            alt=""
+            className="icon"
+          />
+
+          {skipComplateFileds && (
+            <span
+              className="g2-completeInfo-header-skip"
+              onClick={() => onSuccess([])}
+            >
+              <IconFont type="authing-a-share-forward-line1" />
+              <span>{t('common.skip')}</span>
+            </span>
+          )}
+        </div>
+
         <div className="title">{t('common.perfectUserInfo')}</div>
         <div className="title-explain">
           {t('common.welcomeDoc', { name: config.title })}
@@ -35,13 +72,8 @@ export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
           extendsFields={config?.__publicConfig__?.extendsFields!}
           verifyCodeLength={config?.__publicConfig__?.verifyCodeLength}
           user={initData?.user}
-          onRegisterInfoCompleted={(user, udfs, authClient) => {
-            onRegisterInfoCompleted?.(user, udfs, authClient)
-            if (initData.context === 'register') {
-              __changeModule?.(GuardModuleType.LOGIN, {})
-            } else {
-              onLogin(user)
-            }
+          onRegisterInfoCompleted={(_, udfs) => {
+            onSuccess(udfs)
           }}
           onRegisterInfoCompletedError={onRegisterInfoCompletedError}
         />

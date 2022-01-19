@@ -164,6 +164,8 @@ export interface ApplicationConfig {
   verifyCodeLength: number
   websocket: string
   welcomeMessage: any
+
+  skipComplateFileds: boolean
 }
 
 export const fetchAppConfig = (appId: string) =>
