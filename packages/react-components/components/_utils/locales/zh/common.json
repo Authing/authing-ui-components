@@ -253,5 +253,6 @@
   "verifyCodeLogin": "验证码登录",
   "phoneVerifyCode": "手机验证码",
   "emailVerifyCode": "邮箱验证码",
-  "phoneOrEmail": "手机号 / 邮箱"
+  "phoneOrEmail": "手机号 / 邮箱",
+  "skip": "跳过"
 }

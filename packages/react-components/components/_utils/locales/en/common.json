@@ -253,5 +253,6 @@
   "verifyCodeLogin": "Verify Code",
   "phoneVerifyCode": "Phone Code",
   "emailVerifyCode": "Email Code",
-  "phoneOrEmail": "Phone / Email"
+  "phoneOrEmail": "Phone / Email",
+  "skip": "Skip"
 }

@@ -82,11 +82,13 @@ const useSwitchStates = (loginWay: LoginMethods) => {
 }
 export const GuardLoginView = (props: GuardLoginViewProps) => {
   const { config } = props
+  const qrcodeTabsSettings = config.__publicConfig__?.qrcodeTabsSettings
 
   let [defaultMethod, renderInputWay, renderQrcodeWay] = useMethods(config)
   const agreementEnabled = config?.agreementEnabled
 
   const { t } = useTranslation()
+
   const [loginWay, setLoginWay] = useState(defaultMethod)
   const [canLoop, setCanLoop] = useState(false) // 允许轮询
   const client = useGuardAuthClient()
@@ -120,6 +122,23 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
 
     return t('common.verifyCodeLogin')
   }, [publicConfig, t])
+
+  // useEffect(() => {
+  //   if (
+  //     [LoginMethods.WechatMpQrcode, LoginMethods.WxMinQr].includes(
+  //       defaultMethod
+  //     )
+  //   ) {
+  //     const id = qrcodeTabsSettings?.[defaultMethod as LoginMethods]?.find(
+  //       (i: { id: string; title: string; isDefault?: boolean | undefined }) =>
+  //         i.isDefault
+  //     )
+
+  //     setLoginWay(defaultMethod + id)
+  //   } else {
+  //     setLoginWay(defaultMethod)
+  //   }
+  // }, [defaultMethod, qrcodeTabsSettings])
 
   const __codePaser = (code: number) => {
     const action = codeMap[code]
@@ -417,19 +436,25 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                   />
                 </Tabs.TabPane>
               )}
-              {ms?.includes(LoginMethods.AppQr) && (
-                <Tabs.TabPane
-                  key={LoginMethods.AppQr}
-                  tab={t('login.appScanLogin')}
-                >
-                  <LoginWithAppQrcode
-                    onLogin={onLogin}
-                    canLoop={canLoop}
-                    qrCodeScanOptions={props.config.qrCodeScanOptions}
-                  />
-                </Tabs.TabPane>
-              )}
-              {ms?.includes(LoginMethods.WechatMpQrcode) && (
+              {ms?.includes(LoginMethods.AppQr) &&
+                qrcodeTabsSettings?.[LoginMethods.WechatMpQrcode].map(
+                  (item) => (
+                    <Tabs.TabPane
+                      key={LoginMethods.AppQr + item.id}
+                      tab={item.title ?? t('login.appScanLogin')}
+                    >
+                      <LoginWithAppQrcode
+                        onLogin={onLogin}
+                        canLoop={canLoop}
+                        qrCodeScanOptions={{
+                          ...props.config.qrCodeScanOptions,
+                          extIdpConnId: item.id,
+                        }}
+                      />
+                    </Tabs.TabPane>
+                  )
+                )}
+              {/* {ms?.includes(LoginMethods.WechatMpQrcode) && (
                 <Tabs.TabPane
                   key={LoginMethods.WechatMpQrcode}
                   tab={t('login.wechatmpQrcode')}
@@ -440,7 +465,25 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                     qrCodeScanOptions={props.config.qrCodeScanOptions}
                   />
                 </Tabs.TabPane>
-              )}
+              )} */}
+              {ms?.includes(LoginMethods.WechatMpQrcode) &&
+                qrcodeTabsSettings?.[LoginMethods.WechatMpQrcode].map(
+                  (item) => (
+                    <Tabs.TabPane
+                      key={LoginMethods.WechatMpQrcode + item.id}
+                      tab={item.title ?? t('login.wechatmpQrcode')}
+                    >
+                      <LoginWithWechatmpQrcode
+                        onLogin={onLogin}
+                        canLoop={canLoop}
+                        qrCodeScanOptions={{
+                          ...props.config.qrCodeScanOptions,
+                          extIdpConnId: item.id,
+                        }}
+                      />
+                    </Tabs.TabPane>
+                  )
+                )}
             </Tabs>
           </div>
         )}
