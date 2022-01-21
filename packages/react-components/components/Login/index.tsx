@@ -4,7 +4,6 @@ import { message, Popover, Tabs, Tooltip } from 'antd'
 import { intersection } from 'lodash'
 
 import { LoginWithPassword } from './core/withPassword/index'
-import { LoginWithPhoneCode } from './core/withPhonecode'
 import { LoginWithLDAP } from './core/withLDAP'
 import { LoginWithAD } from './core/withAD'
 import { LoginWithAppQrcode } from './core/withAppQrcode'
@@ -24,6 +23,7 @@ import { i18n } from '../_utils/locales'
 import './styles.less'
 import { usePublicConfig } from '../_utils/context'
 import { shoudGoToComplete } from '../_utils'
+import { LoginWithVerifyCode } from './core/withVerifyCode'
 
 const inputWays = [
   LoginMethods.Password,
@@ -106,6 +106,20 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     loginWay,
     autoRegister,
   })
+
+  const verifyCodeLogin = useMemo(() => {
+    const methods = publicConfig?.verifyCodeTabConfig?.enabledLoginMethods ?? [
+      'phone-code',
+    ]
+
+    if (methods.length === 1 && methods[0] === 'phone-code') {
+      return t('common.phoneVerifyCode')
+    } else if (methods.length === 1 && methods[0] === 'email-code') {
+      return t('common.emailVerifyCode')
+    }
+
+    return t('common.verifyCodeLogin')
+  }, [publicConfig, t])
 
   const __codePaser = (code: number) => {
     const action = codeMap[code]
@@ -290,9 +304,9 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                 {ms?.includes(LoginMethods.PhoneCode) && (
                   <Tabs.TabPane
                     key={LoginMethods.PhoneCode}
-                    tab={t('login.verifyCodeLogin')}
+                    tab={verifyCodeLogin}
                   >
-                    <LoginWithPhoneCode
+                    <LoginWithVerifyCode
                       verifyCodeLength={
                         props.config.__publicConfig__?.verifyCodeLength
                       }
