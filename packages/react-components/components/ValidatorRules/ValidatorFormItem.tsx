@@ -107,7 +107,8 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
     }, [checkReady, checked, methodContent.checkErrorMessage])
 
     const rules = useMemo<Rule[]>(() => {
-      const rules = required ? [...fieldRequiredRule(methodContent.field)] : []
+      if (required === false) return []
+      const rules = [...fieldRequiredRule(methodContent.field)]
       rules.push({
         validateTrigger: 'onBlur',
         pattern: methodContent.pattern,
@@ -135,18 +136,18 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
 
 export const EmailFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
   (props, ref) => (
-    <ValidatorFormItem ref={ref} required {...props} method="email" />
+    <ValidatorFormItem ref={ref} required method="email" {...props} />
   )
 )
 
 export const PhoneFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
   (props, ref) => (
-    <ValidatorFormItem ref={ref} required {...props} method="phone" />
+    <ValidatorFormItem ref={ref} required method="phone" {...props} />
   )
 )
 
 export const UserNameFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
   (props, ref) => (
-    <ValidatorFormItem ref={ref} required {...props} method="username" />
+    <ValidatorFormItem ref={ref} required method="username" {...props} />
   )
 )
