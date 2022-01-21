@@ -424,36 +424,34 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                 props.onLoginTabChange?.(k)
               }}
             >
-              {ms?.includes(LoginMethods.WxMinQr) && (
+              {ms?.includes(LoginMethods.WxMinQr) &&
+                qrcodeTabsSettings?.[LoginMethods.WxMinQr].map((item) => (
+                  <Tabs.TabPane
+                    key={LoginMethods.WxMinQr + item.id}
+                    tab={item.title ?? t('login.scanLogin')}
+                  >
+                    <LoginWithWechatMiniQrcode
+                      onLogin={onLogin}
+                      canLoop={canLoop}
+                      qrCodeScanOptions={{
+                        ...props.config.qrCodeScanOptions,
+                        extIdpConnId: item.id,
+                      }}
+                    />
+                  </Tabs.TabPane>
+                ))}
+              {ms?.includes(LoginMethods.AppQr) && (
                 <Tabs.TabPane
-                  key={LoginMethods.WxMinQr}
-                  tab={t('login.scanLogin')}
+                  key={LoginMethods.AppQr}
+                  tab={t('login.appScanLogin')}
                 >
-                  <LoginWithWechatMiniQrcode
+                  <LoginWithAppQrcode
                     onLogin={onLogin}
                     canLoop={canLoop}
                     qrCodeScanOptions={props.config.qrCodeScanOptions}
                   />
                 </Tabs.TabPane>
               )}
-              {ms?.includes(LoginMethods.AppQr) &&
-                qrcodeTabsSettings?.[LoginMethods.WechatMpQrcode].map(
-                  (item) => (
-                    <Tabs.TabPane
-                      key={LoginMethods.AppQr + item.id}
-                      tab={item.title ?? t('login.appScanLogin')}
-                    >
-                      <LoginWithAppQrcode
-                        onLogin={onLogin}
-                        canLoop={canLoop}
-                        qrCodeScanOptions={{
-                          ...props.config.qrCodeScanOptions,
-                          extIdpConnId: item.id,
-                        }}
-                      />
-                    </Tabs.TabPane>
-                  )
-                )}
               {/* {ms?.includes(LoginMethods.WechatMpQrcode) && (
                 <Tabs.TabPane
                   key={LoginMethods.WechatMpQrcode}
