@@ -23,7 +23,6 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
       autoExchangeUserInfo: true,
       ...props.qrCodeScanOptions,
       onCodeShow() {
-        console.log('sdk over')
         setLoading(false)
       },
 

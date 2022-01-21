@@ -24,7 +24,9 @@ export const LoginWithWechatMiniQrcode = (
     appQrcodeClient.startScanning('authingGuardMiniQrcode', {
       autoExchangeUserInfo: true,
       ...props.qrCodeScanOptions,
-
+      onCodeShow() {
+        setLoading(false)
+      },
       onCodeLoaded() {
         setLoading(false)
       },

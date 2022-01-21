@@ -272,17 +272,18 @@
     lodash "^4.17.15"
     resize-observer-polyfill "^1.5.0"
 
-"@authing/react-ui-components@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.npmjs.org/@authing/react-ui-components/-/react-ui-components-3.0.0.tgz#32c4a64cc24f71a51c04a908a5e53a89415fa584"
-  integrity sha512-khpql0I8Stc2TVYb+1NDDRhhdJaEU5uqiECFpiN8tU/7qu00+j2noZT/ndvsaY7ta2QAPMXTWTswT3AU1iWMpQ==
+"@authing/react-ui-components@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.npmjs.org/@authing/react-ui-components/-/react-ui-components-3.0.3.tgz#0cd307b6320d9f0c4a032ad8bd97b7aae28ed7ea"
+  integrity sha512-Ydx5B4GaD3C6YA/Tb/rQWndfVWS08D9weSC8tSG3CbPxqLmIdh2xxCCZWjJKr5KbB0JuTI5xQh4PGhGYfoNN3Q==
   dependencies:
     antd "^4.8.0"
-    authing-js-sdk "4.23.8-alpha.3"
+    authing-js-sdk "4.23.13-alpha.2"
     face-api.js "^0.22.2"
     fastclick "^1.0.6"
     global "^4.4.0"
     qs "^6.9.4"
+    react-responsive "^9.0.0-beta.5"
     react-use "^17.3.1"
     wildcard "^1.1.2"
 
@@ -4961,25 +4962,26 @@ atob@^2.1.2:
   resolved "https://registry.npm.taobao.org/atob/download/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha1-bZUX654DDSQ2ZmZR6GvZ9vE1M8k=
 
-authing-js-sdk@4.23.11-alpha.1:
-  version "4.23.11-alpha.1"
-  resolved "https://registry.npmmirror.com/authing-js-sdk/download/authing-js-sdk-4.23.11-alpha.1.tgz#6a57cc3c430b4fb1b070a431e50a4dd177d42052"
-  integrity sha512-ShdoJoUiHHtun8vxiVwavQiIVkX6BZJtMX+8PvkYNKPFjY2aNO1ypTD+kC+S1V5scperYKZRX19fDfEWX1EQ2w==
+authing-js-sdk@4.23.13-alpha.2:
+  version "4.23.13-alpha.2"
+  resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.23.13-alpha.2.tgz#e195f73083e5a6a0781a88f360ade16f873b0101"
+  integrity sha512-uU4HkR1RJjHWHjsIyk2pBipkcIJ3m6Uk4ws24KUuhHHVIyKSeKmB8SYjYaCwtc/vs1y6CE3AZWWKMoXKGvaT5Q==
   dependencies:
     axios "^0.19.2"
     crypto-js "^4.0.0"
     jsencrypt "^3.1.0"
     jwt-decode "^2.2.0"
 
-authing-js-sdk@4.23.8-alpha.3:
-  version "4.23.8-alpha.3"
-  resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.23.8-alpha.3.tgz#958c3de623c550380f276a58de550e47c1fbda93"
-  integrity sha512-cN/Glw/boHjNdxTjNdBOhvJDxHvFXg9QA+DM3aNgK3fdLYXLxftEGxflCivJ9od17Xkit5g7xXAVgBiynkuonw==
+authing-js-sdk@4.23.18:
+  version "4.23.18"
+  resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.23.18.tgz#300aa1469be7b09c3fdca3c2a27325a2e8706dbe"
+  integrity sha512-LPMwT2Keyo/RBmDSrV5PgYHr9HSZq12EvKevxE+EOnHT9h4qr1dpiODNr6FMHaLA4mXxsujpGzAPI39VXL4hOg==
   dependencies:
     axios "^0.19.2"
     crypto-js "^4.0.0"
     jsencrypt "^3.1.0"
     jwt-decode "^2.2.0"
+    sm-crypto "^0.3.7"
 
 autoprefixer@9.8.6, autoprefixer@^9.5.1, autoprefixer@^9.6.1, autoprefixer@^9.6.5:
   version "9.8.6"
@@ -11568,6 +11570,11 @@ js-yaml@^3.13.1, js-yaml@^3.9.1:
     argparse "^1.0.7"
     esprima "^4.0.0"
 
+jsbn@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.npmjs.org/jsbn/-/jsbn-1.1.0.tgz#b01307cb29b618a1ed26ec79e911f803c4da0040"
+  integrity sha1-sBMHyym2GKHtJux56RH4A8TaAEA=
+
 jsbn@~0.1.0:
   version "0.1.1"
   resolved "https://registry.npm.taobao.org/jsbn/download/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
@@ -17261,6 +17268,13 @@ slide@^1.1.6:
   version "1.1.6"
   resolved "https://registry.npm.taobao.org/slide/download/slide-1.1.6.tgz#56eb027d65b4d2dce6cb2e2d32c4d4afc9e1d707"
   integrity sha1-VusCfWW00tzmyy4tMsTUr8nh1wc=
+
+sm-crypto@^0.3.7:
+  version "0.3.7"
+  resolved "https://registry.npmjs.org/sm-crypto/-/sm-crypto-0.3.7.tgz#d48ad948772eeed0c677c82f490f56925ffe7c0a"
+  integrity sha512-t9SVgGpFkqaQtA8P81+b+gNBDZUyGhSq46ojA8YWf1mKYk8qcRqeCPte+WxLSMaGT38CJLoj43ljfpKX3LZVfA==
+  dependencies:
+    jsbn "^1.1.0"
 
 smart-buffer@^4.1.0:
   version "4.1.0"

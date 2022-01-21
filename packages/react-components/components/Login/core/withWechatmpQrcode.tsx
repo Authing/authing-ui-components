@@ -25,6 +25,9 @@ export const LoginWithWechatmpQrcode = (
     appQrcodeClient.startScanning('authingGuardMpQrcode', {
       autoExchangeUserInfo: true,
       ...props.qrCodeScanOptions,
+      onCodeShow() {
+        setLoading(false)
+      },
       onCodeLoaded() {
         setLoading(false)
       },

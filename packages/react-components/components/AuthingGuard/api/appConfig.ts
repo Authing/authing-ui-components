@@ -72,6 +72,10 @@ export interface ApplicationPasswordTabConfig {
   enabledLoginMethods?: PasswordLoginMethods[]
 }
 
+export interface ApplicationVerifyCodeTabConfig {
+  enabledLoginMethods: VerifyLoginMethods[]
+}
+
 export interface Agreement {
   id: number
   title: string
@@ -84,6 +88,8 @@ export type PasswordLoginMethods =
   | 'username-password'
   | 'email-password'
   | 'phone-password'
+
+export type VerifyLoginMethods = 'email-code' | 'phone-code'
 
 export type ComplateFiledsPlace = 'register' | 'login'
 export interface ApplicationConfig {
@@ -156,6 +162,7 @@ export interface ApplicationConfig {
   protocol: Protocol
   oidcConfig: OidcClientMetadata
   passwordTabConfig: ApplicationPasswordTabConfig
+  verifyCodeTabConfig?: ApplicationVerifyCodeTabConfig
 
   agreementEnabled: boolean
   agreements: Agreement[]
@@ -164,6 +171,8 @@ export interface ApplicationConfig {
   verifyCodeLength: number
   websocket: string
   welcomeMessage: any
+
+  skipComplateFileds: boolean
 }
 
 export const fetchAppConfig = (appId: string) =>
