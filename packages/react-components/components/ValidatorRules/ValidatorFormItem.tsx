@@ -135,18 +135,18 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
 
 export const EmailFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
   (props, ref) => (
-    <ValidatorFormItem ref={ref} {...props} method="email" required />
+    <ValidatorFormItem ref={ref} required {...props} method="email" />
   )
 )
 
 export const PhoneFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
   (props, ref) => (
-    <ValidatorFormItem ref={ref} {...props} method="phone" required />
+    <ValidatorFormItem ref={ref} required {...props} method="phone" />
   )
 )
 
 export const UserNameFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
   (props, ref) => (
-    <ValidatorFormItem ref={ref} {...props} method="username" required />
+    <ValidatorFormItem ref={ref} required {...props} method="username" />
   )
 )
