@@ -92,7 +92,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           {
             context,
             generateToken: true,
-            params: getUserRegisterParams(),
+            // params: getUserRegisterParams(),
           }
         )
         submitButtonRef.current.onSpin(false)

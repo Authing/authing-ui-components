@@ -78,7 +78,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           {
             context,
             generateToken: true,
-            params: getUserRegisterParams(),
+            // params: getUserRegisterParams(),
           }
         )
         submitButtonRef.current.onSpin(false)

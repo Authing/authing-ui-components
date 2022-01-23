@@ -447,7 +447,6 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         }
       )
       submitButtonRef.current?.onSpin(false)
-      message.success(t('common.saveSuccess'))
       onRegisterInfoCompleted?.(user, udfs, authClient)
     } catch (e: any) {
       if (e?.message) {
