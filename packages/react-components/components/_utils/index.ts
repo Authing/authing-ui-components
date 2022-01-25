@@ -221,6 +221,8 @@ export const assembledRequestHost = (
   const hostUrl = new URL(configHost)
   const splitHost = hostUrl.hostname.split('.')
 
+  splitHost.shift()
+
   // 看看是否有端口号
   const port = hostUrl.port
 
