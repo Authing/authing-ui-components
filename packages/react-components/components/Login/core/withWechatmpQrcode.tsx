@@ -48,6 +48,9 @@ export const LoginWithWechatmpQrcode = (
       onRetry: () => {
         setLoading(true)
       },
+      onMfa: (code, message, mfaData) => {
+        props.onLogin(code, mfaData, message)
+      },
     })
     return () => clearInterval(timerRef.current)
     // eslint-disable-next-line react-hooks/exhaustive-deps
