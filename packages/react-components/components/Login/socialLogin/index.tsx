@@ -7,8 +7,9 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import shortid from 'shortid'
 import { i18n } from '../../_utils/locales'
-import { isWechatBrowser, popupCenter } from '../../_utils'
+import { isLarkBrowser, isWechatBrowser, popupCenter } from '../../_utils'
 import { useGuardHttp } from '../../_utils/guradHttp'
+import querystring from 'query-string'
 import {
   ApplicationConfig,
   IAzureAdConnectionConfig,
@@ -363,13 +364,33 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         ? item.provider === SocialConnectionProvider.WECHATMP
         : item.provider !== SocialConnectionProvider.WECHATMP
     )
+    .filter((item) => {
+      if (isLarkBrowser()) {
+        return (
+          item.provider === SocialConnectionProvider.LARK_INTERNAL ||
+          item.provider === SocialConnectionProvider.LARK_PUBLIC
+        )
+      } else {
+        return true
+      }
+    })
     .map((item: any) => {
       let iconType = `authing-${item.provider.replace(/:/g, '-')}`
-
+      const options: Record<string, any> = {}
       const authorization_params: Record<string, any> = {}
       if (item.provider === SocialConnectionProvider.BAIDU) {
         authorization_params.display = screenSize
       }
+      if (config?.isHost) {
+        // 如果 isHost 是 true，则从 url 获取 finish_login_url 作为 social.authorize 方法的 targetUrl 参数
+        options.targetUrl = querystring.parse(window.location.search)?.[
+          'finish_login_url'
+        ]
+      }
+      // 根据 UA 判断是否在微信网页浏览器、钉钉浏览器等内部，使用 form_post 参数作为 social.authorize 方法的 relayMethod 参数，其他情况用 web_message
+      options.relayMethod =
+        isWechatBrowser() || isLarkBrowser() ? 'form_post' : 'web_message'
+
       const onLogin = () => {
         authClient.social.authorize(item.identifier, {
           onSuccess(user) {
@@ -398,6 +419,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
             // message.error(msg)
           },
           authorization_params,
+          ...options,
         })
       }
 
