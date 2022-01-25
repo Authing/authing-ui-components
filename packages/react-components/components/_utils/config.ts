@@ -1,7 +1,7 @@
 import { LoginMethods, RegisterMethods } from 'authing-js-sdk'
 import { IG2Config } from '../Type'
 import { ApplicationConfig } from '../AuthingGuard/api'
-import { assembledAppHost } from '.'
+import { assembledRequestHost } from '.'
 import { getGuardHttp } from './guradHttp'
 import { AuthingResponse } from './http'
 import { GuardComponentConifg, GuardLocalConfig } from '../Guard/config'
@@ -30,8 +30,8 @@ export const initConfig = async (
     config: {
       ...mergedConfig,
       __publicConfig__: getPublicConfig(appId),
-      __appHost__: assembledAppHost(
-        getPublicConfig(appId).identifier,
+      __appHost__: assembledRequestHost(
+        getPublicConfig(appId).requestHostname,
         mergedConfig?.host!
       ),
     },

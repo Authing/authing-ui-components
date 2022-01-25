@@ -211,6 +211,26 @@ export const assembledAppHost = (identifier: string, host: string) => {
   }`
 }
 
+// 拼接请求链接
+export const assembledRequestHost = (
+  requestHostname: string,
+  configHost: string
+) => {
+  const identifier = requestHostname.split('.')[0]
+
+  const hostUrl = new URL(configHost)
+  const splitHost = hostUrl.hostname.split('.')
+
+  splitHost.shift()
+
+  // 看看是否有端口号
+  const port = hostUrl.port
+
+  return `${hostUrl.protocol}//${identifier}.${splitHost.join('.')}${
+    port && `:${port}`
+  }`
+}
+
 export enum PasswordStrength {
   NoCheck,
   Low,
