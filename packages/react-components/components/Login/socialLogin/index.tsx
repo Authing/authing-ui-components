@@ -1,6 +1,10 @@
 import { Button, message, Space, Tooltip } from 'antd'
 import Avatar from 'antd/lib/avatar/avatar'
-import { Protocol, SocialConnectionProvider } from 'authing-js-sdk'
+import {
+  Protocol,
+  SocialConnectionProvider,
+  RelayMethodEnum,
+} from 'authing-js-sdk'
 import { Lang } from 'authing-js-sdk/build/main/types'
 import qs from 'qs'
 import React, { useEffect } from 'react'
@@ -389,7 +393,9 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       }
       // 根据 UA 判断是否在微信网页浏览器、钉钉浏览器等内部，使用 form_post 参数作为 social.authorize 方法的 relayMethod 参数，其他情况用 web_message
       options.relayMethod =
-        isWechatBrowser() || isLarkBrowser() ? 'form_post' : 'web_message'
+        isWechatBrowser() || isLarkBrowser()
+          ? RelayMethodEnum.FORM_POST
+          : RelayMethodEnum.WEB_MESSAGE
 
       const onLogin = () => {
         authClient.social.authorize(item.identifier, {
