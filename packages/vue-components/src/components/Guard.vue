@@ -6,7 +6,6 @@
 import {
   getAuthClient,
   initAuthClient,
-  Guard as NativeGuard,
   GuardEventsCamelToKebabMap,
   GuardMode,
   GuardScenes,
@@ -14,6 +13,7 @@ import {
   RegisterMethods,
 } from "@authing/native-js-ui-components";
 import "@authing/native-js-ui-components/lib/index.min.css";
+import { Guard as NativeGuard } from '@authing/native-js-ui-components/components/Guard/index'
 
 export {
   getAuthClient,

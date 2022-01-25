@@ -272,6 +272,21 @@
     lodash "^4.17.15"
     resize-observer-polyfill "^1.5.0"
 
+"@authing/react-ui-components@^3.0.3":
+  version "3.0.4"
+  resolved "https://registry.npmjs.org/@authing/react-ui-components/-/react-ui-components-3.0.4.tgz#3ccabca4fb4b7a2323f523785a54944224dc3f3d"
+  integrity sha512-pQ3kJdQEGh9VVQOta5XtnX4OijLwALRGmKDQTz6dAFBQ9JpvC5fKfzg2rCzDBo4z/UuLt4298ypoRcjOGShNzQ==
+  dependencies:
+    antd "^4.8.0"
+    authing-js-sdk "4.23.18"
+    face-api.js "^0.22.2"
+    fastclick "^1.0.6"
+    global "^4.4.0"
+    qs "^6.9.4"
+    react-responsive "^9.0.0-beta.5"
+    react-use "^17.3.1"
+    wildcard "^1.1.2"
+
 "@babel/code-frame@7.10.4", "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.5.5":
   version "7.10.4"
   resolved "https://registry.npm.taobao.org/@babel/code-frame/download/@babel/code-frame-7.10.4.tgz#168da1a36e90da68ae8d49c0f1b48c7c6249213a"
@@ -4951,6 +4966,17 @@ authing-js-sdk@4.23.18:
   version "4.23.18"
   resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.23.18.tgz#300aa1469be7b09c3fdca3c2a27325a2e8706dbe"
   integrity sha512-LPMwT2Keyo/RBmDSrV5PgYHr9HSZq12EvKevxE+EOnHT9h4qr1dpiODNr6FMHaLA4mXxsujpGzAPI39VXL4hOg==
+  dependencies:
+    axios "^0.19.2"
+    crypto-js "^4.0.0"
+    jsencrypt "^3.1.0"
+    jwt-decode "^2.2.0"
+    sm-crypto "^0.3.7"
+
+authing-js-sdk@4.23.18-alpha.0:
+  version "4.23.18-alpha.0"
+  resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.23.18-alpha.0.tgz#195050ebd83a93159b85283fe0dc4b63e738f42f"
+  integrity sha512-UeDXh/zzAGuTJIOvmamOId/lXwYI5NXOhgEWcsyzKB4a+mPoJFLuRcA4eJ3gbrdEie7m7Suj9+rFMw5xLmpnBg==
   dependencies:
     axios "^0.19.2"
     crypto-js "^4.0.0"

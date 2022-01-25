@@ -42,7 +42,7 @@ export {
   GuardEventsCamelToKebabMap,
 };
 
-export type EventListeners = {
+export type GuardEventListeners = {
   [key in keyof GuardEventsHandlerKebab]: Exclude<
     Required<GuardEventsHandlerKebab>[key],
     undefined
@@ -86,7 +86,7 @@ export class Guard {
         [evtName]: [],
       });
     },
-    {} as EventListeners
+    {} as GuardEventListeners
   );
 
   private render(cb?: () => void) {

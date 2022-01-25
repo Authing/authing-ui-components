@@ -82,6 +82,7 @@ export class GuardComponent implements OnInit, OnChanges {
   >();
 
   ngAfterViewInit() {
+    // @ts-ignore
     const guard = new Guard(this.appId, this.config);
 
     guard.on('load', (...rest) => this.onLoad.emit(rest));
