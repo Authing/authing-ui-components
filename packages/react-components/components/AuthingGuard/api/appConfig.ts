@@ -128,6 +128,7 @@ export interface ApplicationConfig {
   extendsFields: ExtendsField[]
 
   identifier: string
+  requestHostname: string
   identityProviders: {
     identifier: string
     protocol: Protocol
