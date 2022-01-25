@@ -18,6 +18,7 @@ export interface IG2Config {
   lang: Lang
   langRange: Lang[]
   host: string
+  isHost?: boolean
   mode: GuardMode
   clickCloseable: boolean
   escCloseable: boolean
