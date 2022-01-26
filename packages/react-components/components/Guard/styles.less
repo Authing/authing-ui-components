@@ -114,7 +114,14 @@
 
   .g2-view-tabs {
     padding: 0 var(--sidePadding);
-
+    &.hidden {
+      .authing-ant-tabs-nav-wrap {
+        display: none;
+      }
+      .authing-ant-tabs-nav::before {
+        display: none;
+      }
+    }
     .authing-ant-tabs-tab {
       color: #878a95;
       &:hover {

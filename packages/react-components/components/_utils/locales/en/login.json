@@ -99,5 +99,6 @@
   "AuthorizationCamera": "Please enable authorization first",
   "requireError": "Unable to meet the request error",
   "hardwareSupport": "Hardware does not support",
-  "checkPreferences": "Please check preferences"
+  "checkPreferences": "Please check preferences",
+  "qrcodeExpired": "Click to refresh"
 }
