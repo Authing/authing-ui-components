@@ -137,6 +137,8 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
       } else {
         return true
       }
+    } else {
+      return true
     }
   }, [ms, qrcodeTabsSettings])
   // useEffect(() => {
