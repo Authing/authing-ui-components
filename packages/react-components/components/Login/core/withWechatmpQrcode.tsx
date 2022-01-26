@@ -28,9 +28,9 @@ export const LoginWithWechatmpQrcode = (
       onCodeShow() {
         setLoading(false)
       },
-      onCodeLoaded() {
-        setLoading(false)
-      },
+      // onCodeLoaded() {
+      //   setLoading(false)
+      // },
       onStart(timer) {
         timerRef.current = timer
       },
