@@ -15,4 +15,14 @@ export const codeMap: Record<number, GuardModuleAction> = {
   2001: {
     action: 'message',
   },
+  // 01 02 03 计量计费相关
+  3720001: {
+    action: 'message',
+  },
+  3720002: {
+    action: 'message',
+  },
+  3720003: {
+    action: 'message',
+  },
 }
