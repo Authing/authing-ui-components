@@ -179,7 +179,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
             {
               validateTrigger: 'onBlur',
               validator: (_, value) => {
-                if (value !== form.getFieldValue('password')) {
+                if (value !== form.getFieldValue('password') && value) {
                   return Promise.reject(t('common.repeatPasswordDoc'))
                 } else {
                   return Promise.resolve()
