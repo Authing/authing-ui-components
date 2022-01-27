@@ -36,7 +36,6 @@ export const LoginWithWechatmpQrcode = (
         timerRef.current = timer
       },
       onSuccess(user) {
-        console.log('success', user)
         props.onLogin(200, user)
         // onSuccess && onSuccess(user as User)
       },
@@ -51,7 +50,6 @@ export const LoginWithWechatmpQrcode = (
         setLoading(true)
       },
       onMfa: (code, message, mfaData) => {
-        console.log('mfa', code, message, mfaData)
         props.onLogin(code, mfaData, message)
       },
     })
