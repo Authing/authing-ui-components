@@ -35,7 +35,7 @@
   "mustEqualToPwd": "Must match the password",
   "newGenered": "A new recovery code has been generated for you",
   "newPwdLimit": "6-20 digits new password",
-  "noEmpty": "Can not be empty",
+  "noEmpty": "can not be empty",
   "otherAccLogin": "Switch Account",
   "phoneAutoRegister": "Enter mobile phone number verification code to login. If you do not have an account, we will create it automatically.",
   "pwdLimie": "Password length is 6-20 digits",
@@ -99,5 +99,6 @@
   "AuthorizationCamera": "Please enable authorization first",
   "requireError": "Unable to meet the request error",
   "hardwareSupport": "Hardware does not support",
-  "checkPreferences": "Please check preferences"
+  "checkPreferences": "Please check preferences",
+  "qrcodeExpired": "Click to refresh"
 }

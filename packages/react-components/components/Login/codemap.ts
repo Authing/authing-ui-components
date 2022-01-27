@@ -72,14 +72,22 @@ export const codeMap: Record<number, GuardModuleAction> = {
   2029: {
     action: 'message',
   },
-  // 01 02 03 计量计费相关
   3720001: {
+    // 01 02 03 计量计费相关
     action: 'message',
   },
   3720002: {
     action: 'message',
   },
   3720003: {
+    action: 'message',
+  },
+  2130010: {
+    // 无权登录此应用
+    action: 'message',
+  },
+  2031: {
+    // 禁止注册
     action: 'message',
   },
 }

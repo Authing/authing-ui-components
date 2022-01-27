@@ -25,16 +25,18 @@ export const LoginWithWechatmpQrcode = (
     appQrcodeClient.startScanning('authingGuardMpQrcode', {
       autoExchangeUserInfo: true,
       ...props.qrCodeScanOptions,
+
       onCodeShow() {
         setLoading(false)
       },
-      onCodeLoaded() {
-        setLoading(false)
-      },
+      // onCodeLoaded() {
+      //   setLoading(false)
+      // },
       onStart(timer) {
         timerRef.current = timer
       },
       onSuccess(user) {
+        console.log('success', user)
         props.onLogin(200, user)
         // onSuccess && onSuccess(user as User)
       },
@@ -49,6 +51,7 @@ export const LoginWithWechatmpQrcode = (
         setLoading(true)
       },
       onMfa: (code, message, mfaData) => {
+        console.log('mfa', code, message, mfaData)
         props.onLogin(code, mfaData, message)
       },
     })

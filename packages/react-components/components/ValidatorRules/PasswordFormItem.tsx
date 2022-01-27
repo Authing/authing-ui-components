@@ -3,9 +3,11 @@ import React from 'react'
 import { PasswordFormItemProps } from '.'
 import { getPasswordValidate } from '../_utils'
 import { usePublicConfig } from '../_utils/context'
-
-export const PasswordFormItem: React.FC<PasswordFormItemProps> = (props) => {
-  const { rules, ...fromItemProos } = props
+export interface ExPasswordFormItemProps extends PasswordFormItemProps {
+  fieldRequiredRuleMessage?: string
+}
+export const PasswordFormItem: React.FC<ExPasswordFormItemProps> = (props) => {
+  const { rules, fieldRequiredRuleMessage, ...fromItemProos } = props
 
   const publicConfig = usePublicConfig()
 
@@ -17,7 +19,8 @@ export const PasswordFormItem: React.FC<PasswordFormItemProps> = (props) => {
       rules={[
         ...getPasswordValidate(
           publicConfig.passwordStrength,
-          publicConfig.customPasswordStrength
+          publicConfig.customPasswordStrength,
+          fieldRequiredRuleMessage
         ),
         ...(rules ?? []),
       ]}

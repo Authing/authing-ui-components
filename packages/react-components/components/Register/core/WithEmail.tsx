@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
 import { useGuardAuthClient } from '../../Guard/authClient'
-import { getDeviceName, getUserRegisterParams } from '../../_utils'
+import { getDeviceName } from '../../_utils'
 import { Agreements } from '../components/Agreements'
 import SubmitButton from '../../SubmitButton'
 import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
@@ -175,11 +175,12 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         <CustomFormItem.Password
           key="new-password"
           name="new-password"
+          fieldRequiredRuleMessage={t('common.repeatPasswordDoc')}
           rules={[
             {
               validateTrigger: 'onBlur',
               validator: (_, value) => {
-                if (value !== form.getFieldValue('password')) {
+                if (value !== form.getFieldValue('password') && value) {
                   return Promise.reject(t('common.repeatPasswordDoc'))
                 } else {
                   return Promise.resolve()

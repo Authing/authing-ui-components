@@ -99,7 +99,6 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   // let autoRegister = props.config?.autoRegister
   let ms = props.config?.loginMethods
   let { autoRegister, langRange } = props.config
-
   const firstInputWay = inputWays.filter((way) => ms.includes(way))[0]
   const firstQRcodeWay = qrcodeWays.filter((way) => ms.includes(way))[0]
 
@@ -122,7 +121,26 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
 
     return t('common.verifyCodeLogin')
   }, [publicConfig, t])
-
+  const hiddenTab = useMemo(() => {
+    const scanLogins = ms.filter((method) => qrcodeWays.includes(method)) //取到扫码登录类型
+    if (scanLogins.length > 1) {
+      // 如果有两个以上的code 类型
+      return false
+    } else if (!scanLogins.includes(LoginMethods.AppQr)) {
+      // 如果只有一个且那一个还不是 app 类型
+      if (
+        qrcodeTabsSettings &&
+        (qrcodeTabsSettings?.[LoginMethods.WechatMpQrcode].length > 1 ||
+          qrcodeTabsSettings?.[LoginMethods.WxMinQr].length > 1)
+      ) {
+        return false
+      } else {
+        return true
+      }
+    } else {
+      return true
+    }
+  }, [ms, qrcodeTabsSettings])
   // useEffect(() => {
   //   if (
   //     [LoginMethods.WechatMpQrcode, LoginMethods.WxMinQr].includes(
@@ -417,7 +435,9 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
           </div>
         )}
         {renderQrcodeWay && (
-          <div className={`g2-view-tabs ${qrcodeNone}`}>
+          <div
+            className={`g2-view-tabs ${qrcodeNone} ${hiddenTab && 'hidden'}`}
+          >
             <Tabs
               onChange={(k: any) => {
                 message.destroy()
@@ -448,7 +468,12 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                   <LoginWithAppQrcode
                     onLogin={onLogin}
                     canLoop={canLoop}
-                    qrCodeScanOptions={props.config.qrCodeScanOptions}
+                    qrCodeScanOptions={{
+                      ...props.config.qrCodeScanOptions,
+                      tips: {
+                        expired: t('login.qrcodeExpired'),
+                      },
+                    }}
                   />
                 </Tabs.TabPane>
               )}
@@ -477,6 +502,13 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                         qrCodeScanOptions={{
                           ...props.config.qrCodeScanOptions,
                           extIdpConnId: item.id,
+                          tips: {
+                            title:
+                              i18n.language === 'zh-CN'
+                                ? `扫码关注 ${item.title} 公众号登录`
+                                : `Scan to follow ${item.title} and login`,
+                            expired: t('login.qrcodeExpired'),
+                          },
                         }}
                       />
                     </Tabs.TabPane>

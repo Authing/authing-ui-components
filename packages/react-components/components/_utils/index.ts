@@ -32,14 +32,19 @@ export const getRequiredRules = (msg: string): Rule[] => {
   ]
 }
 
-export const fieldRequiredRule = (fieldRequiredRule: string): Rule[] => {
+export const fieldRequiredRule = (
+  fieldRequiredRule: string,
+  fieldRequiredRuleMessage?: string
+): Rule[] => {
   return [
     {
       required: true,
       validateTrigger: ['onChange'],
-      message: i18n.t('common.isMissing', {
-        name: fieldRequiredRule,
-      }),
+      message:
+        fieldRequiredRuleMessage ||
+        i18n.t('common.isMissing', {
+          name: fieldRequiredRule,
+        }),
       whitespace: true,
     },
   ]
@@ -282,10 +287,11 @@ export const getSymbolTypeLength = (pwd: string) => {
 
 export const getPasswordValidate = (
   strength: PasswordStrength = PasswordStrength.NoCheck,
-  customPasswordStrength: any = {}
+  customPasswordStrength: any = {},
+  fieldRequiredRuleMessage?: string
 ): Rule[] => {
   const required = [
-    ...fieldRequiredRule(i18n.t('common.password')),
+    ...fieldRequiredRule(i18n.t('common.password'), fieldRequiredRuleMessage),
     {
       validateTrigger: 'onBlur',
       validator(_: any, value: any) {
