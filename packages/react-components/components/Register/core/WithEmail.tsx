@@ -175,6 +175,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         <CustomFormItem.Password
           key="new-password"
           name="new-password"
+          fieldRequiredRuleMessage={t('common.repeatPasswordDoc')}
           rules={[
             {
               validateTrigger: 'onBlur',
