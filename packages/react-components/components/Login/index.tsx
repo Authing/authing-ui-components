@@ -468,7 +468,12 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                   <LoginWithAppQrcode
                     onLogin={onLogin}
                     canLoop={canLoop}
-                    qrCodeScanOptions={props.config.qrCodeScanOptions}
+                    qrCodeScanOptions={{
+                      ...props.config.qrCodeScanOptions,
+                      tips: {
+                        expired: t('login.qrcodeExpired'),
+                      },
+                    }}
                   />
                 </Tabs.TabPane>
               )}
