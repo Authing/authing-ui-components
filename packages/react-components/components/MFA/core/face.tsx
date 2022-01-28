@@ -135,6 +135,7 @@ export const MFAFace = (props: any) => {
   }
 
   const faceBind = () => {
+    videoRef?.current?.pause()
     let url = '/api/v2/mfa/face/associate'
     let data = {
       photoA: p1.current,
@@ -149,9 +150,11 @@ export const MFAFace = (props: any) => {
     post(url, data, config).then((result) => {
       faceLogin(result)
     })
+    videoRef?.current?.play()
   }
 
   const faceCheck = () => {
+    videoRef?.current?.pause()
     let url = '/api/v2/mfa/face/verify'
     let data = {
       photo: p1.current,
@@ -166,6 +169,7 @@ export const MFAFace = (props: any) => {
       // 如果是 1702，那么久绑定一个
       faceLogin(result)
     })
+    videoRef?.current?.play()
   }
 
   // bind 的情况
@@ -194,7 +198,6 @@ export const MFAFace = (props: any) => {
 
   // 识别成功，自动前进到下一个步骤
   const quitIdentifying = (blob: Blob) => {
-    videoRef?.current?.pause()
     setPercent(100)
     uploadImage(blob).then((key) => {
       if (props.initData?.faceMfaEnabled === true) {
