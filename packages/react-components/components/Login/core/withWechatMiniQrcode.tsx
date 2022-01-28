@@ -17,17 +17,16 @@ export const LoginWithWechatMiniQrcode = (
   const [loading, setLoading] = useState(true)
   const appQrcodeClient = client.wxqrcode
 
+  const domId = `authingGuardMiniQrcode-${props.qrCodeScanOptions.extIdpConnId}`
+
   useEffect(() => {
     if (!props.canLoop) {
       return
     }
-    appQrcodeClient.startScanning('authingGuardMiniQrcode', {
+    appQrcodeClient.startScanning(domId, {
       autoExchangeUserInfo: true,
       ...props.qrCodeScanOptions,
       onCodeShow() {
-        setLoading(false)
-      },
-      onCodeLoaded() {
         setLoading(false)
       },
       onStart(timer) {
@@ -60,7 +59,7 @@ export const LoginWithWechatMiniQrcode = (
   return (
     <div className="authing-g2-login-app-qrcode">
       {loading && <ShieldSpin />}
-      <div id="authingGuardMiniQrcode"></div>
+      <div id={domId}></div>
     </div>
   )
 }

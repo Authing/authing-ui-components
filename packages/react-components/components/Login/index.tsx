@@ -439,6 +439,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
             className={`g2-view-tabs ${qrcodeNone} ${hiddenTab && 'hidden'}`}
           >
             <Tabs
+              destroyInactiveTabPane={true}
               onChange={(k: any) => {
                 message.destroy()
                 props.onLoginTabChange?.(k)

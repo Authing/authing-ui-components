@@ -18,11 +18,13 @@ export const LoginWithWechatmpQrcode = (
   const appQrcodeClient = client.wechatmpqrcode
   // const config = props.config
 
+  const domId = `authingGuardMpQrcode-${props.qrCodeScanOptions.extIdpConnId}`
+
   useEffect(() => {
     if (!props.canLoop) {
       return
     }
-    appQrcodeClient.startScanning('authingGuardMpQrcode', {
+    appQrcodeClient.startScanning(domId, {
       autoExchangeUserInfo: true,
       ...props.qrCodeScanOptions,
 
@@ -60,7 +62,7 @@ export const LoginWithWechatmpQrcode = (
   return (
     <div className="authing-g2-login-app-qrcode">
       {loading && <ShieldSpin />}
-      <div id="authingGuardMpQrcode"></div>
+      <div id={domId}></div>
     </div>
   )
 }
