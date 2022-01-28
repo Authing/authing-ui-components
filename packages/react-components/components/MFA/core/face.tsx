@@ -194,6 +194,7 @@ export const MFAFace = (props: any) => {
 
   // 识别成功，自动前进到下一个步骤
   const quitIdentifying = (blob: Blob) => {
+    videoRef?.current?.pause()
     setPercent(100)
     uploadImage(blob).then((key) => {
       if (props.initData?.faceMfaEnabled === true) {
