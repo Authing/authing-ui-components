@@ -23,6 +23,7 @@ export const LoginWithWechatMiniQrcode = (
     if (!props.canLoop) {
       return
     }
+    setLoading(true)
     appQrcodeClient.startScanning(domId, {
       autoExchangeUserInfo: true,
       ...props.qrCodeScanOptions,

@@ -18,7 +18,7 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
     if (!props.canLoop) {
       return
     }
-
+    setLoading(true)
     appQrcodeClient.startScanning('authingGuardAppQrcode', {
       autoExchangeUserInfo: true,
       ...props.qrCodeScanOptions,
