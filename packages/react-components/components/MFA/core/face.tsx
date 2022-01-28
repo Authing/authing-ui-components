@@ -42,7 +42,7 @@ export const MFAFace = (props: any) => {
   const interval = useRef<NodeJS.Timeout | undefined>()
   const p1 = useRef<string>() // p1 key
   const p2 = useRef<string>() // p2 key
-  const cooldown = useRef<number>(6) // p2 cooldown, * 500ms
+  const cooldown = useRef<number>(0) // p2 cooldown, * 500ms
   const cdnBase = props.config.__publicConfig__.cdnBase
 
   let { offset, dashStyle } = useDashoffset(percent)
@@ -125,7 +125,7 @@ export const MFAFace = (props: any) => {
       p1.current = undefined
       p2.current = undefined
       interval.current = undefined
-      cooldown.current = 6
+      cooldown.current = 0
       setFaceState('retry')
     }
     if (code === 500) {
@@ -135,7 +135,6 @@ export const MFAFace = (props: any) => {
   }
 
   const faceBind = () => {
-    videoRef?.current?.pause()
     let url = '/api/v2/mfa/face/associate'
     let data = {
       photoA: p1.current,
@@ -150,11 +149,9 @@ export const MFAFace = (props: any) => {
     post(url, data, config).then((result) => {
       faceLogin(result)
     })
-    videoRef?.current?.play()
   }
 
   const faceCheck = () => {
-    videoRef?.current?.pause()
     let url = '/api/v2/mfa/face/verify'
     let data = {
       photo: p1.current,
@@ -169,7 +166,6 @@ export const MFAFace = (props: any) => {
       // 如果是 1702，那么久绑定一个
       faceLogin(result)
     })
-    videoRef?.current?.play()
   }
 
   // bind 的情况
@@ -229,7 +225,7 @@ export const MFAFace = (props: any) => {
         setPercent(() => {
           return (result.score / FACE_SCORE) * 100
         })
-        // console.log('识别失败，但是有结果，设置相似性', percent)
+        // ('识别失败，但是有结果，设置相似性', percent)
       }
     } else {
       setPercent(10)
