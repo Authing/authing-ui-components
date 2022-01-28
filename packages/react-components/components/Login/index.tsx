@@ -456,6 +456,13 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                       qrCodeScanOptions={{
                         ...props.config.qrCodeScanOptions,
                         extIdpConnId: item.id,
+                        tips: {
+                          title:
+                            i18n.language === 'zh-CN'
+                              ? '使用 微信 扫码登录'
+                              : `Use WeChat to scan and login`,
+                          expired: t('login.qrcodeExpired'),
+                        },
                       }}
                     />
                   </Tabs.TabPane>
@@ -471,6 +478,10 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                     qrCodeScanOptions={{
                       ...props.config.qrCodeScanOptions,
                       tips: {
+                        title:
+                          i18n.language === 'zh-CN'
+                            ? '使用 APP 扫码登录'
+                            : `Use APP to scan and login`,
                         expired: t('login.qrcodeExpired'),
                       },
                     }}
