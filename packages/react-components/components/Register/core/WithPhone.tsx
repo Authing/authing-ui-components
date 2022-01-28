@@ -4,11 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
 import { useGuardAuthClient } from '../../Guard/authClient'
-import {
-  fieldRequiredRule,
-  getDeviceName,
-  getUserRegisterParams,
-} from '../../_utils'
+import { fieldRequiredRule, getDeviceName } from '../../_utils'
 import { Agreements } from '../components/Agreements'
 import SubmitButton from '../../SubmitButton'
 import { InputNumber } from '../../InputNumber'
