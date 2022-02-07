@@ -127,7 +127,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
   }
 
   return (
-    <div className="authing-g2-describe-questions">
+    <div className="authing-g2-describe-questions authing-g2-form-required-item-icon-after">
       <Form
         name="resetPassword"
         layout="vertical"
