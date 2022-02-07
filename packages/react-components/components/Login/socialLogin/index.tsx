@@ -143,10 +143,11 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       if (containerDOM) {
         // @ts-ignore
         containerDOM.style['min-height'] = '410px'
-
+        containerDOM.classList.add('no-login-methods-view')
         return () => {
           // @ts-ignore
           containerDOM.style['min-height'] = '610px'
+          containerDOM.classList.remove('no-login-methods-view')
         }
       }
     }
