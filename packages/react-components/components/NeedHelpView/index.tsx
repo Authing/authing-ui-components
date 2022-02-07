@@ -12,7 +12,7 @@ export const GuardNeedHelpView = (props: any) => {
   }
 
   return (
-    <div className="g2-view-container">
+    <div className="g2-view-container g2-need-help">
       <div className="g2-view-header">
         <ImagePro
           src={props.config?.logo}

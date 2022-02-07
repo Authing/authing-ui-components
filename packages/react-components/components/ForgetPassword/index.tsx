@@ -49,7 +49,7 @@ export const GuardForgetPassword: React.FC<ForgetPasswordViewProps> = (
   }
 
   return (
-    <div className="g2-view-container">
+    <div className="g2-view-container g2-forget-password">
       <div className="g2-view-header">
         <ImagePro
           src={props.config?.logo}

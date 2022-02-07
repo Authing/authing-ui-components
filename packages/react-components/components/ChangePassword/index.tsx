@@ -43,7 +43,7 @@ export const GuardChangePassword = (props: any) => {
   }, [config.title, initData.forcedCycle, initData.type, t])
 
   return (
-    <div className="g2-view-container">
+    <div className="g2-view-container g2-change-password">
       <div className="g2-view-header">
         <ImagePro
           src={config?.logo}

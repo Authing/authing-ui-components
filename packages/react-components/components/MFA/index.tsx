@@ -151,7 +151,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
     <MFABackStateContext.Provider
       value={{ setMfaBackState: setMfaBackState, mfaBackState: mfaBackState }}
     >
-      <div className="g2-view-container">
+      <div className="g2-view-container g2-view-mfa">
         <div className="g2-view-back" style={{ display: 'inherit' }}>
           <span onClick={onBack} className="g2-view-mfa-back-hover">
             <IconFont

@@ -40,7 +40,7 @@ export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
   }
 
   return (
-    <div className="g2-view-container">
+    <div className="g2-view-container g2-complete-info">
       <div className="g2-view-header">
         <div className="g2-completeInfo-header">
           <ImagePro

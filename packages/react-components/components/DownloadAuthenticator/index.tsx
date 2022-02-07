@@ -81,7 +81,7 @@ export const GuardDownloadATView: React.FC<GuardDownloadATViewProps> = ({
   const onBack = () => window.history.back()
 
   return (
-    <div className="g2-view-container">
+    <div className="g2-view-container g2-download-authenticator">
       <div className="g2-view-back" style={{ display: 'inherit' }}>
         <span onClick={onBack} className="g2-view-mfa-back-hover">
           <IconFont type="authing-arrow-left-s-line" style={{ fontSize: 24 }} />
