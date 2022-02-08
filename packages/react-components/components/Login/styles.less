@@ -97,3 +97,14 @@
     right: 7px !important;
   }
 }
+// 清楚 tabs 前后竖条阴影
+.g2-view-tabs {
+  .authing-ant-tabs > .authing-ant-tabs-nav .authing-ant-tabs-nav-wrap::before {
+    opacity: 0;
+  }
+  .authing-ant-tabs-top
+    > .authing-ant-tabs-nav
+    .authing-ant-tabs-nav-wrap.authing-ant-tabs-nav-wrap-ping-right::after {
+    opacity: 0;
+  }
+}
