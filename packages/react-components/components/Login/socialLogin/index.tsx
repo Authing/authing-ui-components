@@ -564,6 +564,24 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       >
         {!publicConfig?.ssoPageComponentDisplay.idpBtns || idp}
         {!publicConfig?.ssoPageComponentDisplay.socialLoginBtns || socialLogin}
+        {/* 没有任何登录方式时 */}
+        {noLoginMethods && !socialLoginButtons.length && !idpButtons.length && (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <IconFont
+              type="authing-bianzu"
+              style={{ width: 247, height: 131 }}
+            />
+            <span className="no-login-methods-desc">
+              {t('login.noLoginMethodsDesc')}
+            </span>
+          </div>
+        )}
       </Space>
     </>
   )
