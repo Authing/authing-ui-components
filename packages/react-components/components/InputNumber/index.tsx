@@ -5,6 +5,7 @@ export interface InputNumberProps extends InputProps {}
 
 export const InputNumber = React.forwardRef<any, InputNumberProps>(
   (props, ref) => {
+    console.log(props)
     const { onChange, value: propsValue, ...inputProps } = props
     const [value, setValue] = useState<InputNumberProps['value']>(
       /^[0-9]*$/.test(String(propsValue)) ? propsValue : ''

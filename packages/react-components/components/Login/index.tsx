@@ -393,7 +393,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
               {!disableResetPwd && (
                 <div>
                   <span
-                    className="link-like"
+                    className="link-like forget-password-link"
                     onClick={() =>
                       props.__changeModule?.(GuardModuleType.FORGET_PWD, {})
                     }
@@ -411,7 +411,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
               {(errorNumber >= 2 || accountLock) && (
                 <Tooltip title={t('common.feedback')}>
                   <div
-                    className="touch-tip"
+                    className="touch-tip question-feedback"
                     onClick={() =>
                       props.__changeModule?.(GuardModuleType.ANY_QUESTIONS, {})
                     }
@@ -428,7 +428,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                 <span className="go-to-register">
                   {/* <span className="gray">{t('common.noAccYet')}</span> */}
                   <span
-                    className="link-like"
+                    className="link-like register-link"
                     onClick={() =>
                       props.__changeModule?.(GuardModuleType.REGISTER, {})
                     }

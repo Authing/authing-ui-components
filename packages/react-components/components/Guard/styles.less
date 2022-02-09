@@ -22,8 +22,8 @@
     --containerWidth: 100%;
   }
   .g2-view-container {
-    box-shadow: initial !important;
-    height: 100% !important;
+    box-shadow: initial;
+    height: 100%;
   }
 }
 
@@ -68,8 +68,8 @@
   }
   .g2-mfa-content,
   .g2-mfa-method {
-    margin: 0 !important;
-    padding: 0 var(--sidePadding) !important;
+    margin: 0;
+    padding: 0 var(--sidePadding);
   }
   .g2-view-login-mobile-inner {
     flex: 1;
@@ -215,15 +215,15 @@
 .authing-g2-input-form {
   .authing-g2-select {
     &:hover {
-      border-color: #eeeff1 !important;
+      border-color: #eeeff1;
       background: #eeeff1;
     }
     border: 1px solid #f5f6f7;
     border-radius: 4px;
     .authing-ant-select-selector {
       outline: 0;
-      border-color: #f5f6f7 !important;
-      height: 100% !important;
+      border-color: #f5f6f7;
+      height: 100%;
       background-color: #f5f6f7;
       &:hover {
         border-color: #eeeff1 !important;
@@ -232,13 +232,12 @@
     }
     // focus
     &.authing-ant-select-focused {
-      border-color: #618eff;
-      border-right-width: 1px !important;
+      // border-color: #618eff;
+      border-right-width: 1px;
       outline: 0;
       box-shadow: 0 0 0 2px rgba(57, 106, 255, 0.2);
       .authing-ant-select-selector {
-        border-color: #eeeff1 !important;
-        background: #fff !important;
+        background: #fff;
       }
     }
   }
@@ -249,21 +248,21 @@
   // }
   &.authing-ant-form-item-has-error {
     .authing-g2-select {
-      &:hover {
-        border-color: #eeeff1 !important;
-        background: #eeeff1;
-      }
+      // &:hover {
+      //   border-color: #eeeff1 !important;
+      //   background: #eeeff1;
+      // }
       // focus
       &.authing-ant-select-focused {
-        .authing-ant-select-selector {
-          border-color: #eeeff1 !important;
-        }
-        border-color: #ff4d4f;
-        border-right-width: 1px !important;
+        // .authing-ant-select-selector {
+        //   border-color: #eeeff1 !important;
+        // }
+        // border-color: #ff7875;
+        border-right-width: 1px;
         outline: 0;
         box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
         .authing-ant-select-selector {
-          background: #fff !important;
+          background: #fff;
         }
       }
     }
@@ -328,7 +327,7 @@
     background-color: #eeeff1;
   }
   &:focus {
-    background: #ffffff !important;
+    background: #ffffff;
     border-color: #618eff;
   }
 
@@ -411,7 +410,7 @@
   .g2-captcha-code-image {
     min-width: 100px;
     border-radius: 4px;
-    border: 1px solid #eff2f6 !important;
+    border: 1px solid #eff2f6;
   }
 }
 
@@ -634,8 +633,8 @@
   overflow: visible;
 }
 
-.authing-ant-tabs-tab-btn {
-  font-weight: 400 !important;
+.authing-ant-tabs-tab.authing-ant-tabs-tab-active .authing-ant-tabs-tab-btn {
+  font-weight: 400;
 }
 
 .authing-g2-questions-textarea {
@@ -644,7 +643,7 @@
     background: #f5f6f7;
     border: 1px solid #f5f6f7;
     &:hover {
-      border-color: #eeeff1 !important;
+      border-color: #eeeff1;
       background-color: #eeeff1;
     }
     &:focus {
@@ -657,12 +656,12 @@
 }
 
 .authing-g2-question-option {
-  background: none !important;
+  background: none;
   &.authing-g2-question-option-active {
     color: #396aff;
   }
   &:hover {
-    background: #f5f6f7 !important;
+    background: #f5f6f7;
   }
 }
 // strong {
@@ -688,10 +687,10 @@
   }
 }
 
-.authing-ant-select-selector {
-  padding: 3px 11px !important;
+.authing-g2-input-form .authing-g2-select .authing-ant-select-selector {
+  padding: 3px 11px;
   .authing-ant-select-selection-item {
-    line-height: 30px !important;
+    line-height: 30px;
   }
   .authing-ant-select-selection-search {
     display: flex;

@@ -47,7 +47,7 @@ export const LoginWithVerifyCode = (props: any) => {
           {currentMethod === 'phone-code' && (
             <SendCodeByPhone
               {...props}
-              className="authing-g2-input"
+              className="authing-g2-input g2-send-code-input"
               autoComplete="one-time-code"
               size="large"
               placeholder={t('common.inputFourVerifyCode', {
