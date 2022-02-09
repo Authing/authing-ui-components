@@ -23,8 +23,7 @@ export const guardEventsFilter = (props: any) => {
   eventsName.forEach((eventName) => {
     events[eventName as keyof GuardEvents] = props[eventName]
   })
-
-  return guardEventsHijacking(events)
+  return guardEventsHijacking(events, props.config.openEventsMapping)
 }
 
 const eventsMapping: Partial<GuardEvents> = {
@@ -39,15 +38,18 @@ const eventsMapping: Partial<GuardEvents> = {
   },
 }
 
-export const guardEventsHijacking = (events: GuardEvents): GuardEvents => {
+export const guardEventsHijacking = (
+  events: GuardEvents,
+  openEventsMapping: boolean
+): GuardEvents => {
   const newEvents: GuardEvents = {}
   Object.keys(eventsMapping).forEach((eventsKey) => {
     // @ts-ignore
     newEvents[eventsKey] = (...props) => {
       // @ts-ignore
-      const newProps = eventsMapping[eventsKey](...props)
+      openEventsMapping && eventsMapping[eventsKey](...props)
       // @ts-ignore
-      events[eventsKey]?.(...newProps)
+      events[eventsKey]?.(...props)
     }
   })
 

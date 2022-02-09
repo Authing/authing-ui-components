@@ -13,6 +13,10 @@ export interface GuardLocalConfig extends RegisterConfig, LoginConfig {
   defaultInitData?: any
   showLoading?: boolean
   loadingComponent?: ReactNode
+  /**
+   * @description 是否调用 eventsMapping 中的事件
+   */
+  openEventsMapping?: boolean
 }
 
 let defaultConfig: GuardLocalConfig = {

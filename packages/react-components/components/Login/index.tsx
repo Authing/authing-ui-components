@@ -37,14 +37,19 @@ const qrcodeWays = [
   LoginMethods.WxMinQr,
   LoginMethods.WechatMpQrcode,
 ]
-
+const qrcodeTabsSettings = [LoginMethods.WxMinQr, LoginMethods.WechatMpQrcode]
+interface QrcodeSettings {
+  id: string
+  isDefault: boolean
+  title: string
+}
 const useMethods = (config: any) => {
   let dlm = config?.defaultLoginMethod
   let propsMethods = config?.loginMethods
-
   if (!propsMethods?.includes(dlm)) {
     dlm = propsMethods?.[0]
   }
+
   let renderInputWay = intersection(propsMethods, inputWays).length > 0
   let renderQrcodeWay = intersection(propsMethods, qrcodeWays).length > 0
   return [dlm, renderInputWay, renderQrcodeWay]
@@ -143,22 +148,21 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
       return true
     }
   }, [ms, qrcodeTabsSettings])
-  // useEffect(() => {
-  //   if (
-  //     [LoginMethods.WechatMpQrcode, LoginMethods.WxMinQr].includes(
-  //       defaultMethod
-  //     )
-  //   ) {
-  //     const id = qrcodeTabsSettings?.[defaultMethod as LoginMethods]?.find(
-  //       (i: { id: string; title: string; isDefault?: boolean | undefined }) =>
-  //         i.isDefault
-  //     )
-
-  //     setLoginWay(defaultMethod + id)
-  //   } else {
-  //     setLoginWay(defaultMethod)
-  //   }
-  // }, [defaultMethod, qrcodeTabsSettings])
+  const defaultQrCodeWay = useMemo(() => {
+    if (
+      [LoginMethods.WechatMpQrcode, LoginMethods.WxMinQr].includes(
+        defaultMethod
+      )
+    ) {
+      const id = qrcodeTabsSettings?.[defaultMethod as LoginMethods]?.find(
+        (i: { id: string; title: string; isDefault?: boolean | undefined }) =>
+          i.isDefault
+      )?.id
+      return defaultMethod + id
+    } else {
+      return defaultMethod
+    }
+  }, [defaultMethod, qrcodeTabsSettings])
 
   const __codePaser = (code: number) => {
     const action = codeMap[code]
@@ -446,6 +450,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                 message.destroy()
                 props.onLoginTabChange?.(k)
               }}
+              defaultActiveKey={defaultQrCodeWay}
             >
               {ms?.includes(LoginMethods.WxMinQr) &&
                 qrcodeTabsSettings?.[LoginMethods.WxMinQr].map((item) => (

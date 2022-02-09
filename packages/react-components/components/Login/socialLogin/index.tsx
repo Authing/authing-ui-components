@@ -66,12 +66,12 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
   useEffect(() => {
     const onMessage = (evt: MessageEvent) => {
       // TODO: event.origin是指发送的消息源，一定要进行验证！！！
-      const { code, message: errMsg, data } = evt.data
-      // const { source, eventType } = event || {}
+      const { code, message: errMsg, data, event } = evt.data
+      const { source, eventType } = event || {}
       // 社会化登录是用 authing-js-sdk 实现的，不用再在这里回调了
-      // if (source === 'authing' && eventType === 'socialLogin') {
-      //   return
-      // }
+      if (source === 'authing' && eventType === 'socialLogin') {
+        return
+      }
       try {
         const parsedMsg = JSON.parse(errMsg)
 
@@ -209,17 +209,8 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
           onError(code, msg) {
             try {
               const parsedMsg = JSON.parse(msg)
-              const {
-                code: authingCode,
-                message: authingMessage,
-                data: authingData,
-              } = parsedMsg
-              // if ([OTP_MFA_CODE, APP_MFA_CODE].includes(authingCode)) {
-              //   // TODO
-              //   onGuardLogin(authingCode, authingData, authingMessage)
-              //   return
-              // }
-              onGuardLogin(authingCode, authingData, authingMessage)
+              const { message: authingMessage, data: authingData } = parsedMsg
+              onGuardLogin(code, authingData, authingMessage)
             } catch (e) {
               // do nothing...
             }
@@ -408,18 +399,8 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
           onError(code, msg) {
             try {
               const parsedMsg = JSON.parse(msg)
-              const {
-                code: authingCode,
-                message: authingMessage,
-                data: authingData,
-              } = parsedMsg
-
-              // if ([OTP_MFA_CODE, APP_MFA_CODE].includes(authingCode)) {
-              //   // TODO
-              //   // onGuardLogin(authingCode, authingData, authingMessage)
-              //   return
-              // }
-              onGuardLogin(authingCode, authingData, authingMessage)
+              const { message: authingMessage, data: authingData } = parsedMsg
+              onGuardLogin(code, authingData, authingMessage)
             } catch (e) {
               // do nothing...
             }
