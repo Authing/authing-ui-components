@@ -59,7 +59,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
           {codeMethod === 'phone' && (
             <SendCodeByPhone
               {...props}
-              className="authing-g2-input"
+              className="authing-g2-input g2-send-code-input"
               autoComplete="one-time-code"
               size="large"
               placeholder={t('common.inputFourVerifyCode', {
@@ -82,7 +82,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
           {codeMethod === 'email' && (
             <SendCodeByEmail
               {...props}
-              className="authing-g2-input"
+              className="authing-g2-input g2-send-code-input"
               autoComplete="one-time-code"
               size="large"
               placeholder={t('common.inputFourVerifyCode', {

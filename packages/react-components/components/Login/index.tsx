@@ -37,12 +37,7 @@ const qrcodeWays = [
   LoginMethods.WxMinQr,
   LoginMethods.WechatMpQrcode,
 ]
-const qrcodeTabsSettings = [LoginMethods.WxMinQr, LoginMethods.WechatMpQrcode]
-interface QrcodeSettings {
-  id: string
-  isDefault: boolean
-  title: string
-}
+
 const useMethods = (config: any) => {
   let dlm = config?.defaultLoginMethod
   let propsMethods = config?.loginMethods

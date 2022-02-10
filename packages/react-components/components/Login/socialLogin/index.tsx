@@ -556,7 +556,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
           >
             <IconFont
               type="authing-bianzu"
-              style={{ width: 247, height: 131 }}
+              style={{ width: 178, height: 120 }}
             />
             <span className="no-login-methods-desc">
               {t('login.noLoginMethodsDesc')}
