@@ -30,10 +30,13 @@ export const initConfig = async (
     config: {
       ...mergedConfig,
       __publicConfig__: getPublicConfig(appId),
-      __appHost__: assembledRequestHost(
-        getPublicConfig(appId).requestHostname,
-        mergedConfig?.host!
-      ),
+      // 请求地址 拼装
+      __appHost__: config?.__internalRequest__
+        ? mergedConfig?.host
+        : assembledRequestHost(
+            getPublicConfig(appId).requestHostname,
+            mergedConfig?.host!
+          ),
     },
     publicConfig: getPublicConfig(appId),
   }

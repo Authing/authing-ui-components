@@ -27,6 +27,7 @@ export interface IG2Config {
   target?: HTMLElement | string
   __appHost__?: string
   __publicConfig__?: ApplicationConfig
+  __internalRequest__?: boolean
 }
 
 const defaultG2Config: IG2Config = {
