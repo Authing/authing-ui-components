@@ -119,7 +119,7 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
       {bindInfo.loading ? (
         <Spin />
       ) : (
-        <div className="g2-view-container">
+        <div className="g2-view-container g2-bind-totp">
           <div className="g2-view-back" style={{ display: 'inherit' }}>
             <span onClick={onBack} className="g2-view-mfa-back-hover">
               <IconFont

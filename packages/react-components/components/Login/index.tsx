@@ -22,8 +22,9 @@ import { i18n } from '../_utils/locales'
 
 import './styles.less'
 import { usePublicConfig } from '../_utils/context'
-import { shoudGoToComplete } from '../_utils'
+import { isWechatBrowser, shoudGoToComplete } from '../_utils'
 import { LoginWithVerifyCode } from './core/withVerifyCode'
+import { useMediaSize } from '../_utils/hooks'
 
 const inputWays = [
   LoginMethods.Password,
@@ -40,10 +41,10 @@ const qrcodeWays = [
 const useMethods = (config: any) => {
   let dlm = config?.defaultLoginMethod
   let propsMethods = config?.loginMethods
-
   if (!propsMethods?.includes(dlm)) {
     dlm = propsMethods?.[0]
   }
+
   let renderInputWay = intersection(propsMethods, inputWays).length > 0
   let renderQrcodeWay = intersection(propsMethods, qrcodeWays).length > 0
   return [dlm, renderInputWay, renderQrcodeWay]
@@ -141,22 +142,21 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
       return true
     }
   }, [ms, qrcodeTabsSettings])
-  // useEffect(() => {
-  //   if (
-  //     [LoginMethods.WechatMpQrcode, LoginMethods.WxMinQr].includes(
-  //       defaultMethod
-  //     )
-  //   ) {
-  //     const id = qrcodeTabsSettings?.[defaultMethod as LoginMethods]?.find(
-  //       (i: { id: string; title: string; isDefault?: boolean | undefined }) =>
-  //         i.isDefault
-  //     )
-
-  //     setLoginWay(defaultMethod + id)
-  //   } else {
-  //     setLoginWay(defaultMethod)
-  //   }
-  // }, [defaultMethod, qrcodeTabsSettings])
+  const defaultQrCodeWay = useMemo(() => {
+    if (
+      [LoginMethods.WechatMpQrcode, LoginMethods.WxMinQr].includes(
+        defaultMethod
+      )
+    ) {
+      const id = qrcodeTabsSettings?.[defaultMethod as LoginMethods]?.find(
+        (i: { id: string; title: string; isDefault?: boolean | undefined }) =>
+          i.isDefault
+      )?.id
+      return defaultMethod + id
+    } else {
+      return defaultMethod
+    }
+  }, [defaultMethod, qrcodeTabsSettings])
 
   const __codePaser = (code: number) => {
     const action = codeMap[code]
@@ -387,7 +387,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
               {!disableResetPwd && (
                 <div>
                   <span
-                    className="link-like"
+                    className="link-like forget-password-link"
                     onClick={() =>
                       props.__changeModule?.(GuardModuleType.FORGET_PWD, {})
                     }
@@ -405,7 +405,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
               {(errorNumber >= 2 || accountLock) && (
                 <Tooltip title={t('common.feedback')}>
                   <div
-                    className="touch-tip"
+                    className="touch-tip question-feedback"
                     onClick={() =>
                       props.__changeModule?.(GuardModuleType.ANY_QUESTIONS, {})
                     }
@@ -422,7 +422,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                 <span className="go-to-register">
                   {/* <span className="gray">{t('common.noAccYet')}</span> */}
                   <span
-                    className="link-like"
+                    className="link-like register-link"
                     onClick={() =>
                       props.__changeModule?.(GuardModuleType.REGISTER, {})
                     }
@@ -444,6 +444,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                 message.destroy()
                 props.onLoginTabChange?.(k)
               }}
+              defaultActiveKey={defaultQrCodeWay}
             >
               {ms?.includes(LoginMethods.WxMinQr) &&
                 qrcodeTabsSettings?.[LoginMethods.WxMinQr].map((item) => (
@@ -517,8 +518,12 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                           tips: {
                             title:
                               i18n.language === 'zh-CN'
-                                ? `扫码关注 ${item.title} 公众号登录`
-                                : `Scan to follow ${item.title} and login`,
+                                ? `${isWechatBrowser() ? '长按' : '扫码'}关注 ${
+                                    item.title
+                                  } 公众号登录`
+                                : `${
+                                    isWechatBrowser() ? 'Press' : 'Scan'
+                                  } to follow ${item.title} and login`,
                             expired: t('login.qrcodeExpired'),
                           },
                         }}

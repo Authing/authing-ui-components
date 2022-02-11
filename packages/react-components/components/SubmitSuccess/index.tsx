@@ -42,7 +42,7 @@ export const GuardSubmitSuccessView: React.FC<GuardSubmitSuccessViewProps> = (
   }, [countDown])
 
   return (
-    <div className="g2-view-container">
+    <div className="g2-view-container g2-submit-success">
       <div className="g2-view-tabs g2-questions-send-success-page">
         <ImagePro
           className="plate"

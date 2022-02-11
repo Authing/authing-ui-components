@@ -55,7 +55,7 @@
   img {
     width: 200px;
     height: 200px;
-    margin-top: 0px !important;
+    margin-top: 0px !important; //覆盖行内样式
   }
   .__authing__heading-subtitle-style {
     font-size: 14px;
@@ -68,7 +68,7 @@
   }
 }
 .switch-text {
-  left: -80px !important;
+  left: -80px !important; //覆盖行内样式
   top: 4px !important;
   .authing-ant-popover-inner {
     background: rgba(84, 89, 104, 0.1);
@@ -88,12 +88,32 @@
     border-radius: 4px;
     color: #545968;
   }
-  .authing-ant-popover-arrow {
-    border-color: rgba(84, 89, 104, 0.1) !important;
-    border-width: 3px !important;
-    background: #fff !important;
-    width: 0px !important;
-    height: 0px !important;
-    right: 7px !important;
+}
+.authing-ant-popover-placement-leftTop
+  > .authing-ant-popover-content
+  > .authing-ant-popover-arrow {
+  border-color: rgba(84, 89, 104, 0.1);
+  border-width: 3px;
+  background: #fff;
+  width: 0px;
+  height: 0px;
+  right: 7px;
+  top: 10px;
+}
+// 清楚 tabs 前后竖条阴影
+.g2-view-tabs {
+  .authing-ant-tabs > .authing-ant-tabs-nav .authing-ant-tabs-nav-wrap::before {
+    opacity: 0;
+  }
+  .authing-ant-tabs-top
+    > .authing-ant-tabs-nav
+    .authing-ant-tabs-nav-wrap.authing-ant-tabs-nav-wrap-ping-right::after {
+    opacity: 0;
+  }
+  .authing-ant-tabs-nav-more {
+    font-size: 16px;
+  }
+  .authing-ant-tabs-dropdown-open {
+    color: #396aff;
   }
 }

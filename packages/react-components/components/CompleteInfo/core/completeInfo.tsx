@@ -222,7 +222,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           }
         >
           <SendCodeByPhone
-            className="authing-g2-input"
+            className="authing-g2-input g2-send-code-input"
             autoComplete="one-time-code"
             key="internal-phone:phone345"
             size="large"
@@ -272,7 +272,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           }
         >
           <SendCodeByEmail
-            className="authing-g2-input"
+            className="authing-g2-input g2-send-code-input"
             autoComplete="one-time-code"
             size="large"
             placeholder={t('common.inputFourVerifyCode', {

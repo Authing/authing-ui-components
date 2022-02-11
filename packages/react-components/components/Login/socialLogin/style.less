@@ -5,16 +5,24 @@
 .no-login-methods {
   padding: 0px 38px;
 }
-
-.g2-guard-third-login-btn {
-  display: flex !important;
-  border: none !important;
-  background-color: #f5f6f7 !important;
-  border-radius: 4px !important;
-  color: #282d3c !important;
-  font-size: 14px !important;
-  margin-bottom: 8px !important;
-  margin-top: 8px !important;
+.no-login-methods-desc {
+  margin-top: 16px;
+  color: #545968;
+  font-family: PingFang SC;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 20px;
+}
+.authing-ant-btn.g2-guard-third-login-btn {
+  display: flex;
+  border: none;
+  background-color: #f5f6f7;
+  border-radius: 4px;
+  color: #282d3c;
+  font-size: 14px;
+  margin-bottom: 8px;
+  margin-top: 8px;
   justify-content: center;
   align-items: center;
 
@@ -22,7 +30,7 @@
   //   margin-bottom: 16px !important;
   // }
   &:hover {
-    background-color: rgba(84, 89, 104, 0.2) !important;
+    background-color: rgba(84, 89, 104, 0.2);
   }
 }
 
@@ -82,5 +90,23 @@
   }
   .g2-social-login-list {
     padding: 0 8px;
+  }
+}
+
+.no-login-methods-view {
+  .g2-view-container-inner {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    .g2-view-header {
+      margin-bottom: 0px;
+    }
+    .g2-social-login {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
   }
 }

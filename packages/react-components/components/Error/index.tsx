@@ -10,7 +10,7 @@ export const GuardErrorView: React.FC<GuardErrorViewProps> = (props) => {
     : `${i18n.t('user.contactAdministrator')}`
 
   return (
-    <div className="g2-view-container">
+    <div className="g2-view-container g2-view-error">
       <div className="g2-error-content">
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <IconFont type="authing-bianzu" style={{ width: 240, height: 160 }} />
