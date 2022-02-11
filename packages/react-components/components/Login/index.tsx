@@ -22,7 +22,7 @@ import { i18n } from '../_utils/locales'
 
 import './styles.less'
 import { usePublicConfig } from '../_utils/context'
-import { shoudGoToComplete } from '../_utils'
+import { isWechatBrowser, shoudGoToComplete } from '../_utils'
 import { LoginWithVerifyCode } from './core/withVerifyCode'
 import { useMediaSize } from '../_utils/hooks'
 
@@ -84,7 +84,6 @@ const useSwitchStates = (loginWay: LoginMethods) => {
 export const GuardLoginView = (props: GuardLoginViewProps) => {
   const { config } = props
   const qrcodeTabsSettings = config.__publicConfig__?.qrcodeTabsSettings
-  const { isPhoneMedia } = useMediaSize()
 
   let [defaultMethod, renderInputWay, renderQrcodeWay] = useMethods(config)
   const agreementEnabled = config?.agreementEnabled
@@ -519,11 +518,11 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                           tips: {
                             title:
                               i18n.language === 'zh-CN'
-                                ? `${isPhoneMedia ? '长按' : '扫码'}关注 ${
+                                ? `${isWechatBrowser() ? '长按' : '扫码'}关注 ${
                                     item.title
                                   } 公众号登录`
                                 : `${
-                                    isPhoneMedia ? 'Press' : 'Scan'
+                                    isWechatBrowser() ? 'Press' : 'Scan'
                                   } to follow ${item.title} and login`,
                             expired: t('login.qrcodeExpired'),
                           },

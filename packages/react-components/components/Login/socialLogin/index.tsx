@@ -7,7 +7,7 @@ import {
 } from 'authing-js-sdk'
 import { Lang } from 'authing-js-sdk/build/main/types'
 import qs from 'qs'
-import React, { useEffect } from 'react'
+import React, { useEffect, useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import shortid from 'shortid'
 import { i18n } from '../../_utils/locales'
@@ -115,7 +115,6 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
     const innerContainer = document.querySelector(
       '.g2-view-login>.g2-view-container-inner'
     )
-
     if (isPhoneMedia && noLoginMethods) {
       if (containerDOM) {
         containerDOM.classList.add('g2-view-header-mobile')
@@ -133,7 +132,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
     }
   })
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (noLoginMethods && !isPhoneMedia) {
       // pc 下
       const containerDOM = document.getElementsByClassName(
