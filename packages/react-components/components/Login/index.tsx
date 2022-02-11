@@ -24,7 +24,6 @@ import './styles.less'
 import { usePublicConfig } from '../_utils/context'
 import { isWechatBrowser, shoudGoToComplete } from '../_utils'
 import { LoginWithVerifyCode } from './core/withVerifyCode'
-import { useMediaSize } from '../_utils/hooks'
 
 const inputWays = [
   LoginMethods.Password,
