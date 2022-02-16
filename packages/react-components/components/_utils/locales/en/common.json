@@ -254,5 +254,12 @@
   "phoneVerifyCode": "Phone Code",
   "emailVerifyCode": "Email Code",
   "phoneOrEmail": "Phone / Email",
-  "skip": "Skip"
+  "skip": "Skip",
+  "back": "Back",
+  "identityBindingAskTitle": "Choose how to connect",
+  "identityBindingAskDesc": "If you are bound to an existing account, you can directly log in to the existing account by this method next time.",
+  "identityBindingCreate": "Create a new account",
+  "identityBindingBinding": "Bind to an existing account",
+  "identityBindingTitle": "Bind existing account",
+  "identityBindingDesc": "After binding, you can log in to this account directly by this method next time"
 }

@@ -41,6 +41,8 @@ import { SessionData, trackSession } from './sso'
 import zhCN from 'antd/lib/locale/zh_CN'
 import enUS from 'antd/lib/locale/en_US'
 import 'moment/locale/zh-cn'
+import { GuardIdentityBindingAskView } from '../IdentityBindingAsk'
+import { GuardIdentityBindingView } from '../IdentityBinding'
 
 const PREFIX_CLS = 'authing-ant'
 export enum LangMAP {
@@ -79,6 +81,12 @@ const ComponentsMapping: Record<
   [GuardModuleType.SUBMIT_SUCCESS]: (props) => (
     <GuardSubmitSuccessView {...props} />
   ),
+  [GuardModuleType.IDENTITY_BINDING_ASK]: (props) => (
+    <GuardIdentityBindingAskView {...props} />
+  ),
+  [GuardModuleType.IDENTITY_BINDING]: (props) => (
+    <GuardIdentityBindingView {...props} />
+  ),
 }
 
 export interface GuardProps extends GuardEvents, IG2FCProps {
@@ -107,7 +115,7 @@ export const Guard = (props: GuardProps) => {
 
   // 首页 init 数据
   const initState: ModuleState = {
-    moduleName: config?.defaultScenes ?? GuardModuleType.LOGIN,
+    moduleName: config?.defaultScenes ?? GuardModuleType.IDENTITY_BINDING,
     initData: config?.defaultInitData ?? {},
   }
 
