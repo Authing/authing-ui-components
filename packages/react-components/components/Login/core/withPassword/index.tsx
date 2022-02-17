@@ -128,6 +128,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     setRemainCount(0)
     setAccountLock(false)
   }, [props.loginWay])
+
   return (
     <div className="authing-g2-login-password">
       <Form

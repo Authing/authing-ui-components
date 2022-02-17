@@ -1,9 +1,13 @@
-import { Button } from 'antd'
-import React from 'react'
+import { Button, Tabs } from 'antd'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { GuardModuleType } from '..'
 import { IconFont } from '../IconFont'
+import { LoginWithPassword } from '../Login/core/withPassword'
+import { LoginWithVerifyCode } from '../Login/core/withVerifyCode'
+import { usePublicConfig } from '../_utils/context'
+import { i18n } from '../_utils/locales'
 import { GuardIdentityBindingViewProps } from './interface'
 import './styles.less'
 
@@ -12,8 +16,59 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
 ) => {
   const { __changeModule, config } = props
   const { t } = useTranslation()
+  const { publicKey, autoRegister, agreementEnabled } = config
 
   const onBack = () => {}
+
+  const [, onBind] = useAsyncFn(async () => {}, [])
+
+  const agreements = useMemo(
+    () =>
+      agreementEnabled
+        ? config?.agreements?.filter(
+            (agree) =>
+              agree.lang === i18n.language &&
+              (autoRegister || !!agree?.availableAt)
+          ) ?? []
+        : [],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [agreementEnabled, autoRegister, config?.agreements, i18n.language]
+  )
+
+  const methods = [
+    {
+      key: 'code',
+      title: t('common.verifyCodeLogin'),
+      component: (
+        <LoginWithVerifyCode
+          verifyCodeLength={props.config.__publicConfig__?.verifyCodeLength}
+          autoRegister={autoRegister}
+          onBeforeLogin={onBind}
+          onLogin={() => {}}
+          agreements={agreements}
+        />
+      ),
+    },
+    {
+      key: 'password',
+      title: t('login.pwdLogin'),
+      component: (
+        <LoginWithPassword
+          publicKey={publicKey!}
+          autoRegister={autoRegister}
+          host={config.__appHost__}
+          onBeforeLogin={onBind}
+          passwordLoginMethods={[
+            'username-password',
+            'email-password',
+            'phone-password',
+          ]}
+          onLogin={() => {}}
+          agreements={agreements}
+        />
+      ),
+    },
+  ]
 
   return (
     <div className="g2-view-container g2-view-identity-binding">
@@ -34,7 +89,15 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
         <div className="g2-view-identity-binding-content-desc">
           <span>{t('common.identityBindingDesc')}</span>
         </div>
-        <div className="g2-view-identity-binding-content-login"></div>
+        <div className="g2-view-identity-binding-content-login">
+          <Tabs>
+            {methods.map((method) => (
+              <Tabs.TabPane key={method.key} tab={method.title}>
+                {method.component}
+              </Tabs.TabPane>
+            ))}
+          </Tabs>
+        </div>
       </div>
     </div>
   )

@@ -1,6 +1,12 @@
 import { IG2Config, IG2Events, IG2FCProps, IG2FCViewProps } from '..'
+import { Agreement } from '../AuthingGuard/api'
 
-export interface IdentityBindingConfig extends IG2Config {}
+export interface IdentityBindingConfig extends IG2Config {
+  autoRegister?: boolean
+  publicKey?: string
+  agreementEnabled?: boolean
+  agreements?: Agreement[]
+}
 
 export interface IdentityBindingEvents extends IG2Events {}
 
