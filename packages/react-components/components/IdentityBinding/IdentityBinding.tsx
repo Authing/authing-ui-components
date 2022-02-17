@@ -1,12 +1,10 @@
-import { Button, Tabs } from 'antd'
+import { Tabs } from 'antd'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
-import { GuardModuleType } from '..'
 import { IconFont } from '../IconFont'
 import { LoginWithPassword } from '../Login/core/withPassword'
 import { LoginWithVerifyCode } from '../Login/core/withVerifyCode'
-import { usePublicConfig } from '../_utils/context'
 import { i18n } from '../_utils/locales'
 import { GuardIdentityBindingViewProps } from './interface'
 import './styles.less'
@@ -14,7 +12,7 @@ import './styles.less'
 export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> = (
   props
 ) => {
-  const { __changeModule, config } = props
+  const { config } = props
   const { t } = useTranslation()
   const { publicKey, autoRegister, agreementEnabled } = config
 

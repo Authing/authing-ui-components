@@ -7,7 +7,9 @@ import CustomFormItem from '../../../ValidatorRules'
 import { fieldRequiredRule, validate } from '../../../_utils'
 import { usePublicConfig } from '../../../_utils/context'
 
-export interface FormItemIdentifyProps extends FormItemProps {}
+export interface FormItemIdentifyProps extends FormItemProps {
+  checkRepeat?: boolean
+}
 
 export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
   const { ...formItemProps } = props
