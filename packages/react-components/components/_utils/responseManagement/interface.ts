@@ -1,18 +1,19 @@
-export enum StatusCode {
-  OK = 200,
-  BAD_REQUEST = 400,
-  UNAUTHORIZED = 401,
-  FORBIDDEN = 403,
-  NOT_FOUND = 404,
-  INTERNAL_SERVER_ERROR = 500,
+import { GuardModuleType } from '../../Guard'
 
-  // 以下是自定义的
-  // module 切换
-  CHANGE_MODULE = 306,
-  // messages 渲染
-  RENDER_MESSAGES = 333,
+export enum CodeAction {
+  // 切换 Module
+  CHANGE_MODULE = 'changeModule',
+  // 渲染 错误信息
+  RENDER_MESSAGE = 'renderMessage',
 }
 
-export enum ApiCode {}
+export enum ApiCode {
+  IDENTITY_BINDING_ASK = '1640',
 
-export const ChangeModuleApiCodeMapping = {}
+  IDENTITY_BINDING = '1641',
+}
+
+export const ChangeModuleApiCodeMapping: Record<string, GuardModuleType> = {
+  [ApiCode.IDENTITY_BINDING]: GuardModuleType.IDENTITY_BINDING,
+  [ApiCode.IDENTITY_BINDING_ASK]: GuardModuleType.IDENTITY_BINDING_ASK,
+}

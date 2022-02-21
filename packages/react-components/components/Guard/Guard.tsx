@@ -257,6 +257,9 @@ export const Guard = (props: GuardProps) => {
     }
   }, [appId, config])
 
+  // 初始化 ErrorCode 拦截器
+  useEffect(() => {}, [])
+
   useEffect(() => {
     initPublicConfig()
   }, [initPublicConfig])

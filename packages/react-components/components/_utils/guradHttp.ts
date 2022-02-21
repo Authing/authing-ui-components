@@ -1,7 +1,15 @@
 import version from '../version'
-import { requestClient } from './http'
+import { AuthingResponse, requestClient } from './http'
+import { errorCodeInterceptor } from './responseManagement'
+import { CodeAction } from './responseManagement/interface'
 
 let httpClient: GuardHttp
+
+enum InterceptorName {
+  ERROR_CODE = 'errorCode',
+}
+
+type ResponseInterceptor = (res: AuthingResponse) => AuthingResponse
 
 export class GuardHttp {
   private requestClient: any
@@ -11,6 +19,11 @@ export class GuardHttp {
     'x-authing-sdk-version': version,
     'x-authing-request-from': `Guard@${version}`,
   }
+
+  private responseInterceptorMap: Map<
+    InterceptorName,
+    ResponseInterceptor
+  > = new Map()
 
   constructor(baseUrl: string) {
     this.getRequestClient().setBaseUrl(baseUrl)
@@ -26,18 +39,22 @@ export class GuardHttp {
 
   setUserpoolId(userpoolId: string) {
     this.headers['x-authing-userpool-id'] = userpoolId
+    return this
   }
 
   setAppId(appId: string) {
     this.headers['x-authing-app-id'] = appId
+    return this
   }
 
   setTenantId(tenantId: string) {
     this.headers['x-authing-app-tenant-id'] = tenantId
+    return this
   }
 
   setBaseUrl(baseUrl: string) {
     this.getRequestClient().setBaseUrl(baseUrl)
+    return this
   }
 
   public getHeaders = () => this.headers
@@ -46,11 +63,14 @@ export class GuardHttp {
     path: string,
     query: Record<string, any> = {},
     config?: RequestInit
-  ) =>
-    await requestClient.get<T>(path, query, {
+  ) => {
+    const res = await requestClient.get<T>(path, query, {
       ...config,
       headers: { ...this.headers, ...config?.headers },
     })
+
+    return this.responseIntercept(res)
+  }
 
   public post = async <T>(
     path: string,
@@ -58,13 +78,16 @@ export class GuardHttp {
     config?: {
       headers: any
     }
-  ) =>
-    await requestClient.post<T>(path, data, {
+  ) => {
+    const res = await requestClient.post<T>(path, data, {
       headers: {
         ...this.headers,
         ...config?.headers,
       },
     })
+
+    return this.responseIntercept(res)
+  }
 
   public postForm = async <T>(
     path: string,
@@ -72,13 +95,39 @@ export class GuardHttp {
     config?: {
       headers: any
     }
-  ) =>
-    await requestClient.postForm<T>(path, formData, {
+  ) => {
+    const res = await requestClient.postForm<T>(path, formData, {
       headers: {
         ...this.headers,
         ...config?.headers,
       },
     })
+
+    return this.responseIntercept(res)
+  }
+
+  // 初始化 Error code 拦截器
+  public initErrorCodeInterceptor = (
+    callBack: (code: CodeAction, res: AuthingResponse) => void
+  ) => {
+    if (!this.responseInterceptorMap.has(InterceptorName.ERROR_CODE)) return
+
+    this.responseInterceptorMap.set(InterceptorName.ERROR_CODE, (res) =>
+      errorCodeInterceptor(res, callBack)
+    )
+
+    return this
+  }
+
+  private responseIntercept: (res: AuthingResponse) => AuthingResponse = (
+    res
+  ) => {
+    if (this.responseInterceptorMap.size === 0) return res
+
+    const interceptors = Array.from(this.responseInterceptorMap.values())
+
+    return interceptors.reduce((acc, cur) => cur(acc), res)
+  }
 }
 
 export const initGuardHttp = (baseUrl: string) => {

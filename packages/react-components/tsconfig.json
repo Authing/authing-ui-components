@@ -16,7 +16,8 @@
     "isolatedModules": true,
     "declaration": true,
     "noEmit": false,
-    "jsx": "react"
+    "jsx": "react",
+    "downlevelIteration": true
   },
   "exclude": ["node_modules", "lib", "build", "dist"]
 }

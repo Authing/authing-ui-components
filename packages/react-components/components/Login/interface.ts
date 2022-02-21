@@ -14,9 +14,9 @@ import {
   ADLoginParams,
   PhoneCodeLoginParams,
   AuthenticationClient,
-  LoginMethods,
   User,
 } from '..'
+import { LoginMethods } from '../AuthingGuard/types'
 
 export interface LoginConfig extends IG2Config {
   autoRegister: boolean
@@ -32,21 +32,6 @@ export interface LoginConfig extends IG2Config {
   publicKey?: string
   agreementEnabled?: boolean
   agreements?: Agreement[]
-}
-
-const defaultConfig: LoginConfig = {
-  ...getDefaultG2Config(),
-  autoRegister: false,
-  disableResetPwd: false,
-  disableRegister: false,
-  defaultLoginMethod: LoginMethods.Password,
-  loginMethods: [LoginMethods.Password, LoginMethods.PhoneCode],
-  socialConnectionsBtnShape: 'default',
-  passwordLoginMethods: [
-    'email-password',
-    'username-password',
-    'phone-password',
-  ],
 }
 
 export interface LoginEvents extends IG2Events {
@@ -72,5 +57,15 @@ export interface GuardLoginViewProps extends GuardLoginProps, IG2FCViewProps {
 
 export const getDefaultLoginConfig = (): LoginConfig => ({
   ...getDefaultG2Config(),
-  ...defaultConfig,
+  autoRegister: false,
+  disableResetPwd: false,
+  disableRegister: false,
+  defaultLoginMethod: LoginMethods.Password,
+  loginMethods: [LoginMethods.Password, LoginMethods.PhoneCode],
+  socialConnectionsBtnShape: 'default',
+  passwordLoginMethods: [
+    'email-password',
+    'username-password',
+    'phone-password',
+  ],
 })
