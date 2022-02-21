@@ -25,6 +25,7 @@ let defaultConfig: GuardLocalConfig = {
   isSSO: false,
   defaultInitData: {},
   showLoading: true,
+  openEventsMapping: true,
   loadingComponent: (
     <div className="g2-init-setting-loading">
       <ShieldSpin size={100} />

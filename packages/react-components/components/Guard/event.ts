@@ -23,7 +23,7 @@ export const guardEventsFilter = (props: any) => {
   eventsName.forEach((eventName) => {
     events[eventName as keyof GuardEvents] = props[eventName]
   })
-  return guardEventsHijacking(events, props.config.openEventsMapping)
+  return guardEventsHijacking(events, props.config?.openEventsMapping)
 }
 
 const eventsMapping: Partial<GuardEvents> = {
