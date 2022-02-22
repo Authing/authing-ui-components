@@ -2,6 +2,7 @@ import { message, Tabs } from 'antd'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { GuardModuleType } from '..'
+import { PasswordLoginMethods } from '../AuthingGuard/api'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { IconFont } from '../IconFont'
 import { codeMap } from '../Login/codemap'
@@ -15,7 +16,7 @@ import './styles.less'
 export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> = (
   props
 ) => {
-  const { config } = props
+  const { config, initData } = props
   const { t } = useTranslation()
   const { publicKey, autoRegister, agreementEnabled } = config
 
@@ -139,6 +140,27 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
     [agreementEnabled, autoRegister, config?.agreements, i18n.language]
   )
 
+  const passwordLoginMethods = useMemo<PasswordLoginMethods[]>(() => {
+    const loginMethodsBase = [
+      'username-password',
+      'email-password',
+      'phone-password',
+    ]
+
+    // @ts-ignore
+    return initData.methods.filter((method) =>
+      loginMethodsBase.includes(method)
+    ) as PasswordLoginMethods[]
+  }, [initData.methods])
+
+  const codeLoginMethods = useMemo(() => {
+    const loginMethodsBase = ['email-code', 'phone-code']
+
+    return initData.methods.filter((method) =>
+      loginMethodsBase.includes(method)
+    )
+  }, [initData.methods])
+
   const methods = [
     {
       key: 'code',
@@ -150,6 +172,7 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
           onBeforeLogin={onBind}
           onLogin={() => {}}
           agreements={agreements}
+          methods={codeLoginMethods}
         />
       ),
     },
@@ -162,11 +185,7 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
           autoRegister={autoRegister}
           host={config.__appHost__}
           onBeforeLogin={onBind}
-          passwordLoginMethods={[
-            'username-password',
-            'email-password',
-            'phone-password',
-          ]}
+          passwordLoginMethods={passwordLoginMethods}
           onLogin={() => {}}
           agreements={agreements}
         />
@@ -195,6 +214,20 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
         </div>
         <div className="g2-view-identity-binding-content-login">
           <Tabs>
+            {methods
+              .filter((method) => {
+                if (method.key === 'password')
+                  return passwordLoginMethods.length !== 0
+
+                if (method.key === 'code') return codeLoginMethods.length !== 0
+
+                return true
+              })
+              .map((method) => (
+                <Tabs.TabPane key={method.key} tab={method.title}>
+                  {method.component}
+                </Tabs.TabPane>
+              ))}
             {methods.map((method) => (
               <Tabs.TabPane key={method.key} tab={method.title}>
                 {method.component}

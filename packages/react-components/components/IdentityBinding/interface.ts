@@ -22,8 +22,13 @@ export interface GuardIdentityBindingProps
   config?: Partial<IdentityBindingConfig>
 }
 
+export interface GuardIdentityBindingInitData {
+  methods: Array<'email' | 'username' | 'phone' | 'phone-code' | 'email-code'>
+}
+
 export interface GuardIdentityBindingViewProps
   extends GuardIdentityBindingProps,
     IG2FCViewProps {
   config: IdentityBindingConfig
+  initData: GuardIdentityBindingInitData
 }

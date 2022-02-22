@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useGuardAuthClient } from '../../../Guard/authClient'
@@ -9,7 +9,6 @@ import { Agreements } from '../../../Register/components/Agreements'
 import { EmailScene, SceneType } from 'authing-js-sdk'
 import { SendCodeByPhone } from '../../../SendCode/SendCodeByPhone'
 import { usePublicConfig } from '../../../_utils/context'
-import { VerifyLoginMethods } from '../../../AuthingGuard/api'
 import { SendCodeByEmail } from '../../../SendCode/SendCodeByEmail'
 import { FormItemIdentify } from './FormItemIdentify'
 import { InputIdentify } from './inputIdentify'
@@ -17,12 +16,7 @@ import { InputIdentify } from './inputIdentify'
 export const LoginWithVerifyCode = (props: any) => {
   const config = usePublicConfig()
 
-  const { agreements } = props
-
-  const methods = useMemo<VerifyLoginMethods[]>(
-    () => config?.verifyCodeTabConfig?.enabledLoginMethods ?? ['phone-code'],
-    [config?.verifyCodeTabConfig]
-  )
+  const { agreements, methods } = props
 
   const verifyCodeLength = config?.verifyCodeLength ?? 4
 
@@ -163,11 +157,16 @@ export const LoginWithVerifyCode = (props: any) => {
         onFinishFailed={() => submitButtonRef.current.onError()}
         autoComplete="off"
       >
-        <FormItemIdentify name="identify" className="authing-g2-input-form">
+        <FormItemIdentify
+          name="identify"
+          className="authing-g2-input-form"
+          methods={methods}
+        >
           <InputIdentify
             className="authing-g2-input"
             size="large"
             value={identify}
+            methods={methods}
             onChange={(e) => {
               let v = e.target.value
               setIdentify(v)

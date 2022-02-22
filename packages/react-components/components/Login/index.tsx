@@ -24,6 +24,7 @@ import './styles.less'
 import { usePublicConfig } from '../_utils/context'
 import { isWechatBrowser, shoudGoToComplete } from '../_utils'
 import { LoginWithVerifyCode } from './core/withVerifyCode'
+import { VerifyLoginMethods } from '../AuthingGuard/api'
 
 const inputWays = [
   LoginMethods.Password,
@@ -255,6 +256,14 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     [agreementEnabled, autoRegister, config?.agreements, i18n.language]
   )
 
+  const verifyLoginMethods = useMemo<VerifyLoginMethods[]>(
+    () =>
+      config.__publicConfig__?.verifyCodeTabConfig?.enabledLoginMethods ?? [
+        'phone-code',
+      ],
+    [config.__publicConfig__?.verifyCodeTabConfig?.enabledLoginMethods]
+  )
+
   return (
     <div className="g2-view-container g2-view-login">
       <div className="g2-view-container-inner">
@@ -349,6 +358,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                       onBeforeLogin={onBeforeLogin}
                       onLogin={onLogin}
                       agreements={agreements}
+                      methods={verifyLoginMethods}
                     />
                   </Tabs.TabPane>
                 )}

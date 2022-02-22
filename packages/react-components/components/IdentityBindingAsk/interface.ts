@@ -14,9 +14,13 @@ export interface GuardIdentityBindingAskProps
   initData?: any
 }
 
+export interface GuardIdentityBindingAskInitData {
+  methods: 'email' | 'username' | 'phone' | 'phone-code' | 'email-code'
+}
+
 export interface GuardIdentityBindingAskViewProps
   extends GuardIdentityBindingAskProps,
     IG2FCViewProps {
   config: IdentityBindingAskConfig
-  initData?: any
+  initData: GuardIdentityBindingAskInitData
 }

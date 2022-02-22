@@ -5,23 +5,16 @@ import { useTranslation } from 'react-i18next'
 import { VerifyLoginMethods } from '../../../AuthingGuard/api'
 import CustomFormItem from '../../../ValidatorRules'
 import { fieldRequiredRule, validate } from '../../../_utils'
-import { usePublicConfig } from '../../../_utils/context'
 
 export interface FormItemIdentifyProps extends FormItemProps {
   checkRepeat?: boolean
+  methods: VerifyLoginMethods[]
 }
 
 export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
-  const { ...formItemProps } = props
+  const { methods, ...formItemProps } = props
 
   const { t } = useTranslation()
-
-  const config = usePublicConfig()
-
-  const methods = useMemo<VerifyLoginMethods[]>(
-    () => config?.verifyCodeTabConfig?.enabledLoginMethods ?? ['phone-code'],
-    [config?.verifyCodeTabConfig]
-  )
 
   const renderTemplate = useMemo(() => {
     if (methods.length !== 1)
