@@ -1,20 +1,20 @@
-import babel from 'rollup-plugin-babel'
-import resolve from 'rollup-plugin-node-resolve'
-import vue from 'rollup-plugin-vue'
-import cjs from 'rollup-plugin-commonjs'
-import replace from 'rollup-plugin-replace'
-import requireContext from 'rollup-plugin-require-context'
-import { string } from 'rollup-plugin-string'
-import fs from 'fs'
-import CleanCSS from 'clean-css'
-import autoprefixer from 'autoprefixer'
-import css from 'rollup-plugin-css-only'
-const postcss = require('rollup-plugin-postcss')
+import babel from "rollup-plugin-babel";
+import resolve from "rollup-plugin-node-resolve";
+import vue from "rollup-plugin-vue";
+import cjs from "rollup-plugin-commonjs";
+import replace from "rollup-plugin-replace";
+import requireContext from "rollup-plugin-require-context";
+import { string } from "rollup-plugin-string";
+import fs from "fs";
+import CleanCSS from "clean-css";
+import autoprefixer from "autoprefixer";
+import css from "rollup-plugin-css-only";
+const postcss = require("rollup-plugin-postcss");
 
-const config = require('../package.json')
+const config = require("../package.json");
 
 export default {
-  input: 'src/components/index.js',
+  input: "src/components/index.js",
   plugins: [
     resolve({
       jsnext: true,
@@ -22,7 +22,7 @@ export default {
       browser: true,
     }),
     string({
-      include: '**/*.svg',
+      include: "**/*.svg",
     }),
     vue({
       css: false,
@@ -35,35 +35,34 @@ export default {
     }),
     css({
       output: (styles) => {
-        fs.writeFileSync(
-          'lib/index.min.css',
-          new CleanCSS().minify(styles).styles
-        )
+        fs.writeFileSync("lib/index.min.css", new CleanCSS().minify(styles).styles);
       },
     }),
     babel({
-      exclude: 'node_modules/**',
+      exclude: "node_modules/**",
       runtimeHelpers: true,
     }),
     cjs({
       namedExports: {
-        '@authing/native-js-ui-components': [
-          'AuthingGuard',
-          'GuardEventsCamelToKebabMap',
-          'GuardMode',
-          'GuardScenes',
-          'LoginMethods',
-          'RegisterMethods',
+        "@authing/native-js-ui-components": [
+          "AuthingGuard",
+          "Guard",
+          "GuardEventsCamelToKebabMap",
+          "GuardMode",
+          "GuardScenes",
+          "LoginMethods",
+          "RegisterMethods",
         ],
-        '../native-js/lib/index.min.js': [
-          'AuthingGuard',
-          'GuardEventsCamelToKebabMap',
-          'GuardMode',
-          'GuardScenes',
-          'LoginMethods',
-          'RegisterMethods',
-          'getAuthClient',
-          'initAuthClient',
+        "../native-js/lib/index.min.js": [
+          "AuthingGuard",
+          "Guard",
+          "GuardEventsCamelToKebabMap",
+          "GuardMode",
+          "GuardScenes",
+          "LoginMethods",
+          "RegisterMethods",
+          "getAuthClient",
+          "initAuthClient",
         ],
       },
     }),
@@ -73,6 +72,6 @@ export default {
     // }),
   ],
   watch: {
-    include: 'src/**',
+    include: "src/**",
   },
-}
+};

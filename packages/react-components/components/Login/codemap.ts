@@ -86,6 +86,9 @@ export const codeMap: Record<number, GuardModuleAction> = {
     // 无权登录此应用
     action: 'message',
   },
+  2120008: {
+    action: 'message',
+  },
   2031: {
     // 禁止注册
     action: 'message',
