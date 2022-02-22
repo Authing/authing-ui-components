@@ -90,4 +90,9 @@ export const codeMap: Record<number, GuardModuleAction> = {
     // 禁止注册
     action: 'message',
   },
+  1640: {
+    action: 'changeModule',
+    module: GuardModuleType.IDENTITY_BINDING_ASK,
+    initData: { type: 'rotate' },
+  },
 }

@@ -2,25 +2,36 @@ import { Button } from 'antd'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
-import { GuardModuleType } from '..'
+import { GuardModuleType, User } from '..'
+import { useGuardAuthClient } from '../Guard/authClient'
 import { IconFont } from '../IconFont'
+import { useGuardHttp } from '../_utils/guradHttp'
 import { GuardIdentityBindingAskViewProps } from './interface'
 import './styles.less'
 
 export const GuardIdentityBindingAskView: React.FC<GuardIdentityBindingAskViewProps> = (
   props
 ) => {
-  const { __changeModule } = props
+  const { __changeModule, onLogin, initData } = props
   const { t } = useTranslation()
+  const { post } = useGuardHttp()
+  const authClient = useGuardAuthClient()
 
   const onBack = () => {}
 
   const [createLoading, createAccount] = useAsyncFn(async () => {
-    console.log('createAccount')
+    const url = '/interaction/federation/binding/register'
+
+    const res = await post(url, {})
+
+    if (res.code === 200) {
+      const { data } = res
+      onLogin?.(data.user as User, authClient)
+    }
   }, [])
 
   const bindingAccount = () => {
-    __changeModule?.(GuardModuleType.IDENTITY_BINDING)
+    __changeModule?.(GuardModuleType.IDENTITY_BINDING, initData)
   }
 
   return (

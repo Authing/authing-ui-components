@@ -43,6 +43,11 @@ import enUS from 'antd/lib/locale/en_US'
 import 'moment/locale/zh-cn'
 import { GuardIdentityBindingAskView } from '../IdentityBindingAsk'
 import { GuardIdentityBindingView } from '../IdentityBinding'
+import {
+  ChangeModuleApiCodeMapping,
+  CodeAction,
+} from '../_utils/responseManagement/interface'
+import { AuthingResponse } from '../_utils/http'
 
 const PREFIX_CLS = 'authing-ant'
 export enum LangMAP {
@@ -115,7 +120,7 @@ export const Guard = (props: GuardProps) => {
 
   // 首页 init 数据
   const initState: ModuleState = {
-    moduleName: config?.defaultScenes ?? GuardModuleType.IDENTITY_BINDING,
+    moduleName: config?.defaultScenes ?? GuardModuleType.LOGIN,
     initData: config?.defaultInitData ?? {},
   }
 
@@ -167,6 +172,19 @@ export const Guard = (props: GuardProps) => {
       },
     })
   }
+
+  const __changeModule = useCallback(
+    async (moduleName: GuardModuleType, initData: any = {}) => {
+      if (!events?.onBeforeChangeModule) {
+        historyNext(moduleName)
+        guardStateMachine?.next(moduleName, initData)
+      } else if (await events.onBeforeChangeModule(moduleName, initData)) {
+        historyNext(moduleName)
+        guardStateMachine?.next(moduleName, initData)
+      }
+    },
+    [events, guardStateMachine, historyNext]
+  )
 
   // HttpClint
   useEffect(() => {
@@ -227,6 +245,32 @@ export const Guard = (props: GuardProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // 初始化 ErrorCode 拦截器
+  useEffect(() => {
+    if (!httpClint) return
+
+    const errorCodeCb = (code: CodeAction, res: AuthingResponse) => {
+      const codeActionMapping = {
+        [CodeAction.CHANGE_MODULE]: (res: AuthingResponse) => {
+          const nextModule = ChangeModuleApiCodeMapping[res.apiCode!]
+
+          const nextData = res.data
+
+          __changeModule(nextModule, nextData)
+        },
+        [CodeAction.RENDER_MESSAGE]: (res: AuthingResponse) => {
+          message.error(res.messages)
+        },
+      }
+
+      const codeAction = codeActionMapping[code]
+
+      codeAction(res)
+    }
+
+    httpClint?.initErrorCodeInterceptor(errorCodeCb)
+  }, [__changeModule, httpClint])
+
   // 设置 config
   useEffect(() => {
     if (guardStateMachine && GuardLocalConfig)
@@ -257,9 +301,6 @@ export const Guard = (props: GuardProps) => {
     }
   }, [appId, config])
 
-  // 初始化 ErrorCode 拦截器
-  useEffect(() => {}, [])
-
   useEffect(() => {
     initPublicConfig()
   }, [initPublicConfig])
@@ -288,15 +329,7 @@ export const Guard = (props: GuardProps) => {
         initData: moduleState.initData,
         config: GuardLocalConfig,
         ...events,
-        __changeModule: async (moduleName, initData) => {
-          if (!events?.onBeforeChangeModule) {
-            historyNext(moduleName)
-            guardStateMachine?.next(moduleName, initData)
-          } else if (await events.onBeforeChangeModule(moduleName, initData)) {
-            historyNext(moduleName)
-            guardStateMachine?.next(moduleName, initData)
-          }
-        },
+        __changeModule: __changeModule,
       })
     } else {
       return GuardLocalConfig?.showLoading
@@ -312,8 +345,7 @@ export const Guard = (props: GuardProps) => {
     moduleState.initData,
     appId,
     events,
-    historyNext,
-    guardStateMachine,
+    __changeModule,
   ])
 
   return (
