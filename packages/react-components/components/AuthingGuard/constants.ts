@@ -47,6 +47,7 @@ export const HIDE_SOCIALS_SHOWIN_ENTERPRISE = [
   'lark-internal',
   'wechatwork:corp:qrconnect',
   'wechatwork:service-provider:qrconnect',
+  'wechatwork:agency:qrconnect',
 ]
 
 // 企业版 MFA 支持的方式

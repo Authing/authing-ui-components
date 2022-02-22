@@ -14,6 +14,10 @@ import {
   RegisterMethods,
 } from "@authing/native-js-ui-components";
 import "@authing/native-js-ui-components/lib/index.min.css";
+<<<<<<< HEAD
+=======
+import { Guard as NativeGuard } from "@authing/native-js-ui-components/lib/index.min.js";
+>>>>>>> e64684b43ea5c1ccce16edac612e0430ad6354b3
 
 export { getAuthClient, initAuthClient, GuardMode, GuardScenes, LoginMethods, RegisterMethods };
 
