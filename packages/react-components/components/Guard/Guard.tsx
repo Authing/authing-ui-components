@@ -207,9 +207,11 @@ export const Guard = (props: GuardProps) => {
 
   // initEvents
   useEffect(() => {
-    const events = guardEventsFilter(props)
-    setEvents(events)
-  }, [props])
+    if (!!publicConfig) {
+      const events = guardEventsFilter({ ...props, config: publicConfig })
+      setEvents(events)
+    }
+  }, [props, publicConfig])
 
   // 状态机相关
   useEffect(() => {
