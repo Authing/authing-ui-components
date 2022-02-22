@@ -1,16 +1,16 @@
-import { Tabs } from 'antd'
-import { useForm } from 'antd/lib/form/Form'
-import React, { useMemo, useState } from 'react'
+import { message, Tabs } from 'antd'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
-import { User } from '..'
+import { GuardModuleType, User } from '..'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { IconFont } from '../IconFont'
+import { codeMap } from '../Login/codemap'
 import { LoginWithPassword } from '../Login/core/withPassword'
 import { LoginWithVerifyCode } from '../Login/core/withVerifyCode'
-import { validate } from '../_utils'
+import { shoudGoToComplete } from '../_utils'
+import { usePublicConfig } from '../_utils/context'
 import { useGuardHttp } from '../_utils/guradHttp'
-import { AuthingResponse } from '../_utils/http'
 import { i18n } from '../_utils/locales'
 import { GuardIdentityBindingViewProps } from './interface'
 import './styles.less'
@@ -18,39 +18,116 @@ import './styles.less'
 export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> = (
   props
 ) => {
-  const { config, onLogin } = props
+  const { config } = props
   const { t } = useTranslation()
   const { publicKey, autoRegister, agreementEnabled } = config
 
-  const [bindMethods, setBindMethods] = useState('code')
   const { post } = useGuardHttp()
   const authClient = useGuardAuthClient()
 
-  const onBack = () => {}
+  const onBack = () => window.history.back()
 
   const bindMethodsMap = {
-    'phone-code': async (data: any) =>
-      await post('/interaction/federation/binding/byPhoneCode', data),
-    'email-code': async (data: any) =>
-      await post('/interaction/federation/binding/byEmailCode', data),
-    account: async (data: any) =>
-      await post('/interaction/federation/binding/byAccount', data),
+    'phone-code': async (data: any) => {
+      const { identity, code } = data
+      return await post('/interaction/federation/binding/byPhoneCode', {
+        phone: identity,
+        code,
+      })
+    },
+    'email-code': async (data: any) => {
+      const { identity, code } = data
+
+      return await post('/interaction/federation/binding/byEmailCode', {
+        email: identity,
+        code,
+      })
+    },
+    password: async (data: any) => {
+      const { identity, password } = data
+      const encrypt = authClient.options.encryptFunction
+
+      const encryptPassword = await encrypt!(password, props.config?.publicKey!)
+
+      return await post('/interaction/federation/binding/byAccount', {
+        account: identity,
+        password: encryptPassword,
+      })
+    },
   }
 
-  const [, onBind] = useAsyncFn(async (loginInfo: any) => {
-    if (bindMethods === 'code') {
-      const identity = loginInfo.identity
-      let res: AuthingResponse
-      if (validate('email', identity))
-        res = await bindMethodsMap['email-code'](loginInfo)
-      else res = await bindMethodsMap['phone-code'](loginInfo)
-
-      onLogin?.(res.data as User, authClient)
-    } else {
-      const { data } = await bindMethodsMap.account(loginInfo)
-      onLogin?.(data as User, authClient)
+  const __codePaser = (code: number) => {
+    const action = codeMap[code]
+    if (code === 200) {
+      return (data: any) => {
+        console.log('binding success', data)
+        props.onBinding?.(data.user, authClient!) // 登录成功
+        props.onLogin?.(data.user, authClient!) // 登录成功
+      }
     }
-  }, [])
+
+    if (!action) {
+      return (initData?: any) => {
+        // initData?._message && message.error(initData?._message)
+        console.error('未捕获 code', code)
+      }
+    }
+
+    // 解析成功
+    if (action?.action === 'changeModule') {
+      let m = action.module ? action.module : GuardModuleType.ERROR
+      let init = action.initData ? action.initData : {}
+      return (initData?: any) => {
+        props.__changeModule?.(m, { ...initData, ...init })
+      }
+    }
+    if (action?.action === 'message') {
+      return (initData?: any) => {
+        message.error(initData?._message)
+      }
+    }
+    if (action?.action === 'accountLock') {
+      return () => {}
+    }
+
+    // 最终结果
+    return (initData?: any) => {
+      // props.onLoginError?.(data, client!) // 未捕获 code
+      console.error('last action at loginview')
+      message.error(initData?._message)
+    }
+  }
+
+  const onLogin = (code: any, data: any, message?: string) => {
+    const callback = __codePaser?.(code)
+    if (code !== 200) {
+      props.onBindingError?.({
+        code,
+        data,
+        message,
+      })
+      props.onLoginError?.({
+        code,
+        data,
+        message,
+      })
+    }
+    if (!data) {
+      data = {}
+    }
+    data._message = message
+    callback?.(data)
+  }
+
+  const onBind = async (loginInfo: any) => {
+    const { type, data } = loginInfo
+
+    const res = await bindMethodsMap[
+      type as 'phone-code' | 'email-code' | 'password'
+    ]?.(data)
+
+    onLogin(res.code, res.data, res.message)
+  }
 
   const agreements = useMemo(
     () =>
@@ -120,11 +197,7 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
           <span>{t('common.identityBindingDesc')}</span>
         </div>
         <div className="g2-view-identity-binding-content-login">
-          <Tabs
-            onChange={(key) => {
-              setBindMethods(key)
-            }}
-          >
+          <Tabs>
             {methods.map((method) => (
               <Tabs.TabPane key={method.key} tab={method.title}>
                 {method.component}

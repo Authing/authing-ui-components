@@ -137,7 +137,7 @@ export const LoginWithVerifyCode = (props: any) => {
     let loginInfo = {
       type: currentMethod,
       data: {
-        phone: values.phone,
+        identity: values.identify,
         code: values.code,
       },
     }

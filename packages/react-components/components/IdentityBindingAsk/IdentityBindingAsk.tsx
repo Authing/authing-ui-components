@@ -17,7 +17,7 @@ export const GuardIdentityBindingAskView: React.FC<GuardIdentityBindingAskViewPr
   const { post } = useGuardHttp()
   const authClient = useGuardAuthClient()
 
-  const onBack = () => {}
+  const onBack = () => window.history.back()
 
   const [createLoading, createAccount] = useAsyncFn(async () => {
     const url = '/interaction/federation/binding/register'

@@ -162,7 +162,6 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     if (code === 200) {
       return (data: any) => {
         if (shoudGoToComplete(data, 'login', publicConfig, autoRegister)) {
-          console.log('登陆成功，用户为', data)
           props.__changeModule?.(GuardModuleType.COMPLETE_INFO, {
             context: 'login',
             user: data,
