@@ -207,9 +207,11 @@ export const Guard = (props: GuardProps) => {
 
   // initEvents
   useEffect(() => {
-    const events = guardEventsFilter(props)
-    setEvents(events)
-  }, [props])
+    if (!!GuardLocalConfig) {
+      const events = guardEventsFilter({ ...props, config: GuardLocalConfig })
+      setEvents(events)
+    }
+  }, [props, GuardLocalConfig])
 
   // 状态机相关
   useEffect(() => {
@@ -234,7 +236,6 @@ export const Guard = (props: GuardProps) => {
         config ?? {},
         getDefaultGuardLocalConfig()
       )
-
       setGuardLocalConfig(mergedConfig)
       setPublicConfig(publicConfig)
 
