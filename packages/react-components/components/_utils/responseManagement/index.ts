@@ -1,26 +1,5 @@
-import { GuardModuleType } from '../..'
 import { AuthingResponse } from '../http'
-import { ChangeModuleApiCodeMapping, CodeAction } from './interface'
-
-let changeModule = (a: GuardModuleType, b?: any) => {}
-
-let renderMessage = (message?: string) => {}
-
-const codeActionMapping: Record<
-  CodeAction,
-  (res: AuthingResponse<any>) => void
-> = {
-  [CodeAction.CHANGE_MODULE]: (res) => {
-    const nextModule = ChangeModuleApiCodeMapping[res.apiCode!]
-
-    const nextData = res.data
-
-    changeModule(nextModule, nextData)
-  },
-  [CodeAction.RENDER_MESSAGE]: (res) => {
-    renderMessage(res.messages)
-  },
-}
+import { CodeAction } from './interface'
 
 export const errorCodeInterceptor: (
   res: AuthingResponse<any>,
