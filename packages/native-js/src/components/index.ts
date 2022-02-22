@@ -1,5 +1,7 @@
-import { GuardConfig, GuardLocalConfig } from "@authing/react-ui-components/components";
-export type { GuardConfig, GuardLocalConfig };
-
+// export * from "./Guard";
+import { Guard } from "./Guard";
+import { GuardConfig, GuardLocalConfig } from "@authing/react-ui-components";
 export * from "./AuthingGuard";
-export * from "./Guard";
+
+export { Guard };
+export type { GuardConfig, GuardLocalConfig };
