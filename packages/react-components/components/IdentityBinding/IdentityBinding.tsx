@@ -228,11 +228,6 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
                   {method.component}
                 </Tabs.TabPane>
               ))}
-            {methods.map((method) => (
-              <Tabs.TabPane key={method.key} tab={method.title}>
-                {method.component}
-              </Tabs.TabPane>
-            ))}
           </Tabs>
         </div>
       </div>
