@@ -5,6 +5,9 @@ export interface IdentityBindingAskConfig extends IG2Config {}
 
 export interface IdentityBindingAskEvents extends IG2Events {
   onLogin?: (user: User, authClient: AuthenticationClient) => void
+  onLoginError?: (errorMessages: any) => void
+  onCreate?: (user: User, authClient: AuthenticationClient) => void
+  onCreateError?: (errorMessages: any) => void
 }
 
 export interface GuardIdentityBindingAskProps
