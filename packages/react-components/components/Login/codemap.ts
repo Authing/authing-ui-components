@@ -95,7 +95,10 @@ export const codeMap: Record<number, GuardModuleAction> = {
   },
   1640: {
     action: 'changeModule',
+    module: GuardModuleType.IDENTITY_BINDING,
+  },
+  1641: {
+    action: 'changeModule',
     module: GuardModuleType.IDENTITY_BINDING_ASK,
-    initData: { type: 'rotate' },
   },
 }

@@ -8,9 +8,9 @@ export enum CodeAction {
 }
 
 export enum ApiCode {
-  IDENTITY_BINDING_ASK = '1640',
+  IDENTITY_BINDING_ASK = '1641',
 
-  IDENTITY_BINDING = '1641',
+  IDENTITY_BINDING = '1640',
 }
 
 export const ChangeModuleApiCodeMapping: Record<string, GuardModuleType> = {
