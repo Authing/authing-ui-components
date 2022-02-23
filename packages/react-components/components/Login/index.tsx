@@ -190,6 +190,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     }
     if (action?.action === 'message') {
       return (initData?: any) => {
+        setErrorNumber(errorNumber + 1)
         message.error(initData?._message)
       }
     }
@@ -210,7 +211,6 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   const onLogin = (code: any, data: any, message?: string) => {
     const callback = __codePaser?.(code)
     if (code !== 200) {
-      setErrorNumber(errorNumber + 1)
       props.onLoginError?.({
         code,
         data,
