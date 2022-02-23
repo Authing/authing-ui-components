@@ -16,14 +16,18 @@ import './styles.less'
 export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> = (
   props
 ) => {
-  const { config, initData } = props
+  const { config, initData, __changeModule } = props
   const { t } = useTranslation()
   const { publicKey, autoRegister, agreementEnabled } = config
 
   const { post } = useGuardHttp()
   const authClient = useGuardAuthClient()
 
-  const onBack = () => window.history.back()
+  const onBack = () => {
+    if (initData.source === GuardModuleType.IDENTITY_BINDING_ASK)
+      window.history.back()
+    else __changeModule?.(GuardModuleType.LOGIN)
+  }
 
   const bindMethodsMap = {
     'phone-code': async (data: any) => {
@@ -168,7 +172,7 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
       component: (
         <LoginWithVerifyCode
           verifyCodeLength={props.config.__publicConfig__?.verifyCodeLength}
-          autoRegister={autoRegister}
+          autoRegister={false}
           onBeforeLogin={onBind}
           onLogin={() => {}}
           agreements={agreements}
@@ -182,7 +186,7 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
       component: (
         <LoginWithPassword
           publicKey={publicKey!}
-          autoRegister={autoRegister}
+          autoRegister={false}
           host={config.__appHost__}
           onBeforeLogin={onBind}
           passwordLoginMethods={passwordLoginMethods}

@@ -85,7 +85,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
       setMfaBackState('login')
       return
     }
-    window.history.back()
+    __changeModule?.(GuardModuleType.LOGIN)
   }
 
   const __codePaser = (code: number, msg?: string) => {

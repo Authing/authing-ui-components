@@ -18,7 +18,7 @@ export const GuardIdentityBindingAskView: React.FC<GuardIdentityBindingAskViewPr
   const { post } = useGuardHttp()
   const authClient = useGuardAuthClient()
 
-  const onBack = () => window.history.back()
+  const onBack = () => __changeModule?.(GuardModuleType.LOGIN)
 
   const __codePaser = (code: number) => {
     const action = codeMap[code]
@@ -92,7 +92,10 @@ export const GuardIdentityBindingAskView: React.FC<GuardIdentityBindingAskViewPr
   }, [])
 
   const bindingAccount = () => {
-    __changeModule?.(GuardModuleType.IDENTITY_BINDING, initData)
+    __changeModule?.(GuardModuleType.IDENTITY_BINDING, {
+      ...initData,
+      source: GuardModuleType.IDENTITY_BINDING_ASK,
+    })
   }
 
   return (

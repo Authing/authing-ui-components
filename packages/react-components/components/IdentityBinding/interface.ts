@@ -1,6 +1,7 @@
 import { IG2Config, IG2Events, IG2FCProps, IG2FCViewProps } from '..'
 import { Agreement } from '../AuthingGuard/api'
 import { AuthenticationClient, User } from '..'
+import { GuardModuleType } from '../Guard'
 
 export interface IdentityBindingConfig extends IG2Config {
   autoRegister?: boolean
@@ -24,6 +25,7 @@ export interface GuardIdentityBindingProps
 
 export interface GuardIdentityBindingInitData {
   methods: Array<'email' | 'username' | 'phone' | 'phone-code' | 'email-code'>
+  source?: GuardModuleType
 }
 
 export interface GuardIdentityBindingViewProps
