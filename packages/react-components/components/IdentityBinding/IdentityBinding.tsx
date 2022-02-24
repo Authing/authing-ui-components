@@ -129,7 +129,8 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
       type as 'phone-code' | 'email-code' | 'password'
     ]?.(data)
 
-    onLogin(res.code, res.data, res.message)
+    return res
+    // onLogin(res.code, res.data, res.message)
   }
 
   const agreements = useMemo(
@@ -174,7 +175,7 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
         <LoginWithVerifyCode
           verifyCodeLength={props.config.__publicConfig__?.verifyCodeLength}
           autoRegister={false}
-          onBeforeLogin={onBind}
+          onLoginRequest={onBind}
           onLogin={() => {}}
           agreements={agreements}
           methods={codeLoginMethods}
@@ -190,12 +191,22 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
           publicKey={publicKey!}
           autoRegister={false}
           host={config.__appHost__}
-          onBeforeLogin={onBind}
+          onLoginRequest={onBind}
           passwordLoginMethods={passwordLoginMethods}
           onLogin={() => {}}
           agreements={agreements}
           submitButText={t('common.bind')}
         />
+        //   <LoginWithPassword
+        //   loginWay={loginWay}
+        //   publicKey={publicKey}
+        //   autoRegister={autoRegister}
+        //   host={props.config.__appHost__}
+        //   onLogin={onLogin}
+        //   onBeforeLogin={onBeforeLogin}
+        //   passwordLoginMethods={props.config.passwordLoginMethods}
+        //   agreements={agreements}
+        // />
       ),
     },
   ]

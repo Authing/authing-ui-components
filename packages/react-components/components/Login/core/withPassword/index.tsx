@@ -14,6 +14,7 @@ import { GraphicVerifyCode } from './GraphicVerifyCode'
 import { IconFont } from '../../../IconFont'
 import { InputPassword } from '../../../InputPassword'
 import { Agreements } from '../../../Register/components/Agreements'
+import { AuthingResponse } from '../../../_utils/http'
 
 interface LoginWithPasswordProps {
   // configs
@@ -23,7 +24,9 @@ interface LoginWithPasswordProps {
 
   // events
   onLogin: any
-  onBeforeLogin: any
+  onBeforeLogin?: any
+  // 越过 login 正常的请求，返回一个 res
+  onLoginRequest?: (loginInfo: any) => Promise<AuthingResponse>
   passwordLoginMethods: PasswordLoginMethods[]
 
   agreements: Agreement[]
@@ -81,6 +84,11 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
       return
     }
 
+    if (!!props.onLoginRequest) {
+      const res = await props.onLoginRequest(loginInfo)
+      onLoginRes(res)
+    }
+
     // onLogin
     let url = '/api/v2/login/account'
     let account = values.account && values.account.trim()
@@ -95,7 +103,13 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
       autoRegister: props.autoRegister,
       withCustomData: true,
     }
-    const { code, message: msg, data } = await post(url, body)
+    const res = await post(url, body)
+
+    onLoginRes(res)
+  }
+
+  const onLoginRes = (res: AuthingResponse) => {
+    const { code, message: msg, data } = res
 
     if (code !== 200) {
       submitButtonRef.current.onError()

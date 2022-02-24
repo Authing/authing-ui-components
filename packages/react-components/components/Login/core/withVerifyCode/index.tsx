@@ -141,6 +141,13 @@ export const LoginWithVerifyCode = (props: any) => {
       return
     }
 
+    if (!!props.onLoginRequest) {
+      const res = await props.onLoginRequest?.(loginInfo)
+
+      const { code, message, data } = res
+      props.onLogin(code, data, message)
+    }
+
     if (currentMethod === 'phone-code') {
       await loginByPhoneCode(values)
     } else {
