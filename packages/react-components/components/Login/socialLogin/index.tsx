@@ -93,6 +93,10 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
           localStorage.setItem('_authing_token', data?.token)
           //   onSuccess(data)
           onGuardLogin(code, data, message)
+
+          // TODO 身份源绑定逻辑 临时修改
+        } else if ([1641, 1640].includes(code)) {
+          onGuardLogin(code, data)
         } else {
           try {
             const parsedMsg = JSON.parse(errMsg)
