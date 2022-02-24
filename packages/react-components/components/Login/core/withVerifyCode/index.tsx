@@ -146,6 +146,7 @@ export const LoginWithVerifyCode = (props: any) => {
 
       const { code, message, data } = res
       props.onLogin(code, data, message)
+      return
     }
 
     if (currentMethod === 'phone-code') {

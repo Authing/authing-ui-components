@@ -87,6 +87,8 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     if (!!props.onLoginRequest) {
       const res = await props.onLoginRequest(loginInfo)
       onLoginRes(res)
+
+      return
     }
 
     // onLogin
