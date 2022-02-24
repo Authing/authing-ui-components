@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useGuardAuthClient } from '../../../Guard/authClient'
@@ -16,7 +16,7 @@ import { InputIdentify } from './inputIdentify'
 export const LoginWithVerifyCode = (props: any) => {
   const config = usePublicConfig()
 
-  const { agreements, methods } = props
+  const { agreements, methods, submitButText } = props
 
   const verifyCodeLength = config?.verifyCodeLength ?? 4
 
@@ -148,6 +148,14 @@ export const LoginWithVerifyCode = (props: any) => {
     }
   }
 
+  const submitText = useMemo(() => {
+    if (submitButText) return submitButText
+
+    return props.autoRegister
+      ? `${t('common.login')} / ${t('common.register')}`
+      : t('common.login')
+  }, [props.autoRegister, submitButText, t])
+
   return (
     <div className="authing-g2-login-phone-code">
       <Form
@@ -202,11 +210,7 @@ export const LoginWithVerifyCode = (props: any) => {
         )}
         <Form.Item>
           <SubmitButton
-            text={
-              props.autoRegister
-                ? `${t('common.login')} / ${t('common.register')}`
-                : t('common.login')
-            }
+            text={submitText}
             className="password"
             ref={submitButtonRef}
           />

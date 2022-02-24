@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useGuardHttp } from '../../../_utils/guradHttp'
@@ -28,6 +28,7 @@ interface LoginWithPasswordProps {
 
   agreements: Agreement[]
   loginWay?: LoginMethods
+  submitButText?: string
 }
 
 export const LoginWithPassword = (props: LoginWithPasswordProps) => {
@@ -129,6 +130,14 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     setAccountLock(false)
   }, [props.loginWay])
 
+  const submitText = useMemo(() => {
+    if (props.submitButText) return props.submitButText
+
+    return props.autoRegister
+      ? `${t('common.login')} / ${t('common.register')}`
+      : t('common.login')
+  }, [props, t])
+
   return (
     <div className="authing-g2-login-password">
       <Form
@@ -226,11 +235,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         )}
         <Form.Item>
           <SubmitButton
-            text={
-              props.autoRegister
-                ? `${t('common.login')} / ${t('common.register')}`
-                : t('common.login')
-            }
+            text={submitText}
             className="password"
             ref={submitButtonRef}
           />

@@ -17,6 +17,7 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
   props
 ) => {
   const { config, initData, __changeModule } = props
+
   const { t } = useTranslation()
   const { publicKey, autoRegister, agreementEnabled } = config
 
@@ -177,6 +178,7 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
           onLogin={() => {}}
           agreements={agreements}
           methods={codeLoginMethods}
+          submitButText={t('common.bind')}
         />
       ),
     },
@@ -192,6 +194,7 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
           passwordLoginMethods={passwordLoginMethods}
           onLogin={() => {}}
           agreements={agreements}
+          submitButText={t('common.bind')}
         />
       ),
     },
