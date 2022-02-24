@@ -9,6 +9,7 @@ import { ImagePro } from '../ImagePro'
 import { ForgetPasswordViewProps } from './interface'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { CommonMessage } from '..'
+import { usePublicConfig } from '../_utils/context'
 // import { ChangeLanguage } from '../ChangeLanguage'
 
 export const GuardForgetPassword: React.FC<ForgetPasswordViewProps> = (
@@ -16,7 +17,10 @@ export const GuardForgetPassword: React.FC<ForgetPasswordViewProps> = (
 ) => {
   // let { langRange } = props.config
   const { t } = useTranslation()
-  let publicConfig = props.config.__publicConfig__
+  // let publicConfig = props.config.__publicConfig__
+
+  const publicConfig = usePublicConfig()
+
   const authClient = useGuardAuthClient()
 
   const onReset = (res: any) => {

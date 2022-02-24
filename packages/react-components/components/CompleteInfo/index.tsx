@@ -7,6 +7,7 @@ import { GuardCompleteInfoViewProps } from './interface'
 import './styles.less'
 import { IconFont } from '../IconFont'
 import { useGuardAuthClient } from '../Guard/authClient'
+import { usePublicConfig } from '../_utils/context'
 
 export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
   config,
@@ -22,8 +23,9 @@ export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
 
   const user = initData.user
 
-  const skipComplateFileds =
-    config?.__publicConfig__?.skipComplateFileds ?? false
+  const publicConfig = usePublicConfig()
+
+  const skipComplateFileds = publicConfig?.skipComplateFileds ?? false
 
   const onSuccess = (
     udfs: {
@@ -69,8 +71,8 @@ export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
       </div>
       <div className="g2-view-tabs g2-completeInfo-content">
         <CompleteInfo
-          extendsFields={config?.__publicConfig__?.extendsFields!}
-          verifyCodeLength={config?.__publicConfig__?.verifyCodeLength}
+          extendsFields={publicConfig?.extendsFields!}
+          verifyCodeLength={publicConfig?.verifyCodeLength}
           user={initData?.user}
           onRegisterInfoCompleted={(_, udfs) => {
             onSuccess(udfs)

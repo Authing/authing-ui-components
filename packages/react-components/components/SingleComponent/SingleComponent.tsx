@@ -60,8 +60,8 @@ export function SingleComponent<T extends IG2FCProps>(
   }, [appId, config?.host])
 
   useEffect(() => {
-    if (httpClint && GuardLocalConfig && GuardLocalConfig.__appHost__) {
-      httpClint?.setBaseUrl(GuardLocalConfig.__appHost__)
+    if (httpClint && GuardLocalConfig && GuardLocalConfig.host) {
+      httpClint?.setBaseUrl(GuardLocalConfig.host)
     }
   }, [GuardLocalConfig, httpClint])
 

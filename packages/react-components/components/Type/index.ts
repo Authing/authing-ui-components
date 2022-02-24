@@ -25,8 +25,6 @@ export interface IG2Config {
   userpool?: string
   contentCss?: string
   target?: HTMLElement | string
-  __appHost__?: string
-  __publicConfig__?: ApplicationConfig
   __internalRequest__?: boolean
 }
 

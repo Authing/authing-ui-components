@@ -11,6 +11,7 @@ import { GuardRegisterViewProps } from './interface'
 import { codeMap } from './codemap'
 import { shoudGoToComplete, tabSort } from '../_utils'
 import { i18n } from '../_utils/locales'
+import { usePublicConfig } from '../_utils/context'
 
 export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
   config,
@@ -23,13 +24,15 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
   const { langRange } = config
   const authClient = useGuardAuthClient()
 
+  const publicConfig = usePublicConfig()
+
   const __codePaser = (code: number) => {
     const action = codeMap[code]
 
     if (code === 200) {
       return (user: User) => {
         // TODO 用户信息补全 等待后端接口修改
-        if (shoudGoToComplete(user, 'register', config.__publicConfig__)) {
+        if (shoudGoToComplete(user, 'register', publicConfig)) {
           __changeModule?.(GuardModuleType.COMPLETE_INFO, {
             context: 'register',
             user: user,
@@ -90,7 +93,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
             (agree) => agree.lang === i18n.language && agree?.availableAt !== 1
           ) ?? []
         : [],
-      publicConfig: config.__publicConfig__,
+      publicConfig: publicConfig,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [

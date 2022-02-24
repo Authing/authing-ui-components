@@ -7,9 +7,10 @@ let authClient: AuthenticationClient
 export const initGuardAuthClient = (
   config: GuardLocalConfig,
   appId: string,
+  websocketHost: string,
   tenantId?: string
 ) => {
-  const host = config.__appHost__ ?? config.host
+  const host = config.host
   const lang = config.lang
 
   if (!authClient) {
@@ -23,7 +24,7 @@ export const initGuardAuthClient = (
         onError: (code, msg: any) => {
           console.error(code, msg)
         },
-        websocketHost: config.__publicConfig__?.websocket,
+        websocketHost: websocketHost,
       })
     } catch (error: any) {
       throw error

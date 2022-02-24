@@ -82,7 +82,6 @@ const useSwitchStates = (loginWay: LoginMethods) => {
 }
 export const GuardLoginView = (props: GuardLoginViewProps) => {
   const { config } = props
-  const qrcodeTabsSettings = config.__publicConfig__?.qrcodeTabsSettings
 
   let [defaultMethod, renderInputWay, renderQrcodeWay] = useMethods(config)
   const agreementEnabled = config?.agreementEnabled
@@ -90,16 +89,28 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   const { t } = useTranslation()
 
   const [loginWay, setLoginWay] = useState(defaultMethod)
+
   const [canLoop, setCanLoop] = useState(false) // 允许轮询
+
   const client = useGuardAuthClient()
+
   const publicConfig = usePublicConfig()
+
+  const qrcodeTabsSettings = publicConfig?.qrcodeTabsSettings
+
   const [errorNumber, setErrorNumber] = useState(0)
+
   const [accountLock, setAccountLock] = useState(false)
+
   let publicKey = props.config?.publicKey!
+
   // let autoRegister = props.config?.autoRegister
   let ms = props.config?.loginMethods
+
   let { autoRegister, langRange } = props.config
+
   const firstInputWay = inputWays.filter((way) => ms.includes(way))[0]
+
   const firstQRcodeWay = qrcodeWays.filter((way) => ms.includes(way))[0]
 
   let { disableResetPwd, disableRegister } = useDisables({
@@ -121,6 +132,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
 
     return t('common.verifyCodeLogin')
   }, [publicConfig, t])
+
   const hiddenTab = useMemo(() => {
     const scanLogins = ms.filter((method) => qrcodeWays.includes(method)) //取到扫码登录类型
     if (scanLogins.length > 1) {
@@ -141,6 +153,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
       return true
     }
   }, [ms, qrcodeTabsSettings])
+
   const defaultQrCodeWay = useMemo(() => {
     if (
       [LoginMethods.WechatMpQrcode, LoginMethods.WxMinQr].includes(
@@ -159,6 +172,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
 
   const __codePaser = (code: number) => {
     const action = codeMap[code]
+
     if (code === 200) {
       return (data: any) => {
         if (shoudGoToComplete(data, 'login', publicConfig, autoRegister)) {
@@ -329,7 +343,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                       loginWay={loginWay}
                       publicKey={publicKey}
                       autoRegister={autoRegister}
-                      host={props.config.__appHost__}
+                      host={props.config.host}
                       onLogin={onLogin}
                       onBeforeLogin={onBeforeLogin}
                       passwordLoginMethods={props.config.passwordLoginMethods}
@@ -343,9 +357,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                     tab={verifyCodeLogin}
                   >
                     <LoginWithVerifyCode
-                      verifyCodeLength={
-                        props.config.__publicConfig__?.verifyCodeLength
-                      }
+                      verifyCodeLength={publicConfig?.verifyCodeLength}
                       autoRegister={autoRegister}
                       onBeforeLogin={onBeforeLogin}
                       onLogin={onLogin}
@@ -361,7 +373,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                     <LoginWithLDAP
                       publicKey={publicKey}
                       autoRegister={autoRegister}
-                      host={props.config.__appHost__}
+                      host={props.config.host}
                       onLogin={onLogin}
                       onBeforeLogin={onBeforeLogin}
                       agreements={agreements}
@@ -373,7 +385,6 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                     <LoginWithAD
                       publicKey={publicKey}
                       autoRegister={autoRegister}
-                      // host={props.config.__appHost__}
                       onLogin={onLogin}
                       onBeforeLogin={onBeforeLogin}
                       agreements={agreements}

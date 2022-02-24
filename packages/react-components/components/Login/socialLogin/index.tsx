@@ -35,6 +35,7 @@ import { IconFont } from '../../IconFont'
 import { LoginConfig } from '../interface'
 import './style.less'
 import { useMediaSize } from '../../_utils/hooks'
+import { usePublicConfig } from '../../_utils/context'
 
 export interface SocialLoginProps {
   appId: string
@@ -49,9 +50,9 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
 }) => {
   const noLoginMethods = !config.loginMethods.length
 
-  const userPoolId = config.__publicConfig__?.userPoolId
+  const publicConfig = usePublicConfig()
 
-  const publicConfig = config.__publicConfig__
+  const userPoolId = publicConfig?.userPoolId
 
   const { t } = useTranslation()
 
@@ -156,11 +157,11 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
 
   if (config.enterpriseConnections) {
     enterpriseConnectionObjs =
-      config.__publicConfig__?.identityProviders?.filter?.((item) =>
+      publicConfig?.identityProviders?.filter?.((item) =>
         config.enterpriseConnections!.includes(item.identifier)
       ) || []
   } else {
-    enterpriseConnectionObjs = config.__publicConfig__?.identityProviders || []
+    enterpriseConnectionObjs = publicConfig?.identityProviders || []
   }
 
   let socialConnectionObjs: SocialConnectionItem[]

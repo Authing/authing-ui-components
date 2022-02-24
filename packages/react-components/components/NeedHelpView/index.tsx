@@ -7,6 +7,8 @@ import { GuardModuleType } from '../Guard/module'
 export const GuardNeedHelpView = (props: any) => {
   const { t } = useTranslation()
 
+  const { appId } = props
+
   const onSuccess = () => {
     props.__changeModule?.(GuardModuleType.SUBMIT_SUCCESS)
   }
@@ -26,8 +28,8 @@ export const GuardNeedHelpView = (props: any) => {
       </div>
       <div className="g2-view-tabs">
         <DescribeQuestions
-          appId={props.config.__publicConfig__.id}
-          host={props.config.__appHost__}
+          appId={appId}
+          host={props.config.host}
           onSuccess={onSuccess}
         />
       </div>

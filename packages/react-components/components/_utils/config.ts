@@ -1,11 +1,12 @@
 import { LoginMethods, RegisterMethods } from 'authing-js-sdk'
 import { IG2Config } from '../Type'
 import { ApplicationConfig } from '../AuthingGuard/api'
-import { assembledRequestHost } from '.'
+import { assembledRequestHost as utilAssembledRequestHost } from '.'
 import { getGuardHttp } from './guradHttp'
 import { AuthingResponse } from './http'
-import { GuardComponentConifg, GuardLocalConfig } from '../Guard/config'
+import { GuardComponentConfig, GuardLocalConfig } from '../Guard/config'
 import { corsVerification } from './corsVerification'
+import { useCallback, useEffect, useState } from 'react'
 
 let publicConfigMap: Record<string, ApplicationConfig> = {}
 
@@ -29,21 +30,20 @@ export const initConfig = async (
   return {
     config: {
       ...mergedConfig,
-      __publicConfig__: getPublicConfig(appId),
       // 请求地址 拼装
-      __appHost__: config?.__internalRequest__
-        ? mergedConfig?.host
-        : assembledRequestHost(
-            getPublicConfig(appId).requestHostname,
-            mergedConfig?.host!
-          ),
+      // __appHost__: config?.__internalRequest__
+      //   ? mergedConfig?.host
+      //   : assembledRequestHost(
+      //       getPublicConfig(appId).requestHostname,
+      //       mergedConfig?.host!
+      //     ),
     },
     publicConfig: getPublicConfig(appId),
   }
 }
 
 const mergeConfig = (
-  config: GuardComponentConifg,
+  config: GuardComponentConfig,
   defaultConfig: IG2Config,
   publicConfig: ApplicationConfig
 ): GuardLocalConfig => {
@@ -119,4 +119,99 @@ const requestPublicConfig = async (
   setPublicConfig(appId, res.data)
 
   return getPublicConfig(appId)
+}
+
+export const useMergeDefaultConfig = (
+  config: GuardComponentConfig,
+  defaultConfig: GuardLocalConfig
+): GuardLocalConfig => ({
+  ...defaultConfig,
+  ...config,
+})
+
+const mergedPublicConfig = (
+  config: GuardLocalConfig,
+  publicConfig: ApplicationConfig
+): GuardLocalConfig => {
+  const mergedPublicConfig: GuardLocalConfig = {
+    ...config,
+    title: config.title ?? publicConfig.name,
+    logo: !!config.logo ? config.logo : publicConfig.logo,
+    loginMethods:
+      config?.loginMethods ??
+      (publicConfig.loginTabs?.list as LoginMethods[]) ??
+      [],
+    passwordLoginMethods:
+      config?.passwordLoginMethods ??
+      publicConfig.passwordTabConfig?.enabledLoginMethods ??
+      [],
+    // 默认登录方式
+    defaultLoginMethod:
+      config.defaultLoginMethod ??
+      (publicConfig.loginTabs.default as LoginMethods),
+    // 禁止重制密码
+    disableResetPwd: !!(
+      config.disableResetPwd ??
+      !publicConfig.ssoPageComponentDisplay?.forgetPasswordBtn
+    ),
+    // 是否自动注册
+    autoRegister:
+      config.autoRegister ??
+      publicConfig.ssoPageComponentDisplay.autoRegisterThenLoginHintInfo,
+    registerMethods:
+      config.registerMethods ??
+      (publicConfig.registerTabs?.list as RegisterMethods[]),
+    defaultRegisterMethod:
+      config.defaultRegisterMethod ??
+      (publicConfig.registerTabs.default as RegisterMethods),
+    // 禁止注册
+    disableRegister: !!(
+      config.disableRegister ??
+      !publicConfig.ssoPageComponentDisplay.registerBtn
+    ),
+    // publicKey
+    publicKey: config.publicKey ?? publicConfig.publicKey,
+    // 注册协议
+    agreementEnabled: config.agreementEnabled ?? publicConfig.agreementEnabled,
+    agreements: config.agreements ?? publicConfig.agreements,
+    contentCss: config.contentCss ?? publicConfig.css,
+  }
+
+  return mergedPublicConfig
+}
+
+// host 拼接
+const assembledRequestHost = (
+  config: GuardLocalConfig,
+  publicConfig: ApplicationConfig
+) => {
+  const host = config?.__internalRequest__
+    ? config?.host
+    : utilAssembledRequestHost(publicConfig.requestHostname, config?.host!)
+
+  return host
+}
+
+export const useMergePublicConfig = (
+  appId: string,
+  config: GuardLocalConfig
+) => {
+  const [publicConfig, setPublicConfig] = useState<ApplicationConfig>()
+
+  const initPublicConfig = useCallback(async () => {
+    if (!getPublicConfig(appId)) await requestPublicConfig(appId)
+
+    setPublicConfig(getPublicConfig(appId))
+  }, [appId])
+
+  useEffect(() => {
+    initPublicConfig()
+  }, [initPublicConfig])
+
+  if (publicConfig) {
+    return {
+      ...mergedPublicConfig(config, publicConfig),
+      host: assembledRequestHost(config, publicConfig),
+    }
+  }
 }

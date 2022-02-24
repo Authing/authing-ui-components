@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { GuardComponentConifg, GuardLocalConfig } from './config'
+import { GuardComponentConfig, GuardLocalConfig } from './config'
 import { GuardModuleType } from './module'
 
 export interface ModuleState {
@@ -31,7 +31,7 @@ export class GuardStateMachine {
   private order: number = 0
 
   // 总体的配置信息
-  private config: GuardComponentConifg = {}
+  private config: GuardComponentConfig = {}
 
   // 历史记录
   private moduleStateHistory: ModuleState[] = []

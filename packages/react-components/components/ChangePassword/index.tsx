@@ -3,6 +3,7 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { GuardModuleType } from '../Guard/module'
 import { ImagePro } from '../ImagePro'
+import { usePublicConfig } from '../_utils/context'
 import { FirstLoginReset } from './core/firstLoginReset'
 import { RotateReset } from './core/rotateReset'
 
@@ -10,7 +11,8 @@ import { RotateReset } from './core/rotateReset'
 // 进入的场景是读取配置：1开了首次登录修改密码 || 2开了密码轮换
 export const GuardChangePassword = (props: any) => {
   let { initData, config } = props
-  let publicConfig = config.__publicConfig__
+  // let publicConfig = config.__publicConfig__
+  const publicConfig = usePublicConfig()
   const { t } = useTranslation()
 
   const onReset = (res: any) => {

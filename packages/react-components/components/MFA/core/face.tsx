@@ -21,6 +21,7 @@ import SubmitButton from '../../SubmitButton'
 import { message } from 'antd'
 import { faceErrorMessage } from '../../_utils/errorFace'
 import { MFABackStateContext } from '..'
+import { usePublicConfig } from '../../_utils/context'
 const useDashoffset = (percent: number) => {
   // 接受 0 - 1，返回 0-700 之间的偏移量
   let offset = percent * 7
@@ -43,7 +44,9 @@ export const MFAFace = (props: any) => {
   const p1 = useRef<string>() // p1 key
   const p2 = useRef<string>() // p2 key
   const cooldown = useRef<number>(0) // p2 cooldown, * 500ms
-  const cdnBase = props.config.__publicConfig__.cdnBase
+  const publicConfig = usePublicConfig()
+
+  const cdnBase = publicConfig?.cdnBase
 
   let { offset, dashStyle } = useDashoffset(percent)
 
