@@ -71,7 +71,6 @@ export class GuardStateMachine {
 
   back = (initData: any = {}) => {
     if (this.moduleStateHistory.length <= 1) return
-
     const backModule = this.moduleStateHistory[1]
     this.changeMouleEvent(backModule.moduleName, {
       ...initData,

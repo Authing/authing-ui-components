@@ -64,7 +64,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
         >
           <InputNumber
             className="authing-g2-input"
-            autoComplete="tel"
+            autoComplete="off"
             size="large"
             placeholder={t('login.inputPhone')}
             prefix={

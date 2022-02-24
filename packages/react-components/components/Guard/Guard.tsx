@@ -171,7 +171,13 @@ export const Guard = (props: GuardProps) => {
     tenantId && httpClient.setTenantId(tenantId)
     setHttpClint(httpClient)
   }, [appId, config?.host, tenantId])
-
+  window.addEventListener(
+    'popstate',
+    (event: PopStateEvent) => {
+      alert('=====')
+    },
+    false
+  )
   // SSO 登录
   useEffect(() => {
     if (!config?.isSSO || !authClint || !events || !httpClint) return

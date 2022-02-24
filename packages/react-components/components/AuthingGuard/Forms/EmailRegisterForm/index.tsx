@@ -110,7 +110,7 @@ export const EmailRegisterForm = forwardRef<
     {
       component: (
         <Input
-          autoComplete="email"
+          autoComplete="off"
           size="large"
           placeholder={t('login.inputEmail')}
           prefix={<UserOutlined style={{ color: '#ddd' }} />}
@@ -125,6 +125,7 @@ export const EmailRegisterForm = forwardRef<
     {
       component: (
         <Input.Password
+          autoComplete="off"
           size="large"
           placeholder={t('common.setPassword')}
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
@@ -136,6 +137,7 @@ export const EmailRegisterForm = forwardRef<
     {
       component: (
         <Input.Password
+          autoComplete="off"
           size="large"
           placeholder={t('login.inputPwdAgain')}
           prefix={<LockOutlined style={{ color: '#ddd' }} />}

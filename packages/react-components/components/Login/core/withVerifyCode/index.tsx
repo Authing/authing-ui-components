@@ -48,7 +48,7 @@ export const LoginWithVerifyCode = (props: any) => {
             <SendCodeByPhone
               {...props}
               className="authing-g2-input g2-send-code-input"
-              autoComplete="one-time-code"
+              autoComplete="off"
               size="large"
               placeholder={t('common.inputFourVerifyCode', {
                 length: verifyCodeLength,
@@ -71,7 +71,7 @@ export const LoginWithVerifyCode = (props: any) => {
             <SendCodeByEmail
               {...props}
               className="authing-g2-input g2-send-code-input"
-              autoComplete="one-time-code"
+              autoComplete="off"
               size="large"
               placeholder={t('common.inputFourVerifyCode', {
                 length: verifyCodeLength,
