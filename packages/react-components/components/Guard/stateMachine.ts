@@ -61,7 +61,7 @@ export class GuardStateMachine {
       moduleData.moduleName ===
         this.moduleStateHistory.slice(1, 2)[0].moduleName
     ) {
-      window.history.back()
+      this.back()
     } else {
       this.historyPush(moduleData)
     }
@@ -107,7 +107,6 @@ export class GuardStateMachine {
     if (this.moduleStateHistory.length <= 1) return
 
     this.moduleStateHistory.splice(0, 1)
-
     this.stateMachineLog[this.order++] = {
       action: ActionType.Back,
       date: new Date().getTime(),

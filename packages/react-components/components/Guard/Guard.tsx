@@ -171,13 +171,7 @@ export const Guard = (props: GuardProps) => {
     tenantId && httpClient.setTenantId(tenantId)
     setHttpClint(httpClient)
   }, [appId, config?.host, tenantId])
-  window.addEventListener(
-    'popstate',
-    (event: PopStateEvent) => {
-      alert('=====')
-    },
-    false
-  )
+
   // SSO 登录
   useEffect(() => {
     if (!config?.isSSO || !authClint || !events || !httpClint) return
@@ -190,6 +184,11 @@ export const Guard = (props: GuardProps) => {
       }
     })
   }, [appId, authClint, config?.isSSO, events, httpClint])
+
+  // 初始化 history state 为了身份源监听 popstate 生效 很无语 😓
+  useEffect(() => {
+    window.history.pushState(initState.moduleName, '', window.location.href)
+  }, [initState.moduleName])
 
   useEffect(() => {
     if (httpClint && GuardLocalConfig && GuardLocalConfig.__appHost__) {

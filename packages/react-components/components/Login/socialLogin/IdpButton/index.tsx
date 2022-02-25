@@ -27,14 +27,13 @@ export const IdpButton = (props: any) => {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    window.addEventListener('popstate', (event) => {
-      console.log(
-        'location: ' +
-          document.location +
-          ', state: ' +
-          JSON.stringify(event.state)
-      )
-    })
+    const popStateEvent = () => {
+      setLoading(false)
+    }
+    window.addEventListener('popstate', popStateEvent)
+    return () => {
+      window.removeEventListener('popstate', popStateEvent)
+    }
   }, [])
   const renderBtn = useCallback(() => {
     if (i?.provider) {

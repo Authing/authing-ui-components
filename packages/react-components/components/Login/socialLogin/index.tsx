@@ -1,28 +1,12 @@
 import { Button, message, Space, Tooltip } from 'antd'
-import Avatar from 'antd/lib/avatar/avatar'
-import {
-  Protocol,
-  SocialConnectionProvider,
-  RelayMethodEnum,
-} from 'authing-js-sdk'
+import { SocialConnectionProvider, RelayMethodEnum } from 'authing-js-sdk'
 import { Lang } from 'authing-js-sdk/build/main/types'
-import qs from 'qs'
 import React, { useEffect, useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import shortid from 'shortid'
 import { i18n } from '../../_utils/locales'
-import { isLarkBrowser, isWechatBrowser, popupCenter } from '../../_utils'
-import { useGuardHttp } from '../../_utils/guradHttp'
+import { isLarkBrowser, isWechatBrowser } from '../../_utils'
 import querystring from 'query-string'
-import {
-  ApplicationConfig,
-  IAzureAdConnectionConfig,
-  ICasConnectionConfig,
-  IOAuthConnectionConfig,
-  ISamlConnectionConfig,
-  OIDCConnectionConfig,
-  SocialConnectionItem,
-} from '../../AuthingGuard/api'
+import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
 import {
   APP_MFA_CODE,
   HIDE_SOCIALS,
@@ -196,179 +180,13 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
   const idpButtons = enterpriseConnectionObjs.map((i: any) => {
     return (
       <IdpButton
+        key={i.identifier}
         i={i}
         appId={appId}
         userPoolId={userPoolId}
         onGuardLogin={onGuardLogin}
       />
     )
-    // if (i?.provider) {
-    //   // 社交身份源
-    //   const iconType = `authing-${i.provider.replace(/:/g, '-')}`
-    //   return (
-    //     <IdpButton
-    //       conn={i}
-    //       icon={
-    //         <IconFont
-    //           type={`${iconType}-fill`}
-    //           style={{ fontSize: 20, marginRight: 8 }}
-    //         />
-    //       }
-    //     ></IdpButton>
-    //   )
-    //   // const onLogin = () => {
-    //   //   authClient.social.authorize(i.identifier, {
-    //   //     onSuccess(user) {
-    //   //       // TODO
-    //   //       // onSuccess(user)
-    //   //       onGuardLogin(200, user)
-    //   //     },
-    //   //     onError(code, msg) {
-    //   //       try {
-    //   //         const parsedMsg = JSON.parse(msg)
-    //   //         const { message: authingMessage, data: authingData } = parsedMsg
-    //   //         onGuardLogin(code, authingData, authingMessage)
-    //   //       } catch (e) {
-    //   //         // do nothing...
-    //   //       }
-    //   //       // message.error(msg)
-    //   //     },
-    //   //   })
-    //   // }
-    //   // return (
-    //   //   <Button
-    //   //     key={i.identifier}
-    //   //     className="g2-guard-third-login-btn"
-    //   //     block
-    //   //     size="large"
-    //   //     icon={
-    //   //       <IconFont
-    //   //         type={`${iconType}-fill`}
-    //   //         style={{ fontSize: 20, marginRight: 8 }}
-    //   //       />
-    //   //     }
-    //   //     onClick={onLogin}
-    //   //     loading={false}
-    //   //   >
-    //   //     {t('login.loginBy', {
-    //   //       name: i.displayName,
-    //   //     })}
-    //   //   </Button>
-    //   // )
-    // }
-    // if (i.protocol === Protocol.OIDC) {
-    //   const configItem = i.config as OIDCConnectionConfig
-    //   const state = shortid.generate()
-
-    //   const query = qs.stringify({
-    //     client_id: configItem.clientId,
-    //     redirect_uri: configItem.redirectUri,
-    //     scope: configItem.scopes,
-    //     response_type: configItem.responseType,
-    //     state,
-    //     nonce: shortid.generate(),
-    //   })
-    //   const url = `${configItem.authorizationEdpoint}?${query}`
-
-    //   return (
-    //     <Button
-    //       key={i.identifier}
-    //       className="g2-guard-third-login-btn"
-    //       block
-    //       size="large"
-    //       icon={<Avatar size={20} src={i.logo} style={{ marginRight: 8 }} />}
-    //       onClick={async () => {
-    //         await post('/api/v2/connections/oidc/start-interaction', {
-    //           state,
-    //           protocol: i.protocol,
-    //           userPoolId,
-    //           appId,
-    //           referer: window.location.href,
-    //           connection: { providerIentifier: i.identifier },
-    //         })
-    //         popupCenter(url)
-    //       }}
-    //     >
-    //       {t('login.loginBy', {
-    //         name: i.displayName,
-    //       })}
-    //     </Button>
-    //   )
-    // } else if (i.protocol === Protocol.SAML) {
-    //   const config = i.config as ISamlConnectionConfig
-    //   return (
-    //     <Button
-    //       key={i.identifier}
-    //       className="g2-guard-third-login-btn"
-    //       block
-    //       size="large"
-    //       icon={<Avatar size={20} src={i.logo} style={{ marginRight: 8 }} />}
-    //       onClick={async () => {
-    //         popupCenter(config.samlRequest!)
-    //       }}
-    //     >
-    //       {t('login.loginBy', {
-    //         name: i.displayName,
-    //       })}
-    //     </Button>
-    //   )
-    // } else if (i.protocol === Protocol.CAS) {
-    //   const config = i.config as ICasConnectionConfig
-    //   return (
-    //     <Button
-    //       key={i.identifier}
-    //       className="g2-guard-third-login-btn"
-    //       block
-    //       size="large"
-    //       icon={<Avatar size={20} src={i.logo} style={{ marginRight: 8 }} />}
-    //       onClick={async () => {
-    //         popupCenter(config.casConnectionLoginUrl!)
-    //       }}
-    //     >
-    //       {t('login.loginBy', {
-    //         name: i.displayName,
-    //       })}
-    //     </Button>
-    //   )
-    // } else if (i.protocol === Protocol.OAUTH) {
-    //   const config = i.config as IOAuthConnectionConfig
-    //   return (
-    //     <Button
-    //       key={i.identifier}
-    //       className="g2-guard-third-login-btn"
-    //       block
-    //       size="large"
-    //       icon={<Avatar size={20} src={i.logo} style={{ marginRight: 8 }} />}
-    //       onClick={async () => {
-    //         popupCenter(config.authUrl!)
-    //       }}
-    //     >
-    //       {t('login.loginBy', {
-    //         name: i.displayName,
-    //       })}
-    //     </Button>
-    //   )
-    // } else if (i.protocol === Protocol.AZURE_AD) {
-    //   const configItem = i.config as IAzureAdConnectionConfig
-    //   return (
-    //     <Button
-    //       key={i.identifier}
-    //       className="g2-guard-third-login-btn"
-    //       block
-    //       size="large"
-    //       icon={<Avatar size={20} src={i.logo} style={{ marginRight: 8 }} />}
-    //       onClick={async () => {
-    //         popupCenter(configItem.authorizationUrl)
-    //       }}
-    //     >
-    //       {t('login.loginBy', {
-    //         name: i.displayName,
-    //       })}
-    //     </Button>
-    //   )
-    // } else {
-    //   return null
-    // }
   })
   const socialLoginButtons = socialConnectionObjs
     .filter((item) =>
