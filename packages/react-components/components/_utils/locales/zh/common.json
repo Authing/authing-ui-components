@@ -254,5 +254,12 @@
   "phoneVerifyCode": "短信验证码",
   "emailVerifyCode": "邮箱验证码",
   "phoneOrEmail": "手机号 / 邮箱",
-  "skip": "跳过"
+  "skip": "跳过",
+  "back": "返回",
+  "identityBindingAskTitle": "选择关联方式",
+  "identityBindingAskDesc": "如果绑定到已有账号，下次可以通过本次的方式直接登录已有账号",
+  "identityBindingCreate": "我想创建一个新账号",
+  "identityBindingBinding": "我想绑定到已有账号",
+  "identityBindingTitle": "绑定已有账号",
+  "identityBindingDesc": "绑定后，下次可以直接通过这次的方式登录到此账号"
 }

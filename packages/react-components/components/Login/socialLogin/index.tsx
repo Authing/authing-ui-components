@@ -205,13 +205,14 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
             // onSuccess(user)
             onGuardLogin(200, user)
           },
-          onError(code, msg) {
+          onError(code, msg, data) {
             try {
               const parsedMsg = JSON.parse(msg)
               const { message: authingMessage, data: authingData } = parsedMsg
               onGuardLogin(code, authingData, authingMessage)
             } catch (e) {
               // do nothing...
+              onGuardLogin(code, data, msg)
             }
             // message.error(msg)
           },
@@ -395,13 +396,14 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
             // onSuccess(user)
             onGuardLogin(200, user)
           },
-          onError(code, msg) {
+          onError(code, msg, data) {
             try {
               const parsedMsg = JSON.parse(msg)
               const { message: authingMessage, data: authingData } = parsedMsg
               onGuardLogin(code, authingData, authingMessage)
             } catch (e) {
               // do nothing...
+              onGuardLogin(code, data, msg)
             }
             // message.error(msg)
           },
