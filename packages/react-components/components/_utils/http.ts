@@ -8,9 +8,12 @@ export const requestClient = async (...rest: Parameters<typeof fetch>) => {
 }
 
 export interface AuthingResponse<T = any> {
-  code: number
-  message?: string
+  code?: string | number
+  statusCode?: string
+  apiCode?: string
   data?: T
+  messages?: string
+  message?: string
 }
 
 requestClient.get = async <T>(

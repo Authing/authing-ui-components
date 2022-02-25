@@ -3,19 +3,13 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VerifyLoginMethods } from '../../../AuthingGuard/api'
 import { InputNumber } from '../../../InputNumber'
-import { usePublicConfig } from '../../../_utils/context'
 
-export interface InputIdentifyProps extends InputProps {}
+export interface InputIdentifyProps extends InputProps {
+  methods: VerifyLoginMethods[]
+}
 
 export const InputIdentify: React.FC<InputIdentifyProps> = (props) => {
-  const { ...inputProps } = props
-
-  const config = usePublicConfig()
-
-  const methods = useMemo<VerifyLoginMethods[]>(
-    () => config?.verifyCodeTabConfig?.enabledLoginMethods ?? ['phone-code'],
-    [config?.verifyCodeTabConfig]
-  )
+  const { methods, ...inputProps } = props
 
   const { t } = useTranslation()
 

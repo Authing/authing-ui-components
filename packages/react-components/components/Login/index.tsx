@@ -24,6 +24,7 @@ import './styles.less'
 import { usePublicConfig } from '../_utils/context'
 import { isWechatBrowser, shoudGoToComplete } from '../_utils'
 import { LoginWithVerifyCode } from './core/withVerifyCode'
+import { VerifyLoginMethods } from '../AuthingGuard/api'
 
 const inputWays = [
   LoginMethods.Password,
@@ -162,7 +163,6 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     if (code === 200) {
       return (data: any) => {
         if (shoudGoToComplete(data, 'login', publicConfig, autoRegister)) {
-          console.log('登陆成功，用户为', data)
           props.__changeModule?.(GuardModuleType.COMPLETE_INFO, {
             context: 'login',
             user: data,
@@ -190,6 +190,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     }
     if (action?.action === 'message') {
       return (initData?: any) => {
+        setErrorNumber(errorNumber + 1)
         message.error(initData?._message)
       }
     }
@@ -210,7 +211,6 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   const onLogin = (code: any, data: any, message?: string) => {
     const callback = __codePaser?.(code)
     if (code !== 200) {
-      setErrorNumber(errorNumber + 1)
       props.onLoginError?.({
         code,
         data,
@@ -254,6 +254,14 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
         : [],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [agreementEnabled, autoRegister, config?.agreements, i18n.language]
+  )
+
+  const verifyLoginMethods = useMemo<VerifyLoginMethods[]>(
+    () =>
+      config.__publicConfig__?.verifyCodeTabConfig?.enabledLoginMethods ?? [
+        'phone-code',
+      ],
+    [config.__publicConfig__?.verifyCodeTabConfig?.enabledLoginMethods]
   )
 
   return (
@@ -350,6 +358,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                       onBeforeLogin={onBeforeLogin}
                       onLogin={onLogin}
                       agreements={agreements}
+                      methods={verifyLoginMethods}
                     />
                   </Tabs.TabPane>
                 )}
