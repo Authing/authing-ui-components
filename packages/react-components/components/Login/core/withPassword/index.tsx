@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useGuardHttp } from '../../../_utils/guradHttp'
@@ -59,6 +59,36 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
 
   const encrypt = client.options.encryptFunction
 
+  const loginRequest = useCallback(
+    async (loginInfo: any) => {
+      if (!!props.onLoginRequest) {
+        const res = await props.onLoginRequest(loginInfo)
+
+        return res
+      }
+
+      // onLogin
+      let url = '/api/v2/login/account'
+      let account = loginInfo.account && loginInfo.account.trim()
+      let password =
+        loginInfo.password && loginInfo.onBeforeLoginpassword.trim()
+      let captchaCode = loginInfo.captchaCode && loginInfo.captchaCode.trim()
+
+      let body = {
+        account: account,
+        password: await encrypt!(password, props.publicKey),
+        captchaCode,
+        customData: getUserRegisterParams(),
+        autoRegister: props.autoRegister,
+        withCustomData: true,
+      }
+      const res = await post(url, body)
+
+      return res
+    },
+    [encrypt, post, props]
+  )
+
   const onFinish = async (values: any) => {
     setValidated(true)
     if (agreements?.length && !acceptedAgreements) {
@@ -78,34 +108,13 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         captchaCode: values.captchaCode,
       },
     }
-    let context = await props.onBeforeLogin(loginInfo)
-    if (!context) {
+    let context = await props.onBeforeLogin?.(loginInfo)
+    if (!context && !!props.onBeforeLogin) {
       submitButtonRef?.current.onSpin(false)
       return
     }
 
-    if (!!props.onLoginRequest) {
-      const res = await props.onLoginRequest(loginInfo)
-      onLoginRes(res)
-
-      return
-    }
-
-    // onLogin
-    let url = '/api/v2/login/account'
-    let account = values.account && values.account.trim()
-    let password = values.password && values.password.trim()
-    let captchaCode = values.captchaCode && values.captchaCode.trim()
-
-    let body = {
-      account: account,
-      password: await encrypt!(password, props.publicKey),
-      captchaCode,
-      customData: getUserRegisterParams(),
-      autoRegister: props.autoRegister,
-      withCustomData: true,
-    }
-    const res = await post(url, body)
+    const res = await loginRequest(loginInfo)
 
     onLoginRes(res)
   }

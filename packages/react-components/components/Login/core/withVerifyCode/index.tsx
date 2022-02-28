@@ -135,7 +135,7 @@ export const LoginWithVerifyCode = (props: any) => {
         code: values.code,
       },
     }
-    let context = await props.onBeforeLogin(loginInfo)
+    let context = await props.onBeforeLogin?.(loginInfo)
     if (!context) {
       submitButtonRef.current.onSpin(false)
       return

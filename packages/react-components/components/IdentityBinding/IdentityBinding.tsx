@@ -176,7 +176,7 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
           verifyCodeLength={props.config.__publicConfig__?.verifyCodeLength}
           autoRegister={false}
           onLoginRequest={onBind}
-          onLogin={() => {}}
+          onLogin={onLogin}
           agreements={agreements}
           methods={codeLoginMethods}
           submitButText={t('common.bind')}
@@ -193,7 +193,7 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
           host={config.__appHost__}
           onLoginRequest={onBind}
           passwordLoginMethods={passwordLoginMethods}
-          onLogin={() => {}}
+          onLogin={onLogin}
           agreements={agreements}
           submitButText={t('common.bind')}
         />
