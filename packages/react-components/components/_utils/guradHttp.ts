@@ -110,10 +110,12 @@ export class GuardHttp {
   public initErrorCodeInterceptor = (
     callBack: (code: CodeAction, res: AuthingResponse) => void
   ) => {
+    // 初始化 errorCode 响应拦截器
     if (!this.responseInterceptorMap.has(InterceptorName.ERROR_CODE)) return
 
-    this.responseInterceptorMap.set(InterceptorName.ERROR_CODE, (res) =>
-      errorCodeInterceptor(res, callBack)
+    this.responseInterceptorMap.set(
+      InterceptorName.ERROR_CODE,
+      (res) => errorCodeInterceptor(res, callBack) // 传入调度拦截器回调
     )
 
     return this

@@ -250,7 +250,7 @@ export const Guard = (props: GuardProps) => {
   // 初始化 ErrorCode 拦截器
   useEffect(() => {
     if (!httpClint) return
-
+    // 错误码处理回调 切换 module 和 错误信息提示
     const errorCodeCb = (code: CodeAction, res: AuthingResponse) => {
       const codeActionMapping = {
         [CodeAction.CHANGE_MODULE]: (res: AuthingResponse) => {
@@ -269,7 +269,7 @@ export const Guard = (props: GuardProps) => {
 
       codeAction(res)
     }
-
+    // 设置响应拦截器（初始化拦截器 将错误处理回调传入拦截器）
     httpClint?.initErrorCodeInterceptor(errorCodeCb)
   }, [__changeModule, httpClint])
 
