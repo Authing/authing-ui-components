@@ -6,7 +6,6 @@
 import {
   getAuthClient,
   initAuthClient,
-  Guard as NativeGuard,
   GuardEventsCamelToKebabMap,
   GuardMode,
   GuardScenes,
