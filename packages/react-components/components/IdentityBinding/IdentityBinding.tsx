@@ -8,6 +8,8 @@ import { IconFont } from '../IconFont'
 import { codeMap } from '../Login/codemap'
 import { LoginWithPassword } from '../Login/core/withPassword'
 import { LoginWithVerifyCode } from '../Login/core/withVerifyCode'
+import { shoudGoToComplete } from '../_utils'
+import { usePublicConfig } from '../_utils/context'
 import { useGuardHttp } from '../_utils/guradHttp'
 import { i18n } from '../_utils/locales'
 import { GuardIdentityBindingViewProps } from './interface'
@@ -20,6 +22,7 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
 
   const { t } = useTranslation()
   const { publicKey, autoRegister, agreementEnabled } = config
+  const publicConfig = usePublicConfig()
 
   const { post } = useGuardHttp()
   const authClient = useGuardAuthClient()
@@ -63,9 +66,19 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
     const action = codeMap[code]
     if (code === 200) {
       return (data: any) => {
-        console.log('binding success', data)
-        props.onBinding?.(data.user, authClient!) // 登录成功
-        props.onLogin?.(data.user, authClient!) // 登录成功
+        // console.log('binding success', data)
+        // props.onBinding?.(data.user, authClient!) // 登录成功
+        // props.onLogin?.(data.user, authClient!) // 登录成功
+        props.onBinding?.(data.user, authClient!) // 绑定成功
+        if (shoudGoToComplete(data.user, 'login', publicConfig)) {
+          __changeModule?.(GuardModuleType.COMPLETE_INFO, {
+            context: 'login',
+            user: data.user,
+          })
+        } else {
+          // TODO 身份源绑定后触发信息补全成功没有触发 onBinding
+          props.onLogin?.(data.user, authClient!) // 登录成功
+        }
       }
     }
 
