@@ -178,7 +178,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         >
           <InputAccount
             className="authing-g2-input"
-            autoComplete="email,username,tel"
+            autoComplete="off"
             size="large"
             prefix={
               <IconFont

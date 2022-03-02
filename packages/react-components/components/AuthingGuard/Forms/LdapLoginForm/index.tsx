@@ -99,7 +99,7 @@ export const LdapLoginForm = forwardRef<FormInstance, PasswordLoginFormProps>(
       {
         component: (
           <Input
-            autoComplete="ldap,username"
+            autoComplete="off"
             size="large"
             placeholder={t('login.inputLdapUsername')}
             prefix={<UserOutlined style={{ color: '#ddd' }} />}
@@ -111,6 +111,7 @@ export const LdapLoginForm = forwardRef<FormInstance, PasswordLoginFormProps>(
       {
         component: (
           <Input.Password
+            autoComplete="off"
             size="large"
             placeholder={t('login.inputLdapPwd')}
             prefix={<LockOutlined style={{ color: '#ddd' }} />}
@@ -122,6 +123,7 @@ export const LdapLoginForm = forwardRef<FormInstance, PasswordLoginFormProps>(
       {
         component: (
           <Input
+            autoComplete="off"
             size="large"
             placeholder={t('login.inputCaptchaCode')}
             addonAfter={

@@ -108,7 +108,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
         >
           <Input
             className="authing-g2-input"
-            autoComplete="email,username,tel"
+            autoComplete="off"
             size="large"
             placeholder={t('login.inputLdapUsername')}
             prefix={

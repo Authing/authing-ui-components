@@ -99,7 +99,7 @@ export const LoginWithAD = (props: LoginWithADProps) => {
             >
               <Input
                 className="authing-g2-input"
-                autoComplete="email,username,tel"
+                autoComplete="off"
                 size="large"
                 placeholder={t('login.inputAdUsername')}
                 prefix={
@@ -117,6 +117,7 @@ export const LoginWithAD = (props: LoginWithADProps) => {
               rules={fieldRequiredRule(t('common.password'))}
             >
               <InputPassword
+                autoComplete="off"
                 className="authing-g2-input"
                 size="large"
                 placeholder={t('login.inputAdPwd')}

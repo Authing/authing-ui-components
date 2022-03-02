@@ -140,7 +140,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         >
           <SendCodeByPhone
             className="authing-g2-input g2-send-code-input"
-            autoComplete="one-time-code"
+            autoComplete="off"
             size="large"
             placeholder={t('common.inputFourVerifyCode', {
               length: verifyCodeLength,

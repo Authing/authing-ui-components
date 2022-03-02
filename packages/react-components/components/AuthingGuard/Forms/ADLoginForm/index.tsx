@@ -92,7 +92,7 @@ export const ADLoginForm = forwardRef<FormInstance, ADLoginFormProps>(
           rules={getRequiredRules(t('login.inputAdUsername'))}
         >
           <Input
-            autoComplete="email,username,tel"
+            autoComplete="off"
             size="large"
             placeholder={t('login.inputAdUsername')}
             prefix={<UserOutlined style={{ color: '#ddd' }} />}
@@ -103,7 +103,7 @@ export const ADLoginForm = forwardRef<FormInstance, ADLoginFormProps>(
           rules={getRequiredRules(t('login.inputAdPwd'))}
         >
           <Input.Password
-            autoComplete="current-password"
+            autoComplete="off"
             size="large"
             visibilityToggle={false}
             placeholder={t('login.inputAdPwd')}
