@@ -15,7 +15,7 @@ import { IconFont } from '../../../IconFont'
 import { InputPassword } from '../../../InputPassword'
 import { Agreements } from '../../../Register/components/Agreements'
 import { AuthingResponse } from '../../../_utils/http'
-
+import { VirtualDropdown } from './VirtualDropdown'
 interface LoginWithPasswordProps {
   // configs
   publicKey: string
@@ -180,12 +180,13 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
             className="authing-g2-input"
             autoComplete="off"
             size="large"
-            prefix={
-              <IconFont
-                type="authing-a-user-line1"
-                style={{ color: '#878A95' }}
-              />
-            }
+            prefix={<VirtualDropdown />}
+            // prefix={
+            //   <IconFont
+            //     type="authing-a-user-line1"
+            //     style={{ color: '#878A95' }}
+            //   />
+            // }
             passwordLoginMethods={props.passwordLoginMethods}
           />
         </FormItemAccount>
