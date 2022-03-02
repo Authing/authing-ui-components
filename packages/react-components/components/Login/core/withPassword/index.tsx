@@ -68,7 +68,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
       }
 
       // onLogin
-      const { loginData } = loginInfo
+      const { data: loginData } = loginInfo
       let url = '/api/v2/login/account'
       let account = loginData.identity && loginData.identity.trim()
       let password = loginData.password && loginData.password.trim()
