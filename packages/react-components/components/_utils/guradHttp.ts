@@ -1,3 +1,4 @@
+import { GuardLocalConfig } from '..'
 import version from '../version'
 import { requestClient } from './http'
 

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
-import { GuardComponentConfig, GuardLocalConfig } from './config'
-import { GuardModuleType } from './module'
+import { GuardComponentConfig, GuardLocalConfig } from '../config'
+import { GuardModuleType } from '../module'
 
 export interface ModuleState {
   moduleName: GuardModuleType

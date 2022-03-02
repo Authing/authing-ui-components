@@ -24,7 +24,7 @@ import {
   GuardStateMachine,
   initGuardStateMachine,
   useHistoryHijack,
-} from './stateMachine'
+} from './GuardModule/stateMachine'
 import { GuardBindTotpView } from '../BindTotp'
 import { GuardForgetPassword } from '../ForgetPassword'
 import { GuardChangePassword } from '../ChangePassword'
@@ -41,6 +41,12 @@ import { ApplicationConfig } from '../AuthingGuard/api'
 import { SessionData, trackSession } from './sso'
 import zhCN from 'antd/lib/locale/zh_CN'
 import enUS from 'antd/lib/locale/en_US'
+import {
+  getPublicConfig,
+  useMergeDefaultConfig,
+  useMergePublicConfig,
+} from '../_utils/config/index'
+import { getDefaultCompleteInfoConfig } from '../CompleteInfo/interface'
 
 const PREFIX_CLS = 'authing-ant'
 export enum LangMAP {
@@ -99,15 +105,6 @@ interface ModuleState {
 export const useGuardCore1 = (props: GuardProps, initState: ModuleState) => {
   const { appId, tenantId, config } = props
 
-  // 初始化 Loading 标识
-  const [initSettingEnd, setInitSettingEnd] = useState(false)
-
-  const [initError, setInitError] = useState(false)
-  const [errorData, setErrorData] = useState<any>()
-
-  // Config
-  const [GuardLocalConfig, setGuardLocalConfig] = useState<GuardLocalConfig>()
-
   const [events, setEvents] = useState<GuardEvents>()
   const [authClint, setAuthClint] = useState<AuthenticationClient>()
   const [httpClint, setHttpClint] = useState<GuardHttp>()
@@ -148,17 +145,26 @@ export const useGuardCore1 = (props: GuardProps, initState: ModuleState) => {
     })
   }
 
+  // 合并默认值
+  const defaultMergedConfig = useMergeDefaultConfig(
+    getDefaultGuardLocalConfig(),
+    config
+  )
+
   // HttpClint
   useEffect(() => {
-    if (!appId) return
+    if (!appId || !defaultMergedConfig) return
 
-    const httpClient = initGuardHttp(
-      config?.host ?? getDefaultGuardLocalConfig().host
-    )
+    const httpClient = initGuardHttp(defaultMergedConfig.host)
+
     httpClient.setAppId(appId)
+
     tenantId && httpClient.setTenantId(tenantId)
+
     setHttpClint(httpClient)
-  }, [appId, config?.host, tenantId])
+  }, [appId, defaultMergedConfig, tenantId])
+
+  const finallyConfig = useMergePublicConfig(appId, defaultMergedConfig)
 
   // SSO 登录
   useEffect(() => {
@@ -174,32 +180,50 @@ export const useGuardCore1 = (props: GuardProps, initState: ModuleState) => {
   }, [appId, authClint, config?.isSSO, events, httpClint])
 
   useEffect(() => {
-    if (httpClint && GuardLocalConfig && GuardLocalConfig.__appHost__) {
-      httpClint?.setBaseUrl(GuardLocalConfig.__appHost__)
+    if (httpClint && finallyConfig) {
+      httpClint?.setBaseUrl(finallyConfig.host)
     }
-  }, [GuardLocalConfig, httpClint])
+  }, [finallyConfig, httpClint])
 
   // I18n
   useEffect(() => {
     // TODO  国际化 这部分有点小问题 等待优化
-    initI18n({}, config?.lang)
-  }, [config?.lang])
+    initI18n({}, defaultMergedConfig?.lang)
+  }, [defaultMergedConfig?.lang])
+
+  useEffect(() => {
+    if (!appId) return
+
+    const publicConfig = getPublicConfig(appId)
+
+    if (!publicConfig) return
+
+    setPublicConfig(publicConfig)
+  }, [appId])
 
   // AuthClient
   useEffect(() => {
-    if (appId && GuardLocalConfig) {
-      const authClint = initGuardAuthClient(GuardLocalConfig, appId, tenantId)
+    if (appId && finallyConfig && publicConfig?.websocket) {
+      const authClint = initGuardAuthClient(
+        finallyConfig,
+        appId,
+        publicConfig?.websocket,
+        tenantId
+      )
       setAuthClint(authClint)
     }
-  }, [GuardLocalConfig, appId, tenantId])
+  }, [appId, finallyConfig, publicConfig?.websocket, tenantId])
 
   // initEvents
   useEffect(() => {
-    if (!!GuardLocalConfig) {
-      const events = guardEventsFilter({ ...props, config: GuardLocalConfig })
-      setEvents(events)
-    }
-  }, [props, GuardLocalConfig])
+    if (!defaultMergedConfig) return
+
+    const events = guardEventsFilter({
+      ...props,
+      config: defaultMergedConfig,
+    })
+    setEvents(events)
+  }, [props, defaultMergedConfig])
 
   // 状态机相关
   useEffect(() => {
@@ -209,48 +233,17 @@ export const useGuardCore1 = (props: GuardProps, initState: ModuleState) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // 设置 config
+  // 自定义 CSS 处理
   useEffect(() => {
-    if (guardStateMachine && GuardLocalConfig)
-      guardStateMachine.setConfig(GuardLocalConfig)
-  }, [GuardLocalConfig, guardStateMachine])
+    if (finallyConfig && finallyConfig.contentCss)
+      insertStyles(finallyConfig.contentCss)
+  }, [finallyConfig])
 
-  const initPublicConfig = useCallback(async () => {
-    if (!config && !appId) return
-    try {
-      // Config 初始化
-      const { config: mergedConfig, publicConfig } = await initConfig(
-        appId,
-        config ?? {},
-        getDefaultGuardLocalConfig()
-      )
-      setGuardLocalConfig(mergedConfig)
-      setPublicConfig(publicConfig)
-
-      getGuardHttp().setUserpoolId(publicConfig.userPoolId)
-    } catch (error: any) {
-      console.error(error)
-      setErrorData(error)
-      setInitError(true)
-    } finally {
-      // 初始化 结束
-      setInitSettingEnd(true)
-    }
-  }, [appId, config])
-
+  // TODO 触发 onLoad 事件
   useEffect(() => {
-    initPublicConfig()
-  }, [initPublicConfig])
-
-  useEffect(() => {
-    if (GuardLocalConfig && GuardLocalConfig.contentCss)
-      insertStyles(GuardLocalConfig.contentCss)
-  }, [GuardLocalConfig])
-
-  useEffect(() => {
-    if (GuardLocalConfig && authClint) events?.onLoad?.(authClint)
-  }, [GuardLocalConfig, authClint, events])
-
+    if (!authClint) return
+    events?.onLoad?.(authClint)
+  }, [authClint, events])
   useEffect(() => {
     if (initError) {
       events?.onLoadError?.(errorData)
@@ -300,5 +293,3 @@ export const useGuardCore1 = (props: GuardProps, initState: ModuleState) => {
     ),
   }
 }
-
-export const useGuardCore = (props: GuardProps, initState: ModuleState) => {}
