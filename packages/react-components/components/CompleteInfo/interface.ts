@@ -50,3 +50,46 @@ export interface ExtendsField {
   required: boolean
   validateRules: any[]
 }
+
+export interface CompleteInfoRule {
+  type: 'regExp' | 'isNumber'
+  content: string
+  errorMessages: string
+}
+
+export interface CompleteInfoSelectOption {
+  value: string
+  label: string
+}
+
+export interface CompleteInfoMetaData {
+  type: CompleteInfoInputType
+  label: string
+  name: string
+  required: boolean
+  validateRules: CompleteInfoRule[]
+  options?: CompleteInfoSelectOption[]
+  order: number
+}
+
+export enum CompleteInfoInputType {
+  IMAGE = 'image',
+  NUMBER = 'number',
+  DATE = 'date',
+  DATE_TIME = 'dateTime',
+  SELECT = 'select',
+  DROPDOWN = 'dropdown',
+  BOOLEAN = 'boolean',
+  STRING = 'string',
+  TEXT = 'text',
+  GENDER = 'gender',
+  COUNTRY = 'country',
+  USERNAME = 'username',
+  PHONE = 'phone',
+  EMAIL = 'email',
+}
+
+export interface CompleteInfoInitData {
+  skip: boolean
+  metaData: CompleteInfoMetaData
+}
