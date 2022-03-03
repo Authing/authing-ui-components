@@ -2,17 +2,19 @@ import { FormItemProps } from 'antd/lib/form'
 import FormItem from 'antd/lib/form/FormItem'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { VerifyLoginMethods } from '../../../AuthingGuard/api'
+import { InputMethod } from '.'
+// import { VerifyLoginMethods } from '../../../AuthingGuard/api'
 import CustomFormItem from '../../../ValidatorRules'
 import { fieldRequiredRule, validate } from '../../../_utils'
 
 export interface FormItemIdentifyProps extends FormItemProps {
   checkRepeat?: boolean
-  methods: VerifyLoginMethods[]
+  methods: InputMethod
+  areaCode?: string //国际化手机号区号
 }
 
 export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
-  const { methods, ...formItemProps } = props
+  const { methods, areaCode, ...formItemProps } = props
 
   const { t } = useTranslation()
 
@@ -36,6 +38,7 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
               },
               validateTrigger: 'onBlur',
             },
+            // TODO 国际化校验规则
           ]}
           {...formItemProps}
         />
@@ -43,11 +46,11 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
 
     switch (methods[0]) {
       case 'phone-code':
-        return <CustomFormItem.Phone {...formItemProps} />
+        return <CustomFormItem.Phone areaCode={areaCode} {...formItemProps} />
       case 'email-code':
         return <CustomFormItem.Email {...formItemProps} />
     }
-  }, [formItemProps, methods, t])
+  }, [areaCode, formItemProps, methods, t])
 
   return <>{renderTemplate}</>
 }

@@ -17,7 +17,7 @@ import {
 import { Rule } from 'antd/lib/form'
 import { useDebounce } from '../_utils/hooks'
 import { usePublicConfig } from '../_utils/context'
-
+import { phone } from 'phone'
 const checkError = (message: string) => Promise.reject(new Error(message))
 
 const checkSuccess = (message?: string) => Promise.resolve(message ?? '')
@@ -30,6 +30,7 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
       method,
       name,
       required,
+      areaCode, //国际化区号
       ...formItemProps
     } = props
     const publicConfig = usePublicConfig()
@@ -55,6 +56,13 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
           formatErrorMessage: t('common.usernameFormatError'),
           pattern: VALIDATE_PATTERN.username,
         }
+      } else if (method === 'phone') {
+        return {
+          field: t('common.phone'),
+          checkErrorMessage: t('common.checkPhone'),
+          formatErrorMessage: '请输入符合该区号的手机号',
+          pattern: VALIDATE_PATTERN.username,
+        }
       } else
         return {
           field: t('common.phone'),
@@ -64,11 +72,12 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
         }
     }, [method, t])
     const checkField = useDebounce(async (value: string) => {
+      // 正则校验
       if (!(value && methodContent.pattern.test(value))) {
         setIsReady(true)
         return
       }
-
+      // 重复性校验
       let { data } = await get<boolean>(`/api/v2/users/find`, {
         userPoolId: publicConfig?.userPoolId,
         key: value,
@@ -109,10 +118,20 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
     const rules = useMemo<Rule[]>(() => {
       if (required === false) return []
       const rules = [...fieldRequiredRule(methodContent.field)]
+
       rules.push({
         validateTrigger: 'onBlur',
         pattern: methodContent.pattern,
         message: methodContent.formatErrorMessage,
+      })
+      // TODO 开启国家化短信
+      rules.push({
+        validateTrigger: 'onBlur',
+        validator: async (rule, value) => {
+          if (phone(value, { country: areaCode }).isValid)
+            return Promise.resolve()
+          return Promise.reject('请输入对应区号正确的手机号')
+        },
       })
       checkRepeat &&
         Boolean(publicConfig) &&
@@ -120,8 +139,16 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
           validator,
         })
       return rules
-    }, [required, methodContent, checkRepeat, publicConfig, validator])
-
+    }, [
+      required,
+      methodContent.field,
+      methodContent.pattern,
+      methodContent.formatErrorMessage,
+      checkRepeat,
+      publicConfig,
+      validator,
+      areaCode,
+    ])
     return (
       <Form.Item
         validateFirst={true}
@@ -133,13 +160,11 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
     )
   }
 )
-
 export const EmailFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
   (props, ref) => (
     <ValidatorFormItem ref={ref} required method="email" {...props} />
   )
 )
-
 export const PhoneFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
   (props, ref) => (
     <ValidatorFormItem ref={ref} required method="phone" {...props} />

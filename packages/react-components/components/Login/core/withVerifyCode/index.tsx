@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useGuardAuthClient } from '../../../Guard/authClient'
@@ -13,7 +13,13 @@ import { SendCodeByEmail } from '../../../SendCode/SendCodeByEmail'
 import { FormItemIdentify } from './FormItemIdentify'
 import { InputIdentify } from './inputIdentify'
 import './styles.less'
-import { VirtualDropdown } from './VirtualDropdown'
+import { InputInternationPhone } from './InputInternationPhone'
+
+export enum InputMethod {
+  EmailCode = 'email-code',
+  PhoneCode = 'phone-code',
+  InternationCode = 'internation-code',
+}
 export const LoginWithVerifyCode = (props: any) => {
   const config = usePublicConfig()
 
@@ -27,19 +33,97 @@ export const LoginWithVerifyCode = (props: any) => {
 
   const [identify, setIdentify] = useState('')
 
-  const [currentMethod, setCurrentMethod] = useState(methods[0])
+  const [currentMethod, setCurrentMethod] = useState<InputMethod>(methods[0])
+
+  const [areaCode, setAreaCode] = useState('')
 
   let [form] = Form.useForm()
+
   let submitButtonRef = useRef<any>(null)
   const { t } = useTranslation()
 
   let client = useGuardAuthClient()
 
+  // const SendCodeMap: Record<InputMethod, JSX.Element> = useMemo(() => {
+  //   return {
+  //     'phone-code': (
+  //       <SendCodeByPhone
+  //         {...props}
+  //         className="authing-g2-input g2-send-code-input"
+  //         autoComplete="off"
+  //         size="large"
+  //         placeholder={t('common.inputFourVerifyCode', {
+  //           length: verifyCodeLength,
+  //         })}
+  //         prefix={
+  //           <IconFont
+  //             type="authing-a-shield-check-line1"
+  //             style={{ color: '#878A95' }}
+  //           />
+  //         }
+  //         scene={SceneType.SCENE_TYPE_LOGIN}
+  //         maxLength={verifyCodeLength}
+  //         data={identify}
+  //         onSendCodeBefore={async () => {
+  //           await form.validateFields(['identify'])
+  //         }}
+  //       />
+  //     ),
+  //     'email-code': (
+  //       <SendCodeByEmail
+  //         {...props}
+  //         className="authing-g2-input g2-send-code-input"
+  //         autoComplete="off"
+  //         size="large"
+  //         placeholder={t('common.inputFourVerifyCode', {
+  //           length: verifyCodeLength,
+  //         })}
+  //         prefix={
+  //           <IconFont
+  //             type="authing-a-shield-check-line1"
+  //             style={{ color: '#878A95' }}
+  //           />
+  //         }
+  //         scene={EmailScene.VerifyCode}
+  //         maxLength={verifyCodeLength}
+  //         data={identify}
+  //         onSendCodeBefore={async () => {
+  //           await form.validateFields(['identify'])
+  //         }}
+  //       />
+  //     ),
+  //     'internation-code': (
+  //       <SendCodeByPhone
+  //         {...props}
+  //         className="authing-g2-input g2-send-code-input"
+  //         autoComplete="off"
+  //         size="large"
+  //         placeholder={t('common.inputFourVerifyCode', {
+  //           length: verifyCodeLength,
+  //         })}
+  //         prefix={
+  //           <IconFont
+  //             type="authing-a-shield-check-line1"
+  //             style={{ color: '#878A95' }}
+  //           />
+  //         }
+  //         scene={SceneType.SCENE_TYPE_LOGIN}
+  //         maxLength={verifyCodeLength}
+  //         data={identify}
+  //         onSendCodeBefore={async () => {
+  //           const id = await form.validateFields(['identify'])
+  //           console.log(id, areaCode, '=====')
+  //         }}
+  //       />
+  //     ),
+  //   }
+  // }, [areaCode, form, identify, props, t, verifyCodeLength])
+
   const SendCode = useCallback(
     (props: any) => {
       return (
         <>
-          {currentMethod === 'phone-code' && (
+          {currentMethod === InputMethod.PhoneCode && (
             <SendCodeByPhone
               {...props}
               className="authing-g2-input g2-send-code-input"
@@ -58,13 +142,11 @@ export const LoginWithVerifyCode = (props: any) => {
               maxLength={verifyCodeLength}
               data={identify}
               onSendCodeBefore={async () => {
-                const area = await form.validateFields(['areacode'])
-                console.log(area, 'code')
                 await form.validateFields(['identify'])
               }}
             />
           )}
-          {currentMethod === 'email-code' && (
+          {currentMethod === InputMethod.EmailCode && (
             <SendCodeByEmail
               {...props}
               className="authing-g2-input g2-send-code-input"
@@ -87,18 +169,50 @@ export const LoginWithVerifyCode = (props: any) => {
               }}
             />
           )}
+          {currentMethod === InputMethod.InternationCode && (
+            <SendCodeByPhone
+              {...props}
+              fieldName="identify"
+              className="authing-g2-input g2-send-code-input"
+              autoComplete="off"
+              size="large"
+              placeholder={t('common.inputFourVerifyCode', {
+                length: verifyCodeLength,
+              })}
+              prefix={
+                <IconFont
+                  type="authing-a-shield-check-line1"
+                  style={{ color: '#878A95' }}
+                />
+              }
+              scene={SceneType.SCENE_TYPE_LOGIN}
+              maxLength={verifyCodeLength}
+              // data={identify}
+              onSendCodeBefore={async () => {
+                const id = await form.validateFields(['identify'])
+                console.log(id, areaCode, '=====')
+              }}
+            />
+          )}
         </>
       )
     },
-    [currentMethod, form, identify, t, verifyCodeLength]
+    [areaCode, currentMethod, form, identify, t, verifyCodeLength]
   )
+
+  useEffect(() => {
+    if (methods.length === 1 && methods[0] === 'phone-code') {
+      // TODO 开启国际化配置并登录方式为手机号码时
+      setCurrentMethod(InputMethod.InternationCode)
+    }
+  }, [methods])
 
   const loginByPhoneCode = async (values: any) => {
     try {
       const user = await client.loginByPhoneCode(values.identify, values.code)
       submitButtonRef.current.onSpin(false)
       props.onLogin(200, user)
-    } catch (e) {
+    } catch (e: any) {
       console.log(e)
       submitButtonRef.current.onError()
       props.onLogin(e.code, e.data, e.message)
@@ -112,7 +226,7 @@ export const LoginWithVerifyCode = (props: any) => {
       const user = await client.loginByEmailCode(values.identify, values.code)
       submitButtonRef.current.onSpin(false)
       props.onLogin(200, user)
-    } catch (e) {
+    } catch (e: any) {
       const error = JSON.parse(e.message)
       submitButtonRef.current.onError()
       props.onLogin(error.code, error.data, error.message)
@@ -146,7 +260,6 @@ export const LoginWithVerifyCode = (props: any) => {
 
     if (!!props.onLoginRequest) {
       const res = await props.onLoginRequest?.(loginInfo)
-
       const { code, message, data } = res
       props.onLogin(code, data, message)
       return
@@ -167,6 +280,46 @@ export const LoginWithVerifyCode = (props: any) => {
       : t('common.login')
   }, [props.autoRegister, submitButText, t])
 
+  // const AccountFormItem = useCallback(() => {
+  //   console.log(methods, 'methods')
+  //   return (
+  //     <FormItemIdentify
+  //       name="identify"
+  //       className="authing-g2-input-form remove-padding"
+  //       methods={methods}
+  //       areaCode={areaCode}
+  //     >
+  //       {currentMethod === InputMethod.InternationCode ? (
+  //         <InputInternationPhone
+  //           className="authing-g2-input"
+  //           size="large"
+  //           areaCode={areaCode}
+  //           methods={methods}
+  //           onAreaCodeChange={(value: string) => {
+  //             setAreaCode(value)
+  //           }}
+  //         />
+  //       ) : (
+  //         <InputIdentify
+  //           className="authing-g2-input"
+  //           size="large"
+  //           value={identify}
+  //           methods={methods}
+  //           onChange={(e) => {
+  //             let v = e.target.value
+  //             setIdentify(v)
+  //             if (validate('email', v)) {
+  //               setCurrentMethod(InputMethod.EmailCode)
+  //             }
+  //             if (validate('phone', v)) {
+  //               setCurrentMethod(InputMethod.PhoneCode)
+  //             }
+  //           }}
+  //         />
+  //       )}
+  //     </FormItemIdentify>
+  //   )
+  // }, [areaCode, currentMethod, identify, methods])
   return (
     <div className="authing-g2-login-phone-code">
       <Form
@@ -176,15 +329,27 @@ export const LoginWithVerifyCode = (props: any) => {
         onFinishFailed={() => submitButtonRef.current.onError()}
         autoComplete="off"
       >
-        <div style={{ display: 'flex' }}>
-          <Form.Item name="areacode" className="areacode-select-item">
-            <VirtualDropdown />
-          </Form.Item>
-          <FormItemIdentify
-            name="identify"
-            className="authing-g2-input-form remove-padding"
-            methods={methods}
-          >
+        <FormItemIdentify
+          name="identify"
+          className={
+            currentMethod === InputMethod.InternationCode
+              ? 'authing-g2-input-form remove-padding'
+              : 'authing-g2-input-form'
+          }
+          methods={methods}
+          areaCode={areaCode}
+        >
+          {currentMethod === InputMethod.InternationCode ? (
+            <InputInternationPhone
+              className="authing-g2-input"
+              size="large"
+              areaCode={areaCode}
+              methods={methods}
+              onAreaCodeChange={(value: string) => {
+                setAreaCode(value)
+              }}
+            />
+          ) : (
             <InputIdentify
               className="authing-g2-input"
               size="large"
@@ -194,16 +359,16 @@ export const LoginWithVerifyCode = (props: any) => {
                 let v = e.target.value
                 setIdentify(v)
                 if (validate('email', v)) {
-                  setCurrentMethod('email-code')
+                  setCurrentMethod(InputMethod.EmailCode)
                 }
                 if (validate('phone', v)) {
-                  setCurrentMethod('phone-code')
+                  setCurrentMethod(InputMethod.PhoneCode)
                 }
               }}
-              prefix={<></>}
             />
-          </FormItemIdentify>
-        </div>
+          )}
+        </FormItemIdentify>
+
         <Form.Item
           validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"

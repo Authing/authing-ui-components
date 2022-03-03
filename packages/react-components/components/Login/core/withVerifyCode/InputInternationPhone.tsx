@@ -1,17 +1,19 @@
-import Input, { InputProps } from 'antd/lib/input'
+import { InputProps } from 'antd/lib/input'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VerifyLoginMethods } from '../../../AuthingGuard/api'
-import { IconFont } from '../../../IconFont'
+
 import { InputNumber } from '../../../InputNumber'
-
-export interface InputIdentifyProps extends InputProps {
+import { VirtualDropdown } from './VirtualDropdown'
+export interface InputInternationPhoneProps extends InputProps {
   methods: VerifyLoginMethods[]
+  areaCode: string
+  onAreaCodeChange: (areaCode: string) => void
 }
-
-export const InputIdentify: React.FC<InputIdentifyProps> = (props) => {
-  const { methods, ...inputProps } = props
-
+export const InputInternationPhone: React.FC<InputInternationPhoneProps> = (
+  props
+) => {
+  const { methods, areaCode, onAreaCodeChange, ...inputProps } = props
   const { t } = useTranslation()
 
   const verifyCodeMethodsText = useMemo<
@@ -47,24 +49,16 @@ export const InputIdentify: React.FC<InputIdentifyProps> = (props) => {
     [methods, t, verifyCodeMethodsText]
   )
 
-  const renderInput = useMemo(() => {
-    if (methods.length === 1 && methods[0] === 'phone-code') {
-      // TODO 开启国际化配置并登录方式为手机号码时
-      return (
-        <InputNumber maxLength={11} placeholder={placeholder} {...inputProps} />
-      )
-    }
-
-    return (
-      <Input
+  return (
+    <div>
+      <InputNumber
+        maxLength={11}
         placeholder={placeholder}
         {...inputProps}
         prefix={
-          <IconFont type="authing-a-user-line1" style={{ color: '#878A95' }} />
+          <VirtualDropdown value={areaCode} onChange={onAreaCodeChange} />
         }
       />
-    )
-  }, [inputProps, methods, placeholder])
-
-  return <>{renderInput}</>
+    </div>
+  )
 }

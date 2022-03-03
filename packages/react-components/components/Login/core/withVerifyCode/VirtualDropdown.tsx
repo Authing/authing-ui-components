@@ -1,6 +1,7 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { Select } from 'antd'
 import { isoInfo, Iso } from '../../../_utils/countryList'
+import './styles.less'
 export interface VirtualDropdownProps {
   value?: string
   onChange?: (value: string) => void
@@ -8,6 +9,7 @@ export interface VirtualDropdownProps {
 }
 export const VirtualDropdown: FC<VirtualDropdownProps> = (props) => {
   const { value, onChange } = props
+  const [open, setOpen] = useState(false)
   const options = isoInfo.map((info: Iso) => {
     return {
       value: info.iso,
@@ -23,6 +25,14 @@ export const VirtualDropdown: FC<VirtualDropdownProps> = (props) => {
 
   return (
     <Select
+      open={open}
+      onClick={() => {
+        setOpen(!open)
+      }}
+      onBlur={() => {
+        setOpen(false)
+      }}
+      dropdownClassName="areacode-virtual-dropdown"
       bordered={false}
       listHeight={258}
       options={options}
@@ -30,12 +40,6 @@ export const VirtualDropdown: FC<VirtualDropdownProps> = (props) => {
       onChange={onChange}
       optionLabelProp="key"
       dropdownMatchSelectWidth={138}
-      getPopupContainer={(node: any) => {
-        if (node) {
-          return node?.parentElement
-        }
-        return document.body
-      }}
     />
   )
 }
