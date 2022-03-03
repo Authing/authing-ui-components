@@ -1,20 +1,23 @@
-.areacode-select-item
-  .authing-ant-select-single:not(.authing-ant-select-customize-input)
-  .authing-ant-select-selector {
+.areacode-select-item .authing-ant-select-selector {
   height: 28px;
+  width: 87px;
 }
-.international-sms {
-  display: flex;
-  #phoneCode_identify {
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
-  }
-  .authing-ant-form-item-control-input {
+
+.areacode-select-item {
+  height: 43px;
+  .authing-ant-select-single:not(.authing-ant-select-customize-input)
+    .authing-ant-select-selector {
     width: 87px;
   }
   .authing-ant-select-selection-item {
     display: flex;
     align-items: center;
+  }
+  .authing-ant-select-item-option-active {
+    color: #396aff;
+  }
+  .authing-ant-select-item-option-selected:not(.authing-ant-select-item-option-disabled) {
+    color: #396aff;
   }
 }
 .authing-ant-form-item.areacode-select-item {
@@ -23,15 +26,9 @@
   border-bottom-left-radius: 4px;
   display: flex;
   align-items: center;
-  margin-bottom: 0px;
+  margin-bottom: 16px;
 }
-.authing-ant-select-dropdown.area-code-virtual-dropdown {
-  width: 138px !important;
-  border-radius: 4px;
-  .authing-ant-select-item-option-selected {
-    color: #396aff;
-  }
-}
+
 .select-option-item {
   height: 26px;
   line-height: 26px;
@@ -41,5 +38,13 @@
   display: flex;
   > span {
     width: 50%;
+  }
+}
+.authing-g2-input-form.remove-padding {
+  flex: 1;
+  padding-left: 0px;
+  .authing-g2-input {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
   }
 }

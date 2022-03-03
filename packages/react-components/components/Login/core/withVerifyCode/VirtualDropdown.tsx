@@ -23,14 +23,13 @@ export const VirtualDropdown: FC<VirtualDropdownProps> = (props) => {
 
   return (
     <Select
-      // open={true}
       bordered={false}
       listHeight={258}
       options={options}
       value={value}
       onChange={onChange}
       optionLabelProp="key"
-      dropdownClassName="area-code-virtual-dropdown"
+      dropdownMatchSelectWidth={138}
       getPopupContainer={(node: any) => {
         if (node) {
           return node?.parentElement

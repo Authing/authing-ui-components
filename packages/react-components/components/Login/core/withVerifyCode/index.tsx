@@ -58,6 +58,8 @@ export const LoginWithVerifyCode = (props: any) => {
               maxLength={verifyCodeLength}
               data={identify}
               onSendCodeBefore={async () => {
+                const area = await form.validateFields(['areacode'])
+                console.log(area, 'code')
                 await form.validateFields(['identify'])
               }}
             />
@@ -175,12 +177,12 @@ export const LoginWithVerifyCode = (props: any) => {
         autoComplete="off"
       >
         <div style={{ display: 'flex' }}>
-          <Form.Item className="areacode-select-item">
+          <Form.Item name="areacode" className="areacode-select-item">
             <VirtualDropdown />
           </Form.Item>
           <FormItemIdentify
             name="identify"
-            className="authing-g2-input-form"
+            className="authing-g2-input-form remove-padding"
             methods={methods}
           >
             <InputIdentify
