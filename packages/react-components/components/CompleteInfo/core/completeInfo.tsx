@@ -2,24 +2,27 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Form, Input, message, Select, DatePicker } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
-import { ExtendsField } from '../../AuthingGuard/api'
 import { UploadImage } from '../../AuthingGuard/Forms/UploadImage'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { i18n } from '../../_utils/locales'
 import { useGuardHttp } from '../../_utils/guradHttp'
-import { GuardCompleteInfoViewProps } from '../interface'
+import {
+  CompleteInfoBaseControls,
+  CompleteInfoExtendsControls,
+  CompleteInfoMetaData,
+  FormValidateRule,
+  GuardCompleteInfoViewProps,
+} from '../interface'
 import SubmitButton from '../../SubmitButton'
 import { InputNumber } from '../../InputNumber'
-import { completeFieldsFilter } from '../utils'
-import { EmailScene, SceneType, User } from 'authing-js-sdk'
+import { EmailScene, SceneType } from 'authing-js-sdk'
 import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
 import { fieldRequiredRule } from '../../_utils'
 import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
 export interface CompleteInfoProps {
-  user: User
+  metaData: CompleteInfoMetaData[]
   verifyCodeLength: number | undefined
-  extendsFields: ExtendsField[]
   onRegisterInfoCompleted?: GuardCompleteInfoViewProps['onRegisterInfoCompleted']
   onRegisterInfoCompletedError?: GuardCompleteInfoViewProps['onRegisterInfoCompletedError']
 }
@@ -37,17 +40,15 @@ const filterOption = (input: any, option: any) => {
 
 export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
   const {
+    metaData,
     verifyCodeLength,
-    extendsFields,
     onRegisterInfoCompleted,
     onRegisterInfoCompletedError,
-    user,
   } = props
+
   const authClient = useGuardAuthClient()
   const submitButtonRef = useRef<any>(null)
-  const [contryList, setContryList] = useState<any>([])
-  const [fieldMetadata, setFieldMetadata] = useState<FieldMetadata[]>([])
-  // const [user, setUser] = useState<User>()
+  const [countryList, setCountryList] = useState<any>([])
   const { get, post } = useGuardHttp()
   const { t } = useTranslation()
   const [form] = Form.useForm()
@@ -56,9 +57,6 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
   const refUserName = useRef<ICheckProps>(null)
 
   const loadInitData = useCallback(async () => {
-    await authClient.tokenProvider.clearUser()
-    await authClient.tokenProvider.setUser(user)
-
     const { data: resCountryList } = await get<any>(`/api/v2/country-list`)
     const toMap =
       i18n.language === 'zh-CN' ? resCountryList?.zh : resCountryList?.en
@@ -69,323 +67,323 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         value: key,
       })
     }
-    setContryList(toSet)
-    const { data: currFieldMetadata } = await get<any>(
-      `/api/v2/udfs/field-metadata-for-completion`,
-      undefined,
-      {}
-    )
-    setFieldMetadata(currFieldMetadata)
-  }, [get, setContryList, setFieldMetadata, authClient, user])
+    setCountryList(toSet)
+  }, [get])
 
   useEffect(() => {
+    if (!metaData.map((i) => i.name).includes('country')) return
+
     loadInitData()
-  }, [loadInitData])
+  }, [loadInitData, metaData])
 
   const INPUT_MAP: Record<
     string,
     (props?: any) => React.ReactNode | undefined
-  > = {
-    image: () => <UploadImage />,
-    number: () => (
-      <InputNumber style={{ width: '100%' }} className="authing-g2-input" />
-    ),
-    date: () => (
-      <DatePicker
-        className="authing-g2-input"
-        style={{ width: '100%' }}
-        placeholder={i18n.t('common.pleaseSelectDate')}
-      />
-    ),
-    datetime: () => (
-      <DatePicker
-        className="authing-g2-input"
-        style={{ width: '100%' }}
-        placeholder={i18n.t('common.pleaseSelectDate')}
-      />
-    ),
-    select: (options: any[]) => (
-      <Select
-        className="authing-g2-select"
-        showSearch
-        options={options}
-        filterOption={filterOption}
-      />
-    ),
-    dropdown: (options: any[]) => (
-      <Select
-        className="authing-g2-select"
-        showSearch
-        options={options}
-        filterOption={filterOption}
-      />
-    ),
-    boolean: () => (
-      <Select
-        className="authing-g2-select"
-        options={[
-          { label: i18n.t('common.yes'), value: true as any },
-          { label: i18n.t('common.no'), value: false as any },
-        ]}
-      />
-    ),
-    string: () => (
-      <Input
-        type="text"
-        size="large"
-        className="authing-g2-input"
-        autoComplete="off"
-      />
-    ),
-    text: () => (
-      <Input
-        type="text"
-        size="large"
-        className="authing-g2-input"
-        autoComplete="off"
-      />
-    ),
-  }
+  > = useMemo(
+    () => ({
+      image: () => <UploadImage />,
+      number: () => (
+        <InputNumber style={{ width: '100%' }} className="authing-g2-input" />
+      ),
+      date: () => (
+        <DatePicker
+          className="authing-g2-input"
+          style={{ width: '100%' }}
+          placeholder={i18n.t('common.pleaseSelectDate')}
+        />
+      ),
+      datetime: () => (
+        <DatePicker
+          className="authing-g2-input"
+          style={{ width: '100%' }}
+          placeholder={i18n.t('common.pleaseSelectDate')}
+        />
+      ),
+      select: (props: any) => (
+        <Select
+          className="authing-g2-select"
+          showSearch
+          options={props.options}
+          filterOption={filterOption}
+        />
+      ),
+      dropdown: (props: any) => (
+        <Select
+          className="authing-g2-select"
+          showSearch
+          options={props.options}
+          filterOption={filterOption}
+        />
+      ),
+      boolean: () => (
+        <Select
+          className="authing-g2-select"
+          options={[
+            { label: i18n.t('common.yes'), value: true as any },
+            { label: i18n.t('common.no'), value: false as any },
+          ]}
+        />
+      ),
+      string: () => (
+        <Input
+          type="text"
+          size="large"
+          className="authing-g2-input"
+          autoComplete="off"
+        />
+      ),
+      text: () => (
+        <Input
+          type="text"
+          size="large"
+          className="authing-g2-input"
+          autoComplete="off"
+        />
+      ),
+      gender: () => (
+        <Select
+          className="authing-g2-select"
+          options={[
+            { label: i18n.t('common.man'), value: 'M' },
+            { label: i18n.t('common.female'), value: 'F' },
+          ]}
+        />
+      ),
+      country: () => (
+        <Select
+          className="authing-g2-select"
+          options={countryList}
+          showSearch
+          filterOption={filterOption}
+        />
+      ),
+    }),
+    [countryList]
+  )
   const INTERNAL_INPUT_MAP: Record<
     string,
     (props: any) => React.ReactNode | undefined
-  > = {
-    gender: () => (
-      <Select
-        className="authing-g2-select"
-        options={[
-          { label: i18n.t('common.man'), value: 'M' },
-          { label: i18n.t('common.female'), value: 'F' },
-        ]}
-      ></Select>
-    ),
-    country: (contryList: any) => (
-      <Select
-        className="authing-g2-select"
-        options={contryList}
-        showSearch
-        filterOption={filterOption}
-      ></Select>
-    ),
-    username: (props: any) => (
-      <CustomFormItem.UserName
-        validateFirst={true}
-        className="authing-g2-input-form"
-        name="internal username"
-        key="internal-usernameadsf"
-        label={i18n.t('common.username')}
-        required={props.required}
-        checkRepeat={true}
-        ref={refUserName}
-      >
-        <Input
-          className="authing-g2-input"
-          autoComplete="username"
-          key="internal-username:asdf"
-          size="large"
-          maxLength={11}
-          placeholder={t('login.inputUsername')}
-        />
-      </CustomFormItem.UserName>
-    ),
-    phone: (props: { required?: boolean }) => (
-      <>
-        <CustomFormItem.Phone
+  > = useMemo(
+    () => ({
+      username: (props: any) => (
+        <CustomFormItem.UserName
           validateFirst={true}
           className="authing-g2-input-form"
-          name="internal phone:phone"
-          key="internal-phone:phoneadsf"
-          label={i18n.t('common.phoneLabel')}
+          name="internal username"
+          key="internal-usernameadsf"
+          label={i18n.t('common.username')}
           required={props.required}
           checkRepeat={true}
-          ref={refPhone}
-        >
-          <InputNumber
-            className="authing-g2-input"
-            autoComplete="tel"
-            key="internal-phone:phone123"
-            type="tel"
-            size="large"
-            maxLength={11}
-            placeholder={t('login.inputPhone')}
-          />
-        </CustomFormItem.Phone>
-        <Form.Item
-          validateTrigger={['onBlur', 'onChange']}
-          className="authing-g2-input-form"
-          name="internal phone:code"
-          key="internal-phone:codea"
-          rules={
-            props.required
-              ? fieldRequiredRule(t('common.captchaCode'))
-              : undefined
-          }
-        >
-          <SendCodeByPhone
-            className="authing-g2-input g2-send-code-input"
-            autoComplete="one-time-code"
-            key="internal-phone:phone345"
-            size="large"
-            placeholder={t('common.inputFourVerifyCode', {
-              length: verifyCodeLength,
-            })}
-            scene={SceneType.SCENE_TYPE_COMPLETE_PHONE}
-            maxLength={verifyCodeLength}
-            fieldName="internal phone:phone"
-            data={''}
-            form={form}
-            onSendCodeBefore={() =>
-              form.validateFields(['internal phone:phone'])
-            }
-          />
-        </Form.Item>
-      </>
-    ),
-    email: (props: { required?: boolean }) => (
-      <>
-        <CustomFormItem.Email
-          className="authing-g2-input-form"
-          name="internal email:email"
-          checkRepeat={true}
-          label={i18n.t('common.email')}
-          required={props.required}
-          key="internal email:email13"
-          validateFirst={true}
-          ref={refEmail}
+          ref={refUserName}
         >
           <Input
             className="authing-g2-input"
-            autoComplete="email"
+            autoComplete="username"
+            key="internal-username:asdf"
             size="large"
-            placeholder={t('login.inputEmail')}
+            maxLength={11}
+            placeholder={t('login.inputUsername')}
           />
-        </CustomFormItem.Email>
-        <Form.Item
-          validateTrigger={['onBlur', 'onChange']}
-          className="authing-g2-input-form"
-          name="internal email:code"
-          key="internal email:code1432"
-          rules={
-            props.required
-              ? fieldRequiredRule(t('common.captchaCode'))
-              : undefined
-          }
-        >
-          <SendCodeByEmail
-            className="authing-g2-input g2-send-code-input"
-            autoComplete="one-time-code"
-            size="large"
-            placeholder={t('common.inputFourVerifyCode', {
-              length: verifyCodeLength,
-            })}
-            maxLength={verifyCodeLength}
-            data={''}
-            scene={EmailScene.VerifyCode}
-            fieldName="internal email:email"
-            form={form}
-            onSendCodeBefore={() =>
-              form.validateFields(['internal email:email'])
+        </CustomFormItem.UserName>
+      ),
+      phone: (props: { required?: boolean }) => (
+        <>
+          <CustomFormItem.Phone
+            validateFirst={true}
+            className="authing-g2-input-form"
+            name="internal phone:phone"
+            key="internal-phone:phoneadsf"
+            label={i18n.t('common.phoneLabel')}
+            required={props.required}
+            checkRepeat={true}
+            ref={refPhone}
+          >
+            <InputNumber
+              className="authing-g2-input"
+              autoComplete="tel"
+              key="internal-phone:phone123"
+              type="tel"
+              size="large"
+              maxLength={11}
+              placeholder={t('login.inputPhone')}
+            />
+          </CustomFormItem.Phone>
+          <Form.Item
+            validateTrigger={['onBlur', 'onChange']}
+            className="authing-g2-input-form"
+            name="internal phone:code"
+            key="internal-phone:codea"
+            rules={
+              props.required
+                ? fieldRequiredRule(t('common.captchaCode'))
+                : undefined
             }
-          />
-        </Form.Item>
-      </>
-    ),
-  }
-
-  const formFieldsV2 = useMemo(() => {
-    return extendsFields
-      .filter((each) => completeFieldsFilter(user as User, each))
-      .map((def) => {
-        const key = `${def.type} ${def.name}`
-        const label =
-          i18n.language === 'zh-CN' ? def.label || def.name : def.name
-        const required = def.required || false
-        const rules = def.validateRules ?? []
-        const generateRules = () => {
-          const l = []
-          if (required) {
-            l.push({
-              required: true,
-              message: `${label} ${t('login.noEmpty')}`,
-            })
-          }
-          rules.forEach((rule) => {
-            switch (rule.type) {
-              case 'isNumber':
-                l.push({
-                  type: 'number',
-                  required,
-                  message: rule.error || t('login.mustBeNumber'),
-                })
-                break
-              case 'regExp':
-                l.push({
-                  required,
-                  pattern: new RegExp(rule.content.replaceAll('/', '')),
-                  message: rule.error,
-                })
-                break
-              default:
-                break
-            }
-          })
-          return l
-        }
-
-        const inputElement = () => {
-          if (
-            def.type === 'internal' &&
-            Object.keys(INTERNAL_INPUT_MAP).includes(def.name)
-          ) {
-            if (def.name === 'country') {
-              return INTERNAL_INPUT_MAP[def.name](contryList)
-            } else {
-              return INTERNAL_INPUT_MAP[def.name]({
-                required,
-              })
-            }
-          } else {
-            if (Object.keys(INPUT_MAP).includes(def.inputType)) {
-              if (def.inputType === 'select') {
-                const options =
-                  fieldMetadata.find((field) => field.key === def.name)
-                    ?.options || []
-                return INPUT_MAP[def.inputType](options)
+          >
+            <SendCodeByPhone
+              className="authing-g2-input g2-send-code-input"
+              autoComplete="one-time-code"
+              key="internal-phone:phone345"
+              size="large"
+              placeholder={t('common.inputFourVerifyCode', {
+                length: verifyCodeLength,
+              })}
+              scene={SceneType.SCENE_TYPE_COMPLETE_PHONE}
+              maxLength={verifyCodeLength}
+              fieldName="internal phone:phone"
+              data={''}
+              form={form}
+              onSendCodeBefore={() =>
+                form.validateFields(['internal phone:phone'])
               }
-              return INPUT_MAP[def.inputType]()
+            />
+          </Form.Item>
+        </>
+      ),
+      email: (props: { required?: boolean }) => (
+        <>
+          <CustomFormItem.Email
+            className="authing-g2-input-form"
+            name="internal email:email"
+            checkRepeat={true}
+            label={i18n.t('common.email')}
+            required={props.required}
+            key="internal email:email13"
+            validateFirst={true}
+            ref={refEmail}
+          >
+            <Input
+              className="authing-g2-input"
+              autoComplete="email"
+              size="large"
+              placeholder={t('login.inputEmail')}
+            />
+          </CustomFormItem.Email>
+          <Form.Item
+            validateTrigger={['onBlur', 'onChange']}
+            className="authing-g2-input-form"
+            name="internal email:code"
+            key="internal email:code1432"
+            rules={
+              props.required
+                ? fieldRequiredRule(t('common.captchaCode'))
+                : undefined
             }
-            return (
-              <Input
-                type="text"
-                className="authing-g2-input"
-                autoComplete="off"
-              />
-            )
-          }
-        }
-        if (
-          def.type === 'internal' &&
-          ['phone', 'email', 'username'].includes(def.name)
-        ) {
-          return inputElement()
-        } else {
-          return (
-            <Form.Item
-              validateTrigger={['onBlur', 'onChange']}
-              className="authing-g2-input-form"
-              rules={generateRules()}
-              key={key}
-              name={key}
-              label={label}
-              style={{ marginBottom: 8 }}
-            >
-              {inputElement()}
-            </Form.Item>
-          )
+          >
+            <SendCodeByEmail
+              className="authing-g2-input g2-send-code-input"
+              autoComplete="one-time-code"
+              size="large"
+              placeholder={t('common.inputFourVerifyCode', {
+                length: verifyCodeLength,
+              })}
+              maxLength={verifyCodeLength}
+              data={''}
+              scene={EmailScene.VerifyCode}
+              fieldName="internal email:email"
+              form={form}
+              onSendCodeBefore={() =>
+                form.validateFields(['internal email:email'])
+              }
+            />
+          </Form.Item>
+        </>
+      ),
+    }),
+    [form, t, verifyCodeLength]
+  )
+  const generateRules = useCallback(
+    (metaData: CompleteInfoMetaData) => {
+      const formRules = []
+
+      const label =
+        i18n.language === 'zh-CN'
+          ? metaData.label || metaData.name
+          : metaData.name
+
+      const rules = metaData.validateRules ?? []
+
+      const required = metaData.required ?? false
+
+      if (metaData.required) {
+        formRules.push({
+          required: true,
+          message: `${label} ${t('login.noEmpty')}`,
+        })
+      }
+
+      // TODO 后端的 rule Type 有很多 前端目前只做了两种的映射
+      rules.forEach((rule) => {
+        switch (rule.type) {
+          case 'isNumber':
+            formRules.push({
+              type: 'number',
+              required,
+              message: rule.errorMessages || '请填写数字',
+            })
+            break
+          case 'regExp':
+            formRules.push({
+              required,
+              pattern: new RegExp(rule.content.replaceAll('/', '')),
+              message: rule.errorMessages,
+            })
+            break
+          default:
+            break
         }
       })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contryList, extendsFields, fieldMetadata, t, user])
+      return formRules
+    },
+    [t]
+  )
+
+  const inputElement = useCallback(
+    (metaData: CompleteInfoMetaData) => {
+      const key = `${metaData.type} ${metaData.name}`
+      const label =
+        i18n.language === 'zh-CN'
+          ? metaData.label || metaData.name
+          : metaData.name
+
+      if (
+        (Object.values(CompleteInfoBaseControls) as (
+          | CompleteInfoBaseControls
+          | CompleteInfoExtendsControls
+        )[]).includes(metaData.type)
+      ) {
+        return INTERNAL_INPUT_MAP[metaData.name]({
+          required: metaData.required,
+        })
+      } else {
+        const userFormItem = (children: React.ReactNode) => (
+          <Form.Item
+            validateTrigger={['onBlur', 'onChange']}
+            className="authing-g2-input-form"
+            rules={generateRules(metaData)}
+            key={key}
+            name={key}
+            label={label}
+            style={{ marginBottom: 8 }}
+          >
+            {children}
+          </Form.Item>
+        )
+        if (Object.keys(INPUT_MAP).includes(metaData.type))
+          return userFormItem(
+            INPUT_MAP[metaData.type]({ options: metaData.options })
+          )
+
+        return userFormItem(
+          <Input type="text" className="authing-g2-input" autoComplete="off" />
+        )
+      }
+    },
+    [INPUT_MAP, INTERNAL_INPUT_MAP, generateRules]
+  )
+
+  const formFieldsV2 = useMemo(() => {
+    return metaData.map((data) => inputElement(data))
+  }, [inputElement, metaData])
 
   const [, onFinish] = useAsyncFn(async (values: any) => {
     submitButtonRef.current?.onSpin(true)

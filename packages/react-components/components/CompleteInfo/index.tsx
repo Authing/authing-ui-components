@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ImagePro } from '../ImagePro'
 import { GuardModuleType } from '../Guard/module'
 import { CompleteInfo } from './core/completeInfo'
-import { GuardCompleteInfoViewProps } from './interface'
+import {
+  CompleteInfoBaseControls,
+  CompleteInfoExtendsControls,
+  FormValidateRule,
+  GuardCompleteInfoViewProps,
+} from './interface'
 import './styles.less'
 import { IconFont } from '../IconFont'
 import { useGuardAuthClient } from '../Guard/authClient'
@@ -39,6 +44,62 @@ export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
     }
   }
 
+  const metaData = useMemo(
+    () => [
+      {
+        type: CompleteInfoExtendsControls.SELECT,
+        name: 'name1',
+        label: 'name1',
+        required: false,
+        validateRules: [],
+        options: [
+          {
+            label: '2222',
+            value: '111',
+          },
+        ],
+      },
+      {
+        type: CompleteInfoBaseControls.PHONE,
+        name: 'phone',
+        label: '手机号',
+        required: false,
+        validateRules: [
+          {
+            type: FormValidateRule.PHONE,
+            content: '',
+          },
+        ],
+      },
+      {
+        type: CompleteInfoExtendsControls.TEXT,
+        name: 'name2',
+        label: 'name2',
+        required: true,
+        validateRules: [
+          {
+            type: FormValidateRule.REG_EXP,
+            content: '/^1[3-9]\\d{9}$/',
+            errorMessages: '这个好像不是我的名字',
+          },
+        ],
+      },
+      {
+        type: CompleteInfoBaseControls.EMAIL,
+        name: 'email',
+        label: '邮箱',
+        required: false,
+        validateRules: [
+          {
+            type: FormValidateRule.EMAIL,
+            content: '',
+          },
+        ],
+      },
+    ],
+    []
+  )
+
   return (
     <div className="g2-view-container g2-complete-info">
       <div className="g2-view-header">
@@ -69,9 +130,8 @@ export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
       </div>
       <div className="g2-view-tabs g2-completeInfo-content">
         <CompleteInfo
-          extendsFields={config?.__publicConfig__?.extendsFields!}
+          metaData={metaData}
           verifyCodeLength={config?.__publicConfig__?.verifyCodeLength}
-          user={initData?.user}
           onRegisterInfoCompleted={(_, udfs) => {
             onSuccess(udfs)
           }}

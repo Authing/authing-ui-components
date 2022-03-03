@@ -51,10 +51,18 @@ export interface ExtendsField {
   validateRules: any[]
 }
 
+export enum FormValidateRule {
+  NONE = 'none',
+  EMAIL = 'email',
+  PHONE = 'phone',
+  IS_NUMBER = 'isNumber',
+  REG_EXP = 'regExp',
+}
+
 export interface CompleteInfoRule {
-  type: 'regExp' | 'isNumber'
+  type: FormValidateRule
   content: string
-  errorMessages: string
+  errorMessages?: string
 }
 
 export interface CompleteInfoSelectOption {
@@ -63,16 +71,21 @@ export interface CompleteInfoSelectOption {
 }
 
 export interface CompleteInfoMetaData {
-  type: CompleteInfoInputType
+  type: CompleteInfoBaseControls | CompleteInfoExtendsControls
   label: string
   name: string
   required: boolean
   validateRules: CompleteInfoRule[]
   options?: CompleteInfoSelectOption[]
-  order: number
 }
 
-export enum CompleteInfoInputType {
+export enum CompleteInfoBaseControls {
+  USERNAME = 'username',
+  PHONE = 'phone',
+  EMAIL = 'email',
+}
+
+export enum CompleteInfoExtendsControls {
   IMAGE = 'image',
   NUMBER = 'number',
   DATE = 'date',
@@ -84,12 +97,9 @@ export enum CompleteInfoInputType {
   TEXT = 'text',
   GENDER = 'gender',
   COUNTRY = 'country',
-  USERNAME = 'username',
-  PHONE = 'phone',
-  EMAIL = 'email',
 }
 
 export interface CompleteInfoInitData {
   skip: boolean
-  metaData: CompleteInfoMetaData
+  metaData: CompleteInfoMetaData[]
 }
