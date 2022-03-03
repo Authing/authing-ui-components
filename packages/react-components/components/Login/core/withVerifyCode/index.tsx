@@ -174,31 +174,34 @@ export const LoginWithVerifyCode = (props: any) => {
         onFinishFailed={() => submitButtonRef.current.onError()}
         autoComplete="off"
       >
-        <Form.Item className="areacode-select-item">
-          <VirtualDropdown />
-        </Form.Item>
-        <FormItemIdentify
-          name="identify"
-          className="authing-g2-input-form"
-          methods={methods}
-        >
-          <InputIdentify
-            className="authing-g2-input"
-            size="large"
-            value={identify}
+        <div style={{ display: 'flex' }}>
+          <Form.Item className="areacode-select-item">
+            <VirtualDropdown />
+          </Form.Item>
+          <FormItemIdentify
+            name="identify"
+            className="authing-g2-input-form"
             methods={methods}
-            onChange={(e) => {
-              let v = e.target.value
-              setIdentify(v)
-              if (validate('email', v)) {
-                setCurrentMethod('email-code')
-              }
-              if (validate('phone', v)) {
-                setCurrentMethod('phone-code')
-              }
-            }}
-          />
-        </FormItemIdentify>
+          >
+            <InputIdentify
+              className="authing-g2-input"
+              size="large"
+              value={identify}
+              methods={methods}
+              onChange={(e) => {
+                let v = e.target.value
+                setIdentify(v)
+                if (validate('email', v)) {
+                  setCurrentMethod('email-code')
+                }
+                if (validate('phone', v)) {
+                  setCurrentMethod('phone-code')
+                }
+              }}
+              prefix={<></>}
+            />
+          </FormItemIdentify>
+        </div>
         <Form.Item
           validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"

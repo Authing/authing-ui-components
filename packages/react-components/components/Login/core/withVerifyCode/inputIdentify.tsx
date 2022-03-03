@@ -53,12 +53,7 @@ export const InputIdentify: React.FC<InputIdentifyProps> = (props) => {
     if (methods.length === 1 && methods[0] === 'phone-code') {
       // TODO 开启国际化配置并登录方式为手机号码时
       return (
-        <InputNumber
-          maxLength={11}
-          placeholder={placeholder}
-          {...inputProps}
-          // prefix={<VirtualDropdown />}
-        />
+        <InputNumber maxLength={11} placeholder={placeholder} {...inputProps} />
       )
     }
 
