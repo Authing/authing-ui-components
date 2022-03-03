@@ -12,7 +12,8 @@ import { usePublicConfig } from '../../../_utils/context'
 import { SendCodeByEmail } from '../../../SendCode/SendCodeByEmail'
 import { FormItemIdentify } from './FormItemIdentify'
 import { InputIdentify } from './inputIdentify'
-
+import './styles.less'
+import { VirtualDropdown } from './VirtualDropdown'
 export const LoginWithVerifyCode = (props: any) => {
   const config = usePublicConfig()
 
@@ -173,6 +174,9 @@ export const LoginWithVerifyCode = (props: any) => {
         onFinishFailed={() => submitButtonRef.current.onError()}
         autoComplete="off"
       >
+        <Form.Item className="areacode-select-item">
+          <VirtualDropdown />
+        </Form.Item>
         <FormItemIdentify
           name="identify"
           className="authing-g2-input-form"
@@ -193,12 +197,6 @@ export const LoginWithVerifyCode = (props: any) => {
                 setCurrentMethod('phone-code')
               }
             }}
-            prefix={
-              <IconFont
-                type="authing-a-user-line1"
-                style={{ color: '#878A95' }}
-              />
-            }
           />
         </FormItemIdentify>
         <Form.Item
