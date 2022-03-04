@@ -1,9 +1,10 @@
-#!/usr/bin/env node
-const replace = require("replace-in-file");
-const path = require("path");
+var replace = require("replace-in-file");
+var path = require("path");
 
-// antd 不污染全局
+// 处理 antd reset css 问题
 const removeAntdGlobalStyles = () => {
+  console.log("\n🔥 开始处理 antd reset css 🔥");
+
   const rootDir = path.resolve(__dirname, "../");
 
   const options = {

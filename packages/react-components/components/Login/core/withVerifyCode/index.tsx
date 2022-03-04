@@ -205,8 +205,10 @@ export const LoginWithVerifyCode = (props: any) => {
         code: values.code,
       },
     }
+
     let context = await props.onBeforeLogin?.(loginInfo)
-    if (!context) {
+
+    if (!context && !!props.onBeforeLogin) {
       submitButtonRef.current.onSpin(false)
       return
     }
@@ -214,6 +216,12 @@ export const LoginWithVerifyCode = (props: any) => {
     if (!!props.onLoginRequest) {
       const res = await props.onLoginRequest?.(loginInfo)
       const { code, message, data } = res
+
+      if (code !== 200) {
+        submitButtonRef.current.onError()
+      }
+      submitButtonRef?.current.onSpin(false)
+
       props.onLogin(code, data, message)
       return
     }
