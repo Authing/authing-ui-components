@@ -27,6 +27,7 @@ export enum InputMethod {
   EmailCode = 'email-code',
   PhoneCode = 'phone-code',
 }
+
 export const LoginWithVerifyCode = (props: any) => {
   const config = usePublicConfig()
 
@@ -96,6 +97,7 @@ export const LoginWithVerifyCode = (props: any) => {
               placeholder={t('common.inputFourVerifyCode', {
                 length: verifyCodeLength,
               })}
+              areaCode={areaCode}
               prefix={
                 <IconFont
                   type="authing-a-shield-check-line1"

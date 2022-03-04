@@ -59,7 +59,8 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
           //TODO 区号就走 默认区号
           if (
             value &&
-            (phone(value, { country: 'CN' }).isValid || phone(value).isValid)
+            (phone(value, { country: areaCode }).isValid ||
+              phone(value).isValid)
           ) {
             return Promise.resolve()
           }
