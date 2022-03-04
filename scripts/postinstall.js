@@ -3,6 +3,8 @@ var path = require("path");
 
 // 处理 antd reset css 问题
 const removeAntdGlobalStyles = () => {
+  console.log("\n🔥 开始处理 antd reset css 🔥");
+
   const rootDir = path.resolve(__dirname, "../");
 
   const options = {
