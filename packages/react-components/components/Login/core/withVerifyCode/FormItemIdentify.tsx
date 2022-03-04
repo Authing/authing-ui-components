@@ -32,6 +32,7 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
         validateTrigger: 'onBlur',
       })
     }
+    // 单纯的手机号校验
     if (
       currentMethod === 'phone-code' &&
       publicConfig &&

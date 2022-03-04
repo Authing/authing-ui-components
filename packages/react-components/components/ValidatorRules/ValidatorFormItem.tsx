@@ -2,6 +2,7 @@ import { Form } from 'antd'
 import React, {
   forwardRef,
   useCallback,
+  useEffect,
   useImperativeHandle,
   useMemo,
   useState,
@@ -40,6 +41,10 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
     const [checked, setChecked] = useState(false)
 
     const [isReady, setIsReady] = useState(false)
+
+    const [checkInternationSms, setCheckInternationSms] = useState<boolean>(
+      true
+    )
 
     const methodContent = useMemo(() => {
       if (method === 'email')
@@ -111,22 +116,19 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
     const rules = useMemo<Rule[]>(() => {
       if (required === false) return []
       const rules = [...fieldRequiredRule(methodContent.field)]
-
-      rules.push({
-        validateTrigger: 'onBlur',
-        pattern: methodContent.pattern,
-        message: methodContent.formatErrorMessage,
-      })
-      // TODO 开启国家化短信
-      if (
-        publicConfig &&
-        publicConfig.internationalSmsConfig?.enabled &&
-        method === 'phone'
-      ) {
+      if (!checkInternationSms) {
+        rules.push({
+          validateTrigger: 'onBlur',
+          pattern: methodContent.pattern,
+          message: methodContent.formatErrorMessage,
+        })
+      }
+      // TODO 开启国际化短信
+      if (checkInternationSms) {
         rules.push({
           validateTrigger: 'onBlur',
           validator: async (rule, value) => {
-            if (phone(value, { country: areaCode }).isValid)
+            if (!value || phone(value, { country: areaCode }).isValid)
               return Promise.resolve()
             return Promise.reject(t('common.internationPhoneMessage'))
           },
@@ -142,13 +144,24 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
     }, [
       required,
       methodContent,
-      publicConfig,
-      method,
+      checkInternationSms,
       checkRepeat,
+      publicConfig,
       validator,
       areaCode,
       t,
     ])
+    useEffect(() => {
+      if (
+        publicConfig &&
+        publicConfig.internationalSmsConfig?.enabled &&
+        method === 'phone'
+      ) {
+        setCheckInternationSms(true)
+      } else {
+        setCheckInternationSms(false)
+      }
+    }, [method, publicConfig])
     return (
       <Form.Item
         validateFirst={true}

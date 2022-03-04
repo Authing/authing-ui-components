@@ -34,7 +34,7 @@ export const LoginWithVerifyCode = (props: any) => {
 
   const [currentMethod, setCurrentMethod] = useState<InputMethod>(methods[0])
   // 是否为国际化短信
-  const [isInternationSms, setInternationSms] = useState(false)
+  const [isInternationSms, setInternationSms] = useState(true)
   const [areaCode, setAreaCode] = useState('')
 
   let [form] = Form.useForm()
@@ -50,6 +50,7 @@ export const LoginWithVerifyCode = (props: any) => {
         return (
           <SendCodeByPhone
             {...props}
+            form={form}
             fieldName="identify"
             className="authing-g2-input g2-send-code-input"
             autoComplete="off"
@@ -65,10 +66,8 @@ export const LoginWithVerifyCode = (props: any) => {
             }
             scene={SceneType.SCENE_TYPE_LOGIN}
             maxLength={verifyCodeLength}
-            // data={identify}
             onSendCodeBefore={async () => {
-              const id = await form.validateFields(['identify'])
-              console.log(id, areaCode, '=====')
+              await form.validateFields(['identify'])
             }}
           />
         )
@@ -125,15 +124,7 @@ export const LoginWithVerifyCode = (props: any) => {
         </>
       )
     },
-    [
-      areaCode,
-      currentMethod,
-      form,
-      identify,
-      isInternationSms,
-      t,
-      verifyCodeLength,
-    ]
+    [currentMethod, form, identify, isInternationSms, t, verifyCodeLength]
   )
 
   useEffect(() => {
