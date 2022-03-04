@@ -155,6 +155,7 @@ export const LoginWithVerifyCode = (props: any) => {
       config &&
       config.internationalSmsConfig?.enabled
     ) {
+      console.log(methods.length, '=====')
       setInternationSms(true)
     }
   }, [config, methods])

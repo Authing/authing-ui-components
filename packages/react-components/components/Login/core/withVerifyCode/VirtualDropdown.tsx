@@ -2,6 +2,9 @@ import React, { FC, useState } from 'react'
 import { Select } from 'antd'
 import { isoInfo, Iso } from '../../../_utils/countryList'
 import './styles.less'
+import { IconFont } from '../../../IconFont'
+import { i18n } from '../../../_utils/locales'
+
 export interface VirtualDropdownProps {
   value?: string
   onChange?: (value: string) => void
@@ -10,14 +13,17 @@ export interface VirtualDropdownProps {
 export const VirtualDropdown: FC<VirtualDropdownProps> = (props) => {
   const { value, onChange } = props
   const [open, setOpen] = useState(false)
+  // TODO 先取 iso type 作为 select 获取的 value 后续映射表弄好改为 区号码
   const options = isoInfo.map((info: Iso) => {
     return {
       value: info.iso,
-      key: info.areaCode,
+      key: info.phoneCountryCode,
       label: (
         <div className="select-option-item">
-          <span>{info.areaCode}</span>
-          <span>{info.regions}</span>
+          <span>{info.phoneCountryCode}</span>
+          <span>
+            {i18n.language === 'zh-CN' ? info.regions : info.regions_en}
+          </span>
         </div>
       ),
     }
@@ -40,6 +46,12 @@ export const VirtualDropdown: FC<VirtualDropdownProps> = (props) => {
       onChange={onChange}
       optionLabelProp="key"
       dropdownMatchSelectWidth={138}
+      suffixIcon={
+        <IconFont
+          type="authing-arrow-down-s-fill"
+          style={{ width: 20, height: 20 }}
+        />
+      }
     />
   )
 }

@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { InputProps } from 'antd/lib/input'
 import { SendCode } from './index'
+import { isoInfo } from '../_utils/countryList'
 export interface SendCodeByPhoneProps extends InputProps {
   data: string
   form?: any
@@ -33,7 +34,9 @@ export const SendCodeByPhone: FC<SendCodeByPhoneProps> = (props) => {
 
   const sendPhone = async (phone: string) => {
     try {
-      await authClient.sendSmsCode(phone, '', scene)
+      const phoneCountryCode = isoInfo.find((item) => item.iso === areaCode)
+        ?.phoneCountryCode
+      await authClient.sendSmsCode(phone, phoneCountryCode, scene)
       return true
     } catch (error: any) {
       if (error.code === 'ECONNABORTED') {

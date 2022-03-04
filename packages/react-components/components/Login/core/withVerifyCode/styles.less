@@ -5,15 +5,24 @@
   font-style: normal;
   font-weight: normal;
   display: flex;
-  > span {
-    width: 50%;
+  > span:first-child {
+    width: 40%;
+  }
+  > span:last-child {
+    width: 60%;
   }
 }
 .authing-g2-input-form.remove-padding {
   .authing-ant-input-affix-wrapper {
     padding-left: 0px;
   }
-
+  *[class*='authing-'].authing-ant-select {
+    display: flex;
+    align-items: center;
+    .authing-ant-select-arrow {
+      top: unset;
+    }
+  }
   *[class*='authing-'].authing-ant-select:not(.authing-ant-select-customize-input)
     .authing-ant-select-selector {
     display: flex;
@@ -26,8 +35,10 @@
 .areacode-virtual-dropdown {
   .authing-ant-select-item-option-active {
     color: #396aff;
+    background-color: #eff2f6;
   }
   .authing-ant-select-item-option-selected:not(.authing-ant-select-item-option-disabled) {
     color: #396aff;
+    background-color: #eff2f6;
   }
 }
