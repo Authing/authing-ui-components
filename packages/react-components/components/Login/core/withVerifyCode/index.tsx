@@ -15,6 +15,14 @@ import { InputIdentify } from './inputIdentify'
 import './styles.less'
 import { InputInternationPhone } from './InputInternationPhone'
 
+export const LanguageMap: any = {
+  'zh-CN': 'CN',
+  en: 'GB',
+  'en-US': 'US',
+  ja: 'JP',
+  'de-DE': 'DE',
+}
+
 export enum InputMethod {
   EmailCode = 'email-code',
   PhoneCode = 'phone-code',
@@ -35,7 +43,10 @@ export const LoginWithVerifyCode = (props: any) => {
   const [currentMethod, setCurrentMethod] = useState<InputMethod>(methods[0])
   // 是否为国际化短信
   const [isInternationSms, setInternationSms] = useState(true)
-  const [areaCode, setAreaCode] = useState('')
+  // 区号 默认
+  const [areaCode, setAreaCode] = useState(
+    LanguageMap[navigator.language] ? LanguageMap[navigator.language] : 'CN'
+  )
 
   let [form] = Form.useForm()
 
