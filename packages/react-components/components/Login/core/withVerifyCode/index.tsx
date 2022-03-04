@@ -18,7 +18,6 @@ import { InputInternationPhone } from './InputInternationPhone'
 export enum InputMethod {
   EmailCode = 'email-code',
   PhoneCode = 'phone-code',
-  InternationCode = 'internation-code',
 }
 export const LoginWithVerifyCode = (props: any) => {
   const config = usePublicConfig()
@@ -34,7 +33,8 @@ export const LoginWithVerifyCode = (props: any) => {
   const [identify, setIdentify] = useState('')
 
   const [currentMethod, setCurrentMethod] = useState<InputMethod>(methods[0])
-
+  // 是否为国际化短信
+  const [isInternationSms, setInternationSms] = useState(false)
   const [areaCode, setAreaCode] = useState('')
 
   let [form] = Form.useForm()
@@ -43,81 +43,6 @@ export const LoginWithVerifyCode = (props: any) => {
   const { t } = useTranslation()
 
   let client = useGuardAuthClient()
-
-  // const SendCodeMap: Record<InputMethod, JSX.Element> = useMemo(() => {
-  //   return {
-  //     'phone-code': (
-  //       <SendCodeByPhone
-  //         {...props}
-  //         className="authing-g2-input g2-send-code-input"
-  //         autoComplete="off"
-  //         size="large"
-  //         placeholder={t('common.inputFourVerifyCode', {
-  //           length: verifyCodeLength,
-  //         })}
-  //         prefix={
-  //           <IconFont
-  //             type="authing-a-shield-check-line1"
-  //             style={{ color: '#878A95' }}
-  //           />
-  //         }
-  //         scene={SceneType.SCENE_TYPE_LOGIN}
-  //         maxLength={verifyCodeLength}
-  //         data={identify}
-  //         onSendCodeBefore={async () => {
-  //           await form.validateFields(['identify'])
-  //         }}
-  //       />
-  //     ),
-  //     'email-code': (
-  //       <SendCodeByEmail
-  //         {...props}
-  //         className="authing-g2-input g2-send-code-input"
-  //         autoComplete="off"
-  //         size="large"
-  //         placeholder={t('common.inputFourVerifyCode', {
-  //           length: verifyCodeLength,
-  //         })}
-  //         prefix={
-  //           <IconFont
-  //             type="authing-a-shield-check-line1"
-  //             style={{ color: '#878A95' }}
-  //           />
-  //         }
-  //         scene={EmailScene.VerifyCode}
-  //         maxLength={verifyCodeLength}
-  //         data={identify}
-  //         onSendCodeBefore={async () => {
-  //           await form.validateFields(['identify'])
-  //         }}
-  //       />
-  //     ),
-  //     'internation-code': (
-  //       <SendCodeByPhone
-  //         {...props}
-  //         className="authing-g2-input g2-send-code-input"
-  //         autoComplete="off"
-  //         size="large"
-  //         placeholder={t('common.inputFourVerifyCode', {
-  //           length: verifyCodeLength,
-  //         })}
-  //         prefix={
-  //           <IconFont
-  //             type="authing-a-shield-check-line1"
-  //             style={{ color: '#878A95' }}
-  //           />
-  //         }
-  //         scene={SceneType.SCENE_TYPE_LOGIN}
-  //         maxLength={verifyCodeLength}
-  //         data={identify}
-  //         onSendCodeBefore={async () => {
-  //           const id = await form.validateFields(['identify'])
-  //           console.log(id, areaCode, '=====')
-  //         }}
-  //       />
-  //     ),
-  //   }
-  // }, [areaCode, form, identify, props, t, verifyCodeLength])
 
   const SendCode = useCallback(
     (props: any) => {
@@ -169,7 +94,7 @@ export const LoginWithVerifyCode = (props: any) => {
               }}
             />
           )}
-          {currentMethod === InputMethod.InternationCode && (
+          {/* {currentMethod === InputMethod.InternationCode && (
             <SendCodeByPhone
               {...props}
               fieldName="identify"
@@ -193,7 +118,7 @@ export const LoginWithVerifyCode = (props: any) => {
                 console.log(id, areaCode, '=====')
               }}
             />
-          )}
+          )} */}
         </>
       )
     },
@@ -201,11 +126,16 @@ export const LoginWithVerifyCode = (props: any) => {
   )
 
   useEffect(() => {
-    if (methods.length === 1 && methods[0] === 'phone-code') {
-      // TODO 开启国际化配置并登录方式为手机号码时
-      setCurrentMethod(InputMethod.InternationCode)
+    // TODO 开启国际化配置并登录方式为手机号码时
+    if (
+      methods.length === 1 &&
+      methods[0] === 'phone-code' &&
+      config &&
+      config.internationalSmsConfig?.enabled
+    ) {
+      setInternationSms(true)
     }
-  }, [methods])
+  }, [config, methods])
 
   const loginByPhoneCode = async (values: any) => {
     try {
@@ -280,46 +210,6 @@ export const LoginWithVerifyCode = (props: any) => {
       : t('common.login')
   }, [props.autoRegister, submitButText, t])
 
-  // const AccountFormItem = useCallback(() => {
-  //   console.log(methods, 'methods')
-  //   return (
-  //     <FormItemIdentify
-  //       name="identify"
-  //       className="authing-g2-input-form remove-padding"
-  //       methods={methods}
-  //       areaCode={areaCode}
-  //     >
-  //       {currentMethod === InputMethod.InternationCode ? (
-  //         <InputInternationPhone
-  //           className="authing-g2-input"
-  //           size="large"
-  //           areaCode={areaCode}
-  //           methods={methods}
-  //           onAreaCodeChange={(value: string) => {
-  //             setAreaCode(value)
-  //           }}
-  //         />
-  //       ) : (
-  //         <InputIdentify
-  //           className="authing-g2-input"
-  //           size="large"
-  //           value={identify}
-  //           methods={methods}
-  //           onChange={(e) => {
-  //             let v = e.target.value
-  //             setIdentify(v)
-  //             if (validate('email', v)) {
-  //               setCurrentMethod(InputMethod.EmailCode)
-  //             }
-  //             if (validate('phone', v)) {
-  //               setCurrentMethod(InputMethod.PhoneCode)
-  //             }
-  //           }}
-  //         />
-  //       )}
-  //     </FormItemIdentify>
-  //   )
-  // }, [areaCode, currentMethod, identify, methods])
   return (
     <div className="authing-g2-login-phone-code">
       <Form
@@ -332,14 +222,15 @@ export const LoginWithVerifyCode = (props: any) => {
         <FormItemIdentify
           name="identify"
           className={
-            currentMethod === InputMethod.InternationCode
+            isInternationSms
               ? 'authing-g2-input-form remove-padding'
               : 'authing-g2-input-form'
           }
           methods={methods}
+          currentMethod={currentMethod}
           areaCode={areaCode}
         >
-          {currentMethod === InputMethod.InternationCode ? (
+          {isInternationSms ? (
             <InputInternationPhone
               className="authing-g2-input"
               size="large"

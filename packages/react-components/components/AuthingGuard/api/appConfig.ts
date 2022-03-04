@@ -100,6 +100,9 @@ export interface ApplicationConfig {
   userPoolId: string
   rootUserPoolId: string
   publicKey: string
+  internationalSmsConfig?: {
+    enabled: boolean
+  }
   // 登录框自定义 css 代码
   css: string
   name: string

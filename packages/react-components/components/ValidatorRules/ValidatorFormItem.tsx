@@ -56,13 +56,6 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
           formatErrorMessage: t('common.usernameFormatError'),
           pattern: VALIDATE_PATTERN.username,
         }
-      } else if (method === 'phone') {
-        return {
-          field: t('common.phone'),
-          checkErrorMessage: t('common.checkPhone'),
-          formatErrorMessage: '请输入符合该区号的手机号',
-          pattern: VALIDATE_PATTERN.username,
-        }
       } else
         return {
           field: t('common.phone'),
@@ -125,14 +118,21 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
         message: methodContent.formatErrorMessage,
       })
       // TODO 开启国家化短信
-      rules.push({
-        validateTrigger: 'onBlur',
-        validator: async (rule, value) => {
-          if (phone(value, { country: areaCode }).isValid)
-            return Promise.resolve()
-          return Promise.reject('请输入对应区号正确的手机号')
-        },
-      })
+      if (
+        publicConfig &&
+        publicConfig.internationalSmsConfig?.enabled &&
+        method === 'phone'
+      ) {
+        rules.push({
+          validateTrigger: 'onBlur',
+          validator: async (rule, value) => {
+            if (phone(value, { country: areaCode }).isValid)
+              return Promise.resolve()
+            return Promise.reject(t('common.internationPhoneMessage'))
+          },
+        })
+      }
+
       checkRepeat &&
         Boolean(publicConfig) &&
         rules.push({
