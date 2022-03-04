@@ -83,7 +83,7 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
       case 'email-code':
         return <CustomFormItem.Email {...formItemProps} />
     }
-  }, [areaCode, formItemProps, methods, publicConfig, t])
+  }, [areaCode, currentMethod, formItemProps, methods, publicConfig, t])
 
   return <>{renderTemplate}</>
 }

@@ -46,6 +46,34 @@ export const LoginWithVerifyCode = (props: any) => {
 
   const SendCode = useCallback(
     (props: any) => {
+      if (isInternationSms) {
+        return (
+          <SendCodeByPhone
+            {...props}
+            fieldName="identify"
+            className="authing-g2-input g2-send-code-input"
+            autoComplete="off"
+            size="large"
+            placeholder={t('common.inputFourVerifyCode', {
+              length: verifyCodeLength,
+            })}
+            prefix={
+              <IconFont
+                type="authing-a-shield-check-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
+            scene={SceneType.SCENE_TYPE_LOGIN}
+            maxLength={verifyCodeLength}
+            // data={identify}
+            onSendCodeBefore={async () => {
+              const id = await form.validateFields(['identify'])
+              console.log(id, areaCode, '=====')
+            }}
+          />
+        )
+      }
+
       return (
         <>
           {currentMethod === InputMethod.PhoneCode && (
@@ -94,35 +122,18 @@ export const LoginWithVerifyCode = (props: any) => {
               }}
             />
           )}
-          {/* {currentMethod === InputMethod.InternationCode && (
-            <SendCodeByPhone
-              {...props}
-              fieldName="identify"
-              className="authing-g2-input g2-send-code-input"
-              autoComplete="off"
-              size="large"
-              placeholder={t('common.inputFourVerifyCode', {
-                length: verifyCodeLength,
-              })}
-              prefix={
-                <IconFont
-                  type="authing-a-shield-check-line1"
-                  style={{ color: '#878A95' }}
-                />
-              }
-              scene={SceneType.SCENE_TYPE_LOGIN}
-              maxLength={verifyCodeLength}
-              // data={identify}
-              onSendCodeBefore={async () => {
-                const id = await form.validateFields(['identify'])
-                console.log(id, areaCode, '=====')
-              }}
-            />
-          )} */}
         </>
       )
     },
-    [areaCode, currentMethod, form, identify, t, verifyCodeLength]
+    [
+      areaCode,
+      currentMethod,
+      form,
+      identify,
+      isInternationSms,
+      t,
+      verifyCodeLength,
+    ]
   )
 
   useEffect(() => {
@@ -143,7 +154,6 @@ export const LoginWithVerifyCode = (props: any) => {
       submitButtonRef.current.onSpin(false)
       props.onLogin(200, user)
     } catch (e: any) {
-      console.log(e)
       submitButtonRef.current.onError()
       props.onLogin(e.code, e.data, e.message)
     } finally {

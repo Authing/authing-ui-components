@@ -141,13 +141,13 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
       return rules
     }, [
       required,
-      methodContent.field,
-      methodContent.pattern,
-      methodContent.formatErrorMessage,
-      checkRepeat,
+      methodContent,
       publicConfig,
+      method,
+      checkRepeat,
       validator,
       areaCode,
+      t,
     ])
     return (
       <Form.Item
