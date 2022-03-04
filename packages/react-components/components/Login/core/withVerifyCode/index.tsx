@@ -69,6 +69,7 @@ export const LoginWithVerifyCode = (props: any) => {
             placeholder={t('common.inputFourVerifyCode', {
               length: verifyCodeLength,
             })}
+            areaCode={areaCode}
             prefix={
               <IconFont
                 type="authing-a-shield-check-line1"
@@ -135,7 +136,15 @@ export const LoginWithVerifyCode = (props: any) => {
         </>
       )
     },
-    [currentMethod, form, identify, isInternationSms, t, verifyCodeLength]
+    [
+      areaCode,
+      currentMethod,
+      form,
+      identify,
+      isInternationSms,
+      t,
+      verifyCodeLength,
+    ]
   )
 
   useEffect(() => {

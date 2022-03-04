@@ -14,6 +14,7 @@ export interface SendCodeByPhoneProps extends InputProps {
   fieldName?: string
   autoSubmit?: boolean //验证码输入完毕是否自动提交
   scene: SceneType
+  areaCode?: string //国际区号
 }
 
 export const SendCodeByPhone: FC<SendCodeByPhoneProps> = (props) => {
@@ -21,6 +22,7 @@ export const SendCodeByPhone: FC<SendCodeByPhoneProps> = (props) => {
     scene,
     data,
     form,
+    areaCode,
     onSendCodeBefore,
     fieldName,
     ...remainProps
