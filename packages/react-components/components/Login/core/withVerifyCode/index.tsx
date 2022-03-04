@@ -42,7 +42,7 @@ export const LoginWithVerifyCode = (props: any) => {
 
   const [currentMethod, setCurrentMethod] = useState<InputMethod>(methods[0])
   // 是否为国际化短信
-  const [isInternationSms, setInternationSms] = useState(true)
+  const [isInternationSms, setInternationSms] = useState(false)
   // 区号 默认
   const [areaCode, setAreaCode] = useState(
     LanguageMap[navigator.language] ? LanguageMap[navigator.language] : 'CN'
@@ -155,7 +155,6 @@ export const LoginWithVerifyCode = (props: any) => {
       config &&
       config.internationalSmsConfig?.enabled
     ) {
-      console.log(methods.length, '=====')
       setInternationSms(true)
     }
   }, [config, methods])
