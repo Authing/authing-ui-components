@@ -4947,10 +4947,10 @@ atob@^2.1.2:
   resolved "https://registry.npm.taobao.org/atob/download/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha1-bZUX654DDSQ2ZmZR6GvZ9vE1M8k=
 
-authing-js-sdk@4.23.24:
-  version "4.23.24"
-  resolved "https://registry.npmmirror.com/authing-js-sdk/-/authing-js-sdk-4.23.24.tgz#86c6674a77dec95b7fdc00b1ba4fd18c79ef3477"
-  integrity sha512-2UjlWeJ7eW3y3/DF0MtjjS1wB48AjCm7o3wczwOa7eW1MpclwuJmBjWoeUO87p9xZQ7sTot65S5CPpOu/XDZvQ==
+authing-js-sdk@4.23.26:
+  version "4.23.26"
+  resolved "https://registry.npmmirror.com/authing-js-sdk/-/authing-js-sdk-4.23.26.tgz#11483b7b53139b1069db0daa2adafeb2f3f1c351"
+  integrity sha512-NUF/gZxrIl/e0PS1gNtSajVRTa+Enuguo+z9/5ATIMBA6jROstDgfdRRjvgm2PPWERnSEG7z3qDZmQSNNMks2Q==
   dependencies:
     axios "^0.19.2"
     crypto-js "^4.0.0"
