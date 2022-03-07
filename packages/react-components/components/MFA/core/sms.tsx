@@ -14,8 +14,7 @@ import { InputNumber } from '../../InputNumber'
 import { IconFont } from '../../IconFont'
 import { phoneDesensitization } from '../../_utils'
 import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
-import { LanguageMap } from '../../Type'
-import { parsePhone } from '../../_utils/hooks'
+import { defaultAreaCode, parsePhone } from '../../_utils/hooks'
 export interface BindMFASmsProps {
   mfaToken: string
   onBind: (phone: string) => void
@@ -248,9 +247,7 @@ export const MFASms: React.FC<{
 
   const sendCodeRef = useRef<HTMLButtonElement>(null)
 
-  const [areaCode, setAreaCode] = useState(
-    LanguageMap[navigator.language] ? LanguageMap[navigator.language] : 'CN'
-  )
+  const [areaCode, setAreaCode] = useState(defaultAreaCode)
 
   const codeLength = config.__publicConfig__?.verifyCodeLength
   const isInternationPhone = Boolean(

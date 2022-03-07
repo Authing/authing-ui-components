@@ -41,6 +41,7 @@ export const InputIdentify: React.FC<InputIdentifyProps> = (props) => {
     }),
     [publicConfig, t]
   )
+
   const placeholder = useMemo(
     () =>
       t('login.inputAccount', {

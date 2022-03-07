@@ -14,8 +14,8 @@ import { FormItemIdentify } from './FormItemIdentify'
 import { InputIdentify } from './inputIdentify'
 import './styles.less'
 import { InputInternationPhone } from './InputInternationPhone'
-import { parsePhone } from '../../../_utils/hooks'
-import { InputMethod, LanguageMap } from '../../../Type'
+import { defaultAreaCode, parsePhone } from '../../../_utils/hooks'
+import { InputMethod } from '../../../Type'
 
 export const LoginWithVerifyCode = (props: any) => {
   const config = usePublicConfig()
@@ -34,9 +34,7 @@ export const LoginWithVerifyCode = (props: any) => {
   // 是否为国际化短信
   const [isInternationSms, setInternationSms] = useState(false)
   // 区号 默认
-  const [areaCode, setAreaCode] = useState(
-    LanguageMap[navigator.language] ? LanguageMap[navigator.language] : 'CN'
-  )
+  const [areaCode, setAreaCode] = useState(defaultAreaCode)
 
   let [form] = Form.useForm()
 

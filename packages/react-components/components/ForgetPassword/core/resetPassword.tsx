@@ -1,7 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Form, Input } from 'antd'
-import { StoreValue } from 'antd/lib/form/interface'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { fieldRequiredRule, validate } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
@@ -11,6 +10,13 @@ import { InputPassword } from '../../InputPassword'
 import { EmailScene, SceneType } from 'authing-js-sdk'
 import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
+import { FormItemIdentify } from '../../Login/core/withVerifyCode/FormItemIdentify'
+import { InputIdentify } from '../../Login/core/withVerifyCode/inputIdentify'
+import { parsePhone } from '../../_utils/hooks'
+export enum InputMethodMap {
+  email = 'email-code',
+  phone = 'phone-code',
+}
 interface ResetPasswordProps {
   onReset: any
   publicConfig: any
@@ -37,7 +43,13 @@ export const ResetPassword = (props: ResetPasswordProps) => {
       context = client.resetPasswordByEmailCode(identify, code, newPassword)
     }
     if (codeMethod === 'phone') {
-      context = client.resetPasswordByPhoneCode(identify, code, newPassword)
+      const { phoneNumber, countryCode } = parsePhone(identify)
+      context = client.resetPasswordByPhoneCode(
+        phoneNumber,
+        code,
+        newPassword,
+        countryCode
+      )
     }
 
     context
@@ -107,6 +119,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
     },
     [codeMethod, form, identify, t, verifyCodeLength]
   )
+
   return (
     <div className="authing-g2-login-phone-code">
       <Form
@@ -118,7 +131,38 @@ export const ResetPassword = (props: ResetPasswordProps) => {
         }}
         autoComplete="off"
       >
-        <Form.Item
+        <FormItemIdentify
+          name="identify"
+          className="authing-g2-input-form"
+          methods={['email-code', 'phone-code']}
+          currentMethod={InputMethodMap[codeMethod]}
+        >
+          <InputIdentify
+            methods={['email-code', 'phone-code']}
+            className="authing-g2-input"
+            autoComplete="off"
+            size="large"
+            value={identify}
+            onChange={(e) => {
+              let v = e.target.value
+              setIdentify(v)
+              if (validate('email', v)) {
+                setCodeMethod('email')
+              }
+              if (validate('phone', v)) {
+                setCodeMethod('phone')
+              }
+            }}
+            prefix={
+              <IconFont
+                type="authing-a-user-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
+          />
+        </FormItemIdentify>
+
+        {/* <Form.Item
           validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           name="identify"
@@ -162,7 +206,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
               />
             }
           />
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item
           validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"

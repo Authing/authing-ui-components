@@ -17,8 +17,7 @@ import { IconFont } from '../../IconFont'
 import { SceneType } from 'authing-js-sdk'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
 import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
-import { LanguageMap } from '../../Type'
-import { parsePhone } from '../../_utils/hooks'
+import { defaultAreaCode, parsePhone } from '../../_utils/hooks'
 
 export interface RegisterWithPhoneProps {
   onRegister: Function
@@ -42,9 +41,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
   const [validated, setValidated] = useState(false)
   // 区号 默认
-  const [areaCode, setAreaCode] = useState(
-    LanguageMap[navigator.language] ? LanguageMap[navigator.language] : 'CN'
-  )
+  const [areaCode, setAreaCode] = useState(defaultAreaCode)
   const ref = useRef<ICheckProps>(null)
 
   const verifyCodeLength = publicConfig?.verifyCodeLength ?? 4

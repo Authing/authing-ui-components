@@ -3,6 +3,7 @@ import { GuardModuleType } from '../../Guard/module'
 import { useModule } from '../../context/module/context'
 import { useMediaQuery } from 'react-responsive'
 import phone from 'phone'
+import { LanguageMap } from '../../Type'
 export interface PhoneValidResult {
   isValid: boolean
   phoneNumber: string
@@ -118,9 +119,19 @@ export const useShaking = () => {
   }
   return { MountShaking, UnMountShaking }
 }
-
-//
-export const parsePhone = (fieldValue: string, areaCode?: string) => {
+export const defaultAreaCode = LanguageMap[navigator.language]
+  ? LanguageMap[navigator.language]
+  : 'CN'
+/**
+ * 解析手机号
+ * @param fieldValue 字段值
+ * @param areaCode 区号
+ * @returns
+ */
+export const parsePhone = (
+  fieldValue: string,
+  areaCode: string = defaultAreaCode
+) => {
   let countryCode = areaCode
 
   let phoneNumber = fieldValue
