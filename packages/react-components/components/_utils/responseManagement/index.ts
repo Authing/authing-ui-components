@@ -1,3 +1,4 @@
+import { getHundreds } from '..'
 import { AuthingResponse } from '../http'
 import { CodeAction } from './interface'
 
@@ -9,7 +10,7 @@ export const errorCodeInterceptor: (
 
   const statusCode = res.statusCode
 
-  if (['6'].includes(statusCode[0])) {
+  if ([6].includes(getHundreds(statusCode))) {
     callBack(CodeAction.RENDER_MESSAGE, res)
 
     return res
@@ -17,21 +18,21 @@ export const errorCodeInterceptor: (
 
   // TODO 临时逻辑 如果有 Code 的话 先不走 statusCode 的行为
   // 否则会出现 messages 渲染两次的问题
-  if (!!res.code) return res
+  // if (!!res.code) return res
 
-  switch (statusCode[0]) {
-    case '3':
-      callBack(CodeAction.CHANGE_MODULE, res)
-      break
+  // switch (getHundreds(statusCode)) {
+  //   case 3:
+  //     callBack(CodeAction.CHANGE_MODULE, res)
+  //     break
 
-    case '4':
-    case '6':
-      callBack(CodeAction.RENDER_MESSAGE, res)
-      break
+  //   case 4:
+  //   case 6:
+  //     callBack(CodeAction.RENDER_MESSAGE, res)
+  //     break
 
-    default:
-      break
-  }
+  //   default:
+  //     break
+  // }
 
   return res
 }

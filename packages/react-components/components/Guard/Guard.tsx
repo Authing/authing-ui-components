@@ -266,7 +266,7 @@ export const Guard = (props: GuardProps) => {
           __changeModule(nextModule, nextData)
         },
         [CodeAction.RENDER_MESSAGE]: (res: AuthingResponse) => {
-          message.error(res.messages)
+          message.error(res.message ?? res.messages)
         },
       }
 
