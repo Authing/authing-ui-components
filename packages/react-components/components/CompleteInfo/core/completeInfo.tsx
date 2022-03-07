@@ -10,7 +10,6 @@ import {
   CompleteInfoBaseControls,
   CompleteInfoExtendsControls,
   CompleteInfoMetaData,
-  FormValidateRule,
   GuardCompleteInfoViewProps,
 } from '../interface'
 import SubmitButton from '../../SubmitButton'
@@ -20,9 +19,9 @@ import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
 import { fieldRequiredRule } from '../../_utils'
 import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
+import { usePublicConfig } from '../../_utils/context'
 export interface CompleteInfoProps {
   metaData: CompleteInfoMetaData[]
-  verifyCodeLength: number | undefined
   onRegisterInfoCompleted?: GuardCompleteInfoViewProps['onRegisterInfoCompleted']
   onRegisterInfoCompletedError?: GuardCompleteInfoViewProps['onRegisterInfoCompletedError']
 }
@@ -41,42 +40,53 @@ const filterOption = (input: any, option: any) => {
 export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
   const {
     metaData,
-    verifyCodeLength,
     onRegisterInfoCompleted,
     onRegisterInfoCompletedError,
   } = props
 
+  const config = usePublicConfig()
+
+  const verifyCodeLength = config?.verifyCodeLength
+
   const authClient = useGuardAuthClient()
+
   const submitButtonRef = useRef<any>(null)
+
   const [countryList, setCountryList] = useState<any>([])
+
   const { get, post } = useGuardHttp()
+
   const { t } = useTranslation()
+
   const [form] = Form.useForm()
+
   const refPhone = useRef<ICheckProps>(null)
+
   const refEmail = useRef<ICheckProps>(null)
+
   const refUserName = useRef<ICheckProps>(null)
 
-  const loadInitData = useCallback(async () => {
-    const { data: resCountryList } = await get<any>(`/api/v2/country-list`)
-    const toMap =
-      i18n.language === 'zh-CN' ? resCountryList?.zh : resCountryList?.en
-    const toSet: any = []
-    for (const [key, value] of Object.entries(toMap)) {
-      toSet.push({
-        label: value,
-        value: key,
-      })
-    }
-    setCountryList(toSet)
+  const loadInitCountryList = useCallback(async () => {
+    const { data } = await get(`/api/v2/country-list`)
+
+    const countryMap = i18n.language === 'zh-CN' ? data?.zh : data?.en
+
+    const countryList: { label: string; value: string }[] = []
+
+    countryMap.forEach((value: any, key: any) =>
+      countryList.push({ label: value, value: key })
+    )
+
+    setCountryList(countryList)
   }, [get])
 
   useEffect(() => {
     if (!metaData.map((i) => i.name).includes('country')) return
 
-    loadInitData()
-  }, [loadInitData, metaData])
+    loadInitCountryList()
+  }, [loadInitCountryList, metaData])
 
-  const INPUT_MAP: Record<
+  const baseControlMap: Record<
     string,
     (props?: any) => React.ReactNode | undefined
   > = useMemo(
@@ -158,9 +168,10 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         />
       ),
     }),
+
     [countryList]
   )
-  const INTERNAL_INPUT_MAP: Record<
+  const internalControlMap: Record<
     string,
     (props: any) => React.ReactNode | undefined
   > = useMemo(
@@ -291,6 +302,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
     }),
     [form, t, verifyCodeLength]
   )
+
   const generateRules = useCallback(
     (metaData: CompleteInfoMetaData) => {
       const formRules = []
@@ -351,7 +363,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           | CompleteInfoExtendsControls
         )[]).includes(metaData.type)
       ) {
-        return INTERNAL_INPUT_MAP[metaData.name]({
+        return internalControlMap[metaData.name]({
           required: metaData.required,
         })
       } else {
@@ -368,9 +380,9 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             {children}
           </Form.Item>
         )
-        if (Object.keys(INPUT_MAP).includes(metaData.type))
+        if (Object.keys(baseControlMap).includes(metaData.type))
           return userFormItem(
-            INPUT_MAP[metaData.type]({ options: metaData.options })
+            baseControlMap[metaData.type]({ options: metaData.options })
           )
 
         return userFormItem(
@@ -378,7 +390,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         )
       }
     },
-    [INPUT_MAP, INTERNAL_INPUT_MAP, generateRules]
+    [baseControlMap, generateRules, internalControlMap]
   )
 
   const formFieldsV2 = useMemo(() => {
