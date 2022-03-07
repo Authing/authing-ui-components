@@ -48,7 +48,7 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
         validateTrigger: 'onBlur',
       })
     }
-    // TODO 国际化校验规则
+    // 国际化校验规则
     if (
       publicConfig &&
       publicConfig.internationalSmsConfig?.enabled &&

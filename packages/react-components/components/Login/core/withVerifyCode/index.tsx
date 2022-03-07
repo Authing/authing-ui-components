@@ -139,7 +139,7 @@ export const LoginWithVerifyCode = (props: any) => {
   )
 
   useEffect(() => {
-    // TODO 开启国际化配置且登录方式为手机号码时
+    // 开启国际化配置且登录方式为手机号码时
     if (
       methods.length === 1 &&
       methods[0] === 'phone-code' &&

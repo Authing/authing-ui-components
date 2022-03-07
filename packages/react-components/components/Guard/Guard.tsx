@@ -373,10 +373,14 @@ export const Guard = (props: GuardProps) => {
             closable={config.clickCloseable} //是否显示右上角的关闭按钮
             getContainer={config.target ? config.target : false}
           >
-            <div className="authing-g2-render-module">{renderModule}</div>
+            <div className="authing-g2-render-module" id="custom-css">
+              {renderModule}
+            </div>
           </Modal>
         ) : (
-          <div className="authing-g2-render-module">{renderModule}</div>
+          <div className="authing-g2-render-module" id="custom-css">
+            {renderModule}
+          </div>
         )}
       </Context.Provider>
     </ConfigProvider>

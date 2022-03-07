@@ -12,18 +12,13 @@ import { fieldRequiredRule, getDeviceName } from '../../_utils'
 import { Agreements } from '../components/Agreements'
 import SubmitButton from '../../SubmitButton'
 import { InputNumber } from '../../InputNumber'
-import CustomFormItem, {
-  ICheckProps,
-  // ValidatorFormItemProps,
-} from '../../ValidatorRules'
+import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
 import { SceneType } from 'authing-js-sdk'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
-import { FormItemIdentify } from '../../Login/core/withVerifyCode/FormItemIdentify'
 import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
 import { LanguageMap } from '../../Type'
 import { parsePhone } from '../../_utils/hooks'
-// import { Rule } from 'antd/lib/form'
 
 export interface RegisterWithPhoneProps {
   onRegister: Function

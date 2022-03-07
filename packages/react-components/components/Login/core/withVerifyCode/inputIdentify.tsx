@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { VerifyLoginMethods } from '../../../AuthingGuard/api'
 import { IconFont } from '../../../IconFont'
 import { InputNumber } from '../../../InputNumber'
+import { usePublicConfig } from '../../../_utils/context'
 
 export interface InputIdentifyProps extends InputProps {
   methods: VerifyLoginMethods[]
@@ -11,6 +12,8 @@ export interface InputIdentifyProps extends InputProps {
 
 export const InputIdentify: React.FC<InputIdentifyProps> = (props) => {
   const { methods, ...inputProps } = props
+
+  const publicConfig = usePublicConfig()
 
   const { t } = useTranslation()
 
@@ -26,14 +29,17 @@ export const InputIdentify: React.FC<InputIdentifyProps> = (props) => {
     () => ({
       'email-code': {
         t: t('common.email'),
-        sort: 2,
-      },
-      'phone-code': {
-        t: t('common.phoneNumber'),
         sort: 1,
       },
+      'phone-code': {
+        t:
+          publicConfig && publicConfig.internationalSmsConfig?.enabled
+            ? t('common.areaCodePhone')
+            : t('common.phoneNumber'),
+        sort: 2,
+      },
     }),
-    [t]
+    [publicConfig, t]
   )
   const placeholder = useMemo(
     () =>
