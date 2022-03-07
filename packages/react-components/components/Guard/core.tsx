@@ -12,7 +12,7 @@ import { initGuardAuthClient } from './authClient'
 import { GuardEvents, guardEventsFilter } from './event'
 import { initConfig } from '../_utils/config'
 import { insertStyles } from '../_utils'
-import { getGuardHttp, GuardHttp, initGuardHttp } from '../_utils/guradHttp'
+import { getGuardHttp, GuardHttp, initGuardHttp } from '../_utils/guardHttp'
 import { i18n, initI18n } from '..//_utils/locales'
 import { IG2FCProps } from '../Type'
 import { getDefaultGuardLocalConfig, GuardLocalConfig } from './config'
@@ -36,7 +36,14 @@ import { IconFont } from '../AuthingGuard/IconFont'
 import { GuardErrorView } from '../Error'
 import { AuthenticationClient, GuardMode } from '..'
 import { GuardSubmitSuccessView } from '../SubmitSuccess'
-import { createGuardContext } from '../_utils/context'
+import {
+  createAppIdContext,
+  createGuardEventsContext,
+  createGuardModuleContext,
+  createHttpClientContext,
+  createInitDataContext,
+  createPublicConfigContext,
+} from '../_utils/context'
 import { ApplicationConfig } from '../AuthingGuard/api'
 import { SessionData, trackSession } from './sso'
 import zhCN from 'antd/lib/locale/zh_CN'
@@ -63,28 +70,19 @@ message.config({
   prefixCls: `${PREFIX_CLS}-message`,
 })
 
-const ComponentsMapping: Record<
-  GuardModuleType,
-  (props: GuardViewProps) => React.ReactNode
-> = {
-  [GuardModuleType.ERROR]: (props) => <GuardErrorView {...props} />,
-  [GuardModuleType.LOGIN]: (props) => <GuardLoginView {...props} />,
-  [GuardModuleType.MFA]: (props) => <GuardMFAView {...props} />,
-  [GuardModuleType.REGISTER]: (props) => <GuardRegisterView {...props} />,
-  [GuardModuleType.DOWNLOAD_AT]: (props) => <GuardDownloadATView {...props} />,
-  [GuardModuleType.FORGET_PWD]: (props) => <GuardForgetPassword {...props} />,
-  [GuardModuleType.CHANGE_PWD]: (props) => <GuardChangePassword {...props} />,
-  [GuardModuleType.BIND_TOTP]: (props) => <GuardBindTotpView {...props} />,
-  [GuardModuleType.ANY_QUESTIONS]: (props) => <GuardNeedHelpView {...props} />,
-  [GuardModuleType.COMPLETE_INFO]: (props) => (
-    <GuardCompleteInfoView {...props} />
-  ),
-  [GuardModuleType.RECOVERY_CODE]: (props) => (
-    <GuardRecoveryCodeView {...props} />
-  ),
-  [GuardModuleType.SUBMIT_SUCCESS]: (props) => (
-    <GuardSubmitSuccessView {...props} />
-  ),
+const ComponentsMapping: Record<GuardModuleType, () => React.ReactNode> = {
+  [GuardModuleType.ERROR]: () => <GuardErrorView />,
+  [GuardModuleType.LOGIN]: () => <GuardLoginView />,
+  [GuardModuleType.MFA]: () => <GuardMFAView />,
+  [GuardModuleType.REGISTER]: () => <GuardRegisterView />,
+  [GuardModuleType.DOWNLOAD_AT]: () => <GuardDownloadATView />,
+  [GuardModuleType.FORGET_PWD]: () => <GuardForgetPassword />,
+  [GuardModuleType.CHANGE_PWD]: () => <GuardChangePassword />,
+  [GuardModuleType.BIND_TOTP]: () => <GuardBindTotpView />,
+  [GuardModuleType.ANY_QUESTIONS]: () => <GuardNeedHelpView />,
+  [GuardModuleType.COMPLETE_INFO]: () => <GuardCompleteInfoView />,
+  [GuardModuleType.RECOVERY_CODE]: () => <GuardRecoveryCodeView />,
+  [GuardModuleType.SUBMIT_SUCCESS]: () => <GuardSubmitSuccessView />,
 }
 
 interface GuardViewProps extends GuardProps {
@@ -116,7 +114,17 @@ export const useGuardCore1 = (props: GuardProps, initState: ModuleState) => {
     setGuardStateMachine,
   ] = useState<GuardStateMachine>()
 
-  const { Context } = createGuardContext()
+  const { Context: GuardPublicConfigContext } = createPublicConfigContext()
+
+  const { Context: guardHttpClientContext } = createHttpClientContext()
+
+  const { Context: guardAppIdContext } = createAppIdContext()
+
+  const { Context: guardInitDataContext } = createInitDataContext()
+
+  const { Context: guardEventsContext } = createGuardEventsContext()
+
+  const { Context: guardModuleContext } = createGuardModuleContext()
 
   // 劫持浏览器 History
   const [historyNext] = useHistoryHijack(guardStateMachine?.back)
@@ -255,10 +263,6 @@ export const useGuardCore1 = (props: GuardProps, initState: ModuleState) => {
       return <GuardErrorView initData={{ messages: errorData?.message }} />
     if (initSettingEnd && GuardLocalConfig) {
       return ComponentsMapping[moduleState.moduleName]({
-        appId,
-        initData: moduleState.initData,
-        config: GuardLocalConfig,
-        ...events,
         __changeModule: async (moduleName, initData) => {
           if (!events?.onBeforeChangeModule) {
             historyNext(moduleName)

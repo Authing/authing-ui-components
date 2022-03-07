@@ -7,7 +7,7 @@ import React, {
 } from 'react'
 import { useTranslation } from 'react-i18next'
 import { detectSingleFace } from 'face-api.js'
-import { useGuardHttp } from '../../_utils/guradHttp'
+import { useGuardHttp } from '../../_utils/guardHttp'
 import {
   FACE_SCORE,
   devicesConstraints,

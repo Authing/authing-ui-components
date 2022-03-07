@@ -13,7 +13,7 @@ import {
 import { ApplicationConfig } from '../AuthingGuard/api'
 import { initGuardAuthClient } from '../Guard/authClient'
 import { insertStyles } from '../_utils'
-import { getGuardHttp, GuardHttp, initGuardHttp } from '../_utils/guradHttp'
+import { getGuardHttp, GuardHttp, initGuardHttp } from '../_utils/guardHttp'
 import { i18n, initI18n } from '../_utils/locales'
 import zhCN from 'antd/lib/locale/zh_CN'
 import enUS from 'antd/lib/locale/en_US'

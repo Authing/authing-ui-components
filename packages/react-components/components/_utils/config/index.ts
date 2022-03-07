@@ -4,7 +4,7 @@ import { assembledRequestHost as utilAssembledRequestHost } from '..'
 import { GuardComponentConfig, GuardLocalConfig } from '../../Guard/config'
 import { useCallback, useEffect, useState } from 'react'
 import { AuthingResponse } from '../http'
-import { getGuardHttp } from '../guradHttp'
+import { getGuardHttp } from '../guardHttp'
 import { corsVerification } from '../corsVerification'
 import { Logger } from '../logger'
 

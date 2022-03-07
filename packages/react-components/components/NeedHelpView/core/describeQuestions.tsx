@@ -4,7 +4,7 @@ import { Form, Input, Modal, Progress, Select, Upload } from 'antd'
 import SubmitButton from '../../SubmitButton'
 import { PlusOutlined } from '@ant-design/icons'
 import { UploadFile } from 'antd/lib/upload/interface'
-import { useGuardHttp } from '../../_utils/guradHttp'
+import { useGuardHttp } from '../../_utils/guardHttp'
 import { fieldRequiredRule, validate } from '../../_utils'
 import { IconFont } from '../../IconFont'
 

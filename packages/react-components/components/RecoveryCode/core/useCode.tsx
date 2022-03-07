@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { User } from '../..'
 import { IconFont } from '../../IconFont'
 import SubmitButton from '../../SubmitButton'
-import { useGuardHttp } from '../../_utils/guradHttp'
+import { useGuardHttp } from '../../_utils/guardHttp'
 
 export interface UseCodeProps {
   mfaToken: string

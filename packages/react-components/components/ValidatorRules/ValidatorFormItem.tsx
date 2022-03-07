@@ -7,7 +7,7 @@ import React, {
   useState,
 } from 'react'
 import { fieldRequiredRule, sleep, VALIDATE_PATTERN } from '../_utils'
-import { useGuardHttp } from '../_utils/guradHttp'
+import { useGuardHttp } from '../_utils/guardHttp'
 import { useTranslation } from 'react-i18next'
 import {
   ICheckProps,

@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next'
 import shortid from 'shortid'
 import { i18n } from '../../_utils/locales'
 import { isLarkBrowser, isWechatBrowser, popupCenter } from '../../_utils'
-import { useGuardHttp } from '../../_utils/guradHttp'
+import { useGuardHttp } from '../../_utils/guardHttp'
 import querystring from 'query-string'
 import {
   ApplicationConfig,

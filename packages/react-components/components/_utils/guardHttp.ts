@@ -13,7 +13,8 @@ export class GuardHttp {
     'x-authing-request-from': `Guard@${version}`,
   }
 
-  constructor(baseUrl: string) {
+  constructor(baseUrl?: string) {
+    if (!baseUrl) return
     this.getRequestClient().setBaseUrl(baseUrl)
   }
 
