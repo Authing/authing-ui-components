@@ -142,7 +142,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         >
           <Input
             className="authing-g2-input"
-            autoComplete="email"
+            autoComplete="off"
             size="large"
             placeholder={t('login.inputEmail')}
             // prefix={<UserOutlined style={{ color: '#878A95' }} />}

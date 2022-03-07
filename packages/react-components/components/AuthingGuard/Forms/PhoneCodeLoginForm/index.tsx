@@ -103,7 +103,7 @@ export const PhoneCodeLoginForm = forwardRef<
       )}
       <Form.Item name="phone" rules={rulesMap.phone}>
         <Input
-          autoComplete="tel"
+          autoComplete="off"
           onChange={(e) => {
             setPhone(e.target.value)
           }}
@@ -114,6 +114,7 @@ export const PhoneCodeLoginForm = forwardRef<
       </Form.Item>
       <Form.Item name="code" rules={rulesMap.code}>
         <Input
+          autoComplete="off"
           size="large"
           placeholder={t('common.inputFourVerifyCode', {
             length: 4,

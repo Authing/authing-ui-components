@@ -49,7 +49,7 @@ export const ResetPasswordStep2: FC<ResetPasswordStep2Props> = ({
         rules={getRequiredRules(t('common.phoneNotNull'))}
       >
         <Input
-          autoComplete="tel"
+          autoComplete="off"
           name="phone"
           readOnly
           size="large"
@@ -67,6 +67,7 @@ export const ResetPasswordStep2: FC<ResetPasswordStep2Props> = ({
         })}
       >
         <Input
+          autoComplete="off"
           name="code"
           size="large"
           placeholder={t('common.inputFourVerifyCode', {
@@ -89,6 +90,7 @@ export const ResetPasswordStep2: FC<ResetPasswordStep2Props> = ({
         rules={getRequiredRules(t('common.passwordNotNull'))}
       >
         <Input.Password
+          autoComplete="off"
           name="password"
           size="large"
           placeholder={t('user.newPwd')}
@@ -106,6 +108,7 @@ export const ResetPasswordStep2: FC<ResetPasswordStep2Props> = ({
         })}
       >
         <Input.Password
+          autoComplete="off"
           name="repeat-password"
           size="large"
           placeholder={t('login.inputPwdAgain')}

@@ -8,6 +8,8 @@ import { IconFont } from '../IconFont'
 import { codeMap } from '../Login/codemap'
 import { LoginWithPassword } from '../Login/core/withPassword'
 import { LoginWithVerifyCode } from '../Login/core/withVerifyCode'
+import { shoudGoToComplete } from '../_utils'
+import { usePublicConfig } from '../_utils/context'
 import { useGuardHttp } from '../_utils/guradHttp'
 import { i18n } from '../_utils/locales'
 import { GuardIdentityBindingViewProps } from './interface'
@@ -20,6 +22,7 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
 
   const { t } = useTranslation()
   const { publicKey, autoRegister, agreementEnabled } = config
+  const publicConfig = usePublicConfig()
 
   const { post } = useGuardHttp()
   const authClient = useGuardAuthClient()
@@ -63,9 +66,19 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
     const action = codeMap[code]
     if (code === 200) {
       return (data: any) => {
-        console.log('binding success', data)
-        props.onBinding?.(data.user, authClient!) // 登录成功
-        props.onLogin?.(data.user, authClient!) // 登录成功
+        // console.log('binding success', data)
+        // props.onBinding?.(data.user, authClient!) // 登录成功
+        // props.onLogin?.(data.user, authClient!) // 登录成功
+        props.onBinding?.(data.user, authClient!) // 绑定成功
+        if (shoudGoToComplete(data.user, 'login', publicConfig)) {
+          __changeModule?.(GuardModuleType.COMPLETE_INFO, {
+            context: 'login',
+            user: data.user,
+          })
+        } else {
+          // TODO 身份源绑定后触发信息补全成功没有触发 onBinding
+          props.onLogin?.(data.user, authClient!) // 登录成功
+        }
       }
     }
 
@@ -129,7 +142,8 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
       type as 'phone-code' | 'email-code' | 'password'
     ]?.(data)
 
-    onLogin(res.code, res.data, res.message)
+    return res
+    // onLogin(res.code, res.data, res.message)
   }
 
   const agreements = useMemo(
@@ -174,8 +188,8 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
         <LoginWithVerifyCode
           verifyCodeLength={props.config.__publicConfig__?.verifyCodeLength}
           autoRegister={false}
-          onBeforeLogin={onBind}
-          onLogin={() => {}}
+          onLoginRequest={onBind}
+          onLogin={onLogin}
           agreements={agreements}
           methods={codeLoginMethods}
           submitButText={t('common.bind')}
@@ -190,12 +204,22 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
           publicKey={publicKey!}
           autoRegister={false}
           host={config.__appHost__}
-          onBeforeLogin={onBind}
+          onLoginRequest={onBind}
           passwordLoginMethods={passwordLoginMethods}
-          onLogin={() => {}}
+          onLogin={onLogin}
           agreements={agreements}
           submitButText={t('common.bind')}
         />
+        //   <LoginWithPassword
+        //   loginWay={loginWay}
+        //   publicKey={publicKey}
+        //   autoRegister={autoRegister}
+        //   host={props.config.__appHost__}
+        //   onLogin={onLogin}
+        //   onBeforeLogin={onBeforeLogin}
+        //   passwordLoginMethods={props.config.passwordLoginMethods}
+        //   agreements={agreements}
+        // />
       ),
     },
   ]

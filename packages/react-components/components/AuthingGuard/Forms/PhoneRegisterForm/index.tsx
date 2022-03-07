@@ -113,7 +113,7 @@ export const PhoneRegisterForm = forwardRef<
     {
       component: (
         <Input
-          autoComplete="tel"
+          autoComplete="off"
           onChange={(e) => {
             setPhone(e.target.value)
           }}
@@ -131,6 +131,7 @@ export const PhoneRegisterForm = forwardRef<
     {
       component: (
         <Input.Password
+          autoComplete="off"
           size="large"
           placeholder={t('common.setPassword')}
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
@@ -142,6 +143,7 @@ export const PhoneRegisterForm = forwardRef<
     {
       component: (
         <Input.Password
+          autoComplete="off"
           size="large"
           placeholder={t('login.inputPwdAgain')}
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
@@ -161,7 +163,7 @@ export const PhoneRegisterForm = forwardRef<
     {
       component: (
         <Input
-          autoComplete="one-time-code"
+          autoComplete="off"
           size="large"
           placeholder={t('common.inputFourVerifyCode', {
             length: 4,

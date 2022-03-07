@@ -1,28 +1,12 @@
 import { Button, message, Space, Tooltip } from 'antd'
-import Avatar from 'antd/lib/avatar/avatar'
-import {
-  Protocol,
-  SocialConnectionProvider,
-  RelayMethodEnum,
-} from 'authing-js-sdk'
+import { SocialConnectionProvider, RelayMethodEnum } from 'authing-js-sdk'
 import { Lang } from 'authing-js-sdk/build/main/types'
-import qs from 'qs'
 import React, { useEffect, useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import shortid from 'shortid'
 import { i18n } from '../../_utils/locales'
-import { isLarkBrowser, isWechatBrowser, popupCenter } from '../../_utils'
-import { useGuardHttp } from '../../_utils/guradHttp'
+import { isLarkBrowser, isWechatBrowser } from '../../_utils'
 import querystring from 'query-string'
-import {
-  ApplicationConfig,
-  IAzureAdConnectionConfig,
-  ICasConnectionConfig,
-  IOAuthConnectionConfig,
-  ISamlConnectionConfig,
-  OIDCConnectionConfig,
-  SocialConnectionItem,
-} from '../../AuthingGuard/api'
+import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
 import {
   APP_MFA_CODE,
   HIDE_SOCIALS,
@@ -35,6 +19,7 @@ import { IconFont } from '../../IconFont'
 import { LoginConfig } from '../interface'
 import './style.less'
 import { useMediaSize } from '../../_utils/hooks'
+import { IdpButton } from './IdpButton'
 
 export interface SocialLoginProps {
   appId: string
@@ -55,8 +40,6 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
 
   const { t } = useTranslation()
 
-  const { post } = useGuardHttp()
-
   const [screenSize] = useScreenSize()
 
   const authClient = useGuardAuthClient()
@@ -67,6 +50,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
     const onMessage = (evt: MessageEvent) => {
       // TODO: event.origin是指发送的消息源，一定要进行验证！！！
       const { code, message: errMsg, data, event } = evt.data
+
       const { source, eventType } = event || {}
       // 社会化登录是用 authing-js-sdk 实现的，不用再在这里回调了
       if (source === 'authing' && eventType === 'socialLogin') {
@@ -93,6 +77,10 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
           localStorage.setItem('_authing_token', data?.token)
           //   onSuccess(data)
           onGuardLogin(code, data, message)
+
+          // TODO 身份源绑定逻辑 临时修改
+        } else if ([1641, 1640].includes(code)) {
+          onGuardLogin(code, data)
         } else {
           try {
             const parsedMsg = JSON.parse(errMsg)
@@ -104,6 +92,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         }
       }
     }
+
     window.addEventListener('message', onMessage)
     return () => {
       window.removeEventListener('message', onMessage)
@@ -194,165 +183,15 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
     return true
   })
   const idpButtons = enterpriseConnectionObjs.map((i: any) => {
-    if (i?.provider) {
-      // 社交身份源
-      const iconType = `authing-${i.provider.replace(/:/g, '-')}`
-
-      const onLogin = () => {
-        authClient.social.authorize(i.identifier, {
-          onSuccess(user) {
-            // TODO
-            // onSuccess(user)
-            onGuardLogin(200, user)
-          },
-          onError(code, msg, data) {
-            try {
-              const parsedMsg = JSON.parse(msg)
-              const { message: authingMessage, data: authingData } = parsedMsg
-              onGuardLogin(code, authingData, authingMessage)
-            } catch (e) {
-              // do nothing...
-              onGuardLogin(code, data, msg)
-            }
-            // message.error(msg)
-          },
-        })
-      }
-      return (
-        <Button
-          key={i.identifier}
-          className="g2-guard-third-login-btn"
-          block
-          size="large"
-          icon={
-            <IconFont
-              type={`${iconType}-fill`}
-              style={{ fontSize: 20, marginRight: 8 }}
-            />
-          }
-          onClick={onLogin}
-        >
-          {t('login.loginBy', {
-            name: i.displayName,
-          })}
-        </Button>
-      )
-    }
-    if (i.protocol === Protocol.OIDC) {
-      const configItem = i.config as OIDCConnectionConfig
-      const state = shortid.generate()
-
-      const query = qs.stringify({
-        client_id: configItem.clientId,
-        redirect_uri: configItem.redirectUri,
-        scope: configItem.scopes,
-        response_type: configItem.responseType,
-        state,
-        nonce: shortid.generate(),
-      })
-      const url = `${configItem.authorizationEdpoint}?${query}`
-
-      return (
-        <Button
-          key={i.identifier}
-          className="g2-guard-third-login-btn"
-          block
-          size="large"
-          icon={<Avatar size={20} src={i.logo} style={{ marginRight: 8 }} />}
-          onClick={async () => {
-            await post('/api/v2/connections/oidc/start-interaction', {
-              state,
-              protocol: i.protocol,
-              userPoolId,
-              appId,
-              referer: window.location.href,
-              connection: { providerIentifier: i.identifier },
-            })
-            popupCenter(url)
-          }}
-        >
-          {t('login.loginBy', {
-            name: i.displayName,
-          })}
-        </Button>
-      )
-    } else if (i.protocol === Protocol.SAML) {
-      const config = i.config as ISamlConnectionConfig
-      return (
-        <Button
-          key={i.identifier}
-          className="g2-guard-third-login-btn"
-          block
-          size="large"
-          icon={<Avatar size={20} src={i.logo} style={{ marginRight: 8 }} />}
-          onClick={async () => {
-            popupCenter(config.samlRequest!)
-          }}
-        >
-          {t('login.loginBy', {
-            name: i.displayName,
-          })}
-        </Button>
-      )
-    } else if (i.protocol === Protocol.CAS) {
-      const config = i.config as ICasConnectionConfig
-
-      return (
-        <Button
-          key={i.identifier}
-          className="g2-guard-third-login-btn"
-          block
-          size="large"
-          icon={<Avatar size={20} src={i.logo} style={{ marginRight: 8 }} />}
-          onClick={async () => {
-            popupCenter(config.casConnectionLoginUrl!)
-          }}
-        >
-          {t('login.loginBy', {
-            name: i.displayName,
-          })}
-        </Button>
-      )
-    } else if (i.protocol === Protocol.OAUTH) {
-      const config = i.config as IOAuthConnectionConfig
-
-      return (
-        <Button
-          key={i.identifier}
-          className="g2-guard-third-login-btn"
-          block
-          size="large"
-          icon={<Avatar size={20} src={i.logo} style={{ marginRight: 8 }} />}
-          onClick={async () => {
-            popupCenter(config.authUrl!)
-          }}
-        >
-          {t('login.loginBy', {
-            name: i.displayName,
-          })}
-        </Button>
-      )
-    } else if (i.protocol === Protocol.AZURE_AD) {
-      const configItem = i.config as IAzureAdConnectionConfig
-      return (
-        <Button
-          key={i.identifier}
-          className="g2-guard-third-login-btn"
-          block
-          size="large"
-          icon={<Avatar size={20} src={i.logo} style={{ marginRight: 8 }} />}
-          onClick={async () => {
-            popupCenter(configItem.authorizationUrl)
-          }}
-        >
-          {t('login.loginBy', {
-            name: i.displayName,
-          })}
-        </Button>
-      )
-    } else {
-      return null
-    }
+    return (
+      <IdpButton
+        key={i.identifier}
+        i={i}
+        appId={appId}
+        userPoolId={userPoolId}
+        onGuardLogin={onGuardLogin}
+      />
+    )
   })
   const socialLoginButtons = socialConnectionObjs
     .filter((item) =>

@@ -67,7 +67,7 @@ export const ResetPasswordStep1: FC<ResetPasswordStep1Props> = ({
       >
         <Input
           size="large"
-          autoComplete="tel,email"
+          autoComplete="off"
           placeholder={t('login.inputPhoneOrEmail')}
         />
       </Form.Item>

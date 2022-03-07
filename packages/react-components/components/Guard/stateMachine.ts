@@ -71,7 +71,6 @@ export class GuardStateMachine {
 
   back = (initData: any = {}) => {
     if (this.moduleStateHistory.length <= 1) return
-
     const backModule = this.moduleStateHistory[1]
     this.changeMouleEvent(backModule.moduleName, {
       ...initData,
@@ -108,7 +107,6 @@ export class GuardStateMachine {
     if (this.moduleStateHistory.length <= 1) return
 
     this.moduleStateHistory.splice(0, 1)
-
     this.stateMachineLog[this.order++] = {
       action: ActionType.Back,
       date: new Date().getTime(),

@@ -101,4 +101,7 @@ export const codeMap: Record<number, GuardModuleAction> = {
     action: 'changeModule',
     module: GuardModuleType.IDENTITY_BINDING_ASK,
   },
+  408: {
+    action: 'message',
+  },
 }

@@ -42,7 +42,7 @@ export const LoginWithVerifyCode = (props: any) => {
             <SendCodeByPhone
               {...props}
               className="authing-g2-input g2-send-code-input"
-              autoComplete="one-time-code"
+              autoComplete="off"
               size="large"
               placeholder={t('common.inputFourVerifyCode', {
                 length: verifyCodeLength,
@@ -65,7 +65,7 @@ export const LoginWithVerifyCode = (props: any) => {
             <SendCodeByEmail
               {...props}
               className="authing-g2-input g2-send-code-input"
-              autoComplete="one-time-code"
+              autoComplete="off"
               size="large"
               placeholder={t('common.inputFourVerifyCode', {
                 length: verifyCodeLength,
@@ -135,9 +135,25 @@ export const LoginWithVerifyCode = (props: any) => {
         code: values.code,
       },
     }
-    let context = await props.onBeforeLogin(loginInfo)
-    if (!context) {
+
+    let context = await props.onBeforeLogin?.(loginInfo)
+
+    if (!context && !!props.onBeforeLogin) {
       submitButtonRef.current.onSpin(false)
+      return
+    }
+
+    if (!!props.onLoginRequest) {
+      const res = await props.onLoginRequest?.(loginInfo)
+
+      const { code, message, data } = res
+
+      if (code !== 200) {
+        submitButtonRef.current.onError()
+      }
+      submitButtonRef?.current.onSpin(false)
+
+      props.onLogin(code, data, message)
       return
     }
 

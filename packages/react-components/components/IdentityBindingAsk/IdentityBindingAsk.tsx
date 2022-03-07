@@ -6,6 +6,8 @@ import { GuardModuleType } from '..'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { IconFont } from '../IconFont'
 import { codeMap } from '../Login/codemap'
+import { shoudGoToComplete } from '../_utils'
+import { usePublicConfig } from '../_utils/context'
 import { useGuardHttp } from '../_utils/guradHttp'
 import { GuardIdentityBindingAskViewProps } from './interface'
 import './styles.less'
@@ -19,14 +21,23 @@ export const GuardIdentityBindingAskView: React.FC<GuardIdentityBindingAskViewPr
   const authClient = useGuardAuthClient()
 
   const onBack = () => __changeModule?.(GuardModuleType.LOGIN)
+  const publicConfig = usePublicConfig()
 
   const __codePaser = (code: number) => {
     const action = codeMap[code]
     if (code === 200) {
       return (data: any) => {
-        console.log('binding success', data)
+        //   props.onCreate?.(data.user, authClient!) // 创建成功
+        //   props.onLogin?.(data.user, authClient!) // 创建成功
         props.onCreate?.(data.user, authClient!) // 创建成功
-        props.onLogin?.(data.user, authClient!) // 创建成功
+        if (shoudGoToComplete(data.user, 'login', publicConfig, true)) {
+          __changeModule?.(GuardModuleType.COMPLETE_INFO, {
+            context: 'login',
+            user: data.user,
+          })
+        } else {
+          props.onLogin?.(data.user, authClient!) // 创建成功
+        }
       }
     }
 

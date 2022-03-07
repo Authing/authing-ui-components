@@ -191,7 +191,7 @@ export const PasswordLoginForm = forwardRef<
     {
       component: (
         <Input
-          autoComplete="email,username,tel"
+          autoComplete="off"
           size="large"
           placeholder={usernamePlaceholder}
           prefix={<UserOutlined style={{ color: '#ddd' }} />}
@@ -203,6 +203,7 @@ export const PasswordLoginForm = forwardRef<
     {
       component: (
         <Input.Password
+          autoComplete="off"
           size="large"
           placeholder={t('login.inputLoginPwd')}
           prefix={<LockOutlined style={{ color: '#ddd' }} />}
@@ -214,6 +215,7 @@ export const PasswordLoginForm = forwardRef<
     {
       component: (
         <Input
+          autoComplete="off"
           size="large"
           placeholder={t('login.inputCaptchaCode')}
           addonAfter={

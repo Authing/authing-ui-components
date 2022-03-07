@@ -211,6 +211,11 @@ export const Guard = (props: GuardProps) => {
     })
   }, [appId, authClint, config?.isSSO, events, httpClint])
 
+  // 初始化 history state 为了身份源监听 popstate 生效 很无语 😓
+  useEffect(() => {
+    window.history.pushState(initState.moduleName, '', window.location.href)
+  }, [initState.moduleName])
+
   useEffect(() => {
     if (httpClint && GuardLocalConfig && GuardLocalConfig.__appHost__) {
       httpClint?.setBaseUrl(GuardLocalConfig.__appHost__)
