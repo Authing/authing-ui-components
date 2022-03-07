@@ -35,10 +35,11 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
 
   const bindMethodsMap = {
     'phone-code': async (data: any) => {
-      const { identity, code } = data
+      const { identity, code, phoneCountryCode } = data
       return await post('/interaction/federation/binding/byPhoneCode', {
         phone: identity,
         code,
+        phoneCountryCode,
       })
     },
     'email-code': async (data: any) => {

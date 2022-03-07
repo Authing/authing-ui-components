@@ -20,7 +20,7 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
   const publicConfig = usePublicConfig()
 
   const { t } = useTranslation()
-  // TODO register 场景下 添加 find 手机号是否为注册·校验
+
   const renderTemplate = useMemo(() => {
     const rules = [...fieldRequiredRule(t('common.phoneOrEmail'))]
     if (currentMethod === 'email-code') {

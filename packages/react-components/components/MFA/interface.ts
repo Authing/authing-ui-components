@@ -33,6 +33,7 @@ export interface GuardMFAInitData {
     sort: number
     status: 0 | 1
   }[]
+  phoneCountryCode?: string
   faceMfaEnabled: boolean
   totpMfaEnabled: boolean
   email?: string

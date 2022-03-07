@@ -9,11 +9,10 @@ import { SendCodeBtn } from '../../SendCode/SendCodeBtn'
 import SubmitButton from '../../SubmitButton'
 import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
 import { VerifyCodeFormItem } from '../VerifyCodeInput/VerifyCodeFormItem'
-import { MFAConfig } from '../interface'
+import { GuardMFAInitData, MFAConfig } from '../interface'
 import { InputNumber } from '../../InputNumber'
 import { IconFont } from '../../IconFont'
 import { phoneDesensitization } from '../../_utils'
-import { FormItemIdentify } from '../../Login/core/withVerifyCode/FormItemIdentify'
 import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
 import { LanguageMap } from '../../Type'
 import { parsePhone } from '../../_utils/hooks'
@@ -125,7 +124,9 @@ export interface VerifyMFASmsProps {
   onVerify: (code: number, data: any) => void
   sendCodeRef: React.RefObject<HTMLButtonElement>
   codeLength: number
-  areaCode: string
+  areaCode: string //绑定选择的
+  phoneCountryCode?: string //后端返回的国家区号
+  isInternationPhone: boolean
 }
 
 export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
@@ -135,6 +136,8 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   sendCodeRef,
   codeLength = 4,
   areaCode,
+  phoneCountryCode,
+  isInternationPhone,
 }) => {
   const authClient = useGuardAuthClient()
   const submitButtonRef = useRef<any>(null)
@@ -145,11 +148,13 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   const onFinish = async (values: any) => {
     submitButtonRef.current.onSpin(true)
     const mfaCode = form.getFieldValue('mfaCode')
+    console.log(phoneCountryCode ? phoneCountryCode : countryCode)
     try {
       const user: User = await authClient.mfa.verifyAppSmsMfa({
         mfaToken,
         phone: phone!,
         code: mfaCode.join(''),
+        phoneCountryCode: phoneCountryCode ? phoneCountryCode : countryCode,
       })
       // TODO
       onVerify(200, user)
@@ -165,9 +170,15 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   const tips = useMemo(
     () =>
       sent
-        ? `${t('login.verifyCodeSended')} ${phoneDesensitization(phone)}`
+        ? `${t('login.verifyCodeSended')} ${
+            isInternationPhone
+              ? phoneCountryCode
+                ? phoneCountryCode
+                : countryCode
+              : ''
+          } ${phoneDesensitization(phone)}`
         : '',
-    [phone, sent, t]
+    [countryCode, isInternationPhone, phone, phoneCountryCode, sent, t]
   )
 
   const sendVerifyCode = async () => {
@@ -223,11 +234,16 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
 }
 
 export const MFASms: React.FC<{
-  mfaToken: string
-  phone?: string
+  // mfaToken: string
+  // phone?: string
   mfaLogin: any
   config: MFAConfig
-}> = ({ phone: userPhone, mfaToken, mfaLogin, config }) => {
+  initData: GuardMFAInitData
+}> = ({
+  mfaLogin,
+  config,
+  initData: { phone: userPhone, mfaToken, phoneCountryCode },
+}) => {
   const [phone, setPhone] = useState(userPhone)
 
   const sendCodeRef = useRef<HTMLButtonElement>(null)
@@ -247,6 +263,8 @@ export const MFASms: React.FC<{
         <VerifyMFASms
           mfaToken={mfaToken}
           phone={phone}
+          phoneCountryCode={phoneCountryCode}
+          isInternationPhone={isInternationPhone}
           onVerify={(code, data) => {
             mfaLogin(code, data)
           }}

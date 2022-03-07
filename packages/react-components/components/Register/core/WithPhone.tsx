@@ -44,7 +44,6 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   const submitButtonRef = useRef<any>(null)
   const authClient = useGuardAuthClient()
   const [form] = Form.useForm()
-  const [phone, setPhone] = useState<string>('')
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
   const [validated, setValidated] = useState(false)
   // 区号 默认
@@ -130,9 +129,6 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           <InputNumber
             {...props}
             className="authing-g2-input"
-            onChange={(e) => {
-              setPhone(e.target.value)
-            }}
             size="large"
             placeholder={t('login.inputPhone')}
             prefix={
@@ -181,6 +177,8 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         return (
           <SendCodeByPhone
             {...props}
+            form={form}
+            fieldName="phone"
             className="authing-g2-input g2-send-code-input"
             autoComplete="off"
             size="large"
@@ -198,12 +196,11 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
             onSendCodeBefore={async () => {
               await form.validateFields(['phone'])
             }}
-            data={phone}
           />
         )
       }
     },
-    [areaCode, form, phone, publicConfig, t, verifyCodeLength]
+    [areaCode, form, publicConfig, t, verifyCodeLength]
   )
 
   return (

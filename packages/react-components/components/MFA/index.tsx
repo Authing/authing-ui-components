@@ -32,12 +32,7 @@ const ComponentsMapping: Record<MFAType, (props: any) => React.ReactNode> = {
     />
   ),
   [MFAType.SMS]: ({ config, initData, mfaLogin }) => (
-    <MFASms
-      config={config}
-      mfaToken={initData.mfaToken}
-      phone={initData.phone}
-      mfaLogin={mfaLogin}
-    />
+    <MFASms config={config} initData={initData} mfaLogin={mfaLogin} />
   ),
   [MFAType.TOTP]: ({ initData, config, changeModule, mfaLogin }) => (
     <MFATotp

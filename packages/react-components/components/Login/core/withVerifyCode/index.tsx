@@ -191,12 +191,13 @@ export const LoginWithVerifyCode = (props: any) => {
       submitButtonRef.current.onError()
       return
     }
-    // onBeforeLogin
-    submitButtonRef.current.onSpin(true)
+    // 解析手机号码 ==> 输出 phoenNumber 和 phoneCountryCode
     const { phoneNumber, countryCode: phoneCountryCode } = parsePhone(
       values.identify,
       areaCode
     )
+    // onBeforeLogin
+    submitButtonRef.current.onSpin(true)
 
     let loginInfo = {
       type: currentMethod,
