@@ -15,6 +15,7 @@ import CustomFormItem, {
 import { IconFont } from '../../IconFont'
 import { SceneType } from 'authing-js-sdk'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
+// import { FormItemIdentify } from '../../Login/core/withVerifyCode/FormItemIdentify'
 // import { Rule } from 'antd/lib/form'
 
 export interface RegisterWithPhoneProps {
@@ -91,6 +92,54 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
     { loading: false }
   )
 
+  // const PhoenAccountItem = useCallback(() => {
+  //   if (publicConfig && publicConfig.internationalSmsConfig?.enabled) {
+  //     return (
+  //       <FormItemIdentify
+  //         name="identify"
+  //         className="authing-g2-input-form remove-padding"
+  //         methods="phone-code"
+  //         currentMethod="phone-code"
+  //         areaCode={areaCode}
+  //       >
+  //         {isInternationSms ? (
+  //           <InputInternationPhone
+  //             className="authing-g2-input"
+  //             size="large"
+  //             areaCode={areaCode}
+  //             methods={methods}
+  //             onAreaCodeChange={(value: string) => {
+  //               setAreaCode(value)
+  //             }}
+  //           />
+  //         ) : (
+  //           <InputIdentify
+  //             className="authing-g2-input"
+  //             size="large"
+  //             value={identify}
+  //             methods={methods}
+  //             onChange={(e) => {
+  //               let v = e.target.value
+  //               setIdentify(v)
+  //               if (validate('email', v)) {
+  //                 setCurrentMethod(InputMethod.EmailCode)
+  //               }
+  //               if (validate('phone', v)) {
+  //                 setCurrentMethod(InputMethod.PhoneCode)
+  //               }
+  //             }}
+  //             prefix={
+  //               <IconFont
+  //                 type="authing-a-user-line1"
+  //                 style={{ color: '#878A95' }}
+  //               />
+  //             }
+  //           />
+  //         )}
+  //       </FormItemIdentify>
+  //     )
+  //   }
+  // }, [publicConfig])
   return (
     <div className="authing-g2-register-email">
       <Form
@@ -147,7 +196,6 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
             })}
             maxLength={verifyCodeLength}
             scene={SceneType.SCENE_TYPE_REGISTER}
-            // prefix={<SafetyOutlined style={{ color: '#878A95' }} />}
             prefix={
               <IconFont
                 type="authing-a-shield-check-line1"

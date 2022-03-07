@@ -14,6 +14,7 @@ import { FormItemIdentify } from './FormItemIdentify'
 import { InputIdentify } from './inputIdentify'
 import './styles.less'
 import { InputInternationPhone } from './InputInternationPhone'
+import { parsePhone } from '../../../_utils/hooks'
 
 export const LanguageMap: any = {
   'zh-CN': 'CN',
@@ -162,8 +163,14 @@ export const LoginWithVerifyCode = (props: any) => {
   }, [config, methods])
 
   const loginByPhoneCode = async (values: any) => {
+    const options: any = {}
+    if (isInternationSms) options.phoneCountryCode = values.phoneCountryCode
     try {
-      const user = await client.loginByPhoneCode(values.identify, values.code)
+      const user = await client.loginByPhoneCode(
+        values.identify,
+        values.code,
+        options
+      )
       submitButtonRef.current.onSpin(false)
       props.onLogin(200, user)
     } catch (e: any) {
@@ -197,12 +204,17 @@ export const LoginWithVerifyCode = (props: any) => {
     }
     // onBeforeLogin
     submitButtonRef.current.onSpin(true)
+    const { phoneNumber, countryCode: phoneCountryCode } = parsePhone(
+      values.identify,
+      areaCode
+    )
 
     let loginInfo = {
       type: currentMethod,
       data: {
-        identity: values.identify,
+        identity: phoneNumber,
         code: values.code,
+        phoneCountryCode,
       },
     }
 
@@ -227,7 +239,7 @@ export const LoginWithVerifyCode = (props: any) => {
     }
 
     if (currentMethod === 'phone-code') {
-      await loginByPhoneCode(values)
+      await loginByPhoneCode({ ...values, phoneCountryCode })
     } else {
       await loginByEmailCode(values)
     }
@@ -287,6 +299,12 @@ export const LoginWithVerifyCode = (props: any) => {
                   setCurrentMethod(InputMethod.PhoneCode)
                 }
               }}
+              prefix={
+                <IconFont
+                  type="authing-a-user-line1"
+                  style={{ color: '#878A95' }}
+                />
+              }
             />
           )}
         </FormItemIdentify>

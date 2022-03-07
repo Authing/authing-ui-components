@@ -2,6 +2,14 @@ import { useRef, useCallback, useEffect } from 'react'
 import { GuardModuleType } from '../../Guard/module'
 import { useModule } from '../../context/module/context'
 import { useMediaQuery } from 'react-responsive'
+import phone from 'phone'
+export interface PhoneValidResult {
+  isValid: boolean
+  phoneNumber: string
+  countryIso2: string
+  countryIso3: string
+  countryCode: string
+}
 
 export const useChangeModule = () => {
   const { module, changeModule, setInitData } = useModule()
@@ -109,4 +117,28 @@ export const useShaking = () => {
     bindTotpSecretSave[0] && bindTotpSecretSave[0].classList.remove('shaking')
   }
   return { MountShaking, UnMountShaking }
+}
+
+//
+export const parsePhone = (fieldValue: string, areaCode?: string) => {
+  let countryCode = areaCode
+
+  let phoneNumber = fieldValue
+
+  if (phone(fieldValue, { country: areaCode }).isValid) {
+    const parsePhone = phone(fieldValue, {
+      country: areaCode,
+    }) as PhoneValidResult
+
+    countryCode = parsePhone.countryCode as string
+
+    phoneNumber = parsePhone.phoneNumber.split(countryCode)[1]
+  } else if (phone(fieldValue).isValid) {
+    const parsePhone = phone(fieldValue) as PhoneValidResult
+
+    countryCode = parsePhone.countryCode as string
+
+    phoneNumber = parsePhone.phoneNumber.split(countryCode)[1]
+  }
+  return { countryCode, phoneNumber }
 }

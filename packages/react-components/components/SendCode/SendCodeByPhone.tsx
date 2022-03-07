@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { InputProps } from 'antd/lib/input'
 import { SendCode } from './index'
-import phone from 'phone'
+import { parsePhone } from '../_utils/hooks'
 export interface SendCodeByPhoneProps extends InputProps {
   data: string
   form?: any
@@ -56,18 +56,10 @@ export const SendCodeByPhone: FC<SendCodeByPhoneProps> = (props) => {
                 ? form.getFieldValue(fieldName || 'phone')
                 : data
 
-              let phoneNumber = fieldValue
-              let countryCode = areaCode
-              // 走到这步 起码通过了 默认区号的校验 phone(fieldValue,{country:areaCode}) 或者 phone(fieldValue)
-              if (phone(fieldValue, { country: areaCode }).isValid) {
-                const parsePhone = phone(fieldValue, { country: areaCode })
-                phoneNumber = parsePhone.phoneNumber
-                countryCode = parsePhone.countryCode as string
-              } else if (phone(fieldValue).isValid) {
-                const parsePhone = phone(fieldValue)
-                phoneNumber = parsePhone.phoneNumber
-                countryCode = parsePhone.countryCode as string
-              }
+              const { phoneNumber, countryCode } = parsePhone(
+                fieldValue,
+                areaCode
+              )
 
               return await sendPhone(phoneNumber, countryCode)
             })
