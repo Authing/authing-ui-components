@@ -20,7 +20,7 @@ export interface StateMachineLog {
 }
 
 export type ChangeModuleEvent = (
-  nextModelu: GuardModuleType,
+  nextModule: GuardModuleType,
   initData?: any
 ) => void
 
@@ -36,25 +36,27 @@ export class GuardStateMachine {
   // 历史记录
   private moduleStateHistory: ModuleState[] = []
 
-  private changeMouleEvent: ChangeModuleEvent
+  private changeModuleEvent: ChangeModuleEvent
 
   // Log
   private stateMachineLog: Record<number, StateMachineLog> = {}
 
-  constructor(changeMouleEvent: ChangeModuleEvent, initData: ModuleState) {
-    this.changeMouleEvent = changeMouleEvent
+  constructor(changeModuleEvent: ChangeModuleEvent, initData: ModuleState) {
+    this.changeModuleEvent = changeModuleEvent
 
     this.historyPush(initData, ActionType.Init)
   }
   globalWindow = (): Window | undefined =>
     typeof window !== undefined ? window : undefined
 
-  next = (nextModelu: GuardModuleType, initData: any) => {
+  next = (nextModule: GuardModuleType, initData: any) => {
+    // window?.history.pushState(nextModule, '', window?.location.href)
+
     const moduleData: ModuleState = {
-      moduleName: nextModelu,
+      moduleName: nextModule,
       initData,
     }
-    this.changeMouleEvent(nextModelu, initData)
+    this.changeModuleEvent(nextModule, initData)
     // 快照history
     if (
       this.moduleStateHistory.slice(1, 2)[0] &&
@@ -65,26 +67,27 @@ export class GuardStateMachine {
     } else {
       this.historyPush(moduleData)
     }
-    console.log('next Log', this.stateMachineLog)
-    console.log('next History', this.moduleStateHistory)
+
+    // console.log('next Log', this.stateMachineLog)
+    // console.log('next History', this.moduleStateHistory)
   }
 
   back = (initData: any = {}) => {
     if (this.moduleStateHistory.length <= 1) return
 
     const backModule = this.moduleStateHistory[1]
-    this.changeMouleEvent(backModule.moduleName, {
+    this.changeModuleEvent(backModule.moduleName, {
       ...initData,
       ...backModule.initData,
     })
     this.moduleStateHistory.splice(0, 1)
-    console.log('back Log', this.stateMachineLog)
+
+    // console.log('back Log', this.stateMachineLog)
   }
 
   // 业务终点 Log 发送
   end = () => {
-    console.log('业务终点 Log', this.stateMachineLog)
-
+    // console.log('业务终点 Log', this.stateMachineLog)
     // TODO 请求
   }
 

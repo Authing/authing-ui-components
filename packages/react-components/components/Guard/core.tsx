@@ -1,5 +1,6 @@
 import { GuardProps } from '.'
 import React, {
+  ReactNode,
   useCallback,
   useEffect,
   useMemo,
@@ -103,9 +104,9 @@ interface ModuleState {
 export const useGuardCore1 = (props: GuardProps, initState: ModuleState) => {
   const { appId, tenantId, config } = props
 
-  const [events, setEvents] = useState<GuardEvents>()
+  const [events, setEvents] = useState<GuardEvents>({})
   const [authClint, setAuthClint] = useState<AuthenticationClient>()
-  const [httpClint, setHttpClint] = useState<GuardHttp>()
+  const [httpClint, setHttpClint] = useState<GuardHttp>(new GuardHttp())
   const [publicConfig, setPublicConfig] = useState<ApplicationConfig>()
 
   // 状态机
@@ -116,15 +117,15 @@ export const useGuardCore1 = (props: GuardProps, initState: ModuleState) => {
 
   const { Context: GuardPublicConfigContext } = createPublicConfigContext()
 
-  const { Context: guardHttpClientContext } = createHttpClientContext()
+  const { Context: GuardHttpClientContext } = createHttpClientContext()
 
-  const { Context: guardAppIdContext } = createAppIdContext()
+  const { Context: GuardAppIdContext } = createAppIdContext()
 
-  const { Context: guardInitDataContext } = createInitDataContext()
+  const { Context: GuardInitDataContext } = createInitDataContext()
 
-  const { Context: guardEventsContext } = createGuardEventsContext()
+  const { Context: GuardEventsContext } = createGuardEventsContext()
 
-  const { Context: guardModuleContext } = createGuardModuleContext()
+  const { Context: GuardModuleContext } = createGuardModuleContext()
 
   // 劫持浏览器 History
   const [historyNext] = useHistoryHijack(guardStateMachine?.back)
@@ -145,6 +146,9 @@ export const useGuardCore1 = (props: GuardProps, initState: ModuleState) => {
 
   // Change Module
   const onChangeModule = (moduleName: GuardModuleType, initData: any = {}) => {
+    // 劫持 History
+    historyNext(moduleName)
+
     changeModule({
       type: moduleName,
       payload: {
@@ -252,48 +256,59 @@ export const useGuardCore1 = (props: GuardProps, initState: ModuleState) => {
     if (!authClint) return
     events?.onLoad?.(authClint)
   }, [authClint, events])
-  useEffect(() => {
-    if (initError) {
-      events?.onLoadError?.(errorData)
+
+  useMemo(() => {
+    return {
+      changeModule: async (moduleName: GuardModuleType, initData?: any) => {
+        onChangeModule(moduleName, initData)
+
+        if (!events?.onBeforeChangeModule) {
+          guardStateMachine?.next(moduleName, initData)
+        } else if (await events.onBeforeChangeModule(moduleName, initData)) {
+          guardStateMachine?.next(moduleName, initData)
+        }
+      },
     }
-  }, [errorData, events, initError])
+  }, [])
+
+  // useEffect(() => {
+  //   if (initError) {
+  //     events?.onLoadError?.(errorData)
+  //   }
+  // }, [errorData, events, initError])
+
+  // async (moduleName, initData) => {
+  //   if (!events?.onBeforeChangeModule) {
+  //     historyNext(moduleName)
+  //     guardStateMachine?.next(moduleName, initData)
+  //   } else if (await events.onBeforeChangeModule(moduleName, initData)) {
+  //     historyNext(moduleName)
+  //     guardStateMachine?.next(moduleName, initData)
+  //   }
 
   const renderModule = useMemo(() => {
-    if (initError)
-      return <GuardErrorView initData={{ messages: errorData?.message }} />
-    if (initSettingEnd && GuardLocalConfig) {
-      return ComponentsMapping[moduleState.moduleName]({
-        __changeModule: async (moduleName, initData) => {
-          if (!events?.onBeforeChangeModule) {
-            historyNext(moduleName)
-            guardStateMachine?.next(moduleName, initData)
-          } else if (await events.onBeforeChangeModule(moduleName, initData)) {
-            historyNext(moduleName)
-            guardStateMachine?.next(moduleName, initData)
-          }
-        },
-      })
-    } else {
-      return GuardLocalConfig?.showLoading
-        ? GuardLocalConfig?.loadingComponent
-        : null
-    }
-  }, [
-    initError,
-    errorData?.message,
-    initSettingEnd,
-    GuardLocalConfig,
-    moduleState.moduleName,
-    moduleState.initData,
-    appId,
-    events,
-    historyNext,
-    guardStateMachine,
-  ])
+    return ComponentsMapping[moduleState.moduleName]()
+  }, [moduleState.moduleName])
+
+  const renderContext = useCallback((children: ReactNode) => {
+    return (
+      <GuardPublicConfigContext.Provider value={publicConfig}>
+        <GuardHttpClientContext.Provider value={httpClint}>
+          <GuardAppIdContext.Provider value={appId}>
+            <GuardEventsContext.Provider value={events}>
+              <GuardModuleContext.Provider value={{}}>
+                <GuardInitDataContext.Provider value={moduleState.initData}>
+                  {children}
+                </GuardInitDataContext.Provider>
+              </GuardModuleContext.Provider>
+            </GuardEventsContext.Provider>
+          </GuardAppIdContext.Provider>
+        </GuardHttpClientContext.Provider>
+      </GuardPublicConfigContext.Provider>
+    )
+  }, [])
 
   return {
-    renderModule: (
-      <Context.Provider value={publicConfig}>{renderModule}</Context.Provider>
-    ),
+    renderModule: renderContext(renderModule),
   }
 }
