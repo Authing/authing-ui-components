@@ -2,15 +2,14 @@ import { FormItemProps } from 'antd/lib/form'
 import FormItem from 'antd/lib/form/FormItem'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { InputMethod } from '.'
-// import { VerifyLoginMethods } from '../../../AuthingGuard/api'
 import CustomFormItem from '../../../ValidatorRules'
 import { fieldRequiredRule, validate } from '../../../_utils'
 import { phone } from 'phone'
 import { usePublicConfig } from '../../../_utils/context'
+import { VerifyLoginMethods } from '../../../AuthingGuard/api'
 export interface FormItemIdentifyProps extends FormItemProps {
   checkRepeat?: boolean
-  methods: InputMethod
+  methods: VerifyLoginMethods[]
   currentMethod?: 'phone-code' | 'email-code' //当前 input 输入
   areaCode?: string //国际化手机号区号
 }
@@ -19,7 +18,9 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
   const { methods, areaCode, currentMethod, ...formItemProps } = props
 
   const publicConfig = usePublicConfig()
+
   const { t } = useTranslation()
+  // TODO register 场景下 添加 find 手机号是否为注册·校验
   const renderTemplate = useMemo(() => {
     const rules = [...fieldRequiredRule(t('common.phoneOrEmail'))]
     if (currentMethod === 'email-code') {
@@ -56,7 +57,7 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
       rules.push({
         validateTrigger: 'onBlur',
         validator: async (_: any, value: any) => {
-          //TODO 区号就走 默认区号
+          //无区号就走 默认区号
           if (
             value &&
             (phone(value, { country: areaCode }).isValid ||

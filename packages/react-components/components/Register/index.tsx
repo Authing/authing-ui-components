@@ -11,6 +11,7 @@ import { GuardRegisterViewProps } from './interface'
 import { codeMap } from './codemap'
 import { shoudGoToComplete, tabSort } from '../_utils'
 import { i18n } from '../_utils/locales'
+import { VerifyLoginMethods } from '../AuthingGuard/api'
 
 export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
   config,
@@ -63,6 +64,13 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
       console.error('last action at register')
     }
   }
+  const verifyLoginMethods = useMemo<VerifyLoginMethods[]>(
+    () =>
+      config.__publicConfig__?.verifyCodeTabConfig?.enabledLoginMethods ?? [
+        'phone-code',
+      ],
+    [config.__publicConfig__?.verifyCodeTabConfig?.enabledLoginMethods]
+  )
 
   const registerContextProps = useMemo(
     () => ({
@@ -91,6 +99,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
           ) ?? []
         : [],
       publicConfig: config.__publicConfig__,
+      verifyLoginMethods: verifyLoginMethods,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
@@ -98,6 +107,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
       config?.agreements,
       registerEvents.onBeforeRegister,
       i18n.language,
+      verifyLoginMethods,
     ]
   )
 

@@ -1,8 +1,12 @@
 import { Form } from 'antd'
-import React, { useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
-import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
+import {
+  Agreement,
+  ApplicationConfig,
+  VerifyLoginMethods,
+} from '../../AuthingGuard/api'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { fieldRequiredRule, getDeviceName } from '../../_utils'
 import { Agreements } from '../components/Agreements'
@@ -15,7 +19,10 @@ import CustomFormItem, {
 import { IconFont } from '../../IconFont'
 import { SceneType } from 'authing-js-sdk'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
-// import { FormItemIdentify } from '../../Login/core/withVerifyCode/FormItemIdentify'
+import { FormItemIdentify } from '../../Login/core/withVerifyCode/FormItemIdentify'
+import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
+import { LanguageMap } from '../../Type'
+import { parsePhone } from '../../_utils/hooks'
 // import { Rule } from 'antd/lib/form'
 
 export interface RegisterWithPhoneProps {
@@ -23,6 +30,7 @@ export interface RegisterWithPhoneProps {
   agreements: Agreement[]
   publicConfig?: ApplicationConfig
   registeContext?: any
+  verifyLoginMethods: VerifyLoginMethods[]
 }
 
 export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
@@ -30,6 +38,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   agreements,
   publicConfig,
   registeContext,
+  verifyLoginMethods,
 }) => {
   const { t } = useTranslation()
   const submitButtonRef = useRef<any>(null)
@@ -38,7 +47,10 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   const [phone, setPhone] = useState<string>('')
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
   const [validated, setValidated] = useState(false)
-
+  // 区号 默认
+  const [areaCode, setAreaCode] = useState(
+    LanguageMap[navigator.language] ? LanguageMap[navigator.language] : 'CN'
+  )
   const ref = useRef<ICheckProps>(null)
 
   const verifyCodeLength = publicConfig?.verifyCodeLength ?? 4
@@ -61,10 +73,13 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         const { phone, password = '', code } = values
 
         const context = registeContext ?? {}
-
+        const { phoneNumber, countryCode: phoneCountryCode } = parsePhone(
+          phone,
+          areaCode
+        )
         // 注册
         const user = await authClient.registerByPhoneCode(
-          phone,
+          phoneNumber,
           code,
           password,
           {
@@ -75,6 +90,10 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           {
             context,
             generateToken: true,
+            phoneCountryCode:
+              publicConfig && publicConfig.internationalSmsConfig?.enabled
+                ? phoneCountryCode
+                : undefined,
             // params: getUserRegisterParams(),
           }
         )
@@ -92,66 +111,29 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
     { loading: false }
   )
 
-  // const PhoenAccountItem = useCallback(() => {
-  //   if (publicConfig && publicConfig.internationalSmsConfig?.enabled) {
-  //     return (
-  //       <FormItemIdentify
-  //         name="identify"
-  //         className="authing-g2-input-form remove-padding"
-  //         methods="phone-code"
-  //         currentMethod="phone-code"
-  //         areaCode={areaCode}
-  //       >
-  //         {isInternationSms ? (
-  //           <InputInternationPhone
-  //             className="authing-g2-input"
-  //             size="large"
-  //             areaCode={areaCode}
-  //             methods={methods}
-  //             onAreaCodeChange={(value: string) => {
-  //               setAreaCode(value)
-  //             }}
-  //           />
-  //         ) : (
-  //           <InputIdentify
-  //             className="authing-g2-input"
-  //             size="large"
-  //             value={identify}
-  //             methods={methods}
-  //             onChange={(e) => {
-  //               let v = e.target.value
-  //               setIdentify(v)
-  //               if (validate('email', v)) {
-  //                 setCurrentMethod(InputMethod.EmailCode)
-  //               }
-  //               if (validate('phone', v)) {
-  //                 setCurrentMethod(InputMethod.PhoneCode)
-  //               }
-  //             }}
-  //             prefix={
-  //               <IconFont
-  //                 type="authing-a-user-line1"
-  //                 style={{ color: '#878A95' }}
-  //               />
-  //             }
-  //           />
-  //         )}
-  //       </FormItemIdentify>
-  //     )
-  //   }
-  // }, [publicConfig])
-  return (
-    <div className="authing-g2-register-email">
-      <Form
-        form={form}
-        name="emailRegister"
-        autoComplete="off"
-        onFinish={onFinish}
-        onFinishFailed={() => submitButtonRef.current.onError()}
-        onValuesChange={(values) => {
-          ref.current?.check(values)
-        }}
-      >
+  const PhoenAccountItem = useCallback(() => {
+    if (publicConfig && publicConfig.internationalSmsConfig?.enabled) {
+      return (
+        <FormItemIdentify
+          key="phone"
+          name="phone"
+          className="authing-g2-input-form remove-padding"
+          methods={['phone-code']}
+          currentMethod="phone-code"
+          areaCode={areaCode}
+        >
+          <InputInternationPhone
+            className="authing-g2-input"
+            size="large"
+            areaCode={areaCode}
+            onAreaCodeChange={(value: string) => {
+              setAreaCode(value)
+            }}
+          />
+        </FormItemIdentify>
+      )
+    } else {
+      return (
         <CustomFormItem.Phone
           ref={ref}
           key="phone"
@@ -169,7 +151,6 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
             }}
             size="large"
             placeholder={t('login.inputPhone')}
-            // prefix={<UserOutlined style={{ color: '#878A95' }} />}
             prefix={
               <IconFont
                 type="authing-a-user-line1"
@@ -179,15 +160,42 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
             maxLength={11}
           />
         </CustomFormItem.Phone>
-        <Form.Item
-          key="code"
-          name="code"
-          validateTrigger={['onBlur', 'onChange']}
-          rules={fieldRequiredRule(t('common.captchaCode'))}
-          className="authing-g2-input-form"
-          validateFirst={true}
-        >
+      )
+    }
+  }, [areaCode, form, publicConfig, t, verifyLoginMethods])
+
+  const SendCode = useCallback(
+    (props) => {
+      if (publicConfig && publicConfig.internationalSmsConfig?.enabled) {
+        return (
           <SendCodeByPhone
+            {...props}
+            form={form}
+            fieldName="phone"
+            className="authing-g2-input g2-send-code-input"
+            autoComplete="off"
+            size="large"
+            placeholder={t('common.inputFourVerifyCode', {
+              length: verifyCodeLength,
+            })}
+            areaCode={areaCode}
+            prefix={
+              <IconFont
+                type="authing-a-shield-check-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
+            scene={SceneType.SCENE_TYPE_REGISTER}
+            maxLength={verifyCodeLength}
+            onSendCodeBefore={async () => {
+              await form.validateFields(['phone'])
+            }}
+          />
+        )
+      } else {
+        return (
+          <SendCodeByPhone
+            {...props}
             className="authing-g2-input g2-send-code-input"
             autoComplete="off"
             size="large"
@@ -202,9 +210,39 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
                 style={{ color: '#878A95' }}
               />
             }
-            onSendCodeBefore={() => form.validateFields(['phone'])}
+            onSendCodeBefore={async () => {
+              await form.validateFields(['phone'])
+            }}
             data={phone}
           />
+        )
+      }
+    },
+    [areaCode, form, phone, publicConfig, t, verifyCodeLength]
+  )
+
+  return (
+    <div className="authing-g2-register-email">
+      <Form
+        form={form}
+        name="emailRegister"
+        autoComplete="off"
+        onFinish={onFinish}
+        onFinishFailed={() => submitButtonRef.current.onError()}
+        onValuesChange={(values) => {
+          ref.current?.check(values)
+        }}
+      >
+        <PhoenAccountItem />
+        <Form.Item
+          key="code"
+          name="code"
+          validateTrigger={['onBlur', 'onChange']}
+          rules={fieldRequiredRule(t('common.captchaCode'))}
+          className="authing-g2-input-form"
+          validateFirst={true}
+        >
+          <SendCode />
         </Form.Item>
         {Boolean(agreements?.length) && (
           <Agreements

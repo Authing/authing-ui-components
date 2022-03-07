@@ -15,19 +15,7 @@ import { InputIdentify } from './inputIdentify'
 import './styles.less'
 import { InputInternationPhone } from './InputInternationPhone'
 import { parsePhone } from '../../../_utils/hooks'
-
-export const LanguageMap: any = {
-  'zh-CN': 'CN',
-  en: 'GB',
-  'en-US': 'US',
-  ja: 'JP',
-  'de-DE': 'DE',
-}
-
-export enum InputMethod {
-  EmailCode = 'email-code',
-  PhoneCode = 'phone-code',
-}
+import { InputMethod, LanguageMap } from '../../../Type'
 
 export const LoginWithVerifyCode = (props: any) => {
   const config = usePublicConfig()
@@ -151,7 +139,7 @@ export const LoginWithVerifyCode = (props: any) => {
   )
 
   useEffect(() => {
-    // TODO 开启国际化配置并登录方式为手机号码时
+    // TODO 开启国际化配置且登录方式为手机号码时
     if (
       methods.length === 1 &&
       methods[0] === 'phone-code' &&
@@ -163,11 +151,12 @@ export const LoginWithVerifyCode = (props: any) => {
   }, [config, methods])
 
   const loginByPhoneCode = async (values: any) => {
-    const options: any = {}
-    if (isInternationSms) options.phoneCountryCode = values.phoneCountryCode
     try {
+      const options: any = {}
+      if (config && config.internationalSmsConfig?.enabled)
+        options.phoneCountryCode = values.phoneCountryCode
       const user = await client.loginByPhoneCode(
-        values.identify,
+        values.phoneNumber,
         values.code,
         options
       )
@@ -239,7 +228,7 @@ export const LoginWithVerifyCode = (props: any) => {
     }
 
     if (currentMethod === 'phone-code') {
-      await loginByPhoneCode({ ...values, phoneCountryCode })
+      await loginByPhoneCode({ ...values, phoneNumber, phoneCountryCode })
     } else {
       await loginByEmailCode(values)
     }
@@ -278,7 +267,6 @@ export const LoginWithVerifyCode = (props: any) => {
               className="authing-g2-input"
               size="large"
               areaCode={areaCode}
-              methods={methods}
               onAreaCodeChange={(value: string) => {
                 setAreaCode(value)
               }}

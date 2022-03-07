@@ -8,7 +8,7 @@ import { InputProps } from 'antd/lib/input'
 import { SendCode } from './index'
 import { parsePhone } from '../_utils/hooks'
 export interface SendCodeByPhoneProps extends InputProps {
-  data: string
+  data?: string
   form?: any
   onSendCodeBefore?: any // 点击的时候先做这个
   fieldName?: string

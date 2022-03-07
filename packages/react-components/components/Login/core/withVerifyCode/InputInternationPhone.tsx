@@ -1,11 +1,9 @@
 import Input, { InputProps } from 'antd/lib/input'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { VerifyLoginMethods } from '../../../AuthingGuard/api'
 
 import { VirtualDropdown } from './VirtualDropdown'
 export interface InputInternationPhoneProps extends InputProps {
-  methods: VerifyLoginMethods[]
   areaCode: string
   onAreaCodeChange: (areaCode: string) => void
 }
@@ -13,7 +11,6 @@ export const InputInternationPhone: React.FC<InputInternationPhoneProps> = (
   props
 ) => {
   const {
-    methods,
     areaCode,
     onAreaCodeChange,
     onChange,

@@ -52,3 +52,16 @@ export interface IG2Events {
 }
 
 export const getDefaultG2Config = (): IG2Config => defaultG2Config
+
+export const LanguageMap: any = {
+  'zh-CN': 'CN',
+  en: 'GB',
+  'en-US': 'US',
+  ja: 'JP',
+  'de-DE': 'DE',
+}
+
+export enum InputMethod {
+  EmailCode = 'email-code',
+  PhoneCode = 'phone-code',
+}
