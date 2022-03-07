@@ -28,7 +28,7 @@ export const InputInternationPhone: React.FC<InputInternationPhoneProps> = (
   }
 
   return (
-    <div>
+    <>
       <Input
         pattern="[^a-zA-Z]*"
         value={value}
@@ -45,6 +45,6 @@ export const InputInternationPhone: React.FC<InputInternationPhoneProps> = (
           <VirtualDropdown value={areaCode} onChange={onAreaCodeChange} />
         }
       />
-    </div>
+    </>
   )
 }

@@ -111,18 +111,12 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
     { loading: false }
   )
 
-  const PhoenAccountItem = useCallback(() => {
-    if (publicConfig && publicConfig.internationalSmsConfig?.enabled) {
-      return (
-        <FormItemIdentify
-          key="phone"
-          name="phone"
-          className="authing-g2-input-form remove-padding"
-          methods={['phone-code']}
-          currentMethod="phone-code"
-          areaCode={areaCode}
-        >
+  const PhoenAccount = useCallback(
+    (props) => {
+      if (publicConfig && publicConfig.internationalSmsConfig?.enabled) {
+        return (
           <InputInternationPhone
+            {...props}
             className="authing-g2-input"
             size="large"
             areaCode={areaCode}
@@ -130,21 +124,11 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
               setAreaCode(value)
             }}
           />
-        </FormItemIdentify>
-      )
-    } else {
-      return (
-        <CustomFormItem.Phone
-          ref={ref}
-          key="phone"
-          name="phone"
-          className="authing-g2-input-form"
-          validateFirst={true}
-          form={form}
-          checkRepeat={true}
-          required={true}
-        >
+        )
+      } else {
+        return (
           <InputNumber
+            {...props}
             className="authing-g2-input"
             onChange={(e) => {
               setPhone(e.target.value)
@@ -159,10 +143,11 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
             }
             maxLength={11}
           />
-        </CustomFormItem.Phone>
-      )
-    }
-  }, [areaCode, form, publicConfig, t, verifyLoginMethods])
+        )
+      }
+    },
+    [areaCode, publicConfig, t]
+  )
 
   const SendCode = useCallback(
     (props) => {
@@ -233,7 +218,23 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           ref.current?.check(values)
         }}
       >
-        <PhoenAccountItem />
+        <CustomFormItem.Phone
+          ref={ref}
+          key="phone"
+          name="phone"
+          className={
+            publicConfig?.internationalSmsConfig?.enabled
+              ? 'authing-g2-input-form remove-padding'
+              : 'authing-g2-input-form'
+          }
+          validateFirst={true}
+          form={form}
+          checkRepeat={true}
+          required={true}
+          areaCode={areaCode}
+        >
+          <PhoenAccount />
+        </CustomFormItem.Phone>
         <Form.Item
           key="code"
           name="code"
