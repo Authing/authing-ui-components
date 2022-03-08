@@ -11,7 +11,6 @@ import { LoginWithWechatMiniQrcode } from './core/withWechatMiniQrcode'
 import { LoginWithWechatmpQrcode } from './core/withWechatmpQrcode'
 import { codeMap } from './codemap'
 import { SocialLogin } from './socialLogin'
-import { GuardLoginViewProps } from './interface'
 
 import { useGuardAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
@@ -21,7 +20,13 @@ import { ChangeLanguage } from '../ChangeLanguage'
 import { i18n } from '../_utils/locales'
 
 import './styles.less'
-import { usePublicConfig } from '../_utils/context'
+import {
+  useGuardAppId,
+  useGuardEvents,
+  useGuardFinallyConfig,
+  useGuardModule,
+  useGuardPublicConfig,
+} from '../_utils/context'
 import { isWechatBrowser, shoudGoToComplete } from '../_utils'
 import { LoginWithVerifyCode } from './core/withVerifyCode'
 import { VerifyLoginMethods } from '../AuthingGuard/api'
@@ -81,8 +86,18 @@ const useSwitchStates = (loginWay: LoginMethods) => {
 
   return { switchText, inputNone, qrcodeNone }
 }
-export const GuardLoginView = (props: GuardLoginViewProps) => {
-  const { config } = props
+export const GuardLoginView = () => {
+  // const { config } = props
+
+  const config = useGuardFinallyConfig()
+
+  const appId = useGuardAppId()
+
+  const { changeModule } = useGuardModule()
+
+  const events = useGuardEvents()
+
+  const publicConfig = useGuardPublicConfig()
 
   let [defaultMethod, renderInputWay, renderQrcodeWay] = useMethods(config)
   const agreementEnabled = config?.agreementEnabled
@@ -95,29 +110,25 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
 
   const client = useGuardAuthClient()
 
-  const publicConfig = usePublicConfig()
-
   const qrcodeTabsSettings = publicConfig?.qrcodeTabsSettings
 
   const [errorNumber, setErrorNumber] = useState(0)
 
   const [accountLock, setAccountLock] = useState(false)
 
-  let publicKey = props.config?.publicKey!
+  let publicKey = config?.publicKey!
 
   // let autoRegister = props.config?.autoRegister
-  let ms = props.config?.loginMethods
+  let ms = config?.loginMethods
 
-  let { autoRegister, langRange } = props.config
+  const firstInputWay = inputWays.filter((way) => ms?.includes(way))[0]
 
-  const firstInputWay = inputWays.filter((way) => ms.includes(way))[0]
-
-  const firstQRcodeWay = qrcodeWays.filter((way) => ms.includes(way))[0]
+  const firstQRcodeWay = qrcodeWays.filter((way) => ms?.includes(way))[0]
 
   let { disableResetPwd, disableRegister } = useDisables({
-    config: props.config,
+    config: config,
     loginWay,
-    autoRegister,
+    autoRegister: config?.autoRegister,
   })
 
   const verifyCodeLogin = useMemo(() => {
@@ -135,7 +146,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   }, [publicConfig, t])
 
   const hiddenTab = useMemo(() => {
-    const scanLogins = ms.filter((method) => qrcodeWays.includes(method)) //取到扫码登录类型
+    const scanLogins = ms ?? [].filter((method) => qrcodeWays.includes(method)) //取到扫码登录类型
     if (scanLogins.length > 1) {
       // 如果有两个以上的code 类型
       return false
@@ -176,13 +187,15 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
 
     if (code === 200) {
       return (data: any) => {
-        if (shoudGoToComplete(data, 'login', publicConfig, autoRegister)) {
-          props.__changeModule?.(GuardModuleType.COMPLETE_INFO, {
+        if (
+          shoudGoToComplete(data, 'login', publicConfig, config?.autoRegister)
+        ) {
+          changeModule?.(GuardModuleType.COMPLETE_INFO, {
             context: 'login',
             user: data,
           })
         } else {
-          props.onLogin?.(data, client!) // 登录成功
+          events?.onLogin?.(data, client!) // 登录成功
         }
       }
     }
@@ -196,10 +209,10 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
 
     // 解析成功
     if (action?.action === 'changeModule') {
-      let m = action.module ? action.module : GuardModuleType.ERROR
+      let guardModule = action.module ? action.module : GuardModuleType.ERROR
       let init = action.initData ? action.initData : {}
       return (initData?: any) => {
-        props.__changeModule?.(m, { ...initData, ...init })
+        changeModule?.(guardModule, { ...initData, ...init })
       }
     }
     if (action?.action === 'message') {
@@ -217,7 +230,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     // 最终结果
     return (initData?: any) => {
       // props.onLoginError?.(data, client!) // 未捕获 code
-      console.error('last action at loginview')
+      console.error('last action at login view')
       message.error(initData?._message)
     }
   }
@@ -225,7 +238,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   const onLogin = (code: any, data: any, message?: string) => {
     const callback = __codePaser?.(code)
     if (code !== 200) {
-      props.onLoginError?.({
+      events?.onLoginError?.({
         code,
         data,
         message,
@@ -239,8 +252,8 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   }
 
   const onBeforeLogin = (loginInfo: any) => {
-    if (props.onBeforeLogin) {
-      return props.onBeforeLogin?.(loginInfo, client)
+    if (events?.onBeforeLogin) {
+      return events?.onBeforeLogin?.(loginInfo, client)
     }
     return () => console.log('Guard not onBeforeLogin hooks')
   }
@@ -263,19 +276,18 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
         ? config?.agreements?.filter(
             (agree) =>
               agree.lang === i18n.language &&
-              (autoRegister || !!agree?.availableAt)
+              (config?.autoRegister || !!agree?.availableAt)
           ) ?? []
         : [],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [agreementEnabled, autoRegister, config?.agreements, i18n.language]
+    [agreementEnabled, config?.autoRegister, config?.agreements, i18n.language]
   )
 
   const verifyLoginMethods = useMemo<VerifyLoginMethods[]>(
     () =>
-      config.__publicConfig__?.verifyCodeTabConfig?.enabledLoginMethods ?? [
-        'phone-code',
-      ],
-    [config.__publicConfig__?.verifyCodeTabConfig?.enabledLoginMethods]
+      publicConfig?.verifyCodeTabConfig?.enabledLoginMethods ?? ['phone-code'],
+
+    [publicConfig?.verifyCodeTabConfig?.enabledLoginMethods]
   )
 
   return (
@@ -322,8 +334,8 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
         )}
 
         <div className="g2-view-header">
-          <img src={props.config?.logo} alt="" className="icon" />
-          <div className="title">{props.config?.title}</div>
+          <img src={config?.logo} alt="" className="icon" />
+          <div className="title">{config?.title}</div>
           {!!publicConfig?.welcomeMessage && (
             <div className="title-description">
               {publicConfig?.welcomeMessage[i18n.language]}
@@ -338,7 +350,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                 onChange={(k: any) => {
                   setLoginWay(k)
                   message.destroy()
-                  props.onLoginTabChange?.(k)
+                  events?.onLoginTabChange?.(k)
                 }}
                 activeKey={loginWay}
               >
@@ -350,11 +362,11 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                     <LoginWithPassword
                       loginWay={loginWay}
                       publicKey={publicKey}
-                      autoRegister={autoRegister}
-                      host={props.config.host}
+                      autoRegister={config?.autoRegister}
+                      host={config?.host}
                       onLogin={onLogin}
                       onBeforeLogin={onBeforeLogin}
-                      passwordLoginMethods={props.config.passwordLoginMethods}
+                      passwordLoginMethods={config?.passwordLoginMethods ?? []}
                       agreements={agreements}
                     />
                   </Tabs.TabPane>
@@ -366,7 +378,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                   >
                     <LoginWithVerifyCode
                       verifyCodeLength={publicConfig?.verifyCodeLength}
-                      autoRegister={autoRegister}
+                      autoRegister={config?.autoRegister}
                       onBeforeLogin={onBeforeLogin}
                       onLogin={onLogin}
                       agreements={agreements}
@@ -381,8 +393,8 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                   >
                     <LoginWithLDAP
                       publicKey={publicKey}
-                      autoRegister={autoRegister}
-                      host={props.config.host}
+                      autoRegister={config?.autoRegister}
+                      host={config?.host}
                       onLogin={onLogin}
                       onBeforeLogin={onBeforeLogin}
                       agreements={agreements}
@@ -393,7 +405,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                   <Tabs.TabPane key={LoginMethods.AD} tab={t('login.adLogin')}>
                     <LoginWithAD
                       publicKey={publicKey}
-                      autoRegister={autoRegister}
+                      autoRegister={config?.autoRegister}
                       onLogin={onLogin}
                       onBeforeLogin={onBeforeLogin}
                       agreements={agreements}
@@ -408,7 +420,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                   <span
                     className="link-like forget-password-link"
                     onClick={() =>
-                      props.__changeModule?.(GuardModuleType.FORGET_PWD, {})
+                      changeModule?.(GuardModuleType.FORGET_PWD, {})
                     }
                   >
                     {t('login.forgetPwd')}
@@ -426,7 +438,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                   <div
                     className="touch-tip question-feedback"
                     onClick={() =>
-                      props.__changeModule?.(GuardModuleType.ANY_QUESTIONS, {})
+                      changeModule?.(GuardModuleType.ANY_QUESTIONS, {})
                     }
                   >
                     <IconFont
@@ -442,9 +454,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                   {/* <span className="gray">{t('common.noAccYet')}</span> */}
                   <span
                     className="link-like register-link"
-                    onClick={() =>
-                      props.__changeModule?.(GuardModuleType.REGISTER, {})
-                    }
+                    onClick={() => changeModule?.(GuardModuleType.REGISTER, {})}
                   >
                     {t('common.registerImmediate')}
                   </span>
@@ -461,12 +471,12 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
               destroyInactiveTabPane={true}
               onChange={(k: any) => {
                 message.destroy()
-                props.onLoginTabChange?.(k)
+                events?.onLoginTabChange?.(k)
               }}
               defaultActiveKey={defaultQrCodeWay}
             >
               {ms?.includes(LoginMethods.WxMinQr) &&
-                qrcodeTabsSettings?.[LoginMethods.WxMinQr].map((item) => (
+                qrcodeTabsSettings?.[LoginMethods.WxMinQr].map((item: any) => (
                   <Tabs.TabPane
                     key={LoginMethods.WxMinQr + item.id}
                     tab={item.title ?? t('login.scanLogin')}
@@ -475,7 +485,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                       onLogin={onLogin}
                       canLoop={canLoop}
                       qrCodeScanOptions={{
-                        ...props.config.qrCodeScanOptions,
+                        ...config?.qrCodeScanOptions,
                         extIdpConnId: item.id,
                         tips: {
                           title:
@@ -497,7 +507,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                     onLogin={onLogin}
                     canLoop={canLoop}
                     qrCodeScanOptions={{
-                      ...props.config.qrCodeScanOptions,
+                      ...config?.qrCodeScanOptions,
                       tips: {
                         title:
                           i18n.language === 'zh-CN'
@@ -509,18 +519,6 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                   />
                 </Tabs.TabPane>
               )}
-              {/* {ms?.includes(LoginMethods.WechatMpQrcode) && (
-                <Tabs.TabPane
-                  key={LoginMethods.WechatMpQrcode}
-                  tab={t('login.wechatmpQrcode')}
-                >
-                  <LoginWithWechatmpQrcode
-                    onLogin={onLogin}
-                    canLoop={canLoop}
-                    qrCodeScanOptions={props.config.qrCodeScanOptions}
-                  />
-                </Tabs.TabPane>
-              )} */}
               {ms?.includes(LoginMethods.WechatMpQrcode) &&
                 qrcodeTabsSettings?.[LoginMethods.WechatMpQrcode].map(
                   (item) => (
@@ -532,7 +530,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                         onLogin={onLogin}
                         canLoop={canLoop}
                         qrCodeScanOptions={{
-                          ...props.config.qrCodeScanOptions,
+                          ...config?.qrCodeScanOptions,
                           extIdpConnId: item.id,
                           tips: {
                             title:
@@ -554,14 +552,13 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
           </div>
         )}
         <div className="g2-social-login">
-          <SocialLogin
-            appId={props.appId}
-            config={props.config}
-            onLogin={onLogin}
-          />
+          <SocialLogin appId={appId} config={config!} onLogin={onLogin} />
         </div>
       </div>
-      <ChangeLanguage langRange={langRange} onLangChange={props.onLangChange} />
+      <ChangeLanguage
+        langRange={config?.langRange}
+        onLangChange={events?.onLangChange}
+      />
     </div>
   )
 }

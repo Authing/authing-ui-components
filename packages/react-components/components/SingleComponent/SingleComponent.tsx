@@ -17,7 +17,7 @@ import { getGuardHttp, GuardHttp, initGuardHttp } from '../_utils/guardHttp'
 import { i18n, initI18n } from '../_utils/locales'
 import zhCN from 'antd/lib/locale/zh_CN'
 import enUS from 'antd/lib/locale/en_US'
-import { createGuardContext } from '../_utils/context'
+import { createGuardPublicConfigContext } from '../_utils/context'
 import { ShieldSpin } from '../ShieldSpin'
 import { GuardErrorView } from '../Error'
 
@@ -30,7 +30,7 @@ const PREFIX_CLS = 'authing-ant'
 message.config({
   prefixCls: `${PREFIX_CLS}-message`,
 })
-const { Context } = createGuardContext()
+const { Context } = createGuardPublicConfigContext()
 
 export function SingleComponent<T extends IG2FCProps>(
   props: T,
@@ -74,10 +74,14 @@ export function SingleComponent<T extends IG2FCProps>(
   // AuthClient
   useEffect(() => {
     if (appId && GuardLocalConfig) {
-      const authClint = initGuardAuthClient(GuardLocalConfig, appId)
+      const authClint = initGuardAuthClient(
+        GuardLocalConfig,
+        appId,
+        publicConfig?.websocket!
+      )
       setAuthClint(authClint)
     }
-  }, [GuardLocalConfig, appId])
+  }, [GuardLocalConfig, appId, publicConfig?.websocket])
 
   // initEvents
   useEffect(() => {
@@ -128,8 +132,7 @@ export function SingleComponent<T extends IG2FCProps>(
   }, [errorData, events, initError])
 
   const renderModule = useMemo(() => {
-    if (initError)
-      return <GuardErrorView initData={{ messages: errorData?.message }} />
+    if (initError) return <GuardErrorView />
     if (initSettingEnd && GuardLocalConfig) {
       //   return ComponentsMapping[moduleState.moduleName]({
       //     appId,
@@ -149,21 +152,14 @@ export function SingleComponent<T extends IG2FCProps>(
         </div>
       )
     }
-  }, [
-    Component,
-    GuardLocalConfig,
-    errorData?.message,
-    initError,
-    initSettingEnd,
-    props,
-  ])
+  }, [Component, GuardLocalConfig, initError, initSettingEnd, props])
 
   return (
     <ConfigProvider
       prefixCls={PREFIX_CLS}
       locale={langMap[i18n.language as LangMAP]}
     >
-      <Context.Provider value={publicConfig}>
+      <Context.Provider value={publicConfig!}>
         <div className="authing-g2-render-module">{renderModule}</div>
       </Context.Provider>
     </ConfigProvider>

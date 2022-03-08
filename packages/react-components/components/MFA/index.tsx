@@ -13,7 +13,7 @@ import { codeMap } from './codemap'
 import './styles.less'
 import { message } from 'antd'
 import { shoudGoToComplete } from '../_utils'
-import { usePublicConfig } from '../_utils/context'
+import { useGuardPublicConfig } from '../_utils/context'
 interface MFABackStateContextType {
   setMfaBackState: React.Dispatch<React.SetStateAction<string>>
   mfaBackState: string
@@ -67,7 +67,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
     initData.current ??
       initData.applicationMfa?.sort((a, b) => a.sort - b.sort)[0].mfaPolicy
   )
-  const publicConfig = usePublicConfig()
+  const publicConfig = useGuardPublicConfig()
   const [mfaBackState, setMfaBackState] = useState<string>('login')
   const [showMethods, setShowMethods] = useState(true)
   const client = useGuardAuthClient()

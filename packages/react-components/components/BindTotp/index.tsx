@@ -14,7 +14,7 @@ import { GuardBindTotpViewProps } from './interface'
 import { useTranslation } from 'react-i18next'
 import './styles.less'
 import { shoudGoToComplete } from '../_utils'
-import { usePublicConfig } from '../_utils/context'
+import { useGuardPublicConfig } from '../_utils/context'
 import { MFAType } from '../MFA/interface'
 
 enum BindTotpType {
@@ -33,7 +33,7 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
   const [secret, setSecret] = useState('')
   const [qrcode, setQrcode] = useState('')
   const [user, setUser] = useState<User>()
-  const publicConfig = usePublicConfig()
+  const publicConfig = useGuardPublicConfig()
   const [bindTotpType, setBindTotpType] = useState<BindTotpType>(
     BindTotpType.SECURITY_CODE
   )

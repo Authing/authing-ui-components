@@ -11,7 +11,7 @@ import { GuardRegisterViewProps } from './interface'
 import { codeMap } from './codemap'
 import { shoudGoToComplete, tabSort } from '../_utils'
 import { i18n } from '../_utils/locales'
-import { usePublicConfig } from '../_utils/context'
+import { useGuardPublicConfig } from '../_utils/context'
 
 export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
   config,
@@ -24,7 +24,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
   const { langRange } = config
   const authClient = useGuardAuthClient()
 
-  const publicConfig = usePublicConfig()
+  const publicConfig = useGuardPublicConfig()
 
   const __codePaser = (code: number) => {
     const action = codeMap[code]

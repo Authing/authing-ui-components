@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { GuardModuleType } from '..'
 import { ImagePro } from '../ImagePro'
 import SubmitButton from '../SubmitButton'
+import { useGuardPublicConfig } from '../_utils/context'
 import { GuardSubmitSuccessViewProps } from './interface'
 
 export const GuardSubmitSuccessView: React.FC<GuardSubmitSuccessViewProps> = (
@@ -14,6 +15,8 @@ export const GuardSubmitSuccessView: React.FC<GuardSubmitSuccessViewProps> = (
 
   const timerRef = useRef<any>(0)
 
+  const publicConfig = useGuardPublicConfig()
+
   const {
     title = t('common.problem.successTip'),
     message = t('common.problem.successTipMsg'),
@@ -21,7 +24,7 @@ export const GuardSubmitSuccessView: React.FC<GuardSubmitSuccessViewProps> = (
     countDesc = t('common.pToLogin'),
     changeModule = GuardModuleType.LOGIN,
   } = initData ?? {}
-  const cdnBase = config?.__publicConfig__?.cdnBase
+  const cdnBase = publicConfig?.cdnBase
 
   useEffect(() => {
     timerRef.current = setInterval(() => {

@@ -5,7 +5,7 @@ import { ImagePro } from '../ImagePro'
 import { IconFont } from '../IconFont'
 import { GuardDownloadATViewProps } from './interface'
 import './styles.less'
-import { usePublicConfig } from '../_utils/context'
+import { useGuardPublicConfig } from '../_utils/context'
 
 enum DownloadType {
   IOS = 'ios',
@@ -17,9 +17,7 @@ export const GuardDownloadATView: React.FC<GuardDownloadATViewProps> = ({
 }) => {
   const { t } = useTranslation()
 
-  // const cdnBase = config.__publicConfig__?.cdnBase
-
-  const publicConfig = usePublicConfig()
+  const publicConfig = useGuardPublicConfig()
 
   const cdnBase = publicConfig?.cdnBase
 

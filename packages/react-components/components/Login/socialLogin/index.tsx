@@ -19,7 +19,7 @@ import { IconFont } from '../../IconFont'
 import { LoginConfig } from '../interface'
 import './style.less'
 import { useMediaSize } from '../../_utils/hooks'
-import { usePublicConfig } from '../../_utils/context'
+import { useGuardPublicConfig } from '../../_utils/context'
 import { IdpButton } from './IdpButton'
 
 export interface SocialLoginProps {
@@ -35,7 +35,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
 }) => {
   const noLoginMethods = !config.loginMethods.length
 
-  const publicConfig = usePublicConfig()
+  const publicConfig = useGuardPublicConfig()
 
   const userPoolId = publicConfig?.userPoolId
 

@@ -7,7 +7,7 @@ import { GuardCompleteInfoViewProps } from './interface'
 import './styles.less'
 import { IconFont } from '../IconFont'
 import { useGuardAuthClient } from '../Guard/authClient'
-import { usePublicConfig } from '../_utils/context'
+import { useGuardPublicConfig } from '../_utils/context'
 
 export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
   config,
@@ -23,7 +23,7 @@ export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
 
   const user = initData.user
 
-  const publicConfig = usePublicConfig()
+  const publicConfig = useGuardPublicConfig()
 
   const skipComplateFileds = publicConfig?.skipComplateFileds ?? false
 

@@ -9,7 +9,7 @@ import { InputPassword } from '../../InputPassword'
 import { Agreements } from '../../Register/components/Agreements'
 import SubmitButton from '../../SubmitButton'
 import { fieldRequiredRule } from '../../_utils'
-import { usePublicConfig } from '../../_utils/context'
+import { useGuardPublicConfig } from '../../_utils/context'
 
 interface LoginWithADProps {
   // configs
@@ -30,7 +30,7 @@ export const LoginWithAD = (props: LoginWithADProps) => {
 
   const [validated, setValidated] = useState(false)
 
-  const publicConfig = usePublicConfig()
+  const publicConfig = useGuardPublicConfig()
   const { t } = useTranslation()
 
   let client = useGuardAuthClient()

@@ -1,11 +1,26 @@
 import React, { useContext } from 'react'
-import { GuardEvents } from '..'
+import { GuardEvents, GuardLocalConfig, GuardModuleType } from '..'
 import { ApplicationConfig } from '../AuthingGuard/api'
 import { GuardHttp } from './guardHttp'
 
-const GuardPublicConfigContext = React.createContext<
-  ApplicationConfig | undefined
->(undefined)
+const GuardFinallyConfigContext = React.createContext<GuardLocalConfig>(
+  {} as GuardLocalConfig
+)
+
+export const createGuardFinallyConfigContext = () => {
+  const Provider = GuardFinallyConfigContext.Provider
+  const Consumer = GuardFinallyConfigContext.Consumer
+
+  return {
+    Provider,
+    Consumer,
+    Context: GuardFinallyConfigContext,
+  }
+}
+
+const GuardPublicConfigContext = React.createContext<ApplicationConfig>(
+  {} as ApplicationConfig
+)
 
 export const createGuardPublicConfigContext = () => {
   const Provider = GuardPublicConfigContext.Provider
@@ -18,7 +33,7 @@ export const createGuardPublicConfigContext = () => {
   }
 }
 
-const GuardHttpClientContext = React.createContext<GuardHttp>(new GuardHttp())
+const GuardHttpClientContext = React.createContext<GuardHttp>({} as GuardHttp)
 
 export const createHttpClientContext = () => {
   const Provider = GuardHttpClientContext.Provider
@@ -57,7 +72,9 @@ export const createInitDataContext = () => {
   }
 }
 
-const GuardEventsContext = React.createContext<Partial<GuardEvents>>({})
+const GuardEventsContext = React.createContext<
+  Partial<GuardEvents> | undefined
+>(undefined)
 
 export const createGuardEventsContext = () => {
   const Provider = GuardEventsContext.Provider
@@ -71,7 +88,7 @@ export const createGuardEventsContext = () => {
 }
 
 const GuardModuleContext = React.createContext<{
-  changeModule?: (module: string, initData?: any) => void
+  changeModule?: (moduleName: GuardModuleType, initData?: any) => Promise<void>
   backModule?: () => void
 }>({})
 
@@ -86,13 +103,13 @@ export const createGuardModuleContext = () => {
   }
 }
 
-export const usePublicConfig = () => useContext(GuardPublicConfigContext)
+export const useGuardPublicConfig = () => useContext(GuardPublicConfigContext)
 
-export const useHttpClient = () => useContext(GuardHttpClientContext)
+export const useGuardHttpClient = () => useContext(GuardHttpClientContext)
 
-export const useAppId = () => useContext(GuardAppIdContext)
+export const useGuardAppId = () => useContext(GuardAppIdContext)
 
-export function useInitData<T>(): T {
+export function useGuardInitData<T>(): T {
   const data = useContext(GuardInitDataContext)
   return data as T
 }
@@ -100,3 +117,5 @@ export function useInitData<T>(): T {
 export const useGuardEvents = () => useContext(GuardEventsContext)
 
 export const useGuardModule = () => useContext(GuardModuleContext)
+
+export const useGuardFinallyConfig = () => useContext(GuardFinallyConfigContext)

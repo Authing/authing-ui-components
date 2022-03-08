@@ -40,10 +40,11 @@ import { GuardSubmitSuccessView } from '../SubmitSuccess'
 import {
   createAppIdContext,
   createGuardEventsContext,
+  createGuardFinallyConfigContext,
   createGuardModuleContext,
+  createGuardPublicConfigContext,
   createHttpClientContext,
   createInitDataContext,
-  createPublicConfigContext,
 } from '../_utils/context'
 import { ApplicationConfig } from '../AuthingGuard/api'
 import { SessionData, trackSession } from './sso'
@@ -74,16 +75,28 @@ message.config({
 const ComponentsMapping: Record<GuardModuleType, () => React.ReactNode> = {
   [GuardModuleType.ERROR]: () => <GuardErrorView />,
   [GuardModuleType.LOGIN]: () => <GuardLoginView />,
-  [GuardModuleType.MFA]: () => <GuardMFAView />,
-  [GuardModuleType.REGISTER]: () => <GuardRegisterView />,
-  [GuardModuleType.DOWNLOAD_AT]: () => <GuardDownloadATView />,
-  [GuardModuleType.FORGET_PWD]: () => <GuardForgetPassword />,
-  [GuardModuleType.CHANGE_PWD]: () => <GuardChangePassword />,
-  [GuardModuleType.BIND_TOTP]: () => <GuardBindTotpView />,
-  [GuardModuleType.ANY_QUESTIONS]: () => <GuardNeedHelpView />,
-  [GuardModuleType.COMPLETE_INFO]: () => <GuardCompleteInfoView />,
-  [GuardModuleType.RECOVERY_CODE]: () => <GuardRecoveryCodeView />,
-  [GuardModuleType.SUBMIT_SUCCESS]: () => <GuardSubmitSuccessView />,
+  [GuardModuleType.MFA]: () => <GuardLoginView />,
+  [GuardModuleType.REGISTER]: () => <GuardLoginView />,
+  [GuardModuleType.DOWNLOAD_AT]: () => <GuardLoginView />,
+  [GuardModuleType.FORGET_PWD]: () => <GuardLoginView />,
+  [GuardModuleType.CHANGE_PWD]: () => <GuardLoginView />,
+  [GuardModuleType.BIND_TOTP]: () => <GuardLoginView />,
+  [GuardModuleType.ANY_QUESTIONS]: () => <GuardLoginView />,
+  [GuardModuleType.COMPLETE_INFO]: () => <GuardLoginView />,
+  [GuardModuleType.RECOVERY_CODE]: () => <GuardLoginView />,
+  [GuardModuleType.SUBMIT_SUCCESS]: () => <GuardLoginView />,
+  [GuardModuleType.IDENTITY_BINDING]: () => <GuardLoginView />,
+  [GuardModuleType.IDENTITY_BINDING_ASK]: () => <GuardNeedHelpView />,
+  // [GuardModuleType.MFA]: () => <GuardMFAView />,
+  // [GuardModuleType.REGISTER]: () => <GuardRegisterView />,
+  // [GuardModuleType.DOWNLOAD_AT]: () => <GuardDownloadATView />,
+  // [GuardModuleType.FORGET_PWD]: () => <GuardForgetPassword />,
+  // [GuardModuleType.CHANGE_PWD]: () => <GuardChangePassword />,
+  // [GuardModuleType.BIND_TOTP]: () => <GuardBindTotpView />,
+  // [GuardModuleType.ANY_QUESTIONS]: () => <GuardNeedHelpView />,
+  // [GuardModuleType.COMPLETE_INFO]: () => <GuardCompleteInfoView />,
+  // [GuardModuleType.RECOVERY_CODE]: () => <GuardRecoveryCodeView />,
+  // [GuardModuleType.SUBMIT_SUCCESS]: () => <GuardSubmitSuccessView />,
 }
 
 interface GuardViewProps extends GuardProps {
@@ -101,12 +114,12 @@ interface ModuleState {
   initData: any
 }
 
-export const useGuardCore1 = (props: GuardProps, initState: ModuleState) => {
+export const useGuardCore = (props: GuardProps, initState: ModuleState) => {
   const { appId, tenantId, config } = props
 
-  const [events, setEvents] = useState<GuardEvents>({})
+  const [events, setEvents] = useState<GuardEvents>()
   const [authClint, setAuthClint] = useState<AuthenticationClient>()
-  const [httpClint, setHttpClint] = useState<GuardHttp>(new GuardHttp())
+  const [httpClient, setHttpClient] = useState<GuardHttp>()
   const [publicConfig, setPublicConfig] = useState<ApplicationConfig>()
 
   // 状态机
@@ -115,7 +128,7 @@ export const useGuardCore1 = (props: GuardProps, initState: ModuleState) => {
     setGuardStateMachine,
   ] = useState<GuardStateMachine>()
 
-  const { Context: GuardPublicConfigContext } = createPublicConfigContext()
+  const { Context: GuardPublicConfigContext } = createGuardPublicConfigContext()
 
   const { Context: GuardHttpClientContext } = createHttpClientContext()
 
@@ -126,6 +139,10 @@ export const useGuardCore1 = (props: GuardProps, initState: ModuleState) => {
   const { Context: GuardEventsContext } = createGuardEventsContext()
 
   const { Context: GuardModuleContext } = createGuardModuleContext()
+
+  const {
+    Context: GuardFinallyConfigContext,
+  } = createGuardFinallyConfigContext()
 
   // 劫持浏览器 History
   const [historyNext] = useHistoryHijack(guardStateMachine?.back)
@@ -145,23 +162,34 @@ export const useGuardCore1 = (props: GuardProps, initState: ModuleState) => {
   const [moduleState, changeModule] = useReducer(moduleReducer, initState)
 
   // Change Module
-  const onChangeModule = (moduleName: GuardModuleType, initData: any = {}) => {
-    // 劫持 History
-    historyNext(moduleName)
+  const onChangeModule = useCallback(
+    (moduleName: GuardModuleType, initData: any = {}) => {
+      // 劫持 History
+      historyNext(moduleName)
 
-    changeModule({
-      type: moduleName,
-      payload: {
-        initData: initData ?? {},
-      },
-    })
-  }
+      changeModule({
+        type: moduleName,
+        payload: {
+          initData: initData ?? {},
+        },
+      })
+    },
+    [historyNext]
+  )
 
   // 合并默认值
   const defaultMergedConfig = useMergeDefaultConfig(
     getDefaultGuardLocalConfig(),
     config
   )
+
+  const loadingComponent = useMemo(() => {
+    if (defaultMergedConfig)
+      if (defaultMergedConfig.showLoading)
+        return defaultMergedConfig?.loadingComponent
+
+    return null
+  }, [defaultMergedConfig])
 
   // HttpClint
   useEffect(() => {
@@ -173,14 +201,18 @@ export const useGuardCore1 = (props: GuardProps, initState: ModuleState) => {
 
     tenantId && httpClient.setTenantId(tenantId)
 
-    setHttpClint(httpClient)
+    setHttpClient(httpClient)
   }, [appId, defaultMergedConfig, tenantId])
 
-  const finallyConfig = useMergePublicConfig(appId, defaultMergedConfig)
+  const finallyConfig = useMergePublicConfig(
+    appId,
+    defaultMergedConfig,
+    httpClient
+  )
 
   // SSO 登录
   useEffect(() => {
-    if (!config?.isSSO || !authClint || !events || !httpClint) return
+    if (!config?.isSSO || !authClint || !events || !httpClient) return
 
     trackSession().then((sessionData) => {
       // 这个接口没有 code, data, 直接返回了数据
@@ -189,13 +221,13 @@ export const useGuardCore1 = (props: GuardProps, initState: ModuleState) => {
         events?.onLogin?.(typedData.userInfo, authClint!)
       }
     })
-  }, [appId, authClint, config?.isSSO, events, httpClint])
+  }, [appId, authClint, config?.isSSO, events, httpClient])
 
   useEffect(() => {
-    if (httpClint && finallyConfig) {
-      httpClint?.setBaseUrl(finallyConfig.host)
+    if (httpClient && finallyConfig) {
+      httpClient?.setBaseUrl(finallyConfig.host)
     }
-  }, [finallyConfig, httpClint])
+  }, [finallyConfig, httpClient])
 
   // I18n
   useEffect(() => {
@@ -211,7 +243,7 @@ export const useGuardCore1 = (props: GuardProps, initState: ModuleState) => {
     if (!publicConfig) return
 
     setPublicConfig(publicConfig)
-  }, [appId])
+  }, [appId, finallyConfig])
 
   // AuthClient
   useEffect(() => {
@@ -257,7 +289,8 @@ export const useGuardCore1 = (props: GuardProps, initState: ModuleState) => {
     events?.onLoad?.(authClint)
   }, [authClint, events])
 
-  useMemo(() => {
+  const moduleEvents = useMemo(() => {
+    if (!events && !guardStateMachine) return undefined
     return {
       changeModule: async (moduleName: GuardModuleType, initData?: any) => {
         onChangeModule(moduleName, initData)
@@ -268,45 +301,87 @@ export const useGuardCore1 = (props: GuardProps, initState: ModuleState) => {
           guardStateMachine?.next(moduleName, initData)
         }
       },
+      backModule: () => {
+        guardStateMachine?.back()
+      },
     }
-  }, [])
+  }, [events, guardStateMachine, onChangeModule])
 
-  // useEffect(() => {
-  //   if (initError) {
-  //     events?.onLoadError?.(errorData)
-  //   }
-  // }, [errorData, events, initError])
+  const moduleLoaded = useMemo(() => {
+    const list = [
+      appId,
+      events,
+      finallyConfig,
+      httpClient,
+      moduleEvents,
+      publicConfig,
+      authClint,
+    ]
 
-  // async (moduleName, initData) => {
-  //   if (!events?.onBeforeChangeModule) {
-  //     historyNext(moduleName)
-  //     guardStateMachine?.next(moduleName, initData)
-  //   } else if (await events.onBeforeChangeModule(moduleName, initData)) {
-  //     historyNext(moduleName)
-  //     guardStateMachine?.next(moduleName, initData)
-  //   }
+    return !list.includes(undefined)
+  }, [
+    appId,
+    events,
+    finallyConfig,
+    httpClient,
+    moduleEvents,
+    publicConfig,
+    authClint,
+  ])
+
+  const renderContext = useCallback(
+    (children: ReactNode) => {
+      if (moduleLoaded)
+        return (
+          <GuardFinallyConfigContext.Provider value={finallyConfig!}>
+            <GuardPublicConfigContext.Provider value={publicConfig!}>
+              <GuardHttpClientContext.Provider value={httpClient!}>
+                <GuardAppIdContext.Provider value={appId}>
+                  <GuardEventsContext.Provider value={events}>
+                    <GuardModuleContext.Provider value={moduleEvents!}>
+                      <GuardInitDataContext.Provider
+                        value={moduleState.initData}
+                      >
+                        {children}
+                      </GuardInitDataContext.Provider>
+                    </GuardModuleContext.Provider>
+                  </GuardEventsContext.Provider>
+                </GuardAppIdContext.Provider>
+              </GuardHttpClientContext.Provider>
+            </GuardPublicConfigContext.Provider>
+          </GuardFinallyConfigContext.Provider>
+        )
+      else return null
+    },
+    [
+      GuardAppIdContext,
+      GuardEventsContext,
+      GuardFinallyConfigContext,
+      GuardHttpClientContext,
+      GuardInitDataContext,
+      GuardModuleContext,
+      GuardPublicConfigContext,
+      appId,
+      events,
+      finallyConfig,
+      httpClient,
+      moduleEvents,
+      moduleLoaded,
+      moduleState.initData,
+      publicConfig,
+    ]
+  )
 
   const renderModule = useMemo(() => {
-    return ComponentsMapping[moduleState.moduleName]()
-  }, [moduleState.moduleName])
-
-  const renderContext = useCallback((children: ReactNode) => {
-    return (
-      <GuardPublicConfigContext.Provider value={publicConfig}>
-        <GuardHttpClientContext.Provider value={httpClint}>
-          <GuardAppIdContext.Provider value={appId}>
-            <GuardEventsContext.Provider value={events}>
-              <GuardModuleContext.Provider value={{}}>
-                <GuardInitDataContext.Provider value={moduleState.initData}>
-                  {children}
-                </GuardInitDataContext.Provider>
-              </GuardModuleContext.Provider>
-            </GuardEventsContext.Provider>
-          </GuardAppIdContext.Provider>
-        </GuardHttpClientContext.Provider>
-      </GuardPublicConfigContext.Provider>
-    )
-  }, [])
+    if (moduleLoaded) return ComponentsMapping[moduleState.moduleName]()
+    else if (defaultMergedConfig) return loadingComponent
+    else return null
+  }, [
+    defaultMergedConfig,
+    loadingComponent,
+    moduleLoaded,
+    moduleState.moduleName,
+  ])
 
   return {
     renderModule: renderContext(renderModule),

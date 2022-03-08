@@ -2,14 +2,14 @@ import { Form } from 'antd'
 import React from 'react'
 import { PasswordFormItemProps } from '.'
 import { getPasswordValidate } from '../_utils'
-import { usePublicConfig } from '../_utils/context'
+import { useGuardPublicConfig } from '../_utils/context'
 export interface ExPasswordFormItemProps extends PasswordFormItemProps {
   fieldRequiredRuleMessage?: string
 }
 export const PasswordFormItem: React.FC<ExPasswordFormItemProps> = (props) => {
   const { rules, fieldRequiredRuleMessage, ...fromItemProos } = props
 
-  const publicConfig = usePublicConfig()
+  const publicConfig = useGuardPublicConfig()
 
   return publicConfig ? (
     <Form.Item

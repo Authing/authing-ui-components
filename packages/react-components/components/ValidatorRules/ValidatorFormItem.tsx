@@ -16,7 +16,7 @@ import {
 } from '.'
 import { Rule } from 'antd/lib/form'
 import { useDebounce } from '../_utils/hooks'
-import { usePublicConfig } from '../_utils/context'
+import { useGuardPublicConfig } from '../_utils/context'
 
 const checkError = (message: string) => Promise.reject(new Error(message))
 
@@ -32,7 +32,7 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
       required,
       ...formItemProps
     } = props
-    const publicConfig = usePublicConfig()
+    const publicConfig = useGuardPublicConfig()
 
     const { get } = useGuardHttp()
     const { t } = useTranslation()

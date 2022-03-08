@@ -4,9 +4,10 @@ import { assembledRequestHost as utilAssembledRequestHost } from '..'
 import { GuardComponentConfig, GuardLocalConfig } from '../../Guard/config'
 import { useCallback, useEffect, useState } from 'react'
 import { AuthingResponse } from '../http'
-import { getGuardHttp } from '../guardHttp'
+import { getGuardHttp, GuardHttp } from '../guardHttp'
 import { corsVerification } from '../corsVerification'
 import { Logger } from '../logger'
+import { HttpClient } from 'authing-js-sdk/build/main/lib/common/HttpClient'
 
 let publicConfigMap: Record<string, ApplicationConfig> = {}
 
@@ -16,11 +17,12 @@ export const setPublicConfig = (appId: string, config: ApplicationConfig) =>
   (publicConfigMap[appId] = config)
 
 const requestPublicConfig = async (
-  appId: string
+  appId: string,
+  httpClient: GuardHttp
 ): Promise<ApplicationConfig> => {
   let res: AuthingResponse<ApplicationConfig>
 
-  const { get } = getGuardHttp()
+  const { get } = httpClient
 
   try {
     res = await get<ApplicationConfig>(
@@ -124,15 +126,17 @@ const assembledRequestHost = (
 
 export const useMergePublicConfig = (
   appId: string,
-  config?: GuardLocalConfig
+  config?: GuardLocalConfig,
+  httpClient?: GuardHttp
 ) => {
   const [publicConfig, setPublicConfig] = useState<ApplicationConfig>()
 
   const initPublicConfig = useCallback(async () => {
-    if (!getPublicConfig(appId)) await requestPublicConfig(appId)
+    if (httpClient && appId)
+      if (!getPublicConfig(appId)) await requestPublicConfig(appId, httpClient)
 
     setPublicConfig(getPublicConfig(appId))
-  }, [appId])
+  }, [appId, httpClient])
 
   useEffect(() => {
     initPublicConfig()
