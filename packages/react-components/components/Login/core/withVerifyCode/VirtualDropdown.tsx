@@ -32,6 +32,7 @@ export const VirtualDropdown: FC<VirtualDropdownProps> = (props) => {
 
   return (
     <Select
+      showSearch
       dropdownClassName="areacode-virtual-dropdown"
       bordered={false}
       listHeight={258}
@@ -40,6 +41,9 @@ export const VirtualDropdown: FC<VirtualDropdownProps> = (props) => {
       onChange={onChange}
       optionLabelProp="children"
       dropdownMatchSelectWidth={138}
+      filterOption={(input, option: any) => {
+        return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      }}
       suffixIcon={
         <IconFont
           className={'areacode-virtual-dropdown-icon'}
