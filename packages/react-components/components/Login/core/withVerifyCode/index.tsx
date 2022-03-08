@@ -241,6 +241,52 @@ export const LoginWithVerifyCode = (props: any) => {
       : t('common.login')
   }, [props.autoRegister, submitButText, t])
 
+  const PhoneAccount = useCallback(
+    (props) => {
+      if (isInternationSms) {
+        return (
+          <InputInternationPhone
+            {...props}
+            className="authing-g2-input"
+            size="large"
+            areaCode={areaCode}
+            onAreaCodeChange={(value: string) => {
+              setAreaCode(value)
+              form.getFieldValue(['identify']) &&
+                form.validateFields(['identify'])
+            }}
+          />
+        )
+      } else {
+        return (
+          <InputIdentify
+            {...props}
+            className="authing-g2-input"
+            size="large"
+            value={identify}
+            methods={methods}
+            onChange={(e) => {
+              let v = e.target.value
+              setIdentify(v)
+              if (validate('email', v)) {
+                setCurrentMethod(InputMethod.EmailCode)
+              }
+              if (validate('phone', v)) {
+                setCurrentMethod(InputMethod.PhoneCode)
+              }
+            }}
+            prefix={
+              <IconFont
+                type="authing-a-user-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
+          />
+        )
+      }
+    },
+    [areaCode, form, identify, isInternationSms, methods]
+  )
   return (
     <div className="authing-g2-login-phone-code">
       <Form
@@ -261,41 +307,7 @@ export const LoginWithVerifyCode = (props: any) => {
           currentMethod={currentMethod}
           areaCode={areaCode}
         >
-          {isInternationSms ? (
-            <InputInternationPhone
-              className="authing-g2-input"
-              size="large"
-              areaCode={areaCode}
-              onAreaCodeChange={(value: string) => {
-                setAreaCode(value)
-                form.getFieldValue(['identify']) &&
-                  form.validateFields(['identify'])
-              }}
-            />
-          ) : (
-            <InputIdentify
-              className="authing-g2-input"
-              size="large"
-              value={identify}
-              methods={methods}
-              onChange={(e) => {
-                let v = e.target.value
-                setIdentify(v)
-                if (validate('email', v)) {
-                  setCurrentMethod(InputMethod.EmailCode)
-                }
-                if (validate('phone', v)) {
-                  setCurrentMethod(InputMethod.PhoneCode)
-                }
-              }}
-              prefix={
-                <IconFont
-                  type="authing-a-user-line1"
-                  style={{ color: '#878A95' }}
-                />
-              }
-            />
-          )}
+          <PhoneAccount />
         </FormItemIdentify>
 
         <Form.Item
