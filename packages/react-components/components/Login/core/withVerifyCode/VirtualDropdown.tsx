@@ -12,7 +12,7 @@ export interface VirtualDropdownProps {
 }
 export const VirtualDropdown: FC<VirtualDropdownProps> = (props) => {
   const { value, onChange } = props
-  const [open, setOpen] = useState(false)
+  // const [open, setOpen] = useState(false)
   // TODO 先取 iso type 作为 select 获取的 value 后续映射表弄好改为 区号码
   const options = isoInfo.map((info: IsoType) => {
     return {
@@ -32,13 +32,6 @@ export const VirtualDropdown: FC<VirtualDropdownProps> = (props) => {
 
   return (
     <Select
-      open={open}
-      onClick={() => {
-        setOpen(!open)
-      }}
-      onBlur={() => {
-        setOpen(false)
-      }}
       dropdownClassName="areacode-virtual-dropdown"
       bordered={false}
       listHeight={258}
@@ -49,7 +42,8 @@ export const VirtualDropdown: FC<VirtualDropdownProps> = (props) => {
       dropdownMatchSelectWidth={138}
       suffixIcon={
         <IconFont
-          type="authing-arrow-down-s-fill"
+          className={'areacode-virtual-dropdown-icon'}
+          type={'authing-arrow-down-s-fill'}
           style={{ width: 20, height: 20 }}
         />
       }

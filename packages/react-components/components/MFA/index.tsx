@@ -62,6 +62,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
     initData.current ??
       initData.applicationMfa?.sort((a, b) => a.sort - b.sort)[0].mfaPolicy
   )
+
   const publicConfig = usePublicConfig()
   const [mfaBackState, setMfaBackState] = useState<string>('login')
   const [showMethods, setShowMethods] = useState(true)

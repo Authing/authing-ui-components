@@ -108,7 +108,8 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             areaCode={areaCode}
             onAreaCodeChange={(value: string) => {
               setAreaCode(value)
-              form.validateFields(['internal phone:phone'])
+              form.getFieldValue(['internal phone:phone']) &&
+                form.validateFields(['internal phone:phone'])
             }}
           />
         )

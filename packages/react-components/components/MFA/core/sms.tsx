@@ -61,7 +61,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
             areaCode={areaCode}
             onAreaCodeChange={(value: string) => {
               setAreaCode(value)
-              form.validateFields(['phone'])
+              form.getFieldValue(['phone']) && form.validateFields(['phone'])
             }}
           />
         )
@@ -145,26 +145,41 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   const [form] = Form.useForm()
   const [sent, setSent] = useState<boolean>(false)
   const { phoneNumber, countryCode } = parsePhone(phone, areaCode)
-  const onFinish = async (values: any) => {
-    submitButtonRef.current.onSpin(true)
-    const mfaCode = form.getFieldValue('mfaCode')
-    try {
-      const user: User = await authClient.mfa.verifyAppSmsMfa({
-        mfaToken,
-        phone: phone!,
-        code: mfaCode.join(''),
-        phoneCountryCode: phoneCountryCode ? phoneCountryCode : countryCode,
-      })
-      // TODO
-      onVerify(200, user)
-    } catch (e: any) {
-      const error = JSON.parse(e.message)
-      submitButtonRef.current.onError()
-      onVerify(error.code as number, error)
-    } finally {
-      submitButtonRef.current?.onSpin(false)
-    }
-  }
+  const onFinish = useCallback(
+    async (values: any) => {
+      submitButtonRef.current.onSpin(true)
+      const mfaCode = form.getFieldValue('mfaCode')
+      console.log(
+        phoneCountryCode ? phoneCountryCode : countryCode,
+        phoneCountryCode
+      )
+      try {
+        const user: User = await authClient.mfa.verifyAppSmsMfa({
+          mfaToken,
+          phone: phone!,
+          code: mfaCode.join(''),
+          phoneCountryCode: phoneCountryCode ? phoneCountryCode : countryCode,
+        })
+        // TODO
+        onVerify(200, user)
+      } catch (e: any) {
+        const error = JSON.parse(e.message)
+        submitButtonRef.current.onError()
+        onVerify(error.code as number, error)
+      } finally {
+        submitButtonRef.current?.onSpin(false)
+      }
+    },
+    [
+      authClient.mfa,
+      countryCode,
+      form,
+      mfaToken,
+      onVerify,
+      phone,
+      phoneCountryCode,
+    ]
+  )
 
   const tips = useMemo(
     () =>
@@ -184,7 +199,7 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
     try {
       await authClient.sendSmsCode(
         phoneNumber,
-        countryCode,
+        phoneCountryCode ? phoneCountryCode : countryCode,
         SceneType.SCENE_TYPE_MFA_VERIFY
       )
       return true

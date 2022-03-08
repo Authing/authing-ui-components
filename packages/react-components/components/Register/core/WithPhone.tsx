@@ -113,7 +113,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
             areaCode={areaCode}
             onAreaCodeChange={(value: string) => {
               setAreaCode(value)
-              form.validateFields(['phone'])
+              form.getFieldValue(['phone']) && form.validateFields(['phone'])
             }}
           />
         )

@@ -37,6 +37,7 @@
   &.authing-ant-select-dropdown {
     border-radius: 4px;
   }
+
   .authing-ant-select-item-option-active {
     color: #396aff;
     background-color: #eff2f6;
@@ -44,5 +45,13 @@
   .authing-ant-select-item-option-selected:not(.authing-ant-select-item-option-disabled) {
     color: #396aff;
     background-color: #eff2f6;
+  }
+}
+.areacode-virtual-dropdown-icon {
+  transition: transform 0.3s;
+}
+.authing-ant-select-open {
+  .areacode-virtual-dropdown-icon {
+    transform: rotate(180deg);
   }
 }
