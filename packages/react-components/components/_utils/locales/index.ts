@@ -14,6 +14,7 @@ export const changeLang = (lang: Lang) => {
 }
 
 const initI18n = (localesConfig: LocalesConfig = {}, lang?: Lang) => {
+  const initLang = navigator.language.split('-')[0] === 'zh' ? 'zh-CN' : 'en-US'
   if (!i18n.language) {
     i18n
       .use(LanguageDetector) // 监测当前浏览器语言
@@ -30,7 +31,7 @@ const initI18n = (localesConfig: LocalesConfig = {}, lang?: Lang) => {
             translation: zhCnTrans,
           },
         },
-        fallbackLng: localesConfig.defaultLang || lang || 'zh-CN',
+        fallbackLng: localesConfig.defaultLang || lang || initLang,
         debug: false,
         interpolation: {
           escapeValue: false, // react already safes from xss
