@@ -55,7 +55,6 @@ export const SendCodeByPhone: FC<SendCodeByPhoneProps> = (props) => {
               let fieldValue = form
                 ? form.getFieldValue(fieldName || 'phone')
                 : data
-              console.log(fieldValue)
               const { phoneNumber, countryCode } = parsePhone(
                 fieldValue,
                 areaCode

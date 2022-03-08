@@ -268,6 +268,7 @@ export const LoginWithVerifyCode = (props: any) => {
               areaCode={areaCode}
               onAreaCodeChange={(value: string) => {
                 setAreaCode(value)
+                form.validateFields(['identify'])
               }}
             />
           ) : (

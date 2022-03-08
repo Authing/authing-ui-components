@@ -24,7 +24,6 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
   } = props
 
   const publicConfig = usePublicConfig()
-  console.log(currentMethod)
   const { t } = useTranslation()
   // TODO 未来抽离
   const renderTemplate = useMemo(() => {

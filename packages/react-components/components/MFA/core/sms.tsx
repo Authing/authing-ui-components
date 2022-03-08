@@ -61,6 +61,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
             areaCode={areaCode}
             onAreaCodeChange={(value: string) => {
               setAreaCode(value)
+              form.validateFields(['phone'])
             }}
           />
         )
@@ -82,7 +83,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
         )
       }
     },
-    [areaCode, isInternationPhone, setAreaCode, t]
+    [areaCode, form, isInternationPhone, setAreaCode, t]
   )
   return (
     <>
@@ -147,7 +148,6 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   const onFinish = async (values: any) => {
     submitButtonRef.current.onSpin(true)
     const mfaCode = form.getFieldValue('mfaCode')
-    console.log(phoneCountryCode ? phoneCountryCode : countryCode)
     try {
       const user: User = await authClient.mfa.verifyAppSmsMfa({
         mfaToken,
