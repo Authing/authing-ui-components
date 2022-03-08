@@ -85,7 +85,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
       setMfaBackState('login')
       return
     }
-    window.history.back()
+    __changeModule?.(GuardModuleType.LOGIN)
   }
 
   const __codePaser = (code: number, msg?: string) => {
@@ -94,7 +94,6 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
     if (code === 200) {
       return (data: any) => {
         if (shoudGoToComplete(data, 'login', publicConfig, autoRegister)) {
-          console.log('登陆成功，用户为', data)
           __changeModule?.(GuardModuleType.COMPLETE_INFO, {
             context: 'login',
             user: data,

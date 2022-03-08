@@ -11,6 +11,8 @@ export enum GuardModuleType {
   COMPLETE_INFO = 'completeInfo',
   RECOVERY_CODE = 'recoveryCode',
   SUBMIT_SUCCESS = 'submitSuccess',
+  IDENTITY_BINDING_ASK = 'identityBindingAsk',
+  IDENTITY_BINDING = 'identityBinding',
 }
 export interface GuardModuleAction {
   action: string

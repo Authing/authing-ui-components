@@ -60,7 +60,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
             <SendCodeByPhone
               {...props}
               className="authing-g2-input g2-send-code-input"
-              autoComplete="one-time-code"
+              autoComplete="off"
               size="large"
               placeholder={t('common.inputFourVerifyCode', {
                 length: verifyCodeLength,
@@ -83,7 +83,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
             <SendCodeByEmail
               {...props}
               className="authing-g2-input g2-send-code-input"
-              autoComplete="one-time-code"
+              autoComplete="off"
               size="large"
               placeholder={t('common.inputFourVerifyCode', {
                 length: verifyCodeLength,
@@ -141,7 +141,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
         >
           <Input
             className="authing-g2-input"
-            autoComplete="tel"
+            autoComplete="off"
             size="large"
             placeholder={t('login.inputPhoneOrEmail')}
             value={identify}

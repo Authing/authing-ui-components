@@ -64,7 +64,7 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
         >
           <Input
             className="authing-g2-input"
-            autoComplete="email"
+            autoComplete="off"
             size="large"
             placeholder={t('login.inputEmail')}
             prefix={

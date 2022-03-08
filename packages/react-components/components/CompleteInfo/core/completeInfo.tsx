@@ -88,7 +88,11 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
   > = {
     image: () => <UploadImage />,
     number: () => (
-      <InputNumber style={{ width: '100%' }} className="authing-g2-input" />
+      <InputNumber
+        style={{ width: '100%' }}
+        className="authing-g2-input"
+        autoComplete="off"
+      />
     ),
     date: () => (
       <DatePicker
@@ -180,7 +184,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       >
         <Input
           className="authing-g2-input"
-          autoComplete="username"
+          autoComplete="off"
           key="internal-username:asdf"
           size="large"
           maxLength={11}
@@ -202,7 +206,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         >
           <InputNumber
             className="authing-g2-input"
-            autoComplete="tel"
+            autoComplete="off"
             key="internal-phone:phone123"
             type="tel"
             size="large"
@@ -223,7 +227,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         >
           <SendCodeByPhone
             className="authing-g2-input g2-send-code-input"
-            autoComplete="one-time-code"
+            autoComplete="off"
             key="internal-phone:phone345"
             size="large"
             placeholder={t('common.inputFourVerifyCode', {
@@ -255,7 +259,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         >
           <Input
             className="authing-g2-input"
-            autoComplete="email"
+            autoComplete="off"
             size="large"
             placeholder={t('login.inputEmail')}
           />
@@ -273,7 +277,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         >
           <SendCodeByEmail
             className="authing-g2-input g2-send-code-input"
-            autoComplete="one-time-code"
+            autoComplete="off"
             size="large"
             placeholder={t('common.inputFourVerifyCode', {
               length: verifyCodeLength,

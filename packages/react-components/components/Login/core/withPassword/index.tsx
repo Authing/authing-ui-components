@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useGuardHttp } from '../../../_utils/guardHttp'
@@ -14,6 +14,7 @@ import { GraphicVerifyCode } from './GraphicVerifyCode'
 import { IconFont } from '../../../IconFont'
 import { InputPassword } from '../../../InputPassword'
 import { Agreements } from '../../../Register/components/Agreements'
+import { AuthingResponse } from '../../../_utils/http'
 
 interface LoginWithPasswordProps {
   // configs
@@ -23,11 +24,14 @@ interface LoginWithPasswordProps {
 
   // events
   onLogin: any
-  onBeforeLogin: any
+  onBeforeLogin?: any
+  // 越过 login 正常的请求，返回一个 res
+  onLoginRequest?: (loginInfo: any) => Promise<AuthingResponse>
   passwordLoginMethods: PasswordLoginMethods[]
 
   agreements: Agreement[]
   loginWay?: LoginMethods
+  submitButText?: string
 }
 
 export const LoginWithPassword = (props: LoginWithPasswordProps) => {
@@ -55,6 +59,36 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
 
   const encrypt = client.options.encryptFunction
 
+  const loginRequest = useCallback(
+    async (loginInfo: any) => {
+      if (!!props.onLoginRequest) {
+        const res = await props.onLoginRequest(loginInfo)
+
+        return res
+      }
+
+      // onLogin
+      const { data: loginData } = loginInfo
+      let url = '/api/v2/login/account'
+      let account = loginData.identity && loginData.identity.trim()
+      let password = loginData.password && loginData.password.trim()
+      let captchaCode = loginData.captchaCode && loginData.captchaCode.trim()
+
+      let body = {
+        account: account,
+        password: await encrypt!(password, props.publicKey),
+        captchaCode,
+        customData: getUserRegisterParams(),
+        autoRegister: props.autoRegister,
+        withCustomData: true,
+      }
+      const res = await post(url, body)
+
+      return res
+    },
+    [encrypt, post, props]
+  )
+
   const onFinish = async (values: any) => {
     setValidated(true)
     if (agreements?.length && !acceptedAgreements) {
@@ -74,27 +108,19 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         captchaCode: values.captchaCode,
       },
     }
-    let context = await props.onBeforeLogin(loginInfo)
-    if (!context) {
+    let context = await props.onBeforeLogin?.(loginInfo)
+    if (!context && !!props.onBeforeLogin) {
       submitButtonRef?.current.onSpin(false)
       return
     }
 
-    // onLogin
-    let url = '/api/v2/login/account'
-    let account = values.account && values.account.trim()
-    let password = values.password && values.password.trim()
-    let captchaCode = values.captchaCode && values.captchaCode.trim()
+    const res = await loginRequest(loginInfo)
 
-    let body = {
-      account: account,
-      password: await encrypt!(password, props.publicKey),
-      captchaCode,
-      customData: getUserRegisterParams(),
-      autoRegister: props.autoRegister,
-      withCustomData: true,
-    }
-    const { code, message: msg, data } = await post(url, body)
+    onLoginRes(res)
+  }
+
+  const onLoginRes = (res: AuthingResponse) => {
+    const { code, message: msg, data } = res
 
     if (code !== 200) {
       submitButtonRef.current.onError()
@@ -128,6 +154,15 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     setRemainCount(0)
     setAccountLock(false)
   }, [props.loginWay])
+
+  const submitText = useMemo(() => {
+    if (props.submitButText) return props.submitButText
+
+    return props.autoRegister
+      ? `${t('common.login')} / ${t('common.register')}`
+      : t('common.login')
+  }, [props, t])
+
   return (
     <div className="authing-g2-login-password">
       <Form
@@ -143,7 +178,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         >
           <InputAccount
             className="authing-g2-input"
-            autoComplete="email,username,tel"
+            autoComplete="off"
             size="large"
             prefix={
               <IconFont
@@ -225,11 +260,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         )}
         <Form.Item>
           <SubmitButton
-            text={
-              props.autoRegister
-                ? `${t('common.login')} / ${t('common.register')}`
-                : t('common.login')
-            }
+            text={submitText}
             className="password"
             ref={submitButtonRef}
           />

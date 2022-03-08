@@ -371,7 +371,7 @@ export const shoudGoToComplete = (
   user: User,
   contextType: ComplateFiledsPlace,
   config: ApplicationConfig | undefined,
-  autoRegister?: boolean
+  autoRegister?: boolean //是否登录注册合并
 ) => {
   // console.log('需要补全吗？', user, contextType, config)
   // 先判断开关，再对比字段。
@@ -490,4 +490,8 @@ export const mailDesensitization = (mail: string) => {
 
 export const phoneDesensitization = (phone: string) => {
   return phone.replace(/(\d{3})\d*(\d{4})/, '$1****$2')
+}
+
+export const getHundreds = (num: number) => {
+  return Math.floor(num / 100)
 }

@@ -72,7 +72,7 @@ export const UseCode: React.FC<UseCodeProps> = ({ mfaToken, onSubmit }) => {
         >
           <Input
             className="authing-g2-input"
-            autoComplete="email"
+            autoComplete="off"
             size="large"
             placeholder={t('login.inputRecoverCode')}
             prefix={

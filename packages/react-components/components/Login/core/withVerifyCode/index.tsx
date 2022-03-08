@@ -9,7 +9,6 @@ import { Agreements } from '../../../Register/components/Agreements'
 import { EmailScene, SceneType } from 'authing-js-sdk'
 import { SendCodeByPhone } from '../../../SendCode/SendCodeByPhone'
 import { usePublicConfig } from '../../../_utils/context'
-import { VerifyLoginMethods } from '../../../AuthingGuard/api'
 import { SendCodeByEmail } from '../../../SendCode/SendCodeByEmail'
 import { FormItemIdentify } from './FormItemIdentify'
 import { InputIdentify } from './inputIdentify'
@@ -17,12 +16,7 @@ import { InputIdentify } from './inputIdentify'
 export const LoginWithVerifyCode = (props: any) => {
   const config = usePublicConfig()
 
-  const { agreements } = props
-
-  const methods = useMemo<VerifyLoginMethods[]>(
-    () => config?.verifyCodeTabConfig?.enabledLoginMethods ?? ['phone-code'],
-    [config?.verifyCodeTabConfig]
-  )
+  const { agreements, methods, submitButText } = props
 
   const verifyCodeLength = config?.verifyCodeLength ?? 4
 
@@ -48,7 +42,7 @@ export const LoginWithVerifyCode = (props: any) => {
             <SendCodeByPhone
               {...props}
               className="authing-g2-input g2-send-code-input"
-              autoComplete="one-time-code"
+              autoComplete="off"
               size="large"
               placeholder={t('common.inputFourVerifyCode', {
                 length: verifyCodeLength,
@@ -71,7 +65,7 @@ export const LoginWithVerifyCode = (props: any) => {
             <SendCodeByEmail
               {...props}
               className="authing-g2-input g2-send-code-input"
-              autoComplete="one-time-code"
+              autoComplete="off"
               size="large"
               placeholder={t('common.inputFourVerifyCode', {
                 length: verifyCodeLength,
@@ -137,13 +131,29 @@ export const LoginWithVerifyCode = (props: any) => {
     let loginInfo = {
       type: currentMethod,
       data: {
-        phone: values.phone,
+        identity: values.identify,
         code: values.code,
       },
     }
-    let context = await props.onBeforeLogin(loginInfo)
-    if (!context) {
+
+    let context = await props.onBeforeLogin?.(loginInfo)
+
+    if (!context && !!props.onBeforeLogin) {
       submitButtonRef.current.onSpin(false)
+      return
+    }
+
+    if (!!props.onLoginRequest) {
+      const res = await props.onLoginRequest?.(loginInfo)
+
+      const { code, message, data } = res
+
+      if (code !== 200) {
+        submitButtonRef.current.onError()
+      }
+      submitButtonRef?.current.onSpin(false)
+
+      props.onLogin(code, data, message)
       return
     }
 
@@ -154,6 +164,14 @@ export const LoginWithVerifyCode = (props: any) => {
     }
   }
 
+  const submitText = useMemo(() => {
+    if (submitButText) return submitButText
+
+    return props.autoRegister
+      ? `${t('common.login')} / ${t('common.register')}`
+      : t('common.login')
+  }, [props.autoRegister, submitButText, t])
+
   return (
     <div className="authing-g2-login-phone-code">
       <Form
@@ -163,11 +181,16 @@ export const LoginWithVerifyCode = (props: any) => {
         onFinishFailed={() => submitButtonRef.current.onError()}
         autoComplete="off"
       >
-        <FormItemIdentify name="identify" className="authing-g2-input-form">
+        <FormItemIdentify
+          name="identify"
+          className="authing-g2-input-form"
+          methods={methods}
+        >
           <InputIdentify
             className="authing-g2-input"
             size="large"
             value={identify}
+            methods={methods}
             onChange={(e) => {
               let v = e.target.value
               setIdentify(v)
@@ -203,11 +226,7 @@ export const LoginWithVerifyCode = (props: any) => {
         )}
         <Form.Item>
           <SubmitButton
-            text={
-              props.autoRegister
-                ? `${t('common.login')} / ${t('common.register')}`
-                : t('common.login')
-            }
+            text={submitText}
             className="password"
             ref={submitButtonRef}
           />

@@ -162,7 +162,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
         >
           <Input
             className="authing-g2-input"
-            autoComplete="tel"
+            autoComplete="off"
             size="large"
             placeholder={t('login.inputPhoneOrEmail')}
             prefix={
