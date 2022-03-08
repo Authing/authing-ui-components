@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form, Input } from 'antd'
+import { Form } from 'antd'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { fieldRequiredRule, validate } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
@@ -162,51 +162,6 @@ export const ResetPassword = (props: ResetPasswordProps) => {
           />
         </FormItemIdentify>
 
-        {/* <Form.Item
-          validateTrigger={['onBlur', 'onChange']}
-          className="authing-g2-input-form"
-          name="identify"
-          validateFirst={true}
-          rules={[
-            ...fieldRequiredRule(t('common.account')),
-            {
-              validator: async (_, value: StoreValue) => {
-                if (!value) {
-                  return
-                }
-                if (validate('email', value) || validate('phone', value)) {
-                  return
-                } else {
-                  throw new Error(t('login.inputCorrectPhoneOrEmail'))
-                }
-              },
-            },
-          ]}
-        >
-          <Input
-            className="authing-g2-input"
-            autoComplete="off"
-            size="large"
-            placeholder={t('login.inputPhoneOrEmail')}
-            value={identify}
-            onChange={(e) => {
-              let v = e.target.value
-              setIdentify(v)
-              if (validate('email', v)) {
-                setCodeMethod('email')
-              }
-              if (validate('phone', v)) {
-                setCodeMethod('phone')
-              }
-            }}
-            prefix={
-              <IconFont
-                type="authing-a-user-line1"
-                style={{ color: '#878A95' }}
-              />
-            }
-          />
-        </Form.Item> */}
         <Form.Item
           validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"

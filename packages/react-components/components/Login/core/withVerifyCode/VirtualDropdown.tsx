@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import { Select } from 'antd'
 import { isoInfo, IsoType } from '../../../_utils/countryList'
 import './styles.less'
