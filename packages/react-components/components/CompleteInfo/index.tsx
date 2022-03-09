@@ -7,7 +7,6 @@ import {
   CompleteInfoBaseControls,
   CompleteInfoExtendsControls,
   FormValidateRule,
-  GuardCompleteInfoViewProps,
 } from './interface'
 import './styles.less'
 import { IconFont } from '../IconFont'
