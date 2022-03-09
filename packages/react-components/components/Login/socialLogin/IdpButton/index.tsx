@@ -14,7 +14,7 @@ import shortid from 'shortid'
 import { useGuardAuthClient } from '../../../Guard/authClient'
 import { IconFont } from '../../../IconFont'
 import { isLarkBrowser, isWechatBrowser, popupCenter } from '../../../_utils'
-import { useGuardHttp } from '../../../_utils/guradHttp'
+import { useGuardHttp } from '../../../_utils/guardHttp'
 export const IdpButton = (props: any) => {
   const { i, appId, userPoolId, onGuardLogin } = props
 

@@ -9,8 +9,8 @@ import { codeMap } from '../Login/codemap'
 import { LoginWithPassword } from '../Login/core/withPassword'
 import { LoginWithVerifyCode } from '../Login/core/withVerifyCode'
 import { shoudGoToComplete } from '../_utils'
-import { usePublicConfig } from '../_utils/context'
-import { useGuardHttp } from '../_utils/guradHttp'
+import { useGuardPublicConfig } from '../_utils/context'
+import { useGuardHttp } from '../_utils/guardHttp'
 import { i18n } from '../_utils/locales'
 import { GuardIdentityBindingViewProps } from './interface'
 import './styles.less'
@@ -21,10 +21,12 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
   const { config, initData, __changeModule } = props
 
   const { t } = useTranslation()
+
   const { publicKey, autoRegister, agreementEnabled } = config
-  const publicConfig = usePublicConfig()
+  const publicConfig = useGuardPublicConfig()
 
   const { post } = useGuardHttp()
+
   const authClient = useGuardAuthClient()
 
   const onBack = () => {
@@ -186,7 +188,7 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
       title: t('common.verifyCodeLogin'),
       component: (
         <LoginWithVerifyCode
-          verifyCodeLength={props.config.__publicConfig__?.verifyCodeLength}
+          verifyCodeLength={publicConfig?.verifyCodeLength}
           autoRegister={false}
           onLoginRequest={onBind}
           onLogin={onLogin}
@@ -203,7 +205,7 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
         <LoginWithPassword
           publicKey={publicKey!}
           autoRegister={false}
-          host={config.__appHost__}
+          host={config.host}
           onLoginRequest={onBind}
           passwordLoginMethods={passwordLoginMethods}
           onLogin={onLogin}

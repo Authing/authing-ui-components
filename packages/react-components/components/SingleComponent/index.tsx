@@ -1,8 +1,18 @@
 import React from 'react'
-import { GuardRegisterView } from '../Register'
+import { GuardModuleType } from '..'
 import { GuardRegisterProps } from '../Register/interface'
 import { SingleComponent } from './SingleComponent'
 
 export const Register: React.FC<GuardRegisterProps> = (props) => {
-  return SingleComponent<GuardRegisterProps>(props, GuardRegisterView)
+  const { config } = props
+  return SingleComponent<GuardRegisterProps>(
+    {
+      ...props,
+      config: {
+        ...config,
+        __singleComponent__: true,
+      },
+    },
+    GuardModuleType.REGISTER
+  )
 }

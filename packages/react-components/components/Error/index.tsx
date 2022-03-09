@@ -1,12 +1,15 @@
 import React from 'react'
-import { GuardErrorViewProps } from './interface'
+import { ErrorInitData } from './interface'
 import { i18n } from '../_utils/locales'
 import './styles.less'
 import { IconFont } from '../IconFont'
+import { useGuardInitData } from '../_utils/context'
 
-export const GuardErrorView: React.FC<GuardErrorViewProps> = (props) => {
-  const messages = props?.initData?.messages
-    ? `${props?.initData?.messages} `
+export const GuardErrorView: React.FC = () => {
+  const { error } = useGuardInitData<ErrorInitData>()
+
+  const messages = error?.message
+    ? `${error?.message} `
     : `${i18n.t('user.contactAdministrator')}`
 
   return (

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { useGuardHttp } from '../../../_utils/guradHttp'
+import { useGuardHttp } from '../../../_utils/guardHttp'
 import { useGuardAuthClient } from '../../../Guard/authClient'
 import { fieldRequiredRule, getUserRegisterParams } from '../../../_utils'
 import { ErrorCode } from '../../../_utils/GuardErrorCode'

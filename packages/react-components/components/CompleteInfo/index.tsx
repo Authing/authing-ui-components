@@ -12,23 +12,32 @@ import {
 import './styles.less'
 import { IconFont } from '../IconFont'
 import { useGuardAuthClient } from '../Guard/authClient'
+import {
+  useGuardEvents,
+  useGuardFinallyConfig,
+  useGuardInitData,
+  useGuardModule,
+  useGuardPublicConfig,
+} from '../_utils/context'
 
-export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
-  config,
-  onRegisterInfoCompleted,
-  onRegisterInfoCompletedError,
-  __changeModule,
-  initData,
-  onLogin,
-}) => {
+export const GuardCompleteInfoView: React.FC = () => {
+  const config = useGuardFinallyConfig()
+
+  const events = useGuardEvents()
+
+  const initData = useGuardInitData<any>()
+
+  const { changeModule } = useGuardModule()
+
   const { t } = useTranslation()
 
   const authClient = useGuardAuthClient()
 
   const user = initData.user
 
-  const skipComplateFileds =
-    config?.__publicConfig__?.skipComplateFileds ?? false
+  const publicConfig = useGuardPublicConfig()
+
+  const skipComplateFileds = publicConfig?.skipComplateFileds ?? false
 
   const onSuccess = (
     udfs: {
@@ -36,11 +45,11 @@ export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
       value: any
     }[]
   ) => {
-    onRegisterInfoCompleted?.(user, udfs, authClient)
+    events?.onRegisterInfoCompleted?.(user, udfs, authClient)
     if (initData.context === 'register') {
-      __changeModule?.(GuardModuleType.LOGIN, {})
+      changeModule?.(GuardModuleType.LOGIN, {})
     } else {
-      onLogin(user)
+      events?.onLogin?.(user, authClient)
     }
   }
 
@@ -105,7 +114,7 @@ export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
       <div className="g2-view-header">
         <div className="g2-completeInfo-header">
           <ImagePro
-            src={config?.logo}
+            src={config?.logo!}
             size={48}
             borderRadius={4}
             alt=""
@@ -131,11 +140,10 @@ export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
       <div className="g2-view-tabs g2-completeInfo-content">
         <CompleteInfo
           metaData={metaData}
-          verifyCodeLength={config?.__publicConfig__?.verifyCodeLength}
           onRegisterInfoCompleted={(_, udfs) => {
             onSuccess(udfs)
           }}
-          onRegisterInfoCompletedError={onRegisterInfoCompletedError}
+          onRegisterInfoCompletedError={events?.onRegisterInfoCompletedError}
         />
       </div>
     </div>

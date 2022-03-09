@@ -5,13 +5,13 @@ import { useAsyncFn } from 'react-use'
 import { UploadImage } from '../../AuthingGuard/Forms/UploadImage'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { i18n } from '../../_utils/locales'
-import { useGuardHttp } from '../../_utils/guradHttp'
 import {
   CompleteInfoBaseControls,
   CompleteInfoExtendsControls,
   CompleteInfoMetaData,
-  GuardCompleteInfoViewProps,
 } from '../interface'
+import { useGuardHttp } from '../../_utils/guardHttp'
+import { GuardCompleteInfoViewProps } from '../interface'
 import SubmitButton from '../../SubmitButton'
 import { InputNumber } from '../../InputNumber'
 import { EmailScene, SceneType } from 'authing-js-sdk'
@@ -19,7 +19,7 @@ import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
 import { fieldRequiredRule } from '../../_utils'
 import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
-import { usePublicConfig } from '../../_utils/context'
+import { useGuardPublicConfig } from '../../_utils/context'
 export interface CompleteInfoProps {
   metaData: CompleteInfoMetaData[]
   onRegisterInfoCompleted?: GuardCompleteInfoViewProps['onRegisterInfoCompleted']
@@ -44,7 +44,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
     onRegisterInfoCompletedError,
   } = props
 
-  const config = usePublicConfig()
+  const config = useGuardPublicConfig()
 
   const verifyCodeLength = config?.verifyCodeLength
 

@@ -13,6 +13,7 @@ import { MFAConfig } from '../interface'
 import { InputNumber } from '../../InputNumber'
 import { IconFont } from '../../IconFont'
 import { phoneDesensitization } from '../../_utils'
+import { useGuardPublicConfig } from '../../_utils/context'
 export interface BindMFASmsProps {
   mfaToken: string
   onBind: (phone: string) => void
@@ -187,7 +188,9 @@ export const MFASms: React.FC<{
   const [phone, setPhone] = useState(userPhone)
   const sendCodeRef = useRef<HTMLButtonElement>(null)
 
-  const codeLength = config.__publicConfig__?.verifyCodeLength
+  const publicConfig = useGuardPublicConfig()
+
+  const codeLength = publicConfig?.verifyCodeLength
 
   return (
     <>

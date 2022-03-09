@@ -25,7 +25,8 @@ export class GuardHttp {
     ResponseInterceptor
   > = new Map()
 
-  constructor(baseUrl: string) {
+  constructor(baseUrl?: string) {
+    if (!baseUrl) return
     this.getRequestClient().setBaseUrl(baseUrl)
   }
 
@@ -111,7 +112,7 @@ export class GuardHttp {
     callBack: (code: CodeAction, res: AuthingResponse) => void
   ) => {
     // 初始化 errorCode 响应拦截器
-    if (!this.responseInterceptorMap.has(InterceptorName.ERROR_CODE)) return
+    if (this.responseInterceptorMap.has(InterceptorName.ERROR_CODE)) return
 
     this.responseInterceptorMap.set(
       InterceptorName.ERROR_CODE,

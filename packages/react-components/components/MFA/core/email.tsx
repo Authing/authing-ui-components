@@ -12,6 +12,7 @@ import { MFAConfig } from '../interface'
 import { VerifyCodeFormItem } from '../VerifyCodeInput/VerifyCodeFormItem'
 import { IconFont } from '../../IconFont'
 import { mailDesensitization } from '../../_utils'
+import { useGuardPublicConfig } from '../../_utils/context'
 
 interface BindMFAEmailProps {
   mfaToken: string
@@ -185,7 +186,9 @@ export const MFAEmail: React.FC<{
   const [email, setEmail] = useState(userEmail)
   const sendCodeRef = useRef<HTMLButtonElement>(null)
 
-  const codeLength = config.__publicConfig__?.verifyCodeLength
+  const publicConfig = useGuardPublicConfig()
+
+  const codeLength = publicConfig?.verifyCodeLength
 
   return (
     <>

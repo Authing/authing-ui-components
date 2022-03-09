@@ -1,10 +1,9 @@
 import { LoginMethods, RegisterMethods } from 'authing-js-sdk'
 import { IG2Config } from '../Type'
 import { ApplicationConfig } from '../AuthingGuard/api'
-import { assembledRequestHost } from '.'
-import { getGuardHttp } from './guradHttp'
+import { getGuardHttp } from './guardHttp'
 import { AuthingResponse } from './http'
-import { GuardComponentConifg, GuardLocalConfig } from '../Guard/config'
+import { GuardComponentConfig, GuardLocalConfig } from '../Guard/config'
 import { corsVerification } from './corsVerification'
 
 let publicConfigMap: Record<string, ApplicationConfig> = {}
@@ -29,21 +28,20 @@ export const initConfig = async (
   return {
     config: {
       ...mergedConfig,
-      __publicConfig__: getPublicConfig(appId),
       // 请求地址 拼装
-      __appHost__: config?.__internalRequest__
-        ? mergedConfig?.host
-        : assembledRequestHost(
-            getPublicConfig(appId).requestHostname,
-            mergedConfig?.host!
-          ),
+      // __appHost__: config?.__internalRequest__
+      //   ? mergedConfig?.host
+      //   : assembledRequestHost(
+      //       getPublicConfig(appId).requestHostname,
+      //       mergedConfig?.host!
+      //     ),
     },
     publicConfig: getPublicConfig(appId),
   }
 }
 
 const mergeConfig = (
-  config: GuardComponentConifg,
+  config: GuardComponentConfig,
   defaultConfig: IG2Config,
   publicConfig: ApplicationConfig
 ): GuardLocalConfig => {

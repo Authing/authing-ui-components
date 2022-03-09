@@ -3,18 +3,24 @@ import { User } from 'authing-js-sdk'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import { ErrorCode } from '../_utils/GuardErrorCode'
-import { useGuardHttp } from '../_utils/guradHttp'
+import { useGuardHttp } from '../_utils/guardHttp'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
 import { IconFont } from '../IconFont'
 import { ShieldSpin, Spin } from '../ShieldSpin'
 import { BindSuccess } from './core/bindSuccess'
 import { SecurityCode } from './core/securityCode'
-import { GuardBindTotpViewProps } from './interface'
+import { GuardBindTotpInitData } from './interface'
 import { useTranslation } from 'react-i18next'
 import './styles.less'
 import { shoudGoToComplete } from '../_utils'
-import { usePublicConfig } from '../_utils/context'
+import {
+  useGuardEvents,
+  useGuardFinallyConfig,
+  useGuardInitData,
+  useGuardModule,
+  useGuardPublicConfig,
+} from '../_utils/context'
 import { MFAType } from '../MFA/interface'
 
 enum BindTotpType {
@@ -22,18 +28,21 @@ enum BindTotpType {
   BIND_SUCCESS = 'bindSuccess',
 }
 
-export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
-  config,
-  initData,
-  onLogin,
-  __changeModule,
-}) => {
+export const GuardBindTotpView: React.FC = () => {
+  const config = useGuardFinallyConfig()
+
+  const initData = useGuardInitData<GuardBindTotpInitData>()
+
+  const events = useGuardEvents()
+
+  const { changeModule } = useGuardModule()
+
   const { get, post } = useGuardHttp()
   const { t } = useTranslation()
   const [secret, setSecret] = useState('')
   const [qrcode, setQrcode] = useState('')
   const [user, setUser] = useState<User>()
-  const publicConfig = usePublicConfig()
+  const publicConfig = useGuardPublicConfig()
   const [bindTotpType, setBindTotpType] = useState<BindTotpType>(
     BindTotpType.SECURITY_CODE
   )
@@ -60,7 +69,7 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
 
       if (data.code === ErrorCode.LOGIN_INVALID) {
         message.error(data.message)
-        __changeModule?.(GuardModuleType.LOGIN, {})
+        changeModule?.(GuardModuleType.LOGIN, {})
         return
       }
     } catch (error: any) {
@@ -81,12 +90,12 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
     if (user) {
       if (shoudGoToComplete(user, 'login', publicConfig, config.autoRegister)) {
         console.log('登陆成功，用户为', user)
-        __changeModule?.(GuardModuleType.COMPLETE_INFO, {
+        changeModule?.(GuardModuleType.COMPLETE_INFO, {
           context: 'login',
           user: user,
         })
       } else {
-        onLogin?.(user, authClient) // 登录成功
+        events?.onLogin?.(user, authClient) // 登录成功
       }
     }
   }
@@ -111,7 +120,7 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
   )
 
   const onBack = () => {
-    __changeModule?.(GuardModuleType.MFA, { current: MFAType.TOTP })
+    changeModule?.(GuardModuleType.MFA, { current: MFAType.TOTP })
   }
 
   return (
@@ -139,7 +148,7 @@ export const GuardBindTotpView: React.FC<GuardBindTotpViewProps> = ({
                 secret,
                 onBind,
                 onNext,
-                changeModule: __changeModule,
+                changeModule: changeModule,
               })
             )}
           </div>

@@ -8,13 +8,13 @@ import { IconFont } from '../../../IconFont'
 import { Agreements } from '../../../Register/components/Agreements'
 import { EmailScene, SceneType } from 'authing-js-sdk'
 import { SendCodeByPhone } from '../../../SendCode/SendCodeByPhone'
-import { usePublicConfig } from '../../../_utils/context'
+import { useGuardPublicConfig } from '../../../_utils/context'
 import { SendCodeByEmail } from '../../../SendCode/SendCodeByEmail'
 import { FormItemIdentify } from './FormItemIdentify'
 import { InputIdentify } from './inputIdentify'
 
 export const LoginWithVerifyCode = (props: any) => {
-  const config = usePublicConfig()
+  const config = useGuardPublicConfig()
 
   const { agreements, methods, submitButText } = props
 

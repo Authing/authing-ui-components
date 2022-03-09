@@ -7,8 +7,8 @@ import { useGuardAuthClient } from '../Guard/authClient'
 import { IconFont } from '../IconFont'
 import { codeMap } from '../Login/codemap'
 import { shoudGoToComplete } from '../_utils'
-import { usePublicConfig } from '../_utils/context'
-import { useGuardHttp } from '../_utils/guradHttp'
+import { useGuardPublicConfig } from '../_utils/context'
+import { useGuardHttp } from '../_utils/guardHttp'
 import { GuardIdentityBindingAskViewProps } from './interface'
 import './styles.less'
 
@@ -21,7 +21,7 @@ export const GuardIdentityBindingAskView: React.FC<GuardIdentityBindingAskViewPr
   const authClient = useGuardAuthClient()
 
   const onBack = () => __changeModule?.(GuardModuleType.LOGIN)
-  const publicConfig = usePublicConfig()
+  const publicConfig = useGuardPublicConfig()
 
   const __codePaser = (code: number) => {
     const action = codeMap[code]

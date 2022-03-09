@@ -1,5 +1,5 @@
 import { User } from '..'
-import { getGuardHttp } from '../_utils/guradHttp'
+import { getGuardHttp } from '../_utils/guardHttp'
 
 export interface SessionData {
   session: null | {

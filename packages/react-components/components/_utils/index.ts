@@ -491,3 +491,7 @@ export const mailDesensitization = (mail: string) => {
 export const phoneDesensitization = (phone: string) => {
   return phone.replace(/(\d{3})\d*(\d{4})/, '$1****$2')
 }
+
+export const getHundreds = (num: number) => {
+  return Math.floor(num / 100)
+}

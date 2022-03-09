@@ -5,7 +5,7 @@ import { getDefaultLoginConfig, LoginConfig } from '../Login/interface'
 import { getDefaultRegisterConfig, RegisterConfig } from '../Register/interface'
 import { ShieldSpin } from '../ShieldSpin'
 
-export interface GuardComponentConifg extends Partial<GuardLocalConfig> {}
+export interface GuardComponentConfig extends Partial<GuardLocalConfig> {}
 
 export interface GuardLocalConfig extends RegisterConfig, LoginConfig {
   isSSO?: boolean

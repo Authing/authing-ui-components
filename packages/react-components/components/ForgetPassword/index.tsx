@@ -6,53 +6,63 @@ import { GuardModuleType } from '../Guard/module'
 import { ResetPassword } from './core/resetPassword'
 
 import { ImagePro } from '../ImagePro'
-import { ForgetPasswordViewProps } from './interface'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { CommonMessage } from '..'
+import {
+  useGuardEvents,
+  useGuardFinallyConfig,
+  useGuardModule,
+  useGuardPublicConfig,
+} from '../_utils/context'
 // import { ChangeLanguage } from '../ChangeLanguage'
 
-export const GuardForgetPassword: React.FC<ForgetPasswordViewProps> = (
-  props
-) => {
-  // let { langRange } = props.config
+export const GuardForgetPassword: React.FC = () => {
   const { t } = useTranslation()
-  let publicConfig = props.config.__publicConfig__
+
+  const events = useGuardEvents()
+
+  const publicConfig = useGuardPublicConfig()
+
   const authClient = useGuardAuthClient()
+
+  const config = useGuardFinallyConfig()
+
+  const { changeModule } = useGuardModule()
 
   const onReset = (res: any) => {
     let code = res.code
     if (code !== 200) {
-      props.onPwdResetError?.(res, authClient)
+      events?.onPwdResetError?.(res, authClient)
       message.error(res.message)
       return
     }
-    props.onPwdReset?.(authClient)
+    events?.onPwdReset?.(authClient)
     // 返回登录
     const initData = {
       title: t('common.resetSuccess'),
       message: t('common.resetSuccessMessage'),
     }
-    props.__changeModule?.(GuardModuleType.SUBMIT_SUCCESS, {
+    changeModule?.(GuardModuleType.SUBMIT_SUCCESS, {
       ...initData,
     })
   }
 
   const onSend = (type: 'phone' | 'email') => {
-    if (type === 'phone') props.onPwdPhoneSend?.(authClient)
-    if (type === 'email') props.onPwdEmailSend?.(authClient)
+    if (type === 'phone') events?.onPwdPhoneSend?.(authClient)
+    if (type === 'email') events?.onPwdEmailSend?.(authClient)
   }
   const onSendError = (type: 'phone' | 'email', error: any) => {
     if (type === 'phone')
-      props.onPwdPhoneSendError?.(error as CommonMessage, authClient)
+      events?.onPwdPhoneSendError?.(error as CommonMessage, authClient)
     if (type === 'email')
-      props.onPwdEmailSendError?.(error as CommonMessage, authClient)
+      events?.onPwdEmailSendError?.(error as CommonMessage, authClient)
   }
 
   return (
     <div className="g2-view-container g2-forget-password">
       <div className="g2-view-header">
         <ImagePro
-          src={props.config?.logo}
+          src={config?.logo!}
           size={48}
           borderRadius={4}
           alt=""
@@ -72,7 +82,7 @@ export const GuardForgetPassword: React.FC<ForgetPasswordViewProps> = (
       <div className="g2-tips-line">
         <div
           className="link-like back-to-login"
-          onClick={() => props.__changeModule?.(GuardModuleType.LOGIN)}
+          onClick={() => changeModule?.(GuardModuleType.LOGIN)}
         >
           {t('common.backLoginPage')}
         </div>
