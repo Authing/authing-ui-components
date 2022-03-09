@@ -1,4 +1,3 @@
-import { GuardLocalConfig } from '..'
 import version from '../version'
 import { AuthingResponse, requestClient } from './http'
 import { errorCodeInterceptor } from './responseManagement'

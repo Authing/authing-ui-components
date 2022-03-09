@@ -1,6 +1,5 @@
 import { AuthenticationClient, CommonMessage } from 'authing-js-sdk'
 import { Lang } from 'authing-js-sdk/build/main/types'
-import { ApplicationConfig } from '../AuthingGuard/api'
 import { GuardMode } from '../AuthingGuard/types/GuardConfig'
 import { GuardModuleType } from '../Guard/module'
 export interface IG2FCProps extends IG2Events {
@@ -26,6 +25,7 @@ export interface IG2Config {
   contentCss?: string
   target?: HTMLElement | string
   __internalRequest__?: boolean
+  __singleComponent__?: boolean
 }
 
 const defaultG2Config: IG2Config = {

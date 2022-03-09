@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { GuardEvents, GuardLocalConfig, GuardModuleType } from '..'
 import { ApplicationConfig } from '../AuthingGuard/api'
+import { ModuleState } from '../Guard/GuardModule/stateMachine'
 import { GuardHttp } from './guardHttp'
 
 const GuardFinallyConfigContext = React.createContext<GuardLocalConfig>(
@@ -15,6 +16,21 @@ export const createGuardFinallyConfigContext = () => {
     Provider,
     Consumer,
     Context: GuardFinallyConfigContext,
+  }
+}
+
+const GuardDefaultMergedConfigContext = React.createContext<GuardLocalConfig>(
+  {} as GuardLocalConfig
+)
+
+export const createGuardDefaultMergedConfigContext = () => {
+  const Provider = GuardDefaultMergedConfigContext.Provider
+  const Consumer = GuardDefaultMergedConfigContext.Consumer
+
+  return {
+    Provider,
+    Consumer,
+    Context: GuardDefaultMergedConfigContext,
   }
 }
 
@@ -72,6 +88,21 @@ export const createInitDataContext = () => {
   }
 }
 
+const GuardCurrentModuleContext = React.createContext<ModuleState>(
+  {} as ModuleState
+)
+
+export const createGuardCurrentModuleContext = () => {
+  const Provider = GuardCurrentModuleContext.Provider
+  const Consumer = GuardCurrentModuleContext.Consumer
+
+  return {
+    Provider,
+    Consumer,
+    Context: GuardCurrentModuleContext,
+  }
+}
+
 const GuardEventsContext = React.createContext<
   Partial<GuardEvents> | undefined
 >(undefined)
@@ -103,9 +134,25 @@ export const createGuardModuleContext = () => {
   }
 }
 
+const GuardContextLoaded = React.createContext<boolean>(false)
+
+export const createGuardContextLoaded = () => {
+  const Provider = GuardContextLoaded.Provider
+  const Consumer = GuardContextLoaded.Consumer
+
+  return {
+    Provider,
+    Consumer,
+    Context: GuardContextLoaded,
+  }
+}
+
 export const useGuardPublicConfig = () => useContext(GuardPublicConfigContext)
 
 export const useGuardHttpClient = () => useContext(GuardHttpClientContext)
+
+export const useGuardDefaultMergedConfigContext = () =>
+  useContext(GuardDefaultMergedConfigContext)
 
 export const useGuardAppId = () => useContext(GuardAppIdContext)
 
@@ -114,8 +161,12 @@ export function useGuardInitData<T>(): T {
   return data as T
 }
 
+export const useGuardCurrentModule = () => useContext(GuardCurrentModuleContext)
+
 export const useGuardEvents = () => useContext(GuardEventsContext)
 
 export const useGuardModule = () => useContext(GuardModuleContext)
 
 export const useGuardFinallyConfig = () => useContext(GuardFinallyConfigContext)
+
+export const useGuardContextLoaded = () => useContext(GuardContextLoaded)

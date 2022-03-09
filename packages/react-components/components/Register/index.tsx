@@ -7,18 +7,23 @@ import { useGuardAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
 import { RegisterWithEmail } from './core/WithEmail'
 import { RegisterWithPhone } from './core/WithPhone'
-import { GuardRegisterViewProps } from './interface'
 import { codeMap } from './codemap'
 import { shoudGoToComplete, tabSort } from '../_utils'
 import { i18n } from '../_utils/locales'
-import { useGuardPublicConfig } from '../_utils/context'
+import {
+  useGuardEvents,
+  useGuardFinallyConfig,
+  useGuardModule,
+  useGuardPublicConfig,
+} from '../_utils/context'
 
-export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
-  config,
-  onLangChange,
-  __changeModule,
-  ...registerEvents
-}) => {
+export const GuardRegisterView: React.FC = () => {
+  const events = useGuardEvents()
+
+  const config = useGuardFinallyConfig()
+
+  const { changeModule } = useGuardModule()
+
   const { t } = useTranslation()
   const agreementEnabled = config?.agreementEnabled
   const { langRange } = config
@@ -33,13 +38,13 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
       return (user: User) => {
         // TODO 用户信息补全 等待后端接口修改
         if (shoudGoToComplete(user, 'register', publicConfig)) {
-          __changeModule?.(GuardModuleType.COMPLETE_INFO, {
+          changeModule?.(GuardModuleType.COMPLETE_INFO, {
             context: 'register',
             user: user,
           })
         } else {
-          registerEvents.onRegister?.(user, authClient)
-          __changeModule?.(GuardModuleType.LOGIN, {})
+          events?.onRegister?.(user, authClient)
+          changeModule?.(GuardModuleType.LOGIN, {})
         }
       }
     }
@@ -73,7 +78,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
         console.log('注册 onRegister')
         const callback = __codePaser(code)
         if (code !== 200) {
-          registerEvents.onRegisterError?.({
+          events?.onRegisterError?.({
             code,
             data,
             message,
@@ -86,7 +91,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
         })
       },
       registeContext: config.registeContext,
-      onBeforeRegister: registerEvents.onBeforeRegister,
+      onBeforeRegister: events?.onBeforeRegister,
       //availableAt 0或者null-注册时，1-登录时，2-注册和登录时
       agreements: agreementEnabled
         ? config?.agreements?.filter(
@@ -99,7 +104,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
     [
       agreementEnabled,
       config?.agreements,
-      registerEvents.onBeforeRegister,
+      events?.onBeforeRegister,
       i18n.language,
     ]
   )
@@ -143,7 +148,7 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
           <Tabs
             defaultActiveKey={config?.defaultRegisterMethod}
             onChange={(activeKey) => {
-              registerEvents.onRegisterTabChange?.(activeKey as RegisterMethods)
+              events?.onRegisterTabChange?.(activeKey as RegisterMethods)
             }}
           >
             {renderTab}
@@ -154,14 +159,17 @@ export const GuardRegisterView: React.FC<GuardRegisterViewProps> = ({
             {/* <span className="gray">{t('common.alreadyHasAcc')}</span> */}
             <span
               className="link-like"
-              onClick={() => __changeModule?.(GuardModuleType.LOGIN, {})}
+              onClick={() => changeModule?.(GuardModuleType.LOGIN, {})}
             >
               {t('common.backLoginPage')}
             </span>
           </span>
         </div>
       </div>
-      <ChangeLanguage langRange={langRange} onLangChange={onLangChange} />
+      <ChangeLanguage
+        langRange={langRange}
+        onLangChange={events?.onLangChange}
+      />
     </div>
   )
 }

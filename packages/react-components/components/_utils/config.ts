@@ -1,12 +1,10 @@
 import { LoginMethods, RegisterMethods } from 'authing-js-sdk'
 import { IG2Config } from '../Type'
 import { ApplicationConfig } from '../AuthingGuard/api'
-import { assembledRequestHost as utilAssembledRequestHost } from '.'
 import { getGuardHttp } from './guardHttp'
 import { AuthingResponse } from './http'
 import { GuardComponentConfig, GuardLocalConfig } from '../Guard/config'
 import { corsVerification } from './corsVerification'
-import { useCallback, useEffect, useState } from 'react'
 
 let publicConfigMap: Record<string, ApplicationConfig> = {}
 

@@ -5,11 +5,11 @@ import './styles.less'
 import { IconFont } from '../IconFont'
 import { useGuardInitData } from '../_utils/context'
 
-export const GuardErrorView: React.FC = (props) => {
-  const initData = useGuardInitData<ErrorInitData>()
+export const GuardErrorView: React.FC = () => {
+  const { error } = useGuardInitData<ErrorInitData>()
 
-  const messages = initData?.messages
-    ? `${initData?.messages} `
+  const messages = error?.message
+    ? `${error?.message} `
     : `${i18n.t('user.contactAdministrator')}`
 
   return (

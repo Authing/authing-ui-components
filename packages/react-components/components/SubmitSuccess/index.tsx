@@ -3,14 +3,20 @@ import { useTranslation } from 'react-i18next'
 import { GuardModuleType } from '..'
 import { ImagePro } from '../ImagePro'
 import SubmitButton from '../SubmitButton'
-import { useGuardPublicConfig } from '../_utils/context'
-import { GuardSubmitSuccessViewProps } from './interface'
+import {
+  useGuardInitData,
+  useGuardModule,
+  useGuardPublicConfig,
+} from '../_utils/context'
+import { SubmitSuccessInitData } from './interface'
 
-export const GuardSubmitSuccessView: React.FC<GuardSubmitSuccessViewProps> = (
-  props
-) => {
+export const GuardSubmitSuccessView: React.FC = () => {
   const { t } = useTranslation()
-  const { initData, config } = props
+
+  const initData = useGuardInitData<SubmitSuccessInitData>()
+
+  const { changeModule: __changeModule } = useGuardModule()
+
   const [countDown, setCountDown] = useState(5)
 
   const timerRef = useRef<any>(0)
@@ -39,7 +45,7 @@ export const GuardSubmitSuccessView: React.FC<GuardSubmitSuccessViewProps> = (
   useEffect(() => {
     if (countDown <= 0) {
       clearInterval(timerRef.current)
-      props.__changeModule?.(changeModule)
+      __changeModule?.(changeModule)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countDown])
@@ -58,7 +64,7 @@ export const GuardSubmitSuccessView: React.FC<GuardSubmitSuccessViewProps> = (
         <div className="message">{message}</div>
         <SubmitButton
           onClick={() => {
-            props.__changeModule?.(changeModule)
+            __changeModule?.(changeModule)
           }}
           text={text as string}
         />

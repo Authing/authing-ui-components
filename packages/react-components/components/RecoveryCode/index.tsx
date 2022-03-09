@@ -4,25 +4,36 @@ import { GuardModuleType, User } from '..'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { IconFont } from '../IconFont'
 import { MFAType } from '../MFA/interface'
+import {
+  useGuardEvents,
+  useGuardInitData,
+  useGuardModule,
+} from '../_utils/context'
 import { SaveCode } from './core/saveCode'
 import { UseCode } from './core/useCode'
-import { GuardRecoveryCodeViewProps } from './interface'
+import { GuardRecoveryCodeInitData } from './interface'
 import './style.less'
 
-export const GuardRecoveryCodeView: React.FC<GuardRecoveryCodeViewProps> = ({
-  initData,
-  onLogin,
-  __changeModule,
-}) => {
+export const GuardRecoveryCodeView: React.FC = () => {
+  const { changeModule } = useGuardModule()
+
+  const initData = useGuardInitData<GuardRecoveryCodeInitData>()
+
+  const events = useGuardEvents()
+
   const onBack = () =>
-    __changeModule?.(GuardModuleType.MFA, { current: MFAType.TOTP })
+    changeModule?.(GuardModuleType.MFA, { current: MFAType.TOTP })
+
   const { t } = useTranslation()
+
   const [user, setUser] = useState<User>()
+
   const [code, setCode] = useState<string>()
+
   const authClient = useGuardAuthClient()
 
   const onBind = () => {
-    if (user) onLogin?.(user, authClient)
+    if (user) events?.onLogin?.(user, authClient)
   }
   return (
     <div className="g2-view-container g2-mfa-recovery-code">

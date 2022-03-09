@@ -3,16 +3,25 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { GuardModuleType } from '../Guard/module'
 import { ImagePro } from '../ImagePro'
-import { useGuardPublicConfig } from '../_utils/context'
+import {
+  useGuardFinallyConfig,
+  useGuardInitData,
+  useGuardModule,
+  useGuardPublicConfig,
+} from '../_utils/context'
 import { FirstLoginReset } from './core/firstLoginReset'
 import { RotateReset } from './core/rotateReset'
 
 // 手动修改密码，并非「忘记密码」
 // 进入的场景是读取配置：1开了首次登录修改密码 || 2开了密码轮换
-export const GuardChangePassword = (props: any) => {
-  let { initData, config } = props
+export const GuardChangePassword = () => {
+  const initData = useGuardInitData<any>()
+
+  const config = useGuardFinallyConfig()
 
   const publicConfig = useGuardPublicConfig()
+
+  const { changeModule } = useGuardModule()
 
   const { t } = useTranslation()
 
@@ -22,7 +31,7 @@ export const GuardChangePassword = (props: any) => {
       message.success(t('common.updatePsswordSuccess'))
       // 返回登录
       setTimeout(() => {
-        props.__changeModule(GuardModuleType.LOGIN)
+        changeModule?.(GuardModuleType.LOGIN)
       }, 500)
     } else {
       console.log('*** reset code no catched', res)

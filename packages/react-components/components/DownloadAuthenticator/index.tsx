@@ -3,7 +3,6 @@ import React, { ReactNode, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ImagePro } from '../ImagePro'
 import { IconFont } from '../IconFont'
-import { GuardDownloadATViewProps } from './interface'
 import './styles.less'
 import { useGuardPublicConfig } from '../_utils/context'
 
@@ -12,9 +11,7 @@ enum DownloadType {
   Android = 'Android',
 }
 
-export const GuardDownloadATView: React.FC<GuardDownloadATViewProps> = ({
-  config,
-}) => {
+export const GuardDownloadATView: React.FC = () => {
   const { t } = useTranslation()
 
   const publicConfig = useGuardPublicConfig()

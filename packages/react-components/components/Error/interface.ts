@@ -1,5 +1,5 @@
 export interface ErrorInitData {
-  messages?: string
+  error?: Error
 }
 
 export interface GuardErrorProps {

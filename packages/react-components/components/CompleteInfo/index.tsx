@@ -3,20 +3,26 @@ import { useTranslation } from 'react-i18next'
 import { ImagePro } from '../ImagePro'
 import { GuardModuleType } from '../Guard/module'
 import { CompleteInfo } from './core/completeInfo'
-import { GuardCompleteInfoViewProps } from './interface'
 import './styles.less'
 import { IconFont } from '../IconFont'
 import { useGuardAuthClient } from '../Guard/authClient'
-import { useGuardPublicConfig } from '../_utils/context'
+import {
+  useGuardEvents,
+  useGuardFinallyConfig,
+  useGuardInitData,
+  useGuardModule,
+  useGuardPublicConfig,
+} from '../_utils/context'
 
-export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
-  config,
-  onRegisterInfoCompleted,
-  onRegisterInfoCompletedError,
-  __changeModule,
-  initData,
-  onLogin,
-}) => {
+export const GuardCompleteInfoView: React.FC = () => {
+  const config = useGuardFinallyConfig()
+
+  const events = useGuardEvents()
+
+  const initData = useGuardInitData<any>()
+
+  const { changeModule } = useGuardModule()
+
   const { t } = useTranslation()
 
   const authClient = useGuardAuthClient()
@@ -33,11 +39,11 @@ export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
       value: any
     }[]
   ) => {
-    onRegisterInfoCompleted?.(user, udfs, authClient)
+    events?.onRegisterInfoCompleted?.(user, udfs, authClient)
     if (initData.context === 'register') {
-      __changeModule?.(GuardModuleType.LOGIN, {})
+      changeModule?.(GuardModuleType.LOGIN, {})
     } else {
-      onLogin(user)
+      events?.onLogin?.(user, authClient)
     }
   }
 
@@ -77,7 +83,7 @@ export const GuardCompleteInfoView: React.FC<GuardCompleteInfoViewProps> = ({
           onRegisterInfoCompleted={(_, udfs) => {
             onSuccess(udfs)
           }}
-          onRegisterInfoCompletedError={onRegisterInfoCompletedError}
+          onRegisterInfoCompletedError={events?.onRegisterInfoCompletedError}
         />
       </div>
     </div>

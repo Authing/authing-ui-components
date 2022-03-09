@@ -7,13 +7,19 @@ import { MFASms } from './core/sms'
 import { MFAFace } from './core/face'
 import { MFATotp } from './core/totp'
 import { MFAMethods } from './mfaMethods'
-import { GuardMFAViewProps, MFAType } from './interface'
+import { GuardMFAInitData, MFAType } from './interface'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { codeMap } from './codemap'
 import './styles.less'
 import { message } from 'antd'
 import { shoudGoToComplete } from '../_utils'
-import { useGuardPublicConfig } from '../_utils/context'
+import {
+  useGuardEvents,
+  useGuardFinallyConfig,
+  useGuardInitData,
+  useGuardModule,
+  useGuardPublicConfig,
+} from '../_utils/context'
 interface MFABackStateContextType {
   setMfaBackState: React.Dispatch<React.SetStateAction<string>>
   mfaBackState: string
@@ -57,12 +63,15 @@ const ComponentsMapping: Record<MFAType, (props: any) => React.ReactNode> = {
   ),
 }
 
-export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
-  initData,
-  config,
-  __changeModule,
-  onLogin,
-}) => {
+export const GuardMFAView: React.FC = () => {
+  const initData = useGuardInitData<GuardMFAInitData>()
+
+  const config = useGuardFinallyConfig()
+
+  const { changeModule } = useGuardModule()
+
+  const events = useGuardEvents()
+
   const [currentMethod, setCurrentMethod] = useState(
     initData.current ??
       initData.applicationMfa?.sort((a, b) => a.sort - b.sort)[0].mfaPolicy
@@ -85,7 +94,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
       setMfaBackState('login')
       return
     }
-    __changeModule?.(GuardModuleType.LOGIN)
+    changeModule?.(GuardModuleType.LOGIN)
   }
 
   const __codePaser = (code: number, msg?: string) => {
@@ -94,12 +103,12 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
     if (code === 200) {
       return (data: any) => {
         if (shoudGoToComplete(data, 'login', publicConfig, autoRegister)) {
-          __changeModule?.(GuardModuleType.COMPLETE_INFO, {
+          changeModule?.(GuardModuleType.COMPLETE_INFO, {
             context: 'login',
             user: data,
           })
         } else {
-          onLogin?.(data, client!) // 登录成功
+          events?.onLogin?.(data, client!) // 登录成功
         }
       }
     }
@@ -115,7 +124,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
     if (action?.action === 'changeModule') {
       let m = action.module ? action.module : GuardModuleType.ERROR
       let init = action.initData ? action.initData : {}
-      return (initData?: any) => __changeModule?.(m, { ...initData, init })
+      return (initData?: any) => changeModule?.(m, { ...initData, init })
     }
     if (action?.action === 'insideFix') {
       return () => {}
@@ -168,7 +177,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
           {ComponentsMapping[currentMethod]({
             config: config,
             initData: initData,
-            changeModule: __changeModule,
+            changeModule: changeModule,
             mfaLogin: mfaLogin,
             setShowMethods: setShowMethods,
           })}

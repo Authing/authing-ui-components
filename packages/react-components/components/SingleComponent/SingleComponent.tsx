@@ -8,7 +8,6 @@ import {
   GuardLocalConfig,
   IG2FCProps,
   initConfig,
-  LangMAP,
 } from '..'
 import { ApplicationConfig } from '../AuthingGuard/api'
 import { initGuardAuthClient } from '../Guard/authClient'
@@ -20,6 +19,7 @@ import enUS from 'antd/lib/locale/en_US'
 import { createGuardPublicConfigContext } from '../_utils/context'
 import { ShieldSpin } from '../ShieldSpin'
 import { GuardErrorView } from '../Error'
+import { LangMAP } from '../Guard/core/renderModule'
 
 const langMap = {
   [LangMAP.zhCn]: zhCN,
