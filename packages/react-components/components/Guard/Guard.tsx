@@ -241,7 +241,7 @@ export const Guard = (props: GuardProps) => {
     if (!!GuardLocalConfig) {
       const events = guardEventsFilter(
         { ...props },
-        GuardLocalConfig.openEventsMapping as boolean
+        GuardLocalConfig.openEventsMapping
       )
       setEvents(events)
     }
