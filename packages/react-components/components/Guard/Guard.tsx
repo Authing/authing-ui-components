@@ -239,7 +239,10 @@ export const Guard = (props: GuardProps) => {
   // initEvents
   useEffect(() => {
     if (!!GuardLocalConfig) {
-      const events = guardEventsFilter({ ...props, config: GuardLocalConfig })
+      const events = guardEventsFilter(
+        { ...props },
+        GuardLocalConfig.openEventsMapping as boolean
+      )
       setEvents(events)
     }
   }, [props, GuardLocalConfig])
