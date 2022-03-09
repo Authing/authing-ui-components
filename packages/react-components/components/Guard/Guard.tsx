@@ -7,9 +7,7 @@ import 'moment/locale/zh-cn'
 import { useRenderGuardCore } from './core/index'
 
 export interface GuardProps extends GuardEvents, IG2FCProps {
-  tenantId?: string
   config?: Partial<GuardLocalConfig>
-  visible?: boolean
 }
 
 interface ModuleState {

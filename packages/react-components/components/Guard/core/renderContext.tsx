@@ -201,10 +201,12 @@ export const RenderContext: React.FC<{
   useEffect(() => {
     if (!defaultMergedConfig) return
 
-    const events = guardEventsFilter({
-      ...guardProps,
-      config: defaultMergedConfig,
-    })
+    const events = guardEventsFilter(
+      {
+        ...guardProps,
+      },
+      defaultMergedConfig?.openEventsMapping
+    )
     setEvents(events)
   }, [guardProps, defaultMergedConfig])
 

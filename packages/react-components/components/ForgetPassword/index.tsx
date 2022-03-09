@@ -62,7 +62,7 @@ export const GuardForgetPassword: React.FC = () => {
     <div className="g2-view-container g2-forget-password">
       <div className="g2-view-header">
         <ImagePro
-          src={config?.logo}
+          src={config?.logo!}
           size={48}
           borderRadius={4}
           alt=""

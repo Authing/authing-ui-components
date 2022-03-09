@@ -52,7 +52,7 @@ export const GuardCompleteInfoView: React.FC = () => {
       <div className="g2-view-header">
         <div className="g2-completeInfo-header">
           <ImagePro
-            src={config?.logo}
+            src={config?.logo!}
             size={48}
             borderRadius={4}
             alt=""

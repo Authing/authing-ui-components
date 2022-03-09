@@ -4,7 +4,10 @@ import { GuardMode } from '../AuthingGuard/types/GuardConfig'
 import { GuardModuleType } from '../Guard/module'
 export interface IG2FCProps extends IG2Events {
   appId: string
+  tenantId?: string
   config?: Partial<IG2Config>
+  visible?: boolean
+  initData?: any
 }
 
 export interface IG2FCViewProps extends IG2FCProps {
@@ -12,8 +15,8 @@ export interface IG2FCViewProps extends IG2FCProps {
 }
 
 export interface IG2Config {
-  title: string
-  logo: string
+  title?: string
+  logo?: string
   lang: Lang
   langRange: Lang[]
   host: string
@@ -31,13 +34,10 @@ export interface IG2Config {
 const defaultG2Config: IG2Config = {
   lang: 'zh-CN',
   langRange: ['zh-CN', 'en-US'],
-  title: 'Authing',
   escCloseable: true,
   clickCloseable: true,
   mode: GuardMode.Normal,
   host: 'https://core.authing.cn',
-  logo:
-    'https://files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png',
 }
 
 export interface IG2Events {

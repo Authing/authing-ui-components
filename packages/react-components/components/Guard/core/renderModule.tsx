@@ -1,4 +1,4 @@
-import { ConfigProvider, Modal } from 'antd'
+import { ConfigProvider, message, Modal } from 'antd'
 import React, { useMemo } from 'react'
 import { GuardModuleType, GuardProps } from '..'
 import { GuardBindTotpView } from '../../BindTotp'
@@ -25,6 +25,10 @@ import { GuardMode } from '../..'
 import { IconFont } from '../../IconFont'
 
 const PREFIX_CLS = 'authing-ant'
+
+message.config({
+  prefixCls: `${PREFIX_CLS}-message`,
+})
 
 export enum LangMAP {
   zhCn = 'zh-CN',
