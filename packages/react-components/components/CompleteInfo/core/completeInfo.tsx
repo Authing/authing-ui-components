@@ -275,6 +275,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             }
           >
             <SendCodeByPhone
+              isInternationSms={isInternationSms}
               areaCode={areaCode}
               className="authing-g2-input g2-send-code-input"
               autoComplete="off"

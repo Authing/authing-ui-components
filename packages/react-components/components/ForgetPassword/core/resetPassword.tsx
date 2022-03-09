@@ -54,7 +54,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
         phoneNumber,
         code,
         newPassword,
-        isInternationSms ? countryCode : undefined
+        countryCode
       )
     }
 
@@ -77,6 +77,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
           {codeMethod === 'phone' && (
             <SendCodeByPhone
               {...props}
+              isInternationSms={isInternationSms}
               className="authing-g2-input g2-send-code-input"
               autoComplete="off"
               size="large"
@@ -123,7 +124,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
         </>
       )
     },
-    [codeMethod, form, identify, t, verifyCodeLength]
+    [codeMethod, form, identify, isInternationSms, t, verifyCodeLength]
   )
 
   return (
