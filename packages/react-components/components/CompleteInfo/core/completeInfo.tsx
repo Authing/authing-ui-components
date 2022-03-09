@@ -450,7 +450,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
     user,
   ])
 
-  const [, onFinish] = useAsyncFn(
+  const onFinish = useCallback(
     async (values: any) => {
       submitButtonRef.current?.onSpin(true)
       const internalFields: any = {}
@@ -529,7 +529,14 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         onRegisterInfoCompletedError?.(e as any, udfs, authClient)
       }
     },
-    [isInternationSms]
+    [
+      areaCode,
+      authClient,
+      isInternationSms,
+      onRegisterInfoCompleted,
+      onRegisterInfoCompletedError,
+      post,
+    ]
   )
 
   return (
