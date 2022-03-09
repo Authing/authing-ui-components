@@ -23,7 +23,8 @@ export const LoginWithVerifyCode = (props: any) => {
   const { agreements, methods, submitButText } = props
 
   const verifyCodeLength = config?.verifyCodeLength ?? 4
-
+  // 是否开启了国际化短信功能
+  const isInternationSms = config?.internationalSmsConfig?.enabled || false
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
 
   const [validated, setValidated] = useState(false)
@@ -31,8 +32,8 @@ export const LoginWithVerifyCode = (props: any) => {
   const [identify, setIdentify] = useState('')
 
   const [currentMethod, setCurrentMethod] = useState<InputMethod>(methods[0])
-  // 是否为国际化短信
-  const [isInternationSms, setInternationSms] = useState(false)
+  // 是否仅开启国际化短信
+  const [isOnlyInternationSms, setInternationSms] = useState(false)
   // 区号 默认
   const [areaCode, setAreaCode] = useState(defaultAreaCode)
 
@@ -45,7 +46,7 @@ export const LoginWithVerifyCode = (props: any) => {
 
   const SendCode = useCallback(
     (props: any) => {
-      if (isInternationSms) {
+      if (isOnlyInternationSms) {
         return (
           <SendCodeByPhone
             {...props}
@@ -64,6 +65,7 @@ export const LoginWithVerifyCode = (props: any) => {
                 style={{ color: '#878A95' }}
               />
             }
+            isInternationSms={isInternationSms}
             scene={SceneType.SCENE_TYPE_LOGIN}
             maxLength={verifyCodeLength}
             onSendCodeBefore={async () => {
@@ -78,6 +80,7 @@ export const LoginWithVerifyCode = (props: any) => {
           {currentMethod === InputMethod.PhoneCode && (
             <SendCodeByPhone
               {...props}
+              isInternationSms={isInternationSms}
               className="authing-g2-input g2-send-code-input"
               autoComplete="off"
               size="large"
@@ -131,6 +134,7 @@ export const LoginWithVerifyCode = (props: any) => {
       form,
       identify,
       isInternationSms,
+      isOnlyInternationSms,
       t,
       verifyCodeLength,
     ]
@@ -191,6 +195,7 @@ export const LoginWithVerifyCode = (props: any) => {
     }
     // 解析手机号码 ==> 输出 phoenNumber 和 phoneCountryCode
     const { phoneNumber, countryCode: phoneCountryCode } = parsePhone(
+      isInternationSms,
       values.identify,
       areaCode
     )
@@ -240,7 +245,7 @@ export const LoginWithVerifyCode = (props: any) => {
       ? `${t('common.login')} / ${t('common.register')}`
       : t('common.login')
   }, [props.autoRegister, submitButText, t])
-  // 为了 refresh input 取消残留光标
+  // 为了 refresh input
   const AreaCodePhoneAccount = useCallback(
     (props) => {
       return (
@@ -271,7 +276,7 @@ export const LoginWithVerifyCode = (props: any) => {
         <FormItemIdentify
           name="identify"
           className={
-            isInternationSms
+            isOnlyInternationSms
               ? 'authing-g2-input-form remove-padding'
               : 'authing-g2-input-form'
           }
@@ -279,7 +284,7 @@ export const LoginWithVerifyCode = (props: any) => {
           currentMethod={currentMethod}
           areaCode={areaCode}
         >
-          {isInternationSms ? (
+          {isOnlyInternationSms ? (
             <AreaCodePhoneAccount />
           ) : (
             <InputIdentify

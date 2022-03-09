@@ -2,11 +2,7 @@ import { Form } from 'antd'
 import React, { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
-import {
-  Agreement,
-  ApplicationConfig,
-  VerifyLoginMethods,
-} from '../../AuthingGuard/api'
+import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { fieldRequiredRule, getDeviceName } from '../../_utils'
 import { Agreements } from '../components/Agreements'
@@ -24,7 +20,6 @@ export interface RegisterWithPhoneProps {
   agreements: Agreement[]
   publicConfig?: ApplicationConfig
   registeContext?: any
-  verifyLoginMethods: VerifyLoginMethods[]
 }
 
 export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
@@ -32,7 +27,6 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   agreements,
   publicConfig,
   registeContext,
-  verifyLoginMethods,
 }) => {
   const { t } = useTranslation()
   const submitButtonRef = useRef<any>(null)
@@ -45,7 +39,8 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   const ref = useRef<ICheckProps>(null)
 
   const verifyCodeLength = publicConfig?.verifyCodeLength ?? 4
-
+  const isInternationSms =
+    publicConfig?.internationalSmsConfig?.enabled || false
   const [, onFinish] = useAsyncFn(
     async (values: any) => {
       try {
@@ -65,6 +60,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
 
         const context = registeContext ?? {}
         const { phoneNumber, countryCode: phoneCountryCode } = parsePhone(
+          isInternationSms,
           phone,
           areaCode
         )
@@ -81,10 +77,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           {
             context,
             generateToken: true,
-            phoneCountryCode:
-              publicConfig && publicConfig.internationalSmsConfig?.enabled
-                ? phoneCountryCode
-                : undefined,
+            phoneCountryCode: phoneCountryCode,
             // params: getUserRegisterParams(),
           }
         )

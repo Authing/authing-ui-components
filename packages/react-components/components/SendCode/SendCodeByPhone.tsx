@@ -15,6 +15,7 @@ export interface SendCodeByPhoneProps extends InputProps {
   autoSubmit?: boolean //验证码输入完毕是否自动提交
   scene: SceneType
   areaCode?: string //国际区号
+  isInternationSms?: boolean //是否是国际短信
 }
 
 export const SendCodeByPhone: FC<SendCodeByPhoneProps> = (props) => {
@@ -25,6 +26,7 @@ export const SendCodeByPhone: FC<SendCodeByPhoneProps> = (props) => {
     areaCode,
     onSendCodeBefore,
     fieldName,
+    isInternationSms = false,
     ...remainProps
   } = props
   const { t } = useTranslation()
@@ -56,6 +58,7 @@ export const SendCodeByPhone: FC<SendCodeByPhoneProps> = (props) => {
                 ? form.getFieldValue(fieldName || 'phone')
                 : data
               const { phoneNumber, countryCode } = parsePhone(
+                isInternationSms,
                 fieldValue,
                 areaCode
               )

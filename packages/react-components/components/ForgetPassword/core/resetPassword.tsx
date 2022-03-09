@@ -32,6 +32,9 @@ export const ResetPassword = (props: ResetPasswordProps) => {
   let submitButtonRef = useRef<any>(null)
 
   const verifyCodeLength = props.publicConfig.verifyCodeLength ?? 4
+  // 是否开启了国际化短信功能
+  const isInternationSms =
+    props.publicConfig.internationalSmsConfig?.enabled || false
 
   const onFinish = async (values: any) => {
     let identify = values.identify
@@ -43,12 +46,15 @@ export const ResetPassword = (props: ResetPasswordProps) => {
       context = client.resetPasswordByEmailCode(identify, code, newPassword)
     }
     if (codeMethod === 'phone') {
-      const { phoneNumber, countryCode } = parsePhone(identify)
+      const { phoneNumber, countryCode } = parsePhone(
+        isInternationSms,
+        identify
+      )
       context = client.resetPasswordByPhoneCode(
         phoneNumber,
         code,
         newPassword,
-        countryCode
+        isInternationSms ? countryCode : undefined
       )
     }
 

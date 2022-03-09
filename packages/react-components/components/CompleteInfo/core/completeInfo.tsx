@@ -275,6 +275,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             }
           >
             <SendCodeByPhone
+              areaCode={areaCode}
               className="authing-g2-input g2-send-code-input"
               autoComplete="off"
               key="internal-phone:phone345"
@@ -487,6 +488,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       // 国际化短信 需要携带区号
       if (isInternationSms && values['internal phone:phone']) {
         const { countryCode } = parsePhone(
+          isInternationSms,
           values['internal phone:phone'],
           areaCode
         )
