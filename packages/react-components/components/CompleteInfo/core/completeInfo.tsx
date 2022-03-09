@@ -357,6 +357,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           ? metaData.label || metaData.name
           : metaData.name
 
+      // 这部分的控件分两种 一个集成控件（手机号 + 验证码）一种是基础控件 分开处理
       if (
         (Object.values(CompleteInfoBaseControls) as (
           | CompleteInfoBaseControls

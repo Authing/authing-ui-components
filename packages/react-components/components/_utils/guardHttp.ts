@@ -107,6 +107,23 @@ export class GuardHttp {
     return this.responseIntercept(res)
   }
 
+  public authFlow = async <T>(action: string, data?: any) => {
+    const flowPath = '/interaction/authFlow'
+
+    const requestData = {
+      action,
+      data,
+    }
+
+    const res = await requestClient.post<T>(flowPath, requestData, {
+      headers: {
+        ...this.headers,
+      },
+    })
+
+    return this.responseIntercept(res)
+  }
+
   // 初始化 Error code 拦截器
   public initErrorCodeInterceptor = (
     callBack: (code: CodeAction, res: AuthingResponse) => void

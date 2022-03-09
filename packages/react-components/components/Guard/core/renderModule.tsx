@@ -1,5 +1,5 @@
 import { ConfigProvider, message, Modal } from 'antd'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { GuardModuleType, GuardProps } from '..'
 import { GuardBindTotpView } from '../../BindTotp'
 import { GuardChangePassword } from '../../ChangePassword'
@@ -17,12 +17,19 @@ import {
   useGuardContextLoaded,
   useGuardCurrentModule,
   useGuardDefaultMergedConfigContext,
+  useGuardHttpClient,
+  useGuardModule,
 } from '../../_utils/context'
 import zhCN from 'antd/lib/locale/zh_CN'
 import enUS from 'antd/lib/locale/en_US'
 import { i18n } from '../../_utils/locales'
 import { GuardMode } from '../..'
 import { IconFont } from '../../IconFont'
+import { AuthingResponse } from '../../_utils/http'
+import {
+  CodeAction,
+  ChangeModuleApiCodeMapping,
+} from '../../_utils/responseManagement/interface'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -49,6 +56,10 @@ export const RenderModule: React.FC<{
 
   const { moduleName } = useGuardCurrentModule()
 
+  const httpClient = useGuardHttpClient()
+
+  const { changeModule } = useGuardModule()
+
   const loadingComponent = useMemo(() => {
     return defaultMergedConfig.loadingComponent
   }, [defaultMergedConfig])
@@ -70,6 +81,33 @@ export const RenderModule: React.FC<{
     [GuardModuleType.RECOVERY_CODE]: () => <GuardRecoveryCodeView />,
     [GuardModuleType.SUBMIT_SUCCESS]: () => <GuardSubmitSuccessView />,
   }
+
+  // 初始化 请求拦截器 （Error Code）
+  useEffect(() => {
+    if (!httpClient || !changeModule) return
+
+    // 错误码处理回调 切换 module 和 错误信息提示
+    const errorCodeCb = (code: CodeAction, res: AuthingResponse) => {
+      const codeActionMapping = {
+        [CodeAction.CHANGE_MODULE]: (res: AuthingResponse) => {
+          const nextModule = ChangeModuleApiCodeMapping[res.apiCode!]
+
+          const nextData = res.data
+
+          changeModule(nextModule, nextData)
+        },
+        [CodeAction.RENDER_MESSAGE]: (res: AuthingResponse) => {
+          message.error(res.message ?? res.messages)
+        },
+      }
+
+      const codeAction = codeActionMapping[code]
+
+      codeAction(res)
+    }
+
+    httpClient.initErrorCodeInterceptor(errorCodeCb)
+  }, [httpClient, changeModule])
 
   const renderModule = useMemo(() => {
     if (contextLoaded) {

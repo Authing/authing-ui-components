@@ -215,6 +215,7 @@ export const RenderContext: React.FC<{
     const guardStateMachine = initGuardStateMachine(onChangeModule, initState)
     setGuardStateMachine(guardStateMachine)
 
+    // TODO 这里有一个循环调用问题，藏的有点深 待优化
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -258,12 +259,6 @@ export const RenderContext: React.FC<{
     onChangeModule,
   ])
 
-  useEffect(() => {
-    window.addEventListener('error', console.log, true)
-
-    return window.removeEventListener('error', console.log, true)
-  })
-
   const contextLoaded = useMemo(() => {
     const list = [
       appId,
@@ -288,6 +283,7 @@ export const RenderContext: React.FC<{
     authClint,
   ])
 
+  // TODO 目前这种形式 一个变动会导致所有的 Context 都会渲染，应该搞成高阶组件的形式 待优化
   const renderContext = useMemo(() => {
     if (error) {
       return (
