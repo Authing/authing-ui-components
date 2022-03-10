@@ -263,5 +263,5 @@
   "identityBindingTitle": "Bind existing account",
   "identityBindingDesc": "After binding, you can log in to this account directly by this method next time",
   "internationPhoneMessage": "Please enter a valid mobile phone number",
-  "areaCodePhone": "Country code and mobile number"
+  "areaCodePhone": "Area code Mobile number"
 }
