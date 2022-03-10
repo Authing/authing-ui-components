@@ -1,7 +1,6 @@
 import { Form } from 'antd'
 import React, { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useAsyncFn } from 'react-use'
 import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { fieldRequiredRule, getDeviceName } from '../../_utils'
@@ -41,7 +40,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   const verifyCodeLength = publicConfig?.verifyCodeLength ?? 4
   const isInternationSms =
     publicConfig?.internationalSmsConfig?.enabled || false
-  const [, onFinish] = useAsyncFn(
+  const onFinish = useCallback(
     async (values: any) => {
       try {
         submitButtonRef.current.onSpin(true)
@@ -91,8 +90,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         submitButtonRef.current.onSpin(false)
       }
     },
-    [form, acceptedAgreements],
-    { loading: false }
+    [form, acceptedAgreements]
   )
 
   const PhoenAccount = useCallback(
