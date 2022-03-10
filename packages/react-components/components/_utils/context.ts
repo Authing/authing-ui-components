@@ -147,6 +147,19 @@ export const createGuardContextLoaded = () => {
   }
 }
 
+const GuardIsAuthFlowContext = React.createContext<boolean>(false)
+
+export const createGuardIsAuthFlowContext = () => {
+  const Provider = GuardIsAuthFlowContext.Provider
+  const Consumer = GuardIsAuthFlowContext.Consumer
+
+  return {
+    Provider,
+    Consumer,
+    Context: GuardIsAuthFlowContext,
+  }
+}
+
 export const useGuardPublicConfig = () => useContext(GuardPublicConfigContext)
 
 export const useGuardHttpClient = () => useContext(GuardHttpClientContext)
@@ -170,3 +183,6 @@ export const useGuardModule = () => useContext(GuardModuleContext)
 export const useGuardFinallyConfig = () => useContext(GuardFinallyConfigContext)
 
 export const useGuardContextLoaded = () => useContext(GuardContextLoaded)
+
+export const useGuardIsAuthFlowContext = () =>
+  useContext(GuardIsAuthFlowContext)

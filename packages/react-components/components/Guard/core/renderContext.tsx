@@ -26,6 +26,7 @@ import {
   createGuardDefaultMergedConfigContext,
   createGuardEventsContext,
   createGuardFinallyConfigContext,
+  createGuardIsAuthFlowContext,
   createGuardModuleContext,
   createGuardPublicConfigContext,
   createHttpClientContext,
@@ -57,6 +58,7 @@ export const RenderContext: React.FC<{
   const [httpClient, setHttpClient] = useState<GuardHttp>()
   const [publicConfig, setPublicConfig] = useState<ApplicationConfig>()
   const [error, serError] = useState()
+  const [isAuthFlow, setIsAuthFlow] = useState(false)
 
   // 状态机
   const [
@@ -89,6 +91,8 @@ export const RenderContext: React.FC<{
   } = createGuardFinallyConfigContext()
 
   const { Context: GuardContextLoaded } = createGuardContextLoaded()
+
+  const { Context: GuardIsAuthFlowContext } = createGuardIsAuthFlowContext()
 
   // 劫持浏览器 History
   const [historyNext] = useHistoryHijack(guardStateMachine?.back)
@@ -231,6 +235,13 @@ export const RenderContext: React.FC<{
     events?.onLoad?.(authClint)
   }, [authClint, events])
 
+  // 是否使用 Guard auth flow
+  useEffect(() => {
+    if (!finallyConfig) return
+
+    setIsAuthFlow(Boolean(finallyConfig?.__isAuthFlow__))
+  }, [finallyConfig])
+
   const moduleEvents = useMemo(() => {
     if (!events && !guardStateMachine) return undefined
     return {
@@ -314,31 +325,33 @@ export const RenderContext: React.FC<{
     if (contextLoaded)
       return (
         <GuardContextLoaded.Provider value={contextLoaded}>
-          <GuardDefaultMergedConfigContext.Provider
-            value={defaultMergedConfig!}
-          >
-            <GuardFinallyConfigContext.Provider value={finallyConfig!}>
-              <GuardPublicConfigContext.Provider value={publicConfig!}>
-                <GuardHttpClientContext.Provider value={httpClient!}>
-                  <GuardAppIdContext.Provider value={appId}>
-                    <GuardEventsContext.Provider value={events}>
-                      <GuardModuleContext.Provider value={moduleEvents!}>
-                        <GuardInitDataContext.Provider
-                          value={moduleState.initData}
-                        >
-                          <GuardCurrentModuleContext.Provider
-                            value={moduleState}
+          <GuardIsAuthFlowContext.Provider value={isAuthFlow}>
+            <GuardDefaultMergedConfigContext.Provider
+              value={defaultMergedConfig!}
+            >
+              <GuardFinallyConfigContext.Provider value={finallyConfig!}>
+                <GuardPublicConfigContext.Provider value={publicConfig!}>
+                  <GuardHttpClientContext.Provider value={httpClient!}>
+                    <GuardAppIdContext.Provider value={appId}>
+                      <GuardEventsContext.Provider value={events}>
+                        <GuardModuleContext.Provider value={moduleEvents!}>
+                          <GuardInitDataContext.Provider
+                            value={moduleState.initData}
                           >
-                            {children}
-                          </GuardCurrentModuleContext.Provider>
-                        </GuardInitDataContext.Provider>
-                      </GuardModuleContext.Provider>
-                    </GuardEventsContext.Provider>
-                  </GuardAppIdContext.Provider>
-                </GuardHttpClientContext.Provider>
-              </GuardPublicConfigContext.Provider>
-            </GuardFinallyConfigContext.Provider>
-          </GuardDefaultMergedConfigContext.Provider>
+                            <GuardCurrentModuleContext.Provider
+                              value={moduleState}
+                            >
+                              {children}
+                            </GuardCurrentModuleContext.Provider>
+                          </GuardInitDataContext.Provider>
+                        </GuardModuleContext.Provider>
+                      </GuardEventsContext.Provider>
+                    </GuardAppIdContext.Provider>
+                  </GuardHttpClientContext.Provider>
+                </GuardPublicConfigContext.Provider>
+              </GuardFinallyConfigContext.Provider>
+            </GuardDefaultMergedConfigContext.Provider>
+          </GuardIsAuthFlowContext.Provider>
         </GuardContextLoaded.Provider>
       )
     // 只有极少的情况才会使用这个阶段，比如 Loading 组件
@@ -360,6 +373,7 @@ export const RenderContext: React.FC<{
     GuardFinallyConfigContext,
     GuardHttpClientContext,
     GuardInitDataContext,
+    GuardIsAuthFlowContext,
     GuardModuleContext,
     GuardPublicConfigContext,
     appId,
@@ -370,6 +384,7 @@ export const RenderContext: React.FC<{
     events,
     finallyConfig,
     httpClient,
+    isAuthFlow,
     moduleEvents,
     moduleState,
     publicConfig,

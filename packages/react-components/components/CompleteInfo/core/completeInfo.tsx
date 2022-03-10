@@ -92,18 +92,24 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
   > = useMemo(
     () => ({
       image: () => <UploadImage />,
-      number: () => (
-        <InputNumber style={{ width: '100%' }} className="authing-g2-input" />
+      number: (props) => (
+        <InputNumber
+          key={props.key}
+          style={{ width: '100%' }}
+          className="authing-g2-input"
+        />
       ),
-      date: () => (
+      date: (props) => (
         <DatePicker
+          key={props.key}
           className="authing-g2-input"
           style={{ width: '100%' }}
           placeholder={i18n.t('common.pleaseSelectDate')}
         />
       ),
-      datetime: () => (
+      datetime: (props) => (
         <DatePicker
+          key={props.key}
           className="authing-g2-input"
           style={{ width: '100%' }}
           placeholder={i18n.t('common.pleaseSelectDate')}
@@ -111,6 +117,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       ),
       select: (props: any) => (
         <Select
+          key={props.key}
           className="authing-g2-select"
           showSearch
           options={props.options}
@@ -119,14 +126,16 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       ),
       dropdown: (props: any) => (
         <Select
+          key={props.key}
           className="authing-g2-select"
           showSearch
           options={props.options}
           filterOption={filterOption}
         />
       ),
-      boolean: () => (
+      boolean: (props) => (
         <Select
+          key={props.key}
           className="authing-g2-select"
           options={[
             { label: i18n.t('common.yes'), value: true as any },
@@ -134,24 +143,27 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           ]}
         />
       ),
-      string: () => (
+      string: (props) => (
         <Input
+          key={props.key}
           type="text"
           size="large"
           className="authing-g2-input"
           autoComplete="off"
         />
       ),
-      text: () => (
+      text: (props) => (
         <Input
+          key={props.key}
           type="text"
           size="large"
           className="authing-g2-input"
           autoComplete="off"
         />
       ),
-      gender: () => (
+      gender: (props) => (
         <Select
+          key={props.key}
           className="authing-g2-select"
           options={[
             { label: i18n.t('common.man'), value: 'M' },
@@ -159,8 +171,9 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           ]}
         />
       ),
-      country: () => (
+      country: (props) => (
         <Select
+          key={props.key}
           className="authing-g2-select"
           options={countryList}
           showSearch
@@ -180,8 +193,8 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         <CustomFormItem.UserName
           validateFirst={true}
           className="authing-g2-input-form"
-          name="internal username"
-          key="internal-usernameadsf"
+          name="username"
+          key={props.key}
           label={i18n.t('common.username')}
           required={props.required}
           checkRepeat={true}
@@ -202,8 +215,8 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           <CustomFormItem.Phone
             validateFirst={true}
             className="authing-g2-input-form"
-            name="internal phone:phone"
-            key="internal-phone:phoneadsf"
+            name="phone"
+            key="internal-phone:phone"
             label={i18n.t('common.phoneLabel')}
             required={props.required}
             checkRepeat={true}
@@ -212,7 +225,6 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             <InputNumber
               className="authing-g2-input"
               autoComplete="tel"
-              key="internal-phone:phone123"
               type="tel"
               size="large"
               maxLength={11}
@@ -222,8 +234,8 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           <Form.Item
             validateTrigger={['onBlur', 'onChange']}
             className="authing-g2-input-form"
-            name="internal phone:code"
-            key="internal-phone:codea"
+            name="phoneCode"
+            key="internal-phone:code"
             rules={
               props.required
                 ? fieldRequiredRule(t('common.captchaCode'))
@@ -233,7 +245,6 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             <SendCodeByPhone
               className="authing-g2-input g2-send-code-input"
               autoComplete="one-time-code"
-              key="internal-phone:phone345"
               size="large"
               placeholder={t('common.inputFourVerifyCode', {
                 length: verifyCodeLength,
@@ -254,7 +265,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         <>
           <CustomFormItem.Email
             className="authing-g2-input-form"
-            name="internal email:email"
+            name="email"
             checkRepeat={true}
             label={i18n.t('common.email')}
             required={props.required}
@@ -272,7 +283,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           <Form.Item
             validateTrigger={['onBlur', 'onChange']}
             className="authing-g2-input-form"
-            name="internal email:code"
+            name="emailCode"
             key="internal email:code1432"
             rules={
               props.required
@@ -351,7 +362,6 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
 
   const inputElement = useCallback(
     (metaData: CompleteInfoMetaData) => {
-      const key = `${metaData.type} ${metaData.name}`
       const label =
         i18n.language === 'zh-CN'
           ? metaData.label || metaData.name
@@ -373,8 +383,8 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             validateTrigger={['onBlur', 'onChange']}
             className="authing-g2-input-form"
             rules={generateRules(metaData)}
-            key={key}
-            name={key}
+            key={metaData.name}
+            name={metaData.name}
             label={label}
             style={{ marginBottom: 8 }}
           >
@@ -383,7 +393,10 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         )
         if (Object.keys(baseControlMap).includes(metaData.type))
           return userFormItem(
-            baseControlMap[metaData.type]({ options: metaData.options })
+            baseControlMap[metaData.type]({
+              options: metaData.options,
+              key: metaData.name,
+            })
           )
 
         return userFormItem(
@@ -399,74 +412,90 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
   }, [inputElement, metaData])
 
   const [, onFinish] = useAsyncFn(async (values: any) => {
-    submitButtonRef.current?.onSpin(true)
-    const internalFields: any = {}
-    const userFields: any[] = []
-    let phoneToken: string | undefined = undefined
-    let emailToken: string | undefined = undefined
+    // submitButtonRef.current?.onSpin(true)
 
-    Object.entries(values).forEach(([key, value]) => {
-      const [type, nameOrId] = key.split(' ')
-      if (type === 'internal') {
-        if (nameOrId.split(':').length > 1) {
-          // 是验证码
-          const [codeType, k] = nameOrId.split(':')
-          if (codeType === k) {
-            if (value !== '' || value) {
-              internalFields[codeType] = value
-            }
-          } else {
-            if (codeType === 'phone') {
-              if (value !== '' || value) {
-                phoneToken = value as string
-              }
-            } else if (codeType === 'email') {
-              if (value !== '' || value) {
-                emailToken = value as string
-              }
-            }
-          }
-        } else {
-          internalFields[nameOrId] = value
+    const fieldValues = Object.keys(values)
+      // 先过滤掉 为空的字段
+      .filter((key) => values[key] !== undefined)
+      // 再过滤掉 两个验证码的字段
+      .filter((key) => !['phoneCode', 'emailCode'].includes(key))
+      .map((key) => {
+        const baseData = {
+          name: key,
+          value: values[key],
         }
-      } else if (type === 'user') {
-        userFields.push({ nameOrId, value })
-      }
-    })
+        // 给这两个字段添加一个验证码
+        // TODO 默认这里手机号与邮箱 都是有验证码的
+        if (key === 'phone') return { ...baseData, code: values.phoneCode }
+        if (key === 'email') return { ...baseData, code: values.emailCode }
 
-    const udfs = userFields
-      .filter(({ nameOrId, value }) => Boolean(value))
-      .map(({ nameOrId, value }) => ({
-        definition: nameOrId,
-        value,
-      }))
-
-    try {
-      const user = await authClient.updateProfile(internalFields, {
-        phoneToken,
-        emailToken,
+        return baseData
       })
-      await post(
-        `/api/v2/udfs/values`,
-        {
-          udfs,
-        },
-        {
-          headers: {
-            authorization: user?.token,
-          },
-        }
-      )
-      submitButtonRef.current?.onSpin(false)
-      onRegisterInfoCompleted?.(user, udfs, authClient)
-    } catch (e: any) {
-      if (e?.message) {
-        message.error(e.message)
-      }
-      // TODO
-      submitButtonRef.current?.onSpin(false)
-      onRegisterInfoCompletedError?.(e as any, udfs, authClient)
-    }
+
+    console.log(fieldValues)
+
+    // Object.entries(values).forEach(([key, value]) => {
+    //   const [type, nameOrId] = key.split(' ')
+    //   if (type === 'internal') {
+    //     if (nameOrId.split(':').length > 1) {
+    //       // 是验证码
+    //       const [codeType, k] = nameOrId.split(':')
+    //       if (codeType === k) {
+    //         if (value !== '' || value) {
+    //           internalFields[codeType] = value
+    //         }
+    //       } else {
+    //         if (codeType === 'phone') {
+    //           if (value !== '' || value) {
+    //             phoneToken = value as string
+    //           }
+    //         } else if (codeType === 'email') {
+    //           if (value !== '' || value) {
+    //             emailToken = value as string
+    //           }
+    //         }
+    //       }
+    //     } else {
+    //       internalFields[nameOrId] = value
+    //     }
+    //   } else if (type === 'user') {
+    //     userFields.push({ nameOrId, value })
+    //   }
+    // })
+
+    // const udfs = userFields
+    //   .filter(({ nameOrId, value }) => Boolean(value))
+    //   .map(({ nameOrId, value }) => ({
+    //     definition: nameOrId,
+    //     value,
+    //   }))
+
+    // try {
+    //   const user = await authClient.updateProfile(internalFields, {
+    //     phoneToken,
+    //     emailToken,
+    //   })
+    //   await post(
+    //     `/api/v2/udfs/values`,
+    //     {
+    //       udfs,
+    //     },
+    //     {
+    //       headers: {
+    //         authorization: user?.token,
+    //       },
+    //     }
+    //   )
+    //   submitButtonRef.current?.onSpin(false)
+    //   onRegisterInfoCompleted?.(user, udfs, authClient)
+    // } catch (e: any) {
+    //   if (e?.message) {
+    //     message.error(e.message)
+    //   }
+    //   // TODO
+    //   submitButtonRef.current?.onSpin(false)
+    //   onRegisterInfoCompletedError?.(e as any, udfs, authClient)
+    // }
   }, [])
 
   return (

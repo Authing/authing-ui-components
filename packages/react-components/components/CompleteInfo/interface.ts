@@ -103,3 +103,11 @@ export interface CompleteInfoInitData {
   skip: boolean
   metaData: CompleteInfoMetaData[]
 }
+
+export interface CompleteInfoRequest {
+  fieldValues: {
+    name: string
+    value: string
+    code?: string
+  }[]
+}
