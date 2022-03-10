@@ -2,58 +2,21 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Guard as ReactAuthingGuard } from "@authing/react-ui-components";
 import {
-  User,
   GuardMode,
-  GuardScenes,
-  LoginMethods,
-  getAuthClient,
-  CommonMessage,
-  initAuthClient,
-  RegisterMethods,
   GuardEventsHandler,
-  AuthenticationClient,
   GuardEventsHandlerKebab,
   GuardEventsCamelToKebabMap,
-  AuthenticationClientOptions,
 } from "@authing/react-ui-components";
 import "@authing/react-ui-components/lib/index.min.css";
-import {
-  GuardComponentConifg,
-  GuardLocalConfig,
-} from "@authing/react-ui-components/components/Guard/config";
+import { GuardComponentConifg, GuardLocalConfig } from "@authing/react-ui-components/components/Guard/config";
 import { GuardEvents } from "@authing/react-ui-components/components/Guard/event";
 
-export type {
-  User,
-  CommonMessage,
-  GuardEventsHandler,
-  AuthenticationClient,
-  GuardEventsHandlerKebab,
-  AuthenticationClientOptions,
-};
-
-export {
-  GuardMode,
-  GuardScenes,
-  LoginMethods,
-  getAuthClient,
-  initAuthClient,
-  RegisterMethods,
-  GuardEventsCamelToKebabMap,
-};
-
 export type GuardEventListeners = {
-  [key in keyof GuardEventsHandlerKebab]: Exclude<
-    Required<GuardEventsHandlerKebab>[key],
-    undefined
-  >[];
+  [key in keyof GuardEventsHandlerKebab]: Exclude<Required<GuardEventsHandlerKebab>[key], undefined>[];
 };
 
 export class Guard {
-  constructor(
-    private appId: string,
-    private config?: Partial<GuardLocalConfig>
-  ) {
+  constructor(private appId: string, private config?: Partial<GuardLocalConfig>) {
     this.render();
   }
 
@@ -80,19 +43,14 @@ export class Guard {
 
   private visible = this.config?.mode === GuardMode.Modal ? false : true;
 
-  private eventListeners = Object.values(GuardEventsCamelToKebabMap).reduce(
-    (acc, evtName) => {
-      return Object.assign({}, acc, {
-        [evtName]: [],
-      });
-    },
-    {} as GuardEventListeners
-  );
+  private eventListeners = Object.values(GuardEventsCamelToKebabMap).reduce((acc, evtName) => {
+    return Object.assign({}, acc, {
+      [evtName]: [],
+    });
+  }, {} as GuardEventListeners);
 
   private render(cb?: () => void) {
-    const evts: GuardEventsHandler = Object.entries(
-      GuardEventsCamelToKebabMap
-    ).reduce((acc, [reactEvt, nativeEvt]) => {
+    const evts: GuardEventsHandler = Object.entries(GuardEventsCamelToKebabMap).reduce((acc, [reactEvt, nativeEvt]) => {
       return Object.assign({}, acc, {
         [reactEvt]: (...rest: any) => {
           if (nativeEvt === "close") {
@@ -124,10 +82,7 @@ export class Guard {
     );
   }
 
-  on<T extends keyof GuardEventsHandlerKebab>(
-    evt: T,
-    handler: Exclude<GuardEventsHandlerKebab[T], undefined>
-  ) {
+  on<T extends keyof GuardEventsHandlerKebab>(evt: T, handler: Exclude<GuardEventsHandlerKebab[T], undefined>) {
     this.eventListeners[evt]!.push(handler as any);
   }
 
