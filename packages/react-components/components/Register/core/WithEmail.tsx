@@ -107,7 +107,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         if (isChangeComplete) {
           changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
             businessRequestName: 'registerByEmail',
-            context: registerContent,
+            content: registerContent,
           })
 
           return
