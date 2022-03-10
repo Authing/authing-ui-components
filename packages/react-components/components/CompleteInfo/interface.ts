@@ -42,6 +42,7 @@ export interface GuardCompleteInfoViewProps extends GuardCompleteInfoProps {
 }
 
 export type ExtendsFieldType = 'user' | 'internal'
+
 export interface ExtendsField {
   type: ExtendsFieldType
   name: string
@@ -104,6 +105,10 @@ export interface CompleteInfoInitData {
   metaData: CompleteInfoMetaData[]
 }
 
+export interface RegisterCompleteInfoInitData {
+  content: any
+  businessRequestName: 'registerByEmail' | 'registerByPhoneCode'
+}
 export interface CompleteInfoRequest {
   fieldValues: {
     name: string

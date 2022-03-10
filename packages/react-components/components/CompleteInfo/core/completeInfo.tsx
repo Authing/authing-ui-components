@@ -3,15 +3,14 @@ import { Form, Input, message, Select, DatePicker } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { UploadImage } from '../../AuthingGuard/Forms/UploadImage'
-import { useGuardAuthClient } from '../../Guard/authClient'
 import { i18n } from '../../_utils/locales'
 import {
   CompleteInfoBaseControls,
   CompleteInfoExtendsControls,
   CompleteInfoMetaData,
+  CompleteInfoRequest,
 } from '../interface'
 import { useGuardHttp } from '../../_utils/guardHttp'
-import { GuardCompleteInfoViewProps } from '../interface'
 import SubmitButton from '../../SubmitButton'
 import { InputNumber } from '../../InputNumber'
 import { EmailScene, SceneType } from 'authing-js-sdk'
@@ -22,9 +21,9 @@ import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
 import { useGuardPublicConfig } from '../../_utils/context'
 export interface CompleteInfoProps {
   metaData: CompleteInfoMetaData[]
-  onRegisterInfoCompleted?: GuardCompleteInfoViewProps['onRegisterInfoCompleted']
-  onRegisterInfoCompletedError?: GuardCompleteInfoViewProps['onRegisterInfoCompletedError']
+  businessRequest: (data: CompleteInfoRequest) => Promise<void>
 }
+
 export interface FieldMetadata {
   key: string
   options: any
@@ -38,23 +37,17 @@ const filterOption = (input: any, option: any) => {
 }
 
 export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
-  const {
-    metaData,
-    onRegisterInfoCompleted,
-    onRegisterInfoCompletedError,
-  } = props
+  const { metaData, businessRequest } = props
 
   const config = useGuardPublicConfig()
 
   const verifyCodeLength = config?.verifyCodeLength
 
-  const authClient = useGuardAuthClient()
-
   const submitButtonRef = useRef<any>(null)
 
   const [countryList, setCountryList] = useState<any>([])
 
-  const { get, post } = useGuardHttp()
+  const { get } = useGuardHttp()
 
   const { t } = useTranslation()
 
@@ -432,7 +425,14 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         return baseData
       })
 
-    console.log(fieldValues)
+    try {
+      await businessRequest?.({ fieldValues })
+    } catch (error) {
+      // TODO
+      // throw new Error(error)
+    } finally {
+      submitButtonRef.current?.onSpin(false)
+    }
 
     // Object.entries(values).forEach(([key, value]) => {
     //   const [type, nameOrId] = key.split(' ')

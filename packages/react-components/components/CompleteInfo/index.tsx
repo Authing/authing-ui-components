@@ -1,12 +1,12 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ImagePro } from '../ImagePro'
-import { GuardModuleType } from '../Guard/module'
 import { CompleteInfo } from './core/completeInfo'
 import {
-  CompleteInfoBaseControls,
-  CompleteInfoExtendsControls,
-  FormValidateRule,
+  CompleteInfoInitData,
+  CompleteInfoMetaData,
+  CompleteInfoRequest,
+  RegisterCompleteInfoInitData,
 } from './interface'
 import './styles.less'
 import { IconFont } from '../IconFont'
@@ -14,99 +14,32 @@ import { useGuardAuthClient } from '../Guard/authClient'
 import {
   useGuardEvents,
   useGuardFinallyConfig,
+  useGuardHttpClient,
   useGuardInitData,
-  useGuardModule,
   useGuardPublicConfig,
 } from '../_utils/context'
+import {
+  authFlow,
+  CompleteInfoAuthFlowAction,
+  registerRequest,
+} from './businessRequest'
+import { extendsFieldsToMetaData, fieldValuesToRegisterProfile } from './utils'
 
-export const GuardCompleteInfoView: React.FC = () => {
+export const GuardCompleteInfo: React.FC<{
+  metaData: CompleteInfoMetaData[]
+  skipComplateFileds: boolean
+  businessRequest: (
+    action: CompleteInfoAuthFlowAction,
+    data?: CompleteInfoRequest
+  ) => Promise<void>
+}> = ({ metaData, businessRequest, skipComplateFileds }) => {
   const config = useGuardFinallyConfig()
-
-  const events = useGuardEvents()
-
-  const initData = useGuardInitData<any>()
-
-  const { changeModule } = useGuardModule()
 
   const { t } = useTranslation()
 
-  const authClient = useGuardAuthClient()
-
-  const user = initData.user
-
-  const publicConfig = useGuardPublicConfig()
-
-  const skipComplateFileds = publicConfig?.skipComplateFileds ?? false
-
-  const onSuccess = (
-    udfs: {
-      definition: any
-      value: any
-    }[]
-  ) => {
-    events?.onRegisterInfoCompleted?.(user, udfs, authClient)
-    if (initData.context === 'register') {
-      changeModule?.(GuardModuleType.LOGIN, {})
-    } else {
-      events?.onLogin?.(user, authClient)
-    }
+  const onSkip = async () => {
+    await businessRequest(CompleteInfoAuthFlowAction.Skip)
   }
-
-  const metaData = useMemo(
-    () => [
-      {
-        type: CompleteInfoExtendsControls.SELECT,
-        name: 'name1',
-        label: 'name1',
-        required: false,
-        validateRules: [],
-        options: [
-          {
-            label: '2222',
-            value: '111',
-          },
-        ],
-      },
-      {
-        type: CompleteInfoBaseControls.PHONE,
-        name: 'phone',
-        label: '手机号',
-        required: false,
-        validateRules: [
-          {
-            type: FormValidateRule.PHONE,
-            content: '',
-          },
-        ],
-      },
-      {
-        type: CompleteInfoExtendsControls.TEXT,
-        name: 'name2',
-        label: 'name2',
-        required: true,
-        validateRules: [
-          {
-            type: FormValidateRule.REG_EXP,
-            content: '/^1[3-9]\\d{9}$/',
-            errorMessages: '这个好像不是我的名字',
-          },
-        ],
-      },
-      {
-        type: CompleteInfoBaseControls.EMAIL,
-        name: 'email',
-        label: '邮箱',
-        required: false,
-        validateRules: [
-          {
-            type: FormValidateRule.EMAIL,
-            content: '',
-          },
-        ],
-      },
-    ],
-    []
-  )
 
   return (
     <div className="g2-view-container g2-complete-info">
@@ -123,7 +56,7 @@ export const GuardCompleteInfoView: React.FC = () => {
           {skipComplateFileds && (
             <span
               className="g2-completeInfo-header-skip"
-              onClick={() => onSuccess([])}
+              onClick={() => onSkip()}
             >
               <IconFont type="authing-a-share-forward-line1" />
               <span>{t('common.skip')}</span>
@@ -139,12 +72,133 @@ export const GuardCompleteInfoView: React.FC = () => {
       <div className="g2-view-tabs g2-completeInfo-content">
         <CompleteInfo
           metaData={metaData}
-          onRegisterInfoCompleted={(_, udfs) => {
-            onSuccess(udfs)
-          }}
-          onRegisterInfoCompletedError={events?.onRegisterInfoCompletedError}
+          businessRequest={async (data) =>
+            await businessRequest?.(CompleteInfoAuthFlowAction.Complete, data)
+          }
         />
       </div>
     </div>
+  )
+}
+
+export const GuardLoginCompleteInfoView: React.FC = () => {
+  const { metaData, skip } = useGuardInitData<CompleteInfoInitData>()
+
+  const events = useGuardEvents()
+
+  const authClient = useGuardAuthClient()
+
+  const businessRequest = async (
+    action: CompleteInfoAuthFlowAction,
+    data?: CompleteInfoRequest
+  ) => {
+    const response = await authFlow(action, data)
+
+    if (response.code === 200) {
+      events?.onLogin?.(response.data, authClient)
+    }
+
+    // return response
+  }
+
+  return (
+    <GuardCompleteInfo
+      metaData={metaData}
+      businessRequest={businessRequest}
+      skipComplateFileds={skip}
+    />
+  )
+}
+
+export const GuardRegisterCompleteInfoView: React.FC = () => {
+  const initData = useGuardInitData<RegisterCompleteInfoInitData>()
+
+  const publicConfig = useGuardPublicConfig()
+
+  const { get } = useGuardHttpClient()
+
+  const config = useGuardFinallyConfig()
+
+  const events = useGuardEvents()
+
+  const authClient = useGuardAuthClient()
+
+  const [selectOptions, setSelectOptions] = useState<
+    Array<{
+      key: string
+      options: {
+        value: string
+        label: string
+      }[]
+    }>
+  >()
+
+  const [metaData, setMetaData] = useState<CompleteInfoMetaData[]>()
+
+  const extendsFields = publicConfig?.extendsFields
+
+  const skipComplateFileds = publicConfig?.skipComplateFileds
+
+  const loadingComponent = useMemo(() => {
+    return config.loadingComponent
+  }, [config.loadingComponent])
+
+  const loadSelectOptions = useCallback(async () => {
+    const { data: selectOptions } = await get(
+      `/api/v2/udfs/field-metadata-for-completion`,
+      undefined,
+      {}
+    )
+
+    setSelectOptions(selectOptions)
+  }, [get])
+
+  const businessRequest = async (
+    action: CompleteInfoAuthFlowAction,
+    data?: CompleteInfoRequest
+  ) => {
+    const registerProfile = fieldValuesToRegisterProfile(
+      extendsFields,
+      data?.fieldValues
+    )
+
+    const user = await registerRequest(
+      action,
+      initData.businessRequestName,
+      initData.content,
+      registerProfile
+    )
+
+    if (user) {
+      events?.onRegister?.(user, authClient)
+    }
+  }
+
+  useEffect(() => {
+    loadSelectOptions()
+  }, [loadSelectOptions])
+
+  useEffect(() => {
+    if (!selectOptions) return
+
+    const metaData = extendsFieldsToMetaData(extendsFields, selectOptions)
+
+    setMetaData(metaData)
+  }, [extendsFields, selectOptions])
+
+  return (
+    <>
+      {() => {
+        if (!metaData) return loadingComponent
+
+        return (
+          <GuardCompleteInfo
+            metaData={metaData}
+            skipComplateFileds={skipComplateFileds}
+            businessRequest={businessRequest}
+          />
+        )
+      }}
+    </>
   )
 }

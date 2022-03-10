@@ -1,5 +1,12 @@
 import { User } from 'authing-js-sdk'
-import { ExtendsField } from '../CompleteInfo/interface'
+import { ApplicationConfig } from '../AuthingGuard/api'
+import {
+  CompleteInfoBaseControls,
+  CompleteInfoExtendsControls,
+  CompleteInfoMetaData,
+  CompleteInfoRequest,
+  ExtendsField,
+} from '../CompleteInfo/interface'
 
 export const completeFieldsFilter = (user: User, field: ExtendsField) => {
   if (!user) {
@@ -39,4 +46,57 @@ export const completeFieldsFilter = (user: User, field: ExtendsField) => {
     return false
   }
   return true
+}
+
+export const extendsFieldsToMetaData = (
+  extendsFields: ApplicationConfig['extendsFields'] = [],
+  selectOptions: {
+    key: string
+    options: {
+      value: string
+      label: string
+    }[]
+  }[]
+): CompleteInfoMetaData[] =>
+  extendsFields.map((item) => {
+    return {
+      type: item.inputType as
+        | CompleteInfoBaseControls
+        | CompleteInfoExtendsControls,
+      label: item.label,
+      name: item.name,
+      required: item.required,
+      validateRules: item.validateRules,
+      options: selectOptions.find((option) => option.key === item.name)
+        ?.options,
+    }
+  })
+
+export const fieldValuesToRegisterProfile = (
+  extendsFields: ApplicationConfig['extendsFields'],
+  fieldValues?: CompleteInfoRequest['fieldValues']
+) => {
+  const registerProfile: Record<string, any> = {
+    udf: [],
+  }
+
+  fieldValues?.forEach(({ name, value, code }) => {
+    const fieldType = extendsFields.find((item) => item.name === name)?.type
+
+    // 根据字段类型生成不同的数据结构
+    if (fieldType === 'internal') {
+      if (name === 'phone') registerProfile.phoneCode = code
+
+      if (name === 'email') registerProfile.emailCode = code
+
+      registerProfile[name] = value
+    } else if (fieldType === 'user') {
+      registerProfile.udf.push({
+        key: name,
+        value,
+      })
+    }
+  })
+
+  return registerProfile
 }
