@@ -1,6 +1,6 @@
 {
   "name": "@authing/react-ui-components",
-  "version": "3.0.19-rc.14",
+  "version": "3.0.19-rc.15",
   "private": false,
   "main": "lib/index.min.js",
   "typings": "lib/index.d.ts",

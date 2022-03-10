@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Select } from 'antd'
+import { Select, Tooltip } from 'antd'
 import { isoInfo, IsoType } from '../../../_utils/countryList'
 import './styles.less'
 import { IconFont } from '../../../IconFont'
@@ -22,8 +22,18 @@ export const VirtualDropdown: FC<VirtualDropdownProps> = (props) => {
       label: (
         <div className="select-option-item">
           <span>{info.phoneCountryCode}</span>
-          <span>
-            {i18n.language === 'zh-CN' ? info.regions : info.regions_en}
+          <span className="country">
+            <Tooltip
+              title={i18n.language === 'zh-CN' ? info.regions : info.regions_en}
+              getPopupContainer={(triggerNode) => {
+                if (triggerNode) {
+                  return triggerNode.parentNode as HTMLElement
+                }
+                return document.body
+              }}
+            >
+              {i18n.language === 'zh-CN' ? info.regions : info.regions_en}
+            </Tooltip>
           </span>
         </div>
       ),
@@ -32,6 +42,7 @@ export const VirtualDropdown: FC<VirtualDropdownProps> = (props) => {
 
   return (
     <Select
+      open={true}
       showSearch
       dropdownClassName="areacode-virtual-dropdown"
       bordered={false}
