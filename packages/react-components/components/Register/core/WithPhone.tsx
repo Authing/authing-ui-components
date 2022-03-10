@@ -90,7 +90,16 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         submitButtonRef.current.onSpin(false)
       }
     },
-    [form, acceptedAgreements]
+    [
+      form,
+      agreements?.length,
+      acceptedAgreements,
+      registeContext,
+      isInternationSms,
+      areaCode,
+      authClient,
+      onRegister,
+    ]
   )
 
   const PhoenAccount = useCallback(
@@ -131,10 +140,11 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
 
   const SendCode = useCallback(
     (props) => {
-      if (publicConfig && publicConfig.internationalSmsConfig?.enabled) {
+      if (isInternationSms) {
         return (
           <SendCodeByPhone
             {...props}
+            isInternationSms={isInternationSms}
             form={form}
             fieldName="phone"
             className="authing-g2-input g2-send-code-input"
@@ -184,7 +194,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         )
       }
     },
-    [areaCode, form, publicConfig, t, verifyCodeLength]
+    [areaCode, form, isInternationSms, t, verifyCodeLength]
   )
 
   return (
