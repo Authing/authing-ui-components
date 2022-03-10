@@ -24,7 +24,6 @@ export const InputNumber = React.forwardRef<any, InputNumberProps>(
         pattern="[0-9]*"
         onChange={(e) => {
           let v = e.target.value
-
           if (!/^[0-9]*$/.test(v)) {
             return
           }

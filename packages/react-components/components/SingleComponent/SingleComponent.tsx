@@ -81,9 +81,9 @@ export function SingleComponent<T extends IG2FCProps>(
 
   // initEvents
   useEffect(() => {
-    const events = guardEventsFilter(props)
+    const events = guardEventsFilter(props, GuardLocalConfig?.openEventsMapping)
     setEvents(events)
-  }, [props])
+  }, [GuardLocalConfig, props])
 
   const initPublicConfig = useCallback(async () => {
     if (!config && !appId) return

@@ -1,7 +1,7 @@
 import { message } from 'antd'
 import { Form } from 'antd'
 import { SceneType, User } from 'authing-js-sdk'
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VerifyCodeInput } from '../VerifyCodeInput'
 import { useGuardAuthClient } from '../../Guard/authClient'
@@ -9,20 +9,28 @@ import { SendCodeBtn } from '../../SendCode/SendCodeBtn'
 import SubmitButton from '../../SubmitButton'
 import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
 import { VerifyCodeFormItem } from '../VerifyCodeInput/VerifyCodeFormItem'
-import { MFAConfig } from '../interface'
+import { GuardMFAInitData, MFAConfig } from '../interface'
 import { InputNumber } from '../../InputNumber'
 import { IconFont } from '../../IconFont'
 import { phoneDesensitization } from '../../_utils'
+import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
+import { defaultAreaCode, parsePhone } from '../../_utils/hooks'
 export interface BindMFASmsProps {
   mfaToken: string
   onBind: (phone: string) => void
   config: any
+  areaCode: string
+  setAreaCode: (areaCode: string) => void
+  isInternationSms: boolean
 }
 
 export const BindMFASms: React.FC<BindMFASmsProps> = ({
   mfaToken,
   onBind,
   config,
+  areaCode,
+  setAreaCode,
+  isInternationSms,
 }) => {
   const submitButtonRef = useRef<any>(null)
   const { t } = useTranslation()
@@ -42,6 +50,41 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
     }
   }
 
+  const PhoneAccount = useCallback(
+    (props) => {
+      if (isInternationSms) {
+        return (
+          <InputInternationPhone
+            {...props}
+            className="authing-g2-input"
+            size="large"
+            areaCode={areaCode}
+            onAreaCodeChange={(value: string) => {
+              setAreaCode(value)
+              form.getFieldValue(['phone']) && form.validateFields(['phone'])
+            }}
+          />
+        )
+      } else {
+        return (
+          <InputNumber
+            {...props}
+            className="authing-g2-input"
+            autoComplete="off"
+            size="large"
+            placeholder={t('login.inputPhone')}
+            prefix={
+              <IconFont
+                type="authing-a-smartphone-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
+          />
+        )
+      }
+    },
+    [areaCode, form, isInternationSms, setAreaCode, t]
+  )
   return (
     <>
       <h3 className="authing-g2-mfa-title">{t('common.bindPhone')}</h3>
@@ -55,25 +98,19 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
         }}
       >
         <CustomFormItem.Phone
-          className="authing-g2-input-form"
+          className={
+            isInternationSms
+              ? 'authing-g2-input-form remove-padding'
+              : 'authing-g2-input-form'
+          }
           name="phone"
           form={form}
           ref={ref}
           checkRepeat={true}
           required={true}
+          areaCode={areaCode}
         >
-          <InputNumber
-            className="authing-g2-input"
-            autoComplete="off"
-            size="large"
-            placeholder={t('login.inputPhone')}
-            prefix={
-              <IconFont
-                type="authing-a-smartphone-line1"
-                style={{ color: '#878A95' }}
-              />
-            }
-          />
+          <PhoneAccount />
         </CustomFormItem.Phone>
         <SubmitButton text={t('common.sure')} ref={submitButtonRef} />
       </Form>
@@ -87,6 +124,9 @@ export interface VerifyMFASmsProps {
   onVerify: (code: number, data: any) => void
   sendCodeRef: React.RefObject<HTMLButtonElement>
   codeLength: number
+  areaCode: string //绑定选择的
+  phoneCountryCode?: string //后端返回的国家区号
+  isInternationSms: boolean
 }
 
 export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
@@ -95,44 +135,74 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   onVerify,
   sendCodeRef,
   codeLength = 4,
+  areaCode,
+  phoneCountryCode,
+  isInternationSms,
 }) => {
   const authClient = useGuardAuthClient()
   const submitButtonRef = useRef<any>(null)
   const { t } = useTranslation()
   const [form] = Form.useForm()
   const [sent, setSent] = useState<boolean>(false)
+  const { phoneNumber, countryCode } = parsePhone(
+    isInternationSms,
+    phone,
+    areaCode
+  )
+  const onFinish = useCallback(
+    async (values: any) => {
+      submitButtonRef.current.onSpin(true)
+      const mfaCode = form.getFieldValue('mfaCode')
 
-  const onFinish = async (values: any) => {
-    submitButtonRef.current.onSpin(true)
-    const mfaCode = form.getFieldValue('mfaCode')
-    try {
-      const user: User = await authClient.mfa.verifyAppSmsMfa({
-        mfaToken,
-        phone: phone!,
-        code: mfaCode.join(''),
-      })
-      // TODO
-      onVerify(200, user)
-    } catch (e) {
-      const error = JSON.parse(e.message)
-      submitButtonRef.current.onError()
-      onVerify(error.code as number, error)
-    } finally {
-      submitButtonRef.current?.onSpin(false)
-    }
-  }
+      try {
+        const user: User = await authClient.mfa.verifyAppSmsMfa({
+          mfaToken,
+          phone: phone!,
+          code: mfaCode.join(''),
+          phoneCountryCode: phoneCountryCode ? phoneCountryCode : countryCode,
+        })
+        // TODO
+        onVerify(200, user)
+      } catch (e: any) {
+        const error = JSON.parse(e.message)
+        submitButtonRef.current.onError()
+        onVerify(error.code as number, error)
+      } finally {
+        submitButtonRef.current?.onSpin(false)
+      }
+    },
+    [
+      authClient.mfa,
+      countryCode,
+      form,
+      mfaToken,
+      onVerify,
+      phone,
+      phoneCountryCode,
+    ]
+  )
 
   const tips = useMemo(
     () =>
       sent
-        ? `${t('login.verifyCodeSended')} ${phoneDesensitization(phone)}`
+        ? `${t('login.verifyCodeSended')} ${
+            isInternationSms
+              ? phoneCountryCode
+                ? phoneCountryCode
+                : countryCode
+              : ''
+          } ${phoneDesensitization(phone)}`
         : '',
-    [phone, sent, t]
+    [countryCode, isInternationSms, phone, phoneCountryCode, sent, t]
   )
 
   const sendVerifyCode = async () => {
     try {
-      await authClient.sendSmsCode(phone!, '', SceneType.SCENE_TYPE_MFA_VERIFY)
+      await authClient.sendSmsCode(
+        phoneNumber,
+        phoneCountryCode ? phoneCountryCode : countryCode,
+        SceneType.SCENE_TYPE_MFA_VERIFY
+      )
       return true
     } catch (e: any) {
       if (e.code === 'ECONNABORTED') {
@@ -179,15 +249,26 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
 }
 
 export const MFASms: React.FC<{
-  mfaToken: string
-  phone?: string
+  // mfaToken: string
+  // phone?: string
   mfaLogin: any
   config: MFAConfig
-}> = ({ phone: userPhone, mfaToken, mfaLogin, config }) => {
+  initData: GuardMFAInitData
+}> = ({
+  mfaLogin,
+  config,
+  initData: { phone: userPhone, mfaToken, phoneCountryCode },
+}) => {
   const [phone, setPhone] = useState(userPhone)
+
   const sendCodeRef = useRef<HTMLButtonElement>(null)
 
+  const [areaCode, setAreaCode] = useState(defaultAreaCode)
+
   const codeLength = config.__publicConfig__?.verifyCodeLength
+  const isInternationSms = Boolean(
+    config && config.__publicConfig__?.internationalSmsConfig?.enabled
+  )
 
   return (
     <>
@@ -195,16 +276,22 @@ export const MFASms: React.FC<{
         <VerifyMFASms
           mfaToken={mfaToken}
           phone={phone}
+          phoneCountryCode={phoneCountryCode}
+          isInternationSms={isInternationSms}
           onVerify={(code, data) => {
             mfaLogin(code, data)
           }}
           codeLength={codeLength ?? 4}
           sendCodeRef={sendCodeRef}
+          areaCode={areaCode}
         />
       ) : (
         <BindMFASms
           config={config}
           mfaToken={mfaToken}
+          areaCode={areaCode}
+          setAreaCode={setAreaCode}
+          isInternationSms={isInternationSms}
           onBind={(phone: string) => {
             setPhone(phone)
             sendCodeRef.current?.click()

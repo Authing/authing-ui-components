@@ -15,7 +15,6 @@ import { IconFont } from '../../../IconFont'
 import { InputPassword } from '../../../InputPassword'
 import { Agreements } from '../../../Register/components/Agreements'
 import { AuthingResponse } from '../../../_utils/http'
-
 interface LoginWithPasswordProps {
   // configs
   publicKey: string

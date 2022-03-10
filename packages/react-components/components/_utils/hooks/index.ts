@@ -2,6 +2,15 @@ import { useRef, useCallback, useEffect } from 'react'
 import { GuardModuleType } from '../../Guard/module'
 import { useModule } from '../../context/module/context'
 import { useMediaQuery } from 'react-responsive'
+import phone from 'phone'
+import { LanguageMap } from '../../Type'
+export interface PhoneValidResult {
+  isValid: boolean
+  phoneNumber: string
+  countryIso2: string
+  countryIso3: string
+  countryCode: string
+}
 
 export const useChangeModule = () => {
   const { module, changeModule, setInitData } = useModule()
@@ -109,4 +118,44 @@ export const useShaking = () => {
     bindTotpSecretSave[0] && bindTotpSecretSave[0].classList.remove('shaking')
   }
   return { MountShaking, UnMountShaking }
+}
+export const defaultAreaCode = LanguageMap[navigator.language]
+  ? LanguageMap[navigator.language]
+  : 'CN'
+/**
+ * 解析手机号
+ * @param fieldValue 字段值
+ * @param areaCode 区号
+ * @returns
+ */
+export const parsePhone = (
+  isInternationSms: boolean,
+  fieldValue: string,
+  areaCode: string = defaultAreaCode
+) => {
+  let countryCode = ''
+
+  let phoneNumber = fieldValue
+  // 未开启国家化短信
+  if (!isInternationSms) {
+    return { phoneNumber, countryCode: '+86' }
+  }
+  // 处理 类似 19294229909 情况
+  if (phone(fieldValue, { country: areaCode }).isValid) {
+    const parsePhone = phone(fieldValue, {
+      country: areaCode,
+    }) as PhoneValidResult
+
+    countryCode = parsePhone.countryCode as string
+
+    phoneNumber = parsePhone.phoneNumber.split(countryCode)[1]
+  } else if (phone(fieldValue).isValid) {
+    // 处理 +86 19294229909 情况
+    const parsePhone = phone(fieldValue) as PhoneValidResult
+
+    countryCode = parsePhone.countryCode as string
+
+    phoneNumber = parsePhone.phoneNumber.split(countryCode)[1]
+  }
+  return { countryCode, phoneNumber }
 }

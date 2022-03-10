@@ -17,13 +17,13 @@ export interface GuardEvents
   ) => boolean | Promise<boolean>
 }
 
-export const guardEventsFilter = (props: any) => {
+export const guardEventsFilter = (props: any, openEventsMapping?: boolean) => {
   const events: GuardEvents = {}
   const eventsName = Object.keys(props).filter((name) => name.startsWith('on'))
   eventsName.forEach((eventName) => {
     events[eventName as keyof GuardEvents] = props[eventName]
   })
-  return guardEventsHijacking(events, props.config?.openEventsMapping)
+  return guardEventsHijacking(events, openEventsMapping)
 }
 
 const eventsMapping: Partial<GuardEvents> = {
@@ -40,7 +40,7 @@ const eventsMapping: Partial<GuardEvents> = {
 
 export const guardEventsHijacking = (
   events: GuardEvents,
-  openEventsMapping: boolean
+  openEventsMapping?: boolean
 ): GuardEvents => {
   const newEvents: GuardEvents = {}
   Object.keys(eventsMapping).forEach((eventsKey) => {
