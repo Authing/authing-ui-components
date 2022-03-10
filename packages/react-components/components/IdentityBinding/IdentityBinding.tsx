@@ -72,15 +72,15 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
         // props.onBinding?.(data.user, authClient!) // 登录成功
         // props.onLogin?.(data.user, authClient!) // 登录成功
         props.onBinding?.(data.user, authClient!) // 绑定成功
-        if (shoudGoToComplete(data.user, 'login', publicConfig)) {
-          __changeModule?.(GuardModuleType.COMPLETE_INFO, {
-            context: 'login',
-            user: data.user,
-          })
-        } else {
-          // TODO 身份源绑定后触发信息补全成功没有触发 onBinding
-          props.onLogin?.(data.user, authClient!) // 登录成功
-        }
+        // if (shoudGoToComplete(data.user, 'login', publicConfig)) {
+        //   __changeModule?.(GuardModuleType.COMPLETE_INFO, {
+        //     context: 'login',
+        //     user: data.user,
+        //   })
+        // } else {
+        // TODO 身份源绑定后触发信息补全成功没有触发 onBinding
+        props.onLogin?.(data.user, authClient!) // 登录成功
+        // }
       }
     }
 

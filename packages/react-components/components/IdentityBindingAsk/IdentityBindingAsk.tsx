@@ -30,14 +30,14 @@ export const GuardIdentityBindingAskView: React.FC<GuardIdentityBindingAskViewPr
         //   props.onCreate?.(data.user, authClient!) // 创建成功
         //   props.onLogin?.(data.user, authClient!) // 创建成功
         props.onCreate?.(data.user, authClient!) // 创建成功
-        if (shoudGoToComplete(data.user, 'login', publicConfig, true)) {
-          __changeModule?.(GuardModuleType.COMPLETE_INFO, {
-            context: 'login',
-            user: data.user,
-          })
-        } else {
-          props.onLogin?.(data.user, authClient!) // 创建成功
-        }
+        // if (shoudGoToComplete(data.user, 'login', publicConfig, true)) {
+        //   __changeModule?.(GuardModuleType.COMPLETE_INFO, {
+        //     context: 'login',
+        //     user: data.user,
+        //   })
+        // } else {
+        props.onLogin?.(data.user, authClient!) // 创建成功
+        // }
       }
     }
 

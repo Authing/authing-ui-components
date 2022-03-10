@@ -102,14 +102,14 @@ export const GuardMFAView: React.FC = () => {
 
     if (code === 200) {
       return (data: any) => {
-        if (shoudGoToComplete(data, 'login', publicConfig, autoRegister)) {
-          changeModule?.(GuardModuleType.COMPLETE_INFO, {
-            context: 'login',
-            user: data,
-          })
-        } else {
-          events?.onLogin?.(data, client!) // 登录成功
-        }
+        // if (shoudGoToComplete(data, 'login', publicConfig, autoRegister)) {
+        //   changeModule?.(GuardModuleType.COMPLETE_INFO, {
+        //     context: 'login',
+        //     user: data,
+        //   })
+        // } else {
+        events?.onLogin?.(data, client!) // 登录成功
+        // }
       }
     }
 

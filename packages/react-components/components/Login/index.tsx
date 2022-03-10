@@ -187,16 +187,16 @@ export const GuardLoginView = () => {
 
     if (code === 200) {
       return (data: any) => {
-        if (
-          shoudGoToComplete(data, 'login', publicConfig, config?.autoRegister)
-        ) {
-          changeModule?.(GuardModuleType.COMPLETE_INFO, {
-            context: 'login',
-            user: data,
-          })
-        } else {
-          events?.onLogin?.(data, client!) // 登录成功
-        }
+        // if (
+        //   shoudGoToComplete(data, 'login', publicConfig, config?.autoRegister)
+        // ) {
+        //   changeModule?.(GuardModuleType.COMPLETE_INFO, {
+        //     context: 'login',
+        //     user: data,
+        //   })
+        // } else {
+        events?.onLogin?.(data, client!) // 登录成功
+        // }
       }
     }
 

@@ -3,7 +3,10 @@ import React, { useEffect, useMemo } from 'react'
 import { GuardModuleType, GuardProps } from '..'
 import { GuardBindTotpView } from '../../BindTotp'
 import { GuardChangePassword } from '../../ChangePassword'
-import { GuardCompleteInfoView } from '../../CompleteInfo'
+import {
+  GuardLoginCompleteInfoView,
+  GuardRegisterCompleteInfoView,
+} from '../../CompleteInfo'
 import { GuardDownloadATView } from '../../DownloadAuthenticator'
 import { GuardErrorView } from '../../Error'
 import { GuardForgetPassword } from '../../ForgetPassword'
@@ -77,9 +80,12 @@ export const RenderModule: React.FC<{
     [GuardModuleType.CHANGE_PWD]: () => <GuardChangePassword />,
     [GuardModuleType.BIND_TOTP]: () => <GuardBindTotpView />,
     [GuardModuleType.ANY_QUESTIONS]: () => <GuardNeedHelpView />,
-    [GuardModuleType.COMPLETE_INFO]: () => <GuardCompleteInfoView />,
     [GuardModuleType.RECOVERY_CODE]: () => <GuardRecoveryCodeView />,
     [GuardModuleType.SUBMIT_SUCCESS]: () => <GuardSubmitSuccessView />,
+    [GuardModuleType.REGISTER_COMPLETE_INFO]: () => (
+      <GuardRegisterCompleteInfoView />
+    ),
+    [GuardModuleType.LOGIN_COMPLETE_INFO]: () => <GuardLoginCompleteInfoView />,
   }
 
   // 初始化 请求拦截器 （Error Code）

@@ -188,17 +188,15 @@ export const GuardRegisterCompleteInfoView: React.FC = () => {
 
   return (
     <>
-      {() => {
-        if (!metaData) return loadingComponent
-
-        return (
-          <GuardCompleteInfo
-            metaData={metaData}
-            skipComplateFileds={skipComplateFileds}
-            businessRequest={businessRequest}
-          />
-        )
-      }}
+      {!metaData ? (
+        loadingComponent
+      ) : (
+        <GuardCompleteInfo
+          metaData={metaData}
+          skipComplateFileds={skipComplateFileds}
+          businessRequest={businessRequest}
+        />
+      )}
     </>
   )
 }

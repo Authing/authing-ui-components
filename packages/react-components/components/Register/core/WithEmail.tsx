@@ -11,6 +11,9 @@ import SubmitButton from '../../SubmitButton'
 import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
+import { useIsChangeComplete } from '../utils'
+import { useGuardModule } from '../../_utils/context'
+import { GuardModuleType } from '../../Guard'
 
 export interface RegisterWithEmailProps {
   onRegister: Function
@@ -31,6 +34,10 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
 
   const authClient = useGuardAuthClient()
   const [form] = Form.useForm()
+
+  const isChangeComplete = useIsChangeComplete('email')
+
+  const { changeModule } = useGuardModule()
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
   const [validated, setValidated] = useState(false)
@@ -80,20 +87,38 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
 
         const context = registeContext ?? {}
 
-        // 注册
-        const user = await authClient.registerByEmail(
+        // 注册使用的详情信息
+        const registerContent = {
           email,
           password,
-          {
+          profile: {
             browser:
               typeof navigator !== 'undefined' ? navigator.userAgent : null,
             device: getDeviceName(),
           },
-          {
+          options: {
             context,
             generateToken: true,
             // params: getUserRegisterParams(),
-          }
+          },
+        }
+
+        // 看看是否要跳转到 信息补全
+        if (isChangeComplete) {
+          changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
+            businessRequestName: 'registerByEmail',
+            context: registerContent,
+          })
+
+          return
+        }
+
+        // 注册
+        const user = await authClient.registerByEmail(
+          registerContent.email,
+          registerContent.password,
+          registerContent.profile,
+          registerContent.options
         )
         submitButtonRef.current.onSpin(false)
         onRegister(200, user)

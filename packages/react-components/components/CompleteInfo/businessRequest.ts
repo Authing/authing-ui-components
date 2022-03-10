@@ -1,4 +1,5 @@
 import { getAuthClient } from '../AuthingGuard/hooks'
+import { getGuardAuthClient } from '../Guard/authClient'
 import { getGuardHttp } from '../_utils/guardHttp'
 import { CompleteInfoRequest } from './interface'
 
@@ -23,7 +24,7 @@ const registerMethod = (
   content: any,
   profile?: any
 ) => {
-  const authClient = getAuthClient()
+  const authClient = getGuardAuthClient()
 
   if (fnName === 'registerByEmail') {
     return authClient!.registerByEmail(

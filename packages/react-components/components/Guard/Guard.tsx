@@ -20,7 +20,7 @@ export const Guard = (props: GuardProps) => {
 
   // 首页 init 数据
   const initState: ModuleState = {
-    moduleName: config?.defaultScenes ?? GuardModuleType.COMPLETE_INFO,
+    moduleName: config?.defaultScenes ?? GuardModuleType.LOGIN,
     initData: config?.defaultInitData ?? {},
   }
 
