@@ -27,7 +27,7 @@ import {
   useGuardModule,
   useGuardPublicConfig,
 } from '../_utils/context'
-import { isWechatBrowser, shoudGoToComplete } from '../_utils'
+import { isWechatBrowser } from '../_utils'
 import { LoginWithVerifyCode } from './core/withVerifyCode'
 import { VerifyLoginMethods } from '../AuthingGuard/api'
 

@@ -12,13 +12,11 @@ import { useGuardAuthClient } from '../Guard/authClient'
 import { codeMap } from './codemap'
 import './styles.less'
 import { message } from 'antd'
-import { shoudGoToComplete } from '../_utils'
 import {
   useGuardEvents,
   useGuardFinallyConfig,
   useGuardInitData,
   useGuardModule,
-  useGuardPublicConfig,
 } from '../_utils/context'
 interface MFABackStateContextType {
   setMfaBackState: React.Dispatch<React.SetStateAction<string>>
@@ -76,12 +74,11 @@ export const GuardMFAView: React.FC = () => {
     initData.current ??
       initData.applicationMfa?.sort((a, b) => a.sort - b.sort)[0].mfaPolicy
   )
-  const publicConfig = useGuardPublicConfig()
   const [mfaBackState, setMfaBackState] = useState<string>('login')
   const [showMethods, setShowMethods] = useState(true)
   const client = useGuardAuthClient()
   const { t } = useTranslation()
-  let { autoRegister } = config
+
   const onBack = () => {
     if (currentMethod === MFAType.FACE && mfaBackState === 'check') {
       setCurrentMethod(

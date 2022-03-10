@@ -13,13 +13,10 @@ import { SecurityCode } from './core/securityCode'
 import { GuardBindTotpInitData } from './interface'
 import { useTranslation } from 'react-i18next'
 import './styles.less'
-import { shoudGoToComplete } from '../_utils'
 import {
   useGuardEvents,
-  useGuardFinallyConfig,
   useGuardInitData,
   useGuardModule,
-  useGuardPublicConfig,
 } from '../_utils/context'
 import { MFAType } from '../MFA/interface'
 
@@ -29,8 +26,6 @@ enum BindTotpType {
 }
 
 export const GuardBindTotpView: React.FC = () => {
-  const config = useGuardFinallyConfig()
-
   const initData = useGuardInitData<GuardBindTotpInitData>()
 
   const events = useGuardEvents()
@@ -42,7 +37,6 @@ export const GuardBindTotpView: React.FC = () => {
   const [secret, setSecret] = useState('')
   const [qrcode, setQrcode] = useState('')
   const [user, setUser] = useState<User>()
-  const publicConfig = useGuardPublicConfig()
   const [bindTotpType, setBindTotpType] = useState<BindTotpType>(
     BindTotpType.SECURITY_CODE
   )

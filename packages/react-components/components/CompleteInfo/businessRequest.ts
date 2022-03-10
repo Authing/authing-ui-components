@@ -1,4 +1,3 @@
-import { getAuthClient } from '../AuthingGuard/hooks'
 import { getGuardAuthClient } from '../Guard/authClient'
 import { getGuardHttp } from '../_utils/guardHttp'
 import { CompleteInfoRequest } from './interface'

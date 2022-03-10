@@ -8,7 +8,7 @@ import { GuardModuleType } from '../Guard/module'
 import { RegisterWithEmail } from './core/WithEmail'
 import { RegisterWithPhone } from './core/WithPhone'
 import { codeMap } from './codemap'
-import { shoudGoToComplete, tabSort } from '../_utils'
+import { tabSort } from '../_utils'
 import { i18n } from '../_utils/locales'
 import {
   useGuardEvents,
