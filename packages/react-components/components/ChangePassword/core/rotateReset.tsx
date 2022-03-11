@@ -16,7 +16,9 @@ interface RotateResetProps {
 
 export const RotateReset = (props: RotateResetProps) => {
   const { t } = useTranslation()
+
   let [form] = Form.useForm()
+
   let authClient = useGuardAuthClient()
   let submitButtonRef = useRef<any>(null)
 

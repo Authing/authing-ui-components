@@ -68,13 +68,6 @@ export const GuardChangePassword = () => {
         <div className="title-explain">{typeContent.explain}</div>
       </div>
       <div className="g2-view-tabs">
-        {initData.type === 'inital' && (
-          <FirstLoginReset
-            onReset={onReset}
-            initData={initData}
-            publicConfig={publicConfig}
-          />
-        )}
         {initData.type === 'rotate' && (
           <RotateReset
             onReset={onReset}
@@ -85,4 +78,16 @@ export const GuardChangePassword = () => {
       </div>
     </div>
   )
+}
+
+export const GuardFirstLoginPasswordResetView: React.FC = () => {
+  const onReset = (res: any) => {}
+
+  const coreForm = <FirstLoginReset onReset={onReset} />
+
+  return <span />
+}
+
+export const GuardForcedPasswordResetView: React.FC = () => {
+  return <span />
 }

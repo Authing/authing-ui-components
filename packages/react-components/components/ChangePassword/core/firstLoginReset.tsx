@@ -6,15 +6,23 @@ import SubmitButton from '../../SubmitButton'
 import CustomFormItem from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
+import { useGuardInitData, useGuardPublicConfig } from '../../_utils/context'
 interface FirstLoginResetProps {
   onReset: any
-  publicConfig: any
-  initData: any
 }
-export const FirstLoginReset = (props: FirstLoginResetProps) => {
+export const FirstLoginReset: React.FC<FirstLoginResetProps> = ({
+  onReset,
+}) => {
   const { t } = useTranslation()
+
+  const initData = useGuardInitData<{ token: string }>()
+
+  const publicConfig = useGuardPublicConfig()
+
   let [form] = Form.useForm()
+
   let client = useGuardAuthClient()
+
   let submitButtonRef = useRef<any>(null)
 
   const onFinish = async (values: any) => {
@@ -22,10 +30,10 @@ export const FirstLoginReset = (props: FirstLoginResetProps) => {
     submitButtonRef.current?.onSpin(false)
     try {
       let res = await client.resetPasswordByFirstLoginToken({
-        token: props.initData.token,
+        token: initData.token,
         password: newPassword,
       })
-      props.onReset(res)
+      onReset(res)
     } catch (error: any) {
       message.error(error.message)
       submitButtonRef?.current?.onError()

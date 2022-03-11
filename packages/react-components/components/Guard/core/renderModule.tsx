@@ -69,22 +69,37 @@ export const RenderModule: React.FC<{
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const ComponentsMapping: Record<GuardModuleType, () => React.ReactNode> = {
+    // Error
     [GuardModuleType.ERROR]: () => <GuardErrorView />,
+    // Login
     [GuardModuleType.LOGIN]: () => <GuardLoginView />,
+    // 身份源绑定
     [GuardModuleType.IDENTITY_BINDING]: () => <GuardLoginView />,
+    // 身份源绑定 问询
     [GuardModuleType.IDENTITY_BINDING_ASK]: () => <GuardNeedHelpView />,
+    // MFA
     [GuardModuleType.MFA]: () => <GuardMFAView />,
+    // 注册
     [GuardModuleType.REGISTER]: () => <GuardRegisterView />,
+    // 下载 Authenticator
     [GuardModuleType.DOWNLOAD_AT]: () => <GuardDownloadATView />,
+    // 忘记密码 -> 重置密码
     [GuardModuleType.FORGET_PWD]: () => <GuardForgetPassword />,
+    // 首次登录修改密码 && 密码过期
     [GuardModuleType.CHANGE_PWD]: () => <GuardChangePassword />,
+    // 绑定 TOTP
     [GuardModuleType.BIND_TOTP]: () => <GuardBindTotpView />,
+    // 问题反馈
     [GuardModuleType.ANY_QUESTIONS]: () => <GuardNeedHelpView />,
+    // MFA 恢复码
     [GuardModuleType.RECOVERY_CODE]: () => <GuardRecoveryCodeView />,
+    // 提交成功
     [GuardModuleType.SUBMIT_SUCCESS]: () => <GuardSubmitSuccessView />,
+    // 注册信息补全
     [GuardModuleType.REGISTER_COMPLETE_INFO]: () => (
       <GuardRegisterCompleteInfoView />
     ),
+    // 登录信息补全
     [GuardModuleType.LOGIN_COMPLETE_INFO]: () => <GuardLoginCompleteInfoView />,
   }
 
