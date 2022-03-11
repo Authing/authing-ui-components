@@ -19,7 +19,7 @@ import { GuardSubmitSuccessView } from '../../SubmitSuccess'
 import {
   useGuardContextLoaded,
   useGuardCurrentModule,
-  useGuardDefaultMergedConfigContext,
+  useGuardDefaultMergedConfig,
   useGuardHttpClient,
   useGuardModule,
 } from '../../_utils/context'
@@ -53,7 +53,7 @@ const langMap = {
 export const RenderModule: React.FC<{
   guardProps: GuardProps
 }> = ({ guardProps }) => {
-  const defaultMergedConfig = useGuardDefaultMergedConfigContext()
+  const defaultMergedConfig = useGuardDefaultMergedConfig()
 
   const contextLoaded = useGuardContextLoaded()
 

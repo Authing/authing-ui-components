@@ -1,6 +1,6 @@
 import { Input, message, message as Message } from 'antd'
 import { Form } from 'antd'
-import { EmailScene, User } from 'authing-js-sdk'
+import { EmailScene } from 'authing-js-sdk'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VerifyCodeInput } from '../VerifyCodeInput'
@@ -13,6 +13,7 @@ import { VerifyCodeFormItem } from '../VerifyCodeInput/VerifyCodeFormItem'
 import { IconFont } from '../../IconFont'
 import { mailDesensitization } from '../../_utils'
 import { useGuardPublicConfig } from '../../_utils/context'
+import { MfaBusinessAction, useMfaBusinessRequest } from '../businessRequest'
 
 interface BindMFAEmailProps {
   mfaToken: string
@@ -98,9 +99,15 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
   codeLength,
 }) => {
   const authClient = useGuardAuthClient()
+
+  const businessRequest = useMfaBusinessRequest()[MfaBusinessAction.VerifyEmail]
+
   const submitButtonRef = useRef<any>(null)
+
   const { t } = useTranslation()
+
   const [form] = Form.useForm()
+
   const [sent, setSent] = useState(false)
 
   const sendVerifyCode = async () => {
@@ -123,14 +130,16 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
     submitButtonRef.current?.onSpin(true)
     const mfaCode = form.getFieldValue('mfaCode')
 
-    try {
-      const user: User = await authClient.mfa.verifyAppEmailMfa({
-        mfaToken,
-        email: email!,
-        code: mfaCode.join(''),
-      })
+    const requestData = {
+      mfaToken,
+      email: email!,
+      code: mfaCode.join(''),
+    }
 
-      onVerify(200, user)
+    try {
+      const res = await businessRequest(requestData)
+
+      if (res.code === 200) onVerify(200, res.data)
     } catch (e: any) {
       const error = JSON.parse(e?.message)
       submitButtonRef.current?.onError()

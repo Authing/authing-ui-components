@@ -22,6 +22,7 @@ import { message } from 'antd'
 import { faceErrorMessage } from '../../_utils/errorFace'
 import { MFABackStateContext } from '..'
 import { useGuardPublicConfig } from '../../_utils/context'
+import { MfaBusinessAction, useMfaBusinessRequest } from '../businessRequest'
 const useDashoffset = (percent: number) => {
   // 接受 0 - 1，返回 0-700 之间的偏移量
   let offset = percent * 7
@@ -37,6 +38,8 @@ export const MFAFace = (props: any) => {
   let { t } = useTranslation()
   const [faceState, setFaceState] = useState('ready') // ready, identifying, retry
   const [percent, setPercent] = useState(0) // 识别进度（相似性）
+
+  const businessRequest = useMfaBusinessRequest()[MfaBusinessAction.VerifyFace]
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -154,21 +157,15 @@ export const MFAFace = (props: any) => {
     })
   }
 
-  const faceCheck = () => {
-    let url = '/api/v2/mfa/face/verify'
-    let data = {
-      photo: p1.current,
+  const faceCheck = async () => {
+    const requestData = {
+      photo: p1.current!,
+      mfaToken: props.initData.mfaToken,
     }
-    let mfaToken = props.initData.mfaToken
-    let config = {
-      headers: {
-        authorization: mfaToken,
-      },
-    }
-    post(url, data, config).then((result) => {
-      // 如果是 1702，那么久绑定一个
-      faceLogin(result)
-    })
+
+    const result = await businessRequest(requestData)
+
+    faceLogin(result)
   }
 
   // bind 的情况

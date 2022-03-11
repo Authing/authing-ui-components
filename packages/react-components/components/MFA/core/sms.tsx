@@ -14,6 +14,7 @@ import { InputNumber } from '../../InputNumber'
 import { IconFont } from '../../IconFont'
 import { phoneDesensitization } from '../../_utils'
 import { useGuardPublicConfig } from '../../_utils/context'
+import { useMfaBusinessRequest, MfaBusinessAction } from '../businessRequest'
 export interface BindMFASmsProps {
   mfaToken: string
   onBind: (phone: string) => void
@@ -98,22 +99,31 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   codeLength = 4,
 }) => {
   const authClient = useGuardAuthClient()
+
   const submitButtonRef = useRef<any>(null)
+
   const { t } = useTranslation()
+
   const [form] = Form.useForm()
+
   const [sent, setSent] = useState<boolean>(false)
+
+  const businessRequest = useMfaBusinessRequest()[MfaBusinessAction.VerifySms]
 
   const onFinish = async (values: any) => {
     submitButtonRef.current.onSpin(true)
     const mfaCode = form.getFieldValue('mfaCode')
+
+    const requestData = {
+      mfaToken,
+      phone: phone!,
+      code: mfaCode.join(''),
+    }
+
     try {
-      const user: User = await authClient.mfa.verifyAppSmsMfa({
-        mfaToken,
-        phone: phone!,
-        code: mfaCode.join(''),
-      })
-      // TODO
-      onVerify(200, user)
+      const res = await businessRequest(requestData)
+
+      if (res.code === 200) onVerify(200, res.data)
     } catch (e) {
       const error = JSON.parse(e.message)
       submitButtonRef.current.onError()

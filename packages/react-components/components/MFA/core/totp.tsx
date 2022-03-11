@@ -3,12 +3,12 @@ import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { GuardModuleType } from '../../Guard/module'
-import { useGuardHttp } from '../../_utils/guardHttp'
 import { GuardMFAInitData, MFAConfig } from '../interface'
 import SubmitButton from '../../SubmitButton'
 import { VerifyCodeFormItem } from '../VerifyCodeInput/VerifyCodeFormItem'
 import { VerifyCodeInput } from '../VerifyCodeInput'
 import { IconFont } from '../../IconFont'
+import { MfaBusinessAction, useMfaBusinessRequest } from '../businessRequest'
 
 export interface BindMFATotpProps {
   initData: GuardMFAInitData
@@ -51,28 +51,25 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
   changeModule,
 }) => {
   const { t } = useTranslation()
+
   const [form] = Form.useForm()
 
   const submitButtonRef = useRef<any>(null)
 
-  const { post } = useGuardHttp()
+  const businessRequest = useMfaBusinessRequest()[MfaBusinessAction.VerifyTotp]
 
   const [, onFinish] = useAsyncFn(async () => {
     submitButtonRef.current.onSpin(true)
 
     const mfaCode = form.getFieldValue('mfaCode')
+
+    const requestData = {
+      totp: mfaCode.join(''),
+      mfaToken,
+    }
+
     try {
-      const { code, data, message } = await post(
-        '/api/v2/mfa/totp/verify',
-        {
-          totp: mfaCode.join(''),
-        },
-        {
-          headers: {
-            authorization: mfaToken,
-          },
-        }
-      )
+      const { code, data, message } = await businessRequest(requestData)
 
       if (code !== 200) {
         mfaLogin(code, {

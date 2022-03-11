@@ -164,7 +164,7 @@ export const useGuardPublicConfig = () => useContext(GuardPublicConfigContext)
 
 export const useGuardHttpClient = () => useContext(GuardHttpClientContext)
 
-export const useGuardDefaultMergedConfigContext = () =>
+export const useGuardDefaultMergedConfig = () =>
   useContext(GuardDefaultMergedConfigContext)
 
 export const useGuardAppId = () => useContext(GuardAppIdContext)
@@ -184,5 +184,4 @@ export const useGuardFinallyConfig = () => useContext(GuardFinallyConfigContext)
 
 export const useGuardContextLoaded = () => useContext(GuardContextLoaded)
 
-export const useGuardIsAuthFlowContext = () =>
-  useContext(GuardIsAuthFlowContext)
+export const useGuardIsAuthFlow = () => useContext(GuardIsAuthFlowContext)
