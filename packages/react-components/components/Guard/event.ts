@@ -2,6 +2,7 @@ import { message } from 'antd'
 import { GuardModuleType } from '.'
 import { CompleteInfoEvents } from '../CompleteInfo/interface'
 import { ForgetPasswordEvents } from '../ForgetPassword/interface'
+import { IdentityBindingEvents } from '../IdentityBinding/interface'
 import { LoginEvents } from '../Login/interface'
 import { RegisterEvents } from '../Register/interface'
 import { i18n } from '../_utils/locales'
@@ -10,7 +11,8 @@ export interface GuardEvents
   extends LoginEvents,
     RegisterEvents,
     CompleteInfoEvents,
-    ForgetPasswordEvents {
+    ForgetPasswordEvents,
+    IdentityBindingEvents {
   onBeforeChangeModule?: (
     key: GuardModuleType,
     initData?: any

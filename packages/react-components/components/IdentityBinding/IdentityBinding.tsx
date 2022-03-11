@@ -8,21 +8,32 @@ import { IconFont } from '../IconFont'
 import { codeMap } from '../Login/codemap'
 import { LoginWithPassword } from '../Login/core/withPassword'
 import { LoginWithVerifyCode } from '../Login/core/withVerifyCode'
-import { shoudGoToComplete } from '../_utils'
-import { useGuardPublicConfig } from '../_utils/context'
+// import { shoudGoToComplete } from '../_utils'
+import {
+  useGuardEvents,
+  useGuardFinallyConfig,
+  useGuardInitData,
+  useGuardModule,
+  useGuardPublicConfig,
+} from '../_utils/context'
 import { useGuardHttp } from '../_utils/guardHttp'
 import { i18n } from '../_utils/locales'
-import { GuardIdentityBindingViewProps } from './interface'
+import { GuardIdentityBindingInitData } from './interface'
 import './styles.less'
 
-export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> = (
-  props
-) => {
-  const { config, initData, __changeModule } = props
+export const GuardIdentityBindingView: React.FC = () => {
+  const initData = useGuardInitData<GuardIdentityBindingInitData>()
+
+  const config = useGuardFinallyConfig()
+
+  const { changeModule } = useGuardModule()
 
   const { t } = useTranslation()
 
+  const events = useGuardEvents()
+
   const { publicKey, autoRegister, agreementEnabled } = config
+
   const publicConfig = useGuardPublicConfig()
 
   const { post } = useGuardHttp()
@@ -32,7 +43,7 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
   const onBack = () => {
     if (initData.source === GuardModuleType.IDENTITY_BINDING_ASK)
       window.history.back()
-    else __changeModule?.(GuardModuleType.LOGIN)
+    else changeModule?.(GuardModuleType.LOGIN)
   }
 
   const bindMethodsMap = {
@@ -55,7 +66,7 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
       const { identity, password } = data
       const encrypt = authClient.options.encryptFunction
 
-      const encryptPassword = await encrypt!(password, props.config?.publicKey!)
+      const encryptPassword = await encrypt!(password, publicKey!)
 
       return await post('/interaction/federation/binding/byAccount', {
         account: identity,
@@ -71,15 +82,15 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
         // console.log('binding success', data)
         // props.onBinding?.(data.user, authClient!) // 登录成功
         // props.onLogin?.(data.user, authClient!) // 登录成功
-        props.onBinding?.(data.user, authClient!) // 绑定成功
+        events?.onBinding?.(data.user, authClient!) // 绑定成功
         // if (shoudGoToComplete(data.user, 'login', publicConfig)) {
-        //   __changeModule?.(GuardModuleType.COMPLETE_INFO, {
+        //   changeModule?.(GuardModuleType.COMPLETE_INFO, {
         //     context: 'login',
         //     user: data.user,
         //   })
         // } else {
         // TODO 身份源绑定后触发信息补全成功没有触发 onBinding
-        props.onLogin?.(data.user, authClient!) // 登录成功
+        events?.onLogin?.(data.user, authClient!) // 登录成功
         // }
       }
     }
@@ -96,7 +107,7 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
       let m = action.module ? action.module : GuardModuleType.ERROR
       let init = action.initData ? action.initData : {}
       return (initData?: any) => {
-        props.__changeModule?.(m, { ...initData, ...init })
+        changeModule?.(m, { ...initData, ...init })
       }
     }
     if (action?.action === 'message') {
@@ -119,12 +130,12 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
   const onLogin = (code: any, data: any, message?: string) => {
     const callback = __codePaser?.(code)
     if (code !== 200) {
-      props.onBindingError?.({
+      events?.onBindingError?.({
         code,
         data,
         message,
       })
-      props.onLoginError?.({
+      events?.onLoginError?.({
         code,
         data,
         message,
@@ -237,7 +248,7 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
 
       <div className="g2-view-identity-binding-content">
         <div className="g2-view-identity-binding-content-logo">
-          <img src={props.config?.logo} alt="" className="logo" />
+          <img src={config?.logo} alt="" className="logo" />
         </div>
         <div className="g2-view-identity-binding-content-title">
           <span>{t('common.identityBindingTitle')}</span>
