@@ -8,7 +8,6 @@ import { IconFont } from '../IconFont'
 import { codeMap } from '../Login/codemap'
 import { LoginWithPassword } from '../Login/core/withPassword'
 import { LoginWithVerifyCode } from '../Login/core/withVerifyCode'
-// import { shoudGoToComplete } from '../_utils'
 import {
   useGuardEvents,
   useGuardFinallyConfig,
@@ -16,8 +15,11 @@ import {
   useGuardModule,
   useGuardPublicConfig,
 } from '../_utils/context'
-import { useGuardHttp } from '../_utils/guardHttp'
 import { i18n } from '../_utils/locales'
+import {
+  IdentityBindingBusinessAction,
+  useIdentityBindingBusinessRequest,
+} from './businessRequest'
 import { GuardIdentityBindingInitData } from './interface'
 import './styles.less'
 
@@ -36,9 +38,16 @@ export const GuardIdentityBindingView: React.FC = () => {
 
   const publicConfig = useGuardPublicConfig()
 
-  const { post } = useGuardHttp()
-
   const authClient = useGuardAuthClient()
+  const phoneCodeRequest = useIdentityBindingBusinessRequest()[
+    IdentityBindingBusinessAction.PhoneCode
+  ]
+  const emailCodeRequest = useIdentityBindingBusinessRequest()[
+    IdentityBindingBusinessAction.EmailCode
+  ]
+  const PasswordRequest = useIdentityBindingBusinessRequest()[
+    IdentityBindingBusinessAction.Password
+  ]
 
   const onBack = () => {
     if (initData.source === GuardModuleType.IDENTITY_BINDING_ASK)
@@ -48,30 +57,31 @@ export const GuardIdentityBindingView: React.FC = () => {
 
   const bindMethodsMap = {
     'phone-code': async (data: any) => {
-      const { identity, code } = data
-      return await post('/interaction/federation/binding/byPhoneCode', {
-        phone: identity,
-        code,
-      })
+      const { identity: phone, code } = data
+      return await phoneCodeRequest({ phone, code })
+      // return await post('/interaction/federation/binding/byPhoneCode', {
+      //   phone: identity,
+      //   code,
+      // })
     },
     'email-code': async (data: any) => {
-      const { identity, code } = data
-
-      return await post('/interaction/federation/binding/byEmailCode', {
-        email: identity,
-        code,
-      })
+      const { identity: email, code } = data
+      return await emailCodeRequest({ email, code })
+      // return await post('/interaction/federation/binding/byEmailCode', {
+      //   email: identity,
+      //   code,
+      // })
     },
     password: async (data: any) => {
-      const { identity, password } = data
+      const { identity: account, password } = data
       const encrypt = authClient.options.encryptFunction
 
       const encryptPassword = await encrypt!(password, publicKey!)
-
-      return await post('/interaction/federation/binding/byAccount', {
-        account: identity,
-        password: encryptPassword,
-      })
+      return await PasswordRequest({ account, password: encryptPassword })
+      // return await post('/interaction/federation/binding/byAccount', {
+      //   account: identity,
+      //   password: encryptPassword,
+      // })
     },
   }
 

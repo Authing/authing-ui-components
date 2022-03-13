@@ -1,45 +1,78 @@
-import { useGuardIsAuthFlow } from '../_utils/context'
+// import { useGuardIsAuthFlow } from '../_utils/context'
+import { getGuardHttp } from '../_utils/guardHttp'
 export enum IdentityBindingBusinessAction {
   PhoneCode = 'phone-code',
   EmailCode = 'emial-code',
   Password = 'password',
 }
+export interface PhoneCodeParams {
+  phone: string
+  code: string
+}
+export interface EmailCodeParams {
+  email: string
+  code: string
+}
+export interface PasswordParams {
+  account: string
+  password: string
+}
+export const PhoneCode = async (params: PhoneCodeParams) => {
+  const { phone, code } = params
 
-export const PhoneCode
+  const { post } = getGuardHttp()
+
+  return await post('/interaction/federation/binding/byPhoneCode', {
+    phone,
+    code,
+  })
+}
+
+export const EmailCode = async (params: EmailCodeParams) => {
+  const { email, code } = params
+
+  const { post } = getGuardHttp()
+
+  return await post('/interaction/federation/binding/byEmailCode', {
+    email,
+    code,
+  })
+}
+
+export const Password = async (params: PasswordParams) => {
+  const { account, password } = params
+
+  const { post } = getGuardHttp()
+
+  return await post('/interaction/federation/binding/byAccount', {
+    account,
+    password,
+  })
+}
 
 export const useIdentityBindingBusinessRequest = () => {
-  const isFlow = useGuardIsAuthFlow()
+  //   const isFlow = useGuardIsAuthFlow()
 
   const request = {
-    [IdentityBindingBusinessAction.PhoneCode]: (
-      content: VerifyEmailContent
-    ) => {
-      if (isFlow) {
-        return authFlow(MfaBusinessAction.VerifyEmail, content)
-      }
-
-      return VerifyEmail(content)
+    [IdentityBindingBusinessAction.PhoneCode]: (params: PhoneCodeParams) => {
+      //   if (isFlow) {
+      //     return authFlow(MfaBusinessAction.VerifyEmail, content)
+      //   }
+      return PhoneCode(params)
     },
-    [MfaBusinessAction.VerifySms]: (content: VerifySmsContent) => {
-      if (isFlow) {
-        return authFlow(MfaBusinessAction.VerifySms, content)
-      }
+    [IdentityBindingBusinessAction.EmailCode]: (params: EmailCodeParams) => {
+      //   if (isFlow) {
+      //     return authFlow(MfaBusinessAction.VerifySms, content)
+      //   }
 
-      return VerifySms(content)
+      return EmailCode(params)
     },
-    [MfaBusinessAction.VerifyTotp]: (content: VerifyTotpContent) => {
-      if (isFlow) {
-        return authFlow(MfaBusinessAction.VerifyTotp, content)
-      }
+    [IdentityBindingBusinessAction.Password]: (params: PasswordParams) => {
+      //   if (isFlow) {
+      //     return authFlow(MfaBusinessAction.VerifyTotp, content)
+      //   }
 
-      return VerifyTotp(content)
-    },
-    [MfaBusinessAction.VerifyFace]: (content: VerifyFaceContent) => {
-      if (isFlow) {
-        return authFlow(MfaBusinessAction.VerifyFace, content)
-      }
-
-      return VerifyFace(content)
+      return Password(params)
     },
   }
 
