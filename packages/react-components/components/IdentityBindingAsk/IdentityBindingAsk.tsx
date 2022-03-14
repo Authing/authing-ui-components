@@ -6,22 +6,29 @@ import { GuardModuleType } from '..'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { IconFont } from '../IconFont'
 import { codeMap } from '../Login/codemap'
-import { shoudGoToComplete } from '../_utils'
-import { useGuardPublicConfig } from '../_utils/context'
+import {
+  useGuardEvents,
+  useGuardInitData,
+  useGuardModule,
+} from '../_utils/context'
 import { useGuardHttp } from '../_utils/guardHttp'
-import { GuardIdentityBindingAskViewProps } from './interface'
+import { GuardIdentityBindingAskInitData } from './interface'
 import './styles.less'
 
-export const GuardIdentityBindingAskView: React.FC<GuardIdentityBindingAskViewProps> = (
-  props
-) => {
-  const { __changeModule, initData } = props
+export const GuardIdentityBindingAskView: React.FC = () => {
+  const initData = useGuardInitData<GuardIdentityBindingAskInitData>()
+
+  const { changeModule } = useGuardModule()
+
   const { t } = useTranslation()
+
   const { post } = useGuardHttp()
+
   const authClient = useGuardAuthClient()
 
-  const onBack = () => __changeModule?.(GuardModuleType.LOGIN)
-  const publicConfig = useGuardPublicConfig()
+  const onBack = () => changeModule?.(GuardModuleType.LOGIN)
+
+  const events = useGuardEvents()
 
   const __codePaser = (code: number) => {
     const action = codeMap[code]
@@ -29,14 +36,14 @@ export const GuardIdentityBindingAskView: React.FC<GuardIdentityBindingAskViewPr
       return (data: any) => {
         //   props.onCreate?.(data.user, authClient!) // 创建成功
         //   props.onLogin?.(data.user, authClient!) // 创建成功
-        props.onCreate?.(data.user, authClient!) // 创建成功
+        events?.onCreate?.(data.user, authClient!) // 创建成功
         // if (shoudGoToComplete(data.user, 'login', publicConfig, true)) {
-        //   __changeModule?.(GuardModuleType.COMPLETE_INFO, {
+        //   changeModule?.(GuardModuleType.COMPLETE_INFO, {
         //     context: 'login',
         //     user: data.user,
         //   })
         // } else {
-        props.onLogin?.(data.user, authClient!) // 创建成功
+        events?.onLogin?.(data.user, authClient!) // 创建成功
         // }
       }
     }
@@ -53,7 +60,7 @@ export const GuardIdentityBindingAskView: React.FC<GuardIdentityBindingAskViewPr
       let m = action.module ? action.module : GuardModuleType.ERROR
       let init = action.initData ? action.initData : {}
       return (initData?: any) => {
-        props.__changeModule?.(m, { ...initData, ...init })
+        changeModule?.(m, { ...initData, ...init })
       }
     }
     if (action?.action === 'message') {
@@ -76,12 +83,12 @@ export const GuardIdentityBindingAskView: React.FC<GuardIdentityBindingAskViewPr
   const onCreate = (code: any, data: any, message?: string) => {
     const callback = __codePaser?.(code)
     if (code !== 200) {
-      props.onCreateError?.({
+      events?.onCreateError?.({
         code,
         data,
         message,
       })
-      props.onLoginError?.({
+      events?.onLoginError?.({
         code,
         data,
         message,
@@ -103,7 +110,7 @@ export const GuardIdentityBindingAskView: React.FC<GuardIdentityBindingAskViewPr
   }, [])
 
   const bindingAccount = () => {
-    __changeModule?.(GuardModuleType.IDENTITY_BINDING, {
+    changeModule?.(GuardModuleType.IDENTITY_BINDING, {
       ...initData,
       source: GuardModuleType.IDENTITY_BINDING_ASK,
     })
