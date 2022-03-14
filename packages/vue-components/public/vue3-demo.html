@@ -33,12 +33,11 @@
 
       app.component('authing-guard', {
         render: () => Vue.h(AuthingVueUIComponents.Guard, {
-          props: {
             config,
             appId,
             visible: true,
           },
-        }),
+        ),
       })
 
       app.mount('#app')
