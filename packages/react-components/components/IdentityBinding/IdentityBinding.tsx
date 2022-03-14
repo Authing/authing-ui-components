@@ -8,58 +8,80 @@ import { IconFont } from '../IconFont'
 import { codeMap } from '../Login/codemap'
 import { LoginWithPassword } from '../Login/core/withPassword'
 import { LoginWithVerifyCode } from '../Login/core/withVerifyCode'
-import { useGuardPublicConfig } from '../_utils/context'
-import { useGuardHttp } from '../_utils/guardHttp'
+import {
+  useGuardEvents,
+  useGuardFinallyConfig,
+  useGuardInitData,
+  useGuardModule,
+  useGuardPublicConfig,
+} from '../_utils/context'
 import { i18n } from '../_utils/locales'
-import { GuardIdentityBindingViewProps } from './interface'
+import {
+  IdentityBindingBusinessAction,
+  useIdentityBindingBusinessRequest,
+} from './businessRequest'
+import { GuardIdentityBindingInitData } from './interface'
 import './styles.less'
 
-export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> = (
-  props
-) => {
-  const { config, initData, __changeModule } = props
+export const GuardIdentityBindingView: React.FC = () => {
+  const initData = useGuardInitData<GuardIdentityBindingInitData>()
+
+  const config = useGuardFinallyConfig()
+
+  const { changeModule } = useGuardModule()
 
   const { t } = useTranslation()
 
+  const events = useGuardEvents()
+
   const { publicKey, autoRegister, agreementEnabled } = config
+
   const publicConfig = useGuardPublicConfig()
 
-  const { post } = useGuardHttp()
-
   const authClient = useGuardAuthClient()
+  const phoneCodeRequest = useIdentityBindingBusinessRequest()[
+    IdentityBindingBusinessAction.PhoneCode
+  ]
+  const emailCodeRequest = useIdentityBindingBusinessRequest()[
+    IdentityBindingBusinessAction.EmailCode
+  ]
+  const PasswordRequest = useIdentityBindingBusinessRequest()[
+    IdentityBindingBusinessAction.Password
+  ]
 
   const onBack = () => {
     if (initData.source === GuardModuleType.IDENTITY_BINDING_ASK)
       window.history.back()
-    else __changeModule?.(GuardModuleType.LOGIN)
+    else changeModule?.(GuardModuleType.LOGIN)
   }
 
   const bindMethodsMap = {
     'phone-code': async (data: any) => {
-      const { identity, code } = data
-      return await post('/interaction/federation/binding/byPhoneCode', {
-        phone: identity,
-        code,
-      })
+      const { identity: phone, code } = data
+      return await phoneCodeRequest({ phone, code })
+      // return await post('/interaction/federation/binding/byPhoneCode', {
+      //   phone: identity,
+      //   code,
+      // })
     },
     'email-code': async (data: any) => {
-      const { identity, code } = data
-
-      return await post('/interaction/federation/binding/byEmailCode', {
-        email: identity,
-        code,
-      })
+      const { identity: email, code } = data
+      return await emailCodeRequest({ email, code })
+      // return await post('/interaction/federation/binding/byEmailCode', {
+      //   email: identity,
+      //   code,
+      // })
     },
     password: async (data: any) => {
-      const { identity, password } = data
+      const { identity: account, password } = data
       const encrypt = authClient.options.encryptFunction
 
-      const encryptPassword = await encrypt!(password, props.config?.publicKey!)
-
-      return await post('/interaction/federation/binding/byAccount', {
-        account: identity,
-        password: encryptPassword,
-      })
+      const encryptPassword = await encrypt!(password, publicKey!)
+      return await PasswordRequest({ account, password: encryptPassword })
+      // return await post('/interaction/federation/binding/byAccount', {
+      //   account: identity,
+      //   password: encryptPassword,
+      // })
     },
   }
 
@@ -67,8 +89,9 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
     const action = codeMap[code]
     if (code === 200) {
       return (data: any) => {
-        props.onBinding?.(data.user, authClient!) // 绑定成功
-        props.onLogin?.(data.user, authClient!) // 登录成功
+        events?.onBinding?.(data.user, authClient!) // 绑定成功
+
+        events?.onLogin?.(data.user, authClient!) // 登录成功
       }
     }
 
@@ -84,7 +107,7 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
       let m = action.module ? action.module : GuardModuleType.ERROR
       let init = action.initData ? action.initData : {}
       return (initData?: any) => {
-        props.__changeModule?.(m, { ...initData, ...init })
+        changeModule?.(m, { ...initData, ...init })
       }
     }
     if (action?.action === 'message') {
@@ -107,12 +130,12 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
   const onLogin = (code: any, data: any, message?: string) => {
     const callback = __codePaser?.(code)
     if (code !== 200) {
-      props.onBindingError?.({
+      events?.onBindingError?.({
         code,
         data,
         message,
       })
-      props.onLoginError?.({
+      events?.onLoginError?.({
         code,
         data,
         message,
@@ -214,7 +237,7 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
 
       <div className="g2-view-identity-binding-content">
         <div className="g2-view-identity-binding-content-logo">
-          <img src={props.config?.logo} alt="" className="logo" />
+          <img src={config?.logo} alt="" className="logo" />
         </div>
         <div className="g2-view-identity-binding-content-title">
           <span>{t('common.identityBindingTitle')}</span>
