@@ -3,7 +3,7 @@ import shortid from 'shortid'
 import React, { FC, useEffect } from 'react'
 import { Button, Avatar, Space, Tooltip, message } from 'antd'
 
-import { isWechatBrowser, popupCenter } from '../../../_utils'
+import { isWeChatBrowser, popupCenter } from '../../../_utils'
 import { useGuardContext } from '../../../context/global/context'
 import {
   APP_MFA_CODE,
@@ -205,7 +205,7 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
 
   const socialLoginButtons = config.socialConnectionObjs
     .filter((item) =>
-      isWechatBrowser()
+      isWeChatBrowser()
         ? item.provider === SocialConnectionProvider.WECHATMP
         : item.provider !== SocialConnectionProvider.WECHATMP
     )

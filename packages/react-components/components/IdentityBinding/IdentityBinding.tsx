@@ -8,7 +8,6 @@ import { IconFont } from '../IconFont'
 import { codeMap } from '../Login/codemap'
 import { LoginWithPassword } from '../Login/core/withPassword'
 import { LoginWithVerifyCode } from '../Login/core/withVerifyCode'
-import { shoudGoToComplete } from '../_utils'
 import { useGuardPublicConfig } from '../_utils/context'
 import { useGuardHttp } from '../_utils/guardHttp'
 import { i18n } from '../_utils/locales'
@@ -68,19 +67,8 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
     const action = codeMap[code]
     if (code === 200) {
       return (data: any) => {
-        // console.log('binding success', data)
-        // props.onBinding?.(data.user, authClient!) // 登录成功
-        // props.onLogin?.(data.user, authClient!) // 登录成功
         props.onBinding?.(data.user, authClient!) // 绑定成功
-        // if (shoudGoToComplete(data.user, 'login', publicConfig)) {
-        //   __changeModule?.(GuardModuleType.COMPLETE_INFO, {
-        //     context: 'login',
-        //     user: data.user,
-        //   })
-        // } else {
-        // TODO 身份源绑定后触发信息补全成功没有触发 onBinding
         props.onLogin?.(data.user, authClient!) // 登录成功
-        // }
       }
     }
 
@@ -145,7 +133,6 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
     ]?.(data)
 
     return res
-    // onLogin(res.code, res.data, res.message)
   }
 
   const agreements = useMemo(
@@ -212,16 +199,6 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
           agreements={agreements}
           submitButText={t('common.bind')}
         />
-        //   <LoginWithPassword
-        //   loginWay={loginWay}
-        //   publicKey={publicKey}
-        //   autoRegister={autoRegister}
-        //   host={props.config.__appHost__}
-        //   onLogin={onLogin}
-        //   onBeforeLogin={onBeforeLogin}
-        //   passwordLoginMethods={props.config.passwordLoginMethods}
-        //   agreements={agreements}
-        // />
       ),
     },
   ]

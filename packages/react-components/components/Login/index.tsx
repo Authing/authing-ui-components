@@ -27,7 +27,7 @@ import {
   useGuardModule,
   useGuardPublicConfig,
 } from '../_utils/context'
-import { isWechatBrowser } from '../_utils'
+import { isWeChatBrowser } from '../_utils'
 import { LoginWithVerifyCode } from './core/withVerifyCode'
 import { VerifyLoginMethods } from '../AuthingGuard/api'
 
@@ -535,11 +535,11 @@ export const GuardLoginView = () => {
                           tips: {
                             title:
                               i18n.language === 'zh-CN'
-                                ? `${isWechatBrowser() ? '长按' : '扫码'}关注 ${
+                                ? `${isWeChatBrowser() ? '长按' : '扫码'}关注 ${
                                     item.title
                                   } 公众号登录`
                                 : `${
-                                    isWechatBrowser() ? 'Press' : 'Scan'
+                                    isWeChatBrowser() ? 'Press' : 'Scan'
                                   } to follow ${item.title} and login`,
                             expired: t('login.qrcodeExpired'),
                           },

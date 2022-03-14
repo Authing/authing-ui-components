@@ -139,7 +139,7 @@ export class GuardHttp {
     return this
   }
 
-  private responseIntercept: (res: AuthingResponse) => AuthingResponse = (
+  public responseIntercept: (res: AuthingResponse) => AuthingResponse = (
     res
   ) => {
     if (this.responseInterceptorMap.size === 0) return res

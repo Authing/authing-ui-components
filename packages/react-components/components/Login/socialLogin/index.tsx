@@ -4,7 +4,7 @@ import { Lang } from 'authing-js-sdk/build/main/types'
 import React, { useEffect, useLayoutEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { i18n } from '../../_utils/locales'
-import { isLarkBrowser, isWechatBrowser } from '../../_utils'
+import { isLarkBrowser, isWeChatBrowser } from '../../_utils'
 import querystring from 'query-string'
 import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
 import {
@@ -196,7 +196,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
   })
   const socialLoginButtons = socialConnectionObjs
     .filter((item) =>
-      isWechatBrowser()
+      isWeChatBrowser()
         ? item.provider === SocialConnectionProvider.WECHATMP
         : item.provider !== SocialConnectionProvider.WECHATMP
     )
@@ -225,7 +225,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       }
       // 根据 UA 判断是否在微信网页浏览器、钉钉浏览器等内部，使用 form_post 参数作为 social.authorize 方法的 relayMethod 参数，其他情况用 web_message
       options.relayMethod =
-        isWechatBrowser() || isLarkBrowser()
+        isWeChatBrowser() || isLarkBrowser()
           ? RelayMethodEnum.FORM_POST
           : RelayMethodEnum.WEB_MESSAGE
 
