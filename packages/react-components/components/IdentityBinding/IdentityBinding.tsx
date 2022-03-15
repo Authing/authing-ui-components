@@ -23,7 +23,8 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
   const { t } = useTranslation()
   const { publicKey, autoRegister, agreementEnabled } = config
   const publicConfig = usePublicConfig()
-
+  const isInternationSms =
+    publicConfig?.internationalSmsConfig?.enabled || false
   const { post } = useGuardHttp()
   const authClient = useGuardAuthClient()
 
@@ -36,11 +37,17 @@ export const GuardIdentityBindingView: React.FC<GuardIdentityBindingViewProps> =
   const bindMethodsMap = {
     'phone-code': async (data: any) => {
       const { identity, code, phoneCountryCode } = data
-      return await post('/interaction/federation/binding/byPhoneCode', {
+
+      const options: any = {
         phone: identity,
         code,
-        phoneCountryCode,
-      })
+      }
+
+      if (isInternationSms) {
+        options.phoneCountryCode = phoneCountryCode
+      }
+
+      return await post('/interaction/federation/binding/byPhoneCode', options)
     },
     'email-code': async (data: any) => {
       const { identity, code } = data

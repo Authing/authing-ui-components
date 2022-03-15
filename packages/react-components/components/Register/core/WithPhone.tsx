@@ -64,6 +64,13 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           areaCode
         )
         // 注册
+        const options: any = {
+          context,
+          generateToken: true,
+        }
+        if (isInternationSms) {
+          options.phoneCounryCode = phoneCountryCode
+        }
         const user = await authClient.registerByPhoneCode(
           phoneNumber,
           code,
@@ -73,12 +80,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
               typeof navigator !== 'undefined' ? navigator.userAgent : null,
             device: getDeviceName(),
           },
-          {
-            context,
-            generateToken: true,
-            phoneCountryCode: phoneCountryCode,
-            // params: getUserRegisterParams(),
-          }
+          options
         )
         submitButtonRef.current.onSpin(false)
         onRegister(200, user)
