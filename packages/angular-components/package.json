@@ -1,6 +1,6 @@
 {
   "name": "angular-components",
-  "version": "3.0.29",
+  "version": "3.0.30",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -12,6 +12,7 @@
   },
   "private": true,
   "dependencies": {
+    "@authing/native-js-ui-components": "^3.0.30",
     "@angular/animations": "~10.2.0",
     "@angular/common": "~10.2.0",
     "@angular/compiler": "~10.2.0",
@@ -20,7 +21,6 @@
     "@angular/platform-browser": "~10.2.0",
     "@angular/platform-browser-dynamic": "~10.2.0",
     "@angular/router": "~10.2.0",
-    "@authing/native-js-ui-components": "^3.0.29",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
