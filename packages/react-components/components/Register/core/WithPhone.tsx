@@ -69,8 +69,9 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           generateToken: true,
         }
         if (isInternationSms) {
-          options.phoneCounryCode = phoneCountryCode
+          options.phoneCountryCode = phoneCountryCode
         }
+
         const user = await authClient.registerByPhoneCode(
           phoneNumber,
           code,

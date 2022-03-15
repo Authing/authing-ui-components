@@ -138,7 +138,7 @@ export const parsePhone = (
   let phoneNumber = fieldValue
   // 未开启国家化短信
   if (!isInternationSms) {
-    return { phoneNumber, countryCode: '' }
+    return { phoneNumber, countryCode: undefined }
   }
   // 处理 类似 192*******9 情况
   if (phone(fieldValue, { country: areaCode }).isValid) {
