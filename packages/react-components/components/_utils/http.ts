@@ -1,5 +1,6 @@
 import { message } from 'antd'
 import qs from 'qs'
+import { GuardModuleType } from '../Guard'
 import { i18n } from './locales'
 
 export const requestClient = async (...rest: Parameters<typeof fetch>) => {
@@ -14,6 +15,10 @@ export interface AuthingResponse<T = any> {
   data?: T
   messages?: string
   message?: string
+}
+
+export interface AuthingGuardResponse<T = any> extends AuthingResponse<T> {
+  onGuardHandling?: () => void
 }
 
 requestClient.get = async <T>(

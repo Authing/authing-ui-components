@@ -120,16 +120,15 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
       code: mfaCode.join(''),
     }
 
-    try {
-      const res = await businessRequest(requestData)
+    const { code, data, onGuardHandling } = await businessRequest(requestData)
 
-      if (res.code === 200) onVerify(200, res.data)
-    } catch (e) {
-      const error = JSON.parse(e.message)
+    submitButtonRef.current?.onSpin(false)
+
+    if (code === 200) {
+      onVerify(200, data)
+    } else {
       submitButtonRef.current.onError()
-      onVerify(error.code as number, error)
-    } finally {
-      submitButtonRef.current?.onSpin(false)
+      onGuardHandling?.()
     }
   }
 

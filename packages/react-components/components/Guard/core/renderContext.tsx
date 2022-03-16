@@ -58,7 +58,7 @@ export const RenderContext: React.FC<{
   const [httpClient, setHttpClient] = useState<GuardHttp>()
   const [publicConfig, setPublicConfig] = useState<ApplicationConfig>()
   const [error, serError] = useState()
-  const [isAuthFlow, setIsAuthFlow] = useState(false)
+  const [isAuthFlow, setIsAuthFlow] = useState(true)
 
   // 状态机
   const [
@@ -190,7 +190,7 @@ export const RenderContext: React.FC<{
 
   // AuthClient
   useEffect(() => {
-    if (appId && finallyConfig && publicConfig?.websocket) {
+    if (appId && finallyConfig && publicConfig) {
       const authClint = initGuardAuthClient(
         finallyConfig,
         appId,
@@ -199,7 +199,7 @@ export const RenderContext: React.FC<{
       )
       setAuthClint(authClint)
     }
-  }, [appId, finallyConfig, publicConfig?.websocket, tenantId])
+  }, [appId, finallyConfig, publicConfig, tenantId])
 
   // initEvents
   useEffect(() => {
@@ -219,7 +219,7 @@ export const RenderContext: React.FC<{
     const guardStateMachine = initGuardStateMachine(onChangeModule, initState)
     setGuardStateMachine(guardStateMachine)
 
-    // TODO 这里有一个循环调用问题，藏的有点深 待优化
+    // TODO 这里有一个循环依赖问题，藏的有点深 待优化
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -239,7 +239,7 @@ export const RenderContext: React.FC<{
   useEffect(() => {
     if (!finallyConfig) return
 
-    setIsAuthFlow(Boolean(finallyConfig?.__isAuthFlow__))
+    setIsAuthFlow(!Boolean(finallyConfig?.__unAuthFlow__))
   }, [finallyConfig])
 
   const moduleEvents = useMemo(() => {

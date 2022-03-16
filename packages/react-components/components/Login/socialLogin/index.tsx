@@ -1,4 +1,4 @@
-import { Button, message, Space, Tooltip } from 'antd'
+import { Button, Space, Tooltip } from 'antd'
 import { SocialConnectionProvider, RelayMethodEnum } from 'authing-js-sdk'
 import { Lang } from 'authing-js-sdk/build/main/types'
 import React, { useEffect, useLayoutEffect } from 'react'
@@ -51,11 +51,24 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
   const onErrorHandling = useErrorHandling()
 
   useEffect(() => {
-    window.addEventListener('message', onMessage)
-    return () => {
-      window.removeEventListener('message', onMessage)
+    const onPostMessage = (evt: MessageEvent) => {
+      const res = onMessage(evt)
+
+      if (!res) return
+
+      const { code, data, onGuardHandling } = res
+
+      if (code === 200) {
+        onGuardLogin(200, data)
+      } else {
+        onGuardHandling?.()
+      }
     }
-  }, [onMessage])
+    window.addEventListener('message', onPostMessage)
+    return () => {
+      window.removeEventListener('message', onPostMessage)
+    }
+  }, [onGuardLogin, onMessage])
 
   useEffect(() => {
     const containerDOM = document.getElementsByClassName('g2-view-header')?.[0]
@@ -188,22 +201,28 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
 
       const onLogin = () => {
         authClient.social.authorize(item.identifier, {
-          onSuccess(user) {
-            onGuardLogin(200, user)
-          },
-          onError(code, msg, data) {
-            // try {
-            //   const parsedMsg = JSON.parse(msg)
-            //   const { message: authingMessage, data: authingData } = parsedMsg
-            //   onGuardLogin(code, authingData, authingMessage)
-            // } catch (e) {
-            //   // do nothing...
-            //   onGuardLogin(code, data, msg)
-            // }
-            // // message.error(msg)
+          // onSuccess(user) {
+          //   onGuardLogin(200, user)
+          // },
+          // onError(code, msg, data) {
+          //   // try {
+          //   //   const parsedMsg = JSON.parse(msg)
+          //   //   const { message: authingMessage, data: authingData } = parsedMsg
+          //   //   onGuardLogin(code, authingData, authingMessage)
+          //   // } catch (e) {
+          //   //   // do nothing...
+          //   //   onGuardLogin(code, data, msg)
+          //   // }
+          //   // // message.error(msg)
 
-            onErrorHandling({ code, message: msg, data })
-          },
+          //   const { onGuardHandling } = onErrorHandling({
+          //     code,
+          //     message: msg,
+          //     data,
+          //   })
+
+          //   onGuardHandling?.()
+          // },
           authorization_params,
           ...options,
         })

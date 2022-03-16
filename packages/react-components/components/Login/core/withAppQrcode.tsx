@@ -25,20 +25,11 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
       onCodeShow() {
         setLoading(false)
       },
-
-      // onCodeLoaded() {
-      //   console.log('sdk over')
-      //   setLoading(false)
-      // },
       onStart(timer) {
         timerRef.current = timer
       },
       onSuccess(user) {
         props.onLogin(200, user)
-      },
-      onError: (message) => {
-        // config.qrCodeScanOptions?.onError?.(message)
-        // onFail && onFail(`${message}`)
       },
       onCodeLoadFailed: () => {
         setLoading(false)

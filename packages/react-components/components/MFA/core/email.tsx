@@ -26,8 +26,11 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
   config,
 }) => {
   const submitButtonRef = useRef<any>(null)
+
   const { t } = useTranslation()
+
   const [form] = Form.useForm()
+
   const ref = useRef<ICheckProps>(null)
 
   const onFinish = async ({ email }: any) => {
@@ -136,16 +139,15 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
       code: mfaCode.join(''),
     }
 
-    try {
-      const res = await businessRequest(requestData)
+    const { code, data, onGuardHandling } = await businessRequest(requestData)
 
-      if (res.code === 200) onVerify(200, res.data)
-    } catch (e: any) {
-      const error = JSON.parse(e?.message)
+    submitButtonRef.current?.onSpin(false)
+
+    if (code === 200) {
+      onVerify(200, data)
+    } else {
       submitButtonRef.current?.onError()
-      onVerify(error.code as number, error)
-    } finally {
-      submitButtonRef.current?.onSpin(false)
+      onGuardHandling?.()
     }
   }
 

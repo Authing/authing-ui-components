@@ -3,21 +3,30 @@ import { useTranslation } from 'react-i18next'
 import { ImagePro } from '../ImagePro'
 import { DescribeQuestions } from './core/describeQuestions'
 import { GuardModuleType } from '../Guard/module'
+import {
+  useGuardAppId,
+  useGuardFinallyConfig,
+  useGuardModule,
+} from '../_utils/context'
 
 export const GuardNeedHelpView = (props: any) => {
   const { t } = useTranslation()
 
-  const { appId } = props
+  const appId = useGuardAppId()
+
+  const { changeModule } = useGuardModule()
+
+  const config = useGuardFinallyConfig()
 
   const onSuccess = () => {
-    props.__changeModule?.(GuardModuleType.SUBMIT_SUCCESS)
+    changeModule?.(GuardModuleType.SUBMIT_SUCCESS)
   }
 
   return (
     <div className="g2-view-container g2-need-help">
       <div className="g2-view-header">
         <ImagePro
-          src={props.config?.logo}
+          src={config.logo!}
           size={48}
           borderRadius={4}
           alt=""
@@ -29,7 +38,7 @@ export const GuardNeedHelpView = (props: any) => {
       <div className="g2-view-tabs">
         <DescribeQuestions
           appId={appId}
-          host={props.config.host}
+          host={config.host}
           onSuccess={onSuccess}
         />
       </div>
@@ -38,7 +47,7 @@ export const GuardNeedHelpView = (props: any) => {
           <span className="gray">{t('common.noQuestions')}</span>
           <span
             className="link-like"
-            onClick={() => props.__changeModule(GuardModuleType.LOGIN)}
+            onClick={() => changeModule?.(GuardModuleType.LOGIN)}
           >
             {t('common.goToLogin')}
           </span>

@@ -29,7 +29,7 @@ export interface IG2Config {
   target?: HTMLElement | string
   __internalRequest__?: boolean
   __singleComponent__?: boolean
-  __isAuthFlow__?: boolean
+  __unAuthFlow__?: boolean
 }
 
 const defaultG2Config: IG2Config = {

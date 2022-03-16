@@ -34,7 +34,7 @@ const useDashoffset = (percent: number) => {
 
 export const MFAFace = (props: any) => {
   const mfaBackContext = useContext(MFABackStateContext)
-  let { postForm, post } = useGuardHttp()
+  let { postForm } = useGuardHttp()
   let { t } = useTranslation()
   const [faceState, setFaceState] = useState('ready') // ready, identifying, retry
   const [percent, setPercent] = useState(0) // 识别进度（相似性）

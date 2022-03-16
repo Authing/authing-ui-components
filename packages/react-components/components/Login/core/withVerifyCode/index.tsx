@@ -2,13 +2,20 @@ import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useGuardAuthClient } from '../../../Guard/authClient'
-import { fieldRequiredRule, validate } from '../../../_utils'
+import {
+  fieldRequiredRule,
+  getUserRegisterParams,
+  validate,
+} from '../../../_utils'
 import SubmitButton from '../../../SubmitButton'
 import { IconFont } from '../../../IconFont'
 import { Agreements } from '../../../Register/components/Agreements'
 import { EmailScene, SceneType } from 'authing-js-sdk'
 import { SendCodeByPhone } from '../../../SendCode/SendCodeByPhone'
-import { useGuardPublicConfig } from '../../../_utils/context'
+import {
+  useGuardHttpClient,
+  useGuardPublicConfig,
+} from '../../../_utils/context'
 import { SendCodeByEmail } from '../../../SendCode/SendCodeByEmail'
 import { FormItemIdentify } from './FormItemIdentify'
 import { InputIdentify } from './inputIdentify'
@@ -19,6 +26,8 @@ export const LoginWithVerifyCode = (props: any) => {
   const { agreements, methods, submitButText } = props
 
   const verifyCodeLength = config?.verifyCodeLength ?? 4
+
+  const { post } = useGuardHttpClient()
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
 
@@ -91,16 +100,25 @@ export const LoginWithVerifyCode = (props: any) => {
   )
 
   const loginByPhoneCode = async (values: any) => {
-    try {
-      const user = await client.loginByPhoneCode(values.identify, values.code)
-      submitButtonRef.current.onSpin(false)
-      props.onLogin(200, user)
-    } catch (e) {
-      console.log(e)
+    const reqContent = {
+      phone: values.identifier,
+      code: values.code,
+      customData: getUserRegisterParams(),
+      autoRegister: props.autoRegister,
+      withCustomData: true,
+    }
+    const { code, data, onGuardHandling } = await post(
+      '/api/v2/login/phone-code',
+      reqContent
+    )
+
+    submitButtonRef.current.onSpin(false)
+
+    if (code === 200) {
+      props.onLogin(200, data.user)
+    } else {
       submitButtonRef.current.onError()
-      props.onLogin(e.code, e.data, e.message)
-    } finally {
-      submitButtonRef.current?.onSpin(false)
+      onGuardHandling?.()
     }
   }
 

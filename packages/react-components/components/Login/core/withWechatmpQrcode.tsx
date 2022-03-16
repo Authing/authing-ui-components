@@ -16,7 +16,6 @@ export const LoginWithWechatmpQrcode = (
   const [loading, setLoading] = useState(true)
 
   const appQrcodeClient = client.wechatmpqrcode
-  // const config = props.config
 
   const domId = `authingGuardMpQrcode-${props.qrCodeScanOptions.extIdpConnId}`
 
@@ -32,19 +31,11 @@ export const LoginWithWechatmpQrcode = (
       onCodeShow() {
         setLoading(false)
       },
-      // onCodeLoaded() {
-      //   setLoading(false)
-      // },
       onStart(timer) {
         timerRef.current = timer
       },
       onSuccess(user) {
         props.onLogin(200, user)
-        // onSuccess && onSuccess(user as User)
-      },
-      onError: (message) => {
-        // config.qrCodeScanOptions?.onError?.(message)
-        // onFail && onFail(`${message}`)
       },
       onCodeLoadFailed: () => {
         setLoading(false)

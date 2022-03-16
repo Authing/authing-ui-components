@@ -4,8 +4,15 @@ import { useGuardPublicConfig } from '../_utils/context'
 export const useIsChangeComplete = (currentMode: 'phone' | 'email') => {
   const { extendsFields } = useGuardPublicConfig()
 
-  // 为空就不补了～
+  const { complateFiledsPlace } = useGuardPublicConfig()
+
+  // 开关控制 如果没有 register 就不开启了
+  if (!complateFiledsPlace.includes('register')) {
+    return false
+  }
+
   if (!Boolean(extendsFields) || extendsFields.length === 0) {
+    // 为空就不补了～
     return false
   }
 

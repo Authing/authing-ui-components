@@ -1,10 +1,10 @@
 import { getHundreds } from '..'
-import { AuthingResponse } from '../http'
+import { AuthingGuardResponse, AuthingResponse } from '../http'
 import { CodeAction } from './interface'
 
 export const errorCodeInterceptor: (
   res: AuthingResponse<any>,
-  callBack: (code: CodeAction, res: AuthingResponse) => void
+  callBack: (code: CodeAction, res: AuthingResponse) => AuthingGuardResponse
 ) => AuthingResponse<any> = (res, callBack) => {
   if (!res.statusCode) return res
 
@@ -22,13 +22,11 @@ export const errorCodeInterceptor: (
 
   switch (getHundreds(statusCode)) {
     case 3:
-      callBack(CodeAction.CHANGE_MODULE, res)
-      break
+      return callBack(CodeAction.CHANGE_MODULE, res)
 
     case 4:
     case 6:
-      callBack(CodeAction.RENDER_MESSAGE, res)
-      break
+      return callBack(CodeAction.RENDER_MESSAGE, res)
 
     default:
       break

@@ -433,69 +433,6 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
     } finally {
       submitButtonRef.current?.onSpin(false)
     }
-
-    // Object.entries(values).forEach(([key, value]) => {
-    //   const [type, nameOrId] = key.split(' ')
-    //   if (type === 'internal') {
-    //     if (nameOrId.split(':').length > 1) {
-    //       // 是验证码
-    //       const [codeType, k] = nameOrId.split(':')
-    //       if (codeType === k) {
-    //         if (value !== '' || value) {
-    //           internalFields[codeType] = value
-    //         }
-    //       } else {
-    //         if (codeType === 'phone') {
-    //           if (value !== '' || value) {
-    //             phoneToken = value as string
-    //           }
-    //         } else if (codeType === 'email') {
-    //           if (value !== '' || value) {
-    //             emailToken = value as string
-    //           }
-    //         }
-    //       }
-    //     } else {
-    //       internalFields[nameOrId] = value
-    //     }
-    //   } else if (type === 'user') {
-    //     userFields.push({ nameOrId, value })
-    //   }
-    // })
-
-    // const udfs = userFields
-    //   .filter(({ nameOrId, value }) => Boolean(value))
-    //   .map(({ nameOrId, value }) => ({
-    //     definition: nameOrId,
-    //     value,
-    //   }))
-
-    // try {
-    //   const user = await authClient.updateProfile(internalFields, {
-    //     phoneToken,
-    //     emailToken,
-    //   })
-    //   await post(
-    //     `/api/v2/udfs/values`,
-    //     {
-    //       udfs,
-    //     },
-    //     {
-    //       headers: {
-    //         authorization: user?.token,
-    //       },
-    //     }
-    //   )
-    //   submitButtonRef.current?.onSpin(false)
-    //   onRegisterInfoCompleted?.(user, udfs, authClient)
-    // } catch (e: any) {
-    //   if (e?.message) {
-    //     message.error(e.message)
-    //   }
-    //   // TODO
-    //   submitButtonRef.current?.onSpin(false)
-    //   onRegisterInfoCompletedError?.(e as any, udfs, authClient)
-    // }
   }, [])
 
   return (

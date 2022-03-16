@@ -31,17 +31,12 @@ export const LoginWithWechatMiniQrcode = (
         setLoading(false)
       },
       onStart(timer) {
-        // console.log('开始扫码')
         timerRef.current = timer
       },
       onSuccess(user) {
-        // console.log('扫码完成', user)
-        // onSuccess && onSuccess(user as User)
         props.onLogin(200, user)
       },
       onError: (ms) => {
-        // config.qrCodeScanOptions?.onError?.(message)
-        // onFail && onFail(`${message}`)
         message.error(ms)
       },
       onCodeLoadFailed: ({ message: mes }: any) => {

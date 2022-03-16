@@ -82,15 +82,7 @@ export const GuardBindTotpView: React.FC = () => {
 
   const onBind = () => {
     if (user) {
-      // if (shoudGoToComplete(user, 'login', publicConfig, config.autoRegister)) {
-      //   console.log('登陆成功，用户为', user)
-      //   changeModule?.(GuardModuleType.COMPLETE_INFO, {
-      //     context: 'login',
-      //     user: user,
-      //   })
-      // } else {
       events?.onLogin?.(user, authClient) // 登录成功
-      // }
     }
   }
 

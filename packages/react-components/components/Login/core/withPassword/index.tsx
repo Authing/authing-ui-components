@@ -14,7 +14,8 @@ import { GraphicVerifyCode } from './GraphicVerifyCode'
 import { IconFont } from '../../../IconFont'
 import { InputPassword } from '../../../InputPassword'
 import { Agreements } from '../../../Register/components/Agreements'
-import { AuthingResponse } from '../../../_utils/http'
+import { AuthingGuardResponse, AuthingResponse } from '../../../_utils/http'
+import { useGuardModule } from '../../../_utils/context'
 
 interface LoginWithPasswordProps {
   // configs
@@ -60,7 +61,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   const encrypt = client.options.encryptFunction
 
   const loginRequest = useCallback(
-    async (loginInfo: any) => {
+    async (loginInfo: any): Promise<AuthingGuardResponse> => {
       if (!!props.onLoginRequest) {
         const res = await props.onLoginRequest(loginInfo)
 
@@ -118,8 +119,8 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     onLoginRes(res)
   }
 
-  const onLoginRes = (res: AuthingResponse) => {
-    const { code, message: msg, data } = res
+  const onLoginRes = (res: AuthingGuardResponse) => {
+    const { code, message: msg, data, onGuardHandling } = res
 
     if (code !== 200) {
       submitButtonRef.current.onError()
@@ -129,6 +130,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
       setVerifyCodeUrl(getCaptchaUrl())
       setShowCaptcha(true)
     }
+
     if (code === ErrorCode.PASSWORD_ERROR) {
       if ((data as any)?.remainCount) {
         setRemainCount((data as any)?.remainCount ?? 0)
@@ -138,6 +140,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         return
       }
     }
+
     if (
       code === ErrorCode.ACCOUNT_LOCK ||
       code === ErrorCode.MULTIPLE_ERROR_LOCK
@@ -145,8 +148,14 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
       // 账号锁定
       setAccountLock(true)
     }
+
     submitButtonRef?.current.onSpin(false)
-    props.onLogin(code, data, msg)
+
+    if (code === 200) {
+      props.onLogin(200, data, msg)
+    } else {
+      onGuardHandling?.()
+    }
   }
 
   useEffect(() => {

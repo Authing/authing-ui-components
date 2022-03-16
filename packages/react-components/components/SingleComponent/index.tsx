@@ -11,6 +11,7 @@ export const Register: React.FC<GuardRegisterProps> = (props) => {
       config: {
         ...config,
         __singleComponent__: true,
+        __unAuthFlow__: true,
       },
     },
     GuardModuleType.REGISTER

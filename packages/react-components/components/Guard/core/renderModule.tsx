@@ -28,11 +28,13 @@ import enUS from 'antd/lib/locale/en_US'
 import { i18n } from '../../_utils/locales'
 import { GuardMode } from '../..'
 import { IconFont } from '../../IconFont'
-import { AuthingResponse } from '../../_utils/http'
+import { AuthingGuardResponse, AuthingResponse } from '../../_utils/http'
 import {
   CodeAction,
   ChangeModuleApiCodeMapping,
 } from '../../_utils/responseManagement/interface'
+import { GuardIdentityBindingView } from '../../IdentityBinding'
+import { GuardIdentityBindingAskView } from '../../IdentityBindingAsk'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -74,9 +76,11 @@ export const RenderModule: React.FC<{
     // Login
     [GuardModuleType.LOGIN]: () => <GuardLoginView />,
     // 身份源绑定
-    [GuardModuleType.IDENTITY_BINDING]: () => <GuardLoginView />,
+    [GuardModuleType.IDENTITY_BINDING]: () => <GuardIdentityBindingView />,
     // 身份源绑定 问询
-    [GuardModuleType.IDENTITY_BINDING_ASK]: () => <GuardNeedHelpView />,
+    [GuardModuleType.IDENTITY_BINDING_ASK]: () => (
+      <GuardIdentityBindingAskView />
+    ),
     // MFA
     [GuardModuleType.MFA]: () => <GuardMFAView />,
     // 注册
@@ -108,23 +112,31 @@ export const RenderModule: React.FC<{
     if (!httpClient || !changeModule) return
 
     // 错误码处理回调 切换 module 和 错误信息提示
-    const errorCodeCb = (code: CodeAction, res: AuthingResponse) => {
+    const errorCodeCb = (
+      code: CodeAction,
+      res: AuthingResponse
+    ): AuthingGuardResponse => {
       const codeActionMapping = {
-        [CodeAction.CHANGE_MODULE]: (res: AuthingResponse) => {
+        [CodeAction.CHANGE_MODULE]: () => {
           const nextModule = ChangeModuleApiCodeMapping[res.apiCode!]
 
           const nextData = res.data
 
           changeModule(nextModule, nextData)
         },
-        [CodeAction.RENDER_MESSAGE]: (res: AuthingResponse) => {
+        [CodeAction.RENDER_MESSAGE]: () => {
           message.error(res.message ?? res.messages)
         },
       }
 
       const codeAction = codeActionMapping[code]
 
-      codeAction(res)
+      if (!codeAction) return res
+
+      return {
+        ...res,
+        onGuardHandling: codeAction,
+      }
     }
 
     httpClient.initErrorCodeInterceptor(errorCodeCb)

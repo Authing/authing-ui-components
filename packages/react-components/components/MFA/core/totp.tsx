@@ -68,19 +68,16 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
       mfaToken,
     }
 
-    try {
-      const { code, data, message } = await businessRequest(requestData)
+    const { code, data, onGuardHandling } = await businessRequest(requestData)
 
-      if (code !== 200) {
-        mfaLogin(code, {
-          message,
-        })
-        submitButtonRef.current.onError()
-      } else {
-        mfaLogin(200, data)
-      }
-    } finally {
-      submitButtonRef.current.onSpin(false)
+    submitButtonRef.current.onSpin(false)
+
+    if (code === 200) {
+      mfaLogin(200, data)
+    } else {
+      submitButtonRef.current.onError()
+
+      onGuardHandling?.()
     }
   }, [mfaToken])
   return (

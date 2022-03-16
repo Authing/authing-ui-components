@@ -92,13 +92,16 @@ export const GuardLoginCompleteInfoView: React.FC = () => {
     action: CompleteInfoAuthFlowAction,
     data?: CompleteInfoRequest
   ) => {
-    const response = await authFlow(action, data)
+    const { code, data: resData, onGuardHandling } = await authFlow(
+      action,
+      data
+    )
 
-    if (response.code === 200) {
-      events?.onLogin?.(response.data, authClient)
+    if (code === 200) {
+      events?.onLogin?.(resData, authClient)
+    } else {
+      onGuardHandling?.()
     }
-
-    // return response
   }
 
   return (

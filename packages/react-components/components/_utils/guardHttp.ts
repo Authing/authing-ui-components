@@ -1,5 +1,5 @@
 import version from '../version'
-import { AuthingResponse, requestClient } from './http'
+import { AuthingGuardResponse, AuthingResponse, requestClient } from './http'
 import { errorCodeInterceptor } from './responseManagement'
 import { CodeAction } from './responseManagement/interface'
 
@@ -60,11 +60,11 @@ export class GuardHttp {
 
   public getHeaders = () => this.headers
 
-  public get = async <T>(
+  public get = async <T = any>(
     path: string,
     query: Record<string, any> = {},
     config?: RequestInit
-  ) => {
+  ): Promise<AuthingGuardResponse<T>> => {
     const res = await requestClient.get<T>(path, query, {
       ...config,
       headers: { ...this.headers, ...config?.headers },
@@ -73,13 +73,13 @@ export class GuardHttp {
     return this.responseIntercept(res)
   }
 
-  public post = async <T>(
+  public post = async <T = any>(
     path: string,
     data: any,
     config?: {
       headers: any
     }
-  ) => {
+  ): Promise<AuthingGuardResponse<T>> => {
     const res = await requestClient.post<T>(path, data, {
       headers: {
         ...this.headers,
@@ -90,13 +90,13 @@ export class GuardHttp {
     return this.responseIntercept(res)
   }
 
-  public postForm = async <T>(
+  public postForm = async <T = any>(
     path: string,
     formData: any,
     config?: {
       headers: any
     }
-  ) => {
+  ): Promise<AuthingGuardResponse<T>> => {
     const res = await requestClient.postForm<T>(path, formData, {
       headers: {
         ...this.headers,
@@ -107,7 +107,10 @@ export class GuardHttp {
     return this.responseIntercept(res)
   }
 
-  public authFlow = async <T>(action: string, data?: any) => {
+  public authFlow = async <T = any>(
+    action: string,
+    data?: any
+  ): Promise<AuthingGuardResponse<T>> => {
     const flowPath = '/interaction/authFlow'
 
     const requestData = {
@@ -126,7 +129,7 @@ export class GuardHttp {
 
   // 初始化 Error code 拦截器
   public initErrorCodeInterceptor = (
-    callBack: (code: CodeAction, res: AuthingResponse) => void
+    callBack: (code: CodeAction, res: AuthingResponse) => AuthingGuardResponse
   ) => {
     // 初始化 errorCode 响应拦截器
     if (this.responseInterceptorMap.has(InterceptorName.ERROR_CODE)) return
@@ -139,7 +142,7 @@ export class GuardHttp {
     return this
   }
 
-  public responseIntercept: (res: AuthingResponse) => AuthingResponse = (
+  public responseIntercept: (res: AuthingResponse) => AuthingGuardResponse = (
     res
   ) => {
     if (this.responseInterceptorMap.size === 0) return res
