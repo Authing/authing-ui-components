@@ -35,6 +35,7 @@ import {
 } from '../../_utils/responseManagement/interface'
 import { GuardIdentityBindingView } from '../../IdentityBinding'
 import { GuardIdentityBindingAskView } from '../../IdentityBindingAsk'
+import '../styles.less'
 
 const PREFIX_CLS = 'authing-ant'
 
