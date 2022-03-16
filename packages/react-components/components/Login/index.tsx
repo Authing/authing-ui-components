@@ -187,22 +187,12 @@ export const GuardLoginView = () => {
 
     if (code === 200) {
       return (data: any) => {
-        // if (
-        //   shoudGoToComplete(data, 'login', publicConfig, config?.autoRegister)
-        // ) {
-        //   changeModule?.(GuardModuleType.COMPLETE_INFO, {
-        //     context: 'login',
-        //     user: data,
-        //   })
-        // } else {
         events?.onLogin?.(data, client!) // 登录成功
-        // }
       }
     }
 
     if (!action) {
       return (initData?: any) => {
-        // initData?._message && message.error(initData?._message)
         console.error('未捕获 code', code)
       }
     }

@@ -8,10 +8,8 @@ import { isLarkBrowser, isWeChatBrowser } from '../../_utils'
 import querystring from 'query-string'
 import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
 import {
-  APP_MFA_CODE,
   HIDE_SOCIALS,
   HIDE_SOCIALS_SHOWIN_ENTERPRISE,
-  OTP_MFA_CODE,
 } from '../../AuthingGuard/constants'
 import { useScreenSize } from '../../AuthingGuard/hooks/useScreenSize'
 import { useGuardAuthClient } from '../../Guard/authClient'
@@ -21,6 +19,7 @@ import './style.less'
 import { useMediaSize } from '../../_utils/hooks'
 import { useGuardPublicConfig } from '../../_utils/context'
 import { IdpButton } from './IdpButton'
+import { useErrorHandling, usePostMessage } from './postMessage'
 
 export interface SocialLoginProps {
   appId: string
@@ -47,58 +46,16 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
 
   const { isPhoneMedia } = useMediaSize()
 
+  const onMessage = usePostMessage()
+
+  const onErrorHandling = useErrorHandling()
+
   useEffect(() => {
-    const onMessage = (evt: MessageEvent) => {
-      // TODO: event.origin是指发送的消息源，一定要进行验证！！！
-      const { code, message: errMsg, data, event } = evt.data
-
-      const { source, eventType } = event || {}
-      // 社会化登录是用 authing-js-sdk 实现的，不用再在这里回调了
-      if (source === 'authing' && eventType === 'socialLogin') {
-        return
-      }
-      try {
-        const parsedMsg = JSON.parse(errMsg)
-
-        const {
-          code: authingCode,
-          message: authingMessage,
-          data: authingData,
-        } = parsedMsg
-        if ([OTP_MFA_CODE, APP_MFA_CODE].includes(authingCode)) {
-          onGuardLogin(authingCode, authingData, authingMessage)
-          return
-        }
-      } catch (e) {
-        // do nothing...
-      }
-
-      if (code !== undefined) {
-        if (code === 200) {
-          localStorage.setItem('_authing_token', data?.token)
-          //   onSuccess(data)
-          onGuardLogin(code, data, message)
-
-          // TODO 身份源绑定逻辑 临时修改
-        } else if ([1641, 1640].includes(code)) {
-          onGuardLogin(code, data)
-        } else {
-          try {
-            const parsedMsg = JSON.parse(errMsg)
-            const { message: errorMessage } = parsedMsg
-            message.error(errorMessage)
-          } catch (err) {
-            message.error(errMsg)
-          }
-        }
-      }
-    }
-
     window.addEventListener('message', onMessage)
     return () => {
       window.removeEventListener('message', onMessage)
     }
-  }, [onGuardLogin])
+  }, [onMessage])
 
   useEffect(() => {
     const containerDOM = document.getElementsByClassName('g2-view-header')?.[0]
@@ -232,20 +189,20 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       const onLogin = () => {
         authClient.social.authorize(item.identifier, {
           onSuccess(user) {
-            // TODO
-            // onSuccess(user)
             onGuardLogin(200, user)
           },
           onError(code, msg, data) {
-            try {
-              const parsedMsg = JSON.parse(msg)
-              const { message: authingMessage, data: authingData } = parsedMsg
-              onGuardLogin(code, authingData, authingMessage)
-            } catch (e) {
-              // do nothing...
-              onGuardLogin(code, data, msg)
-            }
-            // message.error(msg)
+            // try {
+            //   const parsedMsg = JSON.parse(msg)
+            //   const { message: authingMessage, data: authingData } = parsedMsg
+            //   onGuardLogin(code, authingData, authingMessage)
+            // } catch (e) {
+            //   // do nothing...
+            //   onGuardLogin(code, data, msg)
+            // }
+            // // message.error(msg)
+
+            onErrorHandling({ code, message: msg, data })
           },
           authorization_params,
           ...options,
@@ -344,10 +301,6 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       <div className="g2-social-login-list">{idpButtons}</div>
     </>
   ) : null
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-
-  // let socialLogin
-  // const shape = config.socialConnectionsBtnShape
 
   const socialLogin =
     socialLoginButtons.length > 0 && noLoginMethods ? (
@@ -386,7 +339,6 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       >
         {!publicConfig?.ssoPageComponentDisplay.idpBtns || idp}
         {!publicConfig?.ssoPageComponentDisplay.socialLoginBtns || socialLogin}
-        {/* 没有任何登录方式时 */}
         {noLoginMethods && !socialLoginButtons.length && !idpButtons.length && (
           <div
             style={{
