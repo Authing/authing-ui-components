@@ -39,7 +39,11 @@ export const MFAFace = (props: any) => {
   const [faceState, setFaceState] = useState('ready') // ready, identifying, retry
   const [percent, setPercent] = useState(0) // 识别进度（相似性）
 
-  const businessRequest = useMfaBusinessRequest()[MfaBusinessAction.VerifyFace]
+  const mfaBusinessRequest = useMfaBusinessRequest()
+
+  const verifyRequest = mfaBusinessRequest[MfaBusinessAction.VerifyFace]
+
+  const bindRequest = mfaBusinessRequest[MfaBusinessAction.AssociateFace]
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -140,21 +144,15 @@ export const MFAFace = (props: any) => {
     props.mfaLogin(code, data, message)
   }
 
-  const faceBind = () => {
-    let url = '/api/v2/mfa/face/associate'
-    let data = {
-      photoA: p1.current,
-      photoB: p2.current,
+  const faceBind = async () => {
+    const requestData = {
+      photoA: p1.current!,
+      photoB: p2.current!,
+      mfaToken: props.initData.mfaToken,
     }
-    let mfaToken = props.initData.mfaToken
-    let config = {
-      headers: {
-        authorization: mfaToken,
-      },
-    }
-    post(url, data, config).then((result) => {
-      faceLogin(result)
-    })
+    const result = await bindRequest(requestData)
+
+    faceLogin(result)
   }
 
   const faceCheck = async () => {
@@ -163,7 +161,7 @@ export const MFAFace = (props: any) => {
       mfaToken: props.initData.mfaToken,
     }
 
-    const result = await businessRequest(requestData)
+    const result = await verifyRequest(requestData)
 
     faceLogin(result)
   }

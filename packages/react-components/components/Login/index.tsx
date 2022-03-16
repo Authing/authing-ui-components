@@ -198,19 +198,19 @@ export const GuardLoginView = () => {
     }
 
     // 解析成功
-    if (action?.action === 'changeModule') {
-      let guardModule = action.module ? action.module : GuardModuleType.ERROR
-      let init = action.initData ? action.initData : {}
-      return (initData?: any) => {
-        changeModule?.(guardModule, { ...initData, ...init })
-      }
-    }
-    if (action?.action === 'message') {
-      return (initData?: any) => {
-        setErrorNumber(errorNumber + 1)
-        message.error(initData?._message)
-      }
-    }
+    // if (action?.action === 'changeModule') {
+    //   let guardModule = action.module ? action.module : GuardModuleType.ERROR
+    //   let init = action.initData ? action.initData : {}
+    //   return (initData?: any) => {
+    //     changeModule?.(guardModule, { ...initData, ...init })
+    //   }
+    // }
+    // if (action?.action === 'message') {
+    //   return (initData?: any) => {
+    //     setErrorNumber(errorNumber + 1)
+    //     message.error(initData?._message)
+    //   }
+    // }
     if (action?.action === 'accountLock') {
       return (initData?: any) => {
         setAccountLock(true)

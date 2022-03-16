@@ -6,6 +6,7 @@ export enum MfaBusinessAction {
   VerifySms = 'verify-sms',
   VerifyTotp = 'verify-totp',
   VerifyFace = 'verify-face',
+  AssociateFace = 'associate-face',
 }
 
 export const authFlow = async (action: MfaBusinessAction, content: any) => {
@@ -35,6 +36,13 @@ interface VerifyTotpContent {
 
 interface VerifyFaceContent {
   photo: string
+  mfaToken?: string
+}
+
+interface AssociateFaceContent {
+  photoA: string
+  photoB: string
+  isExternalPhoto?: boolean
   mfaToken?: string
 }
 
@@ -108,6 +116,25 @@ export const VerifyFace = async (content: VerifyFaceContent) => {
   )
 }
 
+export const AssociateFace = async (content: AssociateFaceContent) => {
+  const { photoA, photoB, isExternalPhoto, mfaToken } = content
+  const { post } = getGuardHttp()
+
+  return await post(
+    '/api/v2/mfa/face/associate',
+    {
+      photoA,
+      photoB,
+      isExternalPhoto,
+    },
+    {
+      headers: {
+        authorization: `Bearer ${mfaToken}`,
+      },
+    }
+  )
+}
+
 export const useMfaBusinessRequest = () => {
   const isFlow = useGuardIsAuthFlow()
 
@@ -140,25 +167,14 @@ export const useMfaBusinessRequest = () => {
 
       return VerifyFace(content)
     },
+    [MfaBusinessAction.AssociateFace]: (content: AssociateFaceContent) => {
+      if (isFlow) {
+        return authFlow(MfaBusinessAction.AssociateFace, content)
+      }
+
+      return AssociateFace(content)
+    },
   }
 
   return request
-
-  // if (isFlow) {
-  //   return (content: any) => authFlow(action, content)
-  // } else {
-  //   switch (action) {
-  //     case MfaBusinessAction.VerifyEmail:
-  //       return (content: VerifyEmailContent) => VerifyEmail(content)
-
-  //     case MfaBusinessAction.VerifySms:
-  //       return (content: VerifySmsContent) => VerifySms(content)
-
-  //     case MfaBusinessAction.VerifyTotp:
-  //       return (content: VerifyTotpContent) => VerifyTotp(content)
-
-  //     case MfaBusinessAction.VerifyFace:
-  //       return (content: VerifyFaceContent) => VerifyFace(content)
-  //   }
-  // }
 }
