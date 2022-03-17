@@ -4,47 +4,69 @@ import { useTranslation } from 'react-i18next'
 import { User } from '../..'
 import { IconFont } from '../../IconFont'
 import SubmitButton from '../../SubmitButton'
+import { useGuardIsAuthFlow } from '../../_utils/context'
 import { useGuardHttp } from '../../_utils/guardHttp'
+import { authFlow, TotpRecoveryCodeBusinessAction } from '../businessRequest'
 
 export interface UseCodeProps {
   mfaToken: string
-  onSubmit: (recoveryCode: string, user: User) => void
+  onSubmit: (recoveryCode: string, user?: User) => void
 }
 
 export const UseCode: React.FC<UseCodeProps> = ({ mfaToken, onSubmit }) => {
   const { t } = useTranslation()
 
+  const isAuthFlow = useGuardIsAuthFlow()
+
   const [form] = Form.useForm()
 
   const { post } = useGuardHttp()
 
-  const onFinish = async () => {
+  const onFinish = async (values: any) => {
     submitButtonRef.current?.onSpin(true)
 
-    try {
-      const res = await post(
-        '/api/v2/mfa/totp/recovery',
-        {
-          recoveryCode: form.getFieldValue('recoveryCode'),
-        },
-        {
-          headers: {
-            authorization: mfaToken,
-          },
-        }
-      )
-      if (res.code === 200) {
-        // @ts-ignore
-        onSubmit(res.recoveryCode, res.data)
-      } else {
-        message.error(res.message)
-        submitButtonRef.current?.onError()
-      }
-    } catch (error) {
-      // TODO: handle error
-      submitButtonRef.current?.onError()
-    } finally {
+    if (isAuthFlow) {
+      const { code, data, onGuardHandling } = await authFlow<{
+        recoveryCode: string
+      }>(TotpRecoveryCodeBusinessAction.RecoveryTotp, {
+        recoveryCode: values.recoveryCode,
+      })
+
       submitButtonRef.current?.onSpin(false)
+
+      if (code === 200) {
+        onSubmit(data!.recoveryCode)
+      } else {
+        submitButtonRef.current?.onError()
+
+        onGuardHandling?.()
+      }
+    } else {
+      try {
+        const res = await post(
+          '/api/v2/mfa/totp/recovery',
+          {
+            recoveryCode: form.getFieldValue('recoveryCode'),
+          },
+          {
+            headers: {
+              authorization: mfaToken,
+            },
+          }
+        )
+        if (res.code === 200) {
+          // @ts-ignore
+          onSubmit(res.recoveryCode, res.data)
+        } else {
+          message.error(res.message)
+          submitButtonRef.current?.onError()
+        }
+      } catch (error) {
+        // TODO: handle error
+        submitButtonRef.current?.onError()
+      } finally {
+        submitButtonRef.current?.onSpin(false)
+      }
     }
   }
 

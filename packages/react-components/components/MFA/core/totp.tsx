@@ -9,6 +9,7 @@ import { VerifyCodeFormItem } from '../VerifyCodeInput/VerifyCodeFormItem'
 import { VerifyCodeInput } from '../VerifyCodeInput'
 import { IconFont } from '../../IconFont'
 import { MfaBusinessAction, useMfaBusinessRequest } from '../businessRequest'
+import { useGuardInitData } from '../../_utils/context'
 
 export interface BindMFATotpProps {
   initData: GuardMFAInitData
@@ -55,6 +56,8 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
   const [form] = Form.useForm()
 
   const submitButtonRef = useRef<any>(null)
+
+  const initData = useGuardInitData<GuardMFAInitData>()
 
   const businessRequest = useMfaBusinessRequest()[MfaBusinessAction.VerifyTotp]
 
@@ -105,7 +108,7 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
           <span
             onClick={() => {
               changeModule(GuardModuleType.RECOVERY_CODE, {
-                mfaToken,
+                ...initData,
               })
             }}
           >
