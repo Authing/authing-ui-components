@@ -1,6 +1,5 @@
 import { Divider, Input } from 'antd'
 import React, { FC, Fragment, useRef } from 'react'
-
 import './style.less'
 
 interface VerifyCodeInputProps extends React.HTMLAttributes<HTMLDivElement> {

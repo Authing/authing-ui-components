@@ -34,7 +34,7 @@ export const RotateReset = (props: RotateResetProps) => {
     submitButtonRef?.current?.onSpin(true)
 
     if (isAuthFlow) {
-      const { code, onGuardHandling } = await authFlow(
+      const { isFlowEnd, onGuardHandling } = await authFlow(
         ChangePasswordBusinessAction.ResetPassword,
         {
           password,
@@ -44,7 +44,7 @@ export const RotateReset = (props: RotateResetProps) => {
 
       submitButtonRef?.current?.onSpin(false)
 
-      if (code === 200) {
+      if (isFlowEnd) {
         onReset()
       } else {
         submitButtonRef?.current?.onError()

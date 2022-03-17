@@ -5,20 +5,24 @@ export enum CodeAction {
   CHANGE_MODULE = 'changeModule',
   // 渲染 错误信息
   RENDER_MESSAGE = 'renderMessage',
+  // 流程 结束
+  FLOW_END = 'flowEnd',
 }
 
 export enum ApiCode {
-  IDENTITY_BINDING_ASK = '1641',
+  IDENTITY_BINDING_ASK = 1641,
 
-  IDENTITY_BINDING = '1640',
+  IDENTITY_BINDING = 1640,
 
-  APP_MFA = '1636',
+  APP_MFA = 1636,
 
-  MFA = '1635',
+  MFA = 1635,
 
-  LOGIN = '1699',
+  LOGIN = 1699,
 
-  COMPLETE_INFO = '1642',
+  COMPLETE_INFO = 1642,
+
+  FLOW_END = 1600,
 }
 
 export const ChangeModuleApiCodeMapping: Record<string, GuardModuleType> = {

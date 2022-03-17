@@ -88,9 +88,13 @@ export const GuardBindTotpView: React.FC = () => {
     setQrcode(data.qrcode_data_url)
   }, [initData.mfaToken])
 
-  const onBind = () => {
-    if (user) {
-      events?.onLogin?.(user, authClient) // 登录成功
+  const onBind = (resUser?: User) => {
+    if (isAuthFlow && resUser) {
+      events?.onLogin?.(resUser, authClient)
+    } else {
+      if (user) {
+        events?.onLogin?.(user, authClient)
+      }
     }
   }
 

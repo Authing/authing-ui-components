@@ -18,6 +18,7 @@ export interface AuthingResponse<T = any> {
 
 export interface AuthingGuardResponse<T = any> extends AuthingResponse<T> {
   onGuardHandling?: () => void
+  isFlowEnd?: boolean
 }
 
 requestClient.get = async <T>(

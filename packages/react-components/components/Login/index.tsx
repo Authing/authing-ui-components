@@ -205,12 +205,11 @@ export const GuardLoginView = () => {
     //     changeModule?.(guardModule, { ...initData, ...init })
     //   }
     // }
-    // if (action?.action === 'message') {
-    //   return (initData?: any) => {
-    //     setErrorNumber(errorNumber + 1)
-    //     message.error(initData?._message)
-    //   }
-    // }
+    if (action?.action === 'message') {
+      return () => {
+        setErrorNumber(errorNumber + 1)
+      }
+    }
     if (action?.action === 'accountLock') {
       return (initData?: any) => {
         setAccountLock(true)

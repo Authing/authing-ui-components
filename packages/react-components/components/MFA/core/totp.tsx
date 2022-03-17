@@ -71,11 +71,13 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
       mfaToken,
     }
 
-    const { code, data, onGuardHandling } = await businessRequest(requestData)
+    const { isFlowEnd, data, onGuardHandling } = await businessRequest(
+      requestData
+    )
 
     submitButtonRef.current.onSpin(false)
 
-    if (code === 200) {
+    if (isFlowEnd) {
       mfaLogin(200, data)
     } else {
       submitButtonRef.current.onError()
@@ -96,7 +98,7 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
         <VerifyCodeFormItem codeLength={6}>
           <VerifyCodeInput
             length={6}
-            showDivider={true}
+            showDivider={false}
             gutter={'10px'}
             onFinish={onFinish}
           />

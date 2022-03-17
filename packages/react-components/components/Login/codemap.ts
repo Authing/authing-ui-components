@@ -24,23 +24,9 @@ export const codeMap: Record<number, GuardModuleAction> = {
   500: {
     action: 'message',
   },
-  1639: {
-    // 首次登陆，跳转去修改密码
-    action: 'changeModule',
-    module: GuardModuleType.CHANGE_PWD,
-    initData: { type: 'inital' },
-    // 借助 1639 强行 mock 一下
-    // initData: { type: 'rotate' },
-  },
   1002: {
     // 登录太频繁
     action: 'message',
-  },
-  2058: {
-    // 密码轮换，跳转去修改密码
-    action: 'changeModule',
-    module: GuardModuleType.CHANGE_PWD,
-    initData: { type: 'rotate' },
   },
   2820002: {
     // ldap url报错信息

@@ -32,14 +32,14 @@ export const FirstLoginReset: React.FC<FirstLoginResetProps> = ({
 
     if (isAuthFlow) {
       // 重置密码成功不会返回 UserInfo
-      const { code, onGuardHandling } = await authFlow(
+      const { isFlowEnd, onGuardHandling } = await authFlow(
         ChangePasswordBusinessAction.ResetPassword,
         {
           password: newPassword,
         }
       )
       submitButtonRef.current?.onSpin(false)
-      if (code === 200) {
+      if (isFlowEnd) {
         onReset()
       } else {
         submitButtonRef.current?.onError()

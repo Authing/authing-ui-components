@@ -15,7 +15,6 @@ import { IconFont } from '../../../IconFont'
 import { InputPassword } from '../../../InputPassword'
 import { Agreements } from '../../../Register/components/Agreements'
 import { AuthingGuardResponse, AuthingResponse } from '../../../_utils/http'
-import { useGuardModule } from '../../../_utils/context'
 
 interface LoginWithPasswordProps {
   // configs

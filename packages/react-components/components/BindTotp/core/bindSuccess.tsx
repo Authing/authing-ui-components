@@ -28,13 +28,13 @@ export const BindSuccess: React.FC<BindSuccessProps> = ({ secret, onBind }) => {
     await form.validateFields()
 
     if (isAuthFlow) {
-      const { code, data, onGuardHandling } = await authFlow(
+      const { data, isFlowEnd, onGuardHandling } = await authFlow(
         BindTotpBusinessAction.ConfirmTotpRecoveryCode,
         {}
       )
       submitButtonRef.current?.onSpin(false)
 
-      if (code === 200) {
+      if (isFlowEnd) {
         onBind(data)
       } else {
         submitButtonRef.current?.onError()

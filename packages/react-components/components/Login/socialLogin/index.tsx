@@ -19,7 +19,7 @@ import './style.less'
 import { useMediaSize } from '../../_utils/hooks'
 import { useGuardPublicConfig } from '../../_utils/context'
 import { IdpButton } from './IdpButton'
-import { useErrorHandling, usePostMessage } from './postMessage'
+import { usePostMessage } from './postMessage'
 
 export interface SocialLoginProps {
   appId: string
@@ -48,7 +48,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
 
   const onMessage = usePostMessage()
 
-  const onErrorHandling = useErrorHandling()
+  // const onErrorHandling = useErrorHandling()
 
   useEffect(() => {
     const onPostMessage = (evt: MessageEvent) => {

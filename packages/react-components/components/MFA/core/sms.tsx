@@ -1,6 +1,6 @@
 import { message } from 'antd'
 import { Form } from 'antd'
-import { SceneType, User } from 'authing-js-sdk'
+import { SceneType } from 'authing-js-sdk'
 import React, { useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VerifyCodeInput } from '../VerifyCodeInput'
@@ -120,11 +120,13 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
       code: mfaCode.join(''),
     }
 
-    const { code, data, onGuardHandling } = await businessRequest(requestData)
+    const { isFlowEnd, data, onGuardHandling } = await businessRequest(
+      requestData
+    )
 
     submitButtonRef.current?.onSpin(false)
 
-    if (code === 200) {
+    if (isFlowEnd) {
       onVerify(200, data)
     } else {
       submitButtonRef.current.onError()

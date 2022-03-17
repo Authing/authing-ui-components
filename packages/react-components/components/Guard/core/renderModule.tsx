@@ -3,7 +3,6 @@ import React, { useEffect, useMemo } from 'react'
 import { GuardModuleType, GuardProps } from '..'
 import { GuardBindTotpView } from '../../BindTotp'
 import {
-  GuardChangePassword,
   GuardFirstLoginPasswordResetView,
   GuardForcedPasswordResetView,
 } from '../../ChangePassword'
@@ -36,6 +35,7 @@ import { AuthingGuardResponse, AuthingResponse } from '../../_utils/http'
 import {
   CodeAction,
   ChangeModuleApiCodeMapping,
+  ApiCode,
 } from '../../_utils/responseManagement/interface'
 import { GuardIdentityBindingView } from '../../IdentityBinding'
 import { GuardIdentityBindingAskView } from '../../IdentityBindingAsk'
@@ -138,11 +138,23 @@ export const RenderModule: React.FC<{
         [CodeAction.RENDER_MESSAGE]: () => {
           message.error(res.message ?? res.messages)
         },
+        [CodeAction.FLOW_END]: () => {},
       }
 
       const codeAction = codeActionMapping[code]
 
       if (!codeAction) return res
+
+      if (res.apiCode === ApiCode.FLOW_END) {
+        const newData = res.data.user
+
+        return {
+          ...res,
+          onGuardHandling: codeAction,
+          isFlowEnd: true,
+          data: newData ? { ...newData } : res,
+        }
+      }
 
       return {
         ...res,

@@ -101,7 +101,7 @@ export const LoginWithVerifyCode = (props: any) => {
 
   const loginByPhoneCode = async (values: any) => {
     const reqContent = {
-      phone: values.identifier,
+      phone: values.identify,
       code: values.code,
       customData: getUserRegisterParams(),
       autoRegister: props.autoRegister,
@@ -115,7 +115,7 @@ export const LoginWithVerifyCode = (props: any) => {
     submitButtonRef.current.onSpin(false)
 
     if (code === 200) {
-      props.onLogin(200, data.user)
+      props.onLogin(200, data)
     } else {
       submitButtonRef.current.onError()
       onGuardHandling?.()
@@ -123,16 +123,25 @@ export const LoginWithVerifyCode = (props: any) => {
   }
 
   const loginByEmailCode = async (values: any) => {
-    try {
-      const user = await client.loginByEmailCode(values.identify, values.code)
-      submitButtonRef.current.onSpin(false)
-      props.onLogin(200, user)
-    } catch (e) {
-      const error = JSON.parse(e.message)
+    const reqContent = {
+      email: values.identify,
+      code: values.code,
+      customData: getUserRegisterParams(),
+      autoRegister: props.autoRegister,
+      withCustomData: true,
+    }
+    const { code, data, onGuardHandling } = await post(
+      '/api/v2/login/email-code',
+      reqContent
+    )
+
+    submitButtonRef.current.onSpin(false)
+
+    if (code === 200) {
+      props.onLogin(200, data)
+    } else {
       submitButtonRef.current.onError()
-      props.onLogin(error.code, error.data, error.message)
-    } finally {
-      submitButtonRef.current?.onSpin(false)
+      onGuardHandling?.()
     }
   }
 

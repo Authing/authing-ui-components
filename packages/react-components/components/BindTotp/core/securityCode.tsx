@@ -44,15 +44,16 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
     const saftyCode = form.getFieldValue('saftyCode')
 
     if (isAuthFlow) {
-      const { code, onGuardHandling } = await authFlow(
+      // 这里绑定成功过返回的是 statusCode
+      const { statusCode, onGuardHandling } = await authFlow(
         BindTotpBusinessAction.VerifyTotpFirstTime,
         {
-          totp: saftyCode,
+          totp: saftyCode.join(''),
         }
       )
       submitButtonRef.current?.onSpin(false)
 
-      if (code === 200) {
+      if (statusCode === 200) {
         onNext()
       } else {
         submitButtonRef.current?.onError()
@@ -121,7 +122,7 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
         >
           <VerifyCodeInput
             length={6}
-            showDivider={true}
+            showDivider={false}
             gutter={'10px'}
             onFinish={bindTotp}
           />
