@@ -18,11 +18,15 @@ export enum ApiCode {
 
   MFA = 1635,
 
-  LOGIN = 1699,
+  ABORT_FLOW = 1699,
 
   COMPLETE_INFO = 1642,
 
   FLOW_END = 1600,
+
+  FIRST_LOGIN_PASSWORD = 1639,
+
+  FORCED_PASSWORD_RESET = 2058,
 }
 
 export const ChangeModuleApiCodeMapping: Record<string, GuardModuleType> = {
@@ -30,6 +34,8 @@ export const ChangeModuleApiCodeMapping: Record<string, GuardModuleType> = {
   [ApiCode.IDENTITY_BINDING_ASK]: GuardModuleType.IDENTITY_BINDING_ASK,
   [ApiCode.APP_MFA]: GuardModuleType.MFA,
   [ApiCode.MFA]: GuardModuleType.MFA,
-  [ApiCode.LOGIN]: GuardModuleType.LOGIN,
+  [ApiCode.ABORT_FLOW]: GuardModuleType.LOGIN,
   [ApiCode.COMPLETE_INFO]: GuardModuleType.LOGIN_COMPLETE_INFO,
+  [ApiCode.FIRST_LOGIN_PASSWORD]: GuardModuleType.FIRST_LOGIN_PASSWORD,
+  [ApiCode.FORCED_PASSWORD_RESET]: GuardModuleType.FORCED_PASSWORD_RESET,
 }

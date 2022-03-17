@@ -7,8 +7,13 @@ import CustomFormItem from '../../ValidatorRules'
 import { fieldRequiredRule } from '../../_utils'
 import { InputPassword } from '../../InputPassword'
 import { IconFont } from '../../IconFont'
-import { useGuardInitData, useGuardIsAuthFlow } from '../../_utils/context'
+import {
+  useGuardInitData,
+  useGuardIsAuthFlow,
+  useGuardPublicConfig,
+} from '../../_utils/context'
 import { authFlow, ChangePasswordBusinessAction } from '../businessRequest'
+import { ApiCode } from '../../_utils/responseManagement/interface'
 
 interface RotateResetProps {
   onReset: any
@@ -21,7 +26,11 @@ export const RotateReset = (props: RotateResetProps) => {
 
   let [form] = Form.useForm()
 
+  const { publicKey } = useGuardPublicConfig()
+
   let authClient = useGuardAuthClient()
+
+  const encrypt = authClient.options.encryptFunction
 
   const isAuthFlow = useGuardIsAuthFlow()
 
@@ -34,17 +43,18 @@ export const RotateReset = (props: RotateResetProps) => {
     submitButtonRef?.current?.onSpin(true)
 
     if (isAuthFlow) {
-      const { isFlowEnd, onGuardHandling } = await authFlow(
+      const { apiCode, onGuardHandling } = await authFlow(
         ChangePasswordBusinessAction.ResetPassword,
         {
-          password,
-          oldPassword,
+          password: await encrypt!(password, publicKey),
+          oldPassword: await encrypt!(oldPassword, publicKey),
         }
       )
 
       submitButtonRef?.current?.onSpin(false)
 
-      if (isFlowEnd) {
+      // 重置密码 返回的是流程终止
+      if (apiCode === ApiCode.ABORT_FLOW) {
         onReset()
       } else {
         submitButtonRef?.current?.onError()

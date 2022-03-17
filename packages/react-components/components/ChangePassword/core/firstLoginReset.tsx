@@ -6,7 +6,11 @@ import SubmitButton from '../../SubmitButton'
 import CustomFormItem from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
-import { useGuardInitData, useGuardIsAuthFlow } from '../../_utils/context'
+import {
+  useGuardInitData,
+  useGuardIsAuthFlow,
+  useGuardPublicConfig,
+} from '../../_utils/context'
 import { authFlow, ChangePasswordBusinessAction } from '../businessRequest'
 interface FirstLoginResetProps {
   onReset: any
@@ -20,9 +24,13 @@ export const FirstLoginReset: React.FC<FirstLoginResetProps> = ({
 
   const isAuthFlow = useGuardIsAuthFlow()
 
+  const { publicKey } = useGuardPublicConfig()
+
   let [form] = Form.useForm()
 
   let client = useGuardAuthClient()
+
+  const encrypt = client.options.encryptFunction
 
   let submitButtonRef = useRef<any>(null)
 
@@ -35,7 +43,7 @@ export const FirstLoginReset: React.FC<FirstLoginResetProps> = ({
       const { isFlowEnd, onGuardHandling } = await authFlow(
         ChangePasswordBusinessAction.ResetPassword,
         {
-          password: newPassword,
+          password: await encrypt!(newPassword, publicKey),
         }
       )
       submitButtonRef.current?.onSpin(false)
