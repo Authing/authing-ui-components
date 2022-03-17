@@ -7,52 +7,27 @@ import {
   useGuardFinallyConfig,
   useGuardInitData,
   useGuardModule,
-  useGuardPublicConfig,
 } from '../_utils/context'
 import { FirstLoginReset } from './core/firstLoginReset'
 import { RotateReset } from './core/rotateReset'
 
 // 手动修改密码，并非「忘记密码」
 // 进入的场景是读取配置：1开了首次登录修改密码 || 2开了密码轮换
-export const GuardChangePassword = () => {
-  const initData = useGuardInitData<any>()
+export const GuardChangePassword: React.FC<{
+  title: string
+  explain: string
+}> = (props) => {
+  const { title, explain, children } = props
 
   const config = useGuardFinallyConfig()
 
-  const publicConfig = useGuardPublicConfig()
-
-  const { changeModule } = useGuardModule()
-
-  const { t } = useTranslation()
-
-  const onReset = (res: any) => {
-    let code = res.code
-    if (code === 200) {
-      message.success(t('common.updatePsswordSuccess'))
-      // 返回登录
-      setTimeout(() => {
-        changeModule?.(GuardModuleType.LOGIN)
-      }, 500)
-    } else {
-      console.log('*** reset code no catched', res)
-    }
-  }
-
-  const typeContent = useMemo(() => {
-    if (initData.type === 'inital') {
-      return {
-        title: `${t('common.welcome')} ${config.title}`,
-        explain: t('common.initPasswordText'),
-      }
-    } else {
-      return {
-        title: t('user.modifyPwd'),
-        explain: t('user.modifyPwdText', {
-          number: initData.forcedCycle,
-        }),
-      }
-    }
-  }, [config.title, initData.forcedCycle, initData.type, t])
+  const typeContent = useMemo(
+    () => ({
+      title,
+      explain,
+    }),
+    [explain, title]
+  )
 
   return (
     <div className="g2-view-container g2-change-password">
@@ -67,27 +42,61 @@ export const GuardChangePassword = () => {
         <div className="title">{typeContent.title}</div>
         <div className="title-explain">{typeContent.explain}</div>
       </div>
-      <div className="g2-view-tabs">
-        {initData.type === 'rotate' && (
-          <RotateReset
-            onReset={onReset}
-            initData={initData}
-            publicConfig={publicConfig}
-          />
-        )}
-      </div>
+      <div className="g2-view-tabs">{children}</div>
     </div>
   )
 }
 
 export const GuardFirstLoginPasswordResetView: React.FC = () => {
-  const onReset = (res: any) => {}
+  const { t } = useTranslation()
+
+  const { changeModule } = useGuardModule()
+
+  const onReset = () => {
+    message.success(t('common.updatePsswordSuccess'))
+    setTimeout(() => {
+      changeModule?.(GuardModuleType.LOGIN)
+    }, 500)
+  }
+
+  const config = useGuardFinallyConfig()
 
   const coreForm = <FirstLoginReset onReset={onReset} />
 
-  return <span />
+  return (
+    <GuardChangePassword
+      title={`${t('common.welcome')} ${config.title}`}
+      explain={t('common.initPasswordText')}
+    >
+      {coreForm}
+    </GuardChangePassword>
+  )
 }
 
 export const GuardForcedPasswordResetView: React.FC = () => {
-  return <span />
+  const { t } = useTranslation()
+
+  const { changeModule } = useGuardModule()
+
+  const initData = useGuardInitData<{ forcedCycle: number }>()
+
+  const onReset = () => {
+    message.success(t('common.updatePsswordSuccess'))
+    setTimeout(() => {
+      changeModule?.(GuardModuleType.LOGIN)
+    }, 500)
+  }
+
+  const coreForm = <RotateReset onReset={onReset} />
+
+  return (
+    <GuardChangePassword
+      title={t('user.modifyPwd')}
+      explain={t('user.modifyPwdText', {
+        number: initData.forcedCycle,
+      })}
+    >
+      {coreForm}
+    </GuardChangePassword>
+  )
 }

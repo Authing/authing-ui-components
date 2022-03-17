@@ -7,37 +7,63 @@ import CustomFormItem from '../../ValidatorRules'
 import { fieldRequiredRule } from '../../_utils'
 import { InputPassword } from '../../InputPassword'
 import { IconFont } from '../../IconFont'
+import { useGuardInitData, useGuardIsAuthFlow } from '../../_utils/context'
+import { authFlow, ChangePasswordBusinessAction } from '../businessRequest'
 
 interface RotateResetProps {
   onReset: any
-  publicConfig: any
-  initData: any
 }
 
 export const RotateReset = (props: RotateResetProps) => {
   const { t } = useTranslation()
 
+  const { onReset } = props
+
   let [form] = Form.useForm()
 
   let authClient = useGuardAuthClient()
+
+  const isAuthFlow = useGuardIsAuthFlow()
+
   let submitButtonRef = useRef<any>(null)
+
+  const initData = useGuardInitData<{ token: string }>()
 
   const onFinish = async (values: any) => {
     let { password, oldPassword } = values
     submitButtonRef?.current?.onSpin(true)
 
-    try {
-      let res = await authClient.resetPasswordByForceResetToken({
-        token: props.initData.token,
-        newPassword: password,
-        oldPassword: oldPassword,
-      })
-      props.onReset({ code: 200, data: res })
-    } catch (error) {
-      message.error(error.message)
-      submitButtonRef?.current?.onError()
-    } finally {
+    if (isAuthFlow) {
+      const { code, onGuardHandling } = await authFlow(
+        ChangePasswordBusinessAction.ResetPassword,
+        {
+          password,
+          oldPassword,
+        }
+      )
+
       submitButtonRef?.current?.onSpin(false)
+
+      if (code === 200) {
+        onReset()
+      } else {
+        submitButtonRef?.current?.onError()
+        onGuardHandling?.()
+      }
+    } else {
+      try {
+        let res = await authClient.resetPasswordByForceResetToken({
+          token: initData.token,
+          newPassword: password,
+          oldPassword: oldPassword,
+        })
+        props.onReset({ code: 200, data: res })
+      } catch (error) {
+        message.error(error.message)
+        submitButtonRef?.current?.onError()
+      } finally {
+        submitButtonRef?.current?.onSpin(false)
+      }
     }
   }
 

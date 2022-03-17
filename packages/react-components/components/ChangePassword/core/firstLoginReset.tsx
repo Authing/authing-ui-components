@@ -6,7 +6,8 @@ import SubmitButton from '../../SubmitButton'
 import CustomFormItem from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
-import { useGuardInitData, useGuardPublicConfig } from '../../_utils/context'
+import { useGuardInitData, useGuardIsAuthFlow } from '../../_utils/context'
+import { authFlow, ChangePasswordBusinessAction } from '../businessRequest'
 interface FirstLoginResetProps {
   onReset: any
 }
@@ -17,7 +18,7 @@ export const FirstLoginReset: React.FC<FirstLoginResetProps> = ({
 
   const initData = useGuardInitData<{ token: string }>()
 
-  const publicConfig = useGuardPublicConfig()
+  const isAuthFlow = useGuardIsAuthFlow()
 
   let [form] = Form.useForm()
 
@@ -27,18 +28,36 @@ export const FirstLoginReset: React.FC<FirstLoginResetProps> = ({
 
   const onFinish = async (values: any) => {
     let newPassword = values.password
-    submitButtonRef.current?.onSpin(false)
-    try {
-      let res = await client.resetPasswordByFirstLoginToken({
-        token: initData.token,
-        password: newPassword,
-      })
-      onReset(res)
-    } catch (error: any) {
-      message.error(error.message)
-      submitButtonRef?.current?.onError()
-    } finally {
+    submitButtonRef.current?.onSpin(true)
+
+    if (isAuthFlow) {
+      // 重置密码成功不会返回 UserInfo
+      const { code, onGuardHandling } = await authFlow(
+        ChangePasswordBusinessAction.ResetPassword,
+        {
+          password: newPassword,
+        }
+      )
       submitButtonRef.current?.onSpin(false)
+      if (code === 200) {
+        onReset()
+      } else {
+        submitButtonRef.current?.onError()
+        onGuardHandling?.()
+      }
+    } else {
+      try {
+        let res = await client.resetPasswordByFirstLoginToken({
+          token: initData.token,
+          password: newPassword,
+        })
+        onReset(res)
+      } catch (error: any) {
+        message.error(error.message)
+        submitButtonRef?.current?.onError()
+      } finally {
+        submitButtonRef.current?.onSpin(false)
+      }
     }
   }
 

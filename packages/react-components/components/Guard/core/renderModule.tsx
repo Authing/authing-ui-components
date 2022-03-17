@@ -2,7 +2,11 @@ import { ConfigProvider, message, Modal } from 'antd'
 import React, { useEffect, useMemo } from 'react'
 import { GuardModuleType, GuardProps } from '..'
 import { GuardBindTotpView } from '../../BindTotp'
-import { GuardChangePassword } from '../../ChangePassword'
+import {
+  GuardChangePassword,
+  GuardFirstLoginPasswordResetView,
+  GuardForcedPasswordResetView,
+} from '../../ChangePassword'
 import {
   GuardLoginCompleteInfoView,
   GuardRegisterCompleteInfoView,
@@ -90,8 +94,14 @@ export const RenderModule: React.FC<{
     [GuardModuleType.DOWNLOAD_AT]: () => <GuardDownloadATView />,
     // 忘记密码 -> 重置密码
     [GuardModuleType.FORGET_PWD]: () => <GuardForgetPassword />,
-    // 首次登录修改密码 && 密码过期
-    [GuardModuleType.CHANGE_PWD]: () => <GuardChangePassword />,
+    // 首次登录修改密码
+    [GuardModuleType.FIRST_LOGIN_PASSWORD]: () => (
+      <GuardFirstLoginPasswordResetView />
+    ),
+    // 登陆安全策略 密码轮换
+    [GuardModuleType.FORCED_PASSWORD_RESET]: () => (
+      <GuardForcedPasswordResetView />
+    ),
     // 绑定 TOTP
     [GuardModuleType.BIND_TOTP]: () => <GuardBindTotpView />,
     // 问题反馈
