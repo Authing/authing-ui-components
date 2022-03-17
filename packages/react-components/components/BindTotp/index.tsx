@@ -16,6 +16,7 @@ import './styles.less'
 import {
   useGuardEvents,
   useGuardInitData,
+  useGuardIsAuthFlow,
   useGuardModule,
 } from '../_utils/context'
 import { MFAType } from '../MFA/interface'
@@ -33,10 +34,17 @@ export const GuardBindTotpView: React.FC = () => {
   const { changeModule } = useGuardModule()
 
   const { get, post } = useGuardHttp()
+
+  const isAuthFlow = useGuardIsAuthFlow()
+
   const { t } = useTranslation()
+
   const [secret, setSecret] = useState('')
+
   const [qrcode, setQrcode] = useState('')
+
   const [user, setUser] = useState<User>()
+
   const [bindTotpType, setBindTotpType] = useState<BindTotpType>(
     BindTotpType.SECURITY_CODE
   )
@@ -86,9 +94,13 @@ export const GuardBindTotpView: React.FC = () => {
     }
   }
 
-  const onNext = (user: User) => {
-    setUser(user)
-    setBindTotpType(BindTotpType.BIND_SUCCESS)
+  const onNext = (user?: User) => {
+    if (isAuthFlow) {
+      setBindTotpType(BindTotpType.BIND_SUCCESS)
+    } else {
+      setUser(user)
+      setBindTotpType(BindTotpType.BIND_SUCCESS)
+    }
   }
 
   useEffect(() => {

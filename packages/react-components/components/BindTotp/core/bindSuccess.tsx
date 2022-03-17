@@ -2,6 +2,8 @@ import { Form, Checkbox, Typography } from 'antd'
 import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import SubmitButton from '../../SubmitButton'
+import { useGuardIsAuthFlow } from '../../_utils/context'
+import { authFlow, BindTotpBusinessAction } from '../businessRequest'
 
 const { Paragraph } = Typography
 
@@ -13,19 +15,35 @@ export interface BindSuccessProps {
 export const BindSuccess: React.FC<BindSuccessProps> = ({ secret, onBind }) => {
   // const [isSaved, setIsSaved] = useState(false)
   const submitButtonRef = useRef<any>(null)
+
   const [form] = Form.useForm()
 
   const { t } = useTranslation()
 
+  const isAuthFlow = useGuardIsAuthFlow()
+
   const bindSuccess = async () => {
     submitButtonRef.current?.onSpin(true)
-    try {
-      await form.validateFields()
-      onBind()
-    } catch (e: any) {
-      submitButtonRef.current?.onError()
-    } finally {
+
+    await form.validateFields()
+
+    if (isAuthFlow) {
+      const { code, data, onGuardHandling } = await authFlow(
+        BindTotpBusinessAction.ConfirmTotpRecoveryCode,
+        {}
+      )
       submitButtonRef.current?.onSpin(false)
+
+      if (code === 200) {
+        onBind(data)
+      } else {
+        submitButtonRef.current?.onError()
+        onGuardHandling?.()
+      }
+    } else {
+      submitButtonRef.current?.onSpin(false)
+
+      onBind()
     }
   }
 

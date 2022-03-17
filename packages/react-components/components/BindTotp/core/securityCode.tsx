@@ -9,6 +9,8 @@ import SubmitButton from '../../SubmitButton'
 import { ImagePro } from '../../ImagePro'
 import { VerifyCodeFormItem } from '../../MFA/VerifyCodeInput/VerifyCodeFormItem'
 import { VerifyCodeInput } from '../../MFA/VerifyCodeInput'
+import { useGuardIsAuthFlow } from '../../_utils/context'
+import { authFlow, BindTotpBusinessAction } from '../businessRequest'
 export interface SecurityCodeProps {
   mfaToken: string
   qrcode: string
@@ -29,6 +31,8 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
 
   const { post } = useGuardHttp()
 
+  const isAuthFlow = useGuardIsAuthFlow()
+
   const onJump = () => {
     changeModule?.(GuardModuleType.DOWNLOAD_AT)
   }
@@ -36,10 +40,26 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
   const [, bindTotp] = useAsyncFn(async () => {
     submitButtonRef.current.onSpin(true)
 
-    try {
-      await form.validateFields()
-      const saftyCode = form.getFieldValue('saftyCode')
-      const { code, data, message: resMessage } = await post(
+    await form.validateFields()
+    const saftyCode = form.getFieldValue('saftyCode')
+
+    if (isAuthFlow) {
+      const { code, onGuardHandling } = await authFlow(
+        BindTotpBusinessAction.VerifyTotpFirstTime,
+        {
+          totp: saftyCode,
+        }
+      )
+      submitButtonRef.current?.onSpin(false)
+
+      if (code === 200) {
+        onNext()
+      } else {
+        submitButtonRef.current?.onError()
+        onGuardHandling?.()
+      }
+    } else {
+      const { code, data, onGuardHandling } = await post(
         '/api/v2/mfa/totp/associate/confirm',
         {
           authenticator_type: 'totp',
@@ -52,17 +72,14 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
           },
         }
       )
-
-      if (code !== 200) {
-        submitButtonRef.current.onError()
-        message.error(resMessage)
-      } else {
-        onNext(data)
-      }
-    } catch (e: any) {
-      submitButtonRef.current.onError()
-    } finally {
       submitButtonRef.current?.onSpin(false)
+
+      if (code === 200) {
+        onNext(data)
+      } else {
+        submitButtonRef.current?.onError()
+        onGuardHandling?.()
+      }
     }
   }, [mfaToken])
 
