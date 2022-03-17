@@ -107,5 +107,5 @@ export const RecoveryCodeAuthFlow: React.FC = () => {
 export const GuardRecoveryCodeView: React.FC = () => {
   const isAuthFlow = useGuardIsAuthFlow()
 
-  return <>{isAuthFlow ? RecoveryCodeAuthFlow : RecoveryCode}</>
+  return <>{isAuthFlow ? <RecoveryCodeAuthFlow /> : <RecoveryCode />}</>
 }

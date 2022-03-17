@@ -3,8 +3,8 @@ import { getGuardHttp } from '../_utils/guardHttp'
 import { CompleteInfoRequest } from './interface'
 
 export enum CompleteInfoAuthFlowAction {
-  Complete = 'complete',
-  Skip = 'skip',
+  Complete = 'complete-completion',
+  Skip = 'skip-completion',
 }
 
 export const authFlow = async (
