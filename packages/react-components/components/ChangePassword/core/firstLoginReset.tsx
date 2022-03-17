@@ -12,6 +12,7 @@ import {
   useGuardPublicConfig,
 } from '../../_utils/context'
 import { authFlow, ChangePasswordBusinessAction } from '../businessRequest'
+import { ApiCode } from '../../_utils/responseManagement/interface'
 interface FirstLoginResetProps {
   onReset: any
 }
@@ -40,14 +41,15 @@ export const FirstLoginReset: React.FC<FirstLoginResetProps> = ({
 
     if (isAuthFlow) {
       // 重置密码成功不会返回 UserInfo
-      const { isFlowEnd, onGuardHandling } = await authFlow(
+      const { apiCode, onGuardHandling } = await authFlow(
         ChangePasswordBusinessAction.ResetPassword,
         {
           password: await encrypt!(newPassword, publicKey),
         }
       )
       submitButtonRef.current?.onSpin(false)
-      if (isFlowEnd) {
+
+      if (apiCode === ApiCode.ABORT_FLOW) {
         onReset()
       } else {
         submitButtonRef.current?.onError()
