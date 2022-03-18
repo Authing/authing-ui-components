@@ -16,6 +16,7 @@ import {
   useGuardModule,
   useGuardPublicConfig,
 } from '../_utils/context'
+import { VerifyLoginMethods } from '../AuthingGuard/api'
 
 export const GuardRegisterView: React.FC = () => {
   const events = useGuardEvents()
@@ -71,6 +72,11 @@ export const GuardRegisterView: React.FC = () => {
       console.error('last action at register')
     }
   }
+  const verifyLoginMethods = useMemo<VerifyLoginMethods[]>(
+    () =>
+      publicConfig?.verifyCodeTabConfig?.enabledLoginMethods ?? ['phone-code'],
+    [publicConfig?.verifyCodeTabConfig?.enabledLoginMethods]
+  )
 
   const registerContextProps = useMemo(
     () => ({
@@ -99,6 +105,7 @@ export const GuardRegisterView: React.FC = () => {
           ) ?? []
         : [],
       publicConfig: publicConfig,
+      verifyLoginMethods: verifyLoginMethods,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
@@ -106,6 +113,7 @@ export const GuardRegisterView: React.FC = () => {
       config?.agreements,
       events?.onBeforeRegister,
       i18n.language,
+      verifyLoginMethods,
     ]
   )
 

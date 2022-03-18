@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useGuardAuthClient } from '../../../Guard/authClient'
@@ -19,6 +19,10 @@ import {
 import { SendCodeByEmail } from '../../../SendCode/SendCodeByEmail'
 import { FormItemIdentify } from './FormItemIdentify'
 import { InputIdentify } from './inputIdentify'
+import './styles.less'
+import { InputInternationPhone } from './InputInternationPhone'
+import { defaultAreaCode, parsePhone } from '../../../_utils/hooks'
+import { InputMethod } from '../../../Type'
 
 export const LoginWithVerifyCode = (props: any) => {
   const config = useGuardPublicConfig()
@@ -29,15 +33,23 @@ export const LoginWithVerifyCode = (props: any) => {
 
   const { post } = useGuardHttpClient()
 
+  // 是否开启了国际化短信功能
+  const isInternationSms = config?.internationalSmsConfig?.enabled || false
+
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
 
   const [validated, setValidated] = useState(false)
 
   const [identify, setIdentify] = useState('')
 
-  const [currentMethod, setCurrentMethod] = useState(methods[0])
+  const [currentMethod, setCurrentMethod] = useState<InputMethod>(methods[0])
+  // 是否仅开启国际化短信
+  const [isOnlyInternationSms, setInternationSms] = useState(false)
+  // 区号 默认
+  const [areaCode, setAreaCode] = useState(defaultAreaCode)
 
   let [form] = Form.useForm()
+
   let submitButtonRef = useRef<any>(null)
   const { t } = useTranslation()
 
@@ -45,17 +57,48 @@ export const LoginWithVerifyCode = (props: any) => {
 
   const SendCode = useCallback(
     (props: any) => {
+      if (isOnlyInternationSms) {
+        return (
+          <SendCodeByPhone
+            {...props}
+            form={form}
+            fieldName="identify"
+            className="authing-g2-input g2-send-code-input"
+            autoComplete="off"
+            size="large"
+            placeholder={t('common.inputFourVerifyCode', {
+              length: verifyCodeLength,
+            })}
+            areaCode={areaCode}
+            prefix={
+              <IconFont
+                type="authing-a-shield-check-line1"
+                style={{ color: '#878A95' }}
+              />
+            }
+            isInternationSms={isInternationSms}
+            scene={SceneType.SCENE_TYPE_LOGIN}
+            maxLength={verifyCodeLength}
+            onSendCodeBefore={async () => {
+              await form.validateFields(['identify'])
+            }}
+          />
+        )
+      }
+
       return (
         <>
-          {currentMethod === 'phone-code' && (
+          {currentMethod === InputMethod.PhoneCode && (
             <SendCodeByPhone
               {...props}
+              isInternationSms={isInternationSms}
               className="authing-g2-input g2-send-code-input"
               autoComplete="off"
               size="large"
               placeholder={t('common.inputFourVerifyCode', {
                 length: verifyCodeLength,
               })}
+              areaCode={areaCode}
               prefix={
                 <IconFont
                   type="authing-a-shield-check-line1"
@@ -70,7 +113,7 @@ export const LoginWithVerifyCode = (props: any) => {
               }}
             />
           )}
-          {currentMethod === 'email-code' && (
+          {currentMethod === InputMethod.EmailCode && (
             <SendCodeByEmail
               {...props}
               className="authing-g2-input g2-send-code-input"
@@ -96,17 +139,42 @@ export const LoginWithVerifyCode = (props: any) => {
         </>
       )
     },
-    [currentMethod, form, identify, t, verifyCodeLength]
+    [
+      areaCode,
+      currentMethod,
+      form,
+      identify,
+      isInternationSms,
+      isOnlyInternationSms,
+      t,
+      verifyCodeLength,
+    ]
   )
 
+  useEffect(() => {
+    // 开启国际化配置且登录方式为手机号码时
+    if (
+      methods.length === 1 &&
+      methods[0] === 'phone-code' &&
+      config &&
+      config.internationalSmsConfig?.enabled
+    ) {
+      setInternationSms(true)
+    }
+  }, [config, methods])
+
   const loginByPhoneCode = async (values: any) => {
-    const reqContent = {
+    const reqContent: any = {
       phone: values.identify,
       code: values.code,
       customData: getUserRegisterParams(),
       autoRegister: props.autoRegister,
       withCustomData: true,
     }
+
+    if (config && config.internationalSmsConfig?.enabled)
+      reqContent.phoneCountryCode = values.phoneCountryCode
+
     const { code, data, onGuardHandling } = await post(
       '/api/v2/login/phone-code',
       reqContent
@@ -152,14 +220,21 @@ export const LoginWithVerifyCode = (props: any) => {
       submitButtonRef.current.onError()
       return
     }
+    // 解析手机号码 ==> 输出 phoenNumber 和 phoneCountryCode
+    const { phoneNumber, countryCode: phoneCountryCode } = parsePhone(
+      isInternationSms,
+      values.identify,
+      areaCode
+    )
     // onBeforeLogin
     submitButtonRef.current.onSpin(true)
 
     let loginInfo = {
       type: currentMethod,
       data: {
-        identity: values.identify,
+        identity: phoneNumber,
         code: values.code,
+        phoneCountryCode,
       },
     }
 
@@ -172,7 +247,6 @@ export const LoginWithVerifyCode = (props: any) => {
 
     if (!!props.onLoginRequest) {
       const res = await props.onLoginRequest?.(loginInfo)
-
       const { code, message, data } = res
 
       if (code !== 200) {
@@ -185,7 +259,7 @@ export const LoginWithVerifyCode = (props: any) => {
     }
 
     if (currentMethod === 'phone-code') {
-      await loginByPhoneCode(values)
+      await loginByPhoneCode({ ...values, phoneNumber, phoneCountryCode })
     } else {
       await loginByEmailCode(values)
     }
@@ -198,7 +272,25 @@ export const LoginWithVerifyCode = (props: any) => {
       ? `${t('common.login')} / ${t('common.register')}`
       : t('common.login')
   }, [props.autoRegister, submitButText, t])
-
+  // 为了 refresh input
+  const AreaCodePhoneAccount = useCallback(
+    (props) => {
+      return (
+        <InputInternationPhone
+          {...props}
+          className="authing-g2-input"
+          size="large"
+          areaCode={areaCode}
+          onAreaCodeChange={(value: string) => {
+            setAreaCode(value)
+            form.getFieldValue(['identify']) &&
+              form.validateFields(['identify'])
+          }}
+        />
+      )
+    },
+    [areaCode, form]
+  )
   return (
     <div className="authing-g2-login-phone-code">
       <Form
@@ -210,32 +302,43 @@ export const LoginWithVerifyCode = (props: any) => {
       >
         <FormItemIdentify
           name="identify"
-          className="authing-g2-input-form"
+          className={
+            isOnlyInternationSms
+              ? 'authing-g2-input-form remove-padding'
+              : 'authing-g2-input-form'
+          }
           methods={methods}
+          currentMethod={currentMethod}
+          areaCode={areaCode}
         >
-          <InputIdentify
-            className="authing-g2-input"
-            size="large"
-            value={identify}
-            methods={methods}
-            onChange={(e) => {
-              let v = e.target.value
-              setIdentify(v)
-              if (validate('email', v)) {
-                setCurrentMethod('email-code')
+          {isOnlyInternationSms ? (
+            <AreaCodePhoneAccount />
+          ) : (
+            <InputIdentify
+              className="authing-g2-input"
+              size="large"
+              value={identify}
+              methods={methods}
+              onChange={(e) => {
+                let v = e.target.value
+                setIdentify(v)
+                if (validate('email', v)) {
+                  setCurrentMethod(InputMethod.EmailCode)
+                }
+                if (validate('phone', v)) {
+                  setCurrentMethod(InputMethod.PhoneCode)
+                }
+              }}
+              prefix={
+                <IconFont
+                  type="authing-a-user-line1"
+                  style={{ color: '#878A95' }}
+                />
               }
-              if (validate('phone', v)) {
-                setCurrentMethod('phone-code')
-              }
-            }}
-            prefix={
-              <IconFont
-                type="authing-a-user-line1"
-                style={{ color: '#878A95' }}
-              />
-            }
-          />
+            />
+          )}
         </FormItemIdentify>
+
         <Form.Item
           validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"

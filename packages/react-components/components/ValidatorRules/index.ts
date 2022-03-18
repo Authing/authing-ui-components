@@ -10,6 +10,7 @@ import {
 export interface ValidatorFormItemProps extends FormItemProps {
   form?: FormInstance
   checkRepeat?: boolean
+  areaCode?: string //国际化区号
 }
 
 export interface ValidatorFormItemMetaProps extends ValidatorFormItemProps {
@@ -39,5 +40,4 @@ CustomFormItem.Password = PasswordFormItem
 CustomFormItem.Email = EmailFormItem
 CustomFormItem.Phone = PhoneFormItem
 CustomFormItem.UserName = UserNameFormItem
-
 export default CustomFormItem

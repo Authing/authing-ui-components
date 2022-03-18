@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Form, Input, Select, DatePicker } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
+import { ExtendsField } from '../../AuthingGuard/api'
 import { UploadImage } from '../../AuthingGuard/Forms/UploadImage'
 import { i18n } from '../../_utils/locales'
 import {

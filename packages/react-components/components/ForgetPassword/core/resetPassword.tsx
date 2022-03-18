@@ -1,7 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form, Input } from 'antd'
-import { StoreValue } from 'antd/lib/form/interface'
+import { Form } from 'antd'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { fieldRequiredRule, validate } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
@@ -11,6 +10,13 @@ import { InputPassword } from '../../InputPassword'
 import { EmailScene, SceneType } from 'authing-js-sdk'
 import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
+import { FormItemIdentify } from '../../Login/core/withVerifyCode/FormItemIdentify'
+import { InputIdentify } from '../../Login/core/withVerifyCode/inputIdentify'
+import { parsePhone } from '../../_utils/hooks'
+export enum InputMethodMap {
+  email = 'email-code',
+  phone = 'phone-code',
+}
 interface ResetPasswordProps {
   onReset: any
   publicConfig: any
@@ -26,6 +32,9 @@ export const ResetPassword = (props: ResetPasswordProps) => {
   let submitButtonRef = useRef<any>(null)
 
   const verifyCodeLength = props.publicConfig.verifyCodeLength ?? 4
+  // 是否开启了国际化短信功能
+  const isInternationSms =
+    props.publicConfig.internationalSmsConfig?.enabled || false
 
   const onFinish = async (values: any) => {
     let identify = values.identify
@@ -37,7 +46,16 @@ export const ResetPassword = (props: ResetPasswordProps) => {
       context = client.resetPasswordByEmailCode(identify, code, newPassword)
     }
     if (codeMethod === 'phone') {
-      context = client.resetPasswordByPhoneCode(identify, code, newPassword)
+      const { phoneNumber, countryCode } = parsePhone(
+        isInternationSms,
+        identify
+      )
+      context = client.resetPasswordByPhoneCode(
+        phoneNumber,
+        code,
+        newPassword,
+        countryCode
+      )
     }
 
     context
@@ -59,6 +77,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
           {codeMethod === 'phone' && (
             <SendCodeByPhone
               {...props}
+              isInternationSms={isInternationSms}
               className="authing-g2-input g2-send-code-input"
               autoComplete="off"
               size="large"
@@ -105,8 +124,9 @@ export const ResetPassword = (props: ResetPasswordProps) => {
         </>
       )
     },
-    [codeMethod, form, identify, t, verifyCodeLength]
+    [codeMethod, form, identify, isInternationSms, t, verifyCodeLength]
   )
+
   return (
     <div className="authing-g2-login-phone-code">
       <Form
@@ -118,32 +138,17 @@ export const ResetPassword = (props: ResetPasswordProps) => {
         }}
         autoComplete="off"
       >
-        <Form.Item
-          validateTrigger={['onBlur', 'onChange']}
-          className="authing-g2-input-form"
+        <FormItemIdentify
           name="identify"
-          validateFirst={true}
-          rules={[
-            ...fieldRequiredRule(t('common.account')),
-            {
-              validator: async (_, value: StoreValue) => {
-                if (!value) {
-                  return
-                }
-                if (validate('email', value) || validate('phone', value)) {
-                  return
-                } else {
-                  throw new Error(t('login.inputCorrectPhoneOrEmail'))
-                }
-              },
-            },
-          ]}
+          className="authing-g2-input-form"
+          methods={['email-code', 'phone-code']}
+          currentMethod={InputMethodMap[codeMethod]}
         >
-          <Input
+          <InputIdentify
+            methods={['email-code', 'phone-code']}
             className="authing-g2-input"
             autoComplete="off"
             size="large"
-            placeholder={t('login.inputPhoneOrEmail')}
             value={identify}
             onChange={(e) => {
               let v = e.target.value
@@ -162,7 +167,8 @@ export const ResetPassword = (props: ResetPasswordProps) => {
               />
             }
           />
-        </Form.Item>
+        </FormItemIdentify>
+
         <Form.Item
           validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"

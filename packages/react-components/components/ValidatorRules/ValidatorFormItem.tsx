@@ -2,6 +2,7 @@ import { Form } from 'antd'
 import React, {
   forwardRef,
   useCallback,
+  useEffect,
   useImperativeHandle,
   useMemo,
   useState,
@@ -17,7 +18,7 @@ import {
 import { Rule } from 'antd/lib/form'
 import { useDebounce } from '../_utils/hooks'
 import { useGuardPublicConfig } from '../_utils/context'
-
+import { phone } from 'phone'
 const checkError = (message: string) => Promise.reject(new Error(message))
 
 const checkSuccess = (message?: string) => Promise.resolve(message ?? '')
@@ -30,6 +31,7 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
       method,
       name,
       required,
+      areaCode, //国际化区号
       ...formItemProps
     } = props
     const publicConfig = useGuardPublicConfig()
@@ -39,6 +41,10 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
     const [checked, setChecked] = useState(false)
 
     const [isReady, setIsReady] = useState(false)
+
+    const [checkInternationSms, setCheckInternationSms] = useState<boolean>(
+      true
+    )
 
     const methodContent = useMemo(() => {
       if (method === 'email')
@@ -64,11 +70,12 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
         }
     }, [method, t])
     const checkField = useDebounce(async (value: string) => {
+      // 正则校验
       if (!(value && methodContent.pattern.test(value))) {
         setIsReady(true)
         return
       }
-
+      // 重复性校验
       let { data } = await get<boolean>(`/api/v2/users/find`, {
         userPoolId: publicConfig?.userPoolId,
         key: value,
@@ -109,19 +116,52 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
     const rules = useMemo<Rule[]>(() => {
       if (required === false) return []
       const rules = [...fieldRequiredRule(methodContent.field)]
-      rules.push({
-        validateTrigger: 'onBlur',
-        pattern: methodContent.pattern,
-        message: methodContent.formatErrorMessage,
-      })
+      if (!checkInternationSms) {
+        rules.push({
+          validateTrigger: 'onBlur',
+          pattern: methodContent.pattern,
+          message: methodContent.formatErrorMessage,
+        })
+      }
+      // TODO 开启国际化短信
+      if (checkInternationSms) {
+        rules.push({
+          validateTrigger: 'onBlur',
+          validator: async (rule, value) => {
+            if (!value || phone(value, { country: areaCode }).isValid)
+              return Promise.resolve()
+            return Promise.reject(t('common.internationPhoneMessage'))
+          },
+        })
+      }
+
       checkRepeat &&
         Boolean(publicConfig) &&
         rules.push({
           validator,
         })
       return rules
-    }, [required, methodContent, checkRepeat, publicConfig, validator])
-
+    }, [
+      required,
+      methodContent,
+      checkInternationSms,
+      checkRepeat,
+      publicConfig,
+      validator,
+      areaCode,
+      t,
+    ])
+    useEffect(() => {
+      if (
+        publicConfig &&
+        publicConfig.internationalSmsConfig?.enabled &&
+        method === 'phone'
+      ) {
+        setCheckInternationSms(true)
+      } else {
+        setCheckInternationSms(false)
+      }
+    }, [method, publicConfig])
     return (
       <Form.Item
         validateFirst={true}
@@ -133,13 +173,11 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
     )
   }
 )
-
 export const EmailFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
   (props, ref) => (
     <ValidatorFormItem ref={ref} required method="email" {...props} />
   )
 )
-
 export const PhoneFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
   (props, ref) => (
     <ValidatorFormItem ref={ref} required method="phone" {...props} />
