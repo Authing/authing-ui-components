@@ -14615,11 +14615,6 @@ performance-now@^2.1.0:
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
 
 phone@^3.1.12:
-<<<<<<< HEAD
-  version "3.1.12"
-  resolved "https://registry.npmjs.org/phone/-/phone-3.1.12.tgz#e97666b0502a12c1c273ca8f09329247288317aa"
-  integrity sha512-bp89VGx/fFIERQawe0MoOSMPR8YUsnGpJF813KhmyitQXNtctD26FM0/UA1cKVmiYfWYnfadiCgUJnhK4e+xvA==
-=======
   version "3.1.13"
   resolved "https://registry.npmmirror.com/phone/-/phone-3.1.13.tgz#4c5cbce3a0b19c8f673bf2d75c852d0fffc5172a"
   integrity sha512-Jszw7J37Fj8FiINO1Y7Ki9pLqXiQX4cB2jHLHktsqodJl3hyctV0A0YTjl2eKO/gVM7AupUmZelnx+KNw2an1Q==
@@ -14628,7 +14623,6 @@ picocolors@^0.2.1:
   version "0.2.1"
   resolved "https://registry.npmmirror.com/picocolors/-/picocolors-0.2.1.tgz#570670f793646851d1ba135996962abad587859f"
   integrity sha512-cMlDqaLEqfSaW8Z7N5Jw+lyIW869EzT73/F5lhtY9cLGoVxSXznfgfXMO0Z5K0o0Q2TkTXq+0KFsdnSe3jDViA==
->>>>>>> feat/guard
 
 picocolors@^1.0.0:
   version "1.0.0"
