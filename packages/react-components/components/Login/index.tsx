@@ -528,7 +528,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
                               i18n.language === 'zh-CN'
                                 ? `${isWechatBrowser() ? '长按' : '扫码'}关注 ${
                                     item.title
-                                  } 公众号登录`
+                                  } 微信公众号登录`
                                 : `${
                                     isWechatBrowser() ? 'Press' : 'Scan'
                                   } to follow ${item.title} and login`,

@@ -64,6 +64,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
           message: authingMessage,
           data: authingData,
         } = parsedMsg
+
         if ([OTP_MFA_CODE, APP_MFA_CODE].includes(authingCode)) {
           onGuardLogin(authingCode, authingData, authingMessage)
           return
