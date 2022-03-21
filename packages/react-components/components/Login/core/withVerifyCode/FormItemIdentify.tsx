@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import CustomFormItem from '../../../ValidatorRules'
 import { fieldRequiredRule, validate } from '../../../_utils'
 import { phone } from 'phone'
-import { usePublicConfig } from '../../../_utils/context'
+import { useGuardPublicConfig } from '../../../_utils/context'
 import { VerifyLoginMethods } from '../../../AuthingGuard/api'
 import { defaultAreaCode } from '../../../_utils/hooks'
 export interface FormItemIdentifyProps extends FormItemProps {
@@ -23,7 +23,7 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
     ...formItemProps
   } = props
 
-  const publicConfig = usePublicConfig()
+  const publicConfig = useGuardPublicConfig()
   const { t } = useTranslation()
   // TODO 未来抽离
   const renderTemplate = useMemo(() => {

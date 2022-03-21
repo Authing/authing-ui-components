@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Form, Input, Select, DatePicker } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
-import { ExtendsField } from '../../AuthingGuard/api'
 import { UploadImage } from '../../AuthingGuard/Forms/UploadImage'
 import { i18n } from '../../_utils/locales'
 import {
@@ -20,6 +19,8 @@ import { fieldRequiredRule } from '../../_utils'
 import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
 import { useGuardPublicConfig } from '../../_utils/context'
+import { defaultAreaCode, parsePhone } from '../../_utils/hooks'
+import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
 export interface CompleteInfoProps {
   metaData: CompleteInfoMetaData[]
   businessRequest: (data: CompleteInfoRequest) => Promise<void>
@@ -47,6 +48,10 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
   const submitButtonRef = useRef<any>(null)
 
   const [countryList, setCountryList] = useState<any>([])
+
+  const isInternationSms = config?.internationalSmsConfig?.enabled || false
+
+  const [areaCode, setAreaCode] = useState(defaultAreaCode)
 
   const { get } = useGuardHttp()
 
@@ -80,6 +85,39 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
     loadInitCountryList()
   }, [loadInitCountryList, metaData])
 
+  const PhoneAccount = useCallback(
+    (props) => {
+      if (isInternationSms) {
+        return (
+          <InputInternationPhone
+            {...props}
+            className="authing-g2-input"
+            size="large"
+            areaCode={areaCode}
+            onAreaCodeChange={(value: string) => {
+              setAreaCode(value)
+              form.getFieldValue(['internal phone:phone']) &&
+                form.validateFields(['internal phone:phone'])
+            }}
+          />
+        )
+      } else {
+        return (
+          <InputNumber
+            {...props}
+            className="authing-g2-input"
+            autoComplete="off"
+            key="internal-phone:phone123"
+            type="tel"
+            size="large"
+            maxLength={11}
+            placeholder={t('login.inputPhone')}
+          />
+        )
+      }
+    },
+    [areaCode, form, isInternationSms, t]
+  )
   const baseControlMap: Record<
     string,
     (props?: any) => React.ReactNode | undefined
@@ -208,22 +246,20 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         <>
           <CustomFormItem.Phone
             validateFirst={true}
-            className="authing-g2-input-form"
+            className={
+              isInternationSms
+                ? 'authing-g2-input-form remove-padding'
+                : 'authing-g2-input-form'
+            }
             name="phone"
             key="internal-phone:phone"
             label={i18n.t('common.phoneLabel')}
             required={props.required}
             checkRepeat={true}
             ref={refPhone}
+            areaCode={areaCode}
           >
-            <InputNumber
-              className="authing-g2-input"
-              autoComplete="tel"
-              type="tel"
-              size="large"
-              maxLength={11}
-              placeholder={t('login.inputPhone')}
-            />
+            <PhoneAccount />
           </CustomFormItem.Phone>
           <Form.Item
             validateTrigger={['onBlur', 'onChange']}
@@ -237,6 +273,8 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             }
           >
             <SendCodeByPhone
+              isInternationSms={isInternationSms}
+              areaCode={areaCode}
               className="authing-g2-input g2-send-code-input"
               autoComplete="one-time-code"
               size="large"
@@ -305,7 +343,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         </>
       ),
     }),
-    [form, t, verifyCodeLength]
+    [PhoneAccount, areaCode, form, isInternationSms, t, verifyCodeLength]
   )
 
   const generateRules = useCallback(
@@ -419,8 +457,24 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           value: values[key],
         }
         // 给这两个字段添加一个验证码
+        // 国际化短信 需要携带区号
         // TODO 默认这里手机号与邮箱 都是有验证码的
-        if (key === 'phone') return { ...baseData, code: values.phoneCode }
+        if (key === 'phone') {
+          if (isInternationSms) {
+            const { countryCode } = parsePhone(
+              isInternationSms,
+              values[key],
+              areaCode
+            )
+            return {
+              ...baseData,
+              code: values.phoneCode,
+              phoneCountryCode: countryCode,
+            }
+          }
+
+          return { ...baseData, code: values.phoneCode }
+        }
         if (key === 'email') return { ...baseData, code: values.emailCode }
 
         return baseData

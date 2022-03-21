@@ -1,6 +1,6 @@
 import { message } from 'antd'
 import { Form } from 'antd'
-import { SceneType, User } from 'authing-js-sdk'
+import { SceneType } from 'authing-js-sdk'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VerifyCodeInput } from '../VerifyCodeInput'

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { useGuardAuthClient } from '../../../Guard/authClient'
 import {
   fieldRequiredRule,
   getUserRegisterParams,
@@ -52,8 +51,6 @@ export const LoginWithVerifyCode = (props: any) => {
 
   let submitButtonRef = useRef<any>(null)
   const { t } = useTranslation()
-
-  let client = useGuardAuthClient()
 
   const SendCode = useCallback(
     (props: any) => {

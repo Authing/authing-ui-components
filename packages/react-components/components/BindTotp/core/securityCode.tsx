@@ -1,4 +1,4 @@
-import { Form, message } from 'antd'
+import { Form } from 'antd'
 import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
