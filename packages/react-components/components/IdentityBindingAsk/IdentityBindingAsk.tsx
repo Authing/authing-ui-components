@@ -104,9 +104,13 @@ export const GuardIdentityBindingAskView: React.FC = () => {
   const [createLoading, createAccount] = useAsyncFn(async () => {
     const url = '/interaction/federation/binding/register'
 
-    const res = await post(url, {})
+    const { code, onGuardHandling, data, message } = await post(url, {})
 
-    onCreate(res.code, res.data, res.message)
+    if (code === 200) {
+      onCreate(code, data, message)
+    } else {
+      onGuardHandling?.()
+    }
   }, [])
 
   const bindingAccount = () => {

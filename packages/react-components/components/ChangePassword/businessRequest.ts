@@ -1,7 +1,8 @@
 import { getGuardHttp } from '../_utils/guardHttp'
 
 export enum ChangePasswordBusinessAction {
-  ResetPassword = 'reset-password',
+  ResetPassword = 'reset-password-first-time',
+  FirstLoginReset = 'reset-password-forced',
 }
 
 export const authFlow = async (

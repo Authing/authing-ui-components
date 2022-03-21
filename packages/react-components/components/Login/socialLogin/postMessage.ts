@@ -7,13 +7,17 @@ export const usePostMessage = () => {
   const { responseIntercept } = useGuardHttpClient()
 
   const onMessage = (evt: MessageEvent) => {
-    const { message, data } = evt.data
+    const { message, data, event } = evt.data
 
-    // const { source, eventType } = event || {}
+    const { source } = event || {}
     // 社会化登录是用 authing-js-sdk 实现的，不用再在这里回调了
     // if (source === 'authing' && eventType === 'socialLogin') {
     //   return
     // }
+
+    if (source !== 'authing') {
+      return
+    }
 
     // TODO 完整的登陆信息 在 message 中 以 Json 的形式返回 待优化
     const parsedMessage = JSON.parse(message)

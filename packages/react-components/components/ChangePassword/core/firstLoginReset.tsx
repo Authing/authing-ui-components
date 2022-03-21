@@ -42,7 +42,7 @@ export const FirstLoginReset: React.FC<FirstLoginResetProps> = ({
     if (isAuthFlow) {
       // 重置密码成功不会返回 UserInfo
       const { apiCode, onGuardHandling } = await authFlow(
-        ChangePasswordBusinessAction.ResetPassword,
+        ChangePasswordBusinessAction.FirstLoginReset,
         {
           password: await encrypt!(newPassword, publicKey),
         }

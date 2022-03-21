@@ -75,47 +75,68 @@ export const RenderModule: React.FC<{
   }, [defaultMergedConfig])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const ComponentsMapping: Record<GuardModuleType, () => React.ReactNode> = {
+  const ComponentsMapping: Record<
+    GuardModuleType,
+    (key: string) => React.ReactNode
+  > = {
     // Error
-    [GuardModuleType.ERROR]: () => <GuardErrorView />,
+    [GuardModuleType.ERROR]: (key: string) => <GuardErrorView key={key} />,
     // Login
-    [GuardModuleType.LOGIN]: () => <GuardLoginView />,
+    [GuardModuleType.LOGIN]: (key: string) => <GuardLoginView key={key} />,
     // 身份源绑定
-    [GuardModuleType.IDENTITY_BINDING]: () => <GuardIdentityBindingView />,
+    [GuardModuleType.IDENTITY_BINDING]: (key: string) => (
+      <GuardIdentityBindingView key={key} />
+    ),
     // 身份源绑定 问询
-    [GuardModuleType.IDENTITY_BINDING_ASK]: () => (
-      <GuardIdentityBindingAskView />
+    [GuardModuleType.IDENTITY_BINDING_ASK]: (key: string) => (
+      <GuardIdentityBindingAskView key={key} />
     ),
     // MFA
-    [GuardModuleType.MFA]: () => <GuardMFAView />,
+    [GuardModuleType.MFA]: (key: string) => <GuardMFAView key={key} />,
     // 注册
-    [GuardModuleType.REGISTER]: () => <GuardRegisterView />,
+    [GuardModuleType.REGISTER]: (key: string) => (
+      <GuardRegisterView key={key} />
+    ),
     // 下载 Authenticator
-    [GuardModuleType.DOWNLOAD_AT]: () => <GuardDownloadATView />,
+    [GuardModuleType.DOWNLOAD_AT]: (key: string) => (
+      <GuardDownloadATView key={key} />
+    ),
     // 忘记密码 -> 重置密码
-    [GuardModuleType.FORGET_PWD]: () => <GuardForgetPassword />,
+    [GuardModuleType.FORGET_PWD]: (key: string) => (
+      <GuardForgetPassword key={key} />
+    ),
     // 首次登录修改密码
-    [GuardModuleType.FIRST_LOGIN_PASSWORD]: () => (
-      <GuardFirstLoginPasswordResetView />
+    [GuardModuleType.FIRST_LOGIN_PASSWORD]: (key: string) => (
+      <GuardFirstLoginPasswordResetView key={key} />
     ),
     // 登陆安全策略 密码轮换
-    [GuardModuleType.FORCED_PASSWORD_RESET]: () => (
-      <GuardForcedPasswordResetView />
+    [GuardModuleType.FORCED_PASSWORD_RESET]: (key: string) => (
+      <GuardForcedPasswordResetView key={key} />
     ),
     // 绑定 TOTP
-    [GuardModuleType.BIND_TOTP]: () => <GuardBindTotpView />,
+    [GuardModuleType.BIND_TOTP]: (key: string) => (
+      <GuardBindTotpView key={key} />
+    ),
     // 问题反馈
-    [GuardModuleType.ANY_QUESTIONS]: () => <GuardNeedHelpView />,
+    [GuardModuleType.ANY_QUESTIONS]: (key: string) => (
+      <GuardNeedHelpView key={key} />
+    ),
     // MFA 恢复码
-    [GuardModuleType.RECOVERY_CODE]: () => <GuardRecoveryCodeView />,
+    [GuardModuleType.RECOVERY_CODE]: (key: string) => (
+      <GuardRecoveryCodeView key={key} />
+    ),
     // 提交成功
-    [GuardModuleType.SUBMIT_SUCCESS]: () => <GuardSubmitSuccessView />,
+    [GuardModuleType.SUBMIT_SUCCESS]: (key: string) => (
+      <GuardSubmitSuccessView key={key} />
+    ),
     // 注册信息补全
-    [GuardModuleType.REGISTER_COMPLETE_INFO]: () => (
-      <GuardRegisterCompleteInfoView />
+    [GuardModuleType.REGISTER_COMPLETE_INFO]: (key: string) => (
+      <GuardRegisterCompleteInfoView key={key} />
     ),
     // 登录信息补全
-    [GuardModuleType.LOGIN_COMPLETE_INFO]: () => <GuardLoginCompleteInfoView />,
+    [GuardModuleType.LOGIN_COMPLETE_INFO]: (key: string) => (
+      <GuardLoginCompleteInfoView key={key} />
+    ),
   }
 
   // 初始化 请求拦截器 （Error Code）
@@ -167,7 +188,7 @@ export const RenderModule: React.FC<{
 
   const renderModule = useMemo(() => {
     if (contextLoaded) {
-      return ComponentsMapping[moduleName]()
+      return ComponentsMapping[moduleName](new Date().toString())
     } else if (loadingComponent) {
       return loadingComponent
     }
