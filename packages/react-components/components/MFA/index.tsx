@@ -103,7 +103,7 @@ export const GuardMFAView: React.FC<GuardMFAViewProps> = ({
     if (!action) {
       return (data: any) => {
         console.error('not catch code', code)
-        message.error(data.message)
+        // message.error(data.message)
       }
     }
 

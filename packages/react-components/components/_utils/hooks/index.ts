@@ -4,6 +4,14 @@ import { useModule } from '../../context/module/context'
 import { useMediaQuery } from 'react-responsive'
 import phone from 'phone'
 import { LanguageMap } from '../../Type'
+import { LoginConfig } from '../../Login/interface'
+import { SocialConnectionProvider } from 'authing-js-sdk'
+import {
+  HIDE_SOCIALS,
+  HIDE_SOCIALS_SHOWIN_ENTERPRISE,
+} from '../../AuthingGuard/constants'
+import { isLarkBrowser, isWechatBrowser } from '..'
+import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
 export interface PhoneValidResult {
   isValid: boolean
   phoneNumber: string
@@ -158,4 +166,80 @@ export const parsePhone = (
     phoneNumber = parsePhone.phoneNumber.split(countryCode)[1]
   }
   return { countryCode, phoneNumber }
+}
+/**
+ *
+ * @param config
+ * @returns[socialConnectionObjs 社交身份源连接对象 enterpriseConnectionObjs 企业身份源连接对象 isNoMethod 是否没有身份源 ]
+ */
+export const useMethod = (config: LoginConfig): any => {
+  const noLoginMethods = !config.loginMethods.length
+
+  const publicConfig = config.__publicConfig__
+
+  let enterpriseConnectionObjs: ApplicationConfig['identityProviders']
+
+  if (config.enterpriseConnections) {
+    enterpriseConnectionObjs =
+      config.__publicConfig__?.identityProviders?.filter?.((item) =>
+        config.enterpriseConnections!.includes(item.identifier)
+      ) || []
+  } else {
+    enterpriseConnectionObjs = config.__publicConfig__?.identityProviders || []
+  }
+
+  let socialConnectionObjs: SocialConnectionItem[]
+
+  if (!config.socialConnections) {
+    socialConnectionObjs = [...(publicConfig?.socialConnections || [])]
+  } else {
+    const socials = config.socialConnections
+    socialConnectionObjs =
+      publicConfig?.socialConnections?.filter?.((item) =>
+        socials.includes(item.provider)
+      ) ?? []
+  }
+
+  socialConnectionObjs = socialConnectionObjs
+    ?.filter((item) => {
+      // 某些社会化登录会在 tabs 中显示，或者无法在 Guard 中使用，所以底部不显示了
+      return !HIDE_SOCIALS.includes(item.provider)
+    })
+    .filter((item: any) => {
+      // 某些在企业身份源创建的社交身份源归为企业身份源方式显示
+      if (HIDE_SOCIALS_SHOWIN_ENTERPRISE.includes(item.provider)) {
+        if (
+          !enterpriseConnectionObjs.find(
+            (connection: any) => connection.identifier === item.identifier
+          )
+        ) {
+          enterpriseConnectionObjs.push(item)
+        }
+        return false
+      }
+      return true
+    })
+    .filter((item) =>
+      isWechatBrowser()
+        ? item.provider === SocialConnectionProvider.WECHATMP
+        : item.provider !== SocialConnectionProvider.WECHATMP
+    )
+    .filter((item) => {
+      if (isLarkBrowser()) {
+        return (
+          item.provider === SocialConnectionProvider.LARK_INTERNAL ||
+          item.provider === SocialConnectionProvider.LARK_PUBLIC
+        )
+      } else {
+        return true
+      }
+    })
+
+  const isNoMethod: boolean =
+    noLoginMethods &&
+    (!publicConfig?.ssoPageComponentDisplay.socialLoginBtns ||
+      !socialConnectionObjs.length) &&
+    (!publicConfig?.ssoPageComponentDisplay.idpBtns ||
+      !enterpriseConnectionObjs.length)
+  return [socialConnectionObjs, enterpriseConnectionObjs, isNoMethod]
 }

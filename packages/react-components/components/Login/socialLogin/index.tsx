@@ -1,18 +1,13 @@
 import { Button, message, Space, Tooltip } from 'antd'
 import { SocialConnectionProvider, RelayMethodEnum } from 'authing-js-sdk'
 import { Lang } from 'authing-js-sdk/build/main/types'
-import React, { useEffect, useLayoutEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { i18n } from '../../_utils/locales'
 import { isLarkBrowser, isWechatBrowser } from '../../_utils'
 import querystring from 'query-string'
 import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
-import {
-  APP_MFA_CODE,
-  HIDE_SOCIALS,
-  HIDE_SOCIALS_SHOWIN_ENTERPRISE,
-  OTP_MFA_CODE,
-} from '../../AuthingGuard/constants'
+import { APP_MFA_CODE, OTP_MFA_CODE } from '../../AuthingGuard/constants'
 import { useScreenSize } from '../../AuthingGuard/hooks/useScreenSize'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { IconFont } from '../../IconFont'
@@ -25,12 +20,16 @@ export interface SocialLoginProps {
   appId: string
   config: LoginConfig
   onLogin: any
+  enterpriseConnectionObjs: ApplicationConfig['identityProviders']
+  socialConnectionObjs: SocialConnectionItem[]
 }
 
 export const SocialLogin: React.FC<SocialLoginProps> = ({
   appId,
   config,
   onLogin: onGuardLogin,
+  enterpriseConnectionObjs,
+  socialConnectionObjs,
 }) => {
   const noLoginMethods = !config.loginMethods.length
 
@@ -100,89 +99,6 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
     }
   }, [onGuardLogin])
 
-  useEffect(() => {
-    const containerDOM = document.getElementsByClassName('g2-view-header')?.[0]
-    const innerContainer = document.querySelector(
-      '.g2-view-login>.g2-view-container-inner'
-    )
-    if (isPhoneMedia && noLoginMethods) {
-      if (containerDOM) {
-        containerDOM.classList.add('g2-view-header-mobile')
-      }
-      if (innerContainer) {
-        innerContainer.classList.add('g2-view-login-mobile-inner')
-      }
-    } else {
-      containerDOM.classList.remove('g2-view-header-mobile')
-      innerContainer?.classList.remove('g2-view-login-mobile-inner')
-    }
-    return () => {
-      containerDOM.classList.remove('g2-view-header-mobile')
-      innerContainer?.classList.remove('g2-view-login-mobile-inner')
-    }
-  })
-
-  useLayoutEffect(() => {
-    if (noLoginMethods && !isPhoneMedia) {
-      // pc 下
-      const containerDOM = document.getElementsByClassName(
-        'g2-view-container'
-      )?.[0]
-
-      if (containerDOM) {
-        // @ts-ignore
-        containerDOM.style['min-height'] = '410px'
-        containerDOM.classList.add('no-login-methods-view')
-        return () => {
-          // @ts-ignore
-          containerDOM.style['min-height'] = '610px'
-          containerDOM.classList.remove('no-login-methods-view')
-        }
-      }
-    }
-  }, [isPhoneMedia, noLoginMethods])
-
-  let enterpriseConnectionObjs: ApplicationConfig['identityProviders']
-
-  if (config.enterpriseConnections) {
-    enterpriseConnectionObjs =
-      config.__publicConfig__?.identityProviders?.filter?.((item) =>
-        config.enterpriseConnections!.includes(item.identifier)
-      ) || []
-  } else {
-    enterpriseConnectionObjs = config.__publicConfig__?.identityProviders || []
-  }
-
-  let socialConnectionObjs: SocialConnectionItem[]
-
-  if (!config.socialConnections) {
-    socialConnectionObjs = [...(publicConfig?.socialConnections || [])]
-  } else {
-    const socials = config.socialConnections
-    socialConnectionObjs =
-      publicConfig?.socialConnections?.filter?.((item) =>
-        socials.includes(item.provider)
-      ) ?? []
-  }
-
-  // 某些社会化登录会在 tabs 中显示，或者无法在 Guard 中使用，所以底部不显示了
-  socialConnectionObjs = socialConnectionObjs?.filter(
-    (item) => !HIDE_SOCIALS.includes(item.provider)
-  )
-  // 某些在企业身份源创建的社交身份源归为企业身份源方式显示
-  socialConnectionObjs = socialConnectionObjs?.filter((item: any) => {
-    if (HIDE_SOCIALS_SHOWIN_ENTERPRISE.includes(item.provider)) {
-      if (
-        !enterpriseConnectionObjs.find(
-          (connection: any) => connection.identifier === item.identifier
-        )
-      ) {
-        enterpriseConnectionObjs.push(item)
-      }
-      return false
-    }
-    return true
-  })
   const idpButtons = enterpriseConnectionObjs.map((i: any) => {
     return (
       <IdpButton
@@ -194,146 +110,131 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       />
     )
   })
-  const socialLoginButtons = socialConnectionObjs
-    .filter((item) =>
-      isWechatBrowser()
-        ? item.provider === SocialConnectionProvider.WECHATMP
-        : item.provider !== SocialConnectionProvider.WECHATMP
-    )
-    .filter((item) => {
-      if (isLarkBrowser()) {
-        return (
-          item.provider === SocialConnectionProvider.LARK_INTERNAL ||
-          item.provider === SocialConnectionProvider.LARK_PUBLIC
-        )
-      } else {
-        return true
-      }
-    })
-    .map((item: any) => {
-      let iconType = `authing-${item.provider.replace(/:/g, '-')}`
-      const options: Record<string, any> = {}
-      const authorization_params: Record<string, any> = {}
-      if (item.provider === SocialConnectionProvider.BAIDU) {
-        authorization_params.display = screenSize
-      }
-      if (config?.isHost) {
-        // 如果 isHost 是 true，则从 url 获取 finish_login_url 作为 social.authorize 方法的 targetUrl 参数
-        options.targetUrl = querystring.parse(window.location.search)?.[
-          'finish_login_url'
-        ]
-      }
-      // 根据 UA 判断是否在微信网页浏览器、钉钉浏览器等内部，使用 form_post 参数作为 social.authorize 方法的 relayMethod 参数，其他情况用 web_message
-      options.relayMethod =
-        isWechatBrowser() || isLarkBrowser()
-          ? RelayMethodEnum.FORM_POST
-          : RelayMethodEnum.WEB_MESSAGE
 
-      const onLogin = () => {
-        authClient.social.authorize(item.identifier, {
-          onSuccess(user) {
-            // TODO
-            // onSuccess(user)
-            onGuardLogin(200, user)
-          },
-          onError(code, msg, data) {
-            try {
-              const parsedMsg = JSON.parse(msg)
-              const { message: authingMessage, data: authingData } = parsedMsg
-              onGuardLogin(code, authingData, authingMessage)
-            } catch (e) {
-              // do nothing...
-              onGuardLogin(code, data, msg)
-            }
-            // message.error(msg)
-          },
-          authorization_params,
-          ...options,
-        })
-      }
+  const socialLoginButtons = socialConnectionObjs.map((item: any) => {
+    let iconType = `authing-${item.provider.replace(/:/g, '-')}`
+    const options: Record<string, any> = {}
+    const authorization_params: Record<string, any> = {}
+    if (item.provider === SocialConnectionProvider.BAIDU) {
+      authorization_params.display = screenSize
+    }
+    if (config?.isHost) {
+      // 如果 isHost 是 true，则从 url 获取 finish_login_url 作为 social.authorize 方法的 targetUrl 参数
+      options.targetUrl = querystring.parse(window.location.search)?.[
+        'finish_login_url'
+      ]
+    }
+    // 根据 UA 判断是否在微信网页浏览器、钉钉浏览器等内部，使用 form_post 参数作为 social.authorize 方法的 relayMethod 参数，其他情况用 web_message
+    options.relayMethod =
+      isWechatBrowser() || isLarkBrowser()
+        ? RelayMethodEnum.FORM_POST
+        : RelayMethodEnum.WEB_MESSAGE
 
-      const shape = config.socialConnectionsBtnShape
+    const onLogin = () => {
+      authClient.social.authorize(item.identifier, {
+        onSuccess(user) {
+          // TODO
+          // onSuccess(user)
+          onGuardLogin(200, user)
+        },
+        onError(code, msg, data) {
+          try {
+            const parsedMsg = JSON.parse(msg)
+            const { message: authingMessage, data: authingData } = parsedMsg
+            onGuardLogin(code, authingData, authingMessage)
+          } catch (e) {
+            // do nothing...
+            onGuardLogin(code, data, msg)
+          }
+          // message.error(msg)
+        },
+        authorization_params,
+        ...options,
+      })
+    }
 
-      if (shape === 'button') {
-        return (
-          <Button
-            key={item.id}
-            block
-            size="large"
-            className="g2-guard-third-login-btn"
-            icon={
-              <IconFont
-                type={`${iconType}-fill`}
-                style={{ fontSize: 20, marginRight: 8 }}
-              />
-            }
-            onClick={onLogin}
-            style={{
-              marginBottom: 8,
-            }}
-          >
-            {item.displayName ??
-              (i18n.language === 'zh-CN' ? item.name : item.name_en) ??
-              item.provider}
-          </Button>
-        )
-      } else if (shape === 'icon') {
-        return isPhoneMedia ? (
+    const shape = config.socialConnectionsBtnShape
+
+    if (shape === 'button') {
+      return (
+        <Button
+          key={item.id}
+          block
+          size="large"
+          className="g2-guard-third-login-btn"
+          icon={
+            <IconFont
+              type={`${iconType}-fill`}
+              style={{ fontSize: 20, marginRight: 8 }}
+            />
+          }
+          onClick={onLogin}
+          style={{
+            marginBottom: 8,
+          }}
+        >
+          {item.displayName ??
+            (i18n.language === 'zh-CN' ? item.name : item.name_en) ??
+            item.provider}
+        </Button>
+      )
+    } else if (shape === 'icon') {
+      return isPhoneMedia ? (
+        <div className="g2-social-login-item" onClick={onLogin}>
+          <IconFont type={`${iconType}-fill`} />
+        </div>
+      ) : (
+        <Tooltip
+          key={item.id}
+          title={item.tooltip?.[i18n.language as Lang] || item.name}
+          trigger={['hover', 'click', 'contextMenu']}
+        >
           <div className="g2-social-login-item" onClick={onLogin}>
             <IconFont type={`${iconType}-fill`} />
           </div>
-        ) : (
-          <Tooltip
-            key={item.id}
-            title={item.tooltip?.[i18n.language as Lang] || item.name}
-            trigger={['hover', 'click', 'contextMenu']}
-          >
-            <div className="g2-social-login-item" onClick={onLogin}>
-              <IconFont type={`${iconType}-fill`} />
-            </div>
-          </Tooltip>
-        )
-      } else {
-        return noLoginMethods ? (
-          <Button
-            key={item.id}
-            block
-            size="large"
-            className="g2-guard-third-login-btn"
-            icon={
-              <IconFont
-                type={`${iconType}-fill`}
-                style={{ fontSize: 20, marginRight: 8 }}
-              />
-            }
-            onClick={onLogin}
-          >
-            {item.displayName ??
-              (i18n.language === 'zh-CN' ? item.name : item.name_en) ??
-              item.provider}
-          </Button>
-        ) : isPhoneMedia ? (
-          <div className="g2-social-login-item" onClick={onLogin} key={item.id}>
+        </Tooltip>
+      )
+    } else {
+      return noLoginMethods ? (
+        <Button
+          key={item.id}
+          block
+          size="large"
+          className="g2-guard-third-login-btn"
+          icon={
+            <IconFont
+              type={`${iconType}-fill`}
+              style={{ fontSize: 20, marginRight: 8 }}
+            />
+          }
+          onClick={onLogin}
+        >
+          {item.displayName ??
+            (i18n.language === 'zh-CN' ? item.name : item.name_en) ??
+            item.provider}
+        </Button>
+      ) : isPhoneMedia ? (
+        <div className="g2-social-login-item" onClick={onLogin} key={item.id}>
+          <IconFont type={`${iconType}-fill`} />
+        </div>
+      ) : (
+        <Tooltip
+          overlayStyle={{ fontFamily: 'sans-serif' }}
+          key={item.id}
+          title={
+            item.displayName ||
+            item.tooltip?.[i18n.language as Lang] ||
+            item.name
+          }
+          trigger={['hover', 'click', 'contextMenu']}
+        >
+          <div className="g2-social-login-item" onClick={onLogin}>
             <IconFont type={`${iconType}-fill`} />
           </div>
-        ) : (
-          <Tooltip
-            overlayStyle={{ fontFamily: 'sans-serif' }}
-            key={item.id}
-            title={
-              item.displayName ||
-              item.tooltip?.[i18n.language as Lang] ||
-              item.name
-            }
-            trigger={['hover', 'click', 'contextMenu']}
-          >
-            <div className="g2-social-login-item" onClick={onLogin}>
-              <IconFont type={`${iconType}-fill`} />
-            </div>
-          </Tooltip>
-        )
-      }
-    })
+        </Tooltip>
+      )
+    }
+  })
   const idp = enterpriseConnectionObjs.length ? (
     <>
       {!noLoginMethods && (
@@ -345,9 +246,6 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
     </>
   ) : null
   // eslint-disable-next-line react-hooks/exhaustive-deps
-
-  // let socialLogin
-  // const shape = config.socialConnectionsBtnShape
 
   const socialLogin =
     socialLoginButtons.length > 0 && noLoginMethods ? (
@@ -386,24 +284,6 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       >
         {!publicConfig?.ssoPageComponentDisplay.idpBtns || idp}
         {!publicConfig?.ssoPageComponentDisplay.socialLoginBtns || socialLogin}
-        {/* 没有任何登录方式时 */}
-        {noLoginMethods && !socialLoginButtons.length && !idpButtons.length && (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <IconFont
-              type="authing-bianzu"
-              style={{ width: 178, height: 120 }}
-            />
-            <span className="no-login-methods-desc">
-              {t('login.noLoginMethodsDesc')}
-            </span>
-          </div>
-        )}
       </Space>
     </>
   )
