@@ -313,7 +313,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
               item.provider}
           </Button>
         ) : isPhoneMedia ? (
-          <div className="g2-social-login-item" onClick={onLogin}>
+          <div className="g2-social-login-item" onClick={onLogin} key={item.id}>
             <IconFont type={`${iconType}-fill`} />
           </div>
         ) : (
