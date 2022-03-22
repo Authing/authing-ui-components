@@ -170,7 +170,6 @@ export const GuardMFAView: React.FC = () => {
         </div>
         {showMethods && (
           <MFAMethods
-            applicationMfa={initData.applicationMfa}
             method={currentMethod}
             onChangeMethod={(type) => {
               setCurrentMethod(type)

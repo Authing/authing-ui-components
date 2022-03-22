@@ -5,9 +5,9 @@ import { IconFont } from '../../IconFont'
 import { GuardMFAInitData, MFAType } from '../interface'
 import { i18n } from '../../_utils/locales'
 import './style.less'
+import { useGuardInitData } from '../../_utils/context'
 
 export interface MFAMethodsProps {
-  applicationMfa: GuardMFAInitData['applicationMfa']
   method: MFAType
   onChangeMethod: (type: MFAType) => void
 }
@@ -38,12 +38,13 @@ const methodTitleMapping: Record<
 }
 
 export const MFAMethods: React.FC<MFAMethodsProps> = ({
-  applicationMfa = [],
   method,
   onChangeMethod,
 }) => {
   const [currentMethod, setCurrentMethod] = useState(method)
   const { t } = useTranslation()
+
+  const { applicationMfa } = useGuardInitData<GuardMFAInitData>()
 
   const otherMethods = useMemo(
     () =>
