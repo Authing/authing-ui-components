@@ -122,7 +122,7 @@ export const GuardBindTotpView: React.FC = () => {
   )
 
   const onBack = () => {
-    changeModule?.(GuardModuleType.MFA, { current: MFAType.TOTP, ...initData })
+    changeModule?.(GuardModuleType.MFA, { ...initData, current: MFAType.TOTP })
   }
 
   return (

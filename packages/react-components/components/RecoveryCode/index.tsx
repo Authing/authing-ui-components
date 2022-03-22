@@ -22,7 +22,7 @@ export const RecoveryCode: React.FC = () => {
   const events = useGuardEvents()
 
   const onBack = () =>
-    changeModule?.(GuardModuleType.MFA, { current: MFAType.TOTP })
+    changeModule?.(GuardModuleType.MFA, { ...initData, current: MFAType.TOTP })
 
   const { t } = useTranslation()
 

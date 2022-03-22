@@ -28,7 +28,7 @@ export const GuardIdentityBindingView: React.FC = () => {
 
   const config = useGuardFinallyConfig()
 
-  const { changeModule } = useGuardModule()
+  const { changeModule, backModule } = useGuardModule()
 
   const { t } = useTranslation()
 
@@ -53,8 +53,7 @@ export const GuardIdentityBindingView: React.FC = () => {
   ]
 
   const onBack = () => {
-    if (initData.source === GuardModuleType.IDENTITY_BINDING_ASK)
-      window.history.back()
+    if (initData.source === GuardModuleType.IDENTITY_BINDING_ASK) backModule?.()
     else changeModule?.(GuardModuleType.LOGIN)
   }
 

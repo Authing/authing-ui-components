@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { ImagePro } from '../ImagePro'
 import { IconFont } from '../IconFont'
 import './styles.less'
-import { useGuardPublicConfig } from '../_utils/context'
+import { useGuardModule, useGuardPublicConfig } from '../_utils/context'
 
 enum DownloadType {
   IOS = 'ios',
@@ -15,6 +15,8 @@ export const GuardDownloadATView: React.FC = () => {
   const { t } = useTranslation()
 
   const publicConfig = useGuardPublicConfig()
+
+  const { backModule } = useGuardModule()
 
   const cdnBase = publicConfig?.cdnBase
 
@@ -78,7 +80,7 @@ export const GuardDownloadATView: React.FC = () => {
     [downloadConfig, t]
   )
 
-  const onBack = () => window.history.back()
+  const onBack = () => backModule?.()
 
   return (
     <div className="g2-view-container g2-download-authenticator">
