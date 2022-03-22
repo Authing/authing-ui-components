@@ -223,6 +223,7 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
     }
     if (action?.action === 'accountLock') {
       return (initData?: any) => {
+        message.error(initData?._message)
         setAccountLock(true)
       }
     }
