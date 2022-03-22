@@ -19,19 +19,6 @@ import {
   useHistoryHijack,
 } from '../GuardModule/stateMachine'
 import { AuthenticationClient } from '../..'
-import {
-  createAppIdContext,
-  createGuardContextLoaded,
-  createGuardCurrentModuleContext,
-  createGuardDefaultMergedConfigContext,
-  createGuardEventsContext,
-  createGuardFinallyConfigContext,
-  createGuardIsAuthFlowContext,
-  createGuardModuleContext,
-  createGuardPublicConfigContext,
-  createHttpClientContext,
-  createInitDataContext,
-} from '../../_utils/context'
 import { ApplicationConfig } from '../../AuthingGuard/api'
 import { SessionData, trackSession } from '../sso'
 import {
@@ -41,6 +28,7 @@ import {
 } from '../../_utils/config/index'
 import { GuardHttp, initGuardHttp } from '../../_utils/guardHttp'
 import { initI18n } from '../../_utils/locales'
+import { createGuardXContext } from '../../_utils/context'
 
 interface IBaseAction<T = string, P = any> {
   type: T & string
@@ -66,33 +54,7 @@ export const RenderContext: React.FC<{
     setGuardStateMachine,
   ] = useState<GuardStateMachine>()
 
-  const { Context: GuardPublicConfigContext } = createGuardPublicConfigContext()
-
-  const { Context: GuardHttpClientContext } = createHttpClientContext()
-
-  const {
-    Context: GuardDefaultMergedConfigContext,
-  } = createGuardDefaultMergedConfigContext()
-
-  const { Context: GuardAppIdContext } = createAppIdContext()
-
-  const { Context: GuardInitDataContext } = createInitDataContext()
-
-  const {
-    Context: GuardCurrentModuleContext,
-  } = createGuardCurrentModuleContext()
-
-  const { Context: GuardEventsContext } = createGuardEventsContext()
-
-  const { Context: GuardModuleContext } = createGuardModuleContext()
-
-  const {
-    Context: GuardFinallyConfigContext,
-  } = createGuardFinallyConfigContext()
-
-  const { Context: GuardContextLoaded } = createGuardContextLoaded()
-
-  const { Context: GuardIsAuthFlowContext } = createGuardIsAuthFlowContext()
+  const { Provider } = createGuardXContext()
 
   // 劫持浏览器 History
   const [historyNext] = useHistoryHijack(guardStateMachine?.back)
@@ -122,7 +84,6 @@ export const RenderContext: React.FC<{
           initData: initData ?? {},
         },
       })
-      // 劫持 History
     },
     [historyNext]
   )
@@ -294,101 +255,78 @@ export const RenderContext: React.FC<{
     authClint,
   ])
 
-  // TODO 目前这种形式 一个变动会导致所有的 Context 都会渲染，应该搞成高阶组件的形式 待优化
+  const contextValues = useMemo(
+    () => ({
+      contextLoaded,
+      isAuthFlow,
+      defaultMergedConfig,
+      finallyConfig,
+      publicConfig,
+      httpClient,
+      appId,
+      events,
+      ...moduleEvents,
+      initData: moduleState.initData,
+      currentModule: moduleState,
+    }),
+    [
+      appId,
+      contextLoaded,
+      defaultMergedConfig,
+      events,
+      finallyConfig,
+      httpClient,
+      isAuthFlow,
+      moduleEvents,
+      moduleState,
+      publicConfig,
+    ]
+  )
+
   const renderContext = useMemo(() => {
-    if (error) {
-      return (
-        <GuardContextLoaded.Provider value={true}>
-          <GuardDefaultMergedConfigContext.Provider
-            value={defaultMergedConfig!}
-          >
-            <GuardInitDataContext.Provider
-              value={{
-                error: error,
-              }}
-            >
-              <GuardCurrentModuleContext.Provider
-                value={{
-                  moduleName: GuardModuleType.ERROR,
-                  initData: {
-                    error,
-                  },
-                }}
-              >
-                {children}
-              </GuardCurrentModuleContext.Provider>
-            </GuardInitDataContext.Provider>
-          </GuardDefaultMergedConfigContext.Provider>
-        </GuardContextLoaded.Provider>
-      )
-    }
-    if (contextLoaded)
-      return (
-        <GuardContextLoaded.Provider value={contextLoaded}>
-          <GuardIsAuthFlowContext.Provider value={isAuthFlow}>
-            <GuardDefaultMergedConfigContext.Provider
-              value={defaultMergedConfig!}
-            >
-              <GuardFinallyConfigContext.Provider value={finallyConfig!}>
-                <GuardPublicConfigContext.Provider value={publicConfig!}>
-                  <GuardHttpClientContext.Provider value={httpClient!}>
-                    <GuardAppIdContext.Provider value={appId}>
-                      <GuardEventsContext.Provider value={events}>
-                        <GuardModuleContext.Provider value={moduleEvents!}>
-                          <GuardInitDataContext.Provider
-                            value={moduleState.initData}
-                          >
-                            <GuardCurrentModuleContext.Provider
-                              value={moduleState}
-                            >
-                              {children}
-                            </GuardCurrentModuleContext.Provider>
-                          </GuardInitDataContext.Provider>
-                        </GuardModuleContext.Provider>
-                      </GuardEventsContext.Provider>
-                    </GuardAppIdContext.Provider>
-                  </GuardHttpClientContext.Provider>
-                </GuardPublicConfigContext.Provider>
-              </GuardFinallyConfigContext.Provider>
-            </GuardDefaultMergedConfigContext.Provider>
-          </GuardIsAuthFlowContext.Provider>
-        </GuardContextLoaded.Provider>
-      )
-    // 只有极少的情况才会使用这个阶段，比如 Loading 组件
-    else if (defaultMergedConfig)
-      return (
-        <GuardContextLoaded.Provider value={false}>
-          <GuardDefaultMergedConfigContext.Provider value={defaultMergedConfig}>
-            {children}
-          </GuardDefaultMergedConfigContext.Provider>
-        </GuardContextLoaded.Provider>
-      )
+    return <Provider value={contextValues}>{children}</Provider>
+  }, [Provider, children, contextValues])
+
+  const renderLoadingContext = useMemo(() => {
+    return <Provider value={contextValues}>{children}</Provider>
+  }, [Provider, children, contextValues])
+
+  const renderErrorContext = useMemo(() => {
+    return (
+      <Provider
+        value={{
+          contextLoaded: true,
+          defaultMergedConfig,
+          initData: {
+            error: error,
+          },
+          currentModule: {
+            moduleName: GuardModuleType.ERROR,
+            initData: {
+              error,
+            },
+          },
+        }}
+      >
+        {children}
+      </Provider>
+    )
+  }, [Provider, children, defaultMergedConfig, error])
+
+  const render = useMemo(() => {
+    if (error) return renderErrorContext
+
+    if (contextLoaded) return renderLoadingContext
+    else if (defaultMergedConfig) return renderContext
     else return null
   }, [
-    GuardAppIdContext,
-    GuardContextLoaded,
-    GuardCurrentModuleContext,
-    GuardDefaultMergedConfigContext,
-    GuardEventsContext,
-    GuardFinallyConfigContext,
-    GuardHttpClientContext,
-    GuardInitDataContext,
-    GuardIsAuthFlowContext,
-    GuardModuleContext,
-    GuardPublicConfigContext,
-    appId,
-    children,
     contextLoaded,
     defaultMergedConfig,
     error,
-    events,
-    finallyConfig,
-    httpClient,
-    isAuthFlow,
-    moduleEvents,
-    moduleState,
-    publicConfig,
+    renderContext,
+    renderErrorContext,
+    renderLoadingContext,
   ])
 
-  return renderContext
+  return render
 }
