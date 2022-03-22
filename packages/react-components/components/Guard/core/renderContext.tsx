@@ -211,7 +211,7 @@ export const RenderContext: React.FC<{
         if (finallyConfig?.__singleComponent__) {
           events?.__changeModule?.(moduleName, initData)
         } else {
-          onChangeModule(moduleName, initData)
+          // onChangeModule(moduleName, initData)
 
           if (!events?.onBeforeChangeModule) {
             guardStateMachine?.next(moduleName, initData)
@@ -224,12 +224,7 @@ export const RenderContext: React.FC<{
         guardStateMachine?.back()
       },
     }
-  }, [
-    events,
-    finallyConfig?.__singleComponent__,
-    guardStateMachine,
-    onChangeModule,
-  ])
+  }, [events, finallyConfig?.__singleComponent__, guardStateMachine])
 
   const contextLoaded = useMemo(() => {
     const list = [

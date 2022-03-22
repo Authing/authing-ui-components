@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { GuardComponentConfig, GuardLocalConfig } from '../config'
 import { GuardModuleType } from '../module'
+import isEqual from 'lodash/isEqual'
 
 export interface ModuleState {
   moduleName: GuardModuleType
@@ -57,12 +58,11 @@ export class GuardStateMachine {
       initData,
     }
     this.changeModuleEvent(nextModule, initData)
+
+    const prevModuleData = this.moduleStateHistory.slice(1, 2)[0]
+
     // 快照history
-    if (
-      this.moduleStateHistory.slice(1, 2)[0] &&
-      moduleData.moduleName ===
-        this.moduleStateHistory.slice(1, 2)[0].moduleName
-    ) {
+    if (prevModuleData && isEqual(prevModuleData, moduleData)) {
       this.back()
     } else {
       this.historyPush(moduleData)
