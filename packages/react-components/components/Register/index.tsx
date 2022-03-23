@@ -136,7 +136,7 @@ export const GuardRegisterView: React.FC = () => {
 
   const renderTab = useMemo(() => {
     const { registerMethods, defaultRegisterMethod } = config
-    return tabSort(defaultRegisterMethod, registerMethods)?.map((method) => (
+    return tabSort(defaultRegisterMethod!, registerMethods!)?.map((method) => (
       <Tabs.TabPane tab={tabMapping[method].name} key={method}>
         {tabMapping[method].component}
       </Tabs.TabPane>

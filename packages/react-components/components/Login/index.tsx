@@ -121,6 +121,8 @@ export const GuardLoginView = () => {
   // let autoRegister = props.config?.autoRegister
   let ms = config?.loginMethods
 
+  console.log(ms)
+
   const firstInputWay = inputWays.filter((way) => ms?.includes(way))[0]
 
   const firstQRcodeWay = qrcodeWays.filter((way) => ms?.includes(way))[0]

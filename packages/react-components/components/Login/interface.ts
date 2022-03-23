@@ -19,12 +19,12 @@ import {
 import { LoginMethods } from '../AuthingGuard/types'
 
 export interface LoginConfig extends IG2Config {
-  autoRegister: boolean
-  disableResetPwd: boolean
-  disableRegister: boolean
-  defaultLoginMethod: LoginMethods
-  loginMethods: LoginMethods[]
-  passwordLoginMethods: PasswordLoginMethods[]
+  autoRegister?: boolean
+  disableResetPwd?: boolean
+  disableRegister?: boolean
+  defaultLoginMethod?: LoginMethods
+  loginMethods?: LoginMethods[]
+  passwordLoginMethods?: PasswordLoginMethods[]
   socialConnections?: SocialConnectionProvider[]
   socialConnectionsBtnShape?: 'default' | 'button' | 'icon'
   enterpriseConnections?: string[]
@@ -57,15 +57,4 @@ export interface GuardLoginViewProps extends GuardLoginProps, IG2FCViewProps {
 
 export const getDefaultLoginConfig = (): LoginConfig => ({
   ...getDefaultG2Config(),
-  autoRegister: false,
-  disableResetPwd: false,
-  disableRegister: false,
-  defaultLoginMethod: LoginMethods.Password,
-  loginMethods: [LoginMethods.Password, LoginMethods.PhoneCode],
-  socialConnectionsBtnShape: 'default',
-  passwordLoginMethods: [
-    'email-password',
-    'username-password',
-    'phone-password',
-  ],
 })

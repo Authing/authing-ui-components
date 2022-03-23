@@ -32,7 +32,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
   config,
   onLogin: onGuardLogin,
 }) => {
-  const noLoginMethods = !config.loginMethods.length
+  const noLoginMethods = !config?.loginMethods?.length
 
   const publicConfig = useGuardPublicConfig()
 
