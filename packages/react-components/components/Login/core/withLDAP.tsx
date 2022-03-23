@@ -42,12 +42,12 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
     if (agreements?.length && !acceptedAgreements) {
       // message.error(t('common.loginProtocolTips'))
 
-      submitButtonRef.current.onError()
+      submitButtonRef.current?.onError()
       // submitButtonRef.current.onSpin(false)
       return
     }
     // onBeforeLogin
-    submitButtonRef.current.onSpin(true)
+    submitButtonRef.current?.onSpin(true)
     let loginInfo = {
       type: LoginMethods.LDAP,
       data: {
@@ -58,7 +58,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
     }
     let context = await props.onBeforeLogin(loginInfo)
     if (!context) {
-      submitButtonRef.current.onSpin(false)
+      submitButtonRef.current?.onSpin(false)
       return
     }
 
@@ -82,13 +82,13 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
             setVerifyCodeUrl(getCaptchaUrl())
             setShowCaptcha(true)
           }
-          submitButtonRef.current.onError()
+          submitButtonRef.current?.onError()
           props.onLogin(e.code, e.data, e.message)
           // onFail && onFail(error)
         }
       })
       .finally(() => {
-        submitButtonRef.current.onSpin(false)
+        submitButtonRef.current?.onSpin(false)
       })
   }
 
@@ -97,7 +97,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
       <Form
         name="passworLogin"
         onFinish={onFinish}
-        onFinishFailed={() => submitButtonRef.current.onError()}
+        onFinishFailed={() => submitButtonRef.current?.onError()}
         autoComplete="off"
       >
         <Form.Item
