@@ -220,7 +220,6 @@ export const MFAEmail: React.FC<{
           config={config}
           mfaToken={mfaToken}
           onBind={(email: string) => {
-            console.log('email', email)
             setEmail(email)
             sendCodeRef.current?.click()
           }}

@@ -81,7 +81,6 @@ export const GuardRegisterView: React.FC = () => {
   const registerContextProps = useMemo(
     () => ({
       onRegister: (code: number, data: any = {}, message?: string) => {
-        console.log('注册 onRegister')
         const callback = __codePaser(code)
         if (code !== 200) {
           events?.onRegisterError?.({
