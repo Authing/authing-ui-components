@@ -63,7 +63,7 @@ export enum FormValidateRule {
 export interface CompleteInfoRule {
   type: FormValidateRule
   content: string
-  errorMessages?: string
+  errorMessage?: string
 }
 
 export interface CompleteInfoSelectOption {

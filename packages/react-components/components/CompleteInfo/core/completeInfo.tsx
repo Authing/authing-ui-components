@@ -373,14 +373,14 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             formRules.push({
               type: 'number',
               required,
-              message: rule.errorMessages || '请填写数字',
+              message: rule.errorMessage || '请填写数字',
             })
             break
           case 'regExp':
             formRules.push({
               required,
               pattern: new RegExp(rule.content.replaceAll('/', '')),
-              message: rule.errorMessages,
+              message: rule.errorMessage,
             })
             break
           default:
