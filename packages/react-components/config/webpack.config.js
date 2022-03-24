@@ -447,6 +447,12 @@ module.exports = function (webpackEnv) {
                   'babel-preset-react-app/webpack-overrides'
                 ),
 
+                presets: [
+                  '@babel/preset-env',
+                  '@babel/preset-typescript',
+                  '@babel/preset-react',
+                ],
+
                 plugins: [
                   [
                     require.resolve('babel-plugin-named-asset-import'),
@@ -469,6 +475,14 @@ module.exports = function (webpackEnv) {
                   isEnvDevelopment &&
                     shouldUseReactRefresh &&
                     require.resolve('react-refresh/babel'),
+                  // '@babel/proposal-class-properties',
+                  // [
+                  //   '@babel/plugin-transform-runtime',
+                  //   {
+                  //     corejs: 3,
+                  //     helpers: true,
+                  //   },
+                  // ],
                 ].filter(Boolean),
                 // This is a feature of `babel-loader` for webpack (not Babel itself).
                 // It enables caching results in ./node_modules/.cache/babel-loader/

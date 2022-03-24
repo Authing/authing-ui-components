@@ -11,7 +11,7 @@ export const InputPassword = React.forwardRef<
       ref={ref}
       {...props}
       iconRender={(visible) => (
-        <span style={{ display: 'block', height: '100%', lineHeight: '28px' }}>
+        <span style={{ display: 'flex', height: '100%', alignItems: 'center' }}>
           {visible ? (
             <IconFont type="authing-a-eye-line1" />
           ) : (
