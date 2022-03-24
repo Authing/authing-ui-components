@@ -89,7 +89,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         submitButtonRef.current.onError()
         onRegister(code, data, message)
       } finally {
-        submitButtonRef.current.onSpin(false)
+        submitButtonRef.current?.onSpin(false)
       }
     },
     [

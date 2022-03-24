@@ -12,22 +12,12 @@
   }
 }
 
-.authing-g2-render-module {
-  --sidePadding: 38px;
-  --containerWidth: 456px;
-}
-.authing-g2-render-module-modal {
-  --containerWidth: 456px;
-}
 @media only screen and (max-width: 450px) {
   .authing-g2-render-module {
     width: 100%;
-    --sidePadding: 8px;
-    --containerWidth: 100%;
   }
   .authing-g2-render-module-modal {
     width: 100%;
-    --containerWidth: 100%;
   }
   .g2-view-container {
     box-shadow: none !important;
@@ -42,7 +32,10 @@
   background: #ffffff;
   display: flex;
   flex-direction: column;
-  width: var(--containerWidth);
+  width: 456px;
+  @media only screen and (max-width: 450px) {
+    width: 100%;
+  }
   min-height: 610px;
   box-sizing: border-box;
   padding: 16px;
@@ -62,7 +55,10 @@
   }
   .g2-view-back {
     margin-top: 26px;
-    padding-left: var(--sidePadding);
+    padding-left: 38px;
+    @media only screen and (max-width: 450px) {
+      padding-left: 8px;
+    }
     font-size: 14px;
     color: #878a95;
     .g2-view-mfa-back-hover {
@@ -77,17 +73,39 @@
   .g2-mfa-content,
   .g2-mfa-method {
     margin: 0;
-    padding: 0 var(--sidePadding);
+    padding: 0 38px;
+    @media only screen and (max-width: 450px) {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+  }
+  .no-login-methods-view {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
   .g2-view-login-mobile-inner {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    .no-login-methods-view {
+      display: flex;
+      flex: 0;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
   }
   .g2-view-header {
     user-select: none;
-    padding: 24px var(--sidePadding) 0;
+    padding: 24px 38px 0;
+    @media only screen and (max-width: 450px) {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
 
     &.g2-view-header-mobile {
       display: flex;
@@ -121,7 +139,11 @@
   }
 
   .g2-view-tabs {
-    padding: 0 var(--sidePadding);
+    padding: 0 38px;
+    @media only screen and (max-width: 450px) {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
     &.hidden {
       .authing-ant-tabs-nav-wrap {
         display: none;
@@ -370,7 +392,7 @@
     background: #ffffff !important;
     border-color: #618eff;
     input {
-      height: 0;
+      background: #ffffff !important;
       padding: 1em 0.5em !important;
       background-clip: content-box !important;
       &::placeholder,
@@ -446,7 +468,11 @@
 .g2-tips-line {
   display: flex;
   font-size: 14px;
-  padding: 0 var(--sidePadding);
+  padding: 0 38px;
+  @media only screen and (max-width: 450px) {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
   height: 22px;
   .link-like {
     color: #396aff;
@@ -479,7 +505,10 @@
   }
 }
 .g2-init-setting-loading {
-  width: var(--containerWidth);
+  width: 456px;
+  @media only screen and (max-width: 450px) {
+    width: 100%;
+  }
   min-height: 610px;
   display: flex;
   justify-content: center;
@@ -566,9 +595,15 @@
   }
 }
 .authing-g2-render-module-modal {
-  width: var(--containerWidth);
+  width: 456px;
+  @media only screen and (max-width: 450px) {
+    width: 100%;
+  }
   .authing-ant-modal-content {
-    width: var(--containerWidth);
+    width: 456px;
+    @media only screen and (max-width: 450px) {
+      width: 100%;
+    }
     border-radius: 8px;
     margin: auto;
   }

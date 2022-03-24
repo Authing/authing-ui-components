@@ -41,12 +41,12 @@ export const LoginWithAD = (props: LoginWithADProps) => {
     setValidated(true)
     if (agreements?.length && !acceptedAgreements) {
       // message.error(t('common.loginProtocolTips'))
-      submitButtonRef.current.onError()
+      submitButtonRef.current?.onError()
       // submitButtonRef.current.onSpin(false)
       return
     }
     // onBeforeLogin
-    submitButtonRef.current.onSpin(true)
+    submitButtonRef.current?.onSpin(true)
     let loginInfo = {
       type: LoginMethods.AD,
       data: {
@@ -56,7 +56,7 @@ export const LoginWithAD = (props: LoginWithADProps) => {
     }
     let context = await props.onBeforeLogin(loginInfo)
     if (!context) {
-      submitButtonRef.current.onSpin(false)
+      submitButtonRef.current?.onSpin(false)
       return
     }
 
@@ -72,12 +72,12 @@ export const LoginWithAD = (props: LoginWithADProps) => {
         if (typeof error?.message === 'string') {
           // let e = { code: 2333, data: {}, message: t('common.timeoutLDAP') }
           let e = JSON.parse(error?.message)
-          submitButtonRef.current.onError()
+          submitButtonRef.current?.onError()
           props.onLogin(e.code, e.data, e.message)
         }
       })
       .finally(() => {
-        submitButtonRef.current.onSpin(false)
+        submitButtonRef.current?.onSpin(false)
       })
   }
 

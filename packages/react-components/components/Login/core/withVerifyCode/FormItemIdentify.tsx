@@ -85,7 +85,7 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
         />
       )
 
-    switch (methods[0]) {
+    switch (currentMethod) {
       case 'phone-code':
         return <CustomFormItem.Phone areaCode={areaCode} {...formItemProps} />
       case 'email-code':
