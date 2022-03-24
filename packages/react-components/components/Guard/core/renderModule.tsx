@@ -155,11 +155,15 @@ export const RenderModule: React.FC<{
           const nextData = res.data
 
           changeModule(nextModule, nextData)
+          return CodeAction.CHANGE_MODULE
         },
         [CodeAction.RENDER_MESSAGE]: () => {
           message.error(res.message ?? res.messages)
+          return CodeAction.RENDER_MESSAGE
         },
-        [CodeAction.FLOW_END]: () => {},
+        [CodeAction.FLOW_END]: () => {
+          return CodeAction.FLOW_END
+        },
       }
 
       const codeAction = codeActionMapping[code]

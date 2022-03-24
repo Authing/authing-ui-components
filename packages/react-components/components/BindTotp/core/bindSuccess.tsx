@@ -42,7 +42,6 @@ export const BindSuccess: React.FC<BindSuccessProps> = ({ secret, onBind }) => {
       }
     } else {
       submitButtonRef.current?.onSpin(false)
-
       onBind()
     }
   }

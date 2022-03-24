@@ -4,7 +4,6 @@ import { useModule } from '../../context/module/context'
 import { useMediaQuery } from 'react-responsive'
 import phone from 'phone'
 import { LanguageMap } from '../../Type'
-import { LoginConfig } from '../../Login/interface'
 import { SocialConnectionProvider } from 'authing-js-sdk'
 import {
   HIDE_SOCIALS,

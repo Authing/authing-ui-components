@@ -161,7 +161,7 @@ export const LoginWithVerifyCode = (props: any) => {
 
   const loginByPhoneCode = async (values: any) => {
     const reqContent: any = {
-      phone: values.identify,
+      phone: values.phoneNumber,
       code: values.code,
       customData: getUserRegisterParams(),
       autoRegister: props.autoRegister,

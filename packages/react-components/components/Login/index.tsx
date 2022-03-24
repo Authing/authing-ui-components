@@ -198,22 +198,24 @@ export const GuardLoginView = () => {
       }
     }
 
+    // 需要知道所有环境的错误信息
+    if (action?.action === 'message') {
+      return () => {
+        setErrorNumber(errorNumber + 1)
+      }
+    }
+
+    if (action?.action === 'accountLock') {
+      return (initData?: any) => {
+        setAccountLock(true)
+      }
+    }
     // 解析成功
     if (action?.action === 'changeModule') {
       let guardModule = action.module ? action.module : GuardModuleType.ERROR
       let init = action.initData ? action.initData : {}
       return (initData?: any) => {
         changeModule?.(guardModule, { ...initData, ...init })
-      }
-    }
-    if (action?.action === 'message') {
-      return () => {
-        setErrorNumber(errorNumber + 1)
-      }
-    }
-    if (action?.action === 'accountLock') {
-      return (initData?: any) => {
-        setAccountLock(true)
       }
     }
 
@@ -503,7 +505,6 @@ export const GuardLoginView = () => {
                       )}
                     </div>
                   )}
-
                   {(errorNumber >= 2 || accountLock) && (
                     <Tooltip title={t('common.feedback')}>
                       <div

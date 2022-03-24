@@ -15,6 +15,7 @@ import { IconFont } from '../../../IconFont'
 import { InputPassword } from '../../../InputPassword'
 import { Agreements } from '../../../Register/components/Agreements'
 import { AuthingGuardResponse, AuthingResponse } from '../../../_utils/http'
+import { CodeAction } from '../../../_utils/responseManagement/interface'
 interface LoginWithPasswordProps {
   // configs
   publicKey: string
@@ -152,7 +153,10 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     if (code === 200) {
       props.onLogin(200, data, msg)
     } else {
-      onGuardHandling?.()
+      // 响应拦截器处理通用错误以及changeModule
+      const handMode = onGuardHandling?.()
+      // 向上层抛出错误
+      handMode === CodeAction.RENDER_MESSAGE && props.onLogin(code, data, msg)
     }
   }
 

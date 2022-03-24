@@ -1,6 +1,7 @@
 import { message } from 'antd'
 import qs from 'qs'
 import { i18n } from './locales'
+import { CodeAction } from './responseManagement/interface'
 
 export const requestClient = async (...rest: Parameters<typeof fetch>) => {
   const res = await fetch(...rest)
@@ -17,7 +18,7 @@ export interface AuthingResponse<T = any> {
 }
 
 export interface AuthingGuardResponse<T = any> extends AuthingResponse<T> {
-  onGuardHandling?: () => void
+  onGuardHandling?: () => CodeAction
   isFlowEnd?: boolean
 }
 
