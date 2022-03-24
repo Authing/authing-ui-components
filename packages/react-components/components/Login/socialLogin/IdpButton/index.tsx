@@ -16,7 +16,7 @@ import { IconFont } from '../../../IconFont'
 import { isLarkBrowser, isWeChatBrowser, popupCenter } from '../../../_utils'
 import { useGuardHttp } from '../../../_utils/guardHttp'
 export const IdpButton = (props: any) => {
-  const { i, appId, userPoolId, onGuardLogin } = props
+  const { i, appId, userPoolId } = props
 
   const { t } = useTranslation()
 
@@ -43,23 +43,23 @@ export const IdpButton = (props: any) => {
       const onLogin = () => {
         setLoading(true)
         authClient.social.authorize(i.identifier, {
-          onSuccess(user) {
-            // TODO
-            // onSuccess(user)
-            setLoading(false)
-            onGuardLogin(200, user)
-          },
-          onError(code, msg) {
-            setLoading(false)
-            try {
-              const parsedMsg = JSON.parse(msg)
-              const { message: authingMessage, data: authingData } = parsedMsg
-              onGuardLogin(code, authingData, authingMessage)
-            } catch (e) {
-              // do nothing...
-            }
-            // message.error(msg)
-          },
+          // onSuccess(user) {
+          //   // TODO
+          //   // onSuccess(user)
+          //   setLoading(false)
+          //   onGuardLogin(200, user)
+          // },
+          // onError(code, msg) {
+          //   setLoading(false)
+          //   try {
+          //     const parsedMsg = JSON.parse(msg)
+          //     const { message: authingMessage, data: authingData } = parsedMsg
+          //     onGuardLogin(code, authingData, authingMessage)
+          //   } catch (e) {
+          //     // do nothing...
+          //   }
+          //   // message.error(msg)
+          // },
         })
       }
       return (
@@ -207,6 +207,6 @@ export const IdpButton = (props: any) => {
     } else {
       return null
     }
-  }, [appId, authClient.social, i, loading, onGuardLogin, post, t, userPoolId])
+  }, [appId, authClient.social, i, loading, post, t, userPoolId])
   return renderBtn()
 }

@@ -22,7 +22,9 @@ import { CodeAction } from '../../_utils/responseManagement/interface'
 export interface SocialLoginProps {
   appId: string
   config: LoginConfig
-  onLogin: any
+  // onLogin: any
+  onLoginFailed: any
+  onLoginSuccess: any
   enterpriseConnectionObjs: ApplicationConfig['identityProviders']
   socialConnectionObjs: SocialConnectionItem[]
 }
@@ -30,7 +32,8 @@ export interface SocialLoginProps {
 export const SocialLogin: React.FC<SocialLoginProps> = ({
   appId,
   config,
-  onLogin: onGuardLogin,
+  onLoginFailed,
+  onLoginSuccess,
   enterpriseConnectionObjs,
   socialConnectionObjs,
 }) => {
@@ -59,20 +62,19 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       if (!res) return
 
       const { code, data, onGuardHandling } = res
-
       if (code === 200) {
-        onGuardLogin(200, data)
+        onLoginSuccess(data)
       } else {
         const handMode = onGuardHandling?.()
         // 向上层抛出错误
-        handMode === CodeAction.RENDER_MESSAGE && onGuardLogin(code, data)
+        handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
       }
     }
     window.addEventListener('message', onPostMessage)
     return () => {
       window.removeEventListener('message', onPostMessage)
     }
-  }, [onGuardLogin, onMessage])
+  }, [onLoginFailed, onLoginSuccess, onMessage])
 
   const idpButtons = enterpriseConnectionObjs.map((i: any) => {
     return (
@@ -81,7 +83,6 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         i={i}
         appId={appId}
         userPoolId={userPoolId}
-        onGuardLogin={onGuardLogin}
       />
     )
   })

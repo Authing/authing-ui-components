@@ -96,67 +96,86 @@ export const GuardIdentityBindingView: React.FC = () => {
     },
   }
 
-  const __codePaser = (code: number) => {
-    const action = codeMap[code]
-    if (code === 200) {
-      return (data: any) => {
-        events?.onBinding?.(data.user, authClient!) // 绑定成功
+  // const __codePaser = (code: number) => {
+  //   const action = codeMap[code]
+  //   if (code === 200) {
+  //     return (data: any) => {
+  //       events?.onBinding?.(data.user, authClient!) // 绑定成功
 
-        events?.onLogin?.(data.user, authClient!) // 登录成功
-      }
-    }
+  //       events?.onLogin?.(data.user, authClient!) // 登录成功
+  //     }
+  //   }
 
-    if (!action) {
-      return (initData?: any) => {
-        // initData?._message && message.error(initData?._message)
-        console.error('未捕获 code', code)
-      }
-    }
+  //   if (!action) {
+  //     return (initData?: any) => {
+  //       // initData?._message && message.error(initData?._message)
+  //       console.error('未捕获 code', code)
+  //     }
+  //   }
 
-    // 解析成功
-    if (action?.action === 'changeModule') {
-      let m = action.module ? action.module : GuardModuleType.ERROR
-      let init = action.initData ? action.initData : {}
-      return (initData?: any) => {
-        changeModule?.(m, { ...initData, ...init })
-      }
-    }
-    if (action?.action === 'message') {
-      return (initData?: any) => {
-        message.error(initData?._message)
-      }
-    }
-    if (action?.action === 'accountLock') {
-      return () => {}
-    }
+  //   // 解析成功
+  //   if (action?.action === 'changeModule') {
+  //     let m = action.module ? action.module : GuardModuleType.ERROR
+  //     let init = action.initData ? action.initData : {}
+  //     return (initData?: any) => {
+  //       changeModule?.(m, { ...initData, ...init })
+  //     }
+  //   }
+  //   if (action?.action === 'message') {
+  //     return (initData?: any) => {
+  //       message.error(initData?._message)
+  //     }
+  //   }
+  //   if (action?.action === 'accountLock') {
+  //     return () => {}
+  //   }
 
-    // 最终结果
-    return (initData?: any) => {
-      // props.onLoginError?.(data, client!) // 未捕获 code
-      console.error('last action at loginview')
-      message.error(initData?._message)
-    }
+  //   // 最终结果
+  //   return (initData?: any) => {
+  //     // props.onLoginError?.(data, client!) // 未捕获 code
+  //     console.error('last action at loginview')
+  //     message.error(initData?._message)
+  //   }
+  // }
+
+  // const onLogin = (code: any, data: any, message?: string) => {
+  //   const callback = __codePaser?.(code)
+  //   if (code !== 200) {
+  //     events?.onBindingError?.({
+  //       code,
+  //       data,
+  //       message,
+  //     })
+  //     events?.onLoginError?.({
+  //       code,
+  //       data,
+  //       message,
+  //     })
+  //   }
+  //   if (!data) {
+  //     data = {}
+  //   }
+  //   data._message = message
+  //   callback?.(data)
+  // }
+
+  const onLoginSuccess = (data: any) => {
+    events?.onBinding?.(data.user, authClient!) // 绑定成功
+
+    events?.onLogin?.(data.user, authClient!) // 登录成功
   }
 
-  const onLogin = (code: any, data: any, message?: string) => {
-    const callback = __codePaser?.(code)
-    if (code !== 200) {
-      events?.onBindingError?.({
-        code,
-        data,
-        message,
-      })
-      events?.onLoginError?.({
-        code,
-        data,
-        message,
-      })
-    }
-    if (!data) {
-      data = {}
-    }
-    data._message = message
-    callback?.(data)
+  const onLoginFailed = (code: number, data: any, message?: string) => {
+    events?.onBindingError?.({
+      code,
+      data,
+      message,
+    })
+    events?.onLoginError?.({
+      code,
+      data,
+      message,
+    })
   }
 
   const onBind = async (loginInfo: any) => {
@@ -212,7 +231,9 @@ export const GuardIdentityBindingView: React.FC = () => {
           verifyCodeLength={publicConfig?.verifyCodeLength}
           autoRegister={false}
           onLoginRequest={onBind}
-          onLogin={onLogin}
+          // onLogin={onLogin}
+          onLoginSuccess={onLoginSuccess}
+          onLoginFailed={onLoginFailed}
           agreements={agreements}
           methods={codeLoginMethods}
           submitButText={t('common.bind')}
@@ -229,7 +250,9 @@ export const GuardIdentityBindingView: React.FC = () => {
           host={config.host}
           onLoginRequest={onBind}
           passwordLoginMethods={passwordLoginMethods}
-          onLogin={onLogin}
+          // onLogin={onLogin}
+          onLoginSuccess={onLoginSuccess}
+          onLoginFailed={onLoginFailed}
           agreements={agreements}
           submitButText={t('common.bind')}
         />

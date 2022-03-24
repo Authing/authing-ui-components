@@ -27,7 +27,13 @@ import { CodeAction } from '../../../_utils/responseManagement/interface'
 export const LoginWithVerifyCode = (props: any) => {
   const config = useGuardPublicConfig()
 
-  const { agreements, methods, submitButText } = props
+  const {
+    agreements,
+    methods,
+    submitButText,
+    onLoginFailed,
+    onLoginSuccess,
+  } = props
 
   const verifyCodeLength = config?.verifyCodeLength ?? 4
 
@@ -180,12 +186,13 @@ export const LoginWithVerifyCode = (props: any) => {
     submitButtonRef.current.onSpin(false)
 
     if (code === 200) {
-      props.onLogin(200, data)
+      // props.onLogin(200, data)
+      onLoginSuccess(200, data)
     } else {
       submitButtonRef.current.onError()
       const handMode = onGuardHandling?.()
       // 向上层抛出错误
-      handMode === CodeAction.RENDER_MESSAGE && props.onLogin(code, data)
+      handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
     }
   }
 
@@ -205,12 +212,13 @@ export const LoginWithVerifyCode = (props: any) => {
     submitButtonRef.current.onSpin(false)
 
     if (code === 200) {
-      props.onLogin(200, data)
+      // props.onLogin(200, data)
+      onLoginSuccess(200, data)
     } else {
       submitButtonRef.current.onError()
       const handMode = onGuardHandling?.()
       // 向上层抛出错误
-      handMode === CodeAction.RENDER_MESSAGE && props.onLogin(code, data)
+      handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
     }
   }
 
@@ -248,14 +256,16 @@ export const LoginWithVerifyCode = (props: any) => {
 
     if (!!props.onLoginRequest) {
       const res = await props.onLoginRequest?.(loginInfo)
-      const { code, message, data } = res
+      const { code, data, onGuardHandling } = res
 
       if (code !== 200) {
         submitButtonRef.current.onError()
       }
       submitButtonRef?.current.onSpin(false)
+      const handMode = onGuardHandling?.()
+      // 向上层抛出错误
+      handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
 
-      props.onLogin(code, data, message)
       return
     }
 

@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ShieldSpin } from '../../ShieldSpin'
 import { useGuardAuthClient } from '../../Guard/authClient'
+import { useGuardHttpClient } from '../../_utils/context'
+import { message } from 'antd'
 
 interface LoginWithWechatmpQrcodeProps {
-  onLogin: any
+  // onLogin: any
+  onLoginSuccess: any
   canLoop: boolean
   qrCodeScanOptions: any
 }
@@ -12,7 +15,11 @@ export const LoginWithWechatmpQrcode = (
   props: LoginWithWechatmpQrcodeProps
 ) => {
   const timerRef = useRef<any>()
+
   const client = useGuardAuthClient()
+
+  const { responseIntercept } = useGuardHttpClient()
+
   const [loading, setLoading] = useState(true)
 
   const appQrcodeClient = client.wechatmpqrcode
@@ -35,16 +42,24 @@ export const LoginWithWechatmpQrcode = (
         timerRef.current = timer
       },
       onSuccess(user) {
-        props.onLogin(200, user)
+        // props.onLogin(200, user)
+        props.onLoginSuccess(user)
       },
-      onCodeLoadFailed: () => {
+      onError: (ms) => {
+        message.error(ms)
+      },
+      onCodeLoadFailed: ({ message: mes }: any) => {
+        message.error(JSON.parse(mes).message)
         setLoading(false)
       },
       onRetry: () => {
         setLoading(true)
       },
-      onMfa: (code, message, mfaData) => {
-        props.onLogin(code, mfaData, message)
+      onMfa: (scannedResult) => {
+        // TODO jkd 返参优化
+        // props.onLogin(code, mfaData, message)
+        const { onGuardHandling } = responseIntercept(scannedResult)
+        onGuardHandling?.()
       },
     })
     return () => clearInterval(timerRef.current)

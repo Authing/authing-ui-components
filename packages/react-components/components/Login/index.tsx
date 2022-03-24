@@ -183,65 +183,86 @@ export const GuardLoginView = () => {
     }
   }, [defaultMethod, qrcodeTabsSettings])
 
-  const __codePaser = (code: number) => {
+  // const __codePaser = (code: number) => {
+  //   const action = codeMap[code]
+
+  //   if (code === 200) {
+  //     return (data: any) => {
+  //       events?.onLogin?.(data, client!) // 登录成功
+  //     }
+  //   }
+
+  //   if (!action) {
+  //     return (initData?: any) => {
+  //       console.error('未捕获 code', code)
+  //     }
+  //   }
+
+  //   // 需要知道所有环境的错误信息
+  //   if (action?.action === 'message') {
+  //     return () => {
+  //       setErrorNumber(errorNumber + 1)
+  //     }
+  //   }
+
+  //   if (action?.action === 'accountLock') {
+  //     return (initData?: any) => {
+  //       setAccountLock(true)
+  //     }
+  //   }
+  //   // 解析成功
+  //   if (action?.action === 'changeModule') {
+  //     let guardModule = action.module ? action.module : GuardModuleType.ERROR
+  //     let init = action.initData ? action.initData : {}
+  //     return (initData?: any) => {
+  //       changeModule?.(guardModule, { ...initData, ...init })
+  //     }
+  //   }
+
+  //   // 最终结果
+  //   return (initData?: any) => {
+  //     // props.onLoginError?.(data, client!) // 未捕获 code
+  //     console.error('last action at login view')
+  //     message.error(initData?._message)
+  //   }
+  // }
+
+  // const onLogin = (code: any, data: any, message?: string) => {
+  //   const callback = __codePaser?.(code)
+  //   if (code !== 200) {
+  //     events?.onLoginError?.({
+  //       code,
+  //       data,
+  //       message,
+  //     })
+  //   }
+  //   if (!data) {
+  //     data = {}
+  //   }
+  //   data._message = message
+  //   callback?.(data)
+  // }
+
+  const onLoginSuccess = (data: any, message?: string) => {
+    data._message = message
+    events?.onLogin?.(data, client)
+  }
+
+  const onLoginFailed = (code: number, data: any, message?: string) => {
     const action = codeMap[code]
-
-    if (code === 200) {
-      return (data: any) => {
-        events?.onLogin?.(data, client!) // 登录成功
-      }
-    }
-
-    if (!action) {
-      return (initData?: any) => {
-        console.error('未捕获 code', code)
-      }
-    }
-
-    // 需要知道所有环境的错误信息
     if (action?.action === 'message') {
-      return () => {
-        setErrorNumber(errorNumber + 1)
-        // message.error(initData?._message)
-      }
+      setErrorNumber(errorNumber + 1)
     }
 
     if (action?.action === 'accountLock') {
-      return (initData?: any) => {
-        setAccountLock(true)
-      }
-    }
-    // 解析成功
-    if (action?.action === 'changeModule') {
-      let guardModule = action.module ? action.module : GuardModuleType.ERROR
-      let init = action.initData ? action.initData : {}
-      return (initData?: any) => {
-        changeModule?.(guardModule, { ...initData, ...init })
-      }
+      setAccountLock(true)
     }
 
-    // 最终结果
-    return (initData?: any) => {
-      // props.onLoginError?.(data, client!) // 未捕获 code
-      console.error('last action at login view')
-      message.error(initData?._message)
-    }
-  }
-
-  const onLogin = (code: any, data: any, message?: string) => {
-    const callback = __codePaser?.(code)
-    if (code !== 200) {
-      events?.onLoginError?.({
-        code,
-        data,
-        message,
-      })
-    }
-    if (!data) {
-      data = {}
-    }
-    data._message = message
-    callback?.(data)
+    events?.onLoginError?.({
+      code,
+      data,
+      message,
+    })
   }
 
   const onBeforeLogin = (loginInfo: any) => {
@@ -433,7 +454,9 @@ export const GuardLoginView = () => {
                           publicKey={publicKey}
                           autoRegister={config?.autoRegister}
                           host={config?.host}
-                          onLogin={onLogin}
+                          // onLogin={onLogin}
+                          onLoginSuccess={onLoginSuccess}
+                          onLoginFailed={onLoginFailed}
                           onBeforeLogin={onBeforeLogin}
                           passwordLoginMethods={
                             config?.passwordLoginMethods ?? []
@@ -451,7 +474,9 @@ export const GuardLoginView = () => {
                           verifyCodeLength={publicConfig?.verifyCodeLength}
                           autoRegister={config?.autoRegister}
                           onBeforeLogin={onBeforeLogin}
-                          onLogin={onLogin}
+                          // onLogin={onLogin}
+                          onLoginSuccess={onLoginSuccess}
+                          onLoginFailed={onLoginFailed}
                           agreements={agreements}
                           methods={verifyLoginMethods}
                         />
@@ -466,7 +491,9 @@ export const GuardLoginView = () => {
                           publicKey={publicKey}
                           autoRegister={config?.autoRegister}
                           host={config?.host}
-                          onLogin={onLogin}
+                          // onLogin={onLogin}
+                          onLoginSuccess={onLoginSuccess}
+                          onLoginFailed={onLoginFailed}
                           onBeforeLogin={onBeforeLogin}
                           agreements={agreements}
                         />
@@ -480,7 +507,9 @@ export const GuardLoginView = () => {
                         <LoginWithAD
                           publicKey={publicKey}
                           autoRegister={config?.autoRegister}
-                          onLogin={onLogin}
+                          // onLogin={onLogin}
+                          onLoginSuccess={onLoginSuccess}
+                          onLoginFailed={onLoginFailed}
                           onBeforeLogin={onBeforeLogin}
                           agreements={agreements}
                         />
@@ -560,7 +589,8 @@ export const GuardLoginView = () => {
                           tab={item.title ?? t('login.scanLogin')}
                         >
                           <LoginWithWechatMiniQrcode
-                            onLogin={onLogin}
+                            // onLogin={onLogin}
+                            onLoginSuccess={onLoginSuccess}
                             canLoop={canLoop}
                             qrCodeScanOptions={{
                               ...config?.qrCodeScanOptions,
@@ -583,7 +613,8 @@ export const GuardLoginView = () => {
                       tab={t('login.appScanLogin')}
                     >
                       <LoginWithAppQrcode
-                        onLogin={onLogin}
+                        // onLogin={onLogin}
+                        onLoginSuccess={onLoginSuccess}
                         canLoop={canLoop}
                         qrCodeScanOptions={{
                           ...config?.qrCodeScanOptions,
@@ -606,7 +637,8 @@ export const GuardLoginView = () => {
                           tab={item.title ?? t('login.wechatmpQrcode')}
                         >
                           <LoginWithWechatmpQrcode
-                            onLogin={onLogin}
+                            // onLogin={onLogin}
+                            onLoginSuccess={onLoginSuccess}
                             canLoop={canLoop}
                             qrCodeScanOptions={{
                               ...config?.qrCodeScanOptions,
@@ -634,7 +666,9 @@ export const GuardLoginView = () => {
               <SocialLogin
                 appId={appId}
                 config={config!}
-                onLogin={onLogin}
+                // onLogin={onLogin}
+                onLoginSuccess={onLoginSuccess}
+                onLoginFailed={onLoginFailed}
                 socialConnectionObjs={socialConnectionObjs}
                 enterpriseConnectionObjs={enterpriseConnectionObjs}
               />

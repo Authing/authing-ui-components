@@ -11,6 +11,7 @@ import { InputPassword } from '../../InputPassword'
 import { Agreements } from '../../Register/components/Agreements'
 import { Agreement } from '../../AuthingGuard/api'
 import { useGuardHttpClient } from '../../_utils/context'
+import { CodeAction } from '../../_utils/responseManagement/interface'
 interface LoginWithLDAPProps {
   // configs
   publicKey: string
@@ -18,20 +19,23 @@ interface LoginWithLDAPProps {
   host?: string
 
   // events
-  onLogin: any
+  // onLogin: any
+  onLoginSuccess: any
+  onLoginFailed: any
   onBeforeLogin: any
   agreements: Agreement[]
 }
 
 export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
-  const { agreements } = props
+  const { agreements, onLoginSuccess, onLoginFailed } = props
 
   const { responseIntercept } = useGuardHttpClient()
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
 
   const [validated, setValidated] = useState(false)
-  let client = useGuardAuthClient()
+  // let client = useGuardAuthClient()
+  const { post } = useGuardHttpClient()
   const { t } = useTranslation()
   let submitButtonRef = useRef<any>(null)
 
@@ -66,43 +70,71 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
     }
 
     // onLogin
-    let account = values.account && values.account.trim()
+    let username = values.account && values.account.trim()
     let password = values.password && values.password.trim()
+
+    const { code, data, onGuardHandling } = await post(
+      '/api/v2/ldap/verify-user',
+      {
+        username,
+        password,
+      }
+    )
+
+    submitButtonRef.current.onSpin(false)
+
+    if (code === 200) {
+      onLoginSuccess(data)
+    } else {
+      submitButtonRef.current.onError()
+      if (code === ErrorCode.INPUT_CAPTCHACODE) {
+        setVerifyCodeUrl(getCaptchaUrl())
+        setShowCaptcha(true)
+      }
+      const handMode = onGuardHandling?.()
+      // 向上层抛出错误
+      handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
+    }
+
     // let captchaCode = values.captchaCode && values.captchaCode.trim()
-    await client
-      .loginByLdap(account, password)
-      .then((user) => {
-        props.onLogin(200, user)
-      })
-      .catch((error: any) => {
-        if (error.code === 'ECONNABORTED') {
-          message.error(t('common.timeoutLDAP'))
-        } else {
-          submitButtonRef.current?.onError()
-          let parsedMessage: any = {}
-          try {
-            parsedMessage = JSON.parse(error.message) || error
-          } catch {
-            console.log('message 解析失败')
-          }
-          const { code, statusCode, apiCode, message, data } = parsedMessage
-          if (code === ErrorCode.INPUT_CAPTCHACODE) {
-            setVerifyCodeUrl(getCaptchaUrl())
-            setShowCaptcha(true)
-          }
-          const { onGuardHandling } = responseIntercept({
-            statusCode,
-            apiCode,
-            data,
-            message,
-            code,
-          })
-          onGuardHandling?.()
-        }
-      })
-      .finally(() => {
-        submitButtonRef.current?.onSpin(false)
-      })
+    // await client
+    // .loginByLdap(account, password)
+    // .then((user) => {
+    //   onLoginSuccess(user)
+    // })
+    // .catch((error: any) => {
+    //   if (error.code === 'ECONNABORTED') {
+    //     message.error(t('common.timeoutLDAP'))
+    //     onLoginFailed(2333, {})
+    //   } else {
+    //     submitButtonRef.current?.onError()
+    //     let parsedMessage: any = {}
+    //     try {
+    //       parsedMessage = JSON.parse(error.message) || error
+    //     } catch {
+    //       console.log('message 解析失败')
+    //     }
+    //     const { code, statusCode, apiCode, message, data } = parsedMessage
+    //     if (code === ErrorCode.INPUT_CAPTCHACODE) {
+    //       setVerifyCodeUrl(getCaptchaUrl())
+    //       setShowCaptcha(true)
+    //     }
+    //     // TODO 错误信息返回不符合 AuthingResponse 的格式 暂用 code 替代
+    //     const { onGuardHandling } = responseIntercept({
+    //       statusCode: statusCode || code,
+    //       apiCode,
+    //       data,
+    //       message,
+    //       code,
+    //     })
+    //     const handMode = onGuardHandling?.()
+    //     // 向上层抛出错误
+    //     handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
+    //   }
+    // })
+    // .finally(() => {
+    //   submitButtonRef.current?.onSpin(false)
+    // })
   }
 
   return (

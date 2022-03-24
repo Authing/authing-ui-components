@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ShieldSpin } from '../../ShieldSpin'
 import { useGuardAuthClient } from '../../Guard/authClient'
+import { message } from 'antd'
+import { useGuardHttpClient } from '../../_utils/context'
 
 interface LoginWithAppQrcodeProps {
-  onLogin: any
+  // onLogin: any
+  onLoginSuccess: any
   canLoop: boolean
   qrCodeScanOptions: any
 }
@@ -13,6 +16,7 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
   const client = useGuardAuthClient()
   const [loading, setLoading] = useState(true)
   const appQrcodeClient = client.qrcode
+  const { responseIntercept } = useGuardHttpClient()
 
   useEffect(() => {
     if (!props.canLoop) {
@@ -29,13 +33,22 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
         timerRef.current = timer
       },
       onSuccess(user) {
-        props.onLogin(200, user)
+        // props.onLogin(200, user)
+        props.onLoginSuccess(user)
       },
-      onCodeLoadFailed: () => {
+      onError: (ms) => {
+        message.error(ms)
+      },
+      onCodeLoadFailed: ({ message: mes }: any) => {
+        message.error(JSON.parse(mes).message)
         setLoading(false)
       },
       onRetry: () => {
         setLoading(true)
+      },
+      onMfa: (scannedResult) => {
+        // const { onGuardHandling } = responseIntercept(scannedResult)
+        // onGuardHandling?.()
       },
     })
     return () => clearInterval(timerRef.current)

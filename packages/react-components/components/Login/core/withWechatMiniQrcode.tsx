@@ -2,9 +2,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import { message } from 'antd'
 import { ShieldSpin } from '../../ShieldSpin'
 import { useGuardAuthClient } from '../../Guard/authClient'
+import { useGuardHttpClient } from '../../_utils/context'
 
 interface LoginWithWechatMiniQrcodeProps {
-  onLogin: any
+  // onLogin: any
+  onLoginSuccess: any
   canLoop: boolean
   qrCodeScanOptions: any
 }
@@ -16,6 +18,7 @@ export const LoginWithWechatMiniQrcode = (
   const client = useGuardAuthClient()
   const [loading, setLoading] = useState(true)
   const appQrcodeClient = client.wxqrcode
+  const { responseIntercept } = useGuardHttpClient()
 
   const domId = `authingGuardMiniQrcode-${props.qrCodeScanOptions.extIdpConnId}`
 
@@ -34,7 +37,8 @@ export const LoginWithWechatMiniQrcode = (
         timerRef.current = timer
       },
       onSuccess(user) {
-        props.onLogin(200, user)
+        // props.onLogin(200, user)
+        props.onLoginSuccess(user)
       },
       onError: (ms) => {
         message.error(ms)
@@ -45,6 +49,10 @@ export const LoginWithWechatMiniQrcode = (
       },
       onRetry: () => {
         setLoading(true)
+      },
+      onMfa: (scannedResult) => {
+        const { onGuardHandling } = responseIntercept(scannedResult)
+        onGuardHandling?.()
       },
     })
     return () => clearInterval(timerRef.current)

@@ -23,8 +23,10 @@ interface LoginWithPasswordProps {
   host?: string
 
   // events
-  onLogin: any
+  // onLogin: any
   onBeforeLogin?: any
+  onLoginSuccess?: any
+  onLoginFailed?: any
   // 越过 login 正常的请求，返回一个 res
   onLoginRequest?: (loginInfo: any) => Promise<AuthingResponse>
   passwordLoginMethods: PasswordLoginMethods[]
@@ -35,7 +37,7 @@ interface LoginWithPasswordProps {
 }
 
 export const LoginWithPassword = (props: LoginWithPasswordProps) => {
-  const { agreements } = props
+  const { agreements, onLoginFailed, onLoginSuccess } = props
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
 
   const [validated, setValidated] = useState(false)
@@ -135,7 +137,8 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         setRemainCount((data as any)?.remainCount ?? 0)
         submitButtonRef?.current.onSpin(false)
         // TODO 临时拦截密码错误限制不报 message
-        props.onLogin(9999, data, msg)
+        // props.onLogin(9999, data, msg)
+        onLoginFailed?.(9999, data, msg)
         return
       }
     }
@@ -151,12 +154,12 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     submitButtonRef?.current.onSpin(false)
 
     if (code === 200) {
-      props.onLogin(200, data, msg)
+      onLoginSuccess(200, data, msg)
     } else {
       // 响应拦截器处理通用错误以及changeModule
       const handMode = onGuardHandling?.()
       // 向上层抛出错误
-      handMode === CodeAction.RENDER_MESSAGE && props.onLogin(code, data, msg)
+      handMode === CodeAction.RENDER_MESSAGE && onLoginFailed?.(code, data, msg)
     }
   }
 

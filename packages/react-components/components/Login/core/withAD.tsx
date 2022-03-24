@@ -9,7 +9,12 @@ import { InputPassword } from '../../InputPassword'
 import { Agreements } from '../../Register/components/Agreements'
 import SubmitButton from '../../SubmitButton'
 import { fieldRequiredRule } from '../../_utils'
-import { useGuardHttpClient, useGuardPublicConfig } from '../../_utils/context'
+import {
+  useGuardFinallyConfig,
+  useGuardHttpClient,
+  useGuardPublicConfig,
+} from '../../_utils/context'
+import { CodeAction } from '../../_utils/responseManagement/interface'
 
 interface LoginWithADProps {
   // configs
@@ -18,13 +23,15 @@ interface LoginWithADProps {
   // host?: string
 
   // events
-  onLogin: any
+  // onLogin: any
+  onLoginSuccess: any
+  onLoginFailed: any
   onBeforeLogin: any
   agreements: Agreement[]
 }
 
 export const LoginWithAD = (props: LoginWithADProps) => {
-  const { agreements } = props
+  const { agreements, onLoginFailed, onLoginSuccess } = props
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
 
@@ -34,9 +41,12 @@ export const LoginWithAD = (props: LoginWithADProps) => {
 
   const { responseIntercept } = useGuardHttpClient()
 
+  const config = useGuardFinallyConfig()
   const { t } = useTranslation()
 
   let client = useGuardAuthClient()
+
+  const { post } = useGuardHttpClient()
 
   let submitButtonRef = useRef<any>(null)
 
@@ -64,39 +74,73 @@ export const LoginWithAD = (props: LoginWithADProps) => {
     }
 
     // onLogin
-    let account = values.account && values.account.trim()
+    let username = values.account && values.account.trim()
     let password = values.password && values.password.trim()
-    await client
-      .loginByAd(account, password)
-      .then((user) => {
-        props.onLogin(200, user)
-      })
-      .catch((error: any) => {
-        if (error.code === 'ECONNABORTED') {
-          message.error(t('common.timeoutAD'))
-        } else {
-          submitButtonRef.current?.onError()
-          let parsedMessage: any = {}
-          try {
-            parsedMessage = JSON.parse(error.message) || error
-          } catch {
-            console.log('message 解析失败')
-          }
-          const { code, statusCode, apiCode, message, data } = parsedMessage
-          const { onGuardHandling } = responseIntercept({
-            statusCode: statusCode || code,
-            apiCode,
-            data,
-            message,
-            code,
-          })
-          console.log(parsedMessage, error)
-          onGuardHandling?.()
-        }
-      })
-      .finally(() => {
-        submitButtonRef.current?.onSpin(false)
-      })
+
+    const firstLevelDomain = new URL(config.host).hostname
+      .split('.')
+      .slice(1)
+      .join('.')
+    console.log(firstLevelDomain)
+    const websocketHost = `https://ws.${firstLevelDomain}`
+
+    const api = `${websocketHost}/api/v2/ad/verify-user`
+
+    // todo
+    const { code, data, onGuardHandling } = await post(api, {
+      username,
+      password,
+    })
+    console.log(code, data)
+
+    submitButtonRef.current?.onSpin(false)
+
+    if (code === 200) {
+      onLoginSuccess(data)
+    } else {
+      submitButtonRef.current?.onError()
+
+      const handMode = onGuardHandling?.()
+      // 向上层抛出错误
+      handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
+    }
+
+    // await client
+    //   .loginByAd(account, password)
+    //   .then((user) => {
+    //     // props.onLogin(200, user)
+    //     onLoginSuccess(user)
+    //   })
+    //   .catch((error: any) => {
+    //     if (error.code === 'ECONNABORTED') {
+    //       message.error(t('common.timeoutAD'))
+    //       onLoginFailed(2333, {})
+    //     } else {
+    //       submitButtonRef.current?.onError()
+    //       let parsedMessage: any = {}
+    //       try {
+    //         parsedMessage = JSON.parse(error.message) || error
+    //       } catch {
+    //         console.log('message 解析失败')
+    //       }
+    //       const { code, statusCode, apiCode, message, data } = parsedMessage
+    //       // TODO 错误信息返回不符合 AuthingResponse 的格式 暂用 code 替代
+    //       const { onGuardHandling } = responseIntercept({
+    //         statusCode: statusCode || code,
+    //         apiCode,
+    //         data,
+    //         message,
+    //         code,
+    //       })
+
+    //       const handMode = onGuardHandling?.()
+    //       // 向上层抛出错误
+    //       handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
+    //     }
+    //   })
+    //   .finally(() => {
+    //     submitButtonRef.current?.onSpin(false)
+    //   })
   }
 
   return (
