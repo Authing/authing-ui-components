@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { message, Popover, Tabs, Tooltip } from 'antd'
 import { intersection } from 'lodash'
@@ -30,6 +30,7 @@ import {
 import { isWeChatBrowser } from '../_utils'
 import { LoginWithVerifyCode } from './core/withVerifyCode'
 import { VerifyLoginMethods } from '../AuthingGuard/api'
+import { useMediaSize, useMethod } from '../_utils/hooks'
 
 const inputWays = [
   LoginMethods.Password,
@@ -279,270 +280,365 @@ export const GuardLoginView = () => {
     [publicConfig?.verifyCodeTabConfig?.enabledLoginMethods]
   )
 
+  const [
+    socialConnectionObjs,
+    enterpriseConnectionObjs,
+    isNoMethod,
+  ] = useMethod(config)
+
+  const noLoginMethods = !config?.loginMethods?.length
+
+  const { isPhoneMedia } = useMediaSize()
+
+  // 渲染前执行
+  useLayoutEffect(() => {
+    if (noLoginMethods && !isPhoneMedia) {
+      // pc 下
+      const containerDOM = document.getElementsByClassName(
+        'g2-view-container'
+      )?.[0]
+
+      if (containerDOM) {
+        // @ts-ignore
+        containerDOM.style['min-height'] = '456px'
+        containerDOM.classList.add('no-login-methods-view')
+        return () => {
+          // @ts-ignore
+          containerDOM.style['min-height'] = '610px'
+          containerDOM.classList.remove('no-login-methods-view')
+        }
+      }
+    }
+  }, [isPhoneMedia, noLoginMethods])
+
+  useEffect(() => {
+    const containerDOM = document.getElementsByClassName('g2-view-header')?.[0]
+    const innerContainer = document.querySelector(
+      '.g2-view-login>.g2-view-container-inner'
+    )
+    if (isPhoneMedia && noLoginMethods) {
+      if (containerDOM) {
+        containerDOM.classList.add('g2-view-header-mobile')
+      }
+      if (innerContainer) {
+        innerContainer.classList.add('g2-view-login-mobile-inner')
+      }
+    } else {
+      containerDOM.classList.remove('g2-view-header-mobile')
+      innerContainer?.classList.remove('g2-view-login-mobile-inner')
+    }
+    return () => {
+      containerDOM.classList.remove('g2-view-header-mobile')
+      innerContainer?.classList.remove('g2-view-login-mobile-inner')
+    }
+  }, [isPhoneMedia, noLoginMethods])
+
   return (
     <div className="g2-view-container g2-view-login">
       <div className="g2-view-container-inner">
-        {/* 两种方式都需要渲染的时候，才出现切换按钮 */}
-        {renderInputWay && renderQrcodeWay && (
-          <div className="g2-qrcode-switch">
-            {/* <div className="switch-text">{switchText}</div> */}
-            <Popover
-              placement="leftTop"
-              content={switchText}
-              overlayClassName="switch-text"
-              getPopupContainer={(node: any) => {
-                if (node) {
-                  return node.parentElement
-                }
-                return document.body
-              }}
-            >
-              <div
-                className="switch-img"
-                onClick={() => {
-                  message.destroy()
-                  if (inputWays.includes(loginWay)) {
-                    setLoginWay(firstQRcodeWay)
-                  } else if (qrcodeWays.includes(loginWay)) {
-                    setLoginWay(firstInputWay)
-                  }
-                }}
-              >
-                <div className="imgae-mask" />
-                <IconFont
-                  type="authing-a-erweima22"
-                  className={`qrcode-switch-image ${inputNone}`}
-                />
-                <IconFont
-                  type="authing-diannao"
-                  className={`qrcode-switch-image ${qrcodeNone}`}
-                />
-              </div>
-            </Popover>
-          </div>
-        )}
-
-        <div className="g2-view-header">
-          <img src={config?.logo} alt="" className="icon" />
-          <div className="title">{config?.title}</div>
-          {!!publicConfig?.welcomeMessage && (
-            <div className="title-description">
-              {publicConfig?.welcomeMessage[i18n.language]}
+        {isNoMethod ? (
+          <>
+            <div className="g2-view-header">
+              <img src={config?.logo} alt="" className="icon" />
+              <div className="title">{config?.title}</div>
+              {!!publicConfig?.welcomeMessage && (
+                <div className="title-description">
+                  {publicConfig?.welcomeMessage[i18n.language]}
+                </div>
+              )}
             </div>
-          )}
-        </div>
-
-        {renderInputWay && (
-          <div className={inputNone}>
-            <div className={`g2-view-tabs`}>
-              <Tabs
-                onChange={(k: any) => {
-                  setLoginWay(k)
-                  message.destroy()
-                  events?.onLoginTabChange?.(k)
-                }}
-                activeKey={loginWay}
-              >
-                {ms?.includes(LoginMethods.Password) && (
-                  <Tabs.TabPane
-                    key={LoginMethods.Password}
-                    tab={t('login.pwdLogin')}
-                  >
-                    <LoginWithPassword
-                      loginWay={loginWay}
-                      publicKey={publicKey}
-                      autoRegister={config?.autoRegister}
-                      host={config?.host}
-                      onLogin={onLogin}
-                      onBeforeLogin={onBeforeLogin}
-                      passwordLoginMethods={config?.passwordLoginMethods ?? []}
-                      agreements={agreements}
-                    />
-                  </Tabs.TabPane>
-                )}
-                {ms?.includes(LoginMethods.PhoneCode) && (
-                  <Tabs.TabPane
-                    key={LoginMethods.PhoneCode}
-                    tab={verifyCodeLogin}
-                  >
-                    <LoginWithVerifyCode
-                      verifyCodeLength={publicConfig?.verifyCodeLength}
-                      autoRegister={config?.autoRegister}
-                      onBeforeLogin={onBeforeLogin}
-                      onLogin={onLogin}
-                      agreements={agreements}
-                      methods={verifyLoginMethods}
-                    />
-                  </Tabs.TabPane>
-                )}
-                {ms?.includes(LoginMethods.LDAP) && (
-                  <Tabs.TabPane
-                    key={LoginMethods.LDAP}
-                    tab={t('login.ldapLogin')}
-                  >
-                    <LoginWithLDAP
-                      publicKey={publicKey}
-                      autoRegister={config?.autoRegister}
-                      host={config?.host}
-                      onLogin={onLogin}
-                      onBeforeLogin={onBeforeLogin}
-                      agreements={agreements}
-                    />
-                  </Tabs.TabPane>
-                )}
-                {ms?.includes(LoginMethods.AD) && (
-                  <Tabs.TabPane key={LoginMethods.AD} tab={t('login.adLogin')}>
-                    <LoginWithAD
-                      publicKey={publicKey}
-                      autoRegister={config?.autoRegister}
-                      onLogin={onLogin}
-                      onBeforeLogin={onBeforeLogin}
-                      agreements={agreements}
-                    />
-                  </Tabs.TabPane>
-                )}
-              </Tabs>
+            <div className="no-login-methods-view">
+              <IconFont
+                type="authing-bianzu"
+                style={{ width: 178, height: 120 }}
+              />
+              <span className="no-login-methods-desc">
+                {t('login.noLoginMethodsDesc')}
+              </span>
             </div>
-            <div className={`g2-tips-line`}>
-              {!disableResetPwd && (
-                <div>
-                  <span
-                    className="link-like forget-password-link"
-                    onClick={() =>
-                      changeModule?.(GuardModuleType.FORGET_PWD, {})
+          </>
+        ) : (
+          <>
+            {/* 两种方式都需要渲染的时候，才出现切换按钮 */}
+            {renderInputWay && renderQrcodeWay && (
+              <div className="g2-qrcode-switch">
+                {/* <div className="switch-text">{switchText}</div> */}
+                <Popover
+                  placement="leftTop"
+                  content={switchText}
+                  overlayClassName="switch-text"
+                  getPopupContainer={(node: any) => {
+                    if (node) {
+                      return node.parentElement
                     }
+                    return document.body
+                  }}
+                >
+                  <div
+                    className="switch-img"
+                    onClick={() => {
+                      message.destroy()
+                      if (inputWays.includes(loginWay)) {
+                        setLoginWay(firstQRcodeWay)
+                      } else if (qrcodeWays.includes(loginWay)) {
+                        setLoginWay(firstInputWay)
+                      }
+                    }}
                   >
-                    {t('login.forgetPwd')}
-                  </span>
+                    <div className="imgae-mask" />
+                    <IconFont
+                      type="authing-a-erweima22"
+                      className={`qrcode-switch-image ${inputNone}`}
+                    />
+                    <IconFont
+                      type="authing-diannao"
+                      className={`qrcode-switch-image ${qrcodeNone}`}
+                    />
+                  </div>
+                </Popover>
+              </div>
+            )}
+
+            <div className="g2-view-header">
+              <img src={config?.logo} alt="" className="icon" />
+              <div className="title">{config?.title}</div>
+              {!!publicConfig?.welcomeMessage && (
+                <div className="title-description">
+                  {publicConfig?.welcomeMessage[i18n.language]}
+                </div>
+              )}
+            </div>
+
+            {renderInputWay && (
+              <div className={inputNone}>
+                <div className={`g2-view-tabs`}>
+                  <Tabs
+                    onChange={(k: any) => {
+                      setLoginWay(k)
+                      message.destroy()
+                      events?.onLoginTabChange?.(k)
+                    }}
+                    activeKey={loginWay}
+                  >
+                    {ms?.includes(LoginMethods.Password) && (
+                      <Tabs.TabPane
+                        key={LoginMethods.Password}
+                        tab={t('login.pwdLogin')}
+                      >
+                        <LoginWithPassword
+                          loginWay={loginWay}
+                          publicKey={publicKey}
+                          autoRegister={config?.autoRegister}
+                          host={config?.host}
+                          onLogin={onLogin}
+                          onBeforeLogin={onBeforeLogin}
+                          passwordLoginMethods={
+                            config?.passwordLoginMethods ?? []
+                          }
+                          agreements={agreements}
+                        />
+                      </Tabs.TabPane>
+                    )}
+                    {ms?.includes(LoginMethods.PhoneCode) && (
+                      <Tabs.TabPane
+                        key={LoginMethods.PhoneCode}
+                        tab={verifyCodeLogin}
+                      >
+                        <LoginWithVerifyCode
+                          verifyCodeLength={publicConfig?.verifyCodeLength}
+                          autoRegister={config?.autoRegister}
+                          onBeforeLogin={onBeforeLogin}
+                          onLogin={onLogin}
+                          agreements={agreements}
+                          methods={verifyLoginMethods}
+                        />
+                      </Tabs.TabPane>
+                    )}
+                    {ms?.includes(LoginMethods.LDAP) && (
+                      <Tabs.TabPane
+                        key={LoginMethods.LDAP}
+                        tab={t('login.ldapLogin')}
+                      >
+                        <LoginWithLDAP
+                          publicKey={publicKey}
+                          autoRegister={config?.autoRegister}
+                          host={config?.host}
+                          onLogin={onLogin}
+                          onBeforeLogin={onBeforeLogin}
+                          agreements={agreements}
+                        />
+                      </Tabs.TabPane>
+                    )}
+                    {ms?.includes(LoginMethods.AD) && (
+                      <Tabs.TabPane
+                        key={LoginMethods.AD}
+                        tab={t('login.adLogin')}
+                      >
+                        <LoginWithAD
+                          publicKey={publicKey}
+                          autoRegister={config?.autoRegister}
+                          onLogin={onLogin}
+                          onBeforeLogin={onBeforeLogin}
+                          agreements={agreements}
+                        />
+                      </Tabs.TabPane>
+                    )}
+                  </Tabs>
+                </div>
+                <div className={`g2-tips-line`}>
+                  {!disableResetPwd && (
+                    <div>
+                      <span
+                        className="link-like forget-password-link"
+                        onClick={() =>
+                          changeModule?.(GuardModuleType.FORGET_PWD, {})
+                        }
+                      >
+                        {t('login.forgetPwd')}
+                      </span>
+                      {(errorNumber >= 2 || accountLock) && (
+                        <span style={{ margin: '0 4px', color: '#EAEBEE' }}>
+                          丨
+                        </span>
+                      )}
+                    </div>
+                  )}
+
                   {(errorNumber >= 2 || accountLock) && (
-                    <span style={{ margin: '0 4px', color: '#EAEBEE' }}>
-                      丨
+                    <Tooltip title={t('common.feedback')}>
+                      <div
+                        className="touch-tip question-feedback"
+                        onClick={() =>
+                          changeModule?.(GuardModuleType.ANY_QUESTIONS, {})
+                        }
+                      >
+                        <IconFont
+                          type={'authing-a-question-line1'}
+                          style={{ fontSize: 16 }}
+                        />
+                      </div>
+                    </Tooltip>
+                  )}
+
+                  {!disableRegister && (
+                    <span className="go-to-register">
+                      {/* <span className="gray">{t('common.noAccYet')}</span> */}
+                      <span
+                        className="link-like register-link"
+                        onClick={() =>
+                          changeModule?.(GuardModuleType.REGISTER, {})
+                        }
+                      >
+                        {t('common.registerImmediate')}
+                      </span>
                     </span>
                   )}
                 </div>
-              )}
-
-              {(errorNumber >= 2 || accountLock) && (
-                <Tooltip title={t('common.feedback')}>
-                  <div
-                    className="touch-tip question-feedback"
-                    onClick={() =>
-                      changeModule?.(GuardModuleType.ANY_QUESTIONS, {})
-                    }
-                  >
-                    <IconFont
-                      type={'authing-a-question-line1'}
-                      style={{ fontSize: 16 }}
-                    />
-                  </div>
-                </Tooltip>
-              )}
-
-              {!disableRegister && (
-                <span className="go-to-register">
-                  {/* <span className="gray">{t('common.noAccYet')}</span> */}
-                  <span
-                    className="link-like register-link"
-                    onClick={() => changeModule?.(GuardModuleType.REGISTER, {})}
-                  >
-                    {t('common.registerImmediate')}
-                  </span>
-                </span>
-              )}
-            </div>
-          </div>
-        )}
-        {renderQrcodeWay && (
-          <div
-            className={`g2-view-tabs ${qrcodeNone} ${hiddenTab && 'hidden'}`}
-          >
-            <Tabs
-              destroyInactiveTabPane={true}
-              onChange={(k: any) => {
-                message.destroy()
-                events?.onLoginTabChange?.(k)
-              }}
-              defaultActiveKey={defaultQrCodeWay}
-            >
-              {ms?.includes(LoginMethods.WxMinQr) &&
-                qrcodeTabsSettings?.[LoginMethods.WxMinQr].map((item: any) => (
-                  <Tabs.TabPane
-                    key={LoginMethods.WxMinQr + item.id}
-                    tab={item.title ?? t('login.scanLogin')}
-                  >
-                    <LoginWithWechatMiniQrcode
-                      onLogin={onLogin}
-                      canLoop={canLoop}
-                      qrCodeScanOptions={{
-                        ...config?.qrCodeScanOptions,
-                        extIdpConnId: item.id,
-                        tips: {
-                          title:
-                            i18n.language === 'zh-CN'
-                              ? '使用 微信 扫码登录'
-                              : `Use WeChat to scan and login`,
-                          expired: t('login.qrcodeExpired'),
-                        },
-                      }}
-                    />
-                  </Tabs.TabPane>
-                ))}
-              {ms?.includes(LoginMethods.AppQr) && (
-                <Tabs.TabPane
-                  key={LoginMethods.AppQr}
-                  tab={t('login.appScanLogin')}
+              </div>
+            )}
+            {renderQrcodeWay && (
+              <div
+                className={`g2-view-tabs ${qrcodeNone} ${
+                  hiddenTab && 'hidden'
+                }`}
+              >
+                <Tabs
+                  destroyInactiveTabPane={true}
+                  onChange={(k: any) => {
+                    message.destroy()
+                    events?.onLoginTabChange?.(k)
+                  }}
+                  defaultActiveKey={defaultQrCodeWay}
                 >
-                  <LoginWithAppQrcode
-                    onLogin={onLogin}
-                    canLoop={canLoop}
-                    qrCodeScanOptions={{
-                      ...config?.qrCodeScanOptions,
-                      tips: {
-                        title:
-                          i18n.language === 'zh-CN'
-                            ? '使用 APP 扫码登录'
-                            : `Use APP to scan and login`,
-                        expired: t('login.qrcodeExpired'),
-                      },
-                    }}
-                  />
-                </Tabs.TabPane>
-              )}
-              {ms?.includes(LoginMethods.WechatMpQrcode) &&
-                qrcodeTabsSettings?.[LoginMethods.WechatMpQrcode].map(
-                  (item) => (
+                  {ms?.includes(LoginMethods.WxMinQr) &&
+                    qrcodeTabsSettings?.[LoginMethods.WxMinQr].map(
+                      (item: any) => (
+                        <Tabs.TabPane
+                          key={LoginMethods.WxMinQr + item.id}
+                          tab={item.title ?? t('login.scanLogin')}
+                        >
+                          <LoginWithWechatMiniQrcode
+                            onLogin={onLogin}
+                            canLoop={canLoop}
+                            qrCodeScanOptions={{
+                              ...config?.qrCodeScanOptions,
+                              extIdpConnId: item.id,
+                              tips: {
+                                title:
+                                  i18n.language === 'zh-CN'
+                                    ? '使用 微信 扫码登录'
+                                    : `Use WeChat to scan and login`,
+                                expired: t('login.qrcodeExpired'),
+                              },
+                            }}
+                          />
+                        </Tabs.TabPane>
+                      )
+                    )}
+                  {ms?.includes(LoginMethods.AppQr) && (
                     <Tabs.TabPane
-                      key={LoginMethods.WechatMpQrcode + item.id}
-                      tab={item.title ?? t('login.wechatmpQrcode')}
+                      key={LoginMethods.AppQr}
+                      tab={t('login.appScanLogin')}
                     >
-                      <LoginWithWechatmpQrcode
+                      <LoginWithAppQrcode
                         onLogin={onLogin}
                         canLoop={canLoop}
                         qrCodeScanOptions={{
                           ...config?.qrCodeScanOptions,
-                          extIdpConnId: item.id,
                           tips: {
                             title:
                               i18n.language === 'zh-CN'
-                                ? `${isWeChatBrowser() ? '长按' : '扫码'}关注 ${
-                                    item.title
-                                  } 公众号登录`
-                                : `${
-                                    isWeChatBrowser() ? 'Press' : 'Scan'
-                                  } to follow ${item.title} and login`,
+                                ? '使用 APP 扫码登录'
+                                : `Use APP to scan and login`,
                             expired: t('login.qrcodeExpired'),
                           },
                         }}
                       />
                     </Tabs.TabPane>
-                  )
-                )}
-            </Tabs>
-          </div>
+                  )}
+                  {ms?.includes(LoginMethods.WechatMpQrcode) &&
+                    qrcodeTabsSettings?.[LoginMethods.WechatMpQrcode].map(
+                      (item) => (
+                        <Tabs.TabPane
+                          key={LoginMethods.WechatMpQrcode + item.id}
+                          tab={item.title ?? t('login.wechatmpQrcode')}
+                        >
+                          <LoginWithWechatmpQrcode
+                            onLogin={onLogin}
+                            canLoop={canLoop}
+                            qrCodeScanOptions={{
+                              ...config?.qrCodeScanOptions,
+                              extIdpConnId: item.id,
+                              tips: {
+                                title:
+                                  i18n.language === 'zh-CN'
+                                    ? `${
+                                        isWeChatBrowser() ? '长按' : '扫码'
+                                      }关注 ${item.title} 微信公众号登录`
+                                    : `${
+                                        isWeChatBrowser() ? 'Press' : 'Scan'
+                                      } to follow ${item.title} and login`,
+                                expired: t('login.qrcodeExpired'),
+                              },
+                            }}
+                          />
+                        </Tabs.TabPane>
+                      )
+                    )}
+                </Tabs>
+              </div>
+            )}
+            <div className="g2-social-login">
+              <SocialLogin
+                appId={appId}
+                config={config!}
+                onLogin={onLogin}
+                socialConnectionObjs={socialConnectionObjs}
+                enterpriseConnectionObjs={enterpriseConnectionObjs}
+              />
+            </div>
+          </>
         )}
-        <div className="g2-social-login">
-          <SocialLogin appId={appId} config={config!} onLogin={onLogin} />
-        </div>
       </div>
       <ChangeLanguage
         langRange={config?.langRange}
