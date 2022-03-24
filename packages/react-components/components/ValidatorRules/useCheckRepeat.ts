@@ -23,7 +23,7 @@ export const useCheckRepeat = (
         setTimer(timeout)
       })
     },
-    [timer]
+    [checkFn, timer]
   )
 
   return checkRepeat
