@@ -1,5 +1,5 @@
 import { LoginMethods, RegisterMethods } from 'authing-js-sdk'
-import { IG2Config } from '../Type'
+import { GuardPageConfig, IG2Config } from '../Type'
 import { ApplicationConfig } from '../AuthingGuard/api'
 import { assembledRequestHost } from '.'
 import { getGuardHttp } from './guradHttp'
@@ -100,11 +100,17 @@ const requestPublicConfig = async (
 ): Promise<ApplicationConfig> => {
   let res: AuthingResponse<ApplicationConfig>
 
+  let pageConfig: AuthingResponse<GuardPageConfig>
+
   const { get } = getGuardHttp()
 
   try {
     res = await get<ApplicationConfig>(
       `/api/v2/applications/${appId}/public-config`
+    )
+
+    pageConfig = await get<GuardPageConfig>(
+      `/api/v2/applications/${appId}/components-public-config/guard`
     )
   } catch (error) {
     console.error('Please check your config or network')

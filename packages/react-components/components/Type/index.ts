@@ -66,3 +66,13 @@ export enum InputMethod {
   EmailCode = 'email-code',
   PhoneCode = 'phone-code',
 }
+
+export enum GuardPageSene {
+  Global = 'guardGlobal',
+}
+
+export interface GuardPageConfig {
+  [GuardPageSene.Global]: {
+    showChangeLanguage: boolean
+  }
+}
