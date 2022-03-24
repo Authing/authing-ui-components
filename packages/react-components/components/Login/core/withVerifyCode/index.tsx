@@ -40,7 +40,6 @@ export const LoginWithVerifyCode = (props: any) => {
   const [validated, setValidated] = useState(false)
 
   const [identify, setIdentify] = useState('')
-
   const [currentMethod, setCurrentMethod] = useState<InputMethod>(methods[0])
   // 是否仅开启国际化短信
   const [isOnlyInternationSms, setInternationSms] = useState(false)
@@ -321,8 +320,8 @@ export const LoginWithVerifyCode = (props: any) => {
                 setIdentify(v)
                 if (validate('email', v)) {
                   setCurrentMethod(InputMethod.EmailCode)
-                }
-                if (validate('phone', v)) {
+                } else {
+                  // 放开手机号校验 方便同时开启邮箱和短信国际化手机号通过
                   setCurrentMethod(InputMethod.PhoneCode)
                 }
               }}

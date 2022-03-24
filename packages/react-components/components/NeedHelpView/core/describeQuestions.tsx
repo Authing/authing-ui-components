@@ -99,6 +99,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
       images: uploadUrl,
       appId: props.appId,
     }
+    // TODO 暂不支持国际化短信参数
     let context = post('/api/v2/feedback', params)
     context.then((res) => {
       if (res.code === 200) {
