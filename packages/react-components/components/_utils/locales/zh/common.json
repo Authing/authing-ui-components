@@ -263,5 +263,6 @@
   "identityBindingTitle": "绑定已有账号",
   "identityBindingDesc": "绑定后，下次可以直接通过这次的方式登录到此账号",
   "internationPhoneMessage": "请输入所在区号合法的手机号",
-  "areaCodePhone": "+区号 手机号"
+  "areaCodePhone": "+区号 手机号",
+  "timeoutAD": "请求超时，AD 配置错误"
 }

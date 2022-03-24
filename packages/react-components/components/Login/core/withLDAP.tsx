@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form, Input } from 'antd'
+import { Form, Input, message } from 'antd'
 import { LoginMethods } from '../../'
 import { ErrorCode } from '../../_utils/GuardErrorCode'
 import { useGuardAuthClient } from '../../Guard/authClient'
@@ -10,6 +10,7 @@ import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
 import { Agreements } from '../../Register/components/Agreements'
 import { Agreement } from '../../AuthingGuard/api'
+import { useGuardHttpClient } from '../../_utils/context'
 interface LoginWithLDAPProps {
   // configs
   publicKey: string
@@ -24,6 +25,8 @@ interface LoginWithLDAPProps {
 
 export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
   const { agreements } = props
+
+  const { responseIntercept } = useGuardHttpClient()
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
 
@@ -72,19 +75,29 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
         props.onLogin(200, user)
       })
       .catch((error: any) => {
-        if (typeof error?.message === 'string') {
-          let e = { code: 2333, data: {}, message: t('common.timeoutLDAP') }
+        if (error.code === 'ECONNABORTED') {
+          message.error(t('common.timeoutLDAP'))
+        } else {
+          submitButtonRef.current?.onError()
+          let parsedMessage: any = {}
           try {
-            e = JSON.parse(error?.message)
-            // onFail && onFail(errorData)
-          } catch {}
-          if (e.code === ErrorCode.INPUT_CAPTCHACODE) {
+            parsedMessage = JSON.parse(error.message) || error
+          } catch {
+            console.log('message 解析失败')
+          }
+          const { code, statusCode, apiCode, message, data } = parsedMessage
+          if (code === ErrorCode.INPUT_CAPTCHACODE) {
             setVerifyCodeUrl(getCaptchaUrl())
             setShowCaptcha(true)
           }
-          submitButtonRef.current?.onError()
-          props.onLogin(e.code, e.data, e.message)
-          // onFail && onFail(error)
+          const { onGuardHandling } = responseIntercept({
+            statusCode,
+            apiCode,
+            data,
+            message,
+            code,
+          })
+          onGuardHandling?.()
         }
       })
       .finally(() => {

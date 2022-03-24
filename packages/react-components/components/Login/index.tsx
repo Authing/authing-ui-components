@@ -202,6 +202,7 @@ export const GuardLoginView = () => {
     if (action?.action === 'message') {
       return () => {
         setErrorNumber(errorNumber + 1)
+        // message.error(initData?._message)
       }
     }
 

@@ -1,4 +1,4 @@
-import { Form, Input } from 'antd'
+import { Form, Input, message } from 'antd'
 import { LoginMethods } from 'authing-js-sdk'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -9,7 +9,7 @@ import { InputPassword } from '../../InputPassword'
 import { Agreements } from '../../Register/components/Agreements'
 import SubmitButton from '../../SubmitButton'
 import { fieldRequiredRule } from '../../_utils'
-import { useGuardPublicConfig } from '../../_utils/context'
+import { useGuardHttpClient, useGuardPublicConfig } from '../../_utils/context'
 
 interface LoginWithADProps {
   // configs
@@ -31,6 +31,9 @@ export const LoginWithAD = (props: LoginWithADProps) => {
   const [validated, setValidated] = useState(false)
 
   const publicConfig = useGuardPublicConfig()
+
+  const { responseIntercept } = useGuardHttpClient()
+
   const { t } = useTranslation()
 
   let client = useGuardAuthClient()
@@ -69,11 +72,26 @@ export const LoginWithAD = (props: LoginWithADProps) => {
         props.onLogin(200, user)
       })
       .catch((error: any) => {
-        if (typeof error?.message === 'string') {
-          // let e = { code: 2333, data: {}, message: t('common.timeoutLDAP') }
-          let e = JSON.parse(error?.message)
+        if (error.code === 'ECONNABORTED') {
+          message.error(t('common.timeoutAD'))
+        } else {
           submitButtonRef.current?.onError()
-          props.onLogin(e.code, e.data, e.message)
+          let parsedMessage: any = {}
+          try {
+            parsedMessage = JSON.parse(error.message) || error
+          } catch {
+            console.log('message 解析失败')
+          }
+          const { code, statusCode, apiCode, message, data } = parsedMessage
+          const { onGuardHandling } = responseIntercept({
+            statusCode: statusCode || code,
+            apiCode,
+            data,
+            message,
+            code,
+          })
+          console.log(parsedMessage, error)
+          onGuardHandling?.()
         }
       })
       .finally(() => {
