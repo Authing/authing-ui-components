@@ -161,7 +161,7 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
       mfaToken,
       phone: phone!,
       code: mfaCode.join(''),
-      phoneCountryCode: phoneCountryCode ?? countryCode,
+      phoneCountryCode: phoneCountryCode ? phoneCountryCode : countryCode,
     }
 
     const { isFlowEnd, data, onGuardHandling } = await businessRequest(
