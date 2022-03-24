@@ -17,6 +17,7 @@ import { useMediaSize } from '../../_utils/hooks'
 import { useGuardPublicConfig } from '../../_utils/context'
 import { IdpButton } from './IdpButton'
 import { usePostMessage } from './postMessage'
+import { CodeAction } from '../../_utils/responseManagement/interface'
 
 export interface SocialLoginProps {
   appId: string
@@ -62,7 +63,9 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       if (code === 200) {
         onGuardLogin(200, data)
       } else {
-        onGuardHandling?.()
+        const handMode = onGuardHandling?.()
+        // 向上层抛出错误
+        handMode === CodeAction.RENDER_MESSAGE && onGuardLogin(code, data)
       }
     }
     window.addEventListener('message', onPostMessage)

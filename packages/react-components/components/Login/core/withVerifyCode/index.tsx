@@ -22,6 +22,7 @@ import './styles.less'
 import { InputInternationPhone } from './InputInternationPhone'
 import { defaultAreaCode, parsePhone } from '../../../_utils/hooks'
 import { InputMethod } from '../../../Type'
+import { CodeAction } from '../../../_utils/responseManagement/interface'
 
 export const LoginWithVerifyCode = (props: any) => {
   const config = useGuardPublicConfig()
@@ -182,7 +183,9 @@ export const LoginWithVerifyCode = (props: any) => {
       props.onLogin(200, data)
     } else {
       submitButtonRef.current.onError()
-      onGuardHandling?.()
+      const handMode = onGuardHandling?.()
+      // 向上层抛出错误
+      handMode === CodeAction.RENDER_MESSAGE && props.onLogin(code, data)
     }
   }
 
@@ -205,7 +208,9 @@ export const LoginWithVerifyCode = (props: any) => {
       props.onLogin(200, data)
     } else {
       submitButtonRef.current.onError()
-      onGuardHandling?.()
+      const handMode = onGuardHandling?.()
+      // 向上层抛出错误
+      handMode === CodeAction.RENDER_MESSAGE && props.onLogin(code, data)
     }
   }
 
