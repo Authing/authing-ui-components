@@ -8,6 +8,7 @@ export enum IdentityBindingBusinessAction {
 export interface PhoneCodeParams {
   phone: string
   code: string
+  phoneCountryCode?: string
 }
 export interface EmailCodeParams {
   email: string
@@ -18,14 +19,11 @@ export interface PasswordParams {
   password: string
 }
 export const PhoneCode = async (params: PhoneCodeParams) => {
-  const { phone, code } = params
+  // const { phone, code, phoneCountryCode } = params
 
   const { post } = getGuardHttp()
 
-  return await post('/interaction/federation/binding/byPhoneCode', {
-    phone,
-    code,
-  })
+  return await post('/interaction/federation/binding/byPhoneCode', params)
 }
 
 export const EmailCode = async (params: EmailCodeParams) => {
