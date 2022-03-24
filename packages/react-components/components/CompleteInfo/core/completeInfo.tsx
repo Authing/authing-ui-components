@@ -59,12 +59,6 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
 
   const [form] = Form.useForm()
 
-  const refPhone = useRef<ICheckProps>(null)
-
-  const refEmail = useRef<ICheckProps>(null)
-
-  const refUserName = useRef<ICheckProps>(null)
-
   const loadInitCountryList = useCallback(async () => {
     const { data } = await get(`/api/v2/country-list`)
 
@@ -230,7 +224,6 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           label={i18n.t('common.username')}
           required={props.required}
           checkRepeat={true}
-          ref={refUserName}
         >
           <Input
             className="authing-g2-input"
@@ -256,7 +249,6 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             label={i18n.t('common.phoneLabel')}
             required={props.required}
             checkRepeat={true}
-            ref={refPhone}
             areaCode={areaCode}
           >
             <PhoneAccount />
@@ -303,7 +295,6 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             required={props.required}
             key="internal email:email13"
             validateFirst={true}
-            ref={refEmail}
           >
             <Input
               className="authing-g2-input"
@@ -496,11 +487,6 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       form={form}
       onFinish={onFinish}
       onFinishFailed={() => submitButtonRef.current.onError()}
-      onValuesChange={(values) => {
-        refPhone?.current?.check(values)
-        refEmail?.current?.check(values)
-        refUserName?.current?.check(values)
-      }}
       className="authing-g2-completeInfo-form authing-g2-form-required-item-icon-after"
     >
       {formFieldsV2}

@@ -31,8 +31,6 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
 
   const [form] = Form.useForm()
 
-  const ref = useRef<ICheckProps>(null)
-
   const onFinish = async ({ email }: any) => {
     submitButtonRef.current?.onSpin(true)
     await form.validateFields()
@@ -54,15 +52,11 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
         form={form}
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
-        onValuesChange={(value) => {
-          ref.current?.check(value)
-        }}
       >
         <CustomFormItem.Email
           className="authing-g2-input-form"
           name="email"
           form={form}
-          ref={ref}
           checkRepeat={true}
           required={true}
         >

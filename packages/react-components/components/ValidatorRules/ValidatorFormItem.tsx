@@ -1,191 +1,140 @@
 import { Form } from 'antd'
-import React, {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useState,
-} from 'react'
-import { fieldRequiredRule, sleep, VALIDATE_PATTERN } from '../_utils'
+import React, { useMemo } from 'react'
+import { fieldRequiredRule, VALIDATE_PATTERN } from '../_utils'
 import { useGuardHttp } from '../_utils/guardHttp'
 import { useTranslation } from 'react-i18next'
-import {
-  ICheckProps,
-  ValidatorFormItemMetaProps,
-  ValidatorFormItemProps,
-} from '.'
+import { ValidatorFormItemMetaProps, ValidatorFormItemProps } from '.'
 import { Rule } from 'antd/lib/form'
-import { useDebounce } from '../_utils/hooks'
 import { useGuardPublicConfig } from '../_utils/context'
 import { phone } from 'phone'
-const checkError = (message: string) => Promise.reject(new Error(message))
+import { useCheckRepeat } from './useCheckRepeat'
 
-const checkSuccess = (message?: string) => Promise.resolve(message ?? '')
+const ValidatorFormItem: React.FC<ValidatorFormItemMetaProps> = (props) => {
+  const {
+    form,
+    checkRepeat = false,
+    method,
+    name,
+    required,
+    areaCode, //国际化区号
+    ...formItemProps
+  } = props
+  const publicConfig = useGuardPublicConfig()
 
-const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
-  (props, ref) => {
-    const {
-      form,
-      checkRepeat = false,
-      method,
-      name,
-      required,
-      areaCode, //国际化区号
-      ...formItemProps
-    } = props
-    const publicConfig = useGuardPublicConfig()
+  const { get } = useGuardHttp()
+  const { t } = useTranslation()
 
-    const { get } = useGuardHttp()
-    const { t } = useTranslation()
-    const [checked, setChecked] = useState(false)
+  const checkInternationalSms = useMemo(() => {
+    return publicConfig.internationalSmsConfig?.enabled && method === 'phone'
+  }, [method, publicConfig.internationalSmsConfig?.enabled])
 
-    const [isReady, setIsReady] = useState(false)
-
-    const [checkInternationSms, setCheckInternationSms] = useState<boolean>(
-      true
-    )
-
-    const methodContent = useMemo(() => {
-      if (method === 'email')
-        return {
-          field: t('common.emailLabel'),
-          checkErrorMessage: t('common.checkEmail'),
-          formatErrorMessage: t('common.emailFormatError'),
-          pattern: VALIDATE_PATTERN.email,
-        }
-      else if (method === 'username') {
-        return {
-          field: t('common.username'),
-          checkErrorMessage: t('common.checkUserName'),
-          formatErrorMessage: t('common.usernameFormatError'),
-          pattern: VALIDATE_PATTERN.username,
-        }
-      } else
-        return {
-          field: t('common.phone'),
-          checkErrorMessage: t('common.checkPhone'),
-          formatErrorMessage: t('common.phoneFormateError'),
-          pattern: VALIDATE_PATTERN.phone,
-        }
-    }, [method, t])
-    const checkField = useDebounce(async (value: string) => {
-      // 正则校验
-      if (!(value && methodContent.pattern.test(value))) {
-        setIsReady(true)
-        return
+  const methodContent = useMemo(() => {
+    if (method === 'email')
+      return {
+        field: t('common.emailLabel'),
+        checkErrorMessage: t('common.checkEmail'),
+        formatErrorMessage: t('common.emailFormatError'),
+        pattern: VALIDATE_PATTERN.email,
       }
-      // 重复性校验
-      let { data } = await get<boolean>(`/api/v2/users/find`, {
-        userPoolId: publicConfig?.userPoolId,
-        key: value,
-        type: method,
-      })
-      setChecked(Boolean(data))
-      form?.validateFields([name ?? method])
-      setIsReady(true)
-    }, 500)
-
-    useImperativeHandle(ref, () => ({
-      check: (values: any) => {
-        setChecked(false)
-        // @ts-ignore
-        if (values[name ?? method]) {
-          setIsReady(false)
-          // @ts-ignore
-          checkField(values[name ?? method])
-        }
-      },
-    }))
-
-    const checkReady = useCallback(async (): Promise<boolean> => {
-      if (isReady) return true
-      do {
-        await sleep(100)
-      } while (!isReady)
-
-      return true
-    }, [isReady])
-
-    const validator = useCallback(async () => {
-      if ((await checkReady()) && checked)
-        return checkError(methodContent.checkErrorMessage)
-      else return checkSuccess()
-    }, [checkReady, checked, methodContent.checkErrorMessage])
-
-    const rules = useMemo<Rule[]>(() => {
-      if (required === false) return []
-      const rules = [...fieldRequiredRule(methodContent.field)]
-      if (!checkInternationSms) {
-        rules.push({
-          validateTrigger: 'onBlur',
-          pattern: methodContent.pattern,
-          message: methodContent.formatErrorMessage,
-        })
+    else if (method === 'username') {
+      return {
+        field: t('common.username'),
+        checkErrorMessage: t('common.checkUserName'),
+        formatErrorMessage: t('common.usernameFormatError'),
+        pattern: VALIDATE_PATTERN.username,
       }
-      // TODO 开启国际化短信
-      if (checkInternationSms) {
-        rules.push({
-          validateTrigger: 'onBlur',
-          validator: async (rule, value) => {
-            if (!value || phone(value, { country: areaCode }).isValid)
-              return Promise.resolve()
-            return Promise.reject(t('common.internationPhoneMessage'))
-          },
-        })
+    } else
+      return {
+        field: t('common.phone'),
+        checkErrorMessage: t('common.checkPhone'),
+        formatErrorMessage: t('common.phoneFormateError'),
+        pattern: VALIDATE_PATTERN.phone,
       }
+  }, [method, t])
 
-      checkRepeat &&
-        Boolean(publicConfig) &&
-        rules.push({
-          validator,
-        })
-      return rules
-    }, [
-      required,
-      methodContent,
-      checkInternationSms,
-      checkRepeat,
-      publicConfig,
-      validator,
-      areaCode,
-      t,
-    ])
-    useEffect(() => {
-      if (
-        publicConfig &&
-        publicConfig.internationalSmsConfig?.enabled &&
-        method === 'phone'
-      ) {
-        setCheckInternationSms(true)
+  const checkRepeatRet = (
+    value: any,
+    resolve: (value: unknown) => void,
+    reject: (reason?: any) => void
+  ) => {
+    get<boolean>(`/api/v2/users/find`, {
+      userPoolId: publicConfig?.userPoolId,
+      key: value,
+      type: method,
+    }).then(({ data }) => {
+      if (Boolean(data)) {
+        reject(methodContent.checkErrorMessage)
       } else {
-        setCheckInternationSms(false)
+        resolve(true)
       }
-    }, [method, publicConfig])
-    return (
-      <Form.Item
-        validateFirst={true}
-        validateTrigger={['onBlur', 'onChange']}
-        rules={[...rules, ...(formItemProps?.rules ?? [])]}
-        name={name ?? method}
-        {...formItemProps}
-      />
-    )
+    })
   }
-)
-export const EmailFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
-  (props, ref) => (
-    <ValidatorFormItem ref={ref} required method="email" {...props} />
+
+  const checkRepeatFn = useCheckRepeat(checkRepeatRet)
+
+  const formatRules = useMemo<Rule>(() => {
+    if (checkInternationalSms) {
+      return {
+        validateTrigger: 'onBlur',
+        validator: async (_, value) => {
+          if (!value || phone(value, { country: areaCode }).isValid)
+            return Promise.resolve()
+          return Promise.reject(t('common.internationPhoneMessage'))
+        },
+      }
+    }
+
+    return {
+      validateTrigger: 'onBlur',
+      pattern: methodContent.pattern,
+      message: methodContent.formatErrorMessage,
+    }
+  }, [
+    areaCode,
+    checkInternationalSms,
+    methodContent.formatErrorMessage,
+    methodContent.pattern,
+    t,
+  ])
+
+  const rules = useMemo<Rule[]>(() => {
+    // 如果不是必填就不校验
+    if (required === false) return []
+
+    // 必填项的默认校验规则
+    const rules = [...fieldRequiredRule(methodContent.field)]
+
+    // 格式校验
+    rules.push(formatRules)
+
+    // 是否校验重复
+    if (checkRepeat) {
+      rules.push({
+        validator: checkRepeatFn,
+        validateTrigger: ['onBlur'],
+      })
+    }
+
+    return rules
+  }, [required, methodContent.field, formatRules, checkRepeat, checkRepeatFn])
+
+  return (
+    <Form.Item
+      validateFirst={true}
+      validateTrigger={['onBlur', 'onChange']}
+      rules={[...rules, ...(formItemProps?.rules ?? [])]}
+      name={name ?? method}
+      {...formItemProps}
+    />
   )
+}
+export const EmailFormItem: React.FC<ValidatorFormItemProps> = (props) => (
+  <ValidatorFormItem required method="email" {...props} />
 )
-export const PhoneFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
-  (props, ref) => (
-    <ValidatorFormItem ref={ref} required method="phone" {...props} />
-  )
+export const PhoneFormItem: React.FC<ValidatorFormItemProps> = (props) => (
+  <ValidatorFormItem required method="phone" {...props} />
 )
 
-export const UserNameFormItem = forwardRef<ICheckProps, ValidatorFormItemProps>(
-  (props, ref) => (
-    <ValidatorFormItem ref={ref} required method="username" {...props} />
-  )
+export const UserNameFormItem: React.FC<ValidatorFormItemProps> = (props) => (
+  <ValidatorFormItem required method="username" {...props} />
 )

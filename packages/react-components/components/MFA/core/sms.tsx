@@ -38,7 +38,6 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
   const { t } = useTranslation()
   const [form] = Form.useForm()
 
-  const ref = useRef<ICheckProps>(null)
   const onFinish = async ({ phone }: any) => {
     submitButtonRef.current.onSpin(true)
     await form.validateFields()
@@ -95,9 +94,6 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
         form={form}
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
-        onValuesChange={(values) => {
-          ref.current?.check(values)
-        }}
       >
         <CustomFormItem.Phone
           className={
@@ -107,7 +103,6 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
           }
           name="phone"
           form={form}
-          ref={ref}
           checkRepeat={true}
           required={true}
           areaCode={areaCode}

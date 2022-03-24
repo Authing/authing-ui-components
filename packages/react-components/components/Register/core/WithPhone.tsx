@@ -7,7 +7,7 @@ import { fieldRequiredRule, getDeviceName } from '../../_utils'
 import { Agreements } from '../components/Agreements'
 import SubmitButton from '../../SubmitButton'
 import { InputNumber } from '../../InputNumber'
-import CustomFormItem, { ICheckProps } from '../../ValidatorRules'
+import CustomFormItem from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
 import { SceneType } from 'authing-js-sdk'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
@@ -35,7 +35,6 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   const [validated, setValidated] = useState(false)
   // 区号 默认
   const [areaCode, setAreaCode] = useState(defaultAreaCode)
-  const ref = useRef<ICheckProps>(null)
 
   const verifyCodeLength = publicConfig?.verifyCodeLength ?? 4
   const isInternationSms =
@@ -208,12 +207,8 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         autoComplete="off"
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
-        onValuesChange={(values) => {
-          ref.current?.check(values)
-        }}
       >
         <CustomFormItem.Phone
-          ref={ref}
           key="phone"
           name="phone"
           className={

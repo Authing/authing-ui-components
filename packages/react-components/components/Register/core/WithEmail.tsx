@@ -41,7 +41,6 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
   const [validated, setValidated] = useState(false)
-  const ref = useRef<ICheckProps>(null)
 
   const [, onFinish] = useAsyncFn(
     async (values: any) => {
@@ -151,12 +150,9 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
             // password changed verify new password
             form.validateFields(['new-password'])
           }
-
-          ref.current?.check(values)
         }}
       >
         <CustomFormItem.Email
-          ref={ref}
           key="email"
           name="email"
           className="authing-g2-input-form"
