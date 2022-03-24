@@ -26,6 +26,7 @@ import { isWechatBrowser, shoudGoToComplete } from '../_utils'
 import { LoginWithVerifyCode } from './core/withVerifyCode'
 import { VerifyLoginMethods } from '../AuthingGuard/api'
 import { useMediaSize, useMethod } from '../_utils/hooks'
+import { GuardPageSene } from '../Type'
 
 const inputWays = [
   LoginMethods.Password,
@@ -88,6 +89,9 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
   const { config } = props
 
   const qrcodeTabsSettings = config.__publicConfig__?.qrcodeTabsSettings
+
+  const showChangeLanguage =
+    config.__pageConfig__?.[GuardPageSene.Global].showChangeLanguage
 
   let [defaultMethod, renderInputWay, renderQrcodeWay] = useMethods(config)
 
@@ -657,7 +661,12 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
           </>
         )}
       </div>
-      <ChangeLanguage langRange={langRange} onLangChange={props.onLangChange} />
+      {showChangeLanguage && (
+        <ChangeLanguage
+          langRange={langRange}
+          onLangChange={props.onLangChange}
+        />
+      )}
     </div>
   )
 }
