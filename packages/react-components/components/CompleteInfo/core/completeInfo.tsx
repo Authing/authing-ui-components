@@ -283,12 +283,9 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
               })}
               scene={SceneType.SCENE_TYPE_COMPLETE_PHONE}
               maxLength={verifyCodeLength}
-              fieldName="internal phone:phone"
-              data={''}
+              fieldName="phone"
               form={form}
-              onSendCodeBefore={() =>
-                form.validateFields(['internal phone:phone'])
-              }
+              onSendCodeBefore={() => form.validateFields(['phone'])}
             />
           </Form.Item>
         </>
@@ -476,7 +473,6 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           return { ...baseData, code: values.phoneCode }
         }
         if (key === 'email') return { ...baseData, code: values.emailCode }
-
         return baseData
       })
 
