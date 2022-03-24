@@ -21,6 +21,7 @@ interface VerifySmsContent {
   phone: string
   code: string
   mfaToken?: string
+  phoneCountryCode?: string
 }
 
 interface VerifyEmailContent {
@@ -65,7 +66,7 @@ export const VerifyEmail = async (content: VerifyEmailContent) => {
 }
 
 export const VerifySms = async (content: VerifySmsContent) => {
-  const { phone, code, mfaToken } = content
+  const { phone, code, mfaToken, phoneCountryCode } = content
   const { post } = getGuardHttp()
 
   return await post(
@@ -73,6 +74,7 @@ export const VerifySms = async (content: VerifySmsContent) => {
     {
       phone,
       code,
+      phoneCountryCode,
     },
     {
       headers: {
@@ -148,6 +150,7 @@ export const useMfaBusinessRequest = () => {
     },
     [MfaBusinessAction.VerifySms]: (content: VerifySmsContent) => {
       if (isFlow) {
+        console.log(content)
         return authFlow(MfaBusinessAction.VerifySms, content)
       }
 

@@ -10,8 +10,9 @@ import {
   HIDE_SOCIALS,
   HIDE_SOCIALS_SHOWIN_ENTERPRISE,
 } from '../../AuthingGuard/constants'
-import { isLarkBrowser, isWechatBrowser } from '..'
+import { isLarkBrowser, isWeChatBrowser } from '..'
 import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
+import { GuardLocalConfig } from '../../Guard'
 export interface PhoneValidResult {
   isValid: boolean
   phoneNumber: string
@@ -141,7 +142,7 @@ export const parsePhone = (
   fieldValue: string,
   areaCode: string = defaultAreaCode
 ) => {
-  let countryCode = ''
+  let countryCode = undefined
 
   let phoneNumber = fieldValue
   // 未开启国家化短信
@@ -167,25 +168,27 @@ export const parsePhone = (
   }
   return { countryCode, phoneNumber }
 }
+
 /**
  *
  * @param config
  * @returns[socialConnectionObjs 社交身份源连接对象 enterpriseConnectionObjs 企业身份源连接对象 isNoMethod 是否没有身份源 ]
  */
-export const useMethod = (config: LoginConfig): any => {
-  const noLoginMethods = !config.loginMethods.length
-
-  const publicConfig = config.__publicConfig__
+export const useMethod: (params: {
+  config: GuardLocalConfig
+  publicConfig: ApplicationConfig
+}) => any = ({ config, publicConfig }) => {
+  const noLoginMethods = !config?.loginMethods?.length
 
   let enterpriseConnectionObjs: ApplicationConfig['identityProviders']
 
   if (config.enterpriseConnections) {
     enterpriseConnectionObjs =
-      config.__publicConfig__?.identityProviders?.filter?.((item) =>
+      publicConfig?.identityProviders?.filter?.((item) =>
         config.enterpriseConnections!.includes(item.identifier)
       ) || []
   } else {
-    enterpriseConnectionObjs = config.__publicConfig__?.identityProviders || []
+    enterpriseConnectionObjs = publicConfig?.identityProviders || []
   }
 
   let socialConnectionObjs: SocialConnectionItem[]
@@ -220,7 +223,7 @@ export const useMethod = (config: LoginConfig): any => {
       return true
     })
     .filter((item) =>
-      isWechatBrowser()
+      isWeChatBrowser()
         ? item.provider === SocialConnectionProvider.WECHATMP
         : item.provider !== SocialConnectionProvider.WECHATMP
     )

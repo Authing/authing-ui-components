@@ -284,7 +284,7 @@ export const GuardLoginView = () => {
     socialConnectionObjs,
     enterpriseConnectionObjs,
     isNoMethod,
-  ] = useMethod(config)
+  ] = useMethod({ config, publicConfig })
 
   const noLoginMethods = !config?.loginMethods?.length
 
