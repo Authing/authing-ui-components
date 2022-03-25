@@ -8,12 +8,16 @@ import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
 import { Agreements } from '../../Register/components/Agreements'
 import SubmitButton from '../../SubmitButton'
+import version from '../../version/version'
 import { fieldRequiredRule } from '../../_utils'
 import {
+  useGuardAppId,
   useGuardFinallyConfig,
   useGuardHttpClient,
   useGuardPublicConfig,
 } from '../../_utils/context'
+import { requestClient } from '../../_utils/http'
+import { i18n } from '../../_utils/locales'
 import { CodeAction } from '../../_utils/responseManagement/interface'
 
 interface LoginWithADProps {
@@ -39,9 +43,13 @@ export const LoginWithAD = (props: LoginWithADProps) => {
 
   const publicConfig = useGuardPublicConfig()
 
-  // const { responseIntercept } = useGuardHttpClient()
+  const appId = useGuardAppId()
+
+  const { responseIntercept } = useGuardHttpClient()
 
   const config = useGuardFinallyConfig()
+
+  console.log(config, publicConfig)
   const { t } = useTranslation()
 
   // let client = useGuardAuthClient()
@@ -77,22 +85,33 @@ export const LoginWithAD = (props: LoginWithADProps) => {
     let username = values.account && values.account.trim()
     let password = values.password && values.password.trim()
 
-    const firstLevelDomain = new URL(config.host).hostname
-      .split('.')
-      .slice(1)
-      .join('.')
-    console.log(firstLevelDomain)
-    const websocketHost = `https://ws.${firstLevelDomain}`
-
-    const api = `${websocketHost}/api/v2/ad/verify-user`
-
     // todo
     try {
-      const { code, data, onGuardHandling } = await post(api, {
-        username,
-        password,
+      const firstLevelDomain = new URL(config.host).hostname
+        .split('.')
+        .slice(1)
+        .join('.')
+      console.log(firstLevelDomain)
+      const websocketHost = `https://ws.${firstLevelDomain}`
+
+      const api = `${websocketHost}/api/v2/ad/verify-user`
+      const fetchRes = await fetch(api, {
+        method: 'POST',
+        body: JSON.stringify({ username, password }),
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          [requestClient.langHeader]: i18n.language,
+          'x-authing-userpool-id': publicConfig.userPoolId,
+          'x-authing-app-id': appId,
+          'x-authing-sdk-version': version,
+          'x-authing-request-from': `Guard@${version}`,
+        },
       })
-      console.log(code, data)
+
+      const res = await fetchRes.json()
+
+      const { code, data, onGuardHandling } = responseIntercept(res)
 
       submitButtonRef.current?.onSpin(false)
 
