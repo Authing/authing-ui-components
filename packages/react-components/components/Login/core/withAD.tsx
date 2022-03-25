@@ -49,12 +49,11 @@ export const LoginWithAD = (props: LoginWithADProps) => {
 
   const config = useGuardFinallyConfig()
 
-  console.log(config, publicConfig)
   const { t } = useTranslation()
 
   // let client = useGuardAuthClient()
 
-  const { post } = useGuardHttpClient()
+  // const { post } = useGuardHttpClient()
 
   let submitButtonRef = useRef<any>(null)
 
@@ -95,6 +94,7 @@ export const LoginWithAD = (props: LoginWithADProps) => {
       const websocketHost = `https://ws.${firstLevelDomain}`
 
       const api = `${websocketHost}/api/v2/ad/verify-user`
+
       const fetchRes = await fetch(api, {
         method: 'POST',
         body: JSON.stringify({ username, password }),
@@ -118,8 +118,6 @@ export const LoginWithAD = (props: LoginWithADProps) => {
       if (code === 200) {
         onLoginSuccess(data)
       } else {
-        submitButtonRef.current?.onError()
-
         const handMode = onGuardHandling?.()
         // 向上层抛出错误
         handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
