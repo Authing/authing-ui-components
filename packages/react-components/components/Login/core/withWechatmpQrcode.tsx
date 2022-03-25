@@ -25,10 +25,9 @@ export const LoginWithWechatmpQrcode = (
   const appQrcodeClient = client.wechatmpqrcode
 
   const domId = `authingGuardMpQrcode-${props.qrCodeScanOptions.extIdpConnId}`
-
   useEffect(() => {
     if (!props.canLoop) {
-      return
+      return () => clearInterval(timerRef.current)
     }
     setLoading(true)
     appQrcodeClient.startScanning(domId, {
@@ -55,7 +54,7 @@ export const LoginWithWechatmpQrcode = (
       onRetry: () => {
         setLoading(true)
       },
-      onMfa: (scannedResult) => {
+      onAuthFlow: (scannedResult) => {
         // props.onLogin(code, mfaData, message)
         const { onGuardHandling } = responseIntercept(scannedResult)
         onGuardHandling?.()
@@ -63,7 +62,7 @@ export const LoginWithWechatmpQrcode = (
     })
     return () => clearInterval(timerRef.current)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [appQrcodeClient, props.canLoop, props.qrCodeScanOptions])
+  }, [appQrcodeClient, props.canLoop])
 
   return (
     <div className="authing-g2-login-app-qrcode">

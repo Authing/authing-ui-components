@@ -150,7 +150,6 @@ export const useMfaBusinessRequest = () => {
     },
     [MfaBusinessAction.VerifySms]: (content: VerifySmsContent) => {
       if (isFlow) {
-        console.log(content)
         return authFlow(MfaBusinessAction.VerifySms, content)
       }
 

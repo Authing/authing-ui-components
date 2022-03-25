@@ -20,7 +20,7 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
 
   useEffect(() => {
     if (!props.canLoop) {
-      return
+      return () => clearInterval(timerRef.current)
     }
     setLoading(true)
     appQrcodeClient.startScanning('authingGuardAppQrcode', {
@@ -46,14 +46,14 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
       onRetry: () => {
         setLoading(true)
       },
-      onMfa: (scannedResult) => {
+      onAuthFlow: (scannedResult) => {
         const { onGuardHandling } = responseIntercept(scannedResult)
         onGuardHandling?.()
       },
     })
     return () => clearInterval(timerRef.current)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [appQrcodeClient, props.canLoop, props.qrCodeScanOptions])
+  }, [appQrcodeClient, props.canLoop])
 
   return (
     <div className="authing-g2-login-app-qrcode">
