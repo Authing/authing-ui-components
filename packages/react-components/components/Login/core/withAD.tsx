@@ -87,22 +87,31 @@ export const LoginWithAD = (props: LoginWithADProps) => {
     const api = `${websocketHost}/api/v2/ad/verify-user`
 
     // todo
-    const { code, data, onGuardHandling } = await post(api, {
-      username,
-      password,
-    })
-    console.log(code, data)
+    try {
+      const { code, data, onGuardHandling } = await post(api, {
+        username,
+        password,
+      })
+      console.log(code, data)
 
-    submitButtonRef.current?.onSpin(false)
+      submitButtonRef.current?.onSpin(false)
 
-    if (code === 200) {
-      onLoginSuccess(data)
-    } else {
-      submitButtonRef.current?.onError()
+      if (code === 200) {
+        onLoginSuccess(data)
+      } else {
+        submitButtonRef.current?.onError()
 
-      const handMode = onGuardHandling?.()
-      // 向上层抛出错误
-      handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
+        const handMode = onGuardHandling?.()
+        // 向上层抛出错误
+        handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
+      }
+    } catch (error: any) {
+      submitButtonRef.current?.onSpin(false)
+      if (error.code === 'ECONNABORTED') {
+        message.error(t('common.timeoutAD'))
+        onLoginFailed(2333, {})
+      }
+      console.log(error)
     }
 
     // await client

@@ -249,6 +249,7 @@ export const GuardLoginView = () => {
   }
 
   const onLoginFailed = (code: number, data: any, message?: string) => {
+    // TODO 与拦截器中 render-message 同步
     const action = codeMap[code]
     if (action?.action === 'message') {
       setErrorNumber(errorNumber + 1)

@@ -56,7 +56,6 @@ export const LoginWithWechatmpQrcode = (
         setLoading(true)
       },
       onMfa: (scannedResult) => {
-        // TODO jkd 返参优化
         // props.onLogin(code, mfaData, message)
         const { onGuardHandling } = responseIntercept(scannedResult)
         onGuardHandling?.()

@@ -47,8 +47,8 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
         setLoading(true)
       },
       onMfa: (scannedResult) => {
-        // const { onGuardHandling } = responseIntercept(scannedResult)
-        // onGuardHandling?.()
+        const { onGuardHandling } = responseIntercept(scannedResult)
+        onGuardHandling?.()
       },
     })
     return () => clearInterval(timerRef.current)

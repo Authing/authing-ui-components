@@ -72,28 +72,37 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
     // onLogin
     let username = values.account && values.account.trim()
     let password = values.password && values.password.trim()
+    try {
+      const { code, data, onGuardHandling } = await post(
+        '/api/v2/ldap/verify-user',
+        {
+          username,
+          password,
+        }
+      )
 
-    const { code, data, onGuardHandling } = await post(
-      '/api/v2/ldap/verify-user',
-      {
-        username,
-        password,
+      submitButtonRef.current.onSpin(false)
+
+      if (code === 200) {
+        onLoginSuccess(data)
+      } else {
+        submitButtonRef.current.onError()
+        if (code === ErrorCode.INPUT_CAPTCHACODE) {
+          setVerifyCodeUrl(getCaptchaUrl())
+          setShowCaptcha(true)
+        }
+        const handMode = onGuardHandling?.()
+        // 向上层抛出错误
+        handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
       }
-    )
-
-    submitButtonRef.current.onSpin(false)
-
-    if (code === 200) {
-      onLoginSuccess(data)
-    } else {
-      submitButtonRef.current.onError()
-      if (code === ErrorCode.INPUT_CAPTCHACODE) {
-        setVerifyCodeUrl(getCaptchaUrl())
-        setShowCaptcha(true)
+    } catch (error: any) {
+      submitButtonRef.current?.onSpin(false)
+      if (error.code === 'ECONNABORTED') {
+        message.error(t('common.timeoutLDAP'))
+        onLoginFailed(2333, {})
+      } else {
+        console.log(error)
       }
-      const handMode = onGuardHandling?.()
-      // 向上层抛出错误
-      handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
     }
 
     // let captchaCode = values.captchaCode && values.captchaCode.trim()
