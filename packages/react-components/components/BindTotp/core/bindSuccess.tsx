@@ -37,6 +37,7 @@ export const BindSuccess: React.FC<BindSuccessProps> = ({ secret, onBind }) => {
       if (isFlowEnd) {
         onBind(data)
       } else {
+        // TODO 需要 onError 抖动吗 当 from 表单校验通过的时候 onError 是没有意义的
         submitButtonRef.current?.onError()
         onGuardHandling?.()
       }

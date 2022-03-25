@@ -65,7 +65,6 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     async (loginInfo: any): Promise<AuthingGuardResponse> => {
       if (!!props.onLoginRequest) {
         const res = await props.onLoginRequest(loginInfo)
-
         return res
       }
 
@@ -95,7 +94,6 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     setValidated(true)
     if (agreements?.length && !acceptedAgreements) {
       submitButtonRef.current.onError()
-
       return
     }
     setRemainCount(0)
@@ -122,10 +120,6 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
 
   const onLoginRes = (res: AuthingGuardResponse) => {
     const { code, message: msg, data, onGuardHandling } = res
-
-    if (code !== 200) {
-      submitButtonRef.current.onError()
-    }
 
     if (code === ErrorCode.INPUT_CAPTCHACODE) {
       setVerifyCodeUrl(getCaptchaUrl())

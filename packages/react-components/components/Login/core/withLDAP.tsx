@@ -47,10 +47,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
   const onFinish = async (values: any) => {
     setValidated(true)
     if (agreements?.length && !acceptedAgreements) {
-      // message.error(t('common.loginProtocolTips'))
-
       submitButtonRef.current?.onError()
-      // submitButtonRef.current.onSpin(false)
       return
     }
     // onBeforeLogin
@@ -87,7 +84,6 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
       if (code === 200) {
         onLoginSuccess(data)
       } else {
-        submitButtonRef.current.onError()
         if (code === ErrorCode.INPUT_CAPTCHACODE) {
           setVerifyCodeUrl(getCaptchaUrl())
           setShowCaptcha(true)

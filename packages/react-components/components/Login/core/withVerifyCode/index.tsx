@@ -189,7 +189,6 @@ export const LoginWithVerifyCode = (props: any) => {
       // props.onLogin(200, data)
       onLoginSuccess(200, data)
     } else {
-      submitButtonRef.current.onError()
       const handMode = onGuardHandling?.()
       // 向上层抛出错误
       handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
@@ -215,7 +214,6 @@ export const LoginWithVerifyCode = (props: any) => {
       // props.onLogin(200, data)
       onLoginSuccess(200, data)
     } else {
-      submitButtonRef.current.onError()
       const handMode = onGuardHandling?.()
       // 向上层抛出错误
       handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
@@ -253,17 +251,15 @@ export const LoginWithVerifyCode = (props: any) => {
       submitButtonRef.current.onSpin(false)
       return
     }
-
+    // 身份源绑定
     if (!!props.onLoginRequest) {
       const res = await props.onLoginRequest?.(loginInfo)
       const { code, data, onGuardHandling } = res
 
-      if (code !== 200) {
-        submitButtonRef.current.onError()
-      }
       submitButtonRef?.current.onSpin(false)
+
       const handMode = onGuardHandling?.()
-      // 向上层抛出错误
+      // 向上层抛出错误 执行绑定失败钩子
       handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
 
       return

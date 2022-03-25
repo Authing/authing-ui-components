@@ -22,6 +22,8 @@ export const UseCode: React.FC<UseCodeProps> = ({ mfaToken, onSubmit }) => {
 
   const { post } = useGuardHttp()
 
+  let submitButtonRef = useRef<any>(null)
+
   const onFinish = async (values: any) => {
     submitButtonRef.current?.onSpin(true)
 
@@ -58,8 +60,9 @@ export const UseCode: React.FC<UseCodeProps> = ({ mfaToken, onSubmit }) => {
           // @ts-ignore
           onSubmit(res.recoveryCode, res.data)
         } else {
-          message.error(res.message)
+          // message.error(res.message)
           submitButtonRef.current?.onError()
+          res.onGuardHandling?.()
         }
       } catch (error) {
         // TODO: handle error
@@ -69,8 +72,6 @@ export const UseCode: React.FC<UseCodeProps> = ({ mfaToken, onSubmit }) => {
       }
     }
   }
-
-  let submitButtonRef = useRef<any>(null)
 
   return (
     <>

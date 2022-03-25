@@ -60,9 +60,7 @@ export const LoginWithAD = (props: LoginWithADProps) => {
   const onFinish = async (values: any) => {
     setValidated(true)
     if (agreements?.length && !acceptedAgreements) {
-      // message.error(t('common.loginProtocolTips'))
       submitButtonRef.current?.onError()
-      // submitButtonRef.current.onSpin(false)
       return
     }
     // onBeforeLogin
