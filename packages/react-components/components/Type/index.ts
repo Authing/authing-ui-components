@@ -69,7 +69,7 @@ export enum InputMethod {
 }
 
 export enum GuardPageSene {
-  Global = 'guardGlobal',
+  Global = 'global',
 }
 
 export interface GuardPageConfig {
