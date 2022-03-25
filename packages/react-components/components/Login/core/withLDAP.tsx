@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Form, Input, message } from 'antd'
 import { LoginMethods } from '../../'
 import { ErrorCode } from '../../_utils/GuardErrorCode'
-import { useGuardAuthClient } from '../../Guard/authClient'
+// import { useGuardAuthClient } from '../../Guard/authClient'
 import SubmitButton from '../../SubmitButton'
 import { fieldRequiredRule } from '../../_utils'
 import { IconFont } from '../../IconFont'
@@ -29,7 +29,7 @@ interface LoginWithLDAPProps {
 export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
   const { agreements, onLoginSuccess, onLoginFailed } = props
 
-  const { responseIntercept } = useGuardHttpClient()
+  // const { responseIntercept } = useGuardHttpClient()
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
 
@@ -72,6 +72,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
     // onLogin
     let username = values.account && values.account.trim()
     let password = values.password && values.password.trim()
+
     try {
       const { code, data, onGuardHandling } = await post(
         '/api/v2/ldap/verify-user',

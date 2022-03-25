@@ -1,11 +1,11 @@
-import { message, Tabs } from 'antd'
+import { Tabs } from 'antd'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { GuardModuleType } from '..'
 import { PasswordLoginMethods } from '../AuthingGuard/api'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { IconFont } from '../IconFont'
-import { codeMap } from '../Login/codemap'
+// import { codeMap } from '../Login/codemap'
 import { LoginWithPassword } from '../Login/core/withPassword'
 import { LoginWithVerifyCode } from '../Login/core/withVerifyCode'
 import {

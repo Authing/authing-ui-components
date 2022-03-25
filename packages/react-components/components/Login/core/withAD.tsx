@@ -3,7 +3,7 @@ import { LoginMethods } from 'authing-js-sdk'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Agreement } from '../../AuthingGuard/api'
-import { useGuardAuthClient } from '../../Guard/authClient'
+// import { useGuardAuthClient } from '../../Guard/authClient'
 import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
 import { Agreements } from '../../Register/components/Agreements'
@@ -39,12 +39,12 @@ export const LoginWithAD = (props: LoginWithADProps) => {
 
   const publicConfig = useGuardPublicConfig()
 
-  const { responseIntercept } = useGuardHttpClient()
+  // const { responseIntercept } = useGuardHttpClient()
 
   const config = useGuardFinallyConfig()
   const { t } = useTranslation()
 
-  let client = useGuardAuthClient()
+  // let client = useGuardAuthClient()
 
   const { post } = useGuardHttpClient()
 
