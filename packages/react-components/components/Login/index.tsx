@@ -90,8 +90,9 @@ export const GuardLoginView = (props: GuardLoginViewProps) => {
 
   const qrcodeTabsSettings = config.__publicConfig__?.qrcodeTabsSettings
 
-  const showChangeLanguage =
-    config.__pageConfig__?.[GuardPageSene.Global].showChangeLanguage
+  const showChangeLanguage = Boolean(
+    config.__pageConfig__?.[GuardPageSene.Global]?.showChangeLanguage
+  )
 
   let [defaultMethod, renderInputWay, renderQrcodeWay] = useMethods(config)
 
