@@ -244,6 +244,7 @@ export const GuardLoginView = () => {
   // }
 
   const onLoginSuccess = (data: any, message?: string) => {
+    // data._message = message
     events?.onLogin?.(data, client)
   }
 
