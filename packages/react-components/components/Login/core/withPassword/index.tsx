@@ -148,7 +148,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     submitButtonRef?.current.onSpin(false)
 
     if (code === 200) {
-      onLoginSuccess(200, data, msg)
+      onLoginSuccess(data, msg)
     } else {
       // 响应拦截器处理通用错误以及changeModule
       const handMode = onGuardHandling?.()

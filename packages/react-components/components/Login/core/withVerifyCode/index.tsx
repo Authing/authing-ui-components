@@ -187,7 +187,7 @@ export const LoginWithVerifyCode = (props: any) => {
 
     if (code === 200) {
       // props.onLogin(200, data)
-      onLoginSuccess(200, data)
+      onLoginSuccess(data)
     } else {
       const handMode = onGuardHandling?.()
       // 向上层抛出错误
@@ -212,7 +212,7 @@ export const LoginWithVerifyCode = (props: any) => {
 
     if (code === 200) {
       // props.onLogin(200, data)
-      onLoginSuccess(200, data)
+      onLoginSuccess(data)
     } else {
       const handMode = onGuardHandling?.()
       // 向上层抛出错误
