@@ -201,9 +201,19 @@ export const getUserRegisterParams = () => {
   }))
 }
 
-export const isWechatBrowser = () =>
-  /MicroMessenger/i.test(navigator?.userAgent)
-export const isLarkBrowser = () => /Lark/i.test(navigator.userAgent)
+export const isWechatBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /MicroMessenger/i.test(navigator?.userAgent)
+}
+
+export const isLarkBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /Lark/i.test(navigator.userAgent)
+}
 export const assembledAppHost = (identifier: string, host: string) => {
   const hostUrl = new URL(host)
 

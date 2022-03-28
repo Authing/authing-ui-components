@@ -14,7 +14,10 @@ export const changeLang = (lang: Lang) => {
 }
 
 const initI18n = (localesConfig: LocalesConfig = {}, lang?: Lang) => {
-  const initLang = navigator.language.split('-')[0] === 'zh' ? 'zh-CN' : 'en-US'
+  let initLang: Lang = 'zh-CN'
+  if (typeof navigator !== 'undefined') {
+    initLang = navigator.language.split('-')[0] === 'zh' ? 'zh-CN' : 'en-US'
+  }
   if (!i18n.language) {
     i18n
       .use(LanguageDetector) // 监测当前浏览器语言

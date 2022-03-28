@@ -127,9 +127,15 @@ export const useShaking = () => {
   }
   return { MountShaking, UnMountShaking }
 }
-export const defaultAreaCode = LanguageMap[navigator.language]
-  ? LanguageMap[navigator.language]
-  : 'CN'
+export const defaultAreaCode = (() => {
+  if (typeof navigator === 'undefined') {
+    return 'CN'
+  }
+  return LanguageMap[navigator.language]
+    ? LanguageMap[navigator.language]
+    : 'CN'
+})()
+
 /**
  * 解析手机号
  * @param fieldValue 字段值
