@@ -60,7 +60,7 @@ export const MFAFace = (props: any) => {
     if (faceState !== 'identifying') {
       return // 不存在 video dom，不要去尝试了
     }
-    if (typeof navigator === undefined) {
+    if (typeof navigator === 'undefined') {
       return // 不存在 navigator，ssr
     }
     let devicesContext = navigator.mediaDevices.getUserMedia(devicesConstraints)
@@ -252,7 +252,7 @@ export const MFAFace = (props: any) => {
 
           <SubmitButton
             onClick={() => {
-              if (typeof navigator === undefined) {
+              if (typeof navigator === 'undefined') {
                 return
               }
               // 设置状态之前 校验是否支持面容 （api 和 设备）
