@@ -19,7 +19,7 @@ import { IconFont } from '../IconFont'
 import { ChangeLanguage } from '../ChangeLanguage'
 import { i18n } from '../_utils/locales'
 
-// import './styles.less'
+import './styles.less'
 import {
   useGuardAppId,
   useGuardEvents,
