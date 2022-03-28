@@ -136,8 +136,8 @@ export const RenderContext: React.FC<{
   // I18n
   useEffect(() => {
     // TODO  国际化 这部分有点小问题 等待优化
-    initI18n({}, defaultMergedConfig?.lang)
-  }, [defaultMergedConfig?.lang])
+    initI18n({}, config?.lang)
+  }, [config?.lang])
 
   useEffect(() => {
     if (!appId) return

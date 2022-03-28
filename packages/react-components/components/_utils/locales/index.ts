@@ -14,8 +14,15 @@ export const changeLang = (lang: Lang) => {
 }
 
 const initI18n = (localesConfig: LocalesConfig = {}, lang?: Lang) => {
-  const initLang = navigator.language.split('-')[0] === 'zh' ? 'zh-CN' : 'en-US'
-  if (!i18n.language) {
+  let initLang: 'zh-CN' | 'en-US' = 'zh-CN'
+
+  if (typeof window !== 'undefined') {
+    initLang = navigator.language.split('-')[0] === 'zh' ? 'zh-CN' : 'en-US'
+  }
+
+  if (Boolean(i18n.language)) {
+    i18n.changeLanguage(lang)
+  } else {
     i18n
       .use(LanguageDetector) // 监测当前浏览器语言
       .use(initReactI18next) // 初始化 i18n
@@ -31,7 +38,7 @@ const initI18n = (localesConfig: LocalesConfig = {}, lang?: Lang) => {
             translation: zhCnTrans,
           },
         },
-        fallbackLng: localesConfig.defaultLang || lang || initLang,
+        fallbackLng: lang ?? initLang,
         debug: false,
         interpolation: {
           escapeValue: false, // react already safes from xss
