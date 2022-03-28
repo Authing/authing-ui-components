@@ -69,6 +69,7 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
           pattern: VALIDATE_PATTERN.phone,
         }
     }, [method, t])
+
     const checkField = useDebounce(async (value: string) => {
       // 正则校验
       if (!(value && methodContent.pattern.test(value))) {
@@ -151,6 +152,7 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
       areaCode,
       t,
     ])
+
     useEffect(() => {
       if (
         publicConfig &&
@@ -162,6 +164,7 @@ const ValidatorFormItem = forwardRef<ICheckProps, ValidatorFormItemMetaProps>(
         setCheckInternationSms(false)
       }
     }, [method, publicConfig])
+
     return (
       <Form.Item
         validateFirst={true}

@@ -26,6 +26,7 @@ export interface IG2Config {
   contentCss?: string
   target?: HTMLElement | string
   __appHost__?: string
+  __pageConfig__?: GuardPageConfig
   __publicConfig__?: ApplicationConfig
   __internalRequest__?: boolean
 }
@@ -65,4 +66,14 @@ export const LanguageMap: any = {
 export enum InputMethod {
   EmailCode = 'email-code',
   PhoneCode = 'phone-code',
+}
+
+export enum GuardPageSene {
+  Global = 'global',
+}
+
+export interface GuardPageConfig {
+  [GuardPageSene.Global]: {
+    showChangeLanguage: boolean
+  }
 }
