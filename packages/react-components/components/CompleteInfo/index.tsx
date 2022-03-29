@@ -28,8 +28,6 @@ import {
 import { extendsFieldsToMetaData, fieldValuesToRegisterProfile } from './utils'
 import { GuardModuleType } from '../Guard'
 import { message } from 'antd'
-import { omit } from 'lodash'
-import { ExtendsField } from '../AuthingGuard/api'
 
 export const GuardCompleteInfo: React.FC<{
   metaData: CompleteInfoMetaData[]
@@ -147,9 +145,11 @@ export const GuardRegisterCompleteInfoView: React.FC = () => {
   const [metaData, setMetaData] = useState<CompleteInfoMetaData[]>()
 
   // 过滤掉 phone 或者 email
-  const extendsFields = publicConfig?.extendsFields.filter(
-    (field) => field.name !== OmitCompleteInfo[initData.businessRequestName]
-  )
+  const extendsFields = useMemo(() => {
+    return publicConfig?.extendsFields.filter(
+      (field) => field.name !== OmitCompleteInfo[initData.businessRequestName]
+    )
+  }, [initData.businessRequestName, publicConfig?.extendsFields])
 
   const skipComplateFileds = publicConfig?.skipComplateFileds
 
