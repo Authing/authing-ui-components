@@ -88,7 +88,7 @@ export const LoginWithAD = (props: LoginWithADProps) => {
         .split('.')
         .slice(1)
         .join('.')
-      console.log(firstLevelDomain)
+
       const websocketHost = `https://ws.${firstLevelDomain}`
 
       const api = `${websocketHost}/api/v2/ad/verify-user`
@@ -125,8 +125,9 @@ export const LoginWithAD = (props: LoginWithADProps) => {
       if (error.code === 'ECONNABORTED') {
         message.error(t('common.timeoutAD'))
         onLoginFailed(2333, {})
+      } else {
+        console.log(error)
       }
-      console.log(error)
     }
 
     // await client

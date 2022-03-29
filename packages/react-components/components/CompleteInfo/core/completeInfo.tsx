@@ -431,51 +431,53 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
     return metaData.map((data) => inputElement(data))
   }, [inputElement, metaData])
 
-  const [, onFinish] = useAsyncFn(async (values: any) => {
-    // submitButtonRef.current?.onSpin(true)
+  const [, onFinish] = useAsyncFn(
+    async (values: any) => {
+      // submitButtonRef.current?.onSpin(true)
 
-    const fieldValues = Object.keys(values)
-      // 先过滤掉 为空的字段
-      .filter((key) => values[key] !== undefined)
-      // 再过滤掉 两个验证码的字段
-      .filter((key) => !['phoneCode', 'emailCode'].includes(key))
-      .map((key) => {
-        const baseData = {
-          name: key,
-          value: values[key],
-        }
-        // 给这两个字段添加一个验证码
-        // 国际化短信 需要携带区号
-        // TODO 默认这里手机号与邮箱 都是有验证码的
-        if (key === 'phone') {
-          if (isInternationSms) {
-            const { countryCode } = parsePhone(
-              isInternationSms,
-              values[key],
-              areaCode
-            )
-            return {
-              ...baseData,
-              code: values.phoneCode,
-              phoneCountryCode: countryCode,
-            }
+      const fieldValues = Object.keys(values)
+        // 先过滤掉 为空的字段
+        .filter((key) => values[key] !== undefined)
+        // 再过滤掉 两个验证码的字段
+        .filter((key) => !['phoneCode', 'emailCode'].includes(key))
+        .map((key) => {
+          const baseData = {
+            name: key,
+            value: values[key],
           }
+          // 给这两个字段添加一个验证码
+          // 国际化短信 需要携带区号
+          // TODO 默认这里手机号与邮箱 都是有验证码的
+          if (key === 'phone') {
+            if (isInternationSms) {
+              const { phoneNumber, countryCode } = parsePhone(
+                isInternationSms,
+                values[key],
+                areaCode
+              )
+              return {
+                ...baseData,
+                code: phoneNumber,
+                phoneCountryCode: countryCode,
+              }
+            }
 
-          return { ...baseData, code: values.phoneCode }
-        }
-        if (key === 'email') return { ...baseData, code: values.emailCode }
-        return baseData
-      })
-
-    try {
-      await businessRequest?.({ fieldValues })
-    } catch (error) {
-      // TODO
-      // throw new Error(error)
-    } finally {
-      submitButtonRef.current?.onSpin(false)
-    }
-  }, [])
+            return { ...baseData, code: values.phoneCode }
+          }
+          if (key === 'email') return { ...baseData, code: values.emailCode }
+          return baseData
+        })
+      try {
+        await businessRequest?.({ fieldValues })
+      } catch (error) {
+        // TODO
+        // throw new Error(error)
+      } finally {
+        submitButtonRef.current?.onSpin(false)
+      }
+    },
+    [areaCode]
+  )
 
   return (
     <Form
