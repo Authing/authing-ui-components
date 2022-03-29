@@ -41,8 +41,16 @@ export const GuardCompleteInfo: React.FC<{
 
   const { t } = useTranslation()
 
+  const [disabled, setDisabled] = useState(false)
+
   const onSkip = async () => {
-    await businessRequest(CompleteInfoAuthFlowAction.Skip)
+    if (disabled) return
+    try {
+      setDisabled(true)
+      await businessRequest(CompleteInfoAuthFlowAction.Skip)
+    } catch (error) {
+      setDisabled(false)
+    }
   }
 
   return (

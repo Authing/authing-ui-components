@@ -72,11 +72,13 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           phone,
           areaCode
         )
+
         // 注册
         const options: any = {
           context,
           generateToken: true,
         }
+
         if (isInternationSms) {
           options.phoneCountryCode = phoneCountryCode
         }
@@ -92,6 +94,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           },
           options,
         }
+
         // 看看是否要跳转到 信息补全
         if (isChangeComplete) {
           changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
@@ -131,8 +134,10 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
       registeContext,
       isInternationSms,
       areaCode,
+      isChangeComplete,
       authClient,
       onRegisterSuccess,
+      changeModule,
       onRegisterFailed,
     ]
   )
