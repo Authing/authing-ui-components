@@ -6,6 +6,7 @@ import {
   CompleteInfoInitData,
   CompleteInfoMetaData,
   CompleteInfoRequest,
+  OmitCompleteInfo,
   RegisterCompleteInfoInitData,
 } from './interface'
 import './styles.less'
@@ -16,6 +17,7 @@ import {
   useGuardFinallyConfig,
   useGuardHttpClient,
   useGuardInitData,
+  useGuardModule,
   useGuardPublicConfig,
 } from '../_utils/context'
 import {
@@ -24,6 +26,10 @@ import {
   registerRequest,
 } from './businessRequest'
 import { extendsFieldsToMetaData, fieldValuesToRegisterProfile } from './utils'
+import { GuardModuleType } from '../Guard'
+import { message } from 'antd'
+import { omit } from 'lodash'
+import { ExtendsField } from '../AuthingGuard/api'
 
 export const GuardCompleteInfo: React.FC<{
   metaData: CompleteInfoMetaData[]
@@ -116,6 +122,8 @@ export const GuardLoginCompleteInfoView: React.FC = () => {
 export const GuardRegisterCompleteInfoView: React.FC = () => {
   const initData = useGuardInitData<RegisterCompleteInfoInitData>()
 
+  const { changeModule } = useGuardModule()
+
   const publicConfig = useGuardPublicConfig()
 
   const { get } = useGuardHttpClient()
@@ -138,7 +146,10 @@ export const GuardRegisterCompleteInfoView: React.FC = () => {
 
   const [metaData, setMetaData] = useState<CompleteInfoMetaData[]>()
 
-  const extendsFields = publicConfig?.extendsFields
+  // 过滤掉 phone 或者 email
+  const extendsFields = publicConfig?.extendsFields.filter(
+    (field) => field.name !== OmitCompleteInfo[initData.businessRequestName]
+  )
 
   const skipComplateFileds = publicConfig?.skipComplateFileds
 
@@ -164,16 +175,21 @@ export const GuardRegisterCompleteInfoView: React.FC = () => {
       extendsFields,
       data?.fieldValues
     )
+    try {
+      // sdk 直接 throw error 拿不到错误详细信息 不能手动给他执行我们的拦截
+      const user = await registerRequest(
+        action,
+        initData.businessRequestName,
+        initData.content,
+        registerProfile
+      )
 
-    const user = await registerRequest(
-      action,
-      initData.businessRequestName,
-      initData.content,
-      registerProfile
-    )
-
-    if (user) {
-      events?.onRegister?.(user, authClient)
+      if (user) {
+        events?.onRegister?.(user, authClient)
+        changeModule?.(GuardModuleType.LOGIN)
+      }
+    } catch (error: any) {
+      message.error(error.message)
     }
   }
 

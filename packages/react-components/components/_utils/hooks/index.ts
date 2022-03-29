@@ -165,6 +165,7 @@ export const parsePhone = (
 
     phoneNumber = parsePhone.phoneNumber.split(countryCode)[1]
   }
+
   return { countryCode, phoneNumber }
 }
 

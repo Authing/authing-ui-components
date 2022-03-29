@@ -1,5 +1,5 @@
 import { useGuardPublicConfig } from '../_utils/context'
-
+import { omit } from 'lodash'
 // 是否进行注册信息补全
 export const useIsChangeComplete = (currentMode: 'phone' | 'email') => {
   const { extendsFields } = useGuardPublicConfig()
@@ -10,8 +10,11 @@ export const useIsChangeComplete = (currentMode: 'phone' | 'email') => {
   if (!complateFiledsPlace.includes('register')) {
     return false
   }
-
-  if (!Boolean(extendsFields) || extendsFields.length === 0) {
+  // 排除掉已有的字段
+  if (
+    !Boolean(omit(extendsFields, currentMode)) ||
+    extendsFields.length === 0
+  ) {
     // 为空就不补了～
     return false
   }

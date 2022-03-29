@@ -13,21 +13,31 @@ import { SceneType } from 'authing-js-sdk'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
 import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
 import { defaultAreaCode, parsePhone } from '../../_utils/hooks'
+import { useIsChangeComplete } from '../utils'
+import { useGuardModule } from '../../_utils/context'
+import { GuardModuleType } from '../../Guard'
 
 export interface RegisterWithPhoneProps {
-  onRegister: Function
+  // onRegister: Function
+  onRegisterSuccess: Function
+  onRegisterFailed: Function
   agreements: Agreement[]
   publicConfig?: ApplicationConfig
   registeContext?: any
 }
 
 export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
-  onRegister,
+  onRegisterSuccess,
+  onRegisterFailed,
   agreements,
   publicConfig,
   registeContext,
 }) => {
   const { t } = useTranslation()
+  const isChangeComplete = useIsChangeComplete('phone')
+
+  const { changeModule } = useGuardModule()
+
   const submitButtonRef = useRef<any>(null)
   const authClient = useGuardAuthClient()
   const [form] = Form.useForm()
@@ -71,6 +81,27 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           options.phoneCountryCode = phoneCountryCode
         }
 
+        const registerContent = {
+          phone: phoneNumber,
+          code,
+          password,
+          profile: {
+            browser:
+              typeof navigator !== 'undefined' ? navigator.userAgent : null,
+            device: getDeviceName(),
+          },
+          options,
+        }
+        // 看看是否要跳转到 信息补全
+        if (isChangeComplete) {
+          changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
+            businessRequestName: 'registerByPhoneCode',
+            content: registerContent,
+          })
+
+          return
+        }
+
         const user = await authClient.registerByPhoneCode(
           phoneNumber,
           code,
@@ -82,12 +113,13 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           },
           options
         )
+
         submitButtonRef.current.onSpin(false)
-        onRegister(200, user)
+        onRegisterSuccess(user)
       } catch (error: any) {
         const { code, message, data } = error
         submitButtonRef.current.onError()
-        onRegister(code, data, message)
+        onRegisterFailed(code, data, message)
       } finally {
         submitButtonRef.current?.onSpin(false)
       }
@@ -100,7 +132,8 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
       isInternationSms,
       areaCode,
       authClient,
-      onRegister,
+      onRegisterSuccess,
+      onRegisterFailed,
     ]
   )
 

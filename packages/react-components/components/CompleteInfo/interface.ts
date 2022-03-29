@@ -116,3 +116,8 @@ export interface CompleteInfoRequest {
     code?: string
   }[]
 }
+
+export enum OmitCompleteInfo {
+  'registerByEmail' = 'email',
+  'registerByPhoneCode' = 'phone',
+}

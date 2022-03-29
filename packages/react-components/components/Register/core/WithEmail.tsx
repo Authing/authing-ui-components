@@ -16,7 +16,9 @@ import { useGuardModule } from '../../_utils/context'
 import { GuardModuleType } from '../../Guard'
 
 export interface RegisterWithEmailProps {
-  onRegister: Function
+  // onRegister: Function
+  onRegisterSuccess: Function
+  onRegisterFailed: Function
   onBeforeRegister?: Function
   publicConfig?: ApplicationConfig
   agreements: Agreement[]
@@ -24,7 +26,8 @@ export interface RegisterWithEmailProps {
 }
 
 export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
-  onRegister,
+  onRegisterSuccess,
+  onRegisterFailed,
   onBeforeRegister,
   agreements,
   registeContext,
@@ -117,12 +120,13 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           registerContent.profile,
           registerContent.options
         )
+
         submitButtonRef.current.onSpin(false)
-        onRegister(200, user)
+        onRegisterSuccess(user)
       } catch (error: any) {
         const { code, data, message } = error
         submitButtonRef.current.onError()
-        onRegister(code, data, message)
+        onRegisterFailed(code, data, message)
       } finally {
         submitButtonRef.current?.onSpin(false)
       }
