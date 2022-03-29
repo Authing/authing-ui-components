@@ -66,16 +66,18 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
 
     const countryList: { label: string; value: string }[] = []
 
-    countryMap.forEach((value: any, key: any) =>
-      countryList.push({ label: value, value: key })
-    )
+    for (const [key, value] of Object.entries(countryMap)) {
+      countryList.push({
+        label: value as string,
+        value: key,
+      })
+    }
 
     setCountryList(countryList)
   }, [get])
 
   useEffect(() => {
     if (!metaData.map((i) => i.name).includes('country')) return
-
     loadInitCountryList()
   }, [loadInitCountryList, metaData])
 
@@ -117,6 +119,25 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
     (props?: any) => React.ReactNode | undefined
   > = useMemo(
     () => ({
+      gender: (props) => (
+        <Select
+          key={props.key}
+          className="authing-g2-select"
+          options={[
+            { label: i18n.t('common.man'), value: 'M' },
+            { label: i18n.t('common.female'), value: 'F' },
+          ]}
+        />
+      ),
+      country: (props) => (
+        <Select
+          key={props.key}
+          className="authing-g2-select"
+          options={countryList}
+          showSearch
+          filterOption={filterOption}
+        />
+      ),
       image: () => <UploadImage />,
       number: (props) => (
         <InputNumber
@@ -187,27 +208,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           autoComplete="off"
         />
       ),
-      gender: (props) => (
-        <Select
-          key={props.key}
-          className="authing-g2-select"
-          options={[
-            { label: i18n.t('common.man'), value: 'M' },
-            { label: i18n.t('common.female'), value: 'F' },
-          ]}
-        />
-      ),
-      country: (props) => (
-        <Select
-          key={props.key}
-          className="authing-g2-select"
-          options={countryList}
-          showSearch
-          filterOption={filterOption}
-        />
-      ),
     }),
-
     [countryList]
   )
   const internalControlMap: Record<
@@ -411,14 +412,22 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             {children}
           </Form.Item>
         )
-        if (Object.keys(baseControlMap).includes(metaData.type))
+
+        if (Object.keys(baseControlMap).includes(metaData.name)) {
+          return userFormItem(
+            baseControlMap[metaData.name]({
+              options: metaData.options,
+              key: metaData.name,
+            })
+          )
+        } else if (Object.keys(baseControlMap).includes(metaData.type)) {
           return userFormItem(
             baseControlMap[metaData.type]({
               options: metaData.options,
               key: metaData.name,
             })
           )
-
+        }
         return userFormItem(
           <Input type="text" className="authing-g2-input" autoComplete="off" />
         )
