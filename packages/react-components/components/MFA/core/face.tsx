@@ -151,10 +151,13 @@ export const MFAFace = (props: any) => {
       mfaToken: props.initData.mfaToken,
     }
     const result = await bindRequest(requestData)
+    const { isFlowEnd, onGuardHandling } = result
 
-    result?.onGuardHandling?.()
-
-    faceLogin(result)
+    if (isFlowEnd) {
+      faceLogin(result)
+    } else {
+      onGuardHandling?.()
+    }
   }
 
   const faceCheck = async () => {
@@ -164,10 +167,12 @@ export const MFAFace = (props: any) => {
     }
 
     const result = await verifyRequest(requestData)
-
-    result?.onGuardHandling?.()
-
-    faceLogin(result)
+    const { isFlowEnd, onGuardHandling } = result
+    if (isFlowEnd) {
+      faceLogin(result)
+    } else {
+      onGuardHandling?.()
+    }
   }
 
   // bind 的情况
