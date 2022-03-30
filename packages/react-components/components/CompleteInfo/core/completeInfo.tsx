@@ -459,14 +459,14 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           // TODO 默认这里手机号与邮箱 都是有验证码的
           if (key === 'phone') {
             if (isInternationSms) {
-              const { phoneNumber, countryCode } = parsePhone(
+              const { countryCode } = parsePhone(
                 isInternationSms,
                 values[key],
                 areaCode
               )
               return {
                 ...baseData,
-                code: phoneNumber,
+                code: values.phoneCode,
                 phoneCountryCode: countryCode,
               }
             }
