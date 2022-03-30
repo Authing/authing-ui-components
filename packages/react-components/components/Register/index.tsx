@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { message, Tabs } from 'antd'
-import { RegisterMethods, User } from 'authing-js-sdk'
+import { Tabs } from 'antd'
+import { RegisterMethods } from 'authing-js-sdk'
 import { ChangeLanguage } from '../ChangeLanguage'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
 import { RegisterWithEmail } from './core/WithEmail'
 import { RegisterWithPhone } from './core/WithPhone'
-import { codeMap } from './codemap'
+
 import { tabSort } from '../_utils'
 import { i18n } from '../_utils/locales'
 import {

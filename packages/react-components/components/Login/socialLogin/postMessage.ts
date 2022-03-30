@@ -22,7 +22,7 @@ export const usePostMessage = () => {
     // 如果直接为 200 代表成功了
     if (code === 200) {
       localStorage.setItem('_authing_token', data?.token)
-      return { code, data }
+      return { code, data, onGuardHandling: undefined }
     }
 
     // TODO 完整的登陆信息 在 message 中 以 Json 的形式返回 待优化
