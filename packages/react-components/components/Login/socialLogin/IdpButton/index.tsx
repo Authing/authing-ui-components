@@ -8,13 +8,13 @@ import {
   Protocol,
 } from 'authing-js-sdk'
 import qs from 'qs'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import shortid from 'shortid'
 import { useGuardAuthClient } from '../../../Guard/authClient'
 import { IconFont } from '../../../IconFont'
 import version from '../../../version/version'
-import { isLarkBrowser, isWeChatBrowser, popupCenter } from '../../../_utils'
+import { popupCenter } from '../../../_utils'
 import { useGuardHttp } from '../../../_utils/guardHttp'
 export const IdpButton = (props: any) => {
   const { i, appId, userPoolId } = props
@@ -25,25 +25,13 @@ export const IdpButton = (props: any) => {
 
   const authClient = useGuardAuthClient()
 
-  const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    const popStateEvent = () => {
-      setLoading(false)
-    }
-    window.addEventListener('popstate', popStateEvent)
-    return () => {
-      window.removeEventListener('popstate', popStateEvent)
-    }
-  }, [])
   const renderBtn = useCallback(() => {
     if (i?.provider) {
       // 社交身份源
       const iconType = `authing-${i.provider.replace(/:/g, '-')}`
 
-      const onLogin = () => {
-        setLoading(true)
-        authClient.social.authorize(i.identifier, {
+      const onLogin = async () => {
+        await authClient.social.authorize(i.identifier, {
           guardVersion: `Guard@${version}`,
 
           // onSuccess(user) {
@@ -78,7 +66,6 @@ export const IdpButton = (props: any) => {
             />
           }
           onClick={onLogin}
-          loading={isWeChatBrowser() || isLarkBrowser() ? loading : false}
         >
           {t('login.loginBy', {
             name: i.displayName,
@@ -107,7 +94,6 @@ export const IdpButton = (props: any) => {
           size="large"
           icon={<Avatar size={20} src={i.logo} style={{ marginRight: 8 }} />}
           onClick={async () => {
-            setLoading(true)
             await post('/api/v2/connections/oidc/start-interaction', {
               state,
               protocol: i.protocol,
@@ -118,7 +104,6 @@ export const IdpButton = (props: any) => {
             })
             popupCenter(url)
           }}
-          loading={isWeChatBrowser() || isLarkBrowser() ? loading : false}
         >
           {t('login.loginBy', {
             name: i.displayName,
@@ -135,10 +120,8 @@ export const IdpButton = (props: any) => {
           size="large"
           icon={<Avatar size={20} src={i.logo} style={{ marginRight: 8 }} />}
           onClick={async () => {
-            setLoading(true)
             popupCenter(config.samlRequest!)
           }}
-          loading={isWeChatBrowser() || isLarkBrowser() ? loading : false}
         >
           {t('login.loginBy', {
             name: i.displayName,
@@ -156,10 +139,8 @@ export const IdpButton = (props: any) => {
           size="large"
           icon={<Avatar size={20} src={i.logo} style={{ marginRight: 8 }} />}
           onClick={async () => {
-            setLoading(true)
             popupCenter(config.casConnectionLoginUrl!)
           }}
-          loading={isWeChatBrowser() || isLarkBrowser() ? loading : false}
         >
           {t('login.loginBy', {
             name: i.displayName,
@@ -177,10 +158,8 @@ export const IdpButton = (props: any) => {
           size="large"
           icon={<Avatar size={20} src={i.logo} style={{ marginRight: 8 }} />}
           onClick={async () => {
-            setLoading(true)
             popupCenter(config.authUrl!)
           }}
-          loading={isWeChatBrowser() || isLarkBrowser() ? loading : false}
         >
           {t('login.loginBy', {
             name: i.displayName,
@@ -197,10 +176,8 @@ export const IdpButton = (props: any) => {
           size="large"
           icon={<Avatar size={20} src={i.logo} style={{ marginRight: 8 }} />}
           onClick={async () => {
-            setLoading(true)
             popupCenter(configItem.authorizationUrl)
           }}
-          loading={isWeChatBrowser() || isLarkBrowser() ? loading : false}
         >
           {t('login.loginBy', {
             name: i.displayName,
@@ -210,6 +187,6 @@ export const IdpButton = (props: any) => {
     } else {
       return null
     }
-  }, [appId, authClient.social, i, loading, post, t, userPoolId])
+  }, [appId, authClient.social, i, post, t, userPoolId])
   return renderBtn()
 }
