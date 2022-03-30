@@ -7,7 +7,7 @@ export const usePostMessage = () => {
   const { responseIntercept } = useGuardHttpClient()
 
   const onMessage = (evt: MessageEvent) => {
-    const { message, data, event } = evt.data
+    const { message, data, event, code } = evt.data
 
     const { source } = event || {}
     // 社会化登录是用 authing-js-sdk 实现的，不用再在这里回调了
@@ -19,8 +19,21 @@ export const usePostMessage = () => {
       return
     }
 
+    // 如果直接为 200 代表成功了
+    if (code === 200) {
+      localStorage.setItem('_authing_token', data?.token)
+      return { code, data }
+    }
+
     // TODO 完整的登陆信息 在 message 中 以 Json 的形式返回 待优化
-    const parsedMessage = JSON.parse(message)
+    let parsedMessage: any
+    try {
+      parsedMessage = JSON.parse(message)
+    } catch (error) {
+      console.error('Json parse error in postMessage')
+      console.error(`message: ${message}, code: ${code}`)
+      return
+    }
 
     const {
       code: authingCode,
