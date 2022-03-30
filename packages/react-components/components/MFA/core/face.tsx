@@ -138,9 +138,9 @@ export const MFAFace = (props: any) => {
       cooldown.current = 0
       setFaceState('retry')
     }
-    if (code === 500) {
-      message = t('common.checkfail')
-    }
+    // if (code === 500) {
+    //   message = t('common.checkfail')
+    // }
     props.mfaLogin(code, data, message)
   }
 
@@ -152,6 +152,8 @@ export const MFAFace = (props: any) => {
     }
     const result = await bindRequest(requestData)
 
+    result?.onGuardHandling?.()
+
     faceLogin(result)
   }
 
@@ -162,6 +164,8 @@ export const MFAFace = (props: any) => {
     }
 
     const result = await verifyRequest(requestData)
+
+    result?.onGuardHandling?.()
 
     faceLogin(result)
   }
