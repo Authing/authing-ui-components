@@ -7,7 +7,6 @@ import { i18n } from '../../_utils/locales'
 import { isLarkBrowser, isWeChatBrowser } from '../../_utils'
 import querystring from 'query-string'
 import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
-
 import { useScreenSize } from '../../AuthingGuard/hooks/useScreenSize'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { IconFont } from '../../IconFont'
@@ -18,6 +17,7 @@ import { useGuardPublicConfig } from '../../_utils/context'
 import { IdpButton } from './IdpButton'
 import { usePostMessage } from './postMessage'
 import { CodeAction } from '../../_utils/responseManagement/interface'
+import version from '../../version/version'
 
 export interface SocialLoginProps {
   appId: string
@@ -131,6 +131,8 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         //   onGuardHandling?.()
         // },
         authorization_params,
+        // 兼容后端因取不到 guardVersion 而走老版本 guard 逻辑 无法拉起信息补全问题
+        guardVersion: `Guard@${version}`,
         ...options,
       })
     }

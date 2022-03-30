@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import shortid from 'shortid'
 import { useGuardAuthClient } from '../../../Guard/authClient'
 import { IconFont } from '../../../IconFont'
+import version from '../../../version/version'
 import { isLarkBrowser, isWeChatBrowser, popupCenter } from '../../../_utils'
 import { useGuardHttp } from '../../../_utils/guardHttp'
 export const IdpButton = (props: any) => {
@@ -43,6 +44,8 @@ export const IdpButton = (props: any) => {
       const onLogin = () => {
         setLoading(true)
         authClient.social.authorize(i.identifier, {
+          guardVersion: `Guard@${version}`,
+
           // onSuccess(user) {
           //   // TODO
           //   // onSuccess(user)
