@@ -10,7 +10,6 @@ import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
 import { useScreenSize } from '../../AuthingGuard/hooks/useScreenSize'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { IconFont } from '../../IconFont'
-import { LoginConfig } from '../interface'
 import './style.less'
 import { useMediaSize } from '../../_utils/hooks'
 import { useGuardPublicConfig } from '../../_utils/context'
@@ -18,10 +17,11 @@ import { IdpButton } from './IdpButton'
 import { usePostMessage } from './postMessage'
 import { CodeAction } from '../../_utils/responseManagement/interface'
 import version from '../../version/version'
+import { GuardLocalConfig } from '../../Guard'
 
 export interface SocialLoginProps {
   appId: string
-  config: LoginConfig
+  config: GuardLocalConfig
   // onLogin: any
   onLoginFailed: any
   onLoginSuccess: any
