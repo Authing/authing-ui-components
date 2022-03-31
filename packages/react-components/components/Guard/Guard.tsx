@@ -30,7 +30,6 @@ export const Guard = memo((props: GuardProps) => {
   }
 
   const renderGuard = useRenderGuardCore(props, initState)
-  console.log('Guard')
 
   return renderGuard
 }, propsAreEqual)
