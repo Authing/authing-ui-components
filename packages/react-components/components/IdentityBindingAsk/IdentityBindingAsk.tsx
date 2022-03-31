@@ -30,9 +30,9 @@ export const GuardIdentityBindingAskView: React.FC<GuardIdentityBindingAskViewPr
         //   props.onCreate?.(data.user, authClient!) // 创建成功
         //   props.onLogin?.(data.user, authClient!) // 创建成功
         props.onCreate?.(data.user, authClient!) // 创建成功
-        if (shoudGoToComplete(data.user, 'login', publicConfig, true)) {
+        if (shoudGoToComplete(data.user, 'register', publicConfig)) {
           __changeModule?.(GuardModuleType.COMPLETE_INFO, {
-            context: 'login',
+            context: 'register',
             user: data.user,
           })
         } else {

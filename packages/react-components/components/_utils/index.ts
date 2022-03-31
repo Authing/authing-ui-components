@@ -441,6 +441,16 @@ export const shoudGoToComplete = (
     ) {
       return false
     }
+    if (
+      allFieldsToComp
+        .filter((item) => item.type === 'user')
+        .map((i) => i.name)
+        //@ts-ignore
+        .map((i) => user[i])
+        .filter((i) => Boolean(i)).length === 0
+    )
+      return false
+
     return true
   }
   if (
