@@ -28,7 +28,7 @@ export const UseCode: React.FC<UseCodeProps> = ({ mfaToken, onSubmit }) => {
     submitButtonRef.current?.onSpin(true)
 
     if (isAuthFlow) {
-      const { code, data, onGuardHandling } = await authFlow<{
+      const { data, onGuardHandling, isFlowEnd } = await authFlow<{
         recoveryCode: string
       }>(TotpRecoveryCodeBusinessAction.RecoveryTotp, {
         recoveryCode: values.recoveryCode,
@@ -36,7 +36,7 @@ export const UseCode: React.FC<UseCodeProps> = ({ mfaToken, onSubmit }) => {
 
       submitButtonRef.current?.onSpin(false)
 
-      if (code === 200) {
+      if (isFlowEnd) {
         onSubmit(data!.recoveryCode)
       } else {
         submitButtonRef.current?.onError()
