@@ -43,6 +43,7 @@ export const LoginWithWechatmpQrcode = (
       onSuccess(user) {
         // props.onLogin(200, user)
         props.onLoginSuccess(user)
+        clearInterval(timerRef.current)
       },
       onError: (ms) => {
         if (ms) {
@@ -58,6 +59,7 @@ export const LoginWithWechatmpQrcode = (
       },
       onAuthFlow: (scannedResult) => {
         // props.onLogin(code, mfaData, message)
+        clearInterval(timerRef.current)
         const { onGuardHandling } = responseIntercept(scannedResult)
         onGuardHandling?.()
       },

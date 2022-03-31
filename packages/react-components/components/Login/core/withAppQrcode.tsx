@@ -34,6 +34,7 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
       },
       onSuccess(user) {
         // props.onLogin(200, user)
+        clearInterval(timerRef.current)
         props.onLoginSuccess(user)
       },
       onError: (ms) => {
@@ -49,6 +50,7 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
         setLoading(true)
       },
       onAuthFlow: (scannedResult) => {
+        clearInterval(timerRef.current)
         const { onGuardHandling } = responseIntercept(scannedResult)
         onGuardHandling?.()
       },

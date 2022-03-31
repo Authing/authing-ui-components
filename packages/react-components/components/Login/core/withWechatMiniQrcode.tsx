@@ -38,6 +38,7 @@ export const LoginWithWechatMiniQrcode = (
       },
       onSuccess(user) {
         // props.onLogin(200, user)
+        clearInterval(timerRef.current)
         props.onLoginSuccess(user)
       },
       onError: (ms) => {
@@ -53,6 +54,7 @@ export const LoginWithWechatMiniQrcode = (
         setLoading(true)
       },
       onAuthFlow: (scannedResult) => {
+        clearInterval(timerRef.current)
         const { onGuardHandling } = responseIntercept(scannedResult)
         onGuardHandling?.()
       },
