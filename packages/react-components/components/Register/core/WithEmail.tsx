@@ -47,6 +47,8 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
 
   const [, onFinish] = useAsyncFn(
     async (values: any) => {
+      submitButtonRef.current.onSpin(true)
+
       if (onBeforeRegister) {
         try {
           const canRegister = await onBeforeRegister(
