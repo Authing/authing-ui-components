@@ -37,7 +37,9 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
         props.onLoginSuccess(user)
       },
       onError: (ms) => {
-        message.error(ms)
+        if (ms) {
+          message.error(ms)
+        }
       },
       onCodeLoadFailed: ({ message: mes }: any) => {
         message.error(JSON.parse(mes).message)

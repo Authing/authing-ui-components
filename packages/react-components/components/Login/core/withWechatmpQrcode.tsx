@@ -45,7 +45,9 @@ export const LoginWithWechatmpQrcode = (
         props.onLoginSuccess(user)
       },
       onError: (ms) => {
-        message.error(ms)
+        if (ms) {
+          message.error(ms)
+        }
       },
       onCodeLoadFailed: ({ message: mes }: any) => {
         message.error(JSON.parse(mes).message)
