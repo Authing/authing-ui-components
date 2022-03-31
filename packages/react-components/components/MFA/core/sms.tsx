@@ -124,11 +124,13 @@ export interface VerifyMFASmsProps {
   areaCode: string //绑定选择的
   phoneCountryCode?: string //后端返回的国家区号
   isInternationSms: boolean
+  userPhone?: string
 }
 
 export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   mfaToken,
   phone,
+  userPhone,
   onVerify,
   sendCodeRef,
   codeLength = 4,
@@ -145,6 +147,7 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   const [form] = Form.useForm()
 
   const [sent, setSent] = useState<boolean>(false)
+
   const { phoneNumber, countryCode } = parsePhone(
     isInternationSms,
     phone,
@@ -195,7 +198,7 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   const sendVerifyCode = async () => {
     try {
       await authClient.sendSmsCode(
-        phoneNumber,
+        userPhone ? userPhone : phoneNumber,
         phoneCountryCode ? phoneCountryCode : countryCode,
         SceneType.SCENE_TYPE_MFA_VERIFY
       )
@@ -267,13 +270,14 @@ export const MFASms: React.FC<{
   const isInternationSms = Boolean(
     publicConfig?.internationalSmsConfig?.enabled
   )
-
+  // todo 后续改 不用 phone 作为判断模式
   return (
     <>
       {phone ? (
         <VerifyMFASms
           mfaToken={mfaToken}
           phone={phone}
+          userPhone={userPhone}
           phoneCountryCode={phoneCountryCode}
           isInternationSms={isInternationSms}
           onVerify={(code, data) => {

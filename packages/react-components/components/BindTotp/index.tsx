@@ -63,15 +63,13 @@ export const GuardBindTotpView: React.FC = () => {
     }
 
     try {
-      const { data } = await get<any>(
+      const { code, message: msg } = await get<any>(
         `/api/v2/mfa/authenticator`,
         query,
         config
       )
-
-      if (data.code === ErrorCode.LOGIN_INVALID) {
-        // TODO 可以用拦截后暴露的 onGuardHandling 处理
-        message.error(data.message)
+      if (code === ErrorCode.LOGIN_INVALID) {
+        message.error(msg)
         changeModule?.(GuardModuleType.LOGIN, {})
         return
       }
