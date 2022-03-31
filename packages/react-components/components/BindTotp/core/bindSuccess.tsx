@@ -33,7 +33,6 @@ export const BindSuccess: React.FC<BindSuccessProps> = ({ secret, onBind }) => {
         {}
       )
       submitButtonRef.current?.onSpin(false)
-
       if (isFlowEnd) {
         onBind(data)
       } else {

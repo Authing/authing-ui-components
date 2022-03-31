@@ -68,8 +68,9 @@ export const GuardBindTotpView: React.FC = () => {
         query,
         config
       )
-      // TODO 可以用拦截后暴露的 onGuardHandling 处理
+
       if (data.code === ErrorCode.LOGIN_INVALID) {
+        // TODO 可以用拦截后暴露的 onGuardHandling 处理
         message.error(data.message)
         changeModule?.(GuardModuleType.LOGIN, {})
         return
@@ -79,18 +80,21 @@ export const GuardBindTotpView: React.FC = () => {
     }
 
     try {
-      const { data } = await post<any>(
+      const { data, code, onGuardHandling } = await post<any>(
         '/api/v2/mfa/totp/associate',
         query,
         config
       )
-
-      setSecret(data.recovery_code)
-      setQrcode(data.qrcode_data_url)
+      if (code === 200) {
+        setSecret(data.recovery_code)
+        setQrcode(data.qrcode_data_url)
+      } else {
+        onGuardHandling?.()
+      }
     } catch (error: any) {
       message.error(error?.message)
     }
-  }, [initData.mfaToken])
+  }, [])
 
   const onBind = (resUser?: User) => {
     if (isAuthFlow && resUser) {

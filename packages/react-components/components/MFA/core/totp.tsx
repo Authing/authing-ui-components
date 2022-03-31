@@ -85,6 +85,7 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
       onGuardHandling?.()
     }
   }, [mfaToken])
+
   return (
     <>
       <p className="authing-g2-mfa-title">{t('login.accPwdLoginVerify')}</p>
