@@ -444,7 +444,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
 
       const fieldValues = Object.keys(values)
         // 先过滤掉 为空的字段
-        .filter((key) => values[key] !== undefined)
+        .filter((key) => values[key] !== undefined && values[key] !== '')
         // 再过滤掉 两个验证码的字段
         .filter((key) => !['phoneCode', 'emailCode'].includes(key))
         .map((key) => {
