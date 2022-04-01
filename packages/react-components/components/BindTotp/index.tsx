@@ -53,7 +53,7 @@ export const GuardBindTotpView: React.FC = () => {
 
   const [bindInfo, fetchBindInfo] = useAsyncFn(async () => {
     const query = {
-      type: 'totp',
+      // type: 'totp',
       source: 'APPLICATION',
     }
     const config = {
