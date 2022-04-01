@@ -44,6 +44,7 @@ export const GuardRegisterView: React.FC = () => {
         changeModule?.(GuardModuleType.LOGIN)
 
         events?.onRegister?.(data, authClient)
+        changeModule?.(GuardModuleType.LOGIN, {})
       },
       onRegisterFailed: (code: number, data: any = {}, message?: string) => {
         events?.onRegisterError?.({

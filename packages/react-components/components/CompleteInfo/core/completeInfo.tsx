@@ -322,11 +322,9 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
               maxLength={verifyCodeLength}
               data={''}
               scene={EmailScene.VerifyCode}
-              fieldName="internal email:email"
+              fieldName="email"
               form={form}
-              onSendCodeBefore={() =>
-                form.validateFields(['internal email:email'])
-              }
+              onSendCodeBefore={() => form.validateFields(['email'])}
             />
           </Form.Item>
         </>
