@@ -34,7 +34,7 @@ export const GuardIdentityBindingView: React.FC = () => {
 
   const events = useGuardEvents()
 
-  const { publicKey, autoRegister, agreementEnabled } = config
+  const { publicKey, agreementEnabled } = config
 
   const publicConfig = useGuardPublicConfig()
 
@@ -192,13 +192,11 @@ export const GuardIdentityBindingView: React.FC = () => {
     () =>
       agreementEnabled
         ? config?.agreements?.filter(
-            (agree) =>
-              agree.lang === i18n.language &&
-              (autoRegister || !!agree?.availableAt)
+            (agree) => agree.lang === i18n.language && !!agree?.availableAt
           ) ?? []
         : [],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [agreementEnabled, autoRegister, config?.agreements, i18n.language]
+    [agreementEnabled, config?.agreements, i18n.language]
   )
 
   const passwordLoginMethods = useMemo<PasswordLoginMethods[]>(() => {
