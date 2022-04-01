@@ -160,9 +160,9 @@ export const GuardIdentityBindingView: React.FC = () => {
   // }
 
   const onLoginSuccess = (data: any) => {
-    events?.onBinding?.(data.user, authClient!) // 绑定成功
+    events?.onBinding?.(data, authClient!) // 绑定成功
 
-    events?.onLogin?.(data.user, authClient!) // 登录成功
+    events?.onLogin?.(data, authClient!) // 登录成功
   }
 
   const onLoginFailed = (code: number, data: any, message?: string) => {
