@@ -1,12 +1,19 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconFont } from '../IconFont'
+import { useGuardPageConfig } from '../_utils/context'
 import { changeLang } from '../_utils/locales'
 
 export const ChangeLanguage = (props: any) => {
   const { i18n } = useTranslation()
-  if (props.langRange.length <= 1) {
-    return <></>
+
+  const guardPageConfig = useGuardPageConfig()
+
+  if (
+    props.langRange.length <= 1 ||
+    !guardPageConfig?.global?.showChangeLanguage
+  ) {
+    return null
   }
 
   let switchText = 'English'

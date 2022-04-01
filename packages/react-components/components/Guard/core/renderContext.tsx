@@ -29,6 +29,7 @@ import {
 import { GuardHttp, initGuardHttp } from '../../_utils/guardHttp'
 import { initI18n } from '../../_utils/locales'
 import { createGuardXContext } from '../../_utils/context'
+import { useGuardPageConfig } from '../../_utils/guardPageConfig'
 
 interface IBaseAction<T = string, P = any> {
   type: T & string
@@ -113,6 +114,9 @@ export const RenderContext: React.FC<{
     httpClient,
     serError
   )
+
+  // guardPageConfig
+  const guardPageConfig = useGuardPageConfig(appId, httpClient, serError)
 
   // SSO 登录
   useEffect(() => {
@@ -236,6 +240,7 @@ export const RenderContext: React.FC<{
       moduleEvents,
       publicConfig,
       authClint,
+      guardPageConfig,
     ]
 
     return !list.includes(undefined)
@@ -248,6 +253,7 @@ export const RenderContext: React.FC<{
     moduleEvents,
     publicConfig,
     authClint,
+    guardPageConfig,
   ])
 
   const contextValues = useMemo(
@@ -263,6 +269,7 @@ export const RenderContext: React.FC<{
       ...moduleEvents,
       initData: moduleState.initData,
       currentModule: moduleState,
+      guardPageConfig,
     }),
     [
       appId,
@@ -270,6 +277,7 @@ export const RenderContext: React.FC<{
       defaultMergedConfig,
       events,
       finallyConfig,
+      guardPageConfig,
       httpClient,
       isAuthFlow,
       moduleEvents,

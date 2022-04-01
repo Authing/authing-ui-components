@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useState } from 'react'
 import { GuardPageConfig } from '..'
 import { GuardHttp } from './guardHttp'
 import { AuthingResponse } from './http'
@@ -10,7 +11,7 @@ export const getPageConfig = (appId: string) => pageConfigMap?.[appId]
 export const setPageConfig = (appId: string, config: GuardPageConfig) =>
   (pageConfigMap[appId] = config)
 
-export const requestPublicConfig = async (
+export const requestGuardPageConfig = async (
   appId: string,
   httpClient: GuardHttp
 ): Promise<GuardPageConfig> => {
@@ -35,4 +36,33 @@ export const requestPublicConfig = async (
   setPageConfig(appId, res.data)
 
   return getPageConfig(appId)
+}
+
+export const useGuardPageConfig = (
+  appId: string,
+  httpClient?: GuardHttp,
+  serError?: any
+) => {
+  const [pageConfig, setPageConfig] = useState<GuardPageConfig>()
+
+  const initPublicConfig = useCallback(async () => {
+    if (httpClient && appId)
+      if (!getPageConfig(appId)) {
+        try {
+          await requestGuardPageConfig(appId, httpClient)
+        } catch (error) {
+          serError(error)
+        }
+      }
+
+    setPageConfig(getPageConfig(appId))
+  }, [appId, httpClient, serError])
+
+  useEffect(() => {
+    initPublicConfig()
+  }, [initPublicConfig])
+
+  if (pageConfig) {
+    return pageConfig
+  }
 }

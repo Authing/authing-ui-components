@@ -1,5 +1,10 @@
 import React, { useContext } from 'react'
-import { GuardEvents, GuardLocalConfig, GuardModuleType } from '..'
+import {
+  GuardEvents,
+  GuardLocalConfig,
+  GuardModuleType,
+  GuardPageConfig,
+} from '..'
 import { ApplicationConfig } from '../AuthingGuard/api'
 import { ModuleState } from '../Guard/GuardModule/stateMachine'
 import { GuardHttp } from './guardHttp'
@@ -28,6 +33,8 @@ export interface IGuardContext {
   isAuthFlow: boolean
 
   contextLoaded: boolean
+
+  guardPageConfig: Partial<GuardPageConfig>
 }
 
 const DefaultGuardX: IGuardContext = {
@@ -50,6 +57,8 @@ const DefaultGuardX: IGuardContext = {
   isAuthFlow: false,
 
   contextLoaded: false,
+
+  guardPageConfig: {} as Partial<GuardPageConfig>,
 }
 
 const GuardXContext = React.createContext<IGuardContext>(DefaultGuardX)
@@ -115,3 +124,6 @@ export const useGuardContextLoaded = () =>
   useContext(GuardXContext).contextLoaded
 
 export const useGuardIsAuthFlow = () => useContext(GuardXContext).isAuthFlow
+
+export const useGuardPageConfig = () =>
+  useContext(GuardXContext).guardPageConfig
