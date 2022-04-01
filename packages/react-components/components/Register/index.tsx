@@ -32,47 +32,6 @@ export const GuardRegisterView: React.FC = () => {
 
   const publicConfig = useGuardPublicConfig()
 
-  // const __codePaser = (code: number) => {
-  //   const action = codeMap[code]
-
-  //   if (code === 200) {
-  //     return (user: User) => {
-  //       // TODO 用户信息补全 等待后端接口修改
-  //       // if (shoudGoToComplete(user, 'register', publicConfig)) {
-  //       //   changeModule?.(GuardModuleType.COMPLETE_INFO, {
-  //       //     context: 'register',
-  //       //     user: user,
-  //       //   })
-  //       // } else {
-  //       // }
-  //       events?.onRegister?.(user, authClient)
-  //       changeModule?.(GuardModuleType.LOGIN, {})
-  //     }
-  //   }
-
-  //   if (!action) {
-  //     return (initData?: any) => {
-  //       message.error(
-  //         initData?._message === 'Network Error'
-  //           ? t('common.error4network')
-  //           : initData?._message
-  //       )
-  //       console.error('未捕获 code', code)
-  //     }
-  //   }
-
-  //   if (action?.action === 'message') {
-  //     return (initData?: any) => {
-  //       message.error(initData?._message)
-  //     }
-  //   }
-
-  //   // 最终结果
-  //   return () => {
-  //     console.error('last action at register')
-  //   }
-  // }
-
   const verifyLoginMethods = useMemo<VerifyLoginMethods[]>(
     () =>
       publicConfig?.verifyCodeTabConfig?.enabledLoginMethods ?? ['phone-code'],
@@ -81,22 +40,9 @@ export const GuardRegisterView: React.FC = () => {
 
   const registerContextProps = useMemo(
     () => ({
-      // onRegister: (code: number, data: any = {}, message?: string) => {
-      //   const callback = __codePaser(code)
-      //   if (code !== 200) {
-      //     events?.onRegisterError?.({
-      //       code,
-      //       data,
-      //       message,
-      //     })
-      //   }
-
-      //   callback?.({
-      //     ...data,
-      //     _message: message,
-      //   })
-      // },
       onRegisterSuccess: (data: any = {}, message?: string) => {
+        changeModule?.(GuardModuleType.LOGIN)
+
         events?.onRegister?.(data, authClient)
         changeModule?.(GuardModuleType.LOGIN, {})
       },
