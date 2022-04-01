@@ -1,11 +1,10 @@
-import { Button, message } from 'antd'
+import { Button } from 'antd'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { GuardModuleType } from '..'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { IconFont } from '../IconFont'
-import { codeMap } from '../Login/codemap'
 import {
   useGuardEvents,
   useGuardInitData,
@@ -30,85 +29,33 @@ export const GuardIdentityBindingAskView: React.FC = () => {
 
   const events = useGuardEvents()
 
-  const __codePaser = (code: number) => {
-    const action = codeMap[code]
-    if (code === 200) {
-      return (data: any) => {
-        //   props.onCreate?.(data.user, authClient!) // 创建成功
-        //   props.onLogin?.(data.user, authClient!) // 创建成功
-        events?.onCreate?.(data.user, authClient!) // 创建成功
-        // if (shoudGoToComplete(data.user, 'login', publicConfig, true)) {
-        //   changeModule?.(GuardModuleType.COMPLETE_INFO, {
-        //     context: 'login',
-        //     user: data.user,
-        //   })
-        // } else {
-        events?.onLogin?.(data.user, authClient!) // 创建成功
-        // }
-      }
-    }
+  const onCreate = (data: any) => {
+    events?.onLogin?.(data, authClient)
 
-    if (!action) {
-      return (initData?: any) => {
-        // initData?._message && message.error(initData?._message)
-        console.error('未捕获 code', code)
-      }
-    }
-
-    // 解析成功
-    if (action?.action === 'changeModule') {
-      let m = action.module ? action.module : GuardModuleType.ERROR
-      let init = action.initData ? action.initData : {}
-      return (initData?: any) => {
-        changeModule?.(m, { ...initData, ...init })
-      }
-    }
-    if (action?.action === 'message') {
-      return (initData?: any) => {
-        message.error(initData?._message)
-      }
-    }
-    if (action?.action === 'accountLock') {
-      return () => {}
-    }
-
-    // 最终结果
-    return (initData?: any) => {
-      // props.onLoginError?.(data, client!) // 未捕获 code
-      console.error('last action at loginview')
-      message.error(initData?._message)
-    }
+    events?.onCreate?.(data, authClient)
   }
 
-  const onCreate = (code: any, data: any, message?: string) => {
-    const callback = __codePaser?.(code)
-    if (code !== 200) {
-      events?.onCreateError?.({
-        code,
-        data,
-        message,
-      })
-      events?.onLoginError?.({
-        code,
-        data,
-        message,
-      })
-    }
-    if (!data) {
-      data = {}
-    }
-    data._message = message
-    callback?.(data)
+  const onCreateError = (code: any, data: any) => {
+    events?.onCreateError?.({
+      code,
+      data,
+    })
+    events?.onLoginError?.({
+      code,
+      data,
+    })
   }
 
   const [createLoading, createAccount] = useAsyncFn(async () => {
     const url = '/interaction/federation/binding/register'
 
-    const { code, onGuardHandling, data, message } = await post(url, {})
+    const { code, onGuardHandling, data } = await post(url, {})
 
     if (code === 200) {
-      onCreate(code, data, message)
+      onCreate(data)
     } else {
+      onCreateError(code, data)
+
       onGuardHandling?.()
     }
   }, [])
