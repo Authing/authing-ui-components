@@ -258,10 +258,13 @@ export const LoginWithVerifyCode = (props: any) => {
 
       submitButtonRef?.current.onSpin(false)
 
-      const handMode = onGuardHandling?.()
-      // 向上层抛出错误 执行绑定失败钩子
-      handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
-
+      if (code === 200) {
+        onLoginSuccess(data)
+      } else {
+        const handMode = onGuardHandling?.()
+        // 向上层抛出错误 执行绑定失败钩子
+        handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
+      }
       return
     }
 
