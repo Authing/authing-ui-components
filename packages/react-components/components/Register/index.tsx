@@ -41,8 +41,6 @@ export const GuardRegisterView: React.FC = () => {
   const registerContextProps = useMemo(
     () => ({
       onRegisterSuccess: (data: any = {}, message?: string) => {
-        changeModule?.(GuardModuleType.LOGIN)
-
         events?.onRegister?.(data, authClient)
         changeModule?.(GuardModuleType.LOGIN, {})
       },
