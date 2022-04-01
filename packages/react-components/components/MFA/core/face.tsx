@@ -34,9 +34,13 @@ const useDashoffset = (percent: number) => {
 
 export const MFAFace = (props: any) => {
   const mfaBackContext = useContext(MFABackStateContext)
+
   let { postForm } = useGuardHttp()
+
   let { t } = useTranslation()
+
   const [faceState, setFaceState] = useState('ready') // ready, identifying, retry
+
   const [percent, setPercent] = useState(0) // 识别进度（相似性）
 
   const mfaBusinessRequest = useMfaBusinessRequest()
@@ -128,22 +132,6 @@ export const MFAFace = (props: any) => {
     return base64Data
   }
 
-  const faceLogin = (result: any) => {
-    let { code, data, message } = result
-
-    if (code === 1700 || code === 1701 || code === 1702) {
-      p1.current = undefined
-      p2.current = undefined
-      interval.current = undefined
-      cooldown.current = 0
-      setFaceState('retry')
-    }
-    // if (code === 500) {
-    //   message = t('common.checkfail')
-    // }
-    props.mfaLogin(code, data, message)
-  }
-
   const faceBind = async () => {
     const requestData = {
       photoA: p1.current!,
@@ -151,12 +139,25 @@ export const MFAFace = (props: any) => {
       mfaToken: props.initData.mfaToken,
     }
     const result = await bindRequest(requestData)
-    const { isFlowEnd, onGuardHandling } = result
+
+    const { isFlowEnd, onGuardHandling, code, data } = result
 
     if (isFlowEnd) {
-      faceLogin(result)
+      props.mfaLogin(200, data)
     } else {
-      onGuardHandling?.()
+      if (code === 1700 || code === 1701 || code === 1702) {
+        p1.current = undefined
+
+        p2.current = undefined
+
+        interval.current = undefined
+
+        cooldown.current = 0
+
+        setFaceState('retry')
+      } else {
+        onGuardHandling?.()
+      }
     }
   }
 
@@ -167,11 +168,25 @@ export const MFAFace = (props: any) => {
     }
 
     const result = await verifyRequest(requestData)
-    const { isFlowEnd, onGuardHandling } = result
+
+    const { isFlowEnd, onGuardHandling, data, code } = result
+
     if (isFlowEnd) {
-      faceLogin(result)
+      props.mfaLogin(200, data)
     } else {
-      onGuardHandling?.()
+      if (code === 1700 || code === 1701 || code === 1702) {
+        p1.current = undefined
+
+        p2.current = undefined
+
+        interval.current = undefined
+
+        cooldown.current = 0
+
+        setFaceState('retry')
+      } else {
+        onGuardHandling?.()
+      }
     }
   }
 
