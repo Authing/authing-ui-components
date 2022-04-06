@@ -18,7 +18,7 @@ import {
 } from "@authing/react-ui-components";
 import "@authing/react-ui-components/lib/index.min.css";
 import {
-  GuardComponentConifg,
+  GuardComponentConfig,
   GuardLocalConfig,
 } from "@authing/react-ui-components/components/Guard/config";
 import { GuardEvents } from "@authing/react-ui-components/components/Guard/event";
@@ -116,7 +116,7 @@ export class Guard {
       <ReactAuthingGuard
         {...(evts as GuardEvents)}
         appId={this.appId}
-        config={this.config as GuardComponentConifg}
+        config={this.config as GuardComponentConfig}
         visible={this.visible}
       />,
       Guard.getGuardContainer(this.config?.target),
