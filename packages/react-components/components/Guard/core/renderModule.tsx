@@ -200,7 +200,6 @@ export const RenderModule: React.FC<{
   }, [ComponentsMapping, contextLoaded, loadingComponent, moduleName])
 
   const visible = useMemo(() => {
-    console.log(guardProps.visible)
     return guardProps.visible
   }, [guardProps.visible])
 
