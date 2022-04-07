@@ -279,22 +279,6 @@
     lodash "^4.17.15"
     resize-observer-polyfill "^1.5.0"
 
-"@authing/react-ui-components@^3.0.30":
-  version "3.0.31"
-  resolved "https://registry.yarnpkg.com/@authing/react-ui-components/-/react-ui-components-3.0.31.tgz#87ff9ee2411d0168e4587cca59186602b182eaea"
-  integrity sha512-NafmkuKfL1RcvcgGST6jpCY6Gh7ea25s6qi4V2AMqjDbe9SXkS8rTpPHY3D6JoVUjmTjvX6097sjHLv8iRui5Q==
-  dependencies:
-    antd "^4.8.0"
-    authing-js-sdk "4.23.27"
-    face-api.js "^0.22.2"
-    fastclick "^1.0.6"
-    global "^4.4.0"
-    phone "^3.1.12"
-    qs "^6.9.4"
-    react-responsive "^9.0.0-beta.5"
-    react-use "^17.3.1"
-    wildcard "^1.1.2"
-
 "@babel/code-frame@7.10.4", "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.5.5":
   version "7.10.4"
   resolved "https://registry.npm.taobao.org/@babel/code-frame/download/@babel/code-frame-7.10.4.tgz#168da1a36e90da68ae8d49c0f1b48c7c6249213a"
@@ -6027,17 +6011,6 @@ atob@^2.1.2:
   version "2.1.2"
   resolved "https://registry.npm.taobao.org/atob/download/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha1-bZUX654DDSQ2ZmZR6GvZ9vE1M8k=
-
-authing-js-sdk@4.23.27:
-  version "4.23.27"
-  resolved "https://registry.npmmirror.com/authing-js-sdk/-/authing-js-sdk-4.23.27.tgz#688be3faf4827c626d340e33acd4cbd9c3452529"
-  integrity sha512-3LmY1lcf8HQGLeSkBfKtvRfnmRnuOGNHresW11bdEbGuf8QxTMDLdCkXMqQWqVKf24d5zZbqwZ/t2LPvOU5LTw==
-  dependencies:
-    axios "^0.19.2"
-    crypto-js "^4.0.0"
-    jsencrypt "^3.1.0"
-    jwt-decode "^2.2.0"
-    sm-crypto "^0.3.7"
 
 authing-js-sdk@4.23.29-alpha.1:
   version "4.23.29-alpha.1"

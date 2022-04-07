@@ -5,6 +5,9 @@ import { useGuardContext } from '../context/global/context'
 import { i18n } from './locales'
 import { RegisterMethods, User } from 'authing-js-sdk'
 import { ApplicationConfig, ComplateFiledsPlace } from '../AuthingGuard/api'
+import { GuardProps } from '../Guard'
+import isEqual from 'lodash/isEqual'
+import omit from 'lodash/omit'
 export * from './popupCenter'
 export * from './clipboard'
 
@@ -496,4 +499,14 @@ export const phoneDesensitization = (phone: string) => {
 
 export const getHundreds = (num: number) => {
   return Math.floor(num / 100)
+}
+
+export const GuardPropsFilter = (pre: GuardProps, current: GuardProps) => {
+  const preAttribute = Object.keys(pre).filter((name) => name.startsWith('on'))
+
+  const currentAttribute = Object.keys(current).filter((name) =>
+    name.startsWith('on')
+  )
+
+  return isEqual(omit(pre, preAttribute), omit(current, currentAttribute))
 }
