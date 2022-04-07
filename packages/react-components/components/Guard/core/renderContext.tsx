@@ -215,8 +215,6 @@ export const RenderContext: React.FC<{
         if (finallyConfig?.__singleComponent__) {
           events?.__changeModule?.(moduleName, initData)
         } else {
-          // onChangeModule(moduleName, initData)
-
           if (!events?.onBeforeChangeModule) {
             guardStateMachine?.next(moduleName, initData)
           } else if (await events.onBeforeChangeModule(moduleName, initData)) {

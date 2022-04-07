@@ -2,12 +2,15 @@ import { AuthenticationClient, CommonMessage } from 'authing-js-sdk'
 import { Lang } from 'authing-js-sdk/build/main/types'
 import { GuardMode } from '../AuthingGuard/types/GuardConfig'
 import { GuardModuleType } from '../Guard/module'
+import { FacePlugin } from '../_utils/facePlugin/interface'
+
 export interface IG2FCProps extends IG2Events {
   appId: string
   tenantId?: string
   config?: Partial<IG2Config>
   visible?: boolean
   initData?: any
+  facePlugin?: FacePlugin
 }
 
 export interface IG2FCViewProps extends IG2FCProps {

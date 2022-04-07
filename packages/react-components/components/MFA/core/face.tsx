@@ -6,7 +6,6 @@ import React, {
   useState,
 } from 'react'
 import { useTranslation } from 'react-i18next'
-import { detectSingleFace } from 'face-api.js'
 import { useGuardHttp } from '../../_utils/guardHttp'
 import {
   FACE_SCORE,
@@ -23,6 +22,8 @@ import { faceErrorMessage } from '../../_utils/errorFace'
 import { MFABackStateContext } from '..'
 import { useGuardPublicConfig } from '../../_utils/context'
 import { MfaBusinessAction, useMfaBusinessRequest } from '../businessRequest'
+import { getFacePlugin } from '../../_utils/facePlugin'
+
 const useDashoffset = (percent: number) => {
   // 接受 0 - 1，返回 0-700 之间的偏移量
   let offset = percent * 7
@@ -64,12 +65,9 @@ export const MFAFace = (props: any) => {
   // 预加载数据
   useEffect(() => {
     // 载入 cdn
-    let cdnContext = getCurrentFaceDetectionNet().loadFromUri(
+    getCurrentFaceDetectionNet().loadFromUri(
       `${cdnBase}/face-api/v1/tiny_face_detector_model-weights_manifest.json`
     )
-    cdnContext.then((result) => {
-      // setLoading(false)
-    })
 
     if (faceState !== 'identifying') {
       return // 不存在 video dom，不要去尝试了
@@ -235,6 +233,9 @@ export const MFAFace = (props: any) => {
       return
     }
     const options = getFaceDetectorOptions()
+
+    const { detectSingleFace } = getFacePlugin()
+
     const result = await detectSingleFace(videoDom, options)
 
     if (result) {
