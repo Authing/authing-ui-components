@@ -6,7 +6,7 @@ import { GuardLocalConfig } from './config'
 import { GuardModuleType } from './module'
 import 'moment/locale/zh-cn'
 import { useRenderGuardCore } from './core/index'
-import isEqual from 'lodash/isEqual'
+import { GuardPropsFilter } from '../_utils'
 
 export interface GuardProps extends GuardEvents, IG2FCProps {
   config?: Partial<GuardLocalConfig>
@@ -18,7 +18,7 @@ interface ModuleState {
 }
 
 const propsAreEqual = (pre: GuardProps, current: GuardProps) => {
-  return !isEqual(pre, current)
+  return GuardPropsFilter(pre, current)
 }
 
 export const Guard = memo((props: GuardProps) => {
