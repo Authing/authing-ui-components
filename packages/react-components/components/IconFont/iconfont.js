@@ -1,22 +1,11 @@
-/** eslint-disable */
-/**
- * !!!!!!!!!!!! 注意注意！！！！！！！！！！！！！
- *
- * 只要替换 svgStr 中的字符串即可，为了兼容 SSR！！！！！！
- *
- */
-import { svgStr } from './svg'
-var init = function (a) {
-  var c,
-    t,
-    l,
-    e,
-    i,
-    o,
-    h = svgStr,
-    m = (m = document.getElementsByTagName('script'))[
-      m.length - 1
-    ].getAttribute('data-injectcss')
+export const init = function (a, h) {
+  console.log('init')
+  let c, t, l, e, i, o
+
+  let m = document.getElementsByTagName('script')
+
+  m = m[m.length - 1].getAttribute('data-injectcss')
+
   if (m && !a.__iconfont__svg__cssinject__) {
     a.__iconfont__svg__cssinject__ = !0
     try {
@@ -31,7 +20,7 @@ var init = function (a) {
     i || ((i = !0), l())
   }
   ;(c = function () {
-    var a, c, t
+    let a, c, t
     ;((t = document.createElement('div')).innerHTML = h),
       (h = null),
       (c = t.getElementsByTagName('svg')[0]) &&
@@ -67,8 +56,4 @@ var init = function (a) {
         (e.onreadystatechange = function () {
           'complete' == e.readyState && ((e.onreadystatechange = null), n())
         }))
-}
-
-if (typeof window !== 'undefined' && typeof window.document !== 'undefined') {
-  init(window)
 }

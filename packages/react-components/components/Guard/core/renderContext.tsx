@@ -30,6 +30,7 @@ import { GuardHttp, initGuardHttp } from '../../_utils/guardHttp'
 import { initI18n } from '../../_utils/locales'
 import { createGuardXContext } from '../../_utils/context'
 import { useGuardPageConfig } from '../../_utils/guardPageConfig'
+import { useGuardIconfont } from '../../IconFont/useGuardIconfont'
 
 interface IBaseAction<T = string, P = any> {
   type: T & string
@@ -46,7 +47,7 @@ export const RenderContext: React.FC<{
   const [authClint, setAuthClint] = useState<AuthenticationClient>()
   const [httpClient, setHttpClient] = useState<GuardHttp>()
   const [publicConfig, setPublicConfig] = useState<ApplicationConfig>()
-  const [error, serError] = useState()
+  const [error, setError] = useState()
   const [isAuthFlow, setIsAuthFlow] = useState(true)
 
   // 状态机
@@ -112,11 +113,14 @@ export const RenderContext: React.FC<{
     appId,
     defaultMergedConfig,
     httpClient,
-    serError
+    setError
   )
 
   // guardPageConfig
-  const guardPageConfig = useGuardPageConfig(appId, httpClient, serError)
+  const guardPageConfig = useGuardPageConfig(appId, httpClient, setError)
+
+  // iconfont
+  const iconfontLoaded = useGuardIconfont(publicConfig)
 
   // SSO 登录
   useEffect(() => {
@@ -194,12 +198,6 @@ export const RenderContext: React.FC<{
       insertStyles(finallyConfig.contentCss)
   }, [finallyConfig])
 
-  // TODO 触发 onLoad 事件
-  useEffect(() => {
-    if (!authClint) return
-    events?.onLoad?.(authClint)
-  }, [authClint, events])
-
   // 是否使用 Guard auth flow
   useEffect(() => {
     if (!finallyConfig) return
@@ -239,6 +237,7 @@ export const RenderContext: React.FC<{
       publicConfig,
       authClint,
       guardPageConfig,
+      iconfontLoaded,
     ]
 
     return !list.includes(undefined)
@@ -252,7 +251,15 @@ export const RenderContext: React.FC<{
     publicConfig,
     authClint,
     guardPageConfig,
+    iconfontLoaded,
   ])
+
+  // TODO 触发 onLoad 事件
+  useEffect(() => {
+    if (!contextLoaded) return
+
+    events?.onLoad?.(authClint!)
+  }, [authClint, contextLoaded, events])
 
   const contextValues = useMemo(
     () => ({
