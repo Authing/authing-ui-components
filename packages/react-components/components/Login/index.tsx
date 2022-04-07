@@ -349,11 +349,11 @@ export const GuardLoginView = () => {
         innerContainer.classList.add('g2-view-login-mobile-inner')
       }
     } else {
-      containerDOM.classList.remove('g2-view-header-mobile')
+      containerDOM?.classList.remove('g2-view-header-mobile')
       innerContainer?.classList.remove('g2-view-login-mobile-inner')
     }
     return () => {
-      containerDOM.classList.remove('g2-view-header-mobile')
+      containerDOM?.classList.remove('g2-view-header-mobile')
       innerContainer?.classList.remove('g2-view-login-mobile-inner')
     }
   }, [isPhoneMedia, noLoginMethods])
