@@ -1,4 +1,4 @@
-import { some } from 'lodash'
+import some from 'lodash/some'
 import { i18n } from './locales'
 
 const isOriginMatched = (

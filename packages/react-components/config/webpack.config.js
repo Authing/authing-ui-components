@@ -25,7 +25,8 @@ const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpack
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter')
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const NpmDtsWebpackPlugin = require('npm-dts-webpack-plugin')
-const WebpackBundleAnalyzer = require('webpack-bundle-analyzer')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin
 
 const postcssNormalize = require('postcss-normalize')
 
@@ -635,6 +636,7 @@ module.exports = function (webpackEnv) {
       ],
     },
     plugins: [
+      new BundleAnalyzerPlugin(),
       // Generates an `index.html` file with the <script> injected.
       // config.build.bundleAnalyzerReport &&
       // new (require('webpack-bundle-analyzer').BundleAnalyzerPlugin)(),

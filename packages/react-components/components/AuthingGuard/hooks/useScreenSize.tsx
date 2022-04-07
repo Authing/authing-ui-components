@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-// import { inRange, debounce } from 'lodash'
 
 function debounce(fn: Function, delay: number, immediate = true) {
   let timer: any

@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { message, Popover, Tabs, Tooltip } from 'antd'
-import { intersection } from 'lodash'
+import intersection from 'lodash/intersection'
 
 import { LoginWithPassword } from './core/withPassword/index'
 import { LoginWithLDAP } from './core/withLDAP'
@@ -182,66 +182,6 @@ export const GuardLoginView = () => {
       return defaultMethod
     }
   }, [defaultMethod, qrcodeTabsSettings])
-
-  // const __codePaser = (code: number) => {
-  //   const action = codeMap[code]
-
-  //   if (code === 200) {
-  //     return (data: any) => {
-  //       events?.onLogin?.(data, client!) // 登录成功
-  //     }
-  //   }
-
-  //   if (!action) {
-  //     return (initData?: any) => {
-  //       console.error('未捕获 code', code)
-  //     }
-  //   }
-
-  //   // 需要知道所有环境的错误信息
-  //   if (action?.action === 'message') {
-  //     return () => {
-  //       setErrorNumber(errorNumber + 1)
-  //     }
-  //   }
-
-  //   if (action?.action === 'accountLock') {
-  //     return (initData?: any) => {
-  //       setAccountLock(true)
-  //     }
-  //   }
-  //   // 解析成功
-  //   if (action?.action === 'changeModule') {
-  //     let guardModule = action.module ? action.module : GuardModuleType.ERROR
-  //     let init = action.initData ? action.initData : {}
-  //     return (initData?: any) => {
-  //       changeModule?.(guardModule, { ...initData, ...init })
-  //     }
-  //   }
-
-  //   // 最终结果
-  //   return (initData?: any) => {
-  //     // props.onLoginError?.(data, client!) // 未捕获 code
-  //     console.error('last action at login view')
-  //     message.error(initData?._message)
-  //   }
-  // }
-
-  // const onLogin = (code: any, data: any, message?: string) => {
-  //   const callback = __codePaser?.(code)
-  //   if (code !== 200) {
-  //     events?.onLoginError?.({
-  //       code,
-  //       data,
-  //       message,
-  //     })
-  //   }
-  //   if (!data) {
-  //     data = {}
-  //   }
-  //   data._message = message
-  //   callback?.(data)
-  // }
 
   const onLoginSuccess = (data: any, message?: string) => {
     // data._message = message
