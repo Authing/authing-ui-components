@@ -1,10 +1,27 @@
 # Authing UI Components
 
-<div align=center><img src="https://files.authing.co/authing-console/authing-logo-new-20210924.svg"></div>
+<div align=center><img width="300" src="https://files.authing.co/authing-console/authing-logo-new-20210924.svg"></div>
 
-<br/>
+<div align="center">
+  <a href="javascript:;"><img src="https://img.shields.io/badge/test-passing-brightgreen" /></a>
+  <a href="https://forum.authing.cn/" target="_blank"><img src="https://img.shields.io/badge/chat-forum-blue" /></a>
+  <a href="https://docs.authing.cn/v2/reference/ui-components/" target="_blank"><img src="https://img.shields.io/badge/docs-passing-brightgreen" /></a>
+  <a href="https://github.com/Authing/AuthingSSO" target="_blank"><img src="https://img.shields.io/badge/License-MIT-success" alt="License"></a>
+  <a href="javascript:;" target="_blank"><img src="https://img.shields.io/badge/node-%3E=12-green.svg" alt="Node"></a>
+</div>
+
+<br />
 
 [Authing](https://authing.cn) 是一个企业级身份认证提供商，其集成了 OAuth、LDAP、OIDC 等多种身份认证和授权解决方案。此仓库包含了 Authing 提供的一些 UI 组件。
+
+## 生态周边
+
+|包名|版本|使用文档
+|-----|----|----|
+|@authing/react-ui-components|[![npm version](https://badge.fury.io/js/@authing%2Freact-ui-components.svg)](https://www.npmjs.com/package/@authing/react-ui-components)|[Authing React UI Components](https://docs.authing.cn/v2/reference/ui-components/react.html)|
+|@authing/vue-ui-components|[![npm version](https://badge.fury.io/js/@authing%2Fvue-ui-components.svg)](https://www.npmjs.com/package/@authing/vue-ui-components)|[Authing Vue UI Components](https://docs.authing.cn/v2/reference/ui-components/vue.html)|
+|@authing/ng-ui-components|[![npm version](https://badge.fury.io/js/@authing%2Fng-ui-components.svg)](https://www.npmjs.com/package/@authing/ng-ui-components)|[Authing Angular UI Components](https://docs.authing.cn/v2/reference/ui-components/angular.html)|
+|@authing/native-js-ui-components|[![npm version](https://badge.fury.io/js/@authing%2Fnative-js-ui-components.svg)](https://www.npmjs.com/package/@authing/native-js-ui-components)|[Authing Native JavaScript UI Components](https://docs.authing.cn/v2/reference/ui-components/native-javascript.html)|
 
 ## 登录组件（Guard）
 
@@ -55,30 +72,20 @@ Guard 内置了多因素认证（MFA）功能，当你的[应用开启了多因�
      sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
    ></iframe>
 
-### 在 React 项目中使用
-
-你可以在你的 React 项目中引入 `@authing/react-ui-components` 包，详情请见 [React 登录组件使用文档](https://docs.authing.cn/v2/reference/ui-components/react.html)。
-
-### 在 Vue.js 项目中使用
-
-你可以在你的 Vue.js 项目中引入 `@authing/vue-ui-components` 包，详情请见 [Vue.js 登录组件使用文档](https://docs.authing.cn/v2/reference/ui-components/vue.html)。
-
-### 在 Angular 项目中使用
-
-你可以在你的 Vue.js 项目中引入 `@authing/ng-ui-components` 包，详情请见 [Angular 登录组件使用文档](https://docs.authing.cn/v2/reference/ui-components/angular.html)。
-
-### 在原生 JavaScript 项目中使用
-
-你可以在你的原生 JavaScript 项目中引入 `@authing/native-js-ui-components` 包，详情请见 [原生 JavaScript 登录组件使用文档](https://docs.authing.cn/v2/reference/ui-components/native-javascript.html)。
-
 ## 参与贡献
+
 - Fork it
 - Create your feature branch (git checkout -b my-new-feature)
 - Commit your changes (git commit -am 'Add some feature')
 - Push to the branch (git push origin my-new-feature)
 - Create new Pull Request
+
 ## 获取帮助
 
 Join us on forum: [#authing-chat](https://forum.authing.cn/)
 
 详细使用文档请查看 [Guard for Web](https://docs.authing.cn/v2/reference/ui-components/)
+
+## LICENSE
+
+MIT
