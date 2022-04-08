@@ -238,6 +238,12 @@ export const useMethod: (params: {
       }
     })
 
+  if (!config?.isHost) {
+    // 嵌入模式下不显示所有身份源登录
+    socialConnectionObjs = []
+    enterpriseConnectionObjs = []
+  }
+
   const isNoMethod: boolean =
     noLoginMethods &&
     (!publicConfig?.ssoPageComponentDisplay.socialLoginBtns ||
