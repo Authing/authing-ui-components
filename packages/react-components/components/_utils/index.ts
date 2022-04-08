@@ -204,9 +204,19 @@ export const getUserRegisterParams = () => {
   }))
 }
 
-export const isWeChatBrowser = () =>
-  /MicroMessenger/i.test(navigator?.userAgent)
-export const isLarkBrowser = () => /Lark/i.test(navigator.userAgent)
+export const isWechatBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /MicroMessenger/i.test(navigator?.userAgent)
+}
+
+export const isLarkBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /Lark/i.test(navigator.userAgent)
+}
 export const assembledAppHost = (identifier: string, host: string) => {
   const hostUrl = new URL(host)
 
@@ -434,6 +444,16 @@ export const shoudGoToComplete = (
     ) {
       return false
     }
+    if (
+      allFieldsToComp
+        .filter((item) => item.type === 'user')
+        .map((i) => i.name)
+        //@ts-ignore
+        .map((i) => user[i])
+        .filter((i) => Boolean(i)).length === 0
+    )
+      return false
+
     return true
   }
   if (
