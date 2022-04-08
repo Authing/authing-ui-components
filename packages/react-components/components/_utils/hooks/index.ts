@@ -9,7 +9,7 @@ import {
   HIDE_SOCIALS,
   HIDE_SOCIALS_SHOWIN_ENTERPRISE,
 } from '../../AuthingGuard/constants'
-import { isLarkBrowser, isWeChatBrowser } from '..'
+import { isLarkBrowser, isSpecialBrowser, isWeChatBrowser } from '..'
 import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
 import { GuardLocalConfig } from '../../Guard'
 export interface PhoneValidResult {
@@ -244,8 +244,8 @@ export const useMethod: (params: {
       }
     })
 
-  if (!config?.isHost) {
-    // 嵌入模式下不显示所有身份源登录
+  if (!config?.isHost && (isSpecialBrowser() || !window.postMessage)) {
+    // 嵌入模式下特殊浏览器不显示所有身份源登录
     socialConnectionObjs = []
     enterpriseConnectionObjs = []
   }

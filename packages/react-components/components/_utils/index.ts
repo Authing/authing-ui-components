@@ -204,7 +204,7 @@ export const getUserRegisterParams = () => {
   }))
 }
 
-export const isWechatBrowser = () => {
+export const isWeChatBrowser = () => {
   if (typeof navigator === 'undefined') {
     return null
   }
@@ -216,6 +216,44 @@ export const isLarkBrowser = () => {
     return null
   }
   return /Lark/i.test(navigator.userAgent)
+}
+
+export const isQtWebEngine = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /QtWebEngine/i.test(navigator.userAgent)
+}
+
+export const isXiaomiBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /MiuiBrowser/i.test(navigator.userAgent)
+}
+export const isDingtalkBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /dingtalk/i.test(navigator.userAgent)
+}
+
+export const isQQBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return / QQ/i.test(navigator.userAgent)
+}
+// 特殊浏览器 后续可能会增加
+export const isSpecialBrowser = () => {
+  return (
+    isWeChatBrowser() ||
+    isLarkBrowser() ||
+    isQtWebEngine() ||
+    isXiaomiBrowser() ||
+    isDingtalkBrowser() ||
+    isQQBrowser()
+  )
 }
 export const assembledAppHost = (identifier: string, host: string) => {
   const hostUrl = new URL(host)
