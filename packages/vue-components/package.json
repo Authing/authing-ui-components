@@ -12,7 +12,7 @@
     "authing"
   ],
   "license": "MIT",
-  "main": "lib/index.min.js",
+  "main": "src/components/index.js",
   "scripts": {
     "clean": "rimraf ./lib",
     "demo:serve": "vue-cli-service serve",

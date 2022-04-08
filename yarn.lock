@@ -6012,10 +6012,17 @@ atob@^2.1.2:
   resolved "https://registry.npm.taobao.org/atob/download/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha1-bZUX654DDSQ2ZmZR6GvZ9vE1M8k=
 
+<<<<<<< HEAD
 authing-js-sdk@4.23.29-alpha.1:
   version "4.23.29-alpha.1"
   resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.23.29-alpha.1.tgz#061177c46e9b8af2c1b580c12692135072a019f8"
   integrity sha512-8/0POlkHp1Ko0cpCpWbvc8DgNLzu7I4zBnNEcu15CzmS/UMmIbNbYqQQyvmNSLhbyASr4RlfLQCbIFfwqIS9+A==
+=======
+authing-js-sdk@4.23.5:
+  version "4.23.5"
+  resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.23.5.tgz#d638b91aa02cd5bd4fc1cfeb1328806461ee2593"
+  integrity sha512-j+HKLJhqfoypzon/fLysIIlGIDyh/5fz4PsRlmYjfeAmQN9DZdO2asZMudaXRbBHpslRLp08pdU2GA04epJn8Q==
+>>>>>>> master
   dependencies:
     axios "^0.19.2"
     crypto-js "^4.0.0"
