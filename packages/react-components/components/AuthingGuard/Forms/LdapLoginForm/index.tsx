@@ -19,7 +19,6 @@ export const LdapLoginForm = forwardRef<FormInstance, PasswordLoginFormProps>(
 
     const { state } = useGuardContext()
     const { authClient, realHost, guardEvents } = state
-    // const autoRegister = config.autoRegister
 
     const [rawForm] = Form.useForm()
 
@@ -68,7 +67,6 @@ export const LdapLoginForm = forwardRef<FormInstance, PasswordLoginFormProps>(
       try {
         const identity = values.identity && values.identity.trim()
         const password = values.password && values.password.trim()
-        // const captchaCode = values.captchaCode && values.captchaCode.trim()
 
         const user = await authClient.loginByLdap(identity, password)
         onSuccess && onSuccess(user)

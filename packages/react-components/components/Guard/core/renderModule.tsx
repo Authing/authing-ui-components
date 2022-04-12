@@ -199,6 +199,10 @@ export const RenderModule: React.FC<{
     return null
   }, [ComponentsMapping, contextLoaded, loadingComponent, moduleName])
 
+  const visible = useMemo(() => {
+    return guardProps.visible
+  }, [guardProps.visible])
+
   return (
     <ConfigProvider
       prefixCls={PREFIX_CLS}
@@ -210,7 +214,7 @@ export const RenderModule: React.FC<{
           closeIcon={
             <IconFont type="authing-close-line" className="g2-modal-close" />
           }
-          visible={guardProps.visible}
+          visible={visible}
           onCancel={guardProps?.onClose}
           keyboard={defaultMergedConfig.escCloseable}
           maskClosable={false} // 点击蒙层，是否允许关闭

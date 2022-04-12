@@ -9,7 +9,7 @@ import {
   HIDE_SOCIALS,
   HIDE_SOCIALS_SHOWIN_ENTERPRISE,
 } from '../../AuthingGuard/constants'
-import { isLarkBrowser, isWeChatBrowser } from '..'
+import { isLarkBrowser, isSpecialBrowser, isWeChatBrowser } from '..'
 import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
 import { GuardLocalConfig } from '../../Guard'
 export interface PhoneValidResult {
@@ -127,9 +127,15 @@ export const useShaking = () => {
   }
   return { MountShaking, UnMountShaking }
 }
-export const defaultAreaCode = LanguageMap[navigator.language]
-  ? LanguageMap[navigator.language]
-  : 'CN'
+export const defaultAreaCode = (() => {
+  if (typeof navigator === 'undefined') {
+    return 'CN'
+  }
+  return LanguageMap[navigator.language]
+    ? LanguageMap[navigator.language]
+    : 'CN'
+})()
+
 /**
  * 解析手机号
  * @param fieldValue 字段值
@@ -237,6 +243,12 @@ export const useMethod: (params: {
         return true
       }
     })
+
+  if (!config?.isHost && (isSpecialBrowser() || !window.postMessage)) {
+    // 嵌入模式下特殊浏览器不显示所有身份源登录
+    socialConnectionObjs = []
+    enterpriseConnectionObjs = []
+  }
 
   const isNoMethod: boolean =
     noLoginMethods &&

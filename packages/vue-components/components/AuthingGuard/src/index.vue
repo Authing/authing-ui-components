@@ -3,18 +3,9 @@
 </template>
 
 <script>
-import {
-  getAuthClient,
-  initAuthClient,
-  AuthingGuard as NativeAuthingGuard,
-  GuardEventsCamelToKebabMap,
-  GuardMode,
-  GuardScenes,
-  LoginMethods,
-  RegisterMethods,
-} from "@authing/native-js-ui-components";
+import { AuthingGuard as NativeAuthingGuard, GuardEventsCamelToKebabMap } from "@authing/native-js-ui-components";
 
-export { getAuthClient, initAuthClient, GuardMode, GuardScenes, LoginMethods, RegisterMethods };
+import "@authing/native-js-ui-components/lib/index.min.css";
 
 const callbackEvent = ["before-login", "before-register"];
 

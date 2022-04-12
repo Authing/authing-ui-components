@@ -23,7 +23,7 @@ export interface IG2Config {
   lang: Lang
   langRange: Lang[]
   host: string
-  isHost?: boolean
+  isHost?: boolean // 判断是否处于托管页面
   mode: GuardMode
   clickCloseable: boolean
   escCloseable: boolean

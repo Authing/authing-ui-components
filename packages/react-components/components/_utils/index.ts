@@ -5,6 +5,9 @@ import { useGuardContext } from '../context/global/context'
 import { i18n } from './locales'
 import { RegisterMethods, User } from 'authing-js-sdk'
 import { ApplicationConfig, ComplateFiledsPlace } from '../AuthingGuard/api'
+import { GuardProps } from '../Guard'
+import isEqual from 'lodash/isEqual'
+import omit from 'lodash/omit'
 export * from './popupCenter'
 export * from './clipboard'
 
@@ -201,9 +204,57 @@ export const getUserRegisterParams = () => {
   }))
 }
 
-export const isWeChatBrowser = () =>
-  /MicroMessenger/i.test(navigator?.userAgent)
-export const isLarkBrowser = () => /Lark/i.test(navigator.userAgent)
+export const isWeChatBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /MicroMessenger/i.test(navigator?.userAgent)
+}
+
+export const isLarkBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /Lark/i.test(navigator.userAgent)
+}
+
+export const isQtWebEngine = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /QtWebEngine/i.test(navigator.userAgent)
+}
+
+export const isXiaomiBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /MiuiBrowser/i.test(navigator.userAgent)
+}
+export const isDingtalkBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /dingtalk/i.test(navigator.userAgent)
+}
+
+export const isQQBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return / QQ/i.test(navigator.userAgent)
+}
+// 特殊浏览器 后续可能会增加
+export const isSpecialBrowser = () => {
+  return (
+    isWeChatBrowser() ||
+    isLarkBrowser() ||
+    isQtWebEngine() ||
+    isXiaomiBrowser() ||
+    isDingtalkBrowser() ||
+    isQQBrowser()
+  )
+}
 export const assembledAppHost = (identifier: string, host: string) => {
   const hostUrl = new URL(host)
 
@@ -431,6 +482,16 @@ export const shoudGoToComplete = (
     ) {
       return false
     }
+    if (
+      allFieldsToComp
+        .filter((item) => item.type === 'user')
+        .map((i) => i.name)
+        //@ts-ignore
+        .map((i) => user[i])
+        .filter((i) => Boolean(i)).length === 0
+    )
+      return false
+
     return true
   }
   if (
@@ -496,4 +557,14 @@ export const phoneDesensitization = (phone: string) => {
 
 export const getHundreds = (num: number) => {
   return Math.floor(num / 100)
+}
+
+export const GuardPropsFilter = (pre: GuardProps, current: GuardProps) => {
+  const preAttribute = Object.keys(pre).filter((name) => name.startsWith('on'))
+
+  const currentAttribute = Object.keys(current).filter((name) =>
+    name.startsWith('on')
+  )
+
+  return isEqual(omit(pre, preAttribute), omit(current, currentAttribute))
 }

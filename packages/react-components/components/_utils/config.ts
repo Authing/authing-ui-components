@@ -1,5 +1,5 @@
 import { LoginMethods, RegisterMethods } from 'authing-js-sdk'
-import { IG2Config } from '../Type'
+import { GuardPageConfig, IG2Config } from '../Type'
 import { ApplicationConfig } from '../AuthingGuard/api'
 import { getGuardHttp } from './guardHttp'
 import { AuthingResponse } from './http'
@@ -8,10 +8,17 @@ import { corsVerification } from './corsVerification'
 
 let publicConfigMap: Record<string, ApplicationConfig> = {}
 
+let pageConfigMap: Record<string, GuardPageConfig> = {}
+
 const getPublicConfig = (appId: string) => publicConfigMap?.[appId]
 
 const setPublicConfig = (appId: string, config: ApplicationConfig) =>
   (publicConfigMap[appId] = config)
+
+const getPageConfig = (appId: string) => pageConfigMap?.[appId]
+
+const setPageConfig = (appId: string, config: GuardPageConfig) =>
+  (pageConfigMap[appId] = config)
 
 export const initConfig = async (
   appId: string,
@@ -19,6 +26,8 @@ export const initConfig = async (
   defaultConfig: IG2Config
 ): Promise<{ config: GuardLocalConfig; publicConfig: ApplicationConfig }> => {
   if (!getPublicConfig(appId)) await requestPublicConfig(appId)
+  if (!getPageConfig(appId)) await requestPageConfig(appId)
+
   const mergedConfig = mergeConfig(
     config,
     defaultConfig,
@@ -117,4 +126,26 @@ const requestPublicConfig = async (
   setPublicConfig(appId, res.data)
 
   return getPublicConfig(appId)
+}
+
+const requestPageConfig = async (appId: string): Promise<GuardPageConfig> => {
+  let res: AuthingResponse<GuardPageConfig>
+
+  const { get } = getGuardHttp()
+
+  try {
+    res = await get<GuardPageConfig>(
+      `/api/v2/applications/${appId}/components-public-config/guard`
+    )
+  } catch (error) {
+    console.error('Please check your config or network')
+    throw new Error('Please check your config or network')
+  }
+
+  if (res.code !== 200 || !res.data)
+    throw new Error(res?.message ?? 'Please check your config')
+
+  setPageConfig(appId, res.data)
+
+  return getPageConfig(appId)
 }
