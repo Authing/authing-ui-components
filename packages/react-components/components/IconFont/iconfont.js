@@ -56,9 +56,3 @@ export const init = function (a, h) {
           'complete' == e.readyState && ((e.onreadystatechange = null), n())
         }))
 }
-
-if (typeof window !== 'undefined' && typeof window.document !== 'undefined') {
-  const globalWindow = getGuardWindow()
-
-  if (globalWindow) init(globalWindow)
-}

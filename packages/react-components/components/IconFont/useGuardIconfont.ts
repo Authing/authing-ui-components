@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ApplicationConfig } from '../AuthingGuard/api'
+import { getGuardWindow } from '../_utils/appendConfig'
 import { init } from './iconfont'
 
 export const useGuardIconfont = (publicConfig?: ApplicationConfig) => {
@@ -26,11 +27,11 @@ export const useGuardIconfont = (publicConfig?: ApplicationConfig) => {
   useEffect(() => {
     if (!svgString) return
 
-    if (typeof window === 'undefined') return
+    const guardWindow = getGuardWindow()
 
-    if (typeof window.document === 'undefined') return
+    if (!guardWindow) return
 
-    init(window, svgString)
+    init(guardWindow, svgString)
 
     setLoaded(true)
   }, [svgString])
