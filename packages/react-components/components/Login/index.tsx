@@ -650,10 +650,10 @@ export const GuardLoginView = () => {
                                   i18n.language === 'zh-CN'
                                     ? `${
                                         isWeChatBrowser() ? '长按' : '扫码'
-                                      }关注 ${item.title} 微信公众号登录`
+                                      }关注微信公众号登录`
                                     : `${
                                         isWeChatBrowser() ? 'Press' : 'Scan'
-                                      } to follow ${item.title} and login`,
+                                      } to follow and login`,
                                 expired: t('login.qrcodeExpired'),
                               },
                             }}
