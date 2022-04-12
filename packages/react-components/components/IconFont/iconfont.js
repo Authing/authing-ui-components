@@ -1,14 +1,14 @@
-export const init = function (a, h) {
+export const init = function (guardWindow, svgString) {
   let c, t, l, e, i, o
 
-  let m = document.getElementsByTagName('script')
+  let m = guardWindow.document.getElementsByTagName('script')
 
-  m = m[m.length - 1].getAttribute('data-injectcss')
+  m = m[m.length - 1]?.getAttribute('data-injectcss')
 
-  if (m && !a.__iconfont__svg__cssinject__) {
-    a.__iconfont__svg__cssinject__ = !0
+  if (m && !guardWindow.__iconfont__svg__cssinject__) {
+    guardWindow.__iconfont__svg__cssinject__ = !0
     try {
-      document.write(
+      guardWindow.document.write(
         '<style>.svgfont {display: inline-block;width: 1em;height: 1em;fill: currentColor;vertical-align: -0.1em;font-size:16px;}</style>'
       )
     } catch (a) {
@@ -20,8 +20,8 @@ export const init = function (a, h) {
   }
   ;(c = function () {
     let a, c, t
-    ;((t = document.createElement('div')).innerHTML = h),
-      (h = null),
+    ;((t = guardWindow.document.createElement('div')).innerHTML = svgString),
+      (svgString = null),
       (c = t.getElementsByTagName('svg')[0]) &&
         (c.setAttribute('aria-hidden', 'true'),
         (c.style.position = 'absolute'),
@@ -29,20 +29,23 @@ export const init = function (a, h) {
         (c.style.height = 0),
         (c.style.overflow = 'hidden'),
         (a = c),
-        (t = document.body).firstChild
+        (t = guardWindow.document.body).firstChild
           ? (c = t.firstChild).parentNode.insertBefore(a, c)
           : t.appendChild(a))
   }),
-    document.addEventListener
-      ? ~['complete', 'loaded', 'interactive'].indexOf(document.readyState)
+    guardWindow.document.addEventListener
+      ? ~['complete', 'loaded', 'interactive'].indexOf(
+          guardWindow.document.readyState
+        )
         ? setTimeout(c, 0)
         : ((t = function () {
-            document.removeEventListener('DOMContentLoaded', t, !1), c()
+            guardWindow.document.removeEventListener('DOMContentLoaded', t, !1),
+              c()
           }),
-          document.addEventListener('DOMContentLoaded', t, !1))
-      : document.attachEvent &&
+          guardWindow.document.addEventListener('DOMContentLoaded', t, !1))
+      : guardWindow.document.attachEvent &&
         ((l = c),
-        (e = a.document),
+        (e = guardWindow.document),
         (i = !1),
         (o = function () {
           try {
