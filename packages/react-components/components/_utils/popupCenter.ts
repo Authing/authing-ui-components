@@ -1,4 +1,4 @@
-import { getGuardWindow } from './appendConfog'
+import { getGuardWindow } from './appendConfig'
 
 /**
  * 在屏幕中心弹出新窗口加载 url

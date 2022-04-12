@@ -8,7 +8,7 @@ import { ApplicationConfig, ComplateFiledsPlace } from '../AuthingGuard/api'
 import { GuardProps } from '../Guard'
 import isEqual from 'lodash/isEqual'
 import omit from 'lodash/omit'
-import { getGuardWindow } from './appendConfog'
+import { getGuardWindow } from './appendConfig'
 export * from './popupCenter'
 export * from './clipboard'
 

@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { GuardComponentConfig, GuardLocalConfig } from '../config'
 import { GuardModuleType } from '../module'
 import isEqual from 'lodash/isEqual'
-import { getGuardWindow } from '../../_utils/appendConfog'
+import { getGuardWindow } from '../../_utils/appendConfig'
 
 export interface ModuleState {
   moduleName: GuardModuleType

@@ -1,4 +1,4 @@
-import { getGuardWindow } from './appendConfog'
+import { getGuardWindow } from './appendConfig'
 import some from 'lodash/some'
 import { i18n } from './locales'
 

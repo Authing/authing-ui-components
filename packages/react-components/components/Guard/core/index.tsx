@@ -1,6 +1,6 @@
 import React from 'react'
 import { GuardProps } from '..'
-import { initAppendConfig } from '../../_utils/appendConfog'
+import { initAppendConfig } from '../../_utils/appendConfig'
 import { ModuleState } from '../GuardModule/stateMachine'
 import { RenderContext } from './renderContext'
 import { RenderModule } from './renderModule'

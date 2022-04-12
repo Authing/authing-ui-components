@@ -15,7 +15,7 @@ import { useGuardAuthClient } from '../../../Guard/authClient'
 import { IconFont } from '../../../IconFont'
 import version from '../../../version/version'
 import { popupCenter } from '../../../_utils'
-import { getGuardWindow } from '../../../_utils/appendConfog'
+import { getGuardWindow } from '../../../_utils/appendConfig'
 import { useGuardHttp } from '../../../_utils/guardHttp'
 export const IdpButton = (props: any) => {
   const { i, appId, userPoolId } = props

@@ -29,7 +29,7 @@ import { useScreenSize } from '../../hooks/useScreenSize'
 import { SocialConnectionProvider } from 'authing-js-sdk'
 import { useTranslation } from 'react-i18next'
 import { i18n } from '../../../_utils/locales'
-import { getGuardWindow } from '../../../_utils/appendConfog'
+import { getGuardWindow } from '../../../_utils/appendConfig'
 
 export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
   onFail = () => {},

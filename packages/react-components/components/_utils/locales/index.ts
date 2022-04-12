@@ -5,7 +5,7 @@ import LanguageDetector from 'i18next-browser-languagedetector'
 import * as enUsTrans from './en'
 import * as zhCnTrans from './zh'
 import { LocalesConfig, Lang } from '../../AuthingGuard/types'
-import { getGuardWindow } from '../appendConfog'
+import { getGuardWindow } from '../appendConfig'
 
 let langChangeFN: (lang: Lang) => void = () => {}
 
