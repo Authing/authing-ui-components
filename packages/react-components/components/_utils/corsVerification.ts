@@ -1,4 +1,5 @@
 import { some } from 'lodash'
+import { getGuardWindow } from './appendConfog'
 import { i18n } from './locales'
 
 const isOriginMatched = (
@@ -38,8 +39,10 @@ export const corsVerification = (
   allowedOrigins: string[] = [],
   corsWhitelist: string[] = []
 ) => {
-  if (allowedOrigins.length > 0) {
-    const origin = window.location.origin
+  const guardWindow = getGuardWindow()
+
+  if (guardWindow && allowedOrigins.length > 0) {
+    const origin = guardWindow.location.origin
     const allowed = isOriginMatched(allowedOrigins, corsWhitelist, origin)
     if (!allowed) {
       throw new Error(

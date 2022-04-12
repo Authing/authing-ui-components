@@ -5,6 +5,7 @@
  * 只要替换 svgStr 中的字符串即可，为了兼容 SSR！！！！！！
  *
  */
+import { getGuardWindow } from '../_utils/appendConfog'
 import { svgStr } from './svg'
 var init = function (a) {
   var c,
@@ -70,5 +71,7 @@ var init = function (a) {
 }
 
 if (typeof window !== 'undefined' && typeof window.document !== 'undefined') {
-  init(window)
+  const globalWindow = getGuardWindow()
+
+  if (globalWindow) init(globalWindow)
 }

@@ -18,6 +18,7 @@ import { usePostMessage } from './postMessage'
 import { CodeAction } from '../../_utils/responseManagement/interface'
 import version from '../../version/version'
 import { GuardLocalConfig } from '../../Guard'
+import { getGuardWindow } from '../../_utils/appendConfog'
 
 export interface SocialLoginProps {
   appId: string
@@ -70,9 +71,12 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
       }
     }
-    window.addEventListener('message', onPostMessage)
+
+    const guardWindow = getGuardWindow()
+
+    guardWindow?.addEventListener('message', onPostMessage)
     return () => {
-      window.removeEventListener('message', onPostMessage)
+      guardWindow?.removeEventListener('message', onPostMessage)
     }
   }, [onLoginFailed, onLoginSuccess, onMessage])
 
@@ -95,10 +99,14 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       authorization_params.display = screenSize
     }
     if (config?.isHost) {
-      // 如果 isHost 是 true，则从 url 获取 finish_login_url 作为 social.authorize 方法的 targetUrl 参数
-      options.targetUrl = querystring.parse(window.location.search)?.[
-        'finish_login_url'
-      ]
+      const guardWindow = getGuardWindow()
+
+      if (guardWindow) {
+        // 如果 isHost 是 true，则从 url 获取 finish_login_url 作为 social.authorize 方法的 targetUrl 参数
+        options.targetUrl = querystring.parse(guardWindow.location.search)?.[
+          'finish_login_url'
+        ]
+      }
     }
     // 根据 UA 判断是否在微信网页浏览器、钉钉浏览器等内部，使用 form_post 参数作为 social.authorize 方法的 relayMethod 参数，其他情况用 web_message
     options.relayMethod =

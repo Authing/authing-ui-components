@@ -8,6 +8,14 @@ export interface IG2FCProps extends IG2Events {
   config?: Partial<IG2Config>
   visible?: boolean
   initData?: any
+  appendConfig?: GuardAppendConfig
+}
+
+export interface GuardAppendConfig {
+  window?: Window
+  internalRequest?: boolean
+  singleComponent?: boolean
+  unAuthFlow?: boolean
 }
 
 export interface IG2FCViewProps extends IG2FCProps {

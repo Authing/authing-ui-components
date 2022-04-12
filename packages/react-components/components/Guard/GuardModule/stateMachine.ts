@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { GuardComponentConfig, GuardLocalConfig } from '../config'
 import { GuardModuleType } from '../module'
 import isEqual from 'lodash/isEqual'
+import { getGuardWindow } from '../../_utils/appendConfog'
 
 export interface ModuleState {
   moduleName: GuardModuleType
@@ -47,8 +48,11 @@ export class GuardStateMachine {
 
     this.historyPush(initData, ActionType.Init)
   }
-  globalWindow = (): Window | undefined =>
-    typeof window !== undefined ? window : undefined
+  globalWindow = (): Window | undefined => {
+    const guardWindow = getGuardWindow()
+
+    return guardWindow ?? undefined
+  }
 
   next = (nextModule: GuardModuleType, initData: any) => {
     // window?.history.pushState(nextModule, '', window?.location.href)
@@ -123,20 +127,22 @@ export class GuardStateMachine {
 }
 
 export const useHistoryHijack = (back?: () => void) => {
+  const globalWindow = getGuardWindow()
+
   const next = (state: any = {}) => {
-    window?.history.pushState(state, '', window?.location.href)
+    globalWindow?.history.pushState(state, '', globalWindow?.location.href)
   }
 
   useEffect(() => {
     const onPopstate = () => {
       back?.()
     }
-    back && window?.addEventListener('popstate', onPopstate)
+    back && globalWindow?.addEventListener('popstate', onPopstate)
 
     return () => {
-      back && window.removeEventListener('popstate', onPopstate)
+      back && globalWindow?.removeEventListener('popstate', onPopstate)
     }
-  }, [back])
+  }, [back, globalWindow])
 
   return [next]
 }

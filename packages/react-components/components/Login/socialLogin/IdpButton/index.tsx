@@ -15,6 +15,7 @@ import { useGuardAuthClient } from '../../../Guard/authClient'
 import { IconFont } from '../../../IconFont'
 import version from '../../../version/version'
 import { popupCenter } from '../../../_utils'
+import { getGuardWindow } from '../../../_utils/appendConfog'
 import { useGuardHttp } from '../../../_utils/guardHttp'
 export const IdpButton = (props: any) => {
   const { i, appId, userPoolId } = props
@@ -94,12 +95,16 @@ export const IdpButton = (props: any) => {
           size="large"
           icon={<Avatar size={20} src={i.logo} style={{ marginRight: 8 }} />}
           onClick={async () => {
+            const guardWindow = getGuardWindow()
+
+            if (!guardWindow) return
+
             await post('/api/v2/connections/oidc/start-interaction', {
               state,
               protocol: i.protocol,
               userPoolId,
               appId,
-              referer: window.location.href,
+              referer: guardWindow?.location.href,
               connection: { providerIentifier: i.identifier },
             })
             popupCenter(url)

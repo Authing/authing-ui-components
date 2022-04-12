@@ -29,6 +29,7 @@ import { useScreenSize } from '../../hooks/useScreenSize'
 import { SocialConnectionProvider } from 'authing-js-sdk'
 import { useTranslation } from 'react-i18next'
 import { i18n } from '../../../_utils/locales'
+import { getGuardWindow } from '../../../_utils/appendConfog'
 
 export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
   onFail = () => {},
@@ -76,9 +77,12 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
         }
       }
     }
-    window.addEventListener('message', onMessage)
+
+    const guardWindow = getGuardWindow()
+
+    guardWindow?.addEventListener('message', onMessage)
     return () => {
-      window.removeEventListener('message', onMessage)
+      guardWindow?.removeEventListener('message', onMessage)
     }
   }, [onFail, onSuccess])
 

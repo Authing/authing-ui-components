@@ -5,6 +5,7 @@ import LanguageDetector from 'i18next-browser-languagedetector'
 import * as enUsTrans from './en'
 import * as zhCnTrans from './zh'
 import { LocalesConfig, Lang } from '../../AuthingGuard/types'
+import { getGuardWindow } from '../appendConfog'
 
 let langChangeFN: (lang: Lang) => void = () => {}
 
@@ -16,8 +17,11 @@ export const changeLang = (lang: Lang) => {
 const initI18n = (localesConfig: LocalesConfig = {}, lang?: Lang) => {
   let initLang: 'zh-CN' | 'en-US' = 'zh-CN'
 
-  if (typeof window !== 'undefined') {
-    initLang = navigator.language.split('-')[0] === 'zh' ? 'zh-CN' : 'en-US'
+  const guardWindow = getGuardWindow()
+
+  if (guardWindow) {
+    initLang =
+      guardWindow.navigator.language.split('-')[0] === 'zh' ? 'zh-CN' : 'en-US'
   }
 
   if (Boolean(i18n.language)) {
