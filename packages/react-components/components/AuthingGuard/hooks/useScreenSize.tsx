@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { getGuardWindow } from '../../_utils/appendConfog'
-// import { inRange, debounce } from 'lodash'
 
 function debounce(fn: Function, delay: number, immediate = true) {
   let timer: any

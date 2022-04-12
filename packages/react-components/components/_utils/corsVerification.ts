@@ -1,5 +1,5 @@
-import { some } from 'lodash'
 import { getGuardWindow } from './appendConfog'
+import some from 'lodash/some'
 import { i18n } from './locales'
 
 const isOriginMatched = (
