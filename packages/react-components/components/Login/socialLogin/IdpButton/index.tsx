@@ -12,11 +12,12 @@ import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import shortid from 'shortid'
 import { useGuardAuthClient } from '../../../Guard/authClient'
+import { getGuardWindow } from '../../../Guard/core/useAppendConfig'
 import { IconFont } from '../../../IconFont'
 import version from '../../../version/version'
 import { popupCenter } from '../../../_utils'
-import { getGuardWindow } from '../../../_utils/appendConfig'
 import { useGuardHttp } from '../../../_utils/guardHttp'
+
 export const IdpButton = (props: any) => {
   const { i, appId, userPoolId } = props
 

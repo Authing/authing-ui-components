@@ -12,7 +12,7 @@ import {
 import { isLarkBrowser, isSpecialBrowser, isWeChatBrowser } from '..'
 import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
 import { GuardLocalConfig } from '../../Guard'
-import { getGuardWindow } from '../appendConfig'
+import { getGuardWindow } from '../../Guard/core/useAppendConfig'
 export interface PhoneValidResult {
   isValid: boolean
   phoneNumber: string

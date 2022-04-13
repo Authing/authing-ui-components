@@ -18,7 +18,7 @@ import { usePostMessage } from './postMessage'
 import { CodeAction } from '../../_utils/responseManagement/interface'
 import version from '../../version/version'
 import { GuardLocalConfig } from '../../Guard'
-import { getGuardWindow } from '../../_utils/appendConfig'
+import { getGuardWindow } from '../../Guard/core/useAppendConfig'
 
 export interface SocialLoginProps {
   appId: string

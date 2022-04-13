@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ApplicationConfig } from '../AuthingGuard/api'
-import { getGuardWindow } from '../_utils/appendConfig'
+import { getGuardWindow } from '../Guard/core/useAppendConfig'
 import { init } from './iconfont'
 
 export const useGuardIconfont = (publicConfig?: ApplicationConfig) => {
@@ -17,7 +17,7 @@ export const useGuardIconfont = (publicConfig?: ApplicationConfig) => {
   }
 
   useEffect(() => {
-    if (!publicConfig) return
+    if (!publicConfig?.cdnBase) return
 
     if (svgString) return
 

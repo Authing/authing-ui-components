@@ -1,5 +1,5 @@
-import { getGuardWindow } from './appendConfig'
 import some from 'lodash/some'
+import { getGuardWindow } from '../Guard/core/useAppendConfig'
 import { i18n } from './locales'
 
 const isOriginMatched = (

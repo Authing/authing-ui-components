@@ -12,12 +12,12 @@ let pageConfigMap: Record<string, GuardPageConfig> = {}
 
 const getPublicConfig = (appId: string) => publicConfigMap?.[appId]
 
-const setPublicConfig = (appId: string, config: ApplicationConfig) =>
+export const setPublicConfig = (appId: string, config: ApplicationConfig) =>
   (publicConfigMap[appId] = config)
 
 const getPageConfig = (appId: string) => pageConfigMap?.[appId]
 
-const setPageConfig = (appId: string, config: GuardPageConfig) =>
+export const setPageConfig = (appId: string, config: GuardPageConfig) =>
   (pageConfigMap[appId] = config)
 
 export const initConfig = async (

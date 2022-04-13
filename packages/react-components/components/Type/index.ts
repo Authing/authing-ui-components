@@ -1,5 +1,6 @@
 import { AuthenticationClient, CommonMessage } from 'authing-js-sdk'
 import { Lang } from 'authing-js-sdk/build/main/types'
+import { ApplicationConfig } from '../AuthingGuard/api'
 import { GuardMode } from '../AuthingGuard/types/GuardConfig'
 import { GuardModuleType } from '../Guard/module'
 import { FacePlugin } from '../_utils/facePlugin/interface'
@@ -19,6 +20,8 @@ export interface GuardAppendConfig {
   internalRequest?: boolean
   singleComponent?: boolean
   unAuthFlow?: boolean
+  publicConfig?: ApplicationConfig
+  pageConfig?: GuardPageConfig
 }
 
 export interface IG2FCViewProps extends IG2FCProps {

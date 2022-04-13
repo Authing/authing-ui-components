@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getGuardWindow } from '../../_utils/appendConfig'
+import { getGuardWindow } from '../../Guard/core/useAppendConfig'
 
 function debounce(fn: Function, delay: number, immediate = true) {
   let timer: any
