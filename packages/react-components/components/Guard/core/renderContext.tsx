@@ -25,11 +25,11 @@ import {
   getPublicConfig,
   useMergeDefaultConfig,
   useMergePublicConfig,
+  useGuardPageConfig,
 } from '../../_utils/config/index'
 import { GuardHttp, initGuardHttp } from '../../_utils/guardHttp'
 import { initI18n } from '../../_utils/locales'
 import { createGuardXContext } from '../../_utils/context'
-import { useGuardPageConfig } from '../../_utils/guardPageConfig'
 import { useGuardIconfont } from '../../IconFont/useGuardIconfont'
 
 interface IBaseAction<T = string, P = any> {
