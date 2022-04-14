@@ -26,7 +26,7 @@ import {
   useMergeDefaultConfig,
   useMergePublicConfig,
   useGuardPageConfig,
-} from '../../_utils/config/index'
+} from '../../_utils/config'
 import { GuardHttp, initGuardHttp } from '../../_utils/guardHttp'
 import { initI18n } from '../../_utils/locales'
 import { createGuardXContext } from '../../_utils/context'

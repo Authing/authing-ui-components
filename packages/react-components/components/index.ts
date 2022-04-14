@@ -1,4 +1,4 @@
-export * from './_utils/config/index'
+export * from './_utils/config'
 export * from './_utils/responseManagement/interface'
 export type { AuthenticationClientOptions } from 'authing-js-sdk'
 

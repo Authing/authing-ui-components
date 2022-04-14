@@ -1,6 +1,6 @@
 import { GuardProps } from '../..'
 import { getAppendConfig, initAppendConfig } from '../../_utils/appendConfig'
-import { setPublicConfig, setPageConfig } from '../../_utils/config/index'
+import { setPublicConfig, setPageConfig } from '../../_utils/config'
 export const getGuardWindow = () => {
   if (typeof window === 'undefined') {
     return undefined
