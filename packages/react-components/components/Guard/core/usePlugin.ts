@@ -2,7 +2,7 @@ import { initFacePlugin } from '../../_utils/facePlugin'
 import { FacePlugin } from '../../_utils/facePlugin/interface'
 import isEqual from 'lodash/isEqual'
 
-export const useGuardPlugin = (plugin: { facePlugin?: FacePlugin }) => {
+export const useGuardPlugin: any = (plugin: { facePlugin?: FacePlugin }) => {
   const { facePlugin } = plugin
 
   return useGuardFacePlugin(facePlugin)
