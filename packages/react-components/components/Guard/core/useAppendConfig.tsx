@@ -18,10 +18,6 @@ export const useGuardWindow = getGuardWindow
 export const useInitGuardAppendConfig = (guardProps: GuardProps) => {
   const { appendConfig, appId } = guardProps
 
-  console.log('================')
-  console.log(appendConfig)
-  console.log('================')
-
   initAppendConfig(appendConfig)
 
   if (appendConfig?.publicConfig) {

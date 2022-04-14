@@ -9,15 +9,17 @@ export const useGuardIconfont = (publicConfig?: ApplicationConfig) => {
   const [loaded, setLoaded] = useState<boolean>(false)
 
   const loadSvgString = async (cdnBase: string) => {
-    const res = await fetch(`${cdnBase}/svg-string/guard`)
+    try {
+      const res = await fetch(`${cdnBase}/svg-string/guard`)
 
-    const body = await res.text()
+      const body = await res.text()
 
-    setSvgString(body)
+      setSvgString(body)
+    } catch (error) {}
   }
 
   useEffect(() => {
-    if (!publicConfig?.cdnBase) return
+    if (!publicConfig) return
 
     if (svgString) return
 
