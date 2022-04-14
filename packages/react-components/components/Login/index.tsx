@@ -31,7 +31,6 @@ import { isWeChatBrowser } from '../_utils'
 import { LoginWithVerifyCode } from './core/withVerifyCode'
 import { VerifyLoginMethods } from '../AuthingGuard/api'
 import { useMediaSize, useMethod } from '../_utils/hooks'
-import { GuardPageSene } from '../Type'
 
 const inputWays = [
   LoginMethods.Password,
