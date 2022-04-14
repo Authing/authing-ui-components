@@ -132,9 +132,7 @@ export const useMergePublicConfig = (
   serError?: any
 ) => {
   const [publicConfig, setPublicConfig] = useState<ApplicationConfig>()
-  console.log(getPublicConfig(appId), 'eee')
   const initPublicConfig = useCallback(async () => {
-    console.log('eee', publicConfigMap)
     if (httpClient && appId)
       if (!getPublicConfig(appId)) {
         try {
