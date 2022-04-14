@@ -47,8 +47,6 @@ export const LoginWithAD = (props: LoginWithADProps) => {
 
   const { responseIntercept } = useGuardHttpClient()
 
-  const config = useGuardFinallyConfig()
-
   const { t } = useTranslation()
 
   // let client = useGuardAuthClient()
@@ -84,14 +82,7 @@ export const LoginWithAD = (props: LoginWithADProps) => {
 
     // todo
     try {
-      const firstLevelDomain = new URL(config.host).hostname
-        .split('.')
-        .slice(1)
-        .join('.')
-
-      const websocketHost = `https://ws.${firstLevelDomain}`
-
-      const api = `${websocketHost}/api/v2/ad/verify-user`
+      const api = `${publicConfig.websocket}/api/v2/ad/verify-user`
 
       const fetchRes = await fetch(api, {
         method: 'POST',
