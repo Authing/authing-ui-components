@@ -1,44 +1,33 @@
-import { useEffect, useState } from 'react'
-import { ApplicationConfig } from '../AuthingGuard/api'
+import { useCallback, useEffect, useState } from 'react'
 import { getGuardWindow } from '../Guard/core/useAppendConfig'
-import { init } from './iconfont'
+import { GenerateSvg } from './iconfont'
 
-export const useGuardIconfont = (publicConfig?: ApplicationConfig) => {
-  const [svgString, setSvgString] = useState<string>()
-
+export const useGuardIconfont = (cdnBase?: string, setError?: any) => {
   const [loaded, setLoaded] = useState<boolean>(false)
 
-  const loadSvgString = async (cdnBase: string) => {
+  const initIconfont = useCallback(async () => {
+    if (!cdnBase) return
+
     try {
       const res = await fetch(`${cdnBase}/svg-string/guard`)
 
-      const body = await res.text()
+      const body = await res?.text()
 
-      setSvgString(body)
-    } catch (error) {}
-  }
+      const guardWindow = getGuardWindow()
+
+      if (!guardWindow) return
+
+      GenerateSvg(guardWindow.document, body)
+
+      setLoaded(true)
+    } catch (error) {
+      setError(error)
+    }
+  }, [cdnBase, setError])
 
   useEffect(() => {
-    if (!publicConfig) return
+    initIconfont()
+  }, [initIconfont])
 
-    if (svgString) return
-
-    loadSvgString(publicConfig.cdnBase)
-  }, [publicConfig, svgString])
-
-  useEffect(() => {
-    if (!svgString) return
-
-    const guardWindow = getGuardWindow()
-
-    if (!guardWindow) return
-
-    init(guardWindow, svgString)
-
-    setLoaded(true)
-  }, [svgString])
-
-  if (loaded) {
-    return true
-  }
+  return loaded
 }
