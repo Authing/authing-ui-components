@@ -569,3 +569,11 @@ export const GuardPropsFilter = (pre: GuardProps, current: GuardProps) => {
 
   return isEqual(omit(pre, preAttribute), omit(current, currentAttribute))
 }
+
+export const getDocumentNode = (node: Node & ParentNode): Document => {
+  if (node.nodeName === '#document') {
+    return node as Document
+  }
+
+  return getDocumentNode(node.parentNode as Node & ParentNode)
+}

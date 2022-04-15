@@ -16,7 +16,6 @@ export interface IG2FCProps extends IG2Events {
 }
 
 export interface GuardAppendConfig {
-  window?: Window
   internalRequest?: boolean
   singleComponent?: boolean
   unAuthFlow?: boolean

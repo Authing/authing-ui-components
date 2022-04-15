@@ -1,14 +1,21 @@
-import { GuardProps } from '../..'
-import { getAppendConfig, initAppendConfig } from '../../_utils/appendConfig'
-import { setPublicConfig, setPageConfig } from '../../_utils/config'
+import { useEffect } from 'react'
+import { GuardProps, setPublicConfig } from '../..'
+import { initAppendConfig } from '../../_utils/appendConfig'
+import { setPageConfig } from '../../_utils/config'
+import { getGuardDocument } from '../../_utils/guardDocument'
+
 export const getGuardWindow = () => {
   if (typeof window === 'undefined') {
     return undefined
   }
 
-  const appendConfig = getAppendConfig()
+  const guardDocument = getGuardDocument()
 
-  if (appendConfig?.window) return appendConfig.window
+  const guardWindow = guardDocument?.defaultView
+
+  if (guardWindow) {
+    return guardWindow
+  }
 
   return window
 }
@@ -18,13 +25,15 @@ export const useGuardWindow = getGuardWindow
 export const useInitGuardAppendConfig = (guardProps: GuardProps) => {
   const { appendConfig, appId } = guardProps
 
-  initAppendConfig(appendConfig)
+  useEffect(() => {
+    initAppendConfig(appendConfig)
 
-  if (appendConfig?.publicConfig) {
-    setPublicConfig(appId, appendConfig.publicConfig)
-  }
+    if (appendConfig?.publicConfig) {
+      setPublicConfig(appId, appendConfig.publicConfig)
+    }
 
-  if (appendConfig?.pageConfig) {
-    setPageConfig(appId, appendConfig.pageConfig)
-  }
+    if (appendConfig?.pageConfig) {
+      setPageConfig(appId, appendConfig.pageConfig)
+    }
+  }, [appId, appendConfig])
 }

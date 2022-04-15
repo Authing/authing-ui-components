@@ -47,6 +47,7 @@ export const RenderContext: React.FC<{
   const [authClint, setAuthClint] = useState<AuthenticationClient>()
   const [httpClient, setHttpClient] = useState<GuardHttp>()
   const [publicConfig, setPublicConfig] = useState<ApplicationConfig>()
+  const [cdnBase, setCdnBase] = useState<string>()
   const [error, setError] = useState()
   const [isAuthFlow, setIsAuthFlow] = useState(true)
 
@@ -120,7 +121,7 @@ export const RenderContext: React.FC<{
   const guardPageConfig = useGuardPageConfig(appId, httpClient, setError)
 
   // iconfont
-  const iconfontLoaded = useGuardIconfont(publicConfig)
+  const iconfontLoaded = useGuardIconfont(cdnBase)
 
   // SSO 登录
   useEffect(() => {
@@ -155,6 +156,8 @@ export const RenderContext: React.FC<{
     if (!publicConfig) return
 
     setPublicConfig(publicConfig)
+
+    setCdnBase(publicConfig.cdnBase)
   }, [appId, finallyConfig])
 
   // AuthClient
