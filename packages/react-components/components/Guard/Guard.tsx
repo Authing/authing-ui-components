@@ -2,7 +2,7 @@ import { memo, useEffect, useRef } from 'react'
 
 import { GuardEvents } from './event'
 import { IG2FCProps } from '../Type'
-import { GuardLocalConfig } from './config'
+import { GuardAppendConfig, GuardLocalConfig } from './config'
 import { GuardModuleType } from './module'
 import 'moment/locale/zh-cn'
 import { GuardCore } from './core/index'
@@ -12,6 +12,7 @@ import { initGuardDocument } from '../_utils/guardDocument'
 
 export interface GuardProps extends GuardEvents, IG2FCProps {
   config?: Partial<GuardLocalConfig>
+  appendConfig?: Partial<GuardAppendConfig>
 }
 
 interface ModuleState {
