@@ -40,7 +40,8 @@ interface IBaseAction<T = string, P = any> {
 export const RenderContext: React.FC<{
   guardProps: GuardProps
   initState: ModuleState
-}> = ({ guardProps, initState, children }) => {
+  forceUpdate: number
+}> = ({ guardProps, initState, children, forceUpdate }) => {
   const { appId, tenantId, config } = guardProps
 
   const [events, setEvents] = useState<GuardEvents>()
@@ -112,13 +113,19 @@ export const RenderContext: React.FC<{
 
   const finallyConfig = useMergePublicConfig(
     appId,
+    forceUpdate,
     defaultMergedConfig,
     httpClient,
     setError
   )
 
   // guardPageConfig
-  const guardPageConfig = useGuardPageConfig(appId, httpClient, setError)
+  const guardPageConfig = useGuardPageConfig(
+    appId,
+    forceUpdate,
+    httpClient,
+    setError
+  )
 
   // iconfont
   const iconfontLoaded = useGuardIconfont(cdnBase)

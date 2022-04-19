@@ -127,6 +127,7 @@ const assembledRequestHost = (
 
 export const useMergePublicConfig = (
   appId: string,
+  forceUpdate: number,
   config?: GuardLocalConfig,
   httpClient?: GuardHttp,
   serError?: any
@@ -147,7 +148,7 @@ export const useMergePublicConfig = (
 
   useEffect(() => {
     initPublicConfig()
-  }, [initPublicConfig])
+  }, [initPublicConfig, forceUpdate])
 
   if (publicConfig && config) {
     return {
@@ -193,6 +194,7 @@ export const requestGuardPageConfig = async (
 
 export const useGuardPageConfig = (
   appId: string,
+  forceUpdate: number,
   httpClient?: GuardHttp,
   serError?: any
 ) => {
@@ -213,7 +215,7 @@ export const useGuardPageConfig = (
 
   useEffect(() => {
     initPublicConfig()
-  }, [initPublicConfig])
+  }, [initPublicConfig, forceUpdate])
 
   if (pageConfig) {
     return pageConfig
