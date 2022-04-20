@@ -8,7 +8,7 @@ import React, {
 } from 'react'
 import { initGuardAuthClient } from '../authClient'
 import { GuardEvents, guardEventsFilter } from '../event'
-import { insertStyles } from '../../_utils'
+import { insertStyles, removeStyles } from '../../_utils'
 import { getDefaultGuardLocalConfig } from '../config'
 import { GuardModuleType } from '../module'
 
@@ -205,7 +205,9 @@ export const RenderContext: React.FC<{
   // 自定义 CSS 处理
   useEffect(() => {
     if (finallyConfig && finallyConfig.contentCss)
-      insertStyles(finallyConfig.contentCss)
+      insertStyles(finallyConfig.contentCss, 'appConfig')
+
+    return () => removeStyles('appConfig')
   }, [finallyConfig])
 
   // 是否使用 Guard auth flow
