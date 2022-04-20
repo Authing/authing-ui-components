@@ -3,6 +3,7 @@ import { ShieldSpin } from '../../ShieldSpin'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { useGuardHttpClient } from '../../_utils/context'
 import { message } from 'antd'
+import { getGuardWindow } from '../../Guard/core/useAppendConfig'
 
 interface LoginWithWechatmpQrcodeProps {
   // onLogin: any
@@ -27,11 +28,18 @@ export const LoginWithWechatmpQrcode = (
   const domId = `authingGuardMpQrcode-${props.qrCodeScanOptions.extIdpConnId}`
 
   useEffect(() => {
+    const guardWindow = getGuardWindow()
+
+    if (!guardWindow) return
+
+    const document = guardWindow.document
+
     if (!props.canLoop) {
       return () => clearInterval(timerRef.current)
     }
     setLoading(true)
     appQrcodeClient.startScanning(domId, {
+      currentDocument: document,
       autoExchangeUserInfo: true,
       ...props.qrCodeScanOptions,
 
