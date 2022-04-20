@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { GuardComponentConfig, GuardLocalConfig } from '../config'
 import { GuardModuleType } from '../module'
 import isEqual from 'lodash/isEqual'
@@ -55,8 +55,6 @@ export class GuardStateMachine {
   }
 
   next = (nextModule: GuardModuleType, initData: any) => {
-    // window?.history.pushState(nextModule, '', window?.location.href)
-
     const moduleData: ModuleState = {
       moduleName: nextModule,
       initData,
@@ -129,20 +127,35 @@ export class GuardStateMachine {
 export const useHistoryHijack = (back?: () => void) => {
   const globalWindow = getGuardWindow()
 
+  const isUseHistoryHijack = useMemo(
+    () => globalWindow?.location.href !== 'about:blank',
+
+    [globalWindow?.location.href]
+  )
+
   const next = (state: any = {}) => {
+    if (!isUseHistoryHijack) {
+      return
+    }
+
     globalWindow?.history.pushState(state, '', globalWindow?.location.href)
   }
 
   useEffect(() => {
+    if (!isUseHistoryHijack) {
+      return () => {}
+    }
+
     const onPopstate = () => {
       back?.()
     }
+
     back && globalWindow?.addEventListener('popstate', onPopstate)
 
     return () => {
       back && globalWindow?.removeEventListener('popstate', onPopstate)
     }
-  }, [back, globalWindow])
+  }, [back, globalWindow, isUseHistoryHijack])
 
   return [next]
 }

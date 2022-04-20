@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 
 import { GuardEvents } from './event'
 import { GuardAppendConfig, IG2FCProps } from '../Type'
@@ -29,12 +29,17 @@ export const Guard = memo((props: GuardProps) => {
 
   const ref = useRef<HTMLDivElement>(null)
 
+  const [guardWindowMount, mounted] = useState<boolean>(false)
+
+  // 锁定 Guard 中 window 指向
   useEffect(() => {
     if (!ref?.current) return
 
     const guardDocument = getDocumentNode(ref.current)
 
     initGuardDocument(guardDocument)
+
+    mounted(true)
   }, [])
 
   // 首页 init 数据
@@ -45,7 +50,9 @@ export const Guard = memo((props: GuardProps) => {
 
   return (
     <div ref={ref}>
-      <GuardCore guardProps={props} initState={initState} />
+      {guardWindowMount && (
+        <GuardCore guardProps={props} initState={initState} />
+      )}
     </div>
   )
 }, propsAreEqual)
