@@ -49,6 +49,9 @@ export const MFAMethods: React.FC<MFAMethodsProps> = ({
   const otherMethods = useMemo(
     () =>
       applicationMfa
+        .filter((item) =>
+          Object.keys(methodTitleMapping).includes(item.mfaPolicy)
+        )
         .filter((item) => item.mfaPolicy !== currentMethod)
         .sort((a, b) => a.sort - b.sort)
         .map((item) => (
