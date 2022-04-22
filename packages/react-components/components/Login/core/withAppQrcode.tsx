@@ -3,6 +3,7 @@ import { ShieldSpin } from '../../ShieldSpin'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { message } from 'antd'
 import { useGuardHttpClient } from '../../_utils/context'
+import { getGuardWindow } from '../../Guard/core/useAppendConfig'
 
 interface LoginWithAppQrcodeProps {
   // onLogin: any
@@ -19,11 +20,18 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
   const { responseIntercept } = useGuardHttpClient()
 
   useEffect(() => {
+    const guardWindow = getGuardWindow()
+
+    if (!guardWindow) return
+
+    const document = guardWindow.document
+
     if (!props.canLoop) {
       return () => clearInterval(timerRef.current)
     }
     setLoading(true)
     appQrcodeClient.startScanning('authingGuardAppQrcode', {
+      currentDocument: document,
       autoExchangeUserInfo: true,
       ...props.qrCodeScanOptions,
       onCodeShow() {
