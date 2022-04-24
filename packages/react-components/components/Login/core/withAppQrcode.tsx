@@ -22,7 +22,9 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
   useEffect(() => {
     const guardWindow = getGuardWindow()
 
-    if (!guardWindow || !!config._qrCodeScanOptions) return
+    if (!guardWindow) return
+
+    if (!!config._qrCodeScanOptions) return
 
     const document = guardWindow.document
 
