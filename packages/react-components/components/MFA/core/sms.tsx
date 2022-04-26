@@ -16,7 +16,7 @@ import { phoneDesensitization } from '../../_utils'
 import { useGuardPublicConfig } from '../../_utils/context'
 import { useMfaBusinessRequest, MfaBusinessAction } from '../businessRequest'
 import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
-import { defaultAreaCode, parsePhone } from '../../_utils/hooks'
+import { parsePhone } from '../../_utils/hooks'
 export interface BindMFASmsProps {
   mfaToken: string
   onBind: (phone: string) => void
@@ -265,7 +265,9 @@ export const MFASms: React.FC<{
   const publicConfig = useGuardPublicConfig()
 
   const codeLength = publicConfig?.verifyCodeLength
-  const [areaCode, setAreaCode] = useState(defaultAreaCode)
+  const [areaCode, setAreaCode] = useState(
+    publicConfig?.internationalSmsConfig?.defaultISOType || 'CN'
+  )
 
   const isInternationSms = Boolean(
     publicConfig?.internationalSmsConfig?.enabled

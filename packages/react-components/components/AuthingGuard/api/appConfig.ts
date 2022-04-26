@@ -102,6 +102,7 @@ export interface ApplicationConfig {
   publicKey: string
   internationalSmsConfig?: {
     enabled: boolean
+    defaultISOType: string
   }
   // 登录框自定义 css 代码
   css: string

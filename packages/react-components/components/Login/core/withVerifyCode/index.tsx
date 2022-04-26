@@ -20,7 +20,7 @@ import { FormItemIdentify } from './FormItemIdentify'
 import { InputIdentify } from './inputIdentify'
 import './styles.less'
 import { InputInternationPhone } from './InputInternationPhone'
-import { defaultAreaCode, parsePhone } from '../../../_utils/hooks'
+import { parsePhone } from '../../../_utils/hooks'
 import { InputMethod } from '../../../Type'
 import { CodeAction } from '../../../_utils/responseManagement/interface'
 
@@ -51,7 +51,9 @@ export const LoginWithVerifyCode = (props: any) => {
   // 是否仅开启国际化短信
   const [isOnlyInternationSms, setInternationSms] = useState(false)
   // 区号 默认
-  const [areaCode, setAreaCode] = useState(defaultAreaCode)
+  const [areaCode, setAreaCode] = useState(
+    config?.internationalSmsConfig?.defaultISOType || 'CN'
+  )
 
   let [form] = Form.useForm()
 

@@ -7,7 +7,6 @@ import { fieldRequiredRule, validate } from '../../../_utils'
 import { phone } from 'phone'
 import { useGuardPublicConfig } from '../../../_utils/context'
 import { VerifyLoginMethods } from '../../../AuthingGuard/api'
-import { defaultAreaCode } from '../../../_utils/hooks'
 export interface FormItemIdentifyProps extends FormItemProps {
   checkRepeat?: boolean
   methods: VerifyLoginMethods[]
@@ -16,12 +15,7 @@ export interface FormItemIdentifyProps extends FormItemProps {
 }
 
 export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
-  const {
-    methods,
-    areaCode = defaultAreaCode,
-    currentMethod,
-    ...formItemProps
-  } = props
+  const { methods, areaCode = 'CN', currentMethod, ...formItemProps } = props
 
   const publicConfig = useGuardPublicConfig()
   const { t } = useTranslation()

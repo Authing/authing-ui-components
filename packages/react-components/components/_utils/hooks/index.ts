@@ -127,12 +127,6 @@ export const useShaking = () => {
   }
   return { MountShaking, UnMountShaking }
 }
-export const defaultAreaCode = (() => {
-  if (typeof navigator === 'undefined') {
-    return 'CN'
-  }
-  return 'CN'
-})()
 
 /**
  * 解析手机号
@@ -143,7 +137,7 @@ export const defaultAreaCode = (() => {
 export const parsePhone = (
   isInternationSms: boolean,
   fieldValue: string,
-  areaCode: string = defaultAreaCode
+  areaCode: string = 'CN'
 ) => {
   let countryCode = undefined
 
