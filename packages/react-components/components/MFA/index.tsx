@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { GuardModuleType } from '../Guard/module'
-import { IconFont } from '../IconFont'
 import { MFAEmail } from './core/email'
 import { MFASms } from './core/sms'
 import { MFAFace } from './core/face'
@@ -18,6 +17,7 @@ import {
   useGuardInitData,
   useGuardModule,
 } from '../_utils/context'
+import { BackCustom, BackLogin } from '../Back'
 interface MFABackStateContextType {
   setMfaBackState: React.Dispatch<React.SetStateAction<string>>
   mfaBackState: string
@@ -75,21 +75,6 @@ export const GuardMFAView: React.FC = () => {
   const client = useGuardAuthClient()
   const { t } = useTranslation()
 
-  const onBack = () => {
-    if (currentMethod === MFAType.FACE && mfaBackState === 'check') {
-      setCurrentMethod(
-        initData.applicationMfa.find((item) => item.mfaPolicy === MFAType.FACE)
-          ? MFAType.FACE
-          : initData.applicationMfa?.sort((a, b) => a.sort - b.sort)[0]
-              .mfaPolicy
-      )
-      setShowMethods(true)
-      setMfaBackState('login')
-      return
-    }
-    changeModule?.(GuardModuleType.LOGIN)
-  }
-
   const __codePaser = (code: number, msg?: string) => {
     const action = codeMap[code]
 
@@ -140,25 +125,38 @@ export const GuardMFAView: React.FC = () => {
     callback?.(data)
   }
 
+  const renderBack = useMemo(() => {
+    if (currentMethod === MFAType.FACE && mfaBackState === 'check') {
+      return (
+        <BackCustom
+          onBack={() => {
+            setCurrentMethod(
+              initData.applicationMfa.find(
+                (item) => item.mfaPolicy === MFAType.FACE
+              )
+                ? MFAType.FACE
+                : initData.applicationMfa?.sort((a, b) => a.sort - b.sort)[0]
+                    .mfaPolicy
+            )
+            setShowMethods(true)
+            setMfaBackState('login')
+          }}
+        >
+          {t('common.backToVerify')}
+        </BackCustom>
+      )
+    }
+
+    return <BackLogin />
+  }, [currentMethod, initData.applicationMfa, mfaBackState, t])
+
   return (
     // 返回验证页和返回登录页 需要获取内部 face 模式下的状态
     <MFABackStateContext.Provider
       value={{ setMfaBackState: setMfaBackState, mfaBackState: mfaBackState }}
     >
       <div className="g2-view-container g2-view-mfa">
-        <div className="g2-view-back" style={{ display: 'inherit' }}>
-          <span onClick={onBack} className="g2-view-mfa-back-hover">
-            <IconFont
-              type="authing-arrow-left-s-line"
-              style={{ fontSize: 24 }}
-            />
-            <span>
-              {currentMethod === MFAType.FACE && mfaBackState === 'check'
-                ? t('common.backToVerify')
-                : t('common.backLoginPage')}
-            </span>
-          </span>
-        </div>
+        {renderBack}
         <div className="g2-mfa-content">
           {ComponentsMapping[currentMethod]({
             config: config,

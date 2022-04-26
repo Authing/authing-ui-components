@@ -2,9 +2,9 @@ import { Tabs } from 'antd'
 import React, { ReactNode, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ImagePro } from '../ImagePro'
-import { IconFont } from '../IconFont'
 import './styles.less'
 import { useGuardModule, useGuardPublicConfig } from '../_utils/context'
+import { BackCustom } from '../Back'
 
 enum DownloadType {
   IOS = 'ios',
@@ -80,16 +80,15 @@ export const GuardDownloadATView: React.FC = () => {
     [downloadConfig, t]
   )
 
-  const onBack = () => backModule?.()
+  const renderBack = useMemo(() => {
+    const onBack = () => backModule?.()
+
+    return <BackCustom onBack={onBack}>{t('common.backToMFA')}</BackCustom>
+  }, [backModule, t])
 
   return (
     <div className="g2-view-container g2-download-authenticator">
-      <div className="g2-view-back" style={{ display: 'inherit' }}>
-        <span onClick={onBack} className="g2-view-mfa-back-hover">
-          <IconFont type="authing-arrow-left-s-line" style={{ fontSize: 24 }} />
-          <span>{t('common.backToMFA')}</span>
-        </span>
-      </div>
+      {renderBack}
       <div className="g2-view-tabs g2-mfa-totp-download-tabs">
         <Tabs defaultActiveKey={DownloadType.IOS}>{renderTab}</Tabs>
       </div>

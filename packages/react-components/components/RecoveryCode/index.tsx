@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { GuardModuleType, User } from '..'
+import { BackCustom } from '../Back'
 import { useGuardAuthClient } from '../Guard/authClient'
-import { IconFont } from '../IconFont'
 import { GuardMFAInitData, MFAType } from '../MFA/interface'
 import {
   useGuardEvents,
@@ -21,9 +21,6 @@ export const RecoveryCode: React.FC = () => {
 
   const events = useGuardEvents()
 
-  const onBack = () =>
-    changeModule?.(GuardModuleType.MFA, { ...initData, current: MFAType.TOTP })
-
   const { t } = useTranslation()
 
   const [user, setUser] = useState<User>()
@@ -35,14 +32,25 @@ export const RecoveryCode: React.FC = () => {
   const onBind = () => {
     if (user) events?.onLogin?.(user, authClient)
   }
+
+  const renderBack = useMemo(() => {
+    return (
+      <BackCustom
+        onBack={() =>
+          changeModule?.(GuardModuleType.MFA, {
+            ...initData,
+            current: MFAType.TOTP,
+          })
+        }
+      >
+        {t('common.backToVerify')}
+      </BackCustom>
+    )
+  }, [changeModule, initData, t])
+
   return (
     <div className="g2-view-container g2-mfa-recovery-code">
-      <div className="g2-view-back" style={{ display: 'inherit' }}>
-        <span onClick={onBack} className="g2-view-mfa-back-hover">
-          <IconFont type="authing-arrow-left-s-line" style={{ fontSize: 24 }} />
-          <span>{t('common.backToVerify')}</span>
-        </span>
-      </div>
+      {renderBack}
       <div className="g2-mfa-content">
         {user && code ? (
           <SaveCode secret={code} onBind={onBind} />
@@ -75,19 +83,26 @@ export const RecoveryCodeAuthFlow: React.FC = () => {
     if (user) events?.onLogin?.(user, authClient)
   }
 
-  const onBack = () =>
-    changeModule?.(GuardModuleType.MFA, { ...initData, current: MFAType.TOTP })
-
   const { t } = useTranslation()
+
+  const renderBack = useMemo(() => {
+    return (
+      <BackCustom
+        onBack={() =>
+          changeModule?.(GuardModuleType.MFA, {
+            ...initData,
+            current: MFAType.TOTP,
+          })
+        }
+      >
+        {t('common.backToVerify')}
+      </BackCustom>
+    )
+  }, [changeModule, initData, t])
 
   return (
     <div className="g2-view-container g2-mfa-recovery-code">
-      <div className="g2-view-back" style={{ display: 'inherit' }}>
-        <span onClick={onBack} className="g2-view-mfa-back-hover">
-          <IconFont type="authing-arrow-left-s-line" style={{ fontSize: 24 }} />
-          <span>{t('common.backToVerify')}</span>
-        </span>
-      </div>
+      {renderBack}
       <div className="g2-mfa-content">
         {recoveryCode ? (
           <SaveCode secret={recoveryCode} onBind={onBind} />

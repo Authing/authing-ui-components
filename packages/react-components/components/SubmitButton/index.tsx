@@ -6,8 +6,9 @@ import React, {
 } from 'react'
 import { Button } from 'antd'
 import { useShaking } from '../_utils/hooks'
+import { ButtonProps } from 'antd/lib/button'
 
-interface SubmitButtonProps {
+interface SubmitButtonProps extends ButtonProps {
   text?: string
   className?: string
   onClick?: any
@@ -33,6 +34,7 @@ const SubmitButton = (props: SubmitButtonProps, ref: any) => {
 
   useImperativeHandle(ref, () => ({
     onError: (text?: string) => {
+      setSpin(false)
       MountShaking()
       setShaking(true)
     },

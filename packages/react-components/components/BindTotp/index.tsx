@@ -6,7 +6,6 @@ import { ErrorCode } from '../_utils/GuardErrorCode'
 import { useGuardHttp } from '../_utils/guardHttp'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
-import { IconFont } from '../IconFont'
 import { ShieldSpin, Spin } from '../ShieldSpin'
 import { BindSuccess } from './core/bindSuccess'
 import { SecurityCode } from './core/securityCode'
@@ -20,6 +19,7 @@ import {
   useGuardModule,
 } from '../_utils/context'
 import { MFAType } from '../MFA/interface'
+import { BackCustom } from '../Back'
 
 enum BindTotpType {
   SECURITY_CODE = 'securityCode',
@@ -127,9 +127,16 @@ export const GuardBindTotpView: React.FC = () => {
     []
   )
 
-  const onBack = () => {
-    changeModule?.(GuardModuleType.MFA, { ...initData, current: MFAType.TOTP })
-  }
+  const renderBack = useMemo(() => {
+    const onBack = () => {
+      changeModule?.(GuardModuleType.MFA, {
+        ...initData,
+        current: MFAType.TOTP,
+      })
+    }
+
+    return <BackCustom onBack={onBack}>{t('common.backToVerify')}</BackCustom>
+  }, [changeModule, initData, t])
 
   return (
     <>
@@ -137,15 +144,7 @@ export const GuardBindTotpView: React.FC = () => {
         <Spin />
       ) : (
         <div className="g2-view-container g2-bind-totp">
-          <div className="g2-view-back" style={{ display: 'inherit' }}>
-            <span onClick={onBack} className="g2-view-mfa-back-hover">
-              <IconFont
-                type="authing-arrow-left-s-line"
-                style={{ fontSize: 24 }}
-              />
-              <span>{t('common.backToVerify')}</span>
-            </span>
-          </div>
+          {renderBack}
           <div className="g2-mfa-content g2-mfa-bindTotp">
             {bindInfo.loading ? (
               <ShieldSpin />
