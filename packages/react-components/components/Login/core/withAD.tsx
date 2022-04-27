@@ -12,6 +12,7 @@ import version from '../../version/version'
 import { fieldRequiredRule } from '../../_utils'
 import {
   useGuardAppId,
+  useGuardFinallyConfig,
   useGuardHttpClient,
   useGuardPublicConfig,
 } from '../../_utils/context'
