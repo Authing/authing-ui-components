@@ -68,7 +68,8 @@ const useDisables = (data: any) => {
     disableRegister = true
   }
   if (loginWay === LoginMethods.AD) {
-    disableResetPwd = true
+    // TODO P0 需求暂时先取消掉
+    // disableResetPwd = true
     disableRegister = true
   }
   if (autoRegister === true) {
