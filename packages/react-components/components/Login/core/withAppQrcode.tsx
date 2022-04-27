@@ -24,7 +24,7 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
 
     if (!guardWindow) return
 
-    if (!!config._qrCodeScanOptions) return
+    if (!!config?._qrCodeScanOptions) return
 
     const document = guardWindow.document
 

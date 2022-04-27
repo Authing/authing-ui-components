@@ -13,6 +13,8 @@ export const popupCenter = (
 
   if (!guardWindow) return
 
+  const document = guardWindow.document
+
   // Fixes dual-screen position                             Most browsers      Firefox
   const dualScreenLeft =
     guardWindow.screenLeft !== undefined

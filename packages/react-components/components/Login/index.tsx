@@ -31,6 +31,7 @@ import { isWeChatBrowser } from '../_utils'
 import { LoginWithVerifyCode } from './core/withVerifyCode'
 import { VerifyLoginMethods } from '../AuthingGuard/api'
 import { useMediaSize, useMethod } from '../_utils/hooks'
+import { getGuardDocument } from '../_utils/guardDocument'
 
 const inputWays = [
   LoginMethods.Password,
@@ -259,6 +260,7 @@ export const GuardLoginView = () => {
   // 渲染前执行
   useLayoutEffect(() => {
     if (noLoginMethods && !isPhoneMedia) {
+      const document = getGuardDocument()
       // pc 下
       const containerDOM = document.getElementsByClassName(
         'g2-view-container'
@@ -278,6 +280,8 @@ export const GuardLoginView = () => {
   }, [isPhoneMedia, noLoginMethods])
 
   useEffect(() => {
+    const document = getGuardDocument()
+
     const containerDOM = document.getElementsByClassName('g2-view-header')?.[0]
     const innerContainer = document.querySelector(
       '.g2-view-login>.g2-view-container-inner'
