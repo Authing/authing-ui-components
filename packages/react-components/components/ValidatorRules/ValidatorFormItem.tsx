@@ -11,7 +11,6 @@ import { useCheckRepeat } from './useCheckRepeat'
 
 const ValidatorFormItem: React.FC<ValidatorFormItemMetaProps> = (props) => {
   const {
-    form,
     checkRepeat = false,
     method,
     name,

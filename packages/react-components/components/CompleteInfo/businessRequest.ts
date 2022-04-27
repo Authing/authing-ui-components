@@ -26,6 +26,10 @@ const registerMethod = (
   const authClient = getGuardAuthClient()
 
   if (fnName === 'registerByEmail') {
+    const phoneToken = profile.phoneToken
+
+    delete profile.phoneToken
+
     return authClient!.registerByEmail(
       content.email,
       content.password,
@@ -35,10 +39,14 @@ const registerMethod = (
       },
       {
         ...content.options,
-        phoneToken: profile?.phoneToken,
+        phoneToken,
       }
     )
   } else if (fnName === 'registerByPhoneCode') {
+    const emailToken = profile?.emailToken
+
+    delete profile?.emailToken
+
     return authClient!.registerByPhoneCode(
       content.phone,
       content.code,
@@ -49,7 +57,7 @@ const registerMethod = (
       },
       {
         ...content.options,
-        phoneToken: profile?.emailToken,
+        emailToken,
       }
     )
   }

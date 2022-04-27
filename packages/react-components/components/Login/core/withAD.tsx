@@ -42,6 +42,8 @@ export const LoginWithAD = (props: LoginWithADProps) => {
 
   const publicConfig = useGuardPublicConfig()
 
+  const { host } = useGuardFinallyConfig()
+
   const appId = useGuardAppId()
 
   const { responseIntercept } = useGuardHttpClient()
@@ -81,7 +83,7 @@ export const LoginWithAD = (props: LoginWithADProps) => {
 
     // todo
     try {
-      const api = `${publicConfig.websocket}/api/v2/ad/verify-user`
+      const api = `${host}/api/v2/ad/verify-user`
 
       const fetchRes = await fetch(api, {
         method: 'POST',

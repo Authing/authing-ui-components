@@ -160,7 +160,6 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           name="email"
           className="authing-g2-input-form"
           validateFirst={true}
-          form={form}
           checkRepeat={true}
           required={true}
         >
@@ -236,7 +235,11 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           />
         )}
         <Form.Item>
-          <SubmitButton text={t('common.register')} ref={submitButtonRef} />
+          <SubmitButton
+            text={t('common.register')}
+            ref={submitButtonRef}
+            onClick={() => submitButtonRef.current.onSpin(true)}
+          />
         </Form.Item>
       </Form>
     </div>

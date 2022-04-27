@@ -3,7 +3,7 @@ import { GuardModuleType } from '../../Guard/module'
 import { useModule } from '../../context/module/context'
 import { useMediaQuery } from 'react-responsive'
 import phone from 'phone'
-import { LanguageMap } from '../../Type'
+// import { LanguageMap } from '../../Type'
 import { SocialConnectionProvider } from 'authing-js-sdk'
 import {
   HIDE_SOCIALS,
@@ -132,9 +132,7 @@ export const defaultAreaCode = (() => {
   if (typeof navigator === 'undefined') {
     return 'CN'
   }
-  return LanguageMap[navigator.language]
-    ? LanguageMap[navigator.language]
-    : 'CN'
+  return 'CN'
 })()
 
 /**
