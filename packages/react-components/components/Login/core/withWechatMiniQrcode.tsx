@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { message } from 'antd'
 import { ShieldSpin } from '../../ShieldSpin'
 import { useGuardAuthClient } from '../../Guard/authClient'
-import { useGuardHttpClient } from '../../_utils/context'
+import { useGuardFinallyConfig, useGuardHttpClient } from '../../_utils/context'
 import { getGuardWindow } from '../../Guard/core/useAppendConfig'
 
 interface LoginWithWechatMiniQrcodeProps {
@@ -20,13 +20,15 @@ export const LoginWithWechatMiniQrcode = (
   const [loading, setLoading] = useState(true)
   const appQrcodeClient = client.wxqrcode
   const { responseIntercept } = useGuardHttpClient()
-
+  const config = useGuardFinallyConfig()
   const domId = `authingGuardMiniQrcode-${props.qrCodeScanOptions.extIdpConnId}`
 
   useEffect(() => {
     const guardWindow = getGuardWindow()
 
     if (!guardWindow) return
+
+    if (!!config._qrCodeScanOptions) return
 
     const document = guardWindow.document
 
@@ -76,8 +78,17 @@ export const LoginWithWechatMiniQrcode = (
 
   return (
     <div className="authing-g2-login-app-qrcode">
-      {loading && <ShieldSpin />}
-      <div id={domId}></div>
+      {config._qrCodeScanOptions ? (
+        <div className="qrcode">
+          <img src={config._qrCodeScanOptions.wechatMiniQrcode.qrcode} alt="" />
+          <span>{props.qrCodeScanOptions.tips.title}</span>
+        </div>
+      ) : (
+        <>
+          {loading && <ShieldSpin />}
+          <div id={domId}></div>
+        </>
+      )}
     </div>
   )
 }

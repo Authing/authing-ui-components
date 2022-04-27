@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { ShieldSpin } from '../../ShieldSpin'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { message } from 'antd'
-import { useGuardHttpClient } from '../../_utils/context'
+import { useGuardFinallyConfig, useGuardHttpClient } from '../../_utils/context'
 import { getGuardWindow } from '../../Guard/core/useAppendConfig'
 
 interface LoginWithAppQrcodeProps {
@@ -18,11 +18,13 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
   const [loading, setLoading] = useState(true)
   const appQrcodeClient = client.qrcode
   const { responseIntercept } = useGuardHttpClient()
-
+  const config = useGuardFinallyConfig()
   useEffect(() => {
     const guardWindow = getGuardWindow()
 
     if (!guardWindow) return
+
+    if (!!config._qrCodeScanOptions) return
 
     const document = guardWindow.document
 
@@ -69,8 +71,17 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
 
   return (
     <div className="authing-g2-login-app-qrcode">
-      {loading && <ShieldSpin />}
-      <div id="authingGuardAppQrcode"></div>
+      {config._qrCodeScanOptions ? (
+        <div className="qrcode">
+          <img src={config._qrCodeScanOptions.appQrcode.qrcode} alt="" />
+          <span>{props.qrCodeScanOptions.tips.title}</span>
+        </div>
+      ) : (
+        <>
+          {loading && <ShieldSpin />}
+          <div id="authingGuardAppQrcode"></div>
+        </>
+      )}
     </div>
   )
 }
