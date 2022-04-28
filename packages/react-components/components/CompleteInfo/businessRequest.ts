@@ -21,11 +21,15 @@ export const authFlow = async (
 const registerMethod = (
   fnName: 'registerByEmail' | 'registerByPhoneCode',
   content: any,
-  profile?: any
+  profile: any
 ) => {
   const authClient = getGuardAuthClient()
 
   if (fnName === 'registerByEmail') {
+    const phoneToken = profile.phoneToken
+
+    delete profile.phoneToken
+
     return authClient!.registerByEmail(
       content.email,
       content.password,
@@ -35,10 +39,14 @@ const registerMethod = (
       },
       {
         ...content.options,
-        phoneToken: profile?.phoneToken,
+        phoneToken,
       }
     )
   } else if (fnName === 'registerByPhoneCode') {
+    const emailToken = profile?.emailToken
+
+    delete profile?.emailToken
+
     return authClient!.registerByPhoneCode(
       content.phone,
       content.code,
@@ -49,7 +57,39 @@ const registerMethod = (
       },
       {
         ...content.options,
-        phoneToken: profile?.emailToken,
+        emailToken,
+      }
+    )
+  }
+}
+
+export const registerSkipMethod = (
+  fnName: 'registerByEmail' | 'registerByPhoneCode',
+  content: any
+) => {
+  const authClient = getGuardAuthClient()
+
+  if (fnName === 'registerByEmail') {
+    return authClient!.registerByEmail(
+      content.email,
+      content.password,
+      {
+        ...content.profile,
+      },
+      {
+        ...content.options,
+      }
+    )
+  } else if (fnName === 'registerByPhoneCode') {
+    return authClient!.registerByPhoneCode(
+      content.phone,
+      content.code,
+      content.password,
+      {
+        ...content.profile,
+      },
+      {
+        ...content.options,
       }
     )
   }
@@ -62,7 +102,7 @@ export const registerRequest = async (
   registerProfile?: any
 ) => {
   if (action === CompleteInfoAuthFlowAction.Skip) {
-    return await registerMethod(registerFnName, registerContent)
+    return await registerSkipMethod(registerFnName, registerContent)
   } else if (action === CompleteInfoAuthFlowAction.Complete) {
     return await registerMethod(
       registerFnName,

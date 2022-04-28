@@ -85,9 +85,9 @@ export const fieldValuesToRegisterProfile = (
 
     // 根据字段类型生成不同的数据结构
     if (fieldType === 'internal') {
-      if (name === 'phone') registerProfile.phoneCode = code
+      if (name === 'phone') registerProfile.phoneToken = code
 
-      if (name === 'email') registerProfile.emailCode = code
+      if (name === 'email') registerProfile.emailToken = code
 
       registerProfile[name] = value
     } else if (fieldType === 'user') {

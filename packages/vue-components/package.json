@@ -5,7 +5,7 @@
     "lib",
     "components"
   ],
-  "version": "3.1.0",
+  "version": "3.1.5-rc.3",
   "keywords": [
     "vue",
     "vuejs",
@@ -35,7 +35,7 @@
     "registry": "https://registry.npmjs.org"
   },
   "dependencies": {
-    "@authing/native-js-ui-components": "^3.1.0"
+    "@authing/native-js-ui-components": "^3.1.5-rc.3"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
