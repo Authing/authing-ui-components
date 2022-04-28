@@ -6,9 +6,8 @@ import React, {
 } from 'react'
 import { Button } from 'antd'
 import { useShaking } from '../_utils/hooks'
-import { ButtonProps } from 'antd/lib/button'
 
-interface SubmitButtonProps extends ButtonProps {
+interface SubmitButtonProps {
   text?: string
   className?: string
   onClick?: any
@@ -22,7 +21,6 @@ const SubmitButton = (props: SubmitButtonProps, ref: any) => {
     let timeOut: NodeJS.Timeout
     if (shaking === true) {
       timeOut = setTimeout(() => {
-        setShaking(false)
         UnMountShaking()
       }, 1000)
     }
