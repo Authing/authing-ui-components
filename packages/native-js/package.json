@@ -1,6 +1,6 @@
 {
   "name": "@authing/native-js-ui-components",
-  "version": "3.1.6",
+  "version": "3.1.7",
   "framework": "Native",
   "private": false,
   "main": "lib/index.min.js",
@@ -91,7 +91,7 @@
     ]
   },
   "devDependencies": {
-    "@authing/react-ui-components": "3.1.6",
+    "@authing/react-ui-components": "^3.1.7",
     "@babel/core": "7.12.3",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.2",
     "@svgr/webpack": "5.4.0",
