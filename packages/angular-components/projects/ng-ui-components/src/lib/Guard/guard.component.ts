@@ -73,37 +73,43 @@ export class GuardComponent implements OnInit, OnChanges {
 
   ngAfterViewInit() {
     // @ts-ignore
-    const guard = new Guard(this.appId, this.config);
+    this.guard = new Guard(this.appId, this.config);
 
-    guard.on('load', (...rest) => this.onLoad.emit(rest));
-    guard.on('load-error', (...rest) => this.onLoadError.emit(rest));
-    guard.on('login', (...rest) => this.onLogin.emit(rest));
-    guard.on('login-error', (...rest) => this.onLoginError.emit(rest));
-    guard.on('register', (...rest) => this.onRegister.emit(rest));
-    guard.on('register-error', (...rest) => this.onRegisterError.emit(rest));
-    guard.on('pwd-email-send', (...rest) => this.onPwdEmailSend.emit(rest));
-    guard.on('pwd-email-send-error', (...rest) =>
+    this.guard.on('load', (...rest) => this.onLoad.emit(rest));
+    this.guard.on('load-error', (...rest) => this.onLoadError.emit(rest));
+    this.guard.on('login', (...rest) => this.onLogin.emit(rest));
+    this.guard.on('login-error', (...rest) => this.onLoginError.emit(rest));
+    this.guard.on('register', (...rest) => this.onRegister.emit(rest));
+    this.guard.on('register-error', (...rest) =>
+      this.onRegisterError.emit(rest)
+    );
+    this.guard.on('pwd-email-send', (...rest) =>
+      this.onPwdEmailSend.emit(rest)
+    );
+    this.guard.on('pwd-email-send-error', (...rest) =>
       this.onPwdEmailSendError.emit(rest)
     );
-    guard.on('pwd-phone-send', (...rest) => this.onPwdPhoneSend.emit(rest));
-    guard.on('pwd-phone-send-error', (...rest) =>
+    this.guard.on('pwd-phone-send', (...rest) =>
+      this.onPwdPhoneSend.emit(rest)
+    );
+    this.guard.on('pwd-phone-send-error', (...rest) =>
       this.onPwdPhoneSendError.emit(rest)
     );
-    guard.on('pwd-reset', (...rest) => this.onPwdReset.emit(rest));
-    guard.on('pwd-reset-error', (...rest) => this.onPwdResetError.emit(rest));
-    guard.on('close', (...rest) => this.onClose.emit(rest));
+    this.guard.on('pwd-reset', (...rest) => this.onPwdReset.emit(rest));
+    this.guard.on('pwd-reset-error', (...rest) =>
+      this.onPwdResetError.emit(rest)
+    );
+    this.guard.on('close', (...rest) => this.onClose.emit(rest));
 
     if (this.visible) {
-      guard.show();
+      this.guard.show();
     }
-
-    this.guard = guard;
   }
 
   ngOnInit(): void {}
 
   ngOnChanges(v) {
-    if (v.visible.currentValue) {
+    if (v.visible) {
       this.guard?.show();
     } else {
       this.guard.hide();
