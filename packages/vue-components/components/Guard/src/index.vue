@@ -68,7 +68,7 @@ export default {
   data() {
     return {
       localVisible: false,
-      $guard: null,
+      guardInstance: null,
       guarConfig: {},
     };
   },
@@ -84,7 +84,7 @@ export default {
     localVisible: {
       handler(val) {
         if (val !== this.visible) {
-          this.$emit("update:visible", val);
+          this.$emit("visible", val);
         }
 
         if (val) {
@@ -109,14 +109,7 @@ export default {
     },
   },
   mounted() {
-    // this.guarConfig = this.config || {};
-    // this.guarConfig.mode = this.mode ? this.mode : this.config.mode;
-    // this.guarConfig.autoRegister = this.autoRegister ? this.autoRegister : this.config.autoRegister;
-    // this.guarConfig.isSSO = this.isSSO ? this.isSSO : this.config.isSSO;
-    // this.guarConfig.clickCloseable = this.clickCloseable ? this.clickCloseable : this.config.clickCloseable;
-    // this.guarConfig.escCloseable = this.escCloseable ? this.escCloseable : this.config.escCloseable;
-
-    const guard = new NativeGuard(this.appId, this.mergeConfig);
+    this.guardInstance = new NativeGuard(this.appId, this.mergeConfig);
 
     const evts = Object.values(GuardEventsCamelToKebabMap);
     const kebabToCamelMap = Object.entries(GuardEventsCamelToKebabMap).reduce((acc, [camel, kebab]) => {
@@ -145,19 +138,18 @@ export default {
       });
     }, {});
 
-    evts.forEach((evtName) => guard.on(evtName, listeners[evtName]));
+    evts.forEach((evtName) => this.guardInstance.on(evtName, listeners[evtName]));
 
     if (this.localVisible) {
-      guard.show();
+      this.guardInstance.show();
     }
-    this.$guard = guard;
   },
   methods: {
     show() {
-      this.$guard.show();
+      this.guardInstance.show();
     },
     hide() {
-      this.$guard.hide();
+      this.guardInstance.hide();
     },
   },
 };

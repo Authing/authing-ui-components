@@ -15,7 +15,7 @@
   </head>
   <body>
     <div id="app">
-      <authing-guard></authing-guard>
+      <Guard></Guard>
     </div>
     <!-- built files will be auto injected -->
 
@@ -30,18 +30,31 @@
       const app = Vue.createApp({})
 
 
-      app.component('authing-guard', {
-        render: () => Vue.h(AuthingVueUIComponents.Guard, {
+      app.component('Guard', {
+        data(){
+            return {
+                showGuard: false
+            }
+        },
+        method:{
+            changeShow(){
+                this.showGuard = !this.showGuard
+            }
+
+        },
+      render(){
+        return Vue.h(AuthingVueUIComponents.AuthingGuard, {
             config,
             appId,
-            visible: true,
-          },
-        ),
-      })
+            onLoad:()=>{
+                this.showGuard = true
+            },
+            visible: this.showGuard,
+            onClose: this.changeShow
+        })
+    } 
+    }).mount('#app')
 
-      app.mount('#app')
-
-      window.app = app
     </script>
   </body>
 </html>
