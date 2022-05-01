@@ -15,8 +15,8 @@ import {
 } from '@authing/native-js-ui-components';
 
 @Component({
-  selector: 'authing-guard',
-  template: `<div id="authing_guard_container"></div>`,
+  selector: 'guard',
+  template: `<div id="guard_container"></div>`,
   styles: [],
   styleUrls: ['./guard.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -25,16 +25,6 @@ export class GuardComponent implements OnInit, OnChanges {
   constructor() {}
 
   guard: Guard;
-
-  ngOnInit(): void {}
-
-  ngOnChanges(v) {
-    if (v.visible.currentValue) {
-      this.guard?.show();
-    } else {
-      this.guard.hide();
-    }
-  }
 
   @Input() appId: string;
   @Input() visible?: boolean;
@@ -108,5 +98,15 @@ export class GuardComponent implements OnInit, OnChanges {
     }
 
     this.guard = guard;
+  }
+
+  ngOnInit(): void {}
+
+  ngOnChanges(v) {
+    if (v.visible.currentValue) {
+      this.guard?.show();
+    } else {
+      this.guard.hide();
+    }
   }
 }

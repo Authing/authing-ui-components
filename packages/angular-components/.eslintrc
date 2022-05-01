@@ -1,0 +1,18 @@
+{
+  "root": true,
+  "parser": "babel-eslint",
+  "extends": [
+    "plugin:@angular-eslint/recommended",
+    "plugin:@angular-eslint/template/process-inline-templates"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "legacyDecorators": true
+    }
+  },
+  "rules": {
+    "no-output-on-prefix": "warn"
+  }
+}

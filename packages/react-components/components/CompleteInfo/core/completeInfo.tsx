@@ -368,7 +368,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           case 'regExp':
             formRules.push({
               required,
-              pattern: new RegExp(rule.content.replaceAll('/', '')),
+              pattern: new RegExp((rule.content as any).replaceAll('/', '')),
               message: rule.errorMessage,
             })
             break
