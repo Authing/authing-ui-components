@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="en">
+<head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
@@ -15,30 +15,33 @@
   </head>
   <body>
     <div id="app">
-      <Guard></Guard>
+        <Guard></Guard>
     </div>
     <!-- built files will be auto injected -->
 
     <script>
-      const appId = '622f3d9416211f994b286a5e'
+      // 这可以替换你的 AppId
+      const appId = '624281dfca360bc614ed25c3'
+
       const config = {
         logo: 'https://usercontents.authing.cn/client/logo@2.png',
         title: 'Authing',
-        mode: 'modal'
+        host:"https://guard-authflow.authing.cn",
+        mode: "modal",
       }
 
-      const app = Vue.createApp({})
 
+    const app= Vue.createApp({})
 
-      app.component('Guard', {
+    app.component('Guard', {
         data(){
             return {
-                showGuard: false
+                show:false
             }
         },
         method:{
             changeShow(){
-                this.showGuard = !this.showGuard
+                this.show=!this.show
             }
 
         },
@@ -47,14 +50,14 @@
             config,
             appId,
             onLoad:()=>{
-                this.showGuard = true
+                this.show=true
             },
-            visible: this.showGuard,
+            visible:this.show,
             onClose: this.changeShow
         })
     } 
     }).mount('#app')
 
     </script>
-  </body>
+</body>
 </html>
