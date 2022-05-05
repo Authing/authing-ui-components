@@ -69,7 +69,6 @@ export const SocialAndIdpLogin: FC<SocialAndIdpLoginProps> = ({
 
       if (code !== undefined) {
         if (code === 200) {
-          localStorage.setItem('_authing_token', data?.token)
           onSuccess(data)
         } else {
           message.error(errMsg)
