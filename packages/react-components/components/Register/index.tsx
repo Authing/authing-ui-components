@@ -7,7 +7,7 @@ import { useGuardAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
 import { RegisterWithEmail } from './core/WithEmail'
 import { RegisterWithPhone } from './core/WithPhone'
-
+import { RegisterWithEmailCode } from './core/WithEmailCode'
 import { tabSort } from '../_utils'
 import { i18n } from '../_utils/locales'
 import {
@@ -84,6 +84,10 @@ export const GuardRegisterView: React.FC = () => {
       [RegisterMethods.Phone]: {
         component: <RegisterWithPhone {...registerContextProps} />,
         name: t('common.phoneLabel'),
+      },
+      emailCode: {
+        component: <RegisterWithEmailCode {...registerContextProps} />,
+        name: t('common.emailLabel'),
       },
     }),
     [registerContextProps, t]

@@ -1,6 +1,7 @@
+import { User } from 'authing-js-sdk'
 import { getGuardAuthClient } from '../Guard/authClient'
 import { getGuardHttp } from '../_utils/guardHttp'
-import { CompleteInfoRequest } from './interface'
+import { CompleteInfoRequest, RegisterCompleteInfoInitData } from './interface'
 
 export enum CompleteInfoAuthFlowAction {
   Complete = 'complete-completion',
@@ -19,11 +20,13 @@ export const authFlow = async (
 }
 
 const registerMethod = (
-  fnName: 'registerByEmail' | 'registerByPhoneCode',
+  fnName: RegisterCompleteInfoInitData['businessRequestName'],
   content: any,
   profile: any
 ) => {
   const authClient = getGuardAuthClient()
+
+  const { post } = getGuardHttp()
 
   if (fnName === 'registerByEmail') {
     const phoneToken = profile.phoneToken
@@ -60,14 +63,30 @@ const registerMethod = (
         emailToken,
       }
     )
+  } else if (fnName === 'registerByEmailCode') {
+    const phoneToken = profile.phoneToken
+
+    delete profile.phoneToken
+    return post('/api/v2/register/email-code', {
+      email: content.email,
+      code: content.code,
+      profile: {
+        ...content.profile,
+        ...profile,
+      },
+      ...content.options,
+      context: JSON.stringify(content.options.context),
+      phoneToken,
+    }) as Promise<User>
   }
 }
 
 export const registerSkipMethod = (
-  fnName: 'registerByEmail' | 'registerByPhoneCode',
+  fnName: RegisterCompleteInfoInitData['businessRequestName'],
   content: any
 ) => {
   const authClient = getGuardAuthClient()
+  const { post } = getGuardHttp()
 
   if (fnName === 'registerByEmail') {
     return authClient!.registerByEmail(
@@ -92,12 +111,22 @@ export const registerSkipMethod = (
         ...content.options,
       }
     )
+  } else if (fnName === 'registerByEmailCode') {
+    return post('/api/v2/register/email-code', {
+      email: content.email,
+      code: content.code,
+      profile: {
+        ...content.profile,
+      },
+      ...content.options,
+      context: JSON.stringify(content.options.context),
+    }) as Promise<User>
   }
 }
 
 export const registerRequest = async (
   action: CompleteInfoAuthFlowAction,
-  registerFnName: 'registerByEmail' | 'registerByPhoneCode',
+  registerFnName: RegisterCompleteInfoInitData['businessRequestName'],
   registerContent: any,
   registerProfile?: any
 ) => {

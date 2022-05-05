@@ -9,7 +9,7 @@ import { validate } from '../_utils'
 import { InputProps } from 'antd/lib/input'
 import { SendCode } from './index'
 export interface SendCodeByEmailProps extends InputProps {
-  data: string
+  data?: string
   form?: any
   onSendCodeBefore?: any // 点击的时候先做这个
   fieldName?: string

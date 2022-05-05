@@ -443,7 +443,6 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
   const [, onFinish] = useAsyncFn(
     async (values: any) => {
       // submitButtonRef.current?.onSpin(true)
-
       const fieldValues = Object.keys(values)
         // 先过滤掉 为空的字段
         .filter((key) => values[key] !== undefined && values[key] !== '')

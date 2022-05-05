@@ -1,4 +1,4 @@
-import { Form } from 'antd'
+import { Form, message } from 'antd'
 import React, { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
@@ -69,6 +69,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         const { phone, password = '', code } = values
 
         const context = registeContext ?? {}
+
         const { phoneNumber, countryCode: phoneCountryCode } = parsePhone(
           isInternationSms,
           phone,
@@ -103,7 +104,6 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
             businessRequestName: 'registerByPhoneCode',
             content: registerContent,
           })
-
           return
         }
 
@@ -118,13 +118,13 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           },
           options
         )
-
         submitButtonRef.current.onSpin(false)
         onRegisterSuccess(user)
       } catch (error: any) {
-        const { code, message, data } = error
+        const { code, message: errorMessage, data } = error
         submitButtonRef.current.onError()
-        onRegisterFailed(code, data, message)
+        message.error(errorMessage)
+        onRegisterFailed(code, data, errorMessage)
       } finally {
         submitButtonRef.current?.onSpin(false)
       }
