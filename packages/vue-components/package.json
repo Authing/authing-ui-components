@@ -12,7 +12,7 @@
     "authing"
   ],
   "license": "MIT",
-  "main": "src/components/index.js",
+  "main": "lib/index.min.js",
   "scripts": {
     "clean": "rimraf ./lib",
     "demo:serve": "vue-cli-service serve",
@@ -34,8 +34,10 @@
     "access": "public",
     "registry": "https://registry.npmjs.org"
   },
+  "dependencies": {
+    "@authing/native-js-ui-components": "^3.1.7"
+  },
   "devDependencies": {
-    "@authing/native-js-ui-components": "^3.1.7",
     "@babel/core": "^7.0.0",
     "@rollup/plugin-alias": "^3.1.8",
     "@rollup/plugin-babel": "^5.3.1",
