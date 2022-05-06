@@ -95,6 +95,7 @@ export const GuardRegisterView: React.FC = () => {
 
   const renderTab = useMemo(() => {
     const { registerMethods, defaultRegisterMethod } = config
+    // todo tabs emailCode 默认值问题
     return tabSort(defaultRegisterMethod!, registerMethods!)?.map((method) => (
       <Tabs.TabPane tab={tabMapping[method].name} key={method}>
         {tabMapping[method].component}
@@ -113,7 +114,10 @@ export const GuardRegisterView: React.FC = () => {
         </div>
         <div className="g2-view-tabs">
           <Tabs
-            defaultActiveKey={config?.defaultRegisterMethod}
+            // email 对应的 tab 可能是 emailCode 或者 email 因为两者模式在控制台互斥 所以在默认tab的判断中需要find一下
+            defaultActiveKey={config?.registerMethods?.find((item: string) =>
+              item.includes(config?.defaultRegisterMethod || '')
+            )}
             onChange={(activeKey) => {
               events?.onRegisterTabChange?.(activeKey as RegisterMethods)
             }}

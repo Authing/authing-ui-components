@@ -120,7 +120,7 @@ export const registerSkipMethod = (
       },
       ...content.options,
       context: JSON.stringify(content.options.context),
-    }) as Promise<User>
+    })
   }
 }
 

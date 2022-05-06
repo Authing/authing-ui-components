@@ -185,18 +185,30 @@ export const GuardRegisterCompleteInfoView: React.FC = () => {
     )
     try {
       // sdk 直接 throw error 拿不到错误详细信息 不能手动给他执行我们的拦截
-      const user = await registerRequest(
+      const user: any = await registerRequest(
         action,
         initData.businessRequestName,
         initData.content,
         registerProfile
       )
-
+      // sdk 还没有这个接口 后续添加后 可以已 sdk 的逻辑执行
+      if (initData.businessRequestName === 'registerByEmailCode') {
+        if (user.code === 200) {
+          events?.onRegister?.(user.data, authClient)
+          changeModule?.(GuardModuleType.LOGIN)
+        } else {
+          user?.onGuardHandling?.()
+          // TODO 后续sdk的验证码逻辑改完后
+          return
+        }
+      }
       if (user) {
         events?.onRegister?.(user, authClient)
         changeModule?.(GuardModuleType.LOGIN)
       }
     } catch (error: any) {
+      // TODO 后续sdk的验证码逻辑改完后·
+
       message.error(error.message)
     }
   }
