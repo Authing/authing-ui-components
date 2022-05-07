@@ -7,12 +7,13 @@ import SubmitButton from '../../SubmitButton'
 import CustomFormItem from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
-import { EmailScene, SceneType } from 'authing-js-sdk'
+import { SceneType } from 'authing-js-sdk'
 import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
 import { FormItemIdentify } from '../../Login/core/withVerifyCode/FormItemIdentify'
 import { InputIdentify } from '../../Login/core/withVerifyCode/inputIdentify'
 import { parsePhone } from '../../_utils/hooks'
+import { EmailScene } from '../../Type'
 export enum InputMethodMap {
   email = 'email-code',
   phone = 'phone-code',
@@ -113,7 +114,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
                   style={{ color: '#878A95' }}
                 />
               }
-              scene={EmailScene.ResetPassword}
+              scene={EmailScene.RESET_PASSWORD_VERIFY_CODE}
               maxLength={verifyCodeLength}
               data={identify}
               onSendCodeBefore={async () => {

@@ -1,13 +1,12 @@
 import { message } from 'antd'
 import React, { FC } from 'react'
-import { EmailScene } from 'authing-js-sdk'
-
 import './style.less'
 import { useTranslation } from 'react-i18next'
-import { useGuardAuthClient } from '../Guard/authClient'
 import { validate } from '../_utils'
 import { InputProps } from 'antd/lib/input'
 import { SendCode } from './index'
+import { getGuardHttp } from '../_utils/guardHttp'
+import { EmailScene } from '../Type'
 export interface SendCodeByEmailProps extends InputProps {
   data: string
   form?: any
@@ -28,8 +27,7 @@ export const SendCodeByEmail: FC<SendCodeByEmailProps> = (props) => {
   } = props
   const { t } = useTranslation()
 
-  const authClient = useGuardAuthClient()
-
+  const { post } = getGuardHttp()
   const sendEmail = async (email: string) => {
     if (!email) {
       message.error(t('login.inputEmail'))
@@ -40,9 +38,18 @@ export const SendCodeByEmail: FC<SendCodeByEmailProps> = (props) => {
       return false
     }
     try {
-      await authClient.sendEmail(email, scene)
+      const { onGuardHandling, code } = await post('/api/v2/email/send', {
+        email,
+        scene,
+      })
+      if (code === 200) {
+        return true
+      } else {
+        onGuardHandling?.()
+        return false
+      }
+      // await await authClient.sendEmail(email, scene)
       // onSend?.()
-      return true
     } catch (error) {
       // onError?.(error)
       return false

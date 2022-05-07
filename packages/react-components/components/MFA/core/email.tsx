@@ -1,6 +1,5 @@
 import { Input, message, message as Message } from 'antd'
 import { Form } from 'antd'
-import { EmailScene } from 'authing-js-sdk'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VerifyCodeInput } from '../VerifyCodeInput'
@@ -14,6 +13,8 @@ import { IconFont } from '../../IconFont'
 import { mailDesensitization } from '../../_utils'
 import { useGuardPublicConfig } from '../../_utils/context'
 import { MfaBusinessAction, useMfaBusinessRequest } from '../businessRequest'
+import { EmailScene } from '../../Type'
+import { getGuardHttp } from '../../_utils/guardHttp'
 
 interface BindMFAEmailProps {
   mfaToken: string
@@ -95,8 +96,7 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
   sendCodeRef,
   codeLength,
 }) => {
-  const authClient = useGuardAuthClient()
-
+  const { post } = getGuardHttp()
   const businessRequest = useMfaBusinessRequest()[MfaBusinessAction.VerifyEmail]
 
   const submitButtonRef = useRef<any>(null)
@@ -109,9 +109,20 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
 
   const sendVerifyCode = async () => {
     try {
-      await authClient.sendEmail(email!, EmailScene.MfaVerify)
-      setSent(true)
-      return true
+      const { code } = await post('/api/v2/email/send', {
+        email,
+        scene: EmailScene.MFA_VERIFY_CODE,
+      })
+      if (code === 200) {
+        setSent(true)
+        return true
+      } else {
+        message.error(t('login.sendCodeTimeout'))
+        return false
+      }
+      // await authClient.sendEmail(email!, EmailScene.MFA_VERIFY_CODE)
+      // setSent(true)
+      // return true
     } catch (e: any) {
       if (e.code === 'ECONNABORTED') {
         message.error(t('login.sendCodeTimeout'))

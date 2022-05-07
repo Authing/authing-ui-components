@@ -9,7 +9,7 @@ import {
 import SubmitButton from '../../../SubmitButton'
 import { IconFont } from '../../../IconFont'
 import { Agreements } from '../../../Register/components/Agreements'
-import { EmailScene, SceneType } from 'authing-js-sdk'
+import { SceneType } from 'authing-js-sdk'
 import { SendCodeByPhone } from '../../../SendCode/SendCodeByPhone'
 import {
   useGuardHttpClient,
@@ -21,7 +21,7 @@ import { InputIdentify } from './inputIdentify'
 import './styles.less'
 import { InputInternationPhone } from './InputInternationPhone'
 import { parsePhone } from '../../../_utils/hooks'
-import { InputMethod } from '../../../Type'
+import { EmailScene, InputMethod } from '../../../Type'
 import { CodeAction } from '../../../_utils/responseManagement/interface'
 
 export const LoginWithVerifyCode = (props: any) => {
@@ -133,7 +133,7 @@ export const LoginWithVerifyCode = (props: any) => {
                   style={{ color: '#878A95' }}
                 />
               }
-              scene={EmailScene.VerifyCode}
+              scene={EmailScene.FIRST_EMAIL_LOGIN_VERIFY}
               maxLength={verifyCodeLength}
               data={identify}
               onSendCodeBefore={async () => {
