@@ -63,15 +63,6 @@ Guard 内置了多因素认证（MFA）功能，当你的[应用开启了多因�
 - [React 组件](https://docs.authing.cn/v2/reference/ui-components/react.html)；
 - [Angular 组件](https://docs.authing.cn/v2/reference/ui-components/angular.html)。
 
-### 在线示例
-
-<iframe src="https://codesandbox.io/embed/red-microservice-6613h?fontsize=14&hidenavigation=1&theme=dark"
-     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
-     title="authing-react-guard"
-     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
-     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
-   ></iframe>
-
 ## 参与贡献
 
 - Fork it
