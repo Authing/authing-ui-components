@@ -1,3 +1,4 @@
+import { message } from 'antd'
 import { getHundreds } from '..'
 import { AuthingGuardResponse, AuthingResponse } from '../http'
 import { CodeAction } from './interface'
@@ -6,6 +7,12 @@ export const errorCodeInterceptor: (
   res: AuthingResponse<any>,
   callBack: (code: CodeAction, res: AuthingResponse) => AuthingGuardResponse
 ) => AuthingResponse<any> = (res, callBack) => {
+  if (res.code === -1) {
+    message.error('请求超时，请稍后重试')
+
+    return res
+  }
+
   if (!res.statusCode) return res
 
   const statusCode = res.statusCode
