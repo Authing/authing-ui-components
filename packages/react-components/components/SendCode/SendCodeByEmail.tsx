@@ -38,14 +38,14 @@ export const SendCodeByEmail: FC<SendCodeByEmailProps> = (props) => {
       return false
     }
     try {
-      const { code, message: errorMessage } = await post('/api/v2/email/send', {
+      const { code } = await post('/api/v2/email/send', {
         email,
         scene,
       })
       if (code === 200) {
         return true
       } else {
-        message.error(errorMessage)
+        message.error(t('login.sendCodeTimeout'))
         return false
       }
       // await await authClient.sendEmail(email, scene)
