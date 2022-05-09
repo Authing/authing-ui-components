@@ -21,7 +21,7 @@ export const authFlow = async (
 const registerMethod = (
   fnName: 'registerByEmail' | 'registerByPhoneCode',
   content: any,
-  profile?: any
+  profile: any
 ) => {
   const authClient = getGuardAuthClient()
 
@@ -63,6 +63,38 @@ const registerMethod = (
   }
 }
 
+export const registerSkipMethod = (
+  fnName: 'registerByEmail' | 'registerByPhoneCode',
+  content: any
+) => {
+  const authClient = getGuardAuthClient()
+
+  if (fnName === 'registerByEmail') {
+    return authClient!.registerByEmail(
+      content.email,
+      content.password,
+      {
+        ...content.profile,
+      },
+      {
+        ...content.options,
+      }
+    )
+  } else if (fnName === 'registerByPhoneCode') {
+    return authClient!.registerByPhoneCode(
+      content.phone,
+      content.code,
+      content.password,
+      {
+        ...content.profile,
+      },
+      {
+        ...content.options,
+      }
+    )
+  }
+}
+
 export const registerRequest = async (
   action: CompleteInfoAuthFlowAction,
   registerFnName: 'registerByEmail' | 'registerByPhoneCode',
@@ -70,7 +102,7 @@ export const registerRequest = async (
   registerProfile?: any
 ) => {
   if (action === CompleteInfoAuthFlowAction.Skip) {
-    return await registerMethod(registerFnName, registerContent)
+    return await registerSkipMethod(registerFnName, registerContent)
   } else if (action === CompleteInfoAuthFlowAction.Complete) {
     return await registerMethod(
       registerFnName,

@@ -12,7 +12,7 @@ import { IconFont } from '../../IconFont'
 import { SceneType } from 'authing-js-sdk'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
 import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
-import { defaultAreaCode, parsePhone } from '../../_utils/hooks'
+import { parsePhone } from '../../_utils/hooks'
 import { useIsChangeComplete } from '../utils'
 import { useGuardModule } from '../../_utils/context'
 import { GuardModuleType } from '../../Guard'
@@ -44,7 +44,9 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
   const [validated, setValidated] = useState(false)
   // 区号 默认
-  const [areaCode, setAreaCode] = useState(defaultAreaCode)
+  const [areaCode, setAreaCode] = useState(
+    publicConfig?.internationalSmsConfig?.defaultISOType || 'CN'
+  )
 
   const verifyCodeLength = publicConfig?.verifyCodeLength ?? 4
   const isInternationSms =

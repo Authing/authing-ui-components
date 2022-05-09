@@ -21,7 +21,6 @@ export const usePostMessage = () => {
 
     // 如果直接为 200 代表成功了
     if (code === 200) {
-      localStorage.setItem('_authing_token', data?.token)
       return { code, data, onGuardHandling: undefined }
     }
 
@@ -50,10 +49,6 @@ export const usePostMessage = () => {
       message: authingMessage,
       code: authingCode,
     })
-
-    if (statusCode === 200) {
-      localStorage.setItem('_authing_token', data?.token)
-    }
 
     return res
   }
