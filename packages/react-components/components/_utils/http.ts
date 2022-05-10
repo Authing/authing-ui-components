@@ -22,7 +22,7 @@ export interface AuthingGuardResponse<T = any> extends AuthingResponse<T> {
 }
 
 const timeoutAction = (controller: AbortController) => {
-  const timer: number = 0.5
+  const timer: number = 10
   return new Promise((resolve) => {
     setTimeout(() => {
       const response = new Response(
