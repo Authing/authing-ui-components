@@ -133,7 +133,7 @@ export const LoginWithVerifyCode = (props: any) => {
                   style={{ color: '#878A95' }}
                 />
               }
-              scene={EmailScene.FIRST_EMAIL_LOGIN_VERIFY}
+              scene={EmailScene.LOGIN_VERIFY_CODE}
               maxLength={verifyCodeLength}
               data={identify}
               onSendCodeBefore={async () => {

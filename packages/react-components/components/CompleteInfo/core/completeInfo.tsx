@@ -324,7 +324,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
               })}
               maxLength={verifyCodeLength}
               data={''}
-              scene={EmailScene.FIRST_EMAIL_LOGIN_VERIFY}
+              scene={EmailScene.INFORMATION_COMPLETION_VERIFY_CODE}
               fieldName="email"
               form={form}
               onSendCodeBefore={() => form.validateFields(['email'])}
