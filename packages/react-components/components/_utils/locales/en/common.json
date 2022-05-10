@@ -199,7 +199,7 @@
   "unBindEmaileDoc": "{{email}} has been bound to another account",
   "bindTotp": "Bind OTP",
   "checkEmail": "This Email address is not available. Choose a different address",
-  "checkPhone": "This phone number cannot be used, please choose another phone number",
+  "checkPhone": "The phone number is wrong or already registered",
   "loginFailCheck": "Reminder: Your password is wrong, you can try {{number}} times",
   "otpText1": "To ensure access security, please go to the OTP binding page",
   "faceText1": "Bind facial recognition",

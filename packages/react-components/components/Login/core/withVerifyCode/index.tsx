@@ -23,6 +23,7 @@ import { InputInternationPhone } from './InputInternationPhone'
 import { parsePhone } from '../../../_utils/hooks'
 import { InputMethod } from '../../../Type'
 import { CodeAction } from '../../../_utils/responseManagement/interface'
+import { Agreement } from '../../../AuthingGuard/api'
 
 export const LoginWithVerifyCode = (props: any) => {
   const config = useGuardPublicConfig()
@@ -371,6 +372,11 @@ export const LoginWithVerifyCode = (props: any) => {
         )}
         <Form.Item>
           <SubmitButton
+            disabled={
+              !!agreements.find(
+                (item: Agreement) => item.required && !acceptedAgreements
+              )
+            }
             text={submitText}
             className="password"
             ref={submitButtonRef}

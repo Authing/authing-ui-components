@@ -169,7 +169,6 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
       ? `${t('common.login')} / ${t('common.register')}`
       : t('common.login')
   }, [props, t])
-
   return (
     <div className="authing-g2-login-password">
       <Form
@@ -182,6 +181,8 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
           name="account"
           className="authing-g2-input-form"
           passwordLoginMethods={props.passwordLoginMethods}
+          // TODO
+          // 开启国际化手机号场景且只有手机号情况下 不应再根据区号去验证手机号
         >
           <InputAccount
             className="authing-g2-input"
@@ -267,6 +268,9 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         )}
         <Form.Item>
           <SubmitButton
+            disabled={
+              !!agreements.find((item) => item.required && !acceptedAgreements)
+            }
             text={submitText}
             className="password"
             ref={submitButtonRef}

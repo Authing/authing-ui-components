@@ -218,6 +218,11 @@ export const LoginWithAD = (props: LoginWithADProps) => {
             )}
             <Form.Item>
               <SubmitButton
+                disabled={
+                  !!agreements.find(
+                    (item) => item.required && !acceptedAgreements
+                  )
+                }
                 text={t('common.login')}
                 className="password"
                 ref={submitButtonRef}
