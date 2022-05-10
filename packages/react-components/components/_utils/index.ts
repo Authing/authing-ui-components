@@ -130,7 +130,7 @@ export const insertStyles = (
   }
 
   if (recordKey) {
-    insertedRecord[recordKey] = styleElt
+    insertedRecord[recordKey] = styleElt || styleSheet
   }
 }
 
@@ -140,7 +140,6 @@ export const removeStyles = (recordKey: STYLE_RECORD_KEY) => {
   }
 
   const styleElt = insertedRecord[recordKey]
-
   styleElt.parentNode?.removeChild(styleElt)
 
   insertedRecord[recordKey] = null

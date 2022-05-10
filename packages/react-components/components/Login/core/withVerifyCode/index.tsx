@@ -185,7 +185,7 @@ export const LoginWithVerifyCode = (props: any) => {
       reqContent
     )
 
-    submitButtonRef.current.onSpin(false)
+    submitButtonRef.current?.onSpin(false)
 
     if (code === 200) {
       // props.onLogin(200, data)
@@ -210,7 +210,7 @@ export const LoginWithVerifyCode = (props: any) => {
       reqContent
     )
 
-    submitButtonRef.current.onSpin(false)
+    submitButtonRef.current?.onSpin(false)
 
     if (code === 200) {
       // props.onLogin(200, data)
@@ -236,7 +236,7 @@ export const LoginWithVerifyCode = (props: any) => {
       areaCode
     )
     // onBeforeLogin
-    submitButtonRef.current.onSpin(true)
+    submitButtonRef.current?.onSpin(true)
 
     let loginInfo = {
       type: currentMethod,
@@ -250,7 +250,7 @@ export const LoginWithVerifyCode = (props: any) => {
     let context = await props.onBeforeLogin?.(loginInfo)
 
     if (!context && !!props.onBeforeLogin) {
-      submitButtonRef.current.onSpin(false)
+      submitButtonRef.current?.onSpin(false)
       return
     }
     // 身份源绑定
@@ -258,7 +258,7 @@ export const LoginWithVerifyCode = (props: any) => {
       const res = await props.onLoginRequest?.(loginInfo)
       const { code, data, onGuardHandling } = res
 
-      submitButtonRef?.current.onSpin(false)
+      submitButtonRef.current?.onSpin(false)
 
       if (code === 200) {
         onLoginSuccess(data)

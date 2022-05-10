@@ -15,7 +15,7 @@ export const copyToClipboard = (str: string) => {
         : false // 标记为  false 以表示不存在之前选中的内容
     el.select() // 选中 <textarea> 的内容
     document.execCommand('copy') // 复制 - 仅当作为用户操作的响应结果时才可以工作(比如，点击事件)
-    document.body.removeChild(el) // 移除 <textarea> 元素
+    el && document.body.removeChild(el) // 移除 <textarea> 元素
     if (selected) {
       // 如果在复制前已存在选中的内容
       document.getSelection()!.removeAllRanges() // 取消 HTML 文档中所有的选中部分

@@ -54,7 +54,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   const onFinish = useCallback(
     async (values: any) => {
       try {
-        submitButtonRef.current.onSpin(true)
+        submitButtonRef.current?.onSpin(true)
         await form.validateFields()
 
         setValidated(true)
@@ -119,7 +119,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           options
         )
 
-        submitButtonRef.current.onSpin(false)
+        submitButtonRef.current?.onSpin(false)
         onRegisterSuccess(user)
       } catch (error: any) {
         const { code, message, data } = error
