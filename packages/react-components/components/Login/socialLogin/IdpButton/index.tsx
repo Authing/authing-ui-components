@@ -15,7 +15,7 @@ import { useGuardAuthClient } from '../../../Guard/authClient'
 import { getGuardWindow } from '../../../Guard/core/useAppendConfig'
 import { IconFont } from '../../../IconFont'
 import version from '../../../version/version'
-import { popupCenter } from '../../../_utils'
+import { isSpecialBrowser, popupCenter } from '../../../_utils'
 import { useGuardHttp } from '../../../_utils/guardHttp'
 
 export const IdpButton = (props: any) => {
@@ -32,29 +32,44 @@ export const IdpButton = (props: any) => {
       // 社交身份源
       const iconType = `authing-${i.provider.replace(/:/g, '-')}`
 
-      const onLogin = async () => {
-        await authClient.social.authorize(i.identifier, {
-          guardVersion: `Guard@${version}`,
+      // TODO: 有没有不依赖 authClient 的方式？
+      const appId = authClient.options.appId
+      const appHost = authClient.baseClient.appHost
 
-          // onSuccess(user) {
-          //   // TODO
-          //   // onSuccess(user)
-          //   setLoading(false)
-          //   onGuardLogin(200, user)
-          // },
-          // onError(code, msg) {
-          //   setLoading(false)
-          //   try {
-          //     const parsedMsg = JSON.parse(msg)
-          //     const { message: authingMessage, data: authingData } = parsedMsg
-          //     onGuardLogin(code, authingData, authingMessage)
-          //   } catch (e) {
-          //     // do nothing...
-          //   }
-          //   // message.error(msg)
-          // },
-        })
+      const query: Record<string, any> = {
+        from_guard: 'true',
+        app_id: appId,
+        guard_version: `Guard@${version}`,
       }
+
+      if (props.isHost) {
+        query.from_hosted_guard = 'true'
+
+        if (isSpecialBrowser()) {
+          query.redirected = 'true'
+
+          const guardWindow = getGuardWindow()
+          if (guardWindow) {
+            // 如果 isHost 是 true，则从 url 获取 finish_login_url 作为 social.authorize 方法的 targetUrl 参数
+            query.redirect_url = qs.parse(guardWindow.location.search)?.[
+              'finish_login_url'
+            ]
+          }
+        }
+      }
+
+      const onLogin = () => {
+        const initUrl = `${appHost}/connections/social/${
+          i.identifier
+        }?${qs.stringify(query)}`
+
+        if (query.redirected) {
+          window.location.replace(initUrl)
+        } else {
+          popupCenter(initUrl)
+        }
+      }
+
       return (
         <Button
           key={i.identifier}
@@ -193,6 +208,15 @@ export const IdpButton = (props: any) => {
     } else {
       return null
     }
-  }, [appId, authClient.social, i, post, t, userPoolId])
+  }, [
+    appId,
+    authClient.baseClient.appHost,
+    authClient.options.appId,
+    i,
+    post,
+    t,
+    userPoolId,
+    props.isHost,
+  ])
   return renderBtn()
 }
