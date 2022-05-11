@@ -106,7 +106,7 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
             device: getDeviceName(),
           },
           options: {
-            context,
+            context: JSON.stringify(context),
             generateToken: true,
             // params: getUserRegisterParams(),
           },
@@ -175,11 +175,7 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
         <CustomFormItem.Email
           key="email"
           name="email"
-          className={
-            publicConfig?.internationalSmsConfig?.enabled
-              ? 'authing-g2-input-form remove-padding'
-              : 'authing-g2-input-form'
-          }
+          className={'authing-g2-input-form'}
           validateFirst={true}
           form={form}
           checkRepeat={true}

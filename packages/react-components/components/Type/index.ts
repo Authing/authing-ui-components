@@ -75,3 +75,9 @@ export interface GuardPageConfig {
     showChangeLanguage: boolean
   }
 }
+
+export enum NewRegisterMethods {
+  Email = 'email',
+  Phone = 'phone',
+  EmailCode = 'emailCode',
+}

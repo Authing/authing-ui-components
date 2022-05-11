@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Tabs } from 'antd'
-import { RegisterMethods } from 'authing-js-sdk'
 import { ChangeLanguage } from '../ChangeLanguage'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
@@ -17,6 +16,7 @@ import {
   useGuardPublicConfig,
 } from '../_utils/context'
 import { VerifyLoginMethods } from '../AuthingGuard/api'
+import { NewRegisterMethods } from '../Type'
 
 export const GuardRegisterView: React.FC = () => {
   const events = useGuardEvents()
@@ -73,19 +73,19 @@ export const GuardRegisterView: React.FC = () => {
   )
 
   const tabMapping: Record<
-    RegisterMethods,
+    NewRegisterMethods,
     { component: React.ReactNode; name: string }
   > = useMemo(
     () => ({
-      [RegisterMethods.Email]: {
+      [NewRegisterMethods.Email]: {
         component: <RegisterWithEmail {...registerContextProps} />,
         name: t('common.emailLabel'),
       },
-      [RegisterMethods.Phone]: {
+      [NewRegisterMethods.Phone]: {
         component: <RegisterWithPhone {...registerContextProps} />,
         name: t('common.phoneLabel'),
       },
-      emailCode: {
+      [NewRegisterMethods.EmailCode]: {
         component: <RegisterWithEmailCode {...registerContextProps} />,
         name: t('common.emailLabel'),
       },
@@ -95,7 +95,6 @@ export const GuardRegisterView: React.FC = () => {
 
   const renderTab = useMemo(() => {
     const { registerMethods, defaultRegisterMethod } = config
-    // todo tabs emailCode 默认值问题
     return tabSort(defaultRegisterMethod!, registerMethods!)?.map((method) => (
       <Tabs.TabPane tab={tabMapping[method].name} key={method}>
         {tabMapping[method].component}
@@ -114,12 +113,9 @@ export const GuardRegisterView: React.FC = () => {
         </div>
         <div className="g2-view-tabs">
           <Tabs
-            // email 对应的 tab 可能是 emailCode 或者 email 因为两者模式在控制台互斥 所以在默认tab的判断中需要find一下
-            defaultActiveKey={config?.registerMethods?.find((item: string) =>
-              item.includes(config?.defaultRegisterMethod || '')
-            )}
+            defaultActiveKey={config?.defaultRegisterMethod}
             onChange={(activeKey) => {
-              events?.onRegisterTabChange?.(activeKey as RegisterMethods)
+              events?.onRegisterTabChange?.(activeKey as NewRegisterMethods)
             }}
           >
             {renderTab}
