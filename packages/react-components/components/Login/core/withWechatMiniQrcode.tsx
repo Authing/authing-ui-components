@@ -21,7 +21,9 @@ export const LoginWithWechatMiniQrcode = (
   const appQrcodeClient = client.wxqrcode
   const { responseIntercept } = useGuardHttpClient()
   const config = useGuardFinallyConfig()
-  const domId = `authingGuardMiniQrcode-${props.qrCodeScanOptions.extIdpConnId}`
+  const domId = `authingGuardMiniQrcode-${
+    props.qrCodeScanOptions.extIdpConnId
+  }-${new Date().toString()}`
 
   useEffect(() => {
     const guardWindow = getGuardWindow()

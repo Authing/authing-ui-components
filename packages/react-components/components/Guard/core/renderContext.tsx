@@ -339,9 +339,14 @@ export const RenderContext: React.FC<{
     if (contextLoaded) return renderLoadingContext
     else if (defaultMergedConfig) return renderContext
     else return null
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contextLoaded, defaultMergedConfig, error])
+  }, [
+    contextLoaded,
+    defaultMergedConfig,
+    error,
+    renderContext,
+    renderErrorContext,
+    renderLoadingContext,
+  ])
 
   return render
 }

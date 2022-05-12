@@ -25,7 +25,9 @@ export const LoginWithWechatmpQrcode = (
 
   const appQrcodeClient = client.wechatmpqrcode
 
-  const domId = `authingGuardMpQrcode-${props.qrCodeScanOptions.extIdpConnId}`
+  const domId = `authingGuardMpQrcode-${
+    props.qrCodeScanOptions.extIdpConnId
+  }-${new Date().toString()}`
 
   const config = useGuardFinallyConfig()
 
