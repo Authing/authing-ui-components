@@ -11,7 +11,6 @@ import qs from 'qs'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import shortid from 'shortid'
-import { useGuardAuthClient } from '../../../Guard/authClient'
 import { getGuardWindow } from '../../../Guard/core/useAppendConfig'
 import { IconFont } from '../../../IconFont'
 import version from '../../../version/version'
@@ -19,34 +18,29 @@ import { isSpecialBrowser, popupCenter } from '../../../_utils'
 import { useGuardHttp } from '../../../_utils/guardHttp'
 
 export const IdpButton = (props: any) => {
-  const { i, appId, userPoolId } = props
+  // TODO: 能不能加个类型
+  const { i, appId, userPoolId, appHost, isHost } = props
 
   const { t } = useTranslation()
 
   const { post } = useGuardHttp()
-
-  const authClient = useGuardAuthClient()
 
   const renderBtn = useCallback(() => {
     if (i?.provider) {
       // 社交身份源
       const iconType = `authing-${i.provider.replace(/:/g, '-')}`
 
-      // TODO: 有没有不依赖 authClient 的方式？
-      const appId = authClient.options.appId
-      const appHost = authClient.baseClient.appHost
-
       const query: Record<string, any> = {
-        from_guard: 'true',
+        from_guard: '1',
         app_id: appId,
         guard_version: `Guard@${version}`,
       }
 
-      if (props.isHost) {
-        query.from_hosted_guard = 'true'
+      if (isHost) {
+        query.from_hosted_guard = '1'
 
         if (isSpecialBrowser()) {
-          query.redirected = 'true'
+          query.redirected = '1'
 
           const guardWindow = getGuardWindow()
           if (guardWindow) {
@@ -208,15 +202,6 @@ export const IdpButton = (props: any) => {
     } else {
       return null
     }
-  }, [
-    appId,
-    authClient.baseClient.appHost,
-    authClient.options.appId,
-    i,
-    post,
-    t,
-    userPoolId,
-    props.isHost,
-  ])
+  }, [appId, i, post, t, userPoolId, isHost, appHost])
   return renderBtn()
 }

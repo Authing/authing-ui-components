@@ -6,7 +6,6 @@ import { i18n } from '../../_utils/locales'
 import { isSpecialBrowser, popupCenter } from '../../_utils'
 import querystring from 'query-string'
 import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
-import { useGuardAuthClient } from '../../Guard/authClient'
 import { IconFont } from '../../IconFont'
 import './style.less'
 import { useMediaSize } from '../../_utils/hooks'
@@ -44,15 +43,9 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
 
   const { t } = useTranslation()
 
-  // const [screenSize] = useScreenSize()
-
-  const authClient = useGuardAuthClient()
-
   const { isPhoneMedia } = useMediaSize()
 
   const onMessage = usePostMessage()
-
-  // const onErrorHandling = useErrorHandling()
 
   useEffect(() => {
     const onPostMessage = (evt: MessageEvent) => {
@@ -84,6 +77,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         key={i.identifier}
         i={i}
         appId={appId}
+        appHost={config?.host}
         userPoolId={userPoolId}
         isHost={config?.isHost}
       />
@@ -93,21 +87,17 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
   const socialLoginButtons = socialConnectionObjs.map((item: any) => {
     let iconType = `authing-${item.provider.replace(/:/g, '-')}`
 
-    // TODO: 有没有不依赖 authClient 的方式？
-    const appId = authClient.options.appId
-    const appHost = authClient.baseClient.appHost
-
     const query: Record<string, any> = {
-      from_guard: 'true',
+      from_guard: '1',
       app_id: appId,
       guard_version: `Guard@${version}`,
     }
 
     if (config?.isHost) {
-      query.from_hosted_guard = 'true'
+      query.from_hosted_guard = '1'
 
       if (isSpecialBrowser()) {
-        query.redirected = 'true'
+        query.redirected = '1'
 
         const guardWindow = getGuardWindow()
         if (guardWindow) {
@@ -120,7 +110,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
     }
 
     const onLogin = () => {
-      const initUrl = `${appHost}/connections/social/${
+      const initUrl = `${config.host}/connections/social/${
         item.identifier
       }?${querystring.stringify(query)}`
 
