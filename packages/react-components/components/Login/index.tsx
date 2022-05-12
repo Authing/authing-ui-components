@@ -92,13 +92,6 @@ const useSwitchStates = (loginWay: LoginMethods) => {
 export const GuardLoginView = () => {
   // const { config } = props
 
-  useEffect(() => {
-    console.log('GuardLoginView')
-    return () => {
-      console.log('GuardLoginView unmount')
-    }
-  }, [])
-
   const config = useGuardFinallyConfig()
 
   const appId = useGuardAppId()
