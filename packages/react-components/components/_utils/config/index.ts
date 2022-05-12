@@ -2,7 +2,7 @@ import { LoginMethods, RegisterMethods } from 'authing-js-sdk'
 import { ApplicationConfig } from '../../AuthingGuard/api'
 import { assembledRequestHost as utilAssembledRequestHost } from '..'
 import { GuardComponentConfig, GuardLocalConfig } from '../../Guard/config'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { AuthingResponse } from '../http'
 import { GuardHttp } from '../guardHttp'
 import { corsVerification } from '../corsVerification'
@@ -150,12 +150,14 @@ export const useMergePublicConfig = (
     initPublicConfig()
   }, [initPublicConfig, forceUpdate])
 
-  if (publicConfig && config) {
-    return {
-      ...mergedPublicConfig(config, publicConfig),
-      host: assembledRequestHost(config, publicConfig),
+  return useMemo(() => {
+    if (publicConfig && config) {
+      return {
+        ...mergedPublicConfig(config, publicConfig),
+        host: assembledRequestHost(config, publicConfig),
+      }
     }
-  }
+  }, [config, publicConfig])
 }
 
 let pageConfigMap: Record<string, GuardPageConfig> = {}

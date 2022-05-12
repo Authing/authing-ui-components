@@ -29,7 +29,7 @@ import {
 } from '../../_utils/config'
 import { GuardHttp, initGuardHttp } from '../../_utils/guardHttp'
 import { initI18n } from '../../_utils/locales'
-import { createGuardXContext } from '../../_utils/context'
+import { useGuardXContext } from '../../_utils/context'
 import { useGuardIconfont } from '../../IconFont/useGuardIconfont'
 
 interface IBaseAction<T = string, P = any> {
@@ -58,7 +58,7 @@ export const RenderContext: React.FC<{
     setGuardStateMachine,
   ] = useState<GuardStateMachine>()
 
-  const { Provider } = createGuardXContext()
+  const { Provider } = useGuardXContext()
 
   // 劫持浏览器 History
   const [historyNext] = useHistoryHijack(guardStateMachine?.back)
@@ -274,20 +274,23 @@ export const RenderContext: React.FC<{
   }, [authClint, contextLoaded, events])
 
   const contextValues = useMemo(
-    () => ({
-      contextLoaded,
-      isAuthFlow,
-      defaultMergedConfig,
-      finallyConfig,
-      publicConfig,
-      httpClient,
-      appId,
-      events,
-      ...moduleEvents,
-      initData: moduleState.initData,
-      currentModule: moduleState,
-      guardPageConfig,
-    }),
+    () =>
+      contextLoaded
+        ? {
+            contextLoaded,
+            isAuthFlow,
+            defaultMergedConfig,
+            finallyConfig,
+            publicConfig,
+            httpClient,
+            appId,
+            events,
+            ...moduleEvents,
+            initData: moduleState.initData,
+            currentModule: moduleState,
+            guardPageConfig,
+          }
+        : null,
     [
       appId,
       contextLoaded,
@@ -304,12 +307,14 @@ export const RenderContext: React.FC<{
   )
 
   const renderContext = useMemo(() => {
+    if (!contextValues) return null
+
     return <Provider value={contextValues}>{children}</Provider>
   }, [Provider, children, contextValues])
 
-  const renderLoadingContext = useMemo(() => {
-    return <Provider value={contextValues}>{children}</Provider>
-  }, [Provider, children, contextValues])
+  useEffect(() => {
+    console.log('Provider')
+  }, [Provider])
 
   const renderErrorContext = useMemo(() => {
     return (
@@ -336,16 +341,15 @@ export const RenderContext: React.FC<{
   const render = useMemo(() => {
     if (error) return renderErrorContext
 
-    if (contextLoaded) return renderLoadingContext
-    else if (defaultMergedConfig) return renderContext
-    else return null
+    if (contextLoaded || defaultMergedConfig) return renderContext
+
+    return null
   }, [
     contextLoaded,
     defaultMergedConfig,
     error,
     renderContext,
     renderErrorContext,
-    renderLoadingContext,
   ])
 
   return render
