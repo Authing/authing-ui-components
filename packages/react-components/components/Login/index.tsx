@@ -94,9 +94,7 @@ export const GuardLoginView = () => {
 
   useEffect(() => {
     console.log('GuardLoginView')
-    return () => {
-      console.log('GuardLoginView unmount')
-    }
+    return () => 
   }, [])
 
   const config = useGuardFinallyConfig()
