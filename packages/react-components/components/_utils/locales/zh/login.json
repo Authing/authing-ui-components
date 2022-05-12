@@ -101,5 +101,6 @@
   "requireError": "无法满足要求错误",
   "hardwareSupport": "硬件不支持",
   "qrcodeExpired": "点击刷新",
-  "noLoginMethodsDesc": "未配置登录注册方式"
+  "noLoginMethodsDesc": "未配置登录注册方式",
+  "inputNewPwd": "请输入新的密码"
 }
