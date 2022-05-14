@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Tabs } from 'antd'
+import { message as Message, Tabs } from 'antd'
 import { RegisterMethods } from 'authing-js-sdk'
 import { ChangeLanguage } from '../ChangeLanguage'
 import { useGuardAuthClient } from '../Guard/authClient'
@@ -45,6 +45,8 @@ export const GuardRegisterView: React.FC = () => {
         changeModule?.(GuardModuleType.LOGIN, {})
       },
       onRegisterFailed: (code: number, data: any = {}, message?: string) => {
+        if (message) Message.error(message)
+
         events?.onRegisterError?.({
           code,
           data,
