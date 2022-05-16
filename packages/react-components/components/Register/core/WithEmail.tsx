@@ -237,9 +237,9 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         )}
         <Form.Item>
           <SubmitButton
-            disabled={
-              !!agreements.find((item) => item.required && !acceptedAgreements)
-            }
+            // disabled={
+            //   !!agreements.find((item) => item.required && !acceptedAgreements)
+            // }
             text={t('common.register')}
             ref={submitButtonRef}
           />

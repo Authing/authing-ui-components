@@ -268,9 +268,10 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         )}
         <Form.Item>
           <SubmitButton
-            disabled={
-              !!agreements.find((item) => item.required && !acceptedAgreements)
-            }
+            // TODO 产品还没想好 暂时不上
+            // disabled={
+            //   !!agreements.find((item) => item.required && !acceptedAgreements)
+            // }
             text={submitText}
             className="password"
             ref={submitButtonRef}

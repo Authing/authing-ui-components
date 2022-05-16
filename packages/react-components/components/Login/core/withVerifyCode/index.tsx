@@ -367,11 +367,11 @@ export const LoginWithVerifyCode = (props: any) => {
         )}
         <Form.Item>
           <SubmitButton
-            disabled={
-              !!agreements.find(
-                (item: Agreement) => item.required && !acceptedAgreements
-              )
-            }
+            // disabled={
+            //   !!agreements.find(
+            //     (item: Agreement) => item.required && !acceptedAgreements
+            //   )
+            // }
             text={submitText}
             className="password"
             ref={submitButtonRef}

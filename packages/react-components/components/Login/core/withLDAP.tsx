@@ -221,9 +221,9 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
         )}
         <Form.Item>
           <SubmitButton
-            disabled={
-              !!agreements.find((item) => item.required && !acceptedAgreements)
-            }
+            // disabled={
+            //   !!agreements.find((item) => item.required && !acceptedAgreements)
+            // }
             text={t('common.login')}
             className="password"
             ref={submitButtonRef}
