@@ -30,6 +30,7 @@ export const LoginWithVerifyCode = (props: any) => {
   const {
     agreements,
     methods,
+    autoRegister,
     submitButText,
     onLoginFailed,
     onLoginSuccess,
@@ -133,7 +134,11 @@ export const LoginWithVerifyCode = (props: any) => {
                   style={{ color: '#878A95' }}
                 />
               }
-              scene={EmailScene.LOGIN_VERIFY_CODE}
+              scene={
+                autoRegister
+                  ? EmailScene.WELCOME_EMAIL
+                  : EmailScene.LOGIN_VERIFY_CODE
+              }
               maxLength={verifyCodeLength}
               data={identify}
               onSendCodeBefore={async () => {
@@ -146,6 +151,7 @@ export const LoginWithVerifyCode = (props: any) => {
     },
     [
       areaCode,
+      autoRegister,
       currentMethod,
       form,
       identify,
@@ -173,7 +179,7 @@ export const LoginWithVerifyCode = (props: any) => {
       phone: values.phoneNumber,
       code: values.code,
       customData: getUserRegisterParams(),
-      autoRegister: props.autoRegister,
+      autoRegister: autoRegister,
       withCustomData: true,
     }
 
@@ -202,7 +208,7 @@ export const LoginWithVerifyCode = (props: any) => {
       email: values.identify,
       code: values.code,
       customData: getUserRegisterParams(),
-      autoRegister: props.autoRegister,
+      autoRegister: autoRegister,
       withCustomData: true,
     }
     const { code, data, onGuardHandling } = await post(
@@ -280,10 +286,10 @@ export const LoginWithVerifyCode = (props: any) => {
   const submitText = useMemo(() => {
     if (submitButText) return submitButText
 
-    return props.autoRegister
+    return autoRegister
       ? `${t('common.login')} / ${t('common.register')}`
       : t('common.login')
-  }, [props.autoRegister, submitButText, t])
+  }, [autoRegister, submitButText, t])
   // 为了 refresh input
   const AreaCodePhoneAccount = useCallback(
     (props) => {
