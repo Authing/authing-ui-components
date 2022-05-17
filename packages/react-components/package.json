@@ -1,6 +1,6 @@
 {
   "name": "@authing/react-ui-components",
-  "version": "3.1.13-rc.2",
+  "version": "3.1.13-rc.3",
   "private": false,
   "main": "lib/index.min.js",
   "typings": "lib/index.d.ts",
@@ -33,7 +33,7 @@
     "log-tag": "node ./scripts/tag.js",
     "pretty-quick": "pretty-quick",
     "prestart": "npm run log-tag && npm run version && npm run generate-examples",
-    "prebuild:lib": "npm run log-tag && npm run version",
+    "prebuild:lib": "npm run log-tag && npm run version && npm run generate-examples",
     "prepare": "cd ../.. && husky install packages/react-components/.husky",
     "pub": "npm run build:lib && node ./scripts/publish.js",
     "start": "PORT=1221 node ./scripts/start.js",
