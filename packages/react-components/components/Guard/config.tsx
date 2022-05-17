@@ -1,3 +1,4 @@
+import { AuthenticationClient } from 'authing-js-sdk'
 import React from 'react'
 import { ReactNode } from 'react'
 import { GuardModuleType } from '.'
@@ -27,6 +28,7 @@ export interface GuardLocalConfig extends RegisterConfig, LoginConfig {
    */
   openEventsMapping?: boolean
   _qrCodeScanOptions?: Record<QrCodeScanType, QrCodeScanOptions>
+  authClient?: AuthenticationClient
 }
 
 let defaultConfig: GuardLocalConfig = {

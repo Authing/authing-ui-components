@@ -12,7 +12,6 @@ import { LoginWithWechatmpQrcode } from './core/withWechatmpQrcode'
 import { codeMap } from './codemap'
 import { SocialLogin } from './socialLogin'
 
-import { useGuardAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
 import { LoginMethods } from '../AuthingGuard/types'
 import { IconFont } from '../IconFont'
@@ -32,6 +31,7 @@ import { LoginWithVerifyCode } from './core/withVerifyCode'
 import { VerifyLoginMethods } from '../AuthingGuard/api'
 import { useMediaSize, useMethod } from '../_utils/hooks'
 import { getGuardDocument } from '../_utils/guardDocument'
+import { useGuardAuthClient } from '../Guard/authClient'
 
 const inputWays = [
   LoginMethods.Password,

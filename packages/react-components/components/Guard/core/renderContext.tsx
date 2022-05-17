@@ -6,7 +6,7 @@ import React, {
   useReducer,
   useState,
 } from 'react'
-import { initGuardAuthClient } from '../authClient'
+import { useInitGuardAuthClient } from '../authClient'
 import { GuardEvents, guardEventsFilter } from '../event'
 import { insertStyles, removeStyles } from '../../_utils'
 import { getDefaultGuardLocalConfig } from '../config'
@@ -127,6 +127,13 @@ export const RenderContext: React.FC<{
     setError
   )
 
+  const sdkClient = useInitGuardAuthClient({
+    config: finallyConfig,
+    appId,
+    tenantId,
+    setError,
+  })
+
   // iconfont
   const iconfontLoaded = useGuardIconfont(cdnBase)
 
@@ -169,16 +176,8 @@ export const RenderContext: React.FC<{
 
   // AuthClient
   useEffect(() => {
-    if (appId && finallyConfig && publicConfig) {
-      const authClint = initGuardAuthClient(
-        finallyConfig,
-        appId,
-        publicConfig?.websocket,
-        tenantId
-      )
-      setAuthClint(authClint)
-    }
-  }, [appId, finallyConfig, publicConfig, tenantId])
+    setAuthClint(sdkClient)
+  }, [sdkClient])
 
   // initEvents
   useEffect(() => {
@@ -311,10 +310,6 @@ export const RenderContext: React.FC<{
 
     return <Provider value={contextValues}>{children}</Provider>
   }, [Provider, children, contextValues])
-
-  useEffect(() => {
-    console.log('Provider')
-  }, [Provider])
 
   const renderErrorContext = useMemo(() => {
     return (

@@ -1,3 +1,4 @@
+import { AuthenticationClient } from 'authing-js-sdk'
 import React, { useContext, useMemo } from 'react'
 import {
   GuardEvents,
