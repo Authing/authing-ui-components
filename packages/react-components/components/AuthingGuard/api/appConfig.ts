@@ -105,6 +105,7 @@ export interface ApplicationConfig {
   }
   // 登录框自定义 css 代码
   css: string
+  customLoading?: string
   name: string
   logo: string
   description?: string
