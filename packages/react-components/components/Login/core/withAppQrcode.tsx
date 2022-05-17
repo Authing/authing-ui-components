@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { ShieldSpin } from '../../ShieldSpin'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { message } from 'antd'
-import { useGuardHttpClient, useGuardPublicConfig } from '../../_utils/context'
+import { useGuardHttpClient } from '../../_utils/context'
 
 interface LoginWithAppQrcodeProps {
   // onLogin: any
@@ -17,8 +17,6 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
   const [loading, setLoading] = useState(true)
   const appQrcodeClient = client.qrcode
   const { responseIntercept } = useGuardHttpClient()
-  const publicConfig = useGuardPublicConfig()
-  console.log(publicConfig)
   useEffect(() => {
     if (!props.canLoop) {
       return () => clearInterval(timerRef.current)
