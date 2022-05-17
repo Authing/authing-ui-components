@@ -9,7 +9,13 @@ import {
   HIDE_SOCIALS,
   HIDE_SOCIALS_SHOWIN_ENTERPRISE,
 } from '../../AuthingGuard/constants'
-import { isLarkBrowser, isSpecialBrowser, isWeChatBrowser } from '..'
+import {
+  isDingtalkBrowser,
+  isLarkBrowser,
+  isQQBrowser,
+  isSpecialBrowser,
+  isWeChatBrowser,
+} from '..'
 import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
 import { GuardLocalConfig } from '../../Guard'
 export interface PhoneValidResult {
@@ -226,10 +232,16 @@ export const useMethod: (params: {
       }
       return true
     })
+    // 特殊浏览器登录方式
     .filter((item) =>
       isWeChatBrowser()
         ? item.provider === SocialConnectionProvider.WECHATMP
         : item.provider !== SocialConnectionProvider.WECHATMP
+    )
+    .filter((item) =>
+      isDingtalkBrowser()
+        ? item.provider !== SocialConnectionProvider.WECHATPC
+        : true
     )
     .filter((item) => {
       if (isLarkBrowser()) {
@@ -237,6 +249,17 @@ export const useMethod: (params: {
           item.provider === SocialConnectionProvider.LARK_INTERNAL ||
           item.provider === SocialConnectionProvider.LARK_PUBLIC
         )
+      } else {
+        return true
+      }
+    })
+    .filter((item) => {
+      if (isDingtalkBrowser() && isQQBrowser()) {
+        return ![
+          SocialConnectionProvider.APPLE,
+          SocialConnectionProvider.APPLE_WEB,
+          SocialConnectionProvider.ALIPAY,
+        ].includes(item.provider)
       } else {
         return true
       }
