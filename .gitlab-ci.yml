@@ -30,6 +30,7 @@ build:lib:
       - packages/vue-components/lib
   script:
     - yarn
+    - yarn run build:demo
     - yarn run build:lib
   artifacts:
     untracked: false
@@ -77,12 +78,12 @@ sonarqube-check:
   stage: sonarqube-check
   image:
     name: sonarsource/sonar-scanner-cli:latest
-    entrypoint: [""]
+    entrypoint: ['']
   variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
-    GIT_DEPTH: "0"
+    SONAR_USER_HOME: '${CI_PROJECT_DIR}/.sonar'
+    GIT_DEPTH: '0'
   cache:
-    key: "${CI_JOB_NAME}"
+    key: '${CI_JOB_NAME}'
     paths:
       - .sonar/cache
   script:
