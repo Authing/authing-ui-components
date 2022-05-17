@@ -30,7 +30,6 @@ build:lib:
       - packages/vue-components/lib
   script:
     - yarn
-    - yarn run build:demo
     - yarn run build:lib
   artifacts:
     untracked: false
