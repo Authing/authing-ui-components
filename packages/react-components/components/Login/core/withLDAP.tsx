@@ -12,6 +12,7 @@ import { Agreements } from '../../Register/components/Agreements'
 import { Agreement } from '../../AuthingGuard/api'
 import { useGuardHttpClient } from '../../_utils/context'
 import { CodeAction } from '../../_utils/responseManagement/interface'
+import { useMediaSize } from '../../_utils/hooks'
 interface LoginWithLDAPProps {
   // configs
   publicKey: string
@@ -32,6 +33,8 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
   // const { responseIntercept } = useGuardHttpClient()
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
+
+  const { isPhoneMedia } = useMediaSize()
 
   const [validated, setValidated] = useState(false)
   // let client = useGuardAuthClient()
@@ -158,6 +161,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
           rules={fieldRequiredRule(t('common.account'))}
         >
           <Input
+            autoFocus={!isPhoneMedia}
             className="authing-g2-input"
             autoComplete="off"
             size="large"

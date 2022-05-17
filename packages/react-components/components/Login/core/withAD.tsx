@@ -16,6 +16,7 @@ import {
   useGuardHttpClient,
   useGuardPublicConfig,
 } from '../../_utils/context'
+import { useMediaSize } from '../../_utils/hooks'
 import { requestClient } from '../../_utils/http'
 import { i18n } from '../../_utils/locales'
 import { CodeAction } from '../../_utils/responseManagement/interface'
@@ -51,6 +52,7 @@ export const LoginWithAD = (props: LoginWithADProps) => {
 
   const { t } = useTranslation()
 
+  const { isPhoneMedia } = useMediaSize()
   // let client = useGuardAuthClient()
 
   // const { post } = useGuardHttpClient()
@@ -178,6 +180,7 @@ export const LoginWithAD = (props: LoginWithADProps) => {
               rules={fieldRequiredRule(t('common.account'))}
             >
               <Input
+                autoFocus={!isPhoneMedia}
                 className="authing-g2-input"
                 autoComplete="off"
                 size="large"

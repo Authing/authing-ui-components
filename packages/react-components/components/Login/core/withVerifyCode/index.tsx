@@ -20,7 +20,11 @@ import { FormItemIdentify } from './FormItemIdentify'
 import { InputIdentify } from './inputIdentify'
 import './styles.less'
 import { InputInternationPhone } from './InputInternationPhone'
-import { defaultAreaCode, parsePhone } from '../../../_utils/hooks'
+import {
+  defaultAreaCode,
+  parsePhone,
+  useMediaSize,
+} from '../../../_utils/hooks'
 import { InputMethod } from '../../../Type'
 import { CodeAction } from '../../../_utils/responseManagement/interface'
 import { Agreement } from '../../../AuthingGuard/api'
@@ -40,6 +44,8 @@ export const LoginWithVerifyCode = (props: any) => {
 
   const { post } = useGuardHttpClient()
 
+  const { isPhoneMedia } = useMediaSize()
+
   // 是否开启了国际化短信功能
   const isInternationSms = config?.internationalSmsConfig?.enabled || false
 
@@ -48,6 +54,7 @@ export const LoginWithVerifyCode = (props: any) => {
   const [validated, setValidated] = useState(false)
 
   const [identify, setIdentify] = useState('')
+
   const [currentMethod, setCurrentMethod] = useState<InputMethod>(methods[0])
   // 是否仅开启国际化短信
   const [isOnlyInternationSms, setInternationSms] = useState(false)
@@ -323,11 +330,12 @@ export const LoginWithVerifyCode = (props: any) => {
           areaCode={areaCode}
         >
           {isOnlyInternationSms ? (
-            <AreaCodePhoneAccount />
+            <AreaCodePhoneAccount autoFocus={!isPhoneMedia} />
           ) : (
             <InputIdentify
               className="authing-g2-input"
               size="large"
+              autoFocus={!isPhoneMedia}
               value={identify}
               methods={methods}
               onChange={(e) => {
