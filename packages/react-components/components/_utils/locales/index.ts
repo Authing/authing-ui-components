@@ -14,7 +14,7 @@ export const changeLang = (lang: Lang) => {
   langChangeFN && langChangeFN(lang)
 }
 
-const initI18n = (localesConfig: LocalesConfig = {}, lang?: Lang) => {
+const initI18n = (localesConfig: LocalesConfig = {}, lang?: string) => {
   let initLang: 'zh-CN' | 'en-US' = 'zh-CN'
 
   const guardWindow = getGuardWindow()

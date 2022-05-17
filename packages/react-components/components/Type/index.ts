@@ -30,8 +30,8 @@ export interface IG2FCViewProps extends IG2FCProps {
 export interface IG2Config {
   title?: string
   logo?: string
-  lang: Lang
-  langRange: Lang[]
+  lang: string
+  langRange: string[]
   host: string
   isHost?: boolean // 判断是否处于托管页面
   mode: GuardMode

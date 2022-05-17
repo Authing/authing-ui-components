@@ -1,4 +1,5 @@
 import { AuthenticationClient } from 'authing-js-sdk'
+import { Lang } from 'authing-js-sdk/build/main/types'
 import { useEffect, useMemo, useState } from 'react'
 import { useGlobalAuthClient } from '../AuthClientProvider/AuthClientProvider'
 import version from '../version'
@@ -44,7 +45,7 @@ export const initGuardAuthClient = (
         appHost: host,
         tenantId: tenantId,
         appId,
-        lang,
+        lang: lang as Lang,
         requestFrom: `Guard@${version}`,
         onError: (code, msg: any) => {
           console.error(code, msg)
@@ -107,7 +108,7 @@ export const useInitGuardAuthClient = (props: {
         appHost: host,
         tenantId: tenantId,
         appId,
-        lang,
+        lang: lang as Lang,
         requestFrom: `Guard@${version}`,
         onError: (code, msg: any) => {
           console.error(code, msg)
