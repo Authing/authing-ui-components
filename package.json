@@ -4,7 +4,7 @@
   "scripts": {
     "build:lib": "lerna run build:lib --stream",
     "build:demo": "node scripts/buildDemo.js",
-    "version": "lerna version patch -y",
+    "version:latest": "lerna version patch -y",
     "version:alpha": "lerna version prerelease --preid alpha -y",
     "version:rc": "lerna version prerelease --preid rc -y",
     "pre-publish": "npm run version && npm run build:lib && lerna publish from-package",
