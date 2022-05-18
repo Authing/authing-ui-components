@@ -147,7 +147,6 @@ export const LoginWithVerifyCode = (props: any) => {
     },
     [
       areaCode,
-      autoRegister,
       currentMethod,
       form,
       identify,
