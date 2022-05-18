@@ -6,7 +6,7 @@
     "build:demo": "node scripts/buildDemo.js",
     "version:latest": "lerna version patch -y",
     "version:alpha": "lerna version prerelease --preid alpha --force-publish -y",
-    "version:rc": "lerna version prerelease --preid rc --force-publish -y",
+    "version:rc": "lerna version prerelease --preid rc -y",
     "pre-publish": "npm run version && npm run build:lib && lerna publish from-package",
     "pre-publish:alpha": "npm run version:alpha && npm run build:lib && lerna publish from-package --dist-tag alpha -y",
     "pre-publish:rc": "npm run version:rc && npm run build:lib && lerna publish from-package --dist-tag rc -y",
