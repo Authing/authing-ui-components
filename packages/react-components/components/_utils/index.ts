@@ -261,7 +261,8 @@ export const isSpecialBrowser = () => {
     isQtWebEngine() ||
     isXiaomiBrowser() ||
     isDingtalkBrowser() ||
-    isQQBrowser()
+    isQQBrowser() ||
+    isQQBuiltInBrowser
   )
 }
 export const assembledAppHost = (identifier: string, host: string) => {

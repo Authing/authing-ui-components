@@ -16,6 +16,7 @@ const ValidatorFormItem: React.FC<ValidatorFormItemMetaProps> = (props) => {
     name,
     required,
     areaCode, //国际化区号
+    isCheckI18nSms = true,
     ...formItemProps
   } = props
   const publicConfig = useGuardPublicConfig()
@@ -24,8 +25,12 @@ const ValidatorFormItem: React.FC<ValidatorFormItemMetaProps> = (props) => {
   const { t } = useTranslation()
 
   const checkInternationalSms = useMemo(() => {
-    return publicConfig.internationalSmsConfig?.enabled && method === 'phone'
-  }, [method, publicConfig.internationalSmsConfig?.enabled])
+    return (
+      publicConfig.internationalSmsConfig?.enabled &&
+      method === 'phone' &&
+      isCheckI18nSms
+    )
+  }, [isCheckI18nSms, method, publicConfig.internationalSmsConfig?.enabled])
 
   const methodContent = useMemo(() => {
     if (method === 'email')

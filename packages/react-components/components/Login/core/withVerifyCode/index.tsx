@@ -341,6 +341,7 @@ export const LoginWithVerifyCode = (props: any) => {
               onChange={(e) => {
                 let v = e.target.value
                 setIdentify(v)
+                if (methods.length === 1) return
                 if (validate('email', v)) {
                   setCurrentMethod(InputMethod.EmailCode)
                 } else {
