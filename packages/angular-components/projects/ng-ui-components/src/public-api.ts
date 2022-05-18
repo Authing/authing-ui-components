@@ -13,7 +13,6 @@ import {
   RegisterMethods,
   AuthenticationClient,
   GuardEventsHandlerKebab,
-  AuthenticationClientOptions,
   UserConfig,
   GuardEventsHandler,
 } from '@authing/native-js-ui-components';
@@ -33,7 +32,6 @@ export type {
   GuardEventsHandler,
   AuthenticationClient,
   GuardEventsHandlerKebab,
-  AuthenticationClientOptions,
 };
 
 export {

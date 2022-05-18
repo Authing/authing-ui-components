@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 
 import {
+  AuthenticationClient,
   Guard,
   GuardEventsHandler,
   GuardLocalConfig,
@@ -26,9 +27,10 @@ export class GuardComponent implements OnInit, OnChanges {
 
   guard: Guard;
 
-  @Input() appId: string;
+  @Input() appId?: string;
   @Input() visible?: boolean;
   @Input() tenantId?: string;
+  @Input() authClient?: AuthenticationClient;
   @Input() config?: Partial<GuardLocalConfig>;
 
   @Output() onLoad = new EventEmitter<
@@ -73,7 +75,12 @@ export class GuardComponent implements OnInit, OnChanges {
 
   ngAfterViewInit() {
     // @ts-ignore
-    this.guard = new Guard(this.appId, this.config);
+    this.guard = new Guard(
+      this.appId,
+      this.config,
+      this.tenantId,
+      this.authClient
+    );
 
     this.guard.on('load', (...rest) => this.onLoad.emit(rest));
     this.guard.on('load-error', (...rest) => this.onLoadError.emit(rest));

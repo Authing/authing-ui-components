@@ -15,7 +15,6 @@ import {
   AuthenticationClient,
   GuardEventsHandlerKebab,
   GuardEventsCamelToKebabMap,
-  AuthenticationClientOptions,
 } from "@authing/react-ui-components";
 import "@authing/react-ui-components/lib/index.min.css";
 
@@ -26,7 +25,6 @@ export type {
   GuardEventsHandler,
   AuthenticationClient,
   GuardEventsHandlerKebab,
-  AuthenticationClientOptions,
 };
 
 export {
