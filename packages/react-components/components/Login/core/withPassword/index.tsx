@@ -99,7 +99,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     }
     setRemainCount(0)
     // onBeforeLogin
-    submitButtonRef?.current.onSpin(true)
+    submitButtonRef?.current?.onSpin(true)
     let loginInfo = {
       type: LoginMethods.Password,
       data: {
@@ -110,7 +110,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     }
     let context = await props.onBeforeLogin?.(loginInfo)
     if (!context && !!props.onBeforeLogin) {
-      submitButtonRef?.current.onSpin(false)
+      submitButtonRef?.current?.onSpin(false)
       return
     }
 
@@ -128,9 +128,9 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     }
 
     if (code === ErrorCode.PASSWORD_ERROR) {
-      if ((data as any)?.remainCount) {
+      if ((data as any)?.remainCount ?? false) {
         setRemainCount((data as any)?.remainCount ?? 0)
-        submitButtonRef?.current.onSpin(false)
+        submitButtonRef?.current?.onSpin(false)
         // TODO 临时拦截密码错误限制不报 message
         // props.onLogin(9999, data, msg)
         onLoginFailed?.(9999, data, msg)
@@ -146,7 +146,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
       setAccountLock(true)
     }
 
-    submitButtonRef?.current.onSpin(false)
+    submitButtonRef?.current?.onSpin(false)
 
     if (code === 200) {
       onLoginSuccess(data, msg)

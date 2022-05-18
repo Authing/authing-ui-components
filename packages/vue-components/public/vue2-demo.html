@@ -27,11 +27,23 @@
 
       const app = new Vue({
         el: '#app',
+        data: () => ({
+          showGuard: false
+        }),
+        method: {
+          changeShow(){
+            this.showGuard = !this.showGuard
+          }
+        },
         render: (h) => h(AuthingVueUIComponents.Guard, {
           props: {
             config,
             appId,
             visible: true,
+            onLoad: () => {
+              this.showGuard = true
+            },
+            onClose: this.changeShow
           },
         }),
       })

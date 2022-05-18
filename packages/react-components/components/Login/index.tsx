@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { message, Popover, Tabs, Tooltip } from 'antd'
-import { intersection } from 'lodash'
+import intersection from 'lodash/intersection'
 
 import { LoginWithPassword } from './core/withPassword/index'
 import { LoginWithLDAP } from './core/withLDAP'
@@ -12,7 +12,6 @@ import { LoginWithWechatmpQrcode } from './core/withWechatmpQrcode'
 import { codeMap } from './codemap'
 import { SocialLogin } from './socialLogin'
 
-import { useGuardAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
 import { LoginMethods } from '../AuthingGuard/types'
 import { IconFont } from '../IconFont'
@@ -31,6 +30,8 @@ import { isWeChatBrowser } from '../_utils'
 import { LoginWithVerifyCode } from './core/withVerifyCode'
 import { VerifyLoginMethods } from '../AuthingGuard/api'
 import { useMediaSize, useMethod } from '../_utils/hooks'
+import { getGuardDocument } from '../_utils/guardDocument'
+import { useGuardAuthClient } from '../Guard/authClient'
 
 const inputWays = [
   LoginMethods.Password,
@@ -259,6 +260,7 @@ export const GuardLoginView = () => {
   // 渲染前执行
   useLayoutEffect(() => {
     if (noLoginMethods && !isPhoneMedia) {
+      const document = getGuardDocument()
       // pc 下
       const containerDOM = document.getElementsByClassName(
         'g2-view-container'
@@ -278,6 +280,8 @@ export const GuardLoginView = () => {
   }, [isPhoneMedia, noLoginMethods])
 
   useEffect(() => {
+    const document = getGuardDocument()
+
     const containerDOM = document.getElementsByClassName('g2-view-header')?.[0]
     const innerContainer = document.querySelector(
       '.g2-view-login>.g2-view-container-inner'

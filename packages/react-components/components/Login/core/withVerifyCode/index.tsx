@@ -20,14 +20,9 @@ import { FormItemIdentify } from './FormItemIdentify'
 import { InputIdentify } from './inputIdentify'
 import './styles.less'
 import { InputInternationPhone } from './InputInternationPhone'
-import {
-  defaultAreaCode,
-  parsePhone,
-  useMediaSize,
-} from '../../../_utils/hooks'
+import { parsePhone, useMediaSize } from '../../../_utils/hooks'
 import { InputMethod } from '../../../Type'
 import { CodeAction } from '../../../_utils/responseManagement/interface'
-import { Agreement } from '../../../AuthingGuard/api'
 
 export const LoginWithVerifyCode = (props: any) => {
   const config = useGuardPublicConfig()
@@ -59,7 +54,9 @@ export const LoginWithVerifyCode = (props: any) => {
   // 是否仅开启国际化短信
   const [isOnlyInternationSms, setInternationSms] = useState(false)
   // 区号 默认
-  const [areaCode, setAreaCode] = useState(defaultAreaCode)
+  const [areaCode, setAreaCode] = useState(
+    config?.internationalSmsConfig?.defaultISOType || 'CN'
+  )
 
   let [form] = Form.useForm()
 
@@ -191,7 +188,7 @@ export const LoginWithVerifyCode = (props: any) => {
       reqContent
     )
 
-    submitButtonRef.current.onSpin(false)
+    submitButtonRef.current?.onSpin(false)
 
     if (code === 200) {
       // props.onLogin(200, data)
@@ -216,7 +213,7 @@ export const LoginWithVerifyCode = (props: any) => {
       reqContent
     )
 
-    submitButtonRef.current.onSpin(false)
+    submitButtonRef.current?.onSpin(false)
 
     if (code === 200) {
       // props.onLogin(200, data)
@@ -242,7 +239,7 @@ export const LoginWithVerifyCode = (props: any) => {
       areaCode
     )
     // onBeforeLogin
-    submitButtonRef.current.onSpin(true)
+    submitButtonRef.current?.onSpin(true)
 
     let loginInfo = {
       type: currentMethod,
@@ -256,7 +253,7 @@ export const LoginWithVerifyCode = (props: any) => {
     let context = await props.onBeforeLogin?.(loginInfo)
 
     if (!context && !!props.onBeforeLogin) {
-      submitButtonRef.current.onSpin(false)
+      submitButtonRef.current?.onSpin(false)
       return
     }
     // 身份源绑定
@@ -264,7 +261,7 @@ export const LoginWithVerifyCode = (props: any) => {
       const res = await props.onLoginRequest?.(loginInfo)
       const { code, data, onGuardHandling } = res
 
-      submitButtonRef?.current.onSpin(false)
+      submitButtonRef.current?.onSpin(false)
 
       if (code === 200) {
         onLoginSuccess(data)

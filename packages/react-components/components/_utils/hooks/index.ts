@@ -20,6 +20,7 @@ import {
 } from '..'
 import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
 import { GuardLocalConfig } from '../../Guard'
+import { getGuardWindow } from '../../Guard/core/useAppendConfig'
 export interface PhoneValidResult {
   isValid: boolean
   phoneNumber: string
@@ -135,12 +136,6 @@ export const useShaking = () => {
   }
   return { MountShaking, UnMountShaking }
 }
-export const defaultAreaCode = (() => {
-  if (typeof navigator === 'undefined') {
-    return 'CN'
-  }
-  return 'CN'
-})()
 
 /**
  * 解析手机号
@@ -151,7 +146,7 @@ export const defaultAreaCode = (() => {
 export const parsePhone = (
   isInternationSms: boolean,
   fieldValue: string,
-  areaCode: string = defaultAreaCode
+  areaCode: string = 'CN'
 ) => {
   let countryCode = undefined
 
@@ -293,7 +288,11 @@ export const useMethod: (params: {
       }
     })
 
-  if (!config?.isHost && (isSpecialBrowser() || !window.postMessage)) {
+  const guardWindow = getGuardWindow()
+
+  if (!guardWindow) return
+
+  if (!config?.isHost && (isSpecialBrowser() || !guardWindow.postMessage)) {
     // 嵌入模式下特殊浏览器不显示所有身份源登录
     socialConnectionObjs = []
     enterpriseConnectionObjs = []

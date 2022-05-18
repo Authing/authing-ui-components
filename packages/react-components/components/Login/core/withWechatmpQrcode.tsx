@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ShieldSpin } from '../../ShieldSpin'
 import { useGuardAuthClient } from '../../Guard/authClient'
-import { useGuardHttpClient } from '../../_utils/context'
+import { useGuardFinallyConfig, useGuardHttpClient } from '../../_utils/context'
 import { message } from 'antd'
+import { getGuardWindow } from '../../Guard/core/useAppendConfig'
 
 interface LoginWithWechatmpQrcodeProps {
   // onLogin: any
@@ -26,12 +27,23 @@ export const LoginWithWechatmpQrcode = (
 
   const domId = `authingGuardMpQrcode-${props.qrCodeScanOptions.extIdpConnId}`
 
+  const config = useGuardFinallyConfig()
+
   useEffect(() => {
+    const guardWindow = getGuardWindow()
+
+    if (!guardWindow) return
+
+    if (!!config._qrCodeScanOptions) return
+
+    const document = guardWindow.document
+
     if (!props.canLoop) {
       return () => clearInterval(timerRef.current)
     }
     setLoading(true)
     appQrcodeClient.startScanning(domId, {
+      currentDocument: document,
       autoExchangeUserInfo: true,
       ...props.qrCodeScanOptions,
 
@@ -71,8 +83,17 @@ export const LoginWithWechatmpQrcode = (
 
   return (
     <div className="authing-g2-login-app-qrcode">
-      {loading && <ShieldSpin />}
-      <div id={domId}></div>
+      {config._qrCodeScanOptions ? (
+        <div className="qrcode">
+          <img src={config._qrCodeScanOptions.wechatmpQrcode.qrcode} alt="" />
+          <span>{props.qrCodeScanOptions.tips.title}</span>
+        </div>
+      ) : (
+        <>
+          {loading && <ShieldSpin />}
+          <div id={domId}></div>
+        </>
+      )}
     </div>
   )
 }

@@ -48,7 +48,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
 
   const [, onFinish] = useAsyncFn(
     async (values: any) => {
-      submitButtonRef.current.onSpin(true)
+      submitButtonRef.current?.onSpin(true)
 
       if (onBeforeRegister) {
         try {
@@ -64,7 +64,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
             authClient
           )
           if (!canRegister) {
-            submitButtonRef.current.onSpin(false)
+            submitButtonRef.current?.onSpin(false)
             return
           }
         } catch (e: any) {
@@ -73,7 +73,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           } else {
             message.error(e?.message)
           }
-          submitButtonRef.current.onSpin(false)
+          submitButtonRef.current?.onSpin(false)
           return
         }
       }
@@ -124,7 +124,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           registerContent.options
         )
 
-        submitButtonRef.current.onSpin(false)
+        submitButtonRef.current?.onSpin(false)
         onRegisterSuccess(user)
       } catch (error: any) {
         const { code, data, message } = error
@@ -145,7 +145,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         name="emailRegister"
         autoComplete="off"
         onFinish={(values: any) => {
-          submitButtonRef.current.onSpin(true)
+          submitButtonRef.current?.onSpin(true)
           onFinish(values)
         }}
         onFinishFailed={() => submitButtonRef.current.onError()}

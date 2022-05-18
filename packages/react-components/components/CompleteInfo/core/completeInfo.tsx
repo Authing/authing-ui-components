@@ -19,7 +19,7 @@ import { fieldRequiredRule } from '../../_utils'
 import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
 import { useGuardPublicConfig } from '../../_utils/context'
-import { defaultAreaCode, parsePhone } from '../../_utils/hooks'
+import { parsePhone } from '../../_utils/hooks'
 import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
 export interface CompleteInfoProps {
   metaData: CompleteInfoMetaData[]
@@ -51,7 +51,9 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
 
   const isInternationSms = config?.internationalSmsConfig?.enabled || false
 
-  const [areaCode, setAreaCode] = useState(defaultAreaCode)
+  const [areaCode, setAreaCode] = useState(
+    config?.internationalSmsConfig?.defaultISOType || 'CN'
+  )
 
   const { get } = useGuardHttp()
 
@@ -366,7 +368,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           case 'regExp':
             formRules.push({
               required,
-              pattern: new RegExp(rule.content.replaceAll('/', '')),
+              pattern: new RegExp((rule.content as any).replaceAll('/', '')),
               message: rule.errorMessage,
             })
             break

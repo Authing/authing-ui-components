@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-// import { inRange, debounce } from 'lodash'
+import { getGuardWindow } from '../../Guard/core/useAppendConfig'
 
 function debounce(fn: Function, delay: number, immediate = true) {
   let timer: any
@@ -59,9 +59,12 @@ export const useScreenSize = () => {
     const onResize = debounce(() => {
       setScreenSize(getScreenSize())
     }, 200)
-    window.addEventListener('resize', onResize)
 
-    return () => window.removeEventListener('resize', onResize)
+    const guardWindow = getGuardWindow()
+
+    guardWindow?.addEventListener('resize', onResize)
+
+    return () => guardWindow?.removeEventListener('resize', onResize)
   }, [])
 
   return [screenSize]

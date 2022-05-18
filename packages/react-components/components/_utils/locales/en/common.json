@@ -264,5 +264,6 @@
   "identityBindingDesc": "After binding, you can log in to this account directly by this method next time",
   "internationPhoneMessage": "Please enter a valid mobile phone number",
   "areaCodePhone": "Area code Mobile number",
-  "timeoutAD": "Request timed out, AD misconfigured"
+  "timeoutAD": "Request timed out, AD misconfigured",
+  "timeout": "Request timed out, please try again later"
 }

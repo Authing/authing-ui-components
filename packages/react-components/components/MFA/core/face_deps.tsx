@@ -1,4 +1,4 @@
-import { nets, TinyFaceDetectorOptions } from 'face-api.js'
+import { getFacePlugin } from '../../_utils/facePlugin'
 
 let inputSize = 512
 let scoreThreshold = 0.5
@@ -12,10 +12,13 @@ export const devicesConstraints = {
 export const FACE_SCORE = 0.65
 
 export function getFaceDetectorOptions() {
+  const { TinyFaceDetectorOptions } = getFacePlugin()
   return new TinyFaceDetectorOptions({ inputSize, scoreThreshold })
 }
 
 export function getCurrentFaceDetectionNet() {
+  const { nets } = getFacePlugin()
+
   return nets.tinyFaceDetector
 }
 

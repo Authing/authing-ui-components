@@ -16,7 +16,7 @@ import { phoneDesensitization } from '../../_utils'
 import { useGuardPublicConfig } from '../../_utils/context'
 import { useMfaBusinessRequest, MfaBusinessAction } from '../businessRequest'
 import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
-import { defaultAreaCode, parsePhone } from '../../_utils/hooks'
+import { parsePhone } from '../../_utils/hooks'
 export interface BindMFASmsProps {
   mfaToken: string
   onBind: (phone: string) => void
@@ -39,7 +39,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
   const [form] = Form.useForm()
 
   const onFinish = async ({ phone }: any) => {
-    submitButtonRef.current.onSpin(true)
+    submitButtonRef.current?.onSpin(true)
     await form.validateFields()
     try {
       onBind(phone)
@@ -157,7 +157,7 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   const businessRequest = useMfaBusinessRequest()[MfaBusinessAction.VerifySms]
 
   const onFinish = async (values: any) => {
-    submitButtonRef.current.onSpin(true)
+    submitButtonRef.current?.onSpin(true)
     const mfaCode = form.getFieldValue('mfaCode')
 
     const requestData: any = {
@@ -265,7 +265,9 @@ export const MFASms: React.FC<{
   const publicConfig = useGuardPublicConfig()
 
   const codeLength = publicConfig?.verifyCodeLength
-  const [areaCode, setAreaCode] = useState(defaultAreaCode)
+  const [areaCode, setAreaCode] = useState(
+    publicConfig?.internationalSmsConfig?.defaultISOType || 'CN'
+  )
 
   const isInternationSms = Boolean(
     publicConfig?.internationalSmsConfig?.enabled

@@ -1,13 +1,26 @@
 import { AuthenticationClient, CommonMessage } from 'authing-js-sdk'
 import { Lang } from 'authing-js-sdk/build/main/types'
+import { ApplicationConfig } from '../AuthingGuard/api'
 import { GuardMode } from '../AuthingGuard/types/GuardConfig'
 import { GuardModuleType } from '../Guard/module'
+import { FacePlugin } from '../_utils/facePlugin/interface'
+
 export interface IG2FCProps extends IG2Events {
   appId: string
   tenantId?: string
   config?: Partial<IG2Config>
   visible?: boolean
   initData?: any
+  appendConfig?: GuardAppendConfig
+  facePlugin?: FacePlugin
+}
+
+export interface GuardAppendConfig {
+  internalRequest?: boolean
+  singleComponent?: boolean
+  unAuthFlow?: boolean
+  publicConfig?: ApplicationConfig
+  pageConfig?: GuardPageConfig
 }
 
 export interface IG2FCViewProps extends IG2FCProps {
@@ -17,8 +30,8 @@ export interface IG2FCViewProps extends IG2FCProps {
 export interface IG2Config {
   title?: string
   logo?: string
-  lang: Lang
-  langRange: Lang[]
+  lang: string
+  langRange: string[]
   host: string
   isHost?: boolean // 判断是否处于托管页面
   mode: GuardMode

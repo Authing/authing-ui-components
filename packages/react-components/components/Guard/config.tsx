@@ -1,3 +1,4 @@
+import { AuthenticationClient } from 'authing-js-sdk'
 import React from 'react'
 import { ReactNode } from 'react'
 import { GuardModuleType } from '.'
@@ -6,6 +7,15 @@ import { getDefaultRegisterConfig, RegisterConfig } from '../Register/interface'
 import { ShieldSpin } from '../ShieldSpin'
 
 export interface GuardComponentConfig extends Partial<GuardLocalConfig> {}
+
+export enum QrCodeScanType {
+  appQrcode = 'appQrcode',
+  wechatMiniQrcode = 'wechatMiniQrcode',
+  wechatmpQrcode = 'wechatmpQrcode',
+}
+export interface QrCodeScanOptions {
+  qrcode: string
+}
 
 export interface GuardLocalConfig extends RegisterConfig, LoginConfig {
   isSSO?: boolean
@@ -17,6 +27,8 @@ export interface GuardLocalConfig extends RegisterConfig, LoginConfig {
    * @description 是否调用 eventsMapping 中的事件
    */
   openEventsMapping?: boolean
+  _qrCodeScanOptions?: Record<QrCodeScanType, QrCodeScanOptions>
+  authClient?: AuthenticationClient
 }
 
 let defaultConfig: GuardLocalConfig = {

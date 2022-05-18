@@ -12,7 +12,7 @@ import { IconFont } from '../../IconFont'
 import { SceneType } from 'authing-js-sdk'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
 import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
-import { defaultAreaCode, parsePhone, useMediaSize } from '../../_utils/hooks'
+import { parsePhone, useMediaSize } from '../../_utils/hooks'
 import { useIsChangeComplete } from '../utils'
 import { useGuardModule } from '../../_utils/context'
 import { GuardModuleType } from '../../Guard'
@@ -47,7 +47,9 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
   const [validated, setValidated] = useState(false)
   // 区号 默认
-  const [areaCode, setAreaCode] = useState(defaultAreaCode)
+  const [areaCode, setAreaCode] = useState(
+    publicConfig?.internationalSmsConfig?.defaultISOType || 'CN'
+  )
 
   const verifyCodeLength = publicConfig?.verifyCodeLength ?? 4
   const isInternationSms =
@@ -55,7 +57,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   const onFinish = useCallback(
     async (values: any) => {
       try {
-        submitButtonRef.current.onSpin(true)
+        submitButtonRef.current?.onSpin(true)
         await form.validateFields()
 
         setValidated(true)
@@ -120,7 +122,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           options
         )
 
-        submitButtonRef.current.onSpin(false)
+        submitButtonRef.current?.onSpin(false)
         onRegisterSuccess(user)
       } catch (error: any) {
         const { code, message, data } = error
