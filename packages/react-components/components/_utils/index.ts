@@ -237,8 +237,17 @@ export const isDingtalkBrowser = () => {
   }
   return /dingtalk/i.test(navigator.userAgent)
 }
-
 export const isQQBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return (
+    /MQQBrowser/i.test(navigator.userAgent) &&
+    !/QQ/i.test(navigator.userAgent.replaceAll('MQQBrowser', ''))
+  )
+}
+// qq 内置浏览器
+export const isQQBuiltInBrowser = () => {
   if (typeof navigator === 'undefined') {
     return null
   }

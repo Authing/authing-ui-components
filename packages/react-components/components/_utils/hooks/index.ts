@@ -13,6 +13,7 @@ import {
   isDingtalkBrowser,
   isLarkBrowser,
   isQQBrowser,
+  isQQBuiltInBrowser,
   isSpecialBrowser,
   isWeChatBrowser,
 } from '..'
@@ -189,9 +190,7 @@ export const useMethod: (params: {
   publicConfig: ApplicationConfig
 }) => any = ({ config, publicConfig }) => {
   const noLoginMethods = !config?.loginMethods?.length
-
   let enterpriseConnectionObjs: ApplicationConfig['identityProviders']
-
   if (config.enterpriseConnections) {
     enterpriseConnectionObjs =
       publicConfig?.identityProviders?.filter?.((item) =>
@@ -254,12 +253,33 @@ export const useMethod: (params: {
       }
     })
     .filter((item) => {
-      if (isDingtalkBrowser() && isQQBrowser()) {
+      if (isDingtalkBrowser()) {
         return ![
           SocialConnectionProvider.APPLE,
           SocialConnectionProvider.APPLE_WEB,
           SocialConnectionProvider.ALIPAY,
+          SocialConnectionProvider.GOOGLE,
         ].includes(item.provider)
+      } else {
+        return true
+      }
+    })
+    .filter((item) => {
+      if (isQQBrowser()) {
+        return (
+          ![
+            SocialConnectionProvider.APPLE,
+            SocialConnectionProvider.APPLE_WEB,
+            SocialConnectionProvider.GOOGLE,
+          ].includes(item.provider) && !item.provider.includes('wechat')
+        )
+      } else {
+        return true
+      }
+    })
+    .filter((item) => {
+      if (isQQBuiltInBrowser()) {
+        return ![SocialConnectionProvider.ALIPAY].includes(item.provider)
       } else {
         return true
       }
