@@ -91,7 +91,7 @@
     ]
   },
   "devDependencies": {
-    "@authing/react-ui-components": "^3.1.13",
+    "@authing/react-ui-components": "^3.1.13-rc.6",
     "@babel/core": "7.12.3",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.2",
     "@svgr/webpack": "5.4.0",
@@ -164,5 +164,8 @@
     "webpack-dev-server": "3.11.0",
     "webpack-manifest-plugin": "2.2.0",
     "workbox-webpack-plugin": "5.1.4"
+  },
+  "dependencies": {
+    "authing-js-sdk": "4.23.30-alpha.3"
   }
 }

@@ -14,7 +14,6 @@ import {
   AuthenticationClient,
   GuardEventsHandlerKebab,
   GuardEventsCamelToKebabMap,
-  AuthenticationClientOptions,
 } from "@authing/react-ui-components";
 import "@authing/react-ui-components/lib/index.min.css";
 import {
@@ -29,7 +28,6 @@ export type {
   GuardEventsHandler,
   AuthenticationClient,
   GuardEventsHandlerKebab,
-  AuthenticationClientOptions,
 };
 
 export {
@@ -51,8 +49,10 @@ export type GuardEventListeners = {
 
 export class Guard {
   constructor(
-    private appId: string,
-    private config?: Partial<GuardLocalConfig>
+    private appId?: string,
+    private config?: Partial<GuardLocalConfig>,
+    private tenantId?: string,
+    private authClient?: AuthenticationClient
   ) {
     this.render();
   }
@@ -118,6 +118,8 @@ export class Guard {
         appId={this.appId}
         config={this.config as GuardComponentConfig}
         visible={this.visible}
+        tenantId={this.tenantId}
+        authClient={this.authClient}
       />,
       Guard.getGuardContainer(this.config?.target),
       cb
