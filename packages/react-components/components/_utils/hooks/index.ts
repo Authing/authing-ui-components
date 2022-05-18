@@ -16,6 +16,7 @@ import {
   isQQBuiltInBrowser,
   isSpecialBrowser,
   isWeChatBrowser,
+  isWeWorkBuiltInBrowser,
 } from '..'
 import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
 import { GuardLocalConfig } from '../../Guard'
@@ -280,6 +281,13 @@ export const useMethod: (params: {
     .filter((item) => {
       if (isQQBuiltInBrowser()) {
         return ![SocialConnectionProvider.ALIPAY].includes(item.provider)
+      } else {
+        return true
+      }
+    })
+    .filter((item) => {
+      if (isWeWorkBuiltInBrowser()) {
+        return ![SocialConnectionProvider.WECHATMP].includes(item.provider)
       } else {
         return true
       }

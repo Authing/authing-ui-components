@@ -203,12 +203,15 @@ export const getUserRegisterParams = () => {
     value: query[key],
   }))
 }
-
+// 微信内置浏览器
 export const isWeChatBrowser = () => {
   if (typeof navigator === 'undefined') {
     return null
   }
-  return /MicroMessenger/i.test(navigator?.userAgent)
+  return (
+    /MicroMessenger/i.test(navigator?.userAgent) &&
+    !/wxwork/i.test(navigator.userAgent)
+  )
 }
 
 export const isLarkBrowser = () => {
@@ -253,6 +256,16 @@ export const isQQBuiltInBrowser = () => {
   }
   return / QQ/i.test(navigator.userAgent)
 }
+// 企业微信内置浏览器
+export const isWeWorkBuiltInBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return (
+    /MicroMessenger/i.test(navigator.userAgent) &&
+    /wxwork/i.test(navigator.userAgent)
+  )
+}
 // 特殊浏览器 后续可能会增加
 export const isSpecialBrowser = () => {
   return (
@@ -262,7 +275,8 @@ export const isSpecialBrowser = () => {
     isXiaomiBrowser() ||
     isDingtalkBrowser() ||
     isQQBrowser() ||
-    isQQBuiltInBrowser
+    isQQBuiltInBrowser() ||
+    isWeWorkBuiltInBrowser()
   )
 }
 export const assembledAppHost = (identifier: string, host: string) => {
