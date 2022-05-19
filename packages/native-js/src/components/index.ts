@@ -1,7 +1,7 @@
 // export * from "./Guard";
-import { Guard } from "./Guard";
+import { Guard, GuardEventsCamelToKebabMapping, GuardEventsKebabToCamelType, GuardEvents } from "./Guard";
 import { GuardConfig, GuardLocalConfig } from "@authing/react-ui-components";
 export * from "./AuthingGuard";
 
-export { Guard };
-export type { GuardConfig, GuardLocalConfig };
+export { Guard, GuardEventsCamelToKebabMapping };
+export type { GuardConfig, GuardLocalConfig, GuardEventsKebabToCamelType, GuardEvents };

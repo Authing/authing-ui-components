@@ -10,16 +10,15 @@ import {
   CommonMessage,
   initAuthClient,
   RegisterMethods,
-  GuardEventsHandler,
+  GuardEvents,
   AuthenticationClient,
-  GuardEventsHandlerKebab,
-  GuardEventsCamelToKebabMap,
+  GuardEventsKebabToCamelType,
+  GuardEventsCamelToKebabMapping,
 } from "@authing/react-ui-components";
 import "@authing/react-ui-components/lib/index.min.css";
 import { GuardComponentConfig, GuardLocalConfig } from "@authing/react-ui-components/components/Guard/config";
-import { GuardEvents } from "@authing/react-ui-components/components/Guard/event";
 
-export type { User, CommonMessage, GuardEventsHandler, AuthenticationClient, GuardEventsHandlerKebab };
+export type { User, CommonMessage, GuardEvents, AuthenticationClient, GuardEventsKebabToCamelType };
 export {
   GuardMode,
   GuardScenes,
@@ -27,7 +26,7 @@ export {
   getAuthClient,
   initAuthClient,
   RegisterMethods,
-  GuardEventsCamelToKebabMap,
+  GuardEventsCamelToKebabMapping,
 };
 
 export interface NativeGuardProps {
@@ -49,7 +48,7 @@ export interface NativeGuardConstructor {
 }
 
 export type GuardEventListeners = {
-  [key in keyof GuardEventsHandlerKebab]: Exclude<Required<GuardEventsHandlerKebab>[key], undefined>[];
+  [key in keyof GuardEventsKebabToCamelType]: Exclude<Required<GuardEventsKebabToCamelType>[key], undefined>[];
 };
 
 export class Guard {
@@ -108,14 +107,14 @@ export class Guard {
     return selector;
   }
 
-  private eventListeners = Object.values(GuardEventsCamelToKebabMap).reduce((acc, evtName) => {
+  private eventListeners = Object.values(GuardEventsCamelToKebabMapping).reduce((acc, evtName) => {
     return Object.assign({}, acc, {
-      [evtName]: [],
+      [evtName as string]: [],
     });
   }, {} as GuardEventListeners);
 
   private render(cb?: () => void) {
-    const evts: GuardEventsHandler = Object.entries(GuardEventsCamelToKebabMap).reduce((acc, [reactEvt, nativeEvt]) => {
+    const evts: GuardEvents = Object.entries(GuardEventsCamelToKebabMapping).reduce((acc, [reactEvt, nativeEvt]) => {
       return Object.assign({}, acc, {
         [reactEvt]: (...rest: any) => {
           if (nativeEvt === "close") {
@@ -124,7 +123,7 @@ export class Guard {
 
           // TODO 返回最后一个执行函数的值，实际应该只让监听一次
           return (
-            this.eventListeners[nativeEvt]
+            (this.eventListeners as any)[nativeEvt as string]
               // @ts-ignore
               .map((item: any) => {
                 return item(...rest);
@@ -133,7 +132,7 @@ export class Guard {
           );
         },
       });
-    }, {} as GuardEventsHandler);
+    }, {} as GuardEvents);
 
     return ReactDOM.render(
       <ReactAuthingGuard
@@ -149,8 +148,8 @@ export class Guard {
     );
   }
 
-  on<T extends keyof GuardEventsHandlerKebab>(evt: T, handler: Exclude<GuardEventsHandlerKebab[T], undefined>) {
-    this.eventListeners[evt]!.push(handler as any);
+  on<T extends keyof GuardEventsKebabToCamelType>(evt: T, handler: Exclude<GuardEventsKebabToCamelType[T], undefined>) {
+    (this.eventListeners as any)[evt]!.push(handler as any);
   }
 
   show() {

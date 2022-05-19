@@ -11,7 +11,7 @@ import {
 import {
   AuthenticationClient,
   Guard,
-  GuardEventsHandler,
+  GuardEvents,
   GuardLocalConfig,
 } from '@authing/native-js-ui-components';
 
@@ -33,44 +33,42 @@ export class GuardComponent implements OnInit, OnChanges {
   @Input() authClient?: AuthenticationClient;
   @Input() config?: Partial<GuardLocalConfig>;
 
-  @Output() onLoad = new EventEmitter<
-    Parameters<GuardEventsHandler['onLoad']>
-  >();
+  @Output() onLoad = new EventEmitter<Parameters<GuardEvents['onLoad']>>();
   @Output() onLoadError = new EventEmitter<
-    Parameters<GuardEventsHandler['onLoadError']>
+    Parameters<GuardEvents['onLoadError']>
   >();
-  @Output() onLogin = new EventEmitter<
-    Parameters<GuardEventsHandler['onLogin']>
-  >();
+  @Output() onLogin = new EventEmitter<Parameters<GuardEvents['onLogin']>>();
   @Output() onLoginError = new EventEmitter<
-    Parameters<GuardEventsHandler['onLoginError']>
+    Parameters<GuardEvents['onLoginError']>
   >();
   @Output() onRegister = new EventEmitter<
-    Parameters<GuardEventsHandler['onRegister']>
+    Parameters<GuardEvents['onRegister']>
   >();
   @Output() onRegisterError = new EventEmitter<
-    Parameters<GuardEventsHandler['onRegisterError']>
+    Parameters<GuardEvents['onRegisterError']>
   >();
   @Output() onPwdEmailSend = new EventEmitter<
-    Parameters<GuardEventsHandler['onPwdEmailSend']>
+    Parameters<GuardEvents['onPwdEmailSend']>
   >();
   @Output() onPwdEmailSendError = new EventEmitter<
-    Parameters<GuardEventsHandler['onPwdEmailSendError']>
+    Parameters<GuardEvents['onPwdEmailSendError']>
   >();
   @Output() onPwdPhoneSend = new EventEmitter<
-    Parameters<GuardEventsHandler['onPwdPhoneSend']>
+    Parameters<GuardEvents['onPwdPhoneSend']>
   >();
   @Output() onPwdPhoneSendError = new EventEmitter<
-    Parameters<GuardEventsHandler['onPwdPhoneSendError']>
+    Parameters<GuardEvents['onPwdPhoneSendError']>
   >();
   @Output() onPwdReset = new EventEmitter<
-    Parameters<GuardEventsHandler['onPwdReset']>
+    Parameters<GuardEvents['onPwdReset']>
   >();
   @Output() onPwdResetError = new EventEmitter<
-    Parameters<GuardEventsHandler['onPwdResetError']>
+    Parameters<GuardEvents['onPwdResetError']>
   >();
-  @Output() onClose = new EventEmitter<
-    Parameters<GuardEventsHandler['onClose']>
+  @Output() onClose = new EventEmitter<Parameters<GuardEvents['onClose']>>();
+
+  @Output() onLangChange = new EventEmitter<
+    Parameters<GuardEvents['onLangChange']>
   >();
 
   ngAfterViewInit() {

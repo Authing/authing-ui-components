@@ -6,14 +6,16 @@
 import {
   getAuthClient,
   initAuthClient,
-  GuardEventsCamelToKebabMap,
   GuardMode,
   GuardScenes,
   LoginMethods,
   RegisterMethods,
 } from "@authing/native-js-ui-components";
+import {
+  GuardEventsCamelToKebabMapping,
+  Guard as NativeGuard,
+} from "@authing/native-js-ui-components/components/Guard/index";
 import "@authing/native-js-ui-components/lib/index.min.css";
-import { Guard as NativeGuard } from "@authing/native-js-ui-components/lib/index.min.js";
 
 export {
   getAuthClient,
@@ -132,15 +134,14 @@ export default {
       this.authClient
     );
 
-    const evts = Object.values(GuardEventsCamelToKebabMap);
-    const kebabToCamelMap = Object.entries(GuardEventsCamelToKebabMap).reduce(
-      (acc, [camel, kebab]) => {
-        return Object.assign({}, acc, {
-          [kebab]: camel,
-        });
-      },
-      {}
-    );
+    const evts = Object.values(GuardEventsCamelToKebabMapping);
+    const kebabToCamelMap = Object.entries(
+      GuardEventsCamelToKebabMapping
+    ).reduce((acc, [camel, kebab]) => {
+      return Object.assign({}, acc, {
+        [kebab]: camel,
+      });
+    }, {});
 
     const listeners = evts.reduce((acc, evtName) => {
       return Object.assign({}, acc, {
