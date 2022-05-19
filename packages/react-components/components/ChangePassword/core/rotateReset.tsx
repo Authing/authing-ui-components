@@ -14,6 +14,7 @@ import {
 } from '../../_utils/context'
 import { authFlow, ChangePasswordBusinessAction } from '../businessRequest'
 import { ApiCode } from '../../_utils/responseManagement/interface'
+import { useMediaSize } from '../../_utils/hooks'
 
 interface RotateResetProps {
   onReset: any
@@ -29,6 +30,8 @@ export const RotateReset = (props: RotateResetProps) => {
   const { publicKey } = useGuardPublicConfig()
 
   let authClient = useGuardAuthClient()
+
+  const { isPhoneMedia } = useMediaSize()
 
   const encrypt = authClient.options.encryptFunction
 
@@ -95,6 +98,7 @@ export const RotateReset = (props: RotateResetProps) => {
           rules={[...fieldRequiredRule(t('common.password'))]}
         >
           <InputPassword
+            autoFocus={!isPhoneMedia}
             className="authing-g2-input"
             size="large"
             placeholder={t('user.inputCurrPwd')}
