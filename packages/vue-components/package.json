@@ -89,7 +89,7 @@
     "vue-jest": "^5.0.0-alpha.10"
   },
   "peerDependencies": {
-    "vue": "^2.5.13"
+    "vue": ">=2.5.13"
   },
   "resolutions": {
     "upath": "1.1.0"

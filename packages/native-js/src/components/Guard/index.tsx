@@ -2,14 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Guard as ReactAuthingGuard } from "@authing/react-ui-components";
 import {
-  User,
   GuardMode,
-  GuardScenes,
-  LoginMethods,
-  getAuthClient,
-  CommonMessage,
-  initAuthClient,
-  RegisterMethods,
   GuardEvents,
   AuthenticationClient,
   GuardEventsKebabToCamelType,
@@ -17,17 +10,6 @@ import {
 } from "@authing/react-ui-components";
 import "@authing/react-ui-components/lib/index.min.css";
 import { GuardComponentConfig, GuardLocalConfig } from "@authing/react-ui-components/components/Guard/config";
-
-export type { User, CommonMessage, GuardEvents, AuthenticationClient, GuardEventsKebabToCamelType };
-export {
-  GuardMode,
-  GuardScenes,
-  LoginMethods,
-  getAuthClient,
-  initAuthClient,
-  RegisterMethods,
-  GuardEventsCamelToKebabMapping,
-};
 
 export interface NativeGuardProps {
   appId?: string;

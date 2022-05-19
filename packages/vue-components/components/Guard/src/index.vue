@@ -10,11 +10,9 @@ import {
   GuardScenes,
   LoginMethods,
   RegisterMethods,
-} from "@authing/native-js-ui-components";
-import {
-  GuardEventsCamelToKebabMapping,
   Guard as NativeGuard,
-} from "@authing/native-js-ui-components/components/Guard/index";
+  GuardEventsCamelToKebabMapping,
+} from "@authing/native-js-ui-components";
 import "@authing/native-js-ui-components/lib/index.min.css";
 
 export {
