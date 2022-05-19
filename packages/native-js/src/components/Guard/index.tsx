@@ -16,20 +16,10 @@ import {
   GuardEventsCamelToKebabMap,
 } from "@authing/react-ui-components";
 import "@authing/react-ui-components/lib/index.min.css";
-import {
-  GuardComponentConfig,
-  GuardLocalConfig,
-} from "@authing/react-ui-components/components/Guard/config";
+import { GuardComponentConfig, GuardLocalConfig } from "@authing/react-ui-components/components/Guard/config";
 import { GuardEvents } from "@authing/react-ui-components/components/Guard/event";
 
-export type {
-  User,
-  CommonMessage,
-  GuardEventsHandler,
-  AuthenticationClient,
-  GuardEventsHandlerKebab,
-};
-
+export type { User, CommonMessage, GuardEventsHandler, AuthenticationClient, GuardEventsHandlerKebab };
 export {
   GuardMode,
   GuardScenes,
@@ -40,20 +30,60 @@ export {
   GuardEventsCamelToKebabMap,
 };
 
+export interface NativeGuardProps {
+  appId?: string;
+  config?: Partial<GuardLocalConfig>;
+  tenantId?: string;
+  authClient?: AuthenticationClient;
+}
+
+export interface NativeGuardConstructor {
+  (
+    appId?: string | NativeGuardProps,
+    config?: Partial<GuardLocalConfig>,
+    tenantId?: string,
+    authClient?: AuthenticationClient
+  ): void;
+
+  (props: NativeGuardProps): void;
+}
+
 export type GuardEventListeners = {
-  [key in keyof GuardEventsHandlerKebab]: Exclude<
-    Required<GuardEventsHandlerKebab>[key],
-    undefined
-  >[];
+  [key in keyof GuardEventsHandlerKebab]: Exclude<Required<GuardEventsHandlerKebab>[key], undefined>[];
 };
 
 export class Guard {
+  private appId?: string;
+  private config?: Partial<GuardLocalConfig>;
+  private tenantId?: string;
+  private authClient?: AuthenticationClient;
+
+  private visible?: boolean;
+
+  constructor(props?: NativeGuardProps);
+  constructor(appId?: string, config?: Partial<GuardLocalConfig>, tenantId?: string, authClient?: AuthenticationClient);
+
   constructor(
-    private appId?: string,
-    private config?: Partial<GuardLocalConfig>,
-    private tenantId?: string,
-    private authClient?: AuthenticationClient
+    appIdOrProps?: string | NativeGuardProps,
+    config?: Partial<GuardLocalConfig>,
+    tenantId?: string,
+    authClient?: AuthenticationClient
   ) {
+    if (typeof appIdOrProps === "string") {
+      this.appId = appIdOrProps;
+      this.config = config;
+      this.tenantId = tenantId;
+      this.authClient = authClient;
+    } else if (appIdOrProps) {
+      const { appId, config: configProps, tenantId: tenantIdProps, authClient: authClientProps } = appIdOrProps;
+      this.appId = appId;
+      this.config = configProps;
+      this.tenantId = tenantIdProps;
+      this.authClient = authClientProps;
+    }
+
+    this.visible = this.config?.mode === GuardMode.Modal ? false : true;
+
     this.render();
   }
 
@@ -78,21 +108,14 @@ export class Guard {
     return selector;
   }
 
-  private visible = this.config?.mode === GuardMode.Modal ? false : true;
-
-  private eventListeners = Object.values(GuardEventsCamelToKebabMap).reduce(
-    (acc, evtName) => {
-      return Object.assign({}, acc, {
-        [evtName]: [],
-      });
-    },
-    {} as GuardEventListeners
-  );
+  private eventListeners = Object.values(GuardEventsCamelToKebabMap).reduce((acc, evtName) => {
+    return Object.assign({}, acc, {
+      [evtName]: [],
+    });
+  }, {} as GuardEventListeners);
 
   private render(cb?: () => void) {
-    const evts: GuardEventsHandler = Object.entries(
-      GuardEventsCamelToKebabMap
-    ).reduce((acc, [reactEvt, nativeEvt]) => {
+    const evts: GuardEventsHandler = Object.entries(GuardEventsCamelToKebabMap).reduce((acc, [reactEvt, nativeEvt]) => {
       return Object.assign({}, acc, {
         [reactEvt]: (...rest: any) => {
           if (nativeEvt === "close") {
@@ -126,10 +149,7 @@ export class Guard {
     );
   }
 
-  on<T extends keyof GuardEventsHandlerKebab>(
-    evt: T,
-    handler: Exclude<GuardEventsHandlerKebab[T], undefined>
-  ) {
+  on<T extends keyof GuardEventsHandlerKebab>(evt: T, handler: Exclude<GuardEventsHandlerKebab[T], undefined>) {
     this.eventListeners[evt]!.push(handler as any);
   }
 
