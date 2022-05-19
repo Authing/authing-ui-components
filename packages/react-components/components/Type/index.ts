@@ -1,13 +1,26 @@
 import { AuthenticationClient, CommonMessage } from 'authing-js-sdk'
 import { Lang } from 'authing-js-sdk/build/main/types'
+import { ApplicationConfig } from '../AuthingGuard/api'
 import { GuardMode } from '../AuthingGuard/types/GuardConfig'
 import { GuardModuleType } from '../Guard/module'
+import { FacePlugin } from '../_utils/facePlugin/interface'
+
 export interface IG2FCProps extends IG2Events {
   appId: string
   tenantId?: string
   config?: Partial<IG2Config>
   visible?: boolean
   initData?: any
+  appendConfig?: GuardAppendConfig
+  facePlugin?: FacePlugin
+}
+
+export interface GuardAppendConfig {
+  internalRequest?: boolean
+  singleComponent?: boolean
+  unAuthFlow?: boolean
+  publicConfig?: ApplicationConfig
+  pageConfig?: GuardPageConfig
 }
 
 export interface IG2FCViewProps extends IG2FCProps {
@@ -17,8 +30,8 @@ export interface IG2FCViewProps extends IG2FCProps {
 export interface IG2Config {
   title?: string
   logo?: string
-  lang: Lang
-  langRange: Lang[]
+  lang: string
+  langRange: string[]
   host: string
   isHost?: boolean // 判断是否处于托管页面
   mode: GuardMode
@@ -80,4 +93,37 @@ export enum NewRegisterMethods {
   Email = 'email',
   Phone = 'phone',
   EmailCode = 'emailCode',
+}
+export enum EmailScene {
+  // 通知模版
+  // - 欢迎邮件 WELCOME
+  WELCOME_EMAIL = 'WELCOME_EMAIL',
+  // - 首次创建用户通知 FIRST_LOGIN_VERIFY
+  FIRST_CREATED_USER = 'FIRST_CREATED_USER',
+
+  // 注册/登录验证码模板 VERIFY_CODE
+  // - 注册验证码
+  REGISTER_VERIFY_CODE = 'REGISTER_VERIFY_CODE',
+  // - 登录验证码
+  LOGIN_VERIFY_CODE = 'LOGIN_VERIFY_CODE',
+  // - MFA 验证
+  MFA_VERIFY_CODE = 'MFA_VERIFY_CODE',
+  // - 信息补全验证码
+  INFORMATION_COMPLETION_VERIFY_CODE = 'INFORMATION_COMPLETION_VERIFY_CODE',
+
+  // 验证模版 VERIFY_EMAIL
+  // - 首次邮箱登录验证
+  FIRST_EMAIL_LOGIN_VERIFY = 'FIRST_EMAIL_LOGIN_VERIFY',
+  // - 在控制台发起验证
+  CONSOLE_CONDUCTED_VERIFY = 'CONSOLE_CONDUCTED_VERIFY',
+
+  // 重置密码模版 RESET_PASSWORD
+  // - 重置密码验证码
+  RESET_PASSWORD_VERIFY_CODE = 'RESET_PASSWORD_VERIFY_CODE',
+
+  // 邮箱绑定模版 CHANGE_EMAIL
+  // - 邮箱绑定验证码
+  EMAIL_BIND_VERIFY_CODE = 'EMAIL_BIND_VERIFY_CODE',
+  // - 邮箱解绑验证码
+  EMAIL_UNBIND_VERIFY_CODE = 'EMAIL_UNBIND_VERIFY_CODE',
 }

@@ -1,14 +1,11 @@
 import { Button, Space, Tooltip } from 'antd'
-import { SocialConnectionProvider, RelayMethodEnum } from 'authing-js-sdk'
 import { Lang } from 'authing-js-sdk/build/main/types'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { i18n } from '../../_utils/locales'
-import { isLarkBrowser, isWeChatBrowser } from '../../_utils'
+import { isSpecialBrowser, popupCenter } from '../../_utils'
 import querystring from 'query-string'
 import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
-import { useScreenSize } from '../../AuthingGuard/hooks/useScreenSize'
-import { useGuardAuthClient } from '../../Guard/authClient'
 import { IconFont } from '../../IconFont'
 import './style.less'
 import { useMediaSize } from '../../_utils/hooks'
@@ -18,6 +15,7 @@ import { usePostMessage } from './postMessage'
 import { CodeAction } from '../../_utils/responseManagement/interface'
 import version from '../../version/version'
 import { GuardLocalConfig } from '../../Guard'
+import { getGuardWindow } from '../../Guard/core/useAppendConfig'
 
 export interface SocialLoginProps {
   appId: string
@@ -45,15 +43,9 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
 
   const { t } = useTranslation()
 
-  const [screenSize] = useScreenSize()
-
-  const authClient = useGuardAuthClient()
-
   const { isPhoneMedia } = useMediaSize()
 
   const onMessage = usePostMessage()
-
-  // const onErrorHandling = useErrorHandling()
 
   useEffect(() => {
     const onPostMessage = (evt: MessageEvent) => {
@@ -70,9 +62,12 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
       }
     }
-    window.addEventListener('message', onPostMessage)
+
+    const guardWindow = getGuardWindow()
+
+    guardWindow?.addEventListener('message', onPostMessage)
     return () => {
-      window.removeEventListener('message', onPostMessage)
+      guardWindow?.removeEventListener('message', onPostMessage)
     }
   }, [onLoginFailed, onLoginSuccess, onMessage])
 
@@ -82,59 +77,48 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         key={i.identifier}
         i={i}
         appId={appId}
+        appHost={config?.host}
         userPoolId={userPoolId}
+        isHost={config?.isHost}
       />
     )
   })
 
   const socialLoginButtons = socialConnectionObjs.map((item: any) => {
     let iconType = `authing-${item.provider.replace(/:/g, '-')}`
-    const options: Record<string, any> = {}
-    const authorization_params: Record<string, any> = {}
-    if (item.provider === SocialConnectionProvider.BAIDU) {
-      authorization_params.display = screenSize
+
+    const query: Record<string, any> = {
+      from_guard: '1',
+      app_id: appId,
+      guard_version: `Guard@${version}`,
     }
+
     if (config?.isHost) {
-      // 如果 isHost 是 true，则从 url 获取 finish_login_url 作为 social.authorize 方法的 targetUrl 参数
-      options.targetUrl = querystring.parse(window.location.search)?.[
-        'finish_login_url'
-      ]
+      query.from_hosted_guard = '1'
+
+      if (isSpecialBrowser()) {
+        query.redirected = '1'
+
+        const guardWindow = getGuardWindow()
+        if (guardWindow) {
+          // 如果 isHost 是 true，则从 url 获取 finish_login_url 作为 social.authorize 方法的 targetUrl 参数
+          query.redirect_url = querystring.parse(guardWindow.location.search)?.[
+            'finish_login_url'
+          ]
+        }
+      }
     }
-    // 根据 UA 判断是否在微信网页浏览器、钉钉浏览器等内部，使用 form_post 参数作为 social.authorize 方法的 relayMethod 参数，其他情况用 web_message
-    options.relayMethod =
-      isWeChatBrowser() || isLarkBrowser()
-        ? RelayMethodEnum.FORM_POST
-        : RelayMethodEnum.WEB_MESSAGE
 
     const onLogin = () => {
-      authClient.social.authorize(item.identifier, {
-        // onSuccess(user) {
-        //   onGuardLogin(200, user)
-        // },
-        // onError(code, msg, data) {
-        //   // try {
-        //   //   const parsedMsg = JSON.parse(msg)
-        //   //   const { message: authingMessage, data: authingData } = parsedMsg
-        //   //   onGuardLogin(code, authingData, authingMessage)
-        //   // } catch (e) {
-        //   //   // do nothing...
-        //   //   onGuardLogin(code, data, msg)
-        //   // }
-        //   // // message.error(msg)
+      const initUrl = `${config.host}/connections/social/${
+        item.identifier
+      }?${querystring.stringify(query)}`
 
-        //   const { onGuardHandling } = onErrorHandling({
-        //     code,
-        //     message: msg,
-        //     data,
-        //   })
-
-        //   onGuardHandling?.()
-        // },
-        authorization_params,
-        // 兼容后端因取不到 guardVersion 而走老版本 guard 逻辑 无法拉起信息补全问题
-        guardVersion: `Guard@${version}`,
-        ...options,
-      })
+      if (query.redirected) {
+        window.location.replace(initUrl)
+      } else {
+        popupCenter(initUrl)
+      }
     }
 
     const shape = config.socialConnectionsBtnShape

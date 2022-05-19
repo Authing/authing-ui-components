@@ -62,7 +62,7 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
   const businessRequest = useMfaBusinessRequest()[MfaBusinessAction.VerifyTotp]
 
   const [, onFinish] = useAsyncFn(async () => {
-    submitButtonRef.current.onSpin(true)
+    submitButtonRef.current?.onSpin(true)
 
     const mfaCode = form.getFieldValue('mfaCode')
 
@@ -75,7 +75,7 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
       requestData
     )
 
-    submitButtonRef.current.onSpin(false)
+    submitButtonRef.current?.onSpin(false)
 
     if (isFlowEnd) {
       mfaLogin(200, data)

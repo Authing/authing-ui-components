@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import {
   GuardEvents,
   GuardLocalConfig,
@@ -87,6 +87,34 @@ export const createGuardXContext = () => {
     Provider: guardXProvider,
     Consumer,
   }
+}
+
+export const useGuardXContext = () => {
+  return useMemo(() => {
+    const Provider = GuardXContext.Provider
+    const Consumer = GuardXContext.Consumer
+
+    const guardXProvider: React.FC<{ value: Partial<IGuardContext> }> = ({
+      value,
+      children,
+    }) => {
+      return (
+        <Provider
+          value={{
+            ...DefaultGuardX,
+            ...value,
+          }}
+        >
+          {children}
+        </Provider>
+      )
+    }
+
+    return {
+      Provider: guardXProvider,
+      Consumer,
+    }
+  }, [])
 }
 
 export const useGuardPublicConfig = () => useContext(GuardXContext).publicConfig

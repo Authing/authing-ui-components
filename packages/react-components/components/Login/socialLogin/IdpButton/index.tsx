@@ -11,48 +11,59 @@ import qs from 'qs'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import shortid from 'shortid'
-import { useGuardAuthClient } from '../../../Guard/authClient'
+import { getGuardWindow } from '../../../Guard/core/useAppendConfig'
 import { IconFont } from '../../../IconFont'
 import version from '../../../version/version'
-import { popupCenter } from '../../../_utils'
+import { isSpecialBrowser, popupCenter } from '../../../_utils'
 import { useGuardHttp } from '../../../_utils/guardHttp'
+
 export const IdpButton = (props: any) => {
-  const { i, appId, userPoolId } = props
+  // TODO: 能不能加个类型
+  const { i, appId, userPoolId, appHost, isHost } = props
 
   const { t } = useTranslation()
 
   const { post } = useGuardHttp()
-
-  const authClient = useGuardAuthClient()
 
   const renderBtn = useCallback(() => {
     if (i?.provider) {
       // 社交身份源
       const iconType = `authing-${i.provider.replace(/:/g, '-')}`
 
-      const onLogin = async () => {
-        await authClient.social.authorize(i.identifier, {
-          guardVersion: `Guard@${version}`,
-
-          // onSuccess(user) {
-          //   // TODO
-          //   // onSuccess(user)
-          //   setLoading(false)
-          //   onGuardLogin(200, user)
-          // },
-          // onError(code, msg) {
-          //   setLoading(false)
-          //   try {
-          //     const parsedMsg = JSON.parse(msg)
-          //     const { message: authingMessage, data: authingData } = parsedMsg
-          //     onGuardLogin(code, authingData, authingMessage)
-          //   } catch (e) {
-          //     // do nothing...
-          //   }
-          //   // message.error(msg)
-          // },
-        })
+      const query: Record<string, any> = {
+        from_guard: '1',
+        app_id: appId,
+        guard_version: `Guard@${version}`,
       }
+
+      if (isHost) {
+        query.from_hosted_guard = '1'
+
+        if (isSpecialBrowser()) {
+          query.redirected = '1'
+
+          const guardWindow = getGuardWindow()
+          if (guardWindow) {
+            // 如果 isHost 是 true，则从 url 获取 finish_login_url 作为 social.authorize 方法的 targetUrl 参数
+            query.redirect_url = qs.parse(guardWindow.location.search)?.[
+              'finish_login_url'
+            ]
+          }
+        }
+      }
+
+      const onLogin = () => {
+        const initUrl = `${appHost}/connections/social/${
+          i.identifier
+        }?${qs.stringify(query)}`
+
+        if (query.redirected) {
+          window.location.replace(initUrl)
+        } else {
+          popupCenter(initUrl)
+        }
+      }
+
       return (
         <Button
           key={i.identifier}
@@ -94,12 +105,16 @@ export const IdpButton = (props: any) => {
           size="large"
           icon={<Avatar size={20} src={i.logo} style={{ marginRight: 8 }} />}
           onClick={async () => {
+            const guardWindow = getGuardWindow()
+
+            if (!guardWindow) return
+
             await post('/api/v2/connections/oidc/start-interaction', {
               state,
               protocol: i.protocol,
               userPoolId,
               appId,
-              referer: window.location.href,
+              referer: guardWindow?.location.href,
               connection: { providerIentifier: i.identifier },
             })
             popupCenter(url)
@@ -187,6 +202,6 @@ export const IdpButton = (props: any) => {
     } else {
       return null
     }
-  }, [appId, authClient.social, i, post, t, userPoolId])
+  }, [appId, i, post, t, userPoolId, isHost, appHost])
   return renderBtn()
 }

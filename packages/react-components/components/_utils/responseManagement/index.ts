@@ -1,11 +1,19 @@
+import { message } from 'antd'
 import { getHundreds } from '..'
 import { AuthingGuardResponse, AuthingResponse } from '../http'
+import { i18n } from '../locales'
 import { CodeAction } from './interface'
 
 export const errorCodeInterceptor: (
   res: AuthingResponse<any>,
   callBack: (code: CodeAction, res: AuthingResponse) => AuthingGuardResponse
 ) => AuthingResponse<any> = (res, callBack) => {
+  if (res.code === -1) {
+    message.error(i18n.t('common.timeout'))
+
+    return res
+  }
+
   if (!res.statusCode) return res
 
   const statusCode = res.statusCode

@@ -279,6 +279,22 @@
     lodash "^4.17.15"
     resize-observer-polyfill "^1.5.0"
 
+"@authing/react-ui-components@^3.1.10":
+  version "3.1.10"
+  resolved "https://registry.npmjs.org/@authing/react-ui-components/-/react-ui-components-3.1.10.tgz#5783acfe37d14afbe41db8e26856ab5a9e3ed9ba"
+  integrity sha512-bP6jnlo1GGA21qlzFCo+2ySKk/ZvbPkriOaf2f2cGWZxq94jOQAb8T3/Czaf2v1Z79gJTE5QIyh9yeBhj/VPOQ==
+  dependencies:
+    antd "^4.8.0"
+    authing-js-sdk "4.23.29-alpha.1"
+    face-api.js "^0.22.2"
+    fastclick "^1.0.6"
+    global "^4.4.0"
+    phone "^3.1.12"
+    qs "^6.9.4"
+    react-responsive "^9.0.0-beta.5"
+    react-use "^17.3.1"
+    wildcard "^1.1.2"
+
 "@babel/code-frame@7.10.4", "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.5.5":
   version "7.10.4"
   resolved "https://registry.npm.taobao.org/@babel/code-frame/download/@babel/code-frame-7.10.4.tgz"
@@ -4340,7 +4356,7 @@
 
 "@tensorflow/tfjs-core@1.7.0":
   version "1.7.0"
-  resolved "https://registry.npmjs.org/@tensorflow/tfjs-core/-/tfjs-core-1.7.0.tgz"
+  resolved "https://registry.npmjs.org/@tensorflow/tfjs-core/-/tfjs-core-1.7.0.tgz#9207c8f2481c52a6a40135a6aaf21a9bb0339bdf"
   integrity sha512-uwQdiklNjqBnHPeseOdG0sGxrI3+d6lybaKu2+ou3ajVeKdPEwpWbgqA6iHjq1iylnOGkgkbbnQ6r2lwkiIIHw==
   dependencies:
     "@types/offscreencanvas" "~2019.3.0"
@@ -4637,7 +4653,7 @@
 
 "@types/offscreencanvas@~2019.3.0":
   version "2019.3.0"
-  resolved "https://registry.npmjs.org/@types/offscreencanvas/-/offscreencanvas-2019.3.0.tgz"
+  resolved "https://registry.npmjs.org/@types/offscreencanvas/-/offscreencanvas-2019.3.0.tgz#3336428ec7e9180cf4566dfea5da04eb586a6553"
   integrity sha512-esIJx9bQg+QYF0ra8GnvfianIY8qWB0GBx54PK5Eps6m+xTj86KLavHv6qDhzKcu5UUOgNfJ2pWaIIV7TRUd9Q==
 
 "@types/parse-json@^4.0.0":
@@ -4706,7 +4722,7 @@
 
 "@types/seedrandom@2.4.27":
   version "2.4.27"
-  resolved "https://registry.npmjs.org/@types/seedrandom/-/seedrandom-2.4.27.tgz"
+  resolved "https://registry.npmjs.org/@types/seedrandom/-/seedrandom-2.4.27.tgz#9db563937dd86915f69092bc43259d2f48578e41"
   integrity sha1-nbVjk33YaRX2kJK8QyWdL0hXjkE=
 
 "@types/selenium-webdriver@^3.0.0":
@@ -4760,12 +4776,12 @@
 
 "@types/webgl-ext@0.0.30":
   version "0.0.30"
-  resolved "https://registry.npmjs.org/@types/webgl-ext/-/webgl-ext-0.0.30.tgz"
+  resolved "https://registry.npmjs.org/@types/webgl-ext/-/webgl-ext-0.0.30.tgz#0ce498c16a41a23d15289e0b844d945b25f0fb9d"
   integrity sha512-LKVgNmBxN0BbljJrVUwkxwRYqzsAEPcZOe6S2T6ZaBDIrFp0qu4FNlpc5sM1tGbXUYFgdVQIoeLk1Y1UoblyEg==
 
 "@types/webgl2@0.0.4":
   version "0.0.4"
-  resolved "https://registry.npmjs.org/@types/webgl2/-/webgl2-0.0.4.tgz"
+  resolved "https://registry.npmjs.org/@types/webgl2/-/webgl2-0.0.4.tgz#c3b0f9d6b465c66138e84e64cb3bdf8373c2c279"
   integrity sha512-PACt1xdErJbMUOUweSrbVM7gSIYm1vTncW2hF6Os/EeWi6TXYAYMPp+8v6rzHmypE5gHrxaxZNXgMkJVIdZpHw==
 
 "@types/webpack-sources@*":
@@ -6000,8 +6016,19 @@ atob@^2.1.2:
 
 authing-js-sdk@4.23.29-alpha.1:
   version "4.23.29-alpha.1"
-  resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.23.29-alpha.1.tgz"
+  resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.23.29-alpha.1.tgz#061177c46e9b8af2c1b580c12692135072a019f8"
   integrity sha512-8/0POlkHp1Ko0cpCpWbvc8DgNLzu7I4zBnNEcu15CzmS/UMmIbNbYqQQyvmNSLhbyASr4RlfLQCbIFfwqIS9+A==
+  dependencies:
+    axios "^0.19.2"
+    crypto-js "^4.0.0"
+    jsencrypt "^3.1.0"
+    jwt-decode "^2.2.0"
+    sm-crypto "^0.3.7"
+
+authing-js-sdk@4.23.30-alpha.3:
+  version "4.23.30-alpha.3"
+  resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.23.30-alpha.3.tgz#339c0fb98e53d16cc8df7f26e802dd56c16e9661"
+  integrity sha512-dme1T52n7hd7JzMhMcy76b7M6TOjqI3KqHemqUzIj65P4n4r72RkhSvtvPrPmkqX1m1FXLXWQZXi19GK0TZdIQ==
   dependencies:
     axios "^0.19.2"
     crypto-js "^4.0.0"
@@ -10024,7 +10051,7 @@ extsprintf@^1.2.0:
 
 face-api.js@^0.22.2:
   version "0.22.2"
-  resolved "https://registry.npmjs.org/face-api.js/-/face-api.js-0.22.2.tgz"
+  resolved "https://registry.npmjs.org/face-api.js/-/face-api.js-0.22.2.tgz#5accbf7e53b1569685d116a7e18dbc4800770d39"
   integrity sha512-9Bbv/yaBRTKCXjiDqzryeKhYxmgSjJ7ukvOvEBy6krA0Ah/vNBlsf7iBNfJljWiPA8Tys1/MnB3lyP2Hfmsuyw==
   dependencies:
     "@tensorflow/tfjs-core" "1.7.0"
@@ -14383,7 +14410,7 @@ node-fetch@^2.5.0, node-fetch@^2.6.1:
 
 node-fetch@~2.1.2:
   version "2.1.2"
-  resolved "https://registry.npmjs.org/node-fetch/-/node-fetch-2.1.2.tgz"
+  resolved "https://registry.npmjs.org/node-fetch/-/node-fetch-2.1.2.tgz#ab884e8e7e57e38a944753cec706f788d1768bb5"
   integrity sha1-q4hOjn5X44qUR1POxwb3iNF2i7U=
 
 node-forge@^0.10.0:
@@ -17158,6 +17185,14 @@ raw-loader@4.0.1:
     loader-utils "^2.0.0"
     schema-utils "^2.6.5"
 
+raw-loader@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.npmjs.org/raw-loader/-/raw-loader-4.0.2.tgz#1aac6b7d1ad1501e66efdac1522c73e59a584eb6"
+  integrity sha512-ZnScIV3ag9A4wPX/ZayxL/jZH+euYb6FcUinPcgiQW0+UBtEv0O6Q3lGd3cqJ+GHH+rksEv3Pj99oxJ3u3VIKA==
+  dependencies:
+    loader-utils "^2.0.0"
+    schema-utils "^3.0.0"
+
 rc-align@^4.0.0:
   version "4.0.9"
   resolved "https://registry.npm.taobao.org/rc-align/download/rc-align-4.0.9.tgz?cache=0&sync_timestamp=1604568696153&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Frc-align%2Fdownload%2Frc-align-4.0.9.tgz"
@@ -17548,6 +17583,11 @@ react-error-overlay@^6.0.8:
   version "6.0.8"
   resolved "https://registry.npm.taobao.org/react-error-overlay/download/react-error-overlay-6.0.8.tgz?cache=0&sync_timestamp=1604667185665&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Freact-error-overlay%2Fdownload%2Freact-error-overlay-6.0.8.tgz"
   integrity sha1-R07RHQT8a9o69kNEfYXpEn7Wtd4=
+
+react-frame-component@^5.2.1:
+  version "5.2.1"
+  resolved "https://registry.npmjs.org/react-frame-component/-/react-frame-component-5.2.1.tgz#6bd5ec73ef7d720f57ee8f259546ed926a941267"
+  integrity sha512-nrSh1OZuHlX69eWqJPiUkPT9S6/wxc4PpJV+vOQ4pHQQ8XmIsIT+utWT+nX32ZfANHZuKONA7JsWMUGT36CqaQ==
 
 react-i18next@^11.8.12:
   version "11.8.12"
@@ -18682,7 +18722,7 @@ scss-tokenizer@^0.2.3:
 
 seedrandom@2.4.3:
   version "2.4.3"
-  resolved "https://registry.npmjs.org/seedrandom/-/seedrandom-2.4.3.tgz"
+  resolved "https://registry.npmjs.org/seedrandom/-/seedrandom-2.4.3.tgz#2438504dad33917314bff18ac4d794f16d6aaecc"
   integrity sha1-JDhQTa0zkXMUv/GKxNeU8W1qrsw=
 
 select-hose@^2.0.0:

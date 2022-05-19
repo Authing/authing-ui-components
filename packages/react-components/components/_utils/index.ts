@@ -9,6 +9,7 @@ import { GuardProps } from '../Guard'
 import isEqual from 'lodash/isEqual'
 import omit from 'lodash/omit'
 import { NewRegisterMethods } from '../Type'
+import { getGuardWindow } from '../Guard/core/useAppendConfig'
 export * from './popupCenter'
 export * from './clipboard'
 
@@ -57,12 +58,12 @@ export const fieldRequiredRule = (
 }
 
 export function getDeviceName() {
-  if (typeof window === 'undefined') {
-    return null
-  }
+  const guardWindow = getGuardWindow()
 
-  const userAgent = window.navigator.userAgent
-  const platform = window.navigator.platform
+  if (!guardWindow) return
+
+  const userAgent = guardWindow.navigator.userAgent
+  const platform = guardWindow.navigator.platform
   const macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K']
   const windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE']
   const iosPlatforms = ['iPhone', 'iPad', 'iPod']
@@ -98,6 +99,12 @@ export const insertStyles = (
   styles: string | any,
   recordKey?: STYLE_RECORD_KEY
 ) => {
+  const guardWindow = getGuardWindow()
+
+  if (!guardWindow) return
+
+  const document = guardWindow.document
+
   let styleElt, styleSheet
   if ((document as any).createStyleSheet) {
     // IE
@@ -124,7 +131,7 @@ export const insertStyles = (
   }
 
   if (recordKey) {
-    insertedRecord[recordKey] = styleElt
+    insertedRecord[recordKey] = styleElt || styleSheet
   }
 }
 
@@ -134,7 +141,6 @@ export const removeStyles = (recordKey: STYLE_RECORD_KEY) => {
   }
 
   const styleElt = insertedRecord[recordKey]
-
   styleElt.parentNode?.removeChild(styleElt)
 
   insertedRecord[recordKey] = null
@@ -568,4 +574,12 @@ export const GuardPropsFilter = (pre: GuardProps, current: GuardProps) => {
   )
 
   return isEqual(omit(pre, preAttribute), omit(current, currentAttribute))
+}
+
+export const getDocumentNode = (node: Node & ParentNode): Document => {
+  if (node.nodeName === '#document') {
+    return node as Document
+  }
+
+  return getDocumentNode(node.parentNode as Node & ParentNode)
 }

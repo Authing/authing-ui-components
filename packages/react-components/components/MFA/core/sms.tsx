@@ -39,7 +39,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
   const [form] = Form.useForm()
 
   const onFinish = async ({ phone }: any) => {
-    submitButtonRef.current.onSpin(true)
+    submitButtonRef.current?.onSpin(true)
     await form.validateFields()
     try {
       onBind(phone)
@@ -157,7 +157,7 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
   const businessRequest = useMfaBusinessRequest()[MfaBusinessAction.VerifySms]
 
   const onFinish = async (values: any) => {
-    submitButtonRef.current.onSpin(true)
+    submitButtonRef.current?.onSpin(true)
     const mfaCode = form.getFieldValue('mfaCode')
 
     const requestData: any = {

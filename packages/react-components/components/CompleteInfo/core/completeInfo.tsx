@@ -13,7 +13,7 @@ import {
 import { useGuardHttp } from '../../_utils/guardHttp'
 import SubmitButton from '../../SubmitButton'
 import { InputNumber } from '../../InputNumber'
-import { EmailScene, SceneType } from 'authing-js-sdk'
+import { SceneType } from 'authing-js-sdk'
 import CustomFormItem from '../../ValidatorRules'
 import { fieldRequiredRule } from '../../_utils'
 import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
@@ -21,6 +21,7 @@ import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
 import { useGuardPublicConfig } from '../../_utils/context'
 import { parsePhone } from '../../_utils/hooks'
 import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
+import { EmailScene } from '../../Type'
 export interface CompleteInfoProps {
   metaData: CompleteInfoMetaData[]
   businessRequest: (data: CompleteInfoRequest) => Promise<void>
@@ -323,7 +324,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
               })}
               maxLength={verifyCodeLength}
               data={''}
-              scene={EmailScene.VerifyCode}
+              scene={EmailScene.INFORMATION_COMPLETION_VERIFY_CODE}
               fieldName="email"
               form={form}
               onSendCodeBefore={() => form.validateFields(['email'])}

@@ -1,4 +1,3 @@
-import { message } from 'antd'
 import qs from 'qs'
 import { i18n } from './locales'
 import { CodeAction } from './responseManagement/interface'
@@ -22,11 +21,30 @@ export interface AuthingGuardResponse<T = any> extends AuthingResponse<T> {
   isFlowEnd?: boolean
 }
 
+const timeoutAction = (controller: AbortController) => {
+  const timer: number = 10
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const response = new Response(
+        JSON.stringify({
+          code: -1,
+        })
+      )
+      resolve(response)
+
+      controller.abort() // 发送终止信号
+    }, timer * 1000)
+  })
+}
+
 requestClient.get = async <T>(
   path: string,
   query: Record<string, any> = {},
   init?: RequestInit
 ): Promise<AuthingResponse<T>> => {
+  let controller = new AbortController()
+  let signal = controller.signal
+
   const headers: Record<string, any> = {
     ...init?.headers,
     'Content-Type': 'application/json',
@@ -36,18 +54,22 @@ requestClient.get = async <T>(
   if (requestClient.tenantId !== '')
     headers[requestClient.tenantHeader] = requestClient.tenantId
 
-  const res = await fetch(
-    `${requestClient.baseUrl}${path}${qs.stringify(query, {
-      addQueryPrefix: true,
-    })}`,
-    {
-      ...init,
-      credentials: 'include',
-      headers,
-    }
-  )
+  const res = await Promise.race([
+    timeoutAction(controller),
+    fetch(
+      `${requestClient.baseUrl}${path}${qs.stringify(query, {
+        addQueryPrefix: true,
+      })}`,
+      {
+        ...init,
+        credentials: 'include',
+        headers,
+        signal,
+      }
+    ),
+  ])
 
-  return res.json()
+  return (res as Response).json()
 }
 
 requestClient.post = async <T>(
@@ -57,6 +79,9 @@ requestClient.post = async <T>(
     headers: any
   }
 ): Promise<AuthingResponse<T>> => {
+  let controller = new AbortController()
+  let signal = controller.signal
+
   const headers: Record<string, any> = {
     ...config?.headers,
     'Content-Type': 'application/json',
@@ -66,18 +91,33 @@ requestClient.post = async <T>(
   if (requestClient.tenantId !== '')
     headers[requestClient.tenantHeader] = requestClient.tenantId
 
-  const res = await fetch(`${requestClient.baseUrl}${path}`, {
-    method: 'POST',
-    body: JSON.stringify(data),
-    credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      ...config?.headers,
-      [requestClient.langHeader]: i18n.language,
-    },
-  })
+  const res = await Promise.race([
+    timeoutAction(controller),
+    fetch(`${requestClient.baseUrl}${path}`, {
+      signal,
+      method: 'POST',
+      body: JSON.stringify(data),
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        ...config?.headers,
+        [requestClient.langHeader]: i18n.language,
+      },
+    }),
+  ])
 
-  return res.json()
+  // const res = await fetch(`${requestClient.baseUrl}${path}`, {
+  //   method: 'POST',
+  //   body: JSON.stringify(data),
+  //   credentials: 'include',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     ...config?.headers,
+  //     [requestClient.langHeader]: i18n.language,
+  //   },
+  // })
+
+  return (res as Response).json()
 }
 
 requestClient.postForm = async <T>(
@@ -87,19 +127,24 @@ requestClient.postForm = async <T>(
     headers: any
   }
 ): Promise<AuthingResponse<T>> => {
-  const res = await fetch(`${requestClient.baseUrl}${path}`, {
-    method: 'post',
-    body: formData,
-    credentials: 'include',
-    headers: {
-      ...config?.headers,
-      [requestClient.langHeader]: i18n.language,
-    },
-  })
-  if (res.status === 500) {
-    message.error(i18n.t('common.unknownError'))
-  }
-  return res.json()
+  let controller = new AbortController()
+  let signal = controller.signal
+
+  const res = await Promise.race([
+    timeoutAction(controller),
+    fetch(`${requestClient.baseUrl}${path}`, {
+      signal,
+      method: 'post',
+      body: formData,
+      credentials: 'include',
+      headers: {
+        ...config?.headers,
+        [requestClient.langHeader]: i18n.language,
+      },
+    }),
+  ])
+
+  return (res as Response).json()
 }
 
 requestClient.baseUrl = ''

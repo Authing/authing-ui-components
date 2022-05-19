@@ -6,9 +6,9 @@ import React, {
   useReducer,
   useState,
 } from 'react'
-import { initGuardAuthClient } from '../authClient'
+import { useInitGuardAuthClient } from '../authClient'
 import { GuardEvents, guardEventsFilter } from '../event'
-import { insertStyles } from '../../_utils'
+import { insertStyles, removeStyles } from '../../_utils'
 import { getDefaultGuardLocalConfig } from '../config'
 import { GuardModuleType } from '../module'
 
@@ -25,11 +25,12 @@ import {
   getPublicConfig,
   useMergeDefaultConfig,
   useMergePublicConfig,
-} from '../../_utils/config/index'
+  useGuardPageConfig,
+} from '../../_utils/config'
 import { GuardHttp, initGuardHttp } from '../../_utils/guardHttp'
 import { initI18n } from '../../_utils/locales'
-import { createGuardXContext } from '../../_utils/context'
-import { useGuardPageConfig } from '../../_utils/guardPageConfig'
+import { useGuardXContext } from '../../_utils/context'
+import { useGuardIconfont } from '../../IconFont/useGuardIconfont'
 
 interface IBaseAction<T = string, P = any> {
   type: T & string
@@ -39,14 +40,16 @@ interface IBaseAction<T = string, P = any> {
 export const RenderContext: React.FC<{
   guardProps: GuardProps
   initState: ModuleState
-}> = ({ guardProps, initState, children }) => {
+  forceUpdate: number
+}> = ({ guardProps, initState, children, forceUpdate }) => {
   const { appId, tenantId, config } = guardProps
 
   const [events, setEvents] = useState<GuardEvents>()
   const [authClint, setAuthClint] = useState<AuthenticationClient>()
   const [httpClient, setHttpClient] = useState<GuardHttp>()
   const [publicConfig, setPublicConfig] = useState<ApplicationConfig>()
-  const [error, serError] = useState()
+  const [cdnBase, setCdnBase] = useState<string>()
+  const [error, setError] = useState()
   const [isAuthFlow, setIsAuthFlow] = useState(true)
 
   // 状态机
@@ -55,7 +58,7 @@ export const RenderContext: React.FC<{
     setGuardStateMachine,
   ] = useState<GuardStateMachine>()
 
-  const { Provider } = createGuardXContext()
+  const { Provider } = useGuardXContext()
 
   // 劫持浏览器 History
   const [historyNext] = useHistoryHijack(guardStateMachine?.back)
@@ -110,13 +113,29 @@ export const RenderContext: React.FC<{
 
   const finallyConfig = useMergePublicConfig(
     appId,
+    forceUpdate,
     defaultMergedConfig,
     httpClient,
-    serError
+    setError
   )
 
   // guardPageConfig
-  const guardPageConfig = useGuardPageConfig(appId, httpClient, serError)
+  const guardPageConfig = useGuardPageConfig(
+    appId,
+    forceUpdate,
+    httpClient,
+    setError
+  )
+
+  const sdkClient = useInitGuardAuthClient({
+    config: finallyConfig,
+    appId,
+    tenantId,
+    setError,
+  })
+
+  // iconfont
+  const iconfontLoaded = useGuardIconfont(cdnBase)
 
   // SSO 登录
   useEffect(() => {
@@ -151,20 +170,14 @@ export const RenderContext: React.FC<{
     if (!publicConfig) return
 
     setPublicConfig(publicConfig)
+
+    setCdnBase(publicConfig.cdnBase)
   }, [appId, finallyConfig])
 
   // AuthClient
   useEffect(() => {
-    if (appId && finallyConfig && publicConfig) {
-      const authClint = initGuardAuthClient(
-        finallyConfig,
-        appId,
-        publicConfig?.websocket,
-        tenantId
-      )
-      setAuthClint(authClint)
-    }
-  }, [appId, finallyConfig, publicConfig, tenantId])
+    setAuthClint(sdkClient)
+  }, [sdkClient])
 
   // initEvents
   useEffect(() => {
@@ -191,14 +204,10 @@ export const RenderContext: React.FC<{
   // 自定义 CSS 处理
   useEffect(() => {
     if (finallyConfig && finallyConfig.contentCss)
-      insertStyles(finallyConfig.contentCss)
-  }, [finallyConfig])
+      insertStyles(finallyConfig.contentCss, 'appConfig')
 
-  // TODO 触发 onLoad 事件
-  useEffect(() => {
-    if (!authClint) return
-    events?.onLoad?.(authClint)
-  }, [authClint, events])
+    return () => removeStyles('appConfig')
+  }, [finallyConfig])
 
   // 是否使用 Guard auth flow
   useEffect(() => {
@@ -215,8 +224,6 @@ export const RenderContext: React.FC<{
         if (finallyConfig?.__singleComponent__) {
           events?.__changeModule?.(moduleName, initData)
         } else {
-          // onChangeModule(moduleName, initData)
-
           if (!events?.onBeforeChangeModule) {
             guardStateMachine?.next(moduleName, initData)
           } else if (await events.onBeforeChangeModule(moduleName, initData)) {
@@ -241,6 +248,7 @@ export const RenderContext: React.FC<{
       publicConfig,
       authClint,
       guardPageConfig,
+      iconfontLoaded,
     ]
 
     return !list.includes(undefined)
@@ -254,23 +262,34 @@ export const RenderContext: React.FC<{
     publicConfig,
     authClint,
     guardPageConfig,
+    iconfontLoaded,
   ])
 
+  // TODO 触发 onLoad 事件
+  useEffect(() => {
+    if (!contextLoaded) return
+
+    events?.onLoad?.(authClint!)
+  }, [authClint, contextLoaded, events])
+
   const contextValues = useMemo(
-    () => ({
-      contextLoaded,
-      isAuthFlow,
-      defaultMergedConfig,
-      finallyConfig,
-      publicConfig,
-      httpClient,
-      appId,
-      events,
-      ...moduleEvents,
-      initData: moduleState.initData,
-      currentModule: moduleState,
-      guardPageConfig,
-    }),
+    () =>
+      contextLoaded
+        ? {
+            contextLoaded,
+            isAuthFlow,
+            defaultMergedConfig,
+            finallyConfig,
+            publicConfig,
+            httpClient,
+            appId,
+            events,
+            ...moduleEvents,
+            initData: moduleState.initData,
+            currentModule: moduleState,
+            guardPageConfig,
+          }
+        : null,
     [
       appId,
       contextLoaded,
@@ -287,10 +306,8 @@ export const RenderContext: React.FC<{
   )
 
   const renderContext = useMemo(() => {
-    return <Provider value={contextValues}>{children}</Provider>
-  }, [Provider, children, contextValues])
+    if (!contextValues) return null
 
-  const renderLoadingContext = useMemo(() => {
     return <Provider value={contextValues}>{children}</Provider>
   }, [Provider, children, contextValues])
 
@@ -319,16 +336,15 @@ export const RenderContext: React.FC<{
   const render = useMemo(() => {
     if (error) return renderErrorContext
 
-    if (contextLoaded) return renderLoadingContext
-    else if (defaultMergedConfig) return renderContext
-    else return null
+    if (contextLoaded || defaultMergedConfig) return renderContext
+
+    return null
   }, [
     contextLoaded,
     defaultMergedConfig,
     error,
     renderContext,
     renderErrorContext,
-    renderLoadingContext,
   ])
 
   return render

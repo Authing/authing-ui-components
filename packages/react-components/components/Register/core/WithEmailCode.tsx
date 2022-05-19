@@ -8,12 +8,13 @@ import { Agreements } from '../components/Agreements'
 import SubmitButton from '../../SubmitButton'
 import CustomFormItem from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
-import { EmailScene, RegisterMethods } from 'authing-js-sdk'
+import { RegisterMethods } from 'authing-js-sdk'
 import { useIsChangeComplete } from '../utils'
 import { useGuardModule } from '../../_utils/context'
 import { GuardModuleType } from '../../Guard'
 import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
 import { getGuardHttp } from '../../_utils/guardHttp'
+import { EmailScene } from '../../Type'
 
 export interface RegisterWithEmailCodeProps {
   // onRegister: Function
@@ -215,8 +216,7 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
                 style={{ color: '#878A95' }}
               />
             }
-            // 暂无邮箱验证码注册场景 用验证邮箱代替
-            scene={EmailScene.VerifyCode}
+            scene={EmailScene.REGISTER_VERIFY_CODE}
             maxLength={verifyCodeLength}
             fieldName={'email'}
             form={form}

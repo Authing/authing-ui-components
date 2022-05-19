@@ -1,3 +1,5 @@
+import { getGuardWindow } from '../Guard/core/useAppendConfig'
+
 /**
  * 在屏幕中心弹出新窗口加载 url
  * @param url
@@ -7,27 +9,37 @@ export const popupCenter = (
   url: string,
   { w, h }: { w: number; h: number } = { w: 585, h: 649 }
 ) => {
+  const guardWindow = getGuardWindow()
+
+  if (!guardWindow) return
+
+  const document = guardWindow.document
+
   // Fixes dual-screen position                             Most browsers      Firefox
   const dualScreenLeft =
-    window.screenLeft !== undefined ? window.screenLeft : window.screenX
+    guardWindow.screenLeft !== undefined
+      ? guardWindow.screenLeft
+      : guardWindow.screenX
   const dualScreenTop =
-    window.screenTop !== undefined ? window.screenTop : window.screenY
+    guardWindow.screenTop !== undefined
+      ? guardWindow.screenTop
+      : guardWindow.screenY
 
-  const width = window.innerWidth
-    ? window.innerWidth
+  const width = guardWindow.innerWidth
+    ? guardWindow.innerWidth
     : document.documentElement.clientWidth
     ? document.documentElement.clientWidth
-    : window.screen.width
-  const height = window.innerHeight
-    ? window.innerHeight
+    : guardWindow.screen.width
+  const height = guardWindow.innerHeight
+    ? guardWindow.innerHeight
     : document.documentElement.clientHeight
     ? document.documentElement.clientHeight
-    : window.screen.height
+    : guardWindow.screen.height
 
-  const systemZoom = width / window.screen.availWidth
+  const systemZoom = width / guardWindow.screen.availWidth
   const left = (width - w) / 2 / systemZoom + dualScreenLeft
   const top = (height - h) / 2 / systemZoom + dualScreenTop
-  const newWindow = window.open(
+  const newWindow = guardWindow.open(
     url,
     '_blank',
     `

@@ -1,6 +1,7 @@
 export * from './_utils/config'
 export * from './_utils/responseManagement/interface'
-export type { AuthenticationClientOptions } from 'authing-js-sdk'
+
+export * from './AuthClientProvider'
 
 export * from './AuthingGuard/types'
 export * from './AuthingGuard/hooks'

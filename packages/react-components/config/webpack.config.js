@@ -25,7 +25,6 @@ const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpack
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter')
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
 const NpmDtsWebpackPlugin = require('npm-dts-webpack-plugin')
-const WebpackBundleAnalyzer = require('webpack-bundle-analyzer')
 
 const postcssNormalize = require('postcss-normalize')
 
@@ -416,6 +415,10 @@ module.exports = function (webpackEnv) {
           oneOf: [
             // TODO: Merge this config once `image/avif` is in the mime-db
             // https://github.com/jshttp/mime-db
+            {
+              test: /index\.min\.css$/,
+              loader: 'raw-loader',
+            },
             {
               test: [/\.avif$/],
               loader: require.resolve('url-loader'),

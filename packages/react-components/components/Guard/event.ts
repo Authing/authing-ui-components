@@ -38,9 +38,15 @@ export const guardEventsFilter = (props: any, openEventsMapping?: boolean) => {
 }
 
 const eventsMapping: Partial<GuardEvents> = {
-  onLogin: (...props) => {
+  onLogin: (user, client) => {
     message.success(i18n.t('common.LoginSuccess'))
-    return props
+
+    if (user) {
+      user?.token && client.setToken(user.token)
+      client.setCurrentUser(user)
+    }
+
+    return [user, client]
   },
 
   onRegister: (...props) => {

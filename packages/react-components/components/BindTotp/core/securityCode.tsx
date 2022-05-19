@@ -38,7 +38,7 @@ export const SecurityCode: React.FC<SecurityCodeProps> = ({
   }
 
   const [, bindTotp] = useAsyncFn(async () => {
-    submitButtonRef.current.onSpin(true)
+    submitButtonRef.current?.onSpin(true)
 
     await form.validateFields()
     const saftyCode = form.getFieldValue('saftyCode')

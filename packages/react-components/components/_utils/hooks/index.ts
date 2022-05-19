@@ -12,6 +12,7 @@ import {
 import { isLarkBrowser, isSpecialBrowser, isWeChatBrowser } from '..'
 import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
 import { GuardLocalConfig } from '../../Guard'
+import { getGuardWindow } from '../../Guard/core/useAppendConfig'
 export interface PhoneValidResult {
   isValid: boolean
   phoneNumber: string
@@ -236,7 +237,11 @@ export const useMethod: (params: {
       }
     })
 
-  if (!config?.isHost && (isSpecialBrowser() || !window.postMessage)) {
+  const guardWindow = getGuardWindow()
+
+  if (!guardWindow) return
+
+  if (!config?.isHost && (isSpecialBrowser() || !guardWindow.postMessage)) {
     // 嵌入模式下特殊浏览器不显示所有身份源登录
     socialConnectionObjs = []
     enterpriseConnectionObjs = []
