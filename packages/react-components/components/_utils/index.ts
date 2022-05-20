@@ -19,7 +19,7 @@ export const VALIDATE_PATTERN = {
   // https://cloud.tencent.com/developer/article/1751120
   // email: /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
   //   以下的来自 authing-user-portal 项目
-  phone: /^1[3-9]\d{9}$/,
+  phone: /^1(3\d|4[5-9]|5[0-35-9]|6[2567]|7[0-8]|8\d|9[0-35-9])\d{8}$/,
   ip: /^((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})(\.((2(5[0-5]|[0-4]\d))|[0-1]?\d{1,2})){3}$/,
   host: /^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+.?$/,
   username: /.?/,

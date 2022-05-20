@@ -64,6 +64,7 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
           ) {
             return Promise.resolve()
           }
+
           return Promise.reject(t('login.inputCorrectPhone'))
         },
       })
