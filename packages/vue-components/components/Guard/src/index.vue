@@ -1,5 +1,5 @@
 <template>
-  <div id="authing_guard_container" />
+  <div id="authing_guard_container"></div>
 </template>
 
 <script>
@@ -125,12 +125,12 @@ export default {
     },
   },
   mounted() {
-    this.guardInstance = new NativeGuard(
-      this.appId,
-      this.mergeConfig,
-      this.tenantId,
-      this.authClient
-    );
+    this.guardInstance = new NativeGuard({
+      appId: this.appId,
+      tenantId: this.tenantId,
+      config: this.mergeConfig,
+      authClient: this.authClient,
+    });
 
     const evts = Object.values(GuardEventsCamelToKebabMapping);
     const kebabToCamelMap = Object.entries(

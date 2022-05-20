@@ -73,12 +73,12 @@ export class GuardComponent implements OnInit, OnChanges {
 
   ngAfterViewInit() {
     // @ts-ignore
-    this.guard = new Guard(
-      this.appId,
-      this.config,
-      this.tenantId,
-      this.authClient
-    );
+    this.guard = new Guard({
+      appId: this.appId,
+      config: this.config,
+      tenantId: this.tenantId,
+      authClient: this.authClient,
+    });
 
     this.guard.on('load', (...rest) => this.onLoad.emit(rest));
     this.guard.on('load-error', (...rest) => this.onLoadError.emit(rest));
@@ -105,6 +105,8 @@ export class GuardComponent implements OnInit, OnChanges {
       this.onPwdResetError.emit(rest)
     );
     this.guard.on('close', (...rest) => this.onClose.emit(rest));
+
+    this.guard.on('lang-change', (...rest) => this.onLangChange.emit(rest));
 
     if (this.visible) {
       this.guard.show();
