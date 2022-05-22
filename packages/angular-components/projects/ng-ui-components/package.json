@@ -1,6 +1,6 @@
 {
   "name": "@authing/ng-ui-components",
-  "version": "3.1.13-rc.14",
+  "version": "3.1.13-rc.15",
   "main": "src/public-api.ts",
   "peerDependencies": {
     "@angular/common": ">=10.2.0",
