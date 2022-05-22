@@ -10,7 +10,7 @@ import {
 
 import {
   AuthenticationClient,
-  Guard,
+  Guard as NativeGuard,
   GuardEvents,
   GuardLocalConfig,
 } from '@authing/native-js-ui-components';
@@ -25,7 +25,7 @@ import {
 export class GuardComponent implements OnInit, OnChanges {
   constructor() {}
 
-  guard: Guard;
+  guard: NativeGuard;
 
   @Input() appId?: string;
   @Input() visible?: boolean;
@@ -73,7 +73,7 @@ export class GuardComponent implements OnInit, OnChanges {
 
   ngAfterViewInit() {
     // @ts-ignore
-    this.guard = new Guard({
+    this.guard = new NativeGuard({
       appId: this.appId,
       config: this.config,
       tenantId: this.tenantId,
@@ -119,7 +119,7 @@ export class GuardComponent implements OnInit, OnChanges {
     if (v.visible) {
       this.guard?.show();
     } else {
-      this.guard.hide();
+      this.guard?.hide();
     }
   }
 }
