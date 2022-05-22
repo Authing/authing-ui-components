@@ -74,7 +74,7 @@ export class GuardComponent implements OnInit, OnChanges {
   ngAfterViewInit() {
     // @ts-ignore
 
-    if (authClient) {
+    if (this.authClient) {
       this.guard = new NativeGuard({
         appId: this.appId,
         config: this.config,
