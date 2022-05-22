@@ -98,24 +98,7 @@ export class GuardComponent implements OnInit, OnChanges {
     this.guard.on('register-error', (...rest) =>
       this.onRegisterError.emit(rest)
     );
-    this.guard.on('pwd-email-send', (...rest) =>
-      this.onPwdEmailSend.emit(rest)
-    );
-    this.guard.on('pwd-email-send-error', (...rest) =>
-      this.onPwdEmailSendError.emit(rest)
-    );
-    this.guard.on('pwd-phone-send', (...rest) =>
-      this.onPwdPhoneSend.emit(rest)
-    );
-    this.guard.on('pwd-phone-send-error', (...rest) =>
-      this.onPwdPhoneSendError.emit(rest)
-    );
-    this.guard.on('pwd-reset', (...rest) => this.onPwdReset.emit(rest));
-    this.guard.on('pwd-reset-error', (...rest) =>
-      this.onPwdResetError.emit(rest)
-    );
     this.guard.on('close', (...rest) => this.onClose.emit(rest));
-
     this.guard.on('lang-change', (...rest) => this.onLangChange.emit(rest));
 
     if (this.visible === true) {

@@ -50,17 +50,17 @@ export class Guard {
     tenantId?: string,
     authClient?: AuthenticationClient
   ) {
-    if (typeof appIdOrProps === "string") {
-      this.appId = appIdOrProps;
-      this.config = config;
-      this.tenantId = tenantId;
-      this.authClient = authClient;
-    } else if (appIdOrProps) {
+    if (appIdOrProps && typeof appIdOrProps !== "string") {
       const { appId, config: configProps, tenantId: tenantIdProps, authClient: authClientProps } = appIdOrProps;
       this.appId = appId;
       this.config = configProps;
       this.tenantId = tenantIdProps;
       this.authClient = authClientProps;
+    } else {
+      this.appId = appIdOrProps;
+      this.config = config;
+      this.tenantId = tenantId;
+      this.authClient = authClient;
     }
 
     this.visible = this.config?.mode === GuardMode.Modal ? false : true;
