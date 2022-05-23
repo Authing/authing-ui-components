@@ -14,6 +14,7 @@ import { InputPassword } from '../../InputPassword'
 import { useIsChangeComplete } from '../utils'
 import { useGuardModule } from '../../_utils/context'
 import { GuardModuleType } from '../../Guard'
+import { useMediaSize } from '../../_utils/hooks'
 
 export interface RegisterWithEmailProps {
   // onRegister: Function
@@ -34,7 +35,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
 }) => {
   const { t } = useTranslation()
   const submitButtonRef = useRef<any>(null)
-
+  const { isPhoneMedia } = useMediaSize()
   const authClient = useGuardAuthClient()
   const [form] = Form.useForm()
 
@@ -165,6 +166,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           required={true}
         >
           <Input
+            autoFocus={!isPhoneMedia}
             className="authing-g2-input"
             autoComplete="off"
             size="large"
@@ -237,9 +239,9 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         )}
         <Form.Item>
           <SubmitButton
-            disabled={
-              !!agreements.find((item) => item.required && !acceptedAgreements)
-            }
+            // disabled={
+            //   !!agreements.find((item) => item.required && !acceptedAgreements)
+            // }
             text={t('common.register')}
             ref={submitButtonRef}
           />

@@ -20,10 +20,9 @@ import { FormItemIdentify } from './FormItemIdentify'
 import { InputIdentify } from './inputIdentify'
 import './styles.less'
 import { InputInternationPhone } from './InputInternationPhone'
-import { parsePhone } from '../../../_utils/hooks'
+import { parsePhone, useMediaSize } from '../../../_utils/hooks'
 import { EmailScene, InputMethod } from '../../../Type'
 import { CodeAction } from '../../../_utils/responseManagement/interface'
-import { Agreement } from '../../../AuthingGuard/api'
 
 export const LoginWithVerifyCode = (props: any) => {
   const config = useGuardPublicConfig()
@@ -41,6 +40,8 @@ export const LoginWithVerifyCode = (props: any) => {
 
   const { post } = useGuardHttpClient()
 
+  const { isPhoneMedia } = useMediaSize()
+
   // 是否开启了国际化短信功能
   const isInternationSms = config?.internationalSmsConfig?.enabled || false
 
@@ -49,6 +50,7 @@ export const LoginWithVerifyCode = (props: any) => {
   const [validated, setValidated] = useState(false)
 
   const [identify, setIdentify] = useState('')
+
   const [currentMethod, setCurrentMethod] = useState<InputMethod>(methods[0])
   // 是否仅开启国际化短信
   const [isOnlyInternationSms, setInternationSms] = useState(false)
@@ -326,19 +328,18 @@ export const LoginWithVerifyCode = (props: any) => {
           areaCode={areaCode}
         >
           {isOnlyInternationSms ? (
-            <AreaCodePhoneAccount />
+            <AreaCodePhoneAccount autoFocus={!isPhoneMedia} />
           ) : (
             <InputIdentify
               className="authing-g2-input"
               size="large"
+              autoFocus={!isPhoneMedia}
               value={identify}
               methods={methods}
               onChange={(e) => {
                 let v = e.target.value
                 setIdentify(v)
-                if (methods.length === 1) {
-                  return
-                }
+                if (methods.length === 1) return
                 if (validate('email', v)) {
                   setCurrentMethod(InputMethod.EmailCode)
                 } else {
@@ -373,11 +374,11 @@ export const LoginWithVerifyCode = (props: any) => {
         )}
         <Form.Item>
           <SubmitButton
-            disabled={
-              !!agreements.find(
-                (item: Agreement) => item.required && !acceptedAgreements
-              )
-            }
+            // disabled={
+            //   !!agreements.find(
+            //     (item: Agreement) => item.required && !acceptedAgreements
+            //   )
+            // }
             text={submitText}
             className="password"
             ref={submitButtonRef}

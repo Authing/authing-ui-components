@@ -12,7 +12,7 @@ import { IconFont } from '../../IconFont'
 import { SceneType } from 'authing-js-sdk'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
 import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
-import { parsePhone } from '../../_utils/hooks'
+import { parsePhone, useMediaSize } from '../../_utils/hooks'
 import { useIsChangeComplete } from '../utils'
 import { useGuardModule } from '../../_utils/context'
 import { GuardModuleType } from '../../Guard'
@@ -34,7 +34,10 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   registeContext,
 }) => {
   const { t } = useTranslation()
+
   const isChangeComplete = useIsChangeComplete('phone')
+
+  const { isPhoneMedia } = useMediaSize()
 
   const { changeModule } = useGuardModule()
 
@@ -263,7 +266,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           required={true}
           areaCode={areaCode}
         >
-          <PhoenAccount />
+          <PhoenAccount autoFocus={!isPhoneMedia} />
         </CustomFormItem.Phone>
         <Form.Item
           key="code"
@@ -284,9 +287,9 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         )}
         <Form.Item>
           <SubmitButton
-            disabled={
-              !!agreements.find((item) => item.required && !acceptedAgreements)
-            }
+            // disabled={
+            //   !!agreements.find((item) => item.required && !acceptedAgreements)
+            // }
             text={t('common.register')}
             ref={submitButtonRef}
           />

@@ -16,6 +16,7 @@ import { InputPassword } from '../../../InputPassword'
 import { Agreements } from '../../../Register/components/Agreements'
 import { AuthingGuardResponse, AuthingResponse } from '../../../_utils/http'
 import { CodeAction } from '../../../_utils/responseManagement/interface'
+import { useMediaSize } from '../../../_utils/hooks'
 interface LoginWithPasswordProps {
   // configs
   publicKey: string
@@ -39,7 +40,7 @@ interface LoginWithPasswordProps {
 export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   const { agreements, onLoginFailed, onLoginSuccess } = props
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
-
+  const { isPhoneMedia } = useMediaSize()
   const [validated, setValidated] = useState(false)
 
   let { t } = useTranslation()
@@ -188,6 +189,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
             className="authing-g2-input"
             autoComplete="off"
             size="large"
+            autoFocus={!isPhoneMedia}
             prefix={
               <IconFont
                 type="authing-a-user-line1"
@@ -268,9 +270,10 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         )}
         <Form.Item>
           <SubmitButton
-            disabled={
-              !!agreements.find((item) => item.required && !acceptedAgreements)
-            }
+            // TODO 产品还没想好 暂时不上
+            // disabled={
+            //   !!agreements.find((item) => item.required && !acceptedAgreements)
+            // }
             text={submitText}
             className="password"
             ref={submitButtonRef}

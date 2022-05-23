@@ -1,4 +1,5 @@
 import React from 'react'
+import { useGuardPublicConfig } from '../_utils/context'
 
 //@ts-ignore
 import { ReactComponent as ShieldSpinLoading } from './loading.svg'
@@ -7,6 +8,7 @@ interface IG2SpinProps {
 }
 
 export const ShieldSpin = (props: IG2SpinProps) => {
+  const publicConfig = useGuardPublicConfig()
   let size = props.size ? props.size : 50
 
   return (
@@ -16,7 +18,11 @@ export const ShieldSpin = (props: IG2SpinProps) => {
         height: size,
       }}
     >
-      <ShieldSpinLoading />
+      {publicConfig?.customLoading ? (
+        <img src={publicConfig.customLoading} alt="" width={size} />
+      ) : (
+        <ShieldSpinLoading />
+      )}
     </div>
   )
 }
