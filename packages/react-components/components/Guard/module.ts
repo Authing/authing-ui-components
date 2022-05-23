@@ -10,6 +10,7 @@ export enum GuardModuleType {
   BIND_TOTP = 'bindTotp',
   ANY_QUESTIONS = 'anyQuestions',
   LOGIN_COMPLETE_INFO = 'loginCompleteInfo',
+  REGISTER_PASSWORD = 'registerPassword',
   REGISTER_COMPLETE_INFO = 'registerCompleteInfo',
   RECOVERY_CODE = 'recoveryCode',
   SUBMIT_SUCCESS = 'submitSuccess',

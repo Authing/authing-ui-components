@@ -103,9 +103,7 @@ export const RenderContext: React.FC<{
     if (!appId || !defaultMergedConfig) return
 
     const httpClient = initGuardHttp(defaultMergedConfig.host)
-
     httpClient.setAppId(appId)
-
     tenantId && httpClient.setTenantId(tenantId)
 
     setHttpClient(httpClient)

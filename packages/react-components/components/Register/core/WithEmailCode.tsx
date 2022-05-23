@@ -15,6 +15,7 @@ import { GuardModuleType } from '../../Guard'
 import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
 import { getGuardHttp } from '../../_utils/guardHttp'
 import { EmailScene } from '../../Type'
+import { useMediaSize } from '../../_utils/hooks'
 
 export interface RegisterWithEmailCodeProps {
   // onRegister: Function
@@ -41,6 +42,8 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
   const { changeModule } = useGuardModule()
 
   const submitButtonRef = useRef<any>(null)
+
+  const { isPhoneMedia } = useMediaSize()
 
   const authClient = useGuardAuthClient()
 
@@ -112,6 +115,9 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
             // params: getUserRegisterParams(),
           },
         }
+        // 判断验证码是否正确
+
+        // 验证码校验通过 进入密码补全流程
 
         // 看看是否要跳转到 信息补全
         if (isChangeComplete) {
@@ -183,6 +189,7 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
           required={true}
         >
           <Input
+            autoFocus={!isPhoneMedia}
             className="authing-g2-input"
             autoComplete="off"
             size="large"

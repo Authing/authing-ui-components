@@ -44,6 +44,8 @@ const requestPublicConfig = async (
 
   setPublicConfig(appId, res.data)
 
+  httpClient.setUserpoolId(res.data.userPoolId)
+
   return getPublicConfig(appId)
 }
 

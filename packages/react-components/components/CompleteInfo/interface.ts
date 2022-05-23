@@ -112,6 +112,11 @@ export interface RegisterCompleteInfoInitData {
     | 'registerByPhoneCode'
     | 'registerByEmailCode'
 }
+
+export interface RegisterCompletePasswordInitData
+  extends RegisterCompleteInfoInitData {
+  isChangeComplete: boolean
+}
 export interface CompleteInfoRequest {
   fieldValues: {
     name: string
