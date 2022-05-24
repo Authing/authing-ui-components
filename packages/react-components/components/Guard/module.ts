@@ -5,6 +5,7 @@ export enum GuardModuleType {
   MFA = 'mfa',
   FORGET_PWD = 'forgetPassword',
   FORCED_PASSWORD_RESET = 'forcedPasswordReset',
+  NOTICE_PASSWORD_RESET = 'noticePasswordReset',
   FIRST_LOGIN_PASSWORD = 'firstLoginPassword',
   DOWNLOAD_AT = 'downloadAT',
   BIND_TOTP = 'bindTotp',

@@ -5,6 +5,7 @@ import { GuardBindTotpView } from '../../BindTotp'
 import {
   GuardFirstLoginPasswordResetView,
   GuardForcedPasswordResetView,
+  GuardNoticePasswordResetView,
 } from '../../ChangePassword'
 import {
   GuardLoginCompleteInfoView,
@@ -108,6 +109,10 @@ export const RenderModule: React.FC<{
     // 首次登录修改密码
     [GuardModuleType.FIRST_LOGIN_PASSWORD]: (key: string) => (
       <GuardFirstLoginPasswordResetView key={key} />
+    ),
+    // 提示修改密码
+    [GuardModuleType.NOTICE_PASSWORD_RESET]: (key: string) => (
+      <GuardNoticePasswordResetView key={key} />
     ),
     // 登陆安全策略 密码轮换
     [GuardModuleType.FORCED_PASSWORD_RESET]: (key: string) => (
