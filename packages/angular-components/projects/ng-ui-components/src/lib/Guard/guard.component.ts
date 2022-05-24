@@ -90,16 +90,16 @@ export class GuardComponent implements OnInit, OnChanges {
       );
     }
 
-    this.guard.on('load', (...rest) => this.onLoad.emit(...rest));
-    this.guard.on('load-error', (...rest) => this.onLoadError.emit(...rest));
-    this.guard.on('login', (...rest) => this.onLogin.emit(...rest));
-    this.guard.on('login-error', (...rest) => this.onLoginError.emit(...rest));
-    this.guard.on('register', (...rest) => this.onRegister.emit(...rest));
+    this.guard.on('load', (...rest) => this.onLoad.emit(rest));
+    this.guard.on('load-error', (...rest) => this.onLoadError.emit(rest));
+    this.guard.on('login', (...rest) => this.onLogin.emit(rest));
+    this.guard.on('login-error', (...rest) => this.onLoginError.emit(rest));
+    this.guard.on('register', (...rest) => this.onRegister.emit(rest));
     this.guard.on('register-error', (...rest) =>
-      this.onRegisterError.emit(...rest)
+      this.onRegisterError.emit(rest)
     );
-    this.guard.on('close', (...rest) => this.onClose.emit(...rest));
-    this.guard.on('lang-change', (...rest) => this.onLangChange.emit(...rest));
+    this.guard.on('close', (...rest) => this.onClose.emit(rest));
+    this.guard.on('lang-change', (...rest) => this.onLangChange.emit(rest));
 
     if (this.visible === true) {
       this.guard.show();
