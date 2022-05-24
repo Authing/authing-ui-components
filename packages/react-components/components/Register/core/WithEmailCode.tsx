@@ -116,37 +116,54 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
           },
         }
         // 判断验证码是否正确
-
+        const {
+          statusCode: checkCode,
+          data: { valid, message: checkMessage },
+        } = await post('/api/v2/sms/preCheckCode', {
+          email: email,
+          emailCode: code,
+        })
         // 验证码校验通过 进入密码补全流程
-
-        // 看看是否要跳转到 信息补全
-        if (isChangeComplete) {
-          changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
+        if (checkCode === 200 && valid) {
+          changeModule?.(GuardModuleType.REGISTER_PASSWORD, {
             businessRequestName: 'registerByEmailCode', //用于判断后续使用哪个注册api
             content: registerContent,
+            isChangeComplete: isChangeComplete,
           })
-
+          return
+        } else {
+          submitButtonRef.current.onError()
+          message.error(checkMessage)
           return
         }
+        // 看看是否要跳转到 信息补全
+        // if (isChangeComplete) {
+        //   changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
+        //     businessRequestName: 'registerByEmailCode', //用于判断后续使用哪个注册api
+        //     content: registerContent,
+        //   })
 
-        // 注册
-        const { code: resCode, data, onGuardHandling, message } = await post(
-          '/api/v2/register/email-code',
-          {
-            email: registerContent.email,
-            code: registerContent.code,
-            profile: registerContent.profile,
-            ...registerContent.options,
-          }
-        )
+        //   return
+        // }
 
-        submitButtonRef.current.onSpin(false)
-        if (resCode === 200) {
-          onRegisterSuccess(data)
-        } else {
-          onGuardHandling?.()
-          onRegisterFailed(code, data, message)
-        }
+        // // 注册
+        // const { code: resCode, data, onGuardHandling, message } = await post(
+        //   '/api/v2/register/email-code',
+        //   {
+        //     email: registerContent.email,
+        //     code: registerContent.code,
+        //     profile: registerContent.profile,
+        //     ...registerContent.options,
+        //   }
+        // )
+
+        // submitButtonRef.current.onSpin(false)
+        // if (resCode === 200) {
+        //   onRegisterSuccess(data)
+        // } else {
+        //   onGuardHandling?.()
+        //   onRegisterFailed(code, data, message)
+        // }
       } catch (error: any) {
         const { code, data, message } = error
         submitButtonRef.current.onError()
@@ -164,7 +181,6 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
       registeContext,
       isChangeComplete,
       post,
-      onRegisterSuccess,
       changeModule,
       onRegisterFailed,
     ]

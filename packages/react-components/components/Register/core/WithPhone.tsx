@@ -108,17 +108,16 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           options,
         }
         // 判断验证码是否正确
-        const { code: checkCode, message: checkMessage } = await post(
-          '/api/v2/sms/verifyCode',
-          {
-            phone: phoneNumber,
-            phoneCode: code,
-            phoneCountryCode,
-            isPreCheck: true,
-          }
-        )
+        const {
+          statusCode: checkCode,
+          data: { valid, message: checkMessage },
+        } = await post('/api/v2/sms/preCheckCode', {
+          phone: phoneNumber,
+          phoneCode: code,
+          phoneCountryCode,
+        })
         // 验证码校验通过 进入密码补全流程
-        if (checkCode === 200) {
+        if (checkCode === 200 && valid) {
           changeModule?.(GuardModuleType.REGISTER_PASSWORD, {
             businessRequestName: 'registerByPhoneCode',
             content: registerContent,
