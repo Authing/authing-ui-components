@@ -198,9 +198,11 @@ export const GuardRegisterCompleteInfoView: React.FC = () => {
           changeModule?.(GuardModuleType.LOGIN)
         } else {
           user?.onGuardHandling?.()
+          const { code, message: errorMessage, data } = user
+          events?.onRegisterError?.({ code, data, message: errorMessage })
           // TODO 后续sdk的验证码逻辑改完后
-          return
         }
+        return
       }
       if (user) {
         events?.onRegister?.(user, authClient)
@@ -208,8 +210,9 @@ export const GuardRegisterCompleteInfoView: React.FC = () => {
       }
     } catch (error: any) {
       // TODO 后续sdk的验证码逻辑改完后·
-
-      message.error(error.message)
+      const { code, message: errorMessage, data } = error
+      message.error(errorMessage)
+      events?.onRegisterError?.({ code, data, message: errorMessage })
     }
   }
 

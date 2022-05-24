@@ -25,6 +25,7 @@ export interface RegisterWithEmailCodeProps {
   agreements: Agreement[]
   publicConfig?: ApplicationConfig
   registeContext?: any
+  needPassword?: boolean
 }
 
 export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
@@ -34,6 +35,7 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
   agreements,
   publicConfig,
   registeContext,
+  needPassword,
 }) => {
   const { t } = useTranslation()
 
@@ -115,59 +117,61 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
             // params: getUserRegisterParams(),
           },
         }
-        // 判断验证码是否正确
-        const {
-          statusCode: checkCode,
-          data: { valid, message: checkMessage },
-        } = await post('/api/v2/sms/preCheckCode', {
-          email: email,
-          emailCode: code,
-        })
-        // 验证码校验通过 进入密码补全流程
-        if (checkCode === 200 && valid) {
-          changeModule?.(GuardModuleType.REGISTER_PASSWORD, {
-            businessRequestName: 'registerByEmailCode', //用于判断后续使用哪个注册api
-            content: registerContent,
-            isChangeComplete: isChangeComplete,
+
+        if (needPassword) {
+          // 判断验证码是否正确
+          const {
+            statusCode: checkCode,
+            data: { valid, message: checkMessage },
+          } = await post('/api/v2/email/preCheckCode', {
+            email: email,
+            emailCode: code,
           })
-          return
+          // 验证码校验通过 进入密码补全流程
+          if (checkCode === 200 && valid) {
+            changeModule?.(GuardModuleType.REGISTER_PASSWORD, {
+              businessRequestName: 'registerByEmailCode', //用于判断后续使用哪个注册api
+              content: registerContent,
+              isChangeComplete: isChangeComplete,
+            })
+            return
+          } else {
+            submitButtonRef.current.onError()
+            message.error(checkMessage)
+            return
+          }
         } else {
-          submitButtonRef.current.onError()
-          message.error(checkMessage)
-          return
+          // 看看是否要跳转到 信息补全
+          if (isChangeComplete) {
+            changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
+              businessRequestName: 'registerByEmailCode', //用于判断后续使用哪个注册api
+              content: registerContent,
+            })
+            return
+          }
+          // 注册
+          const { code: resCode, data, onGuardHandling, message } = await post(
+            '/api/v2/register/email-code',
+            {
+              email: registerContent.email,
+              code: registerContent.code,
+              profile: registerContent.profile,
+              ...registerContent.options,
+            }
+          )
+          submitButtonRef.current.onSpin(false)
+          if (resCode === 200) {
+            onRegisterSuccess(data)
+          } else {
+            onGuardHandling?.()
+            onRegisterFailed(code, data, message)
+          }
         }
-        // 看看是否要跳转到 信息补全
-        // if (isChangeComplete) {
-        //   changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
-        //     businessRequestName: 'registerByEmailCode', //用于判断后续使用哪个注册api
-        //     content: registerContent,
-        //   })
-
-        //   return
-        // }
-
-        // // 注册
-        // const { code: resCode, data, onGuardHandling, message } = await post(
-        //   '/api/v2/register/email-code',
-        //   {
-        //     email: registerContent.email,
-        //     code: registerContent.code,
-        //     profile: registerContent.profile,
-        //     ...registerContent.options,
-        //   }
-        // )
-
-        // submitButtonRef.current.onSpin(false)
-        // if (resCode === 200) {
-        //   onRegisterSuccess(data)
-        // } else {
-        //   onGuardHandling?.()
-        //   onRegisterFailed(code, data, message)
-        // }
       } catch (error: any) {
-        const { code, data, message } = error
+        const { message: errorMessage, code, data } = error
         submitButtonRef.current.onError()
-        onRegisterFailed(code, data, message)
+        message.error(errorMessage)
+        !needPassword && onRegisterFailed(code, data, message)
       } finally {
         submitButtonRef.current?.onSpin(false)
       }
@@ -179,9 +183,11 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
       agreements?.length,
       acceptedAgreements,
       registeContext,
-      isChangeComplete,
       post,
+      needPassword,
       changeModule,
+      isChangeComplete,
+      onRegisterSuccess,
       onRegisterFailed,
     ]
   )

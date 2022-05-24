@@ -16,6 +16,7 @@ import { useIsChangeComplete } from '../utils'
 import { useGuardModule } from '../../_utils/context'
 import { GuardModuleType } from '../../Guard'
 import { useGuardHttp } from '../../_utils/guardHttp'
+import { useGuardAuthClient } from '../../Guard/authClient'
 
 export interface RegisterWithPhoneProps {
   // onRegister: Function
@@ -24,6 +25,7 @@ export interface RegisterWithPhoneProps {
   agreements: Agreement[]
   publicConfig?: ApplicationConfig
   registeContext?: any
+  needPassword?: boolean
 }
 
 export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
@@ -32,12 +34,15 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   agreements,
   publicConfig,
   registeContext,
+  needPassword,
 }) => {
   const { t } = useTranslation()
 
   const isChangeComplete = useIsChangeComplete('phone')
 
   const { isPhoneMedia } = useMediaSize()
+
+  const authClient = useGuardAuthClient()
 
   const { changeModule } = useGuardModule()
 
@@ -107,33 +112,60 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           },
           options,
         }
-        // 判断验证码是否正确
-        const {
-          statusCode: checkCode,
-          data: { valid, message: checkMessage },
-        } = await post('/api/v2/sms/preCheckCode', {
-          phone: phoneNumber,
-          phoneCode: code,
-          phoneCountryCode,
-        })
-        // 验证码校验通过 进入密码补全流程
-        if (checkCode === 200 && valid) {
-          changeModule?.(GuardModuleType.REGISTER_PASSWORD, {
-            businessRequestName: 'registerByPhoneCode',
-            content: registerContent,
-            isChangeComplete: isChangeComplete,
+
+        if (needPassword) {
+          // 判断验证码是否正确
+          const {
+            statusCode: checkCode,
+            data: { valid, message: checkMessage },
+          } = await post('/api/v2/sms/preCheckCode', {
+            phone: phoneNumber,
+            phoneCode: code,
+            phoneCountryCode,
           })
-          return
+          // 验证码校验通过 进入密码补全流程
+          if (checkCode === 200 && valid) {
+            changeModule?.(GuardModuleType.REGISTER_PASSWORD, {
+              businessRequestName: 'registerByPhoneCode',
+              content: registerContent,
+              isChangeComplete: isChangeComplete,
+            })
+            return
+          } else {
+            submitButtonRef.current.onError()
+            message.error(checkMessage)
+            return
+          }
         } else {
-          submitButtonRef.current.onError()
-          message.error(checkMessage)
-          return
+          // 看看是否要跳转到 信息补全
+          if (isChangeComplete) {
+            changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
+              businessRequestName: 'registerByPhoneCode',
+              content: registerContent,
+            })
+            return
+          }
+
+          const user = await authClient.registerByPhoneCode(
+            phoneNumber,
+            code,
+            password,
+            {
+              browser:
+                typeof navigator !== 'undefined' ? navigator.userAgent : null,
+              device: getDeviceName(),
+            },
+            options
+          )
+
+          submitButtonRef.current?.onSpin(false)
+          onRegisterSuccess(user)
         }
       } catch (error: any) {
-        const { message: errorMessage } = error
+        const { message: errorMessage, code, data } = error
         submitButtonRef.current.onError()
         message.error(errorMessage)
-        // onRegisterFailed(code, data, errorMessage)
+        !needPassword && onRegisterFailed(code, data, errorMessage)
       } finally {
         submitButtonRef.current?.onSpin(false)
       }
@@ -145,9 +177,13 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
       registeContext,
       isInternationSms,
       areaCode,
+      needPassword,
       post,
       changeModule,
       isChangeComplete,
+      authClient,
+      onRegisterSuccess,
+      onRegisterFailed,
     ]
   )
 

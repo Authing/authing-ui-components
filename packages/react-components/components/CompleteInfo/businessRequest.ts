@@ -70,12 +70,12 @@ const registerMethod = (
     return post('/api/v2/register/email-code', {
       email: content.email,
       code: content.code,
+      password: content.password,
       profile: {
         ...content.profile,
         ...profile,
       },
       ...content.options,
-      context: JSON.stringify(content.options.context),
       phoneToken,
     }) as Promise<User>
   }
@@ -115,11 +115,11 @@ export const registerSkipMethod = (
     return post('/api/v2/register/email-code', {
       email: content.email,
       code: content.code,
+      password: content.password,
       profile: {
         ...content.profile,
       },
       ...content.options,
-      context: JSON.stringify(content.options.context),
     })
   }
 }
