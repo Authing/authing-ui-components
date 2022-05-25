@@ -86,7 +86,6 @@ export class GuardHttp {
         ...config?.headers,
       },
     })
-
     return this.responseIntercept(res)
   }
 
