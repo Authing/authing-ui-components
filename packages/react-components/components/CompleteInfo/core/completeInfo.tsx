@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Form, Input, Select, DatePicker } from 'antd'
+import { Form, Input, Select, DatePicker, message } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { UploadImage } from '../../AuthingGuard/Forms/UploadImage'
@@ -56,7 +56,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
     config?.internationalSmsConfig?.defaultISOType || 'CN'
   )
 
-  const { get } = useGuardHttp()
+  const { get, post } = useGuardHttp()
 
   const { t } = useTranslation()
 
@@ -443,8 +443,48 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
 
   const [, onFinish] = useAsyncFn(
     async (values: any) => {
+      const fieldKeys = Object.keys(values)
+      // 对特殊字段提前进行 precheck 不然直接调用注册接口失败也会导致上一步验证码失效
+      // 手机验证码check
+      if (fieldKeys.includes('phone')) {
+        const options: any = {
+          phone: values.phone,
+          phoneCode: values.phoneCode,
+        }
+        if (isInternationSms) {
+          const { countryCode } = parsePhone(
+            isInternationSms,
+            values.phone,
+            areaCode
+          )
+          options.phoneCountryCode = countryCode
+        }
+        const {
+          statusCode: checkCode,
+          data: { valid, message: checkMessage },
+        } = await post('/api/v2/sms/preCheckCode', options)
+        if (checkCode !== 200 || !valid) {
+          message.error(checkMessage)
+          return
+        }
+      }
+      // 邮箱验证码check
+      if (fieldKeys.includes('email')) {
+        const {
+          statusCode: checkCode,
+          data: { valid, message: checkMessage },
+        } = await post('/api/v2/email/preCheckCode', {
+          email: values.email,
+          emailCode: values.emailCode,
+        })
+        if (checkCode !== 200 || !valid) {
+          message.error(checkMessage)
+          return
+        }
+      }
+      // todo 用户名 check
       // submitButtonRef.current?.onSpin(true)
-      const fieldValues = Object.keys(values)
+      const fieldValues = fieldKeys
         // 先过滤掉 为空的字段
         .filter((key) => values[key] !== undefined && values[key] !== '')
         // 再过滤掉 两个验证码的字段
