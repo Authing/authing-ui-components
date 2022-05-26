@@ -22,6 +22,7 @@ import { useGuardPublicConfig } from '../../_utils/context'
 import { parsePhone } from '../../_utils/hooks'
 import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
 import { EmailScene } from '../../Type'
+import { useGuardAuthClient } from '../../Guard/authClient'
 export interface CompleteInfoProps {
   metaData: CompleteInfoMetaData[]
   businessRequest: (data: CompleteInfoRequest) => Promise<void>
@@ -57,6 +58,8 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
   )
 
   const { get, post } = useGuardHttp()
+
+  const authClient = useGuardAuthClient()
 
   const { t } = useTranslation()
 
@@ -444,46 +447,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
   const [, onFinish] = useAsyncFn(
     async (values: any) => {
       const fieldKeys = Object.keys(values)
-      // 对特殊字段提前进行 precheck 不然直接调用注册接口失败也会导致上一步验证码失效
-      // 手机验证码check
-      if (fieldKeys.includes('phone')) {
-        const options: any = {
-          phone: values.phone,
-          phoneCode: values.phoneCode,
-        }
-        if (isInternationSms) {
-          const { countryCode } = parsePhone(
-            isInternationSms,
-            values.phone,
-            areaCode
-          )
-          options.phoneCountryCode = countryCode
-        }
-        const {
-          statusCode: checkCode,
-          data: { valid, message: checkMessage },
-        } = await post('/api/v2/sms/preCheckCode', options)
-        if (checkCode !== 200 || !valid) {
-          message.error(checkMessage)
-          return
-        }
-      }
-      // 邮箱验证码check
-      if (fieldKeys.includes('email')) {
-        const {
-          statusCode: checkCode,
-          data: { valid, message: checkMessage },
-        } = await post('/api/v2/email/preCheckCode', {
-          email: values.email,
-          emailCode: values.emailCode,
-        })
-        if (checkCode !== 200 || !valid) {
-          message.error(checkMessage)
-          return
-        }
-      }
-      // todo 用户名 check
-      // submitButtonRef.current?.onSpin(true)
+
       const fieldValues = fieldKeys
         // 先过滤掉 为空的字段
         .filter((key) => values[key] !== undefined && values[key] !== '')
@@ -516,7 +480,57 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           if (key === 'email') return { ...baseData, code: values.emailCode }
           return baseData
         })
+
       try {
+        // 对特殊字段提前进行 precheck 不然直接调用注册接口失败也会导致上一步验证码失效
+        // 用户名 check
+        if (fieldKeys.includes('username')) {
+          const checkResult = await authClient.isUserExists({
+            username: values.username,
+          })
+          if (checkResult) {
+            message.error(t('common.userNameIsExists'))
+            return
+          }
+        }
+        // 手机验证码check
+        if (fieldKeys.includes('phone')) {
+          const options: any = {
+            phone: values.phone,
+            phoneCode: values.phoneCode,
+          }
+          if (isInternationSms) {
+            const { countryCode } = parsePhone(
+              isInternationSms,
+              values.phone,
+              areaCode
+            )
+            options.phoneCountryCode = countryCode
+          }
+          const {
+            statusCode: checkCode,
+            data: { valid, message: checkMessage },
+          } = await post('/api/v2/sms/preCheckCode', options)
+          if (checkCode !== 200 || !valid) {
+            message.error(checkMessage)
+            return
+          }
+        }
+        // 邮箱验证码check
+        if (fieldKeys.includes('email')) {
+          const {
+            statusCode: checkCode,
+            data: { valid, message: checkMessage },
+          } = await post('/api/v2/email/preCheckCode', {
+            email: values.email,
+            emailCode: values.emailCode,
+          })
+          if (checkCode !== 200 || !valid) {
+            message.error(checkMessage)
+            return
+          }
+        }
+
         await businessRequest?.({ fieldValues })
       } catch (error) {
         // TODO
