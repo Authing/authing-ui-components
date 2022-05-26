@@ -13,8 +13,9 @@ import { FormItemIdentify } from '../../Login/core/withVerifyCode/FormItemIdenti
 import { InputIdentify } from '../../Login/core/withVerifyCode/inputIdentify'
 import { parsePhone, useMediaSize } from '../../_utils/hooks'
 import { EmailScene } from '../../Type'
-import { getGuardHttp } from '../../_utils/guardHttp'
+import { getGuardHttp, useGuardHttp } from '../../_utils/guardHttp'
 import { useGuardAuthClient } from '../../Guard/authClient'
+import { useGuardPublicConfig } from '../../_utils/context'
 
 export enum InputMethodMap {
   email = 'email-code',
@@ -34,28 +35,37 @@ export const SelfUnlock = (props: ResetPasswordProps) => {
   let submitButtonRef = useRef<any>(null)
   const { isPhoneMedia } = useMediaSize()
   let authClient = useGuardAuthClient()
-  const verifyCodeLength = props.publicConfig.verifyCodeLength ?? 4
+
+  const { authFlow } = useGuardHttp()
+
+  const {
+    publicKey,
+    verifyCodeLength,
+    internationalSmsConfig,
+  } = useGuardPublicConfig()
+
   // 是否开启了国际化短信功能
-  const isInternationSms =
-    props.publicConfig.internationalSmsConfig?.enabled || false
+  const isInternationSms = internationalSmsConfig?.enabled || false
 
   const onFinish = async (values: any) => {
     let identify = values.identify
+
     let code = values.code
+
     let password = values.password
+
     let context = new Promise(() => {})
-    const { authFlow } = getGuardHttp()
-    // @ts-ignore
-    const newPassWord = await authClient.options.encryptFunction(
+
+    const encryptPassWord = await authClient.options?.encryptFunction?.(
       password,
-      // @ts-ignore
-      await authClient.publicKeyManager.getPublicKey()
+      publicKey
     )
+
     if (codeMethod === 'email') {
       context = authFlow('unlock-account-by-email', {
         email: identify, // 用户输入的邮箱
         code, // 验证码
-        password: newPassWord, // 密码，经过加密后的
+        password: encryptPassWord, // 密码，经过加密后的
       })
     }
     if (codeMethod === 'phone') {
@@ -63,7 +73,7 @@ export const SelfUnlock = (props: ResetPasswordProps) => {
       context = authFlow('unlock-account-by-phone', {
         phone: phoneNumber, // 用户输入的邮箱
         code, // 验证码
-        password: newPassWord, // 密码，经过加密后的
+        password: encryptPassWord, // 密码，经过加密后的
       })
     }
 
