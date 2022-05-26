@@ -30,21 +30,13 @@ export const GuardUnlockView: React.FC = () => {
   const { changeModule } = useGuardModule()
 
   const onReset = (res: any) => {
-    let code = res.code
-    if (code !== 200) {
+    let apiCode = res.apiCode
+    if (apiCode !== 1600) {
       events?.onPwdResetError?.(res, authClient)
       message.error(res.message)
       return
     }
-    events?.onPwdReset?.(authClient)
-    // 返回登录
-    const initData = {
-      title: t('common.resetSuccess'),
-      message: t('common.resetSuccessMessage'),
-    }
-    changeModule?.(GuardModuleType.SUBMIT_SUCCESS, {
-      ...initData,
-    })
+    events?.onLogin?.(res.data, authClient)
   }
 
   const onSend = (type: 'phone' | 'email') => {
