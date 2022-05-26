@@ -40,6 +40,7 @@ import {
 import { GuardIdentityBindingView } from '../../IdentityBinding'
 import { GuardIdentityBindingAskView } from '../../IdentityBindingAsk'
 import '../styles.less'
+import { GuardUnlockView } from '../../SelfUnlock'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -136,6 +137,10 @@ export const RenderModule: React.FC<{
     // 登录信息补全
     [GuardModuleType.LOGIN_COMPLETE_INFO]: (key: string) => (
       <GuardLoginCompleteInfoView key={key} />
+    ),
+    // 自助解锁
+    [GuardModuleType.SELF_UNLOCK]: (key: string) => (
+      <GuardUnlockView key={key} />
     ),
   }
 

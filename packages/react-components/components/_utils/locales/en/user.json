@@ -12,6 +12,7 @@
   "currentPwd": "Current Password",
   "inputCurrPwd": "Enter current password",
   "inputNewPwd": "Enter a new Password",
+  "inputOldPwd": "Enter a old Password",
   "inputSafteyCode": "Enter Security Code",
   "mfaBind": "MFA Binding",
   "modifyPwd": "Change Password",

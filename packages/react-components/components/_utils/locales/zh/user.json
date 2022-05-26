@@ -23,6 +23,7 @@
   "inputCurrPwd": "请输入当前密码",
   "newPwd": "新密码",
   "inputNewPwd": "请输入新密码",
+  "inputOldPwd": "输入原登录密码",
   "confrimPwd": "确认密码",
   "needSameWithNewPwd": "需要与新密码一致",
   "confirmModify": "确认修改",
@@ -81,5 +82,6 @@
   "contactAdministrator": "未知的错误～ 请你联系管理员进行处理",
   "personalMfaTips": "绑定个人 MFA 后，你可以在登录时进行二次验证，更有效的保障你的账户安全。",
   "resetpasswordText1": "输入你的注册电话/邮箱，输入收到的验证码，我们将为你进行密码重置。",
-  "pleaseDownloadAuthenticator": "请在手机打开 Google Authenticator / Microsoft Authenticator 扫码添加 MFA"
+  "pleaseDownloadAuthenticator": "请在手机打开 Google Authenticator / Microsoft Authenticator 扫码添加 MFA",
+  "unlockTip": "若解锁遇到问题，请点"
 }

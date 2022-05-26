@@ -15,6 +15,7 @@ export enum GuardModuleType {
   SUBMIT_SUCCESS = 'submitSuccess',
   IDENTITY_BINDING_ASK = 'identityBindingAsk',
   IDENTITY_BINDING = 'identityBinding',
+  SELF_UNLOCK = 'selfUnlock',
 }
 export interface GuardModuleAction {
   action: string

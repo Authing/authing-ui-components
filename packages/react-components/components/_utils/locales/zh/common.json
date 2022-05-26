@@ -48,6 +48,7 @@
   "hasLooseSaftyCode": "安全码丢失？",
   "useRecoverCode": "使用恢复代码",
   "register": "注册",
+  "unlock": "解锁",
   "welcomeJoin": "欢迎加入 {{name}}",
   "alreadyHasAcc": "已有账号，",
   "loginImmediate": "立即登录",
