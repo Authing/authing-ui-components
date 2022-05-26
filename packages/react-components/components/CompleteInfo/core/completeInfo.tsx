@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Form, Input, Select, DatePicker } from 'antd'
+import { Form, Input, Select, DatePicker, message } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { UploadImage } from '../../AuthingGuard/Forms/UploadImage'
@@ -56,7 +56,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
     config?.internationalSmsConfig?.defaultISOType || 'CN'
   )
 
-  const { get } = useGuardHttp()
+  const { get, post } = useGuardHttp()
 
   const { t } = useTranslation()
 
@@ -443,9 +443,46 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
 
   const [, onFinish] = useAsyncFn(
     async (values: any) => {
+      const fieldKeys = Object.keys(values)
+      // 对验证码进行 precheck
+      if (fieldKeys.includes('phone')) {
+        // 手机验证码check
+        const options: any = {
+          phone: values.phone,
+          phoneCode: values.code,
+        }
+        if (isInternationSms) {
+          const { countryCode } = parsePhone(
+            isInternationSms,
+            values.phone,
+            areaCode
+          )
+          options.phoneCountryCode = countryCode
+        }
+        const {
+          statusCode: checkCode,
+          data: { valid, message: checkMessage },
+        } = await post('/api/v2/sms/preCheckCode', options)
+        if (checkCode !== 200 || !valid) {
+          message.error(checkMessage)
+          return
+        }
+      } else if (fieldKeys.includes('email')) {
+        // 邮箱验证码check
+        const {
+          statusCode: checkCode,
+          data: { valid, message: checkMessage },
+        } = await post('/api/v2/email/preCheckCode', {
+          email: values.email,
+          emailCode: values.code,
+        })
+        if (checkCode !== 200 || !valid) {
+          message.error(checkMessage)
+          return
+        }
+      }
       // submitButtonRef.current?.onSpin(true)
-
-      const fieldValues = Object.keys(values)
+      const fieldValues = fieldKeys
         // 先过滤掉 为空的字段
         .filter((key) => values[key] !== undefined && values[key] !== '')
         // 再过滤掉 两个验证码的字段
