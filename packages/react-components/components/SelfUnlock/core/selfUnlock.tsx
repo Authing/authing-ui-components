@@ -13,9 +13,13 @@ import { FormItemIdentify } from '../../Login/core/withVerifyCode/FormItemIdenti
 import { InputIdentify } from '../../Login/core/withVerifyCode/inputIdentify'
 import { parsePhone, useMediaSize } from '../../_utils/hooks'
 import { EmailScene } from '../../Type'
-import { getGuardHttp, useGuardHttp } from '../../_utils/guardHttp'
+import { useGuardHttp } from '../../_utils/guardHttp'
 import { useGuardAuthClient } from '../../Guard/authClient'
-import { useGuardPublicConfig } from '../../_utils/context'
+import {
+  useGuardEvents,
+  useGuardIsAuthFlow,
+  useGuardPublicConfig,
+} from '../../_utils/context'
 
 export enum InputMethodMap {
   email = 'email-code',
@@ -35,6 +39,8 @@ export const SelfUnlock = (props: ResetPasswordProps) => {
   let submitButtonRef = useRef<any>(null)
   const { isPhoneMedia } = useMediaSize()
   let authClient = useGuardAuthClient()
+  const isAuthFlow = useGuardIsAuthFlow()
+  const events = useGuardEvents()
 
   const { authFlow } = useGuardHttp()
 
@@ -54,39 +60,56 @@ export const SelfUnlock = (props: ResetPasswordProps) => {
 
     let password = values.password
 
-    let context = new Promise(() => {})
+    if (isAuthFlow) {
+      const encryptPassWord = await authClient.options?.encryptFunction?.(
+        password,
+        publicKey
+      )
 
-    const encryptPassWord = await authClient.options?.encryptFunction?.(
-      password,
-      publicKey
-    )
-
-    if (codeMethod === 'email') {
-      context = authFlow('unlock-account-by-email', {
-        email: identify, // 用户输入的邮箱
-        code, // 验证码
-        password: encryptPassWord, // 密码，经过加密后的
-      })
+      if (codeMethod === 'email') {
+        const { isFlowEnd, data, onGuardHandling } = await authFlow(
+          'unlock-account-by-email',
+          {
+            email: identify, // 用户输入的邮箱
+            code, // 验证码
+            password: encryptPassWord, // 密码，经过加密后的
+          }
+        )
+        submitButtonRef.current?.onSpin(false)
+        if (isFlowEnd) {
+          events?.onLogin?.(data, authClient!) // 登录成功
+        } else {
+          onGuardHandling?.()
+        }
+      }
+      if (codeMethod === 'phone') {
+        const { phoneNumber } = parsePhone(isInternationSms, identify)
+        const { isFlowEnd, data, onGuardHandling } = await authFlow(
+          'unlock-account-by-phone',
+          {
+            phone: phoneNumber, // 用户输入的邮箱
+            code, // 验证码
+            password: encryptPassWord, // 密码，经过加密后的
+          }
+        )
+        submitButtonRef.current?.onSpin(false)
+        if (isFlowEnd) {
+          events?.onLogin?.(data, authClient!) // 登录成功
+        } else {
+          onGuardHandling?.()
+        }
+      }
     }
-    if (codeMethod === 'phone') {
-      const { phoneNumber } = parsePhone(isInternationSms, identify)
-      context = authFlow('unlock-account-by-phone', {
-        phone: phoneNumber, // 用户输入的邮箱
-        code, // 验证码
-        password: encryptPassWord, // 密码，经过加密后的
-      })
-    }
-
-    context
-      .then((r) => {
-        props.onSend(codeMethod)
-        props.onReset(r)
-      })
-      .catch((e) => {
-        submitButtonRef.current.onError()
-        props.onSendError(codeMethod, e)
-        props.onReset(e)
-      })
+    // context
+    //   .then((r) => {
+    //     props.onSend(codeMethod)
+    //     props.onReset(r)
+    //   })
+    //   .catch((e) => {
+    //     submitButtonRef.current.onError()
+    //     props.onSendError(codeMethod, e)
+    //     props.onReset(e)
+    //   })
   }
 
   const SendCode = useCallback(
