@@ -10,7 +10,7 @@ import CustomFormItem from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
 import { RegisterMethods } from 'authing-js-sdk'
 import { useIsChangeComplete } from '../utils'
-import { useGuardModule } from '../../_utils/context'
+import { useGuardFinallyConfig, useGuardModule } from '../../_utils/context'
 import { GuardModuleType } from '../../Guard'
 import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
 import { getGuardHttp } from '../../_utils/guardHttp'
@@ -25,7 +25,6 @@ export interface RegisterWithEmailCodeProps {
   agreements: Agreement[]
   publicConfig?: ApplicationConfig
   registeContext?: any
-  needPassword?: boolean
 }
 
 export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
@@ -35,11 +34,14 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
   agreements,
   publicConfig,
   registeContext,
-  needPassword,
 }) => {
   const { t } = useTranslation()
 
   const isChangeComplete = useIsChangeComplete('email')
+
+  const config = useGuardFinallyConfig()
+
+  const needPassword = config.passwordLoginMethods?.includes('email-password')
 
   const { changeModule } = useGuardModule()
 

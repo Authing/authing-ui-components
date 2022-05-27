@@ -17,7 +17,6 @@ import {
 } from '../_utils/context'
 import { VerifyLoginMethods } from '../AuthingGuard/api'
 import { NewRegisterMethods } from '../Type'
-import { LoginMethods } from '../AuthingGuard/types'
 
 export const GuardRegisterView: React.FC = () => {
   const events = useGuardEvents()
@@ -64,7 +63,6 @@ export const GuardRegisterView: React.FC = () => {
         : [],
       publicConfig: publicConfig,
       verifyLoginMethods: verifyLoginMethods,
-      needPassword: config?.loginMethods?.includes(LoginMethods.Password), //存在 password 方式登录时 才需要密码补全
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
@@ -73,7 +71,6 @@ export const GuardRegisterView: React.FC = () => {
       events?.onBeforeRegister,
       i18n.language,
       verifyLoginMethods,
-      config?.loginMethods,
     ]
   )
 

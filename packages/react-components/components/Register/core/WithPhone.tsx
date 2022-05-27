@@ -13,7 +13,7 @@ import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
 import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
 import { parsePhone, useMediaSize } from '../../_utils/hooks'
 import { useIsChangeComplete } from '../utils'
-import { useGuardModule } from '../../_utils/context'
+import { useGuardFinallyConfig, useGuardModule } from '../../_utils/context'
 import { GuardModuleType } from '../../Guard'
 import { useGuardHttp } from '../../_utils/guardHttp'
 import { useGuardAuthClient } from '../../Guard/authClient'
@@ -25,7 +25,6 @@ export interface RegisterWithPhoneProps {
   agreements: Agreement[]
   publicConfig?: ApplicationConfig
   registeContext?: any
-  needPassword?: boolean
 }
 
 export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
@@ -34,11 +33,14 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   agreements,
   publicConfig,
   registeContext,
-  needPassword,
 }) => {
   const { t } = useTranslation()
 
   const isChangeComplete = useIsChangeComplete('phone')
+
+  const config = useGuardFinallyConfig()
+
+  const needPassword = config.passwordLoginMethods?.includes('phone-password')
 
   const { isPhoneMedia } = useMediaSize()
 
