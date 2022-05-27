@@ -163,29 +163,30 @@ const assembledRequestHost = (
 }
 
 export const useMergePublicConfig = (
-  appId: string,
-  forceUpdate: number,
+  appId?: string,
   config?: GuardLocalConfig,
   httpClient?: GuardHttp,
-  serError?: any
+  setError?: any
 ) => {
   const [publicConfig, setPublicConfig] = useState<ApplicationConfig>()
+
   const initPublicConfig = useCallback(async () => {
-    if (httpClient && appId)
+    if (httpClient && appId) {
       if (!getPublicConfig(appId)) {
         try {
           await requestPublicConfig(appId, httpClient)
         } catch (error) {
-          serError(error)
+          setError(error)
         }
       }
 
-    setPublicConfig(getPublicConfig(appId))
-  }, [appId, httpClient, serError])
+      setPublicConfig(getPublicConfig(appId))
+    }
+  }, [appId, httpClient, setError])
 
   useEffect(() => {
     initPublicConfig()
-  }, [initPublicConfig, forceUpdate])
+  }, [initPublicConfig])
 
   return useMemo(() => {
     if (publicConfig && config) {
@@ -232,15 +233,14 @@ export const requestGuardPageConfig = async (
 }
 
 export const useGuardPageConfig = (
-  appId: string,
-  forceUpdate: number,
+  appId?: string,
   httpClient?: GuardHttp,
   serError?: any
 ) => {
   const [pageConfig, setPageConfig] = useState<GuardPageConfig>()
 
   const initPublicConfig = useCallback(async () => {
-    if (httpClient && appId)
+    if (httpClient && appId) {
       if (!getPageConfig(appId)) {
         try {
           await requestGuardPageConfig(appId, httpClient)
@@ -249,12 +249,13 @@ export const useGuardPageConfig = (
         }
       }
 
-    setPageConfig(getPageConfig(appId))
+      setPageConfig(getPageConfig(appId))
+    }
   }, [appId, httpClient, serError])
 
   useEffect(() => {
     initPublicConfig()
-  }, [initPublicConfig, forceUpdate])
+  }, [initPublicConfig])
 
   if (pageConfig) {
     return pageConfig

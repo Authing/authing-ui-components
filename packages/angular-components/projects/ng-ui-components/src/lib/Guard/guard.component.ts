@@ -9,8 +9,9 @@ import {
 } from '@angular/core';
 
 import {
-  Guard,
-  GuardEventsHandler,
+  AuthenticationClient,
+  Guard as NativeGuard,
+  GuardEvents,
   GuardLocalConfig,
 } from '@authing/native-js-ui-components';
 
@@ -24,56 +25,61 @@ import {
 export class GuardComponent implements OnInit, OnChanges {
   constructor() {}
 
-  guard: Guard;
+  guard: NativeGuard;
 
-  @Input() appId: string;
+  @Input() appId?: string;
   @Input() visible?: boolean;
   @Input() tenantId?: string;
+  @Input() authClient?: AuthenticationClient;
   @Input() config?: Partial<GuardLocalConfig>;
 
-  @Output() onLoad = new EventEmitter<
-    Parameters<GuardEventsHandler['onLoad']>
-  >();
+  @Output() onLoad = new EventEmitter<Parameters<GuardEvents['onLoad']>>();
   @Output() onLoadError = new EventEmitter<
-    Parameters<GuardEventsHandler['onLoadError']>
+    Parameters<GuardEvents['onLoadError']>
   >();
-  @Output() onLogin = new EventEmitter<
-    Parameters<GuardEventsHandler['onLogin']>
-  >();
+  @Output() onLogin = new EventEmitter<Parameters<GuardEvents['onLogin']>>();
   @Output() onLoginError = new EventEmitter<
-    Parameters<GuardEventsHandler['onLoginError']>
+    Parameters<GuardEvents['onLoginError']>
   >();
   @Output() onRegister = new EventEmitter<
-    Parameters<GuardEventsHandler['onRegister']>
+    Parameters<GuardEvents['onRegister']>
   >();
   @Output() onRegisterError = new EventEmitter<
-    Parameters<GuardEventsHandler['onRegisterError']>
+    Parameters<GuardEvents['onRegisterError']>
   >();
   @Output() onPwdEmailSend = new EventEmitter<
-    Parameters<GuardEventsHandler['onPwdEmailSend']>
+    Parameters<GuardEvents['onPwdEmailSend']>
   >();
   @Output() onPwdEmailSendError = new EventEmitter<
-    Parameters<GuardEventsHandler['onPwdEmailSendError']>
+    Parameters<GuardEvents['onPwdEmailSendError']>
   >();
   @Output() onPwdPhoneSend = new EventEmitter<
-    Parameters<GuardEventsHandler['onPwdPhoneSend']>
+    Parameters<GuardEvents['onPwdPhoneSend']>
   >();
   @Output() onPwdPhoneSendError = new EventEmitter<
-    Parameters<GuardEventsHandler['onPwdPhoneSendError']>
+    Parameters<GuardEvents['onPwdPhoneSendError']>
   >();
   @Output() onPwdReset = new EventEmitter<
-    Parameters<GuardEventsHandler['onPwdReset']>
+    Parameters<GuardEvents['onPwdReset']>
   >();
   @Output() onPwdResetError = new EventEmitter<
-    Parameters<GuardEventsHandler['onPwdResetError']>
+    Parameters<GuardEvents['onPwdResetError']>
   >();
-  @Output() onClose = new EventEmitter<
-    Parameters<GuardEventsHandler['onClose']>
+  @Output() onClose = new EventEmitter<Parameters<GuardEvents['onClose']>>();
+
+  @Output() onLangChange = new EventEmitter<
+    Parameters<GuardEvents['onLangChange']>
   >();
 
   ngAfterViewInit() {
     // @ts-ignore
-    this.guard = new Guard(this.appId, this.config);
+
+    this.guard = new NativeGuard({
+      appId: this.appId,
+      config: this.config,
+      tenantId: this.tenantId,
+      authClient: this.authClient,
+    });
 
     this.guard.on('load', (...rest) => this.onLoad.emit(rest));
     this.guard.on('load-error', (...rest) => this.onLoadError.emit(rest));
@@ -83,25 +89,10 @@ export class GuardComponent implements OnInit, OnChanges {
     this.guard.on('register-error', (...rest) =>
       this.onRegisterError.emit(rest)
     );
-    this.guard.on('pwd-email-send', (...rest) =>
-      this.onPwdEmailSend.emit(rest)
-    );
-    this.guard.on('pwd-email-send-error', (...rest) =>
-      this.onPwdEmailSendError.emit(rest)
-    );
-    this.guard.on('pwd-phone-send', (...rest) =>
-      this.onPwdPhoneSend.emit(rest)
-    );
-    this.guard.on('pwd-phone-send-error', (...rest) =>
-      this.onPwdPhoneSendError.emit(rest)
-    );
-    this.guard.on('pwd-reset', (...rest) => this.onPwdReset.emit(rest));
-    this.guard.on('pwd-reset-error', (...rest) =>
-      this.onPwdResetError.emit(rest)
-    );
     this.guard.on('close', (...rest) => this.onClose.emit(rest));
+    this.guard.on('lang-change', (...rest) => this.onLangChange.emit(rest));
 
-    if (this.visible) {
+    if (this.visible === true) {
       this.guard.show();
     }
   }
@@ -109,10 +100,12 @@ export class GuardComponent implements OnInit, OnChanges {
   ngOnInit(): void {}
 
   ngOnChanges(v) {
-    if (v.visible) {
-      this.guard?.show();
-    } else {
-      this.guard.hide();
+    if (this.visible !== undefined && this.guard) {
+      if (this.visible) {
+        this.guard?.show();
+      } else {
+        this.guard?.hide();
+      }
     }
   }
 }

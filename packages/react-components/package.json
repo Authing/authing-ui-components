@@ -32,13 +32,13 @@
     "clear:lib": "rm -rf lib",
     "log-tag": "node ./scripts/tag.js",
     "pretty-quick": "pretty-quick",
-    "prestart": "npm run log-tag && npm run version && npm run generate-examples",
-    "prebuild:lib": "npm run log-tag && npm run version",
+    "prestart": "npm run log-tag && npm run generate-version && npm run generate-examples",
+    "prebuild:lib": "npm run log-tag && npm run generate-version && npm run generate-examples",
     "prepare": "cd ../.. && husky install packages/react-components/.husky",
     "pub": "npm run build:lib && node ./scripts/publish.js",
     "start": "PORT=1221 node ./scripts/start.js",
     "vite": "vite",
-    "version": "node ./scripts/generate-version",
+    "generate-version": "node ./scripts/generate-version",
     "generate-examples": "node ./scripts/generate-examples.js"
   },
   "publishConfig": {

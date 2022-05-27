@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { GuardProps, setPublicConfig } from '../..'
+import { GuardAppendConfig, setPublicConfig } from '../..'
 import { initAppendConfig } from '../../_utils/appendConfig'
 import { setPageConfig } from '../../_utils/config'
 import { getGuardDocument } from '../../_utils/guardDocument'
@@ -23,13 +23,11 @@ export const getGuardWindow = () => {
 export const useGuardWindow = getGuardWindow
 
 export const useInitGuardAppendConfig = (
-  guardProps: GuardProps,
-  setForceUpdate: any
+  appId?: string,
+  appendConfig?: GuardAppendConfig
 ) => {
-  const { appendConfig, appId } = guardProps
-
   useEffect(() => {
-    setForceUpdate(Date.now())
+    if (!appId) return
 
     initAppendConfig(appendConfig)
 
@@ -40,5 +38,5 @@ export const useInitGuardAppendConfig = (
     if (appendConfig?.pageConfig) {
       setPageConfig(appId, appendConfig.pageConfig)
     }
-  }, [appId, appendConfig, setForceUpdate])
+  }, [appId, appendConfig])
 }
