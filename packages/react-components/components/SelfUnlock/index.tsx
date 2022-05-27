@@ -11,6 +11,7 @@ import { CommonMessage } from '..'
 import {
   useGuardEvents,
   useGuardFinallyConfig,
+  useGuardInitData,
   useGuardModule,
   useGuardPublicConfig,
 } from '../_utils/context'
@@ -19,6 +20,10 @@ import {
 export const GuardUnlockView: React.FC = () => {
   const { t } = useTranslation()
 
+  const initData = useGuardInitData<{
+    defaultEmail: 'string'
+    defaultPhone: 'string'
+  }>()
   const events = useGuardEvents()
 
   const publicConfig = useGuardPublicConfig()
@@ -65,6 +70,7 @@ export const GuardUnlockView: React.FC = () => {
       </div>
       <div className="g2-view-tabs">
         <SelfUnlock
+          initData={initData}
           onReset={onReset}
           publicConfig={publicConfig}
           onSend={onSend}

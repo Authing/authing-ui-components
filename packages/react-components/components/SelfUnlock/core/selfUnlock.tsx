@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Form } from 'antd'
 import { fieldRequiredRule, validate } from '../../_utils'
@@ -30,6 +30,7 @@ interface ResetPasswordProps {
   publicConfig: any
   onSend: (type: 'email' | 'phone') => void
   onSendError: (type: 'email' | 'phone', error: any) => void
+  initData: any
 }
 export const SelfUnlock = (props: ResetPasswordProps) => {
   const { t } = useTranslation()
@@ -41,7 +42,23 @@ export const SelfUnlock = (props: ResetPasswordProps) => {
   let authClient = useGuardAuthClient()
   const isAuthFlow = useGuardIsAuthFlow()
   const events = useGuardEvents()
-
+  console.log('identify', identify, 'codeMethod', codeMethod)
+  useEffect(() => {
+    if (props.initData.defaultEmail) {
+      setIdentify(props.initData.defaultEmail)
+      form.setFieldsValue({
+        identify: props.initData.defaultEmail,
+      })
+      setCodeMethod('email')
+    }
+    if (props.initData.defaultPhone) {
+      setIdentify(props.initData.defaultPhone)
+      form.setFieldsValue({
+        identify: props.initData.defaultPhone,
+      })
+      setCodeMethod('phone')
+    }
+  }, [props.initData, form])
   const { authFlow } = useGuardHttp()
 
   const {
@@ -100,16 +117,6 @@ export const SelfUnlock = (props: ResetPasswordProps) => {
         }
       }
     }
-    // context
-    //   .then((r) => {
-    //     props.onSend(codeMethod)
-    //     props.onReset(r)
-    //   })
-    //   .catch((e) => {
-    //     submitButtonRef.current.onError()
-    //     props.onSendError(codeMethod, e)
-    //     props.onReset(e)
-    //   })
   }
 
   const SendCode = useCallback(
@@ -161,6 +168,7 @@ export const SelfUnlock = (props: ResetPasswordProps) => {
               onSendCodeBefore={async () => {
                 await form.validateFields(['identify'])
               }}
+              value={identify}
             />
           )}
         </>

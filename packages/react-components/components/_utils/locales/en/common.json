@@ -234,7 +234,7 @@
   "resetSuccessMessage": "The password is reset successfully, you can continue to log in with the new password",
   "totpCode": "Security code",
   "welcome": "Welcome",
-  "initPasswordText": "To ensure account security, please set your initial password.",
+  "initPasswordText": "To ensure account security, please set your new password.",
   "updatePsswordSuccess": "Change the password successfully, please log in again",
   "protocolTips": "Please check the required agreement first",
   "fullCaptchaCode": "Please fill in the complete",
