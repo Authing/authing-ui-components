@@ -14,6 +14,7 @@ export interface AuthingResponse<T = any> {
   data?: T
   messages?: string
   message?: string
+  flowHandle?: string
 }
 
 export interface AuthingGuardResponse<T = any> extends AuthingResponse<T> {
