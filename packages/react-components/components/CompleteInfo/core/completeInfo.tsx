@@ -444,11 +444,12 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
   const [, onFinish] = useAsyncFn(
     async (values: any) => {
       const fieldKeys = Object.keys(values)
-
-      submitButtonRef.current?.onSpin(true)
-      const fieldValues = fieldKeys
         // 先过滤掉 为空的字段
         .filter((key) => values[key] !== undefined && values[key] !== '')
+
+      submitButtonRef.current?.onSpin(true)
+
+      const fieldValues = fieldKeys
         // 再过滤掉 两个验证码的字段
         .filter((key) => !['phoneCode', 'emailCode'].includes(key))
         .map((key) => {
@@ -483,14 +484,14 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         // 对特殊字段提前进行 precheck 不然直接调用注册接口失败也会导致上一步验证码失效
         // 用户名 check
         if (fieldKeys.includes('username')) {
-          const { data: checkResult } = await get(
+          const { data: checkResult, code: checkCode } = await get(
             '/api/v2/users/is-user-exists',
             {
               username: values.username,
             }
           )
-
-          if (checkResult) {
+          // checkResult 为 true 时 代表用户名已存在 直接报message 并且不调用注册接口
+          if (checkCode === 200 && checkResult) {
             message.error(t('common.userNameIsExists'))
             return
           }
