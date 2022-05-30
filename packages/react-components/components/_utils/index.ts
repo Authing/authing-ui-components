@@ -250,17 +250,98 @@ export const isQQBrowser = () => {
   }
   return / QQ/i.test(navigator.userAgent)
 }
-// 特殊浏览器 后续可能会增加
-export const isSpecialBrowser = () => {
+
+export const isChromeBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /Chrome/i.test(navigator.userAgent)
+}
+
+export const isFirefoxBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /Firefox/i.test(navigator.userAgent)
+}
+
+export const isSafariBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /Safari/i.test(navigator.userAgent)
+}
+
+export const isOperaBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /Opera/i.test(navigator.userAgent)
+}
+
+export const isIEBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
   return (
-    isWeChatBrowser() ||
-    isLarkBrowser() ||
-    isQtWebEngine() ||
-    isXiaomiBrowser() ||
-    isDingtalkBrowser() ||
-    isQQBrowser()
+    /MSIE/i.test(navigator.userAgent) || /Trident/i.test(navigator.userAgent)
   )
 }
+
+export const isEdgeBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /Edge/i.test(navigator.userAgent)
+}
+
+export const isWeiboBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /Weibo/i.test(navigator.userAgent)
+}
+
+export const isAlipayBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /Alipay/i.test(navigator.userAgent)
+}
+
+export const isBaiduBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /Baidu/i.test(navigator.userAgent)
+}
+
+export const isMobile = () => {
+  const guardWindow = getGuardWindow()
+  if (guardWindow) {
+    const ua = guardWindow.navigator.userAgent.toLowerCase()
+
+    return /mobile|android|iphone|ipad|phone/i.test(ua)
+  } else {
+    return false
+  }
+}
+// 特殊浏览器 后续可能会增加
+export const isSpecialBrowser = () => {
+  if (isMobile()) {
+    return true
+  }
+
+  return !(
+    isChromeBrowser() ||
+    isFirefoxBrowser() ||
+    isSafariBrowser() ||
+    isOperaBrowser() ||
+    isIEBrowser() ||
+    isEdgeBrowser()
+  )
+}
+
 export const assembledAppHost = (identifier: string, host: string) => {
   const hostUrl = new URL(host)
 
