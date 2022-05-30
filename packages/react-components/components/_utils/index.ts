@@ -360,7 +360,8 @@ export const PASSWORD_STRENGTH_TEXT_MAP: Record<
 const SYMBOL_TYPE_PATTERNS = [
   /\d+/,
   /[a-zA-Z]/,
-  /[-!$%^&*()_+|~=`{}[\]:";'<>?,@./]/,
+  /[`~!@#$%^&*()_\-+=<>?:"{}|,.\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘'，。、]/,
+  // /[-!$%^&*()_+|~=`{}[\]:";'<>?,@./]/,
 ]
 
 export const getSymbolTypeLength = (pwd: string) => {
