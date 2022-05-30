@@ -266,5 +266,6 @@
   "areaCodePhone": "Area code Mobile number",
   "timeoutAD": "Request timed out, AD misconfigured",
   "timeout": "Request timed out, please try again later",
-  "userNameIsExists": "This username already exists!"
+  "userNameIsExists": "This username already exists!",
+  "fetchError": "Network connection failed, please try again later"
 }

@@ -335,6 +335,7 @@ export const GuardLoginView = () => {
                 {/* <div className="switch-text">{switchText}</div> */}
                 <Popover
                   placement="leftTop"
+                  visible={true}
                   content={switchText}
                   overlayClassName="switch-text"
                   getPopupContainer={(node: any) => {

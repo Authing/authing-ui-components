@@ -13,6 +13,11 @@ export const errorCodeInterceptor: (
 
     return res
   }
+  if (res.code === -2) {
+    message.error(i18n.t('common.fetchError'))
+
+    return res
+  }
 
   if (!res.statusCode) return res
 
