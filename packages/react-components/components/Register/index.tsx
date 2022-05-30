@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { message as Message, Tabs } from 'antd'
+import { Tabs } from 'antd'
 import { ChangeLanguage } from '../ChangeLanguage'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
