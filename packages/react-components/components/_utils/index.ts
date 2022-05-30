@@ -9,6 +9,7 @@ import { GuardProps } from '../Guard'
 import isEqual from 'lodash/isEqual'
 import omit from 'lodash/omit'
 import { getGuardWindow } from '../Guard/core/useAppendConfig'
+import UAParser from 'ua-parser-js'
 export * from './popupCenter'
 export * from './clipboard'
 
@@ -252,47 +253,39 @@ export const isQQBrowser = () => {
 }
 
 export const isChromeBrowser = () => {
-  if (typeof navigator === 'undefined') {
-    return null
-  }
-  return /Chrome/i.test(navigator.userAgent)
+  const parser = UAParser()
+
+  return parser.browser.name === 'Chrome'
 }
 
 export const isFirefoxBrowser = () => {
-  if (typeof navigator === 'undefined') {
-    return null
-  }
-  return /Firefox/i.test(navigator.userAgent)
+  const parser = UAParser()
+
+  return parser.browser.name === 'Firefox'
 }
 
 export const isSafariBrowser = () => {
-  if (typeof navigator === 'undefined') {
-    return null
-  }
-  return /Safari/i.test(navigator.userAgent)
+  const parser = UAParser()
+
+  return parser.browser.name === 'Safari'
 }
 
 export const isOperaBrowser = () => {
-  if (typeof navigator === 'undefined') {
-    return null
-  }
-  return /Opera/i.test(navigator.userAgent)
+  const parser = UAParser()
+
+  return parser.browser.name === 'Opera'
 }
 
 export const isIEBrowser = () => {
-  if (typeof navigator === 'undefined') {
-    return null
-  }
-  return (
-    /MSIE/i.test(navigator.userAgent) || /Trident/i.test(navigator.userAgent)
-  )
+  const parser = UAParser()
+
+  return parser.browser.name === 'IE'
 }
 
 export const isEdgeBrowser = () => {
-  if (typeof navigator === 'undefined') {
-    return null
-  }
-  return /Edge/i.test(navigator.userAgent)
+  const parser = UAParser()
+
+  return parser.browser.name === 'Edge'
 }
 
 export const isWeiboBrowser = () => {
