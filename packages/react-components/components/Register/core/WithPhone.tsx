@@ -141,11 +141,27 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         } else {
           // 看看是否要跳转到 信息补全
           if (isChangeComplete) {
-            changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
-              businessRequestName: 'registerByPhoneCode',
-              content: registerContent,
+            // 判断验证码是否正确
+            const {
+              statusCode: checkCode,
+              data: { valid, message: checkMessage },
+            } = await post('/api/v2/sms/preCheckCode', {
+              phone: phoneNumber,
+              phoneCode: code,
+              phoneCountryCode,
             })
-            return
+
+            if (checkCode === 200 && valid) {
+              changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
+                businessRequestName: 'registerByPhoneCode',
+                content: registerContent,
+              })
+              return
+            } else {
+              submitButtonRef.current.onError()
+              message.error(checkMessage)
+              return
+            }
           }
 
           const user = await authClient.registerByPhoneCode(

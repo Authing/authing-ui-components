@@ -145,28 +145,44 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
         } else {
           // 看看是否要跳转到 信息补全
           if (isChangeComplete) {
-            changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
-              businessRequestName: 'registerByEmailCode', //用于判断后续使用哪个注册api
-              content: registerContent,
+            // 判断验证码是否正确
+            const {
+              statusCode: checkCode,
+              data: { valid, message: checkMessage },
+            } = await post('/api/v2/email/preCheckCode', {
+              email: email,
+              emailCode: code,
             })
-            return
+            if (checkCode === 200 && valid) {
+              changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
+                businessRequestName: 'registerByEmailCode', //用于判断后续使用哪个注册api
+                content: registerContent,
+              })
+              return
+            } else {
+              submitButtonRef.current.onError()
+              message.error(checkMessage)
+              return
+            }
           }
           // 注册
-          const { code: resCode, data, onGuardHandling, message } = await post(
-            '/api/v2/register/email-code',
-            {
-              email: registerContent.email,
-              code: registerContent.code,
-              profile: registerContent.profile,
-              ...registerContent.options,
-            }
-          )
+          const {
+            code: resCode,
+            data,
+            onGuardHandling,
+            message: registerMessage,
+          } = await post('/api/v2/register/email-code', {
+            email: registerContent.email,
+            code: registerContent.code,
+            profile: registerContent.profile,
+            ...registerContent.options,
+          })
           submitButtonRef.current.onSpin(false)
           if (resCode === 200) {
             onRegisterSuccess(data)
           } else {
             onGuardHandling?.()
-            onRegisterFailed(code, data, message)
+            onRegisterFailed(code, data, registerMessage)
           }
         }
       } catch (error: any) {
