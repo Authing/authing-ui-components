@@ -326,7 +326,7 @@ export const isMobile = () => {
     return false
   }
 }
-// 特殊浏览器 后续可能会增加
+// 浏览器白名单
 export const isSpecialBrowser = () => {
   if (isMobile()) {
     return true
