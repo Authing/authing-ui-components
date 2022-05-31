@@ -60,7 +60,7 @@ export const useIdentityBindingBusinessRequest = () => {
 
   const request = {
     [IdentityBindingBusinessAction.PhoneCode]: (params: PhoneCodeParams) => {
-      return authFlow(IdentityBindingAction.BindByEmailCode, params)
+      return authFlow(IdentityBindingAction.BindByPhoneCode, params)
     },
     [IdentityBindingBusinessAction.EmailCode]: (params: EmailCodeParams) => {
       return authFlow(IdentityBindingAction.BindByEmailCode, params)
