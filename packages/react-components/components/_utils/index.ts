@@ -332,7 +332,9 @@ export const assembledAppHost = (identifier: string, host: string) => {
   splitHost.shift()
 
   // eslint-disable-next-line prettier/prettier
-  return `${hostUrl.protocol}//${identifier}.${splitHost.join('.')}${port && `:${port}`}`
+  return `${hostUrl.protocol}//${identifier}.${splitHost.join('.')}${
+    port && `:${port}`
+  }`
 }
 
 // 拼接请求链接
@@ -350,8 +352,9 @@ export const assembledRequestHost = (
   // 看看是否有端口号
   const port = hostUrl.port
 
-  return `${hostUrl.protocol}//${identifier}.${splitHost.join('.')}${port && `:${port}`
-    }`
+  return `${hostUrl.protocol}//${identifier}.${splitHost.join('.')}${
+    port && `:${port}`
+  }`
 }
 
 export enum PasswordStrength {
