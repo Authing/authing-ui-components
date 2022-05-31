@@ -252,36 +252,6 @@ export const isQQBrowser = () => {
   return / QQ/i.test(navigator.userAgent)
 }
 
-export const isChromeBrowser = () => {
-  const parser = UAParser()
-
-  return parser.browser.name === 'Chrome'
-}
-
-export const isFirefoxBrowser = () => {
-  const parser = UAParser()
-
-  return parser.browser.name === 'Firefox'
-}
-
-export const isSafariBrowser = () => {
-  const parser = UAParser()
-
-  return parser.browser.name === 'Safari'
-}
-
-export const isOperaBrowser = () => {
-  const parser = UAParser()
-
-  return parser.browser.name === 'Opera'
-}
-
-export const isIEBrowser = () => {
-  const parser = UAParser()
-
-  return parser.browser.name === 'IE'
-}
-
 export const isEdgeBrowser = () => {
   const parser = UAParser()
 
@@ -309,30 +279,47 @@ export const isBaiduBrowser = () => {
   return /Baidu/i.test(navigator.userAgent)
 }
 
-export const isMobile = () => {
-  const guardWindow = getGuardWindow()
-  if (guardWindow) {
-    const ua = guardWindow.navigator.userAgent.toLowerCase()
+export const isWeComeBrowser = () => /wxwork/i.test(navigator.userAgent)
 
-    return /mobile|android|iphone|ipad|phone/i.test(ua)
-  } else {
-    return false
-  }
+export const isMobile = () => {
+  return window.navigator.userAgent.match(
+    /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+  )
 }
-// 浏览器白名单
+
+/* 利用浏览器的 UA 判断是否为不支持弹窗的特殊浏览器 */
 export const isSpecialBrowser = () => {
-  if (isMobile()) {
+  // 1. 首先筛选出一定是特殊浏览器的 UA
+  if (
+    isWeChatBrowser() ||
+    isWeComeBrowser() ||
+    isLarkBrowser() ||
+    isDingtalkBrowser() ||
+    isQtWebEngine() ||
+    isXiaomiBrowser() ||
+    isQQBrowser() ||
+    isMobile()
+  ) {
     return true
   }
 
-  return !(
-    isChromeBrowser() ||
-    isFirefoxBrowser() ||
-    isSafariBrowser() ||
-    isOperaBrowser() ||
-    isIEBrowser() ||
-    isEdgeBrowser()
-  )
+  // 2. 利用 ua-parser-js 进一步判断，筛选出很可能不是特殊浏览器的 UA
+  // 由于一些特殊浏览器也可能会被误判为非特殊，所以需要首先经过第 1 步筛选
+  const parser = UAParser()
+  const nonSpecialBrowsers = [
+    'Chrome',
+    'Firefox',
+    'Safari',
+    'Opera',
+    'IE',
+    'Edge',
+  ]
+  if (nonSpecialBrowsers.includes(parser.browser.name ?? '')) {
+    return false
+  }
+
+  // 3. 可能有一些 UA 没有任何特征，这种情况下一律默认为特殊浏览器
+  return true
 }
 
 export const assembledAppHost = (identifier: string, host: string) => {
@@ -344,9 +331,8 @@ export const assembledAppHost = (identifier: string, host: string) => {
 
   splitHost.shift()
 
-  return `${hostUrl.protocol}//${identifier}.${splitHost.join('.')}${
-    port && `:${port}`
-  }`
+  return `${hostUrl.protocol}//${identifier}.${splitHost.join('.')}${port && `:${port}`
+    }`
 }
 
 // 拼接请求链接
@@ -364,9 +350,8 @@ export const assembledRequestHost = (
   // 看看是否有端口号
   const port = hostUrl.port
 
-  return `${hostUrl.protocol}//${identifier}.${splitHost.join('.')}${
-    port && `:${port}`
-  }`
+  return `${hostUrl.protocol}//${identifier}.${splitHost.join('.')}${port && `:${port}`
+    }`
 }
 
 export enum PasswordStrength {
