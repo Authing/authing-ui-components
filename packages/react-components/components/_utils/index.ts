@@ -331,8 +331,8 @@ export const assembledAppHost = (identifier: string, host: string) => {
 
   splitHost.shift()
 
-  return `${hostUrl.protocol}//${identifier}.${splitHost.join('.')}${port && `:${port}`
-    }`
+  // eslint-disable-next-line prettier/prettier
+  return `${hostUrl.protocol}//${identifier}.${splitHost.join('.')}${port && `:${port}`}`
 }
 
 // 拼接请求链接
