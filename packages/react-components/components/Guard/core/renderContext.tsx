@@ -33,6 +33,7 @@ import { useGuardXContext } from '../../_utils/context'
 import { useGuardIconfont } from '../../IconFont/useGuardIconfont'
 import { useInitGuardAppendConfig } from './useAppendConfig'
 import { useInitAppId } from '../../_utils/initAppId'
+import { updateFlowHandle } from '../../_utils/flowHandleStorage'
 
 interface IBaseAction<T = string, P = any> {
   type: T & string
@@ -81,6 +82,13 @@ export const RenderContext: React.FC<{
 
   // Modules Reducer
   const [moduleState, changeModule] = useReducer(moduleReducer, initState)
+
+  // Flow Handle init
+  useEffect(() => {
+    if (initState.initData?.flowHandle) {
+      updateFlowHandle(initState.initData.flowHandle)
+    }
+  }, [initState.initData])
 
   // Change Module
   const onChangeModule = useCallback(

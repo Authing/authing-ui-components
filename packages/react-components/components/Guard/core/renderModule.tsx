@@ -41,6 +41,7 @@ import {
 import { GuardIdentityBindingView } from '../../IdentityBinding'
 import { GuardIdentityBindingAskView } from '../../IdentityBindingAsk'
 import '../styles.less'
+import { updateFlowHandle } from '../../_utils/flowHandleStorage'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -153,6 +154,9 @@ export const RenderModule: React.FC<{
       code: CodeAction,
       res: AuthingResponse
     ): AuthingGuardResponse => {
+      // 判断有没有 flowHandle
+      res.flowHandle && updateFlowHandle(res.flowHandle)
+
       const codeActionMapping = {
         [CodeAction.CHANGE_MODULE]: () => {
           const nextModule = ChangeModuleApiCodeMapping[res.apiCode!]

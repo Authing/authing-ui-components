@@ -1,4 +1,5 @@
 import version from '../version'
+import { getFlowHandle } from './flowHandleStorage'
 import { AuthingGuardResponse, AuthingResponse, requestClient } from './http'
 import { errorCodeInterceptor } from './responseManagement'
 import { CodeAction } from './responseManagement/interface'
@@ -112,9 +113,12 @@ export class GuardHttp {
   ): Promise<AuthingGuardResponse<T>> => {
     const flowPath = '/interaction/authFlow'
 
+    const flowHandle = getFlowHandle()
+
     const requestData = {
       action,
       data,
+      flowHandle,
     }
 
     const res = await requestClient.post<T>(flowPath, requestData, {
