@@ -17,6 +17,7 @@ import {
 } from '../_utils/context'
 import { VerifyLoginMethods } from '../AuthingGuard/api'
 import { NewRegisterMethods } from '../Type'
+import { GuardLoginInitData } from '../Login/interface'
 
 export const GuardRegisterView: React.FC = () => {
   const events = useGuardEvents()
@@ -40,9 +41,13 @@ export const GuardRegisterView: React.FC = () => {
 
   const registerContextProps = useMemo(
     () => ({
-      onRegisterSuccess: (data: any = {}, message?: string) => {
+      onRegisterSuccess: (
+        data: any = {},
+        initData: Partial<GuardLoginInitData> = {},
+        message?: string
+      ) => {
         events?.onRegister?.(data, authClient)
-        changeModule?.(GuardModuleType.LOGIN, {})
+        changeModule?.(GuardModuleType.LOGIN, initData)
       },
       onRegisterFailed: (code: number, data: any = {}, message?: string) => {
         // if (message) Message.error(message)

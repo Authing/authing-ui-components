@@ -17,6 +17,7 @@ import { useGuardFinallyConfig, useGuardModule } from '../../_utils/context'
 import { GuardModuleType } from '../../Guard'
 import { useGuardHttp } from '../../_utils/guardHttp'
 import { useGuardAuthClient } from '../../Guard/authClient'
+import { LoginMethods } from '../../AuthingGuard/types'
 
 export interface RegisterWithPhoneProps {
   // onRegister: Function
@@ -177,7 +178,9 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           )
 
           submitButtonRef.current?.onSpin(false)
-          onRegisterSuccess(user)
+          onRegisterSuccess(user, {
+            specifyDefaultLoginMethod: LoginMethods.PhoneCode,
+          })
         }
       } catch (error: any) {
         const { message: errorMessage, code, data } = error

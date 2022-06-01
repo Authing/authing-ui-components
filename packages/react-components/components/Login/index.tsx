@@ -33,6 +33,7 @@ import { VerifyLoginMethods } from '../AuthingGuard/api'
 import { useMediaSize, useMethod } from '../_utils/hooks'
 import { getGuardDocument } from '../_utils/guardDocument'
 import { useGuardAuthClient } from '../Guard/authClient'
+import { GuardLoginInitData } from './interface'
 
 const inputWays = [
   LoginMethods.Password,
@@ -92,8 +93,7 @@ const useSwitchStates = (loginWay: LoginMethods) => {
 }
 export const GuardLoginView = () => {
   // const { config } = props
-
-  const initData = useGuardInitData<any>()
+  const { specifyDefaultLoginMethod } = useGuardInitData<GuardLoginInitData>()
 
   const config = useGuardFinallyConfig()
 
@@ -106,11 +106,14 @@ export const GuardLoginView = () => {
   const publicConfig = useGuardPublicConfig()
 
   let [defaultMethod, renderInputWay, renderQrcodeWay] = useMethods(config)
+
   const agreementEnabled = config?.agreementEnabled
 
   const { t } = useTranslation()
 
-  const [loginWay, setLoginWay] = useState(defaultMethod)
+  const [loginWay, setLoginWay] = useState(
+    specifyDefaultLoginMethod || defaultMethod
+  )
 
   const [canLoop, setCanLoop] = useState(false) // 允许轮询
 
@@ -234,10 +237,10 @@ export const GuardLoginView = () => {
     () =>
       agreementEnabled
         ? config?.agreements?.filter(
-          (agree) =>
-            agree.lang === i18n.language &&
-            (config?.autoRegister || !!agree?.availableAt)
-        ) ?? []
+            (agree) =>
+              agree.lang === i18n.language &&
+              (config?.autoRegister || !!agree?.availableAt)
+          ) ?? []
         : [],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [agreementEnabled, config?.autoRegister, config?.agreements, i18n.language]
@@ -519,8 +522,9 @@ export const GuardLoginView = () => {
             )}
             {renderQrcodeWay && (
               <div
-                className={`g2-view-tabs ${qrcodeNone} ${hiddenTab && 'hidden'
-                  }`}
+                className={`g2-view-tabs ${qrcodeNone} ${
+                  hiddenTab && 'hidden'
+                }`}
               >
                 <Tabs
                   destroyInactiveTabPane={true}
@@ -595,14 +599,16 @@ export const GuardLoginView = () => {
                               tips: {
                                 title:
                                   i18n.language === 'zh-CN'
-                                    ? `${isWeChatBrowser()
-                                      ? '长按二维码登录'
-                                      : '使用 微信 扫码登录'
-                                    }`
-                                    : `${isWeChatBrowser()
-                                      ? 'Long press the QR code to log in'
-                                      : 'Use WeChat to scan and login'
-                                    } `,
+                                    ? `${
+                                        isWeChatBrowser()
+                                          ? '长按二维码登录'
+                                          : '使用 微信 扫码登录'
+                                      }`
+                                    : `${
+                                        isWeChatBrowser()
+                                          ? 'Long press the QR code to log in'
+                                          : 'Use WeChat to scan and login'
+                                      } `,
                                 expired: t('login.qrcodeExpired'),
                               },
                             }}

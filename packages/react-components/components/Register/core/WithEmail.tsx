@@ -15,6 +15,7 @@ import { useIsChangeComplete } from '../utils'
 import { useGuardModule } from '../../_utils/context'
 import { GuardModuleType } from '../../Guard'
 import { useMediaSize } from '../../_utils/hooks'
+import { LoginMethods } from '../../AuthingGuard/types'
 
 export interface RegisterWithEmailProps {
   // onRegister: Function
@@ -125,7 +126,9 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         )
 
         submitButtonRef.current?.onSpin(false)
-        onRegisterSuccess(user)
+        onRegisterSuccess(user, {
+          specifyDefaultLoginMethod: LoginMethods.Password,
+        })
       } catch (error: any) {
         const { code, data, message } = error
         submitButtonRef.current.onError()

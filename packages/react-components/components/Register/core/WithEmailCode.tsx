@@ -16,6 +16,7 @@ import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
 import { getGuardHttp } from '../../_utils/guardHttp'
 import { EmailScene } from '../../Type'
 import { useMediaSize } from '../../_utils/hooks'
+import { LoginMethods } from '../../AuthingGuard/types'
 
 export interface RegisterWithEmailCodeProps {
   // onRegister: Function
@@ -179,7 +180,9 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
           })
           submitButtonRef.current.onSpin(false)
           if (resCode === 200) {
-            onRegisterSuccess(data)
+            onRegisterSuccess(data, {
+              specifyDefaultLoginMethod: LoginMethods.PhoneCode,
+            })
           } else {
             onGuardHandling?.()
             onRegisterFailed(code, data, registerMessage)
