@@ -55,6 +55,10 @@ export interface GuardLoginViewProps extends GuardLoginProps, IG2FCViewProps {
   config: LoginConfig
 }
 
+export interface GuardLoginInitData {
+  loginMethod: LoginMethods
+}
+
 export const getDefaultLoginConfig = (): LoginConfig => ({
   ...getDefaultG2Config(),
 })

@@ -23,6 +23,7 @@ import {
   useGuardAppId,
   useGuardEvents,
   useGuardFinallyConfig,
+  useGuardInitData,
   useGuardModule,
   useGuardPublicConfig,
 } from '../_utils/context'
@@ -91,6 +92,8 @@ const useSwitchStates = (loginWay: LoginMethods) => {
 }
 export const GuardLoginView = () => {
   // const { config } = props
+
+  const initData = useGuardInitData<any>()
 
   const config = useGuardFinallyConfig()
 
@@ -231,10 +234,10 @@ export const GuardLoginView = () => {
     () =>
       agreementEnabled
         ? config?.agreements?.filter(
-            (agree) =>
-              agree.lang === i18n.language &&
-              (config?.autoRegister || !!agree?.availableAt)
-          ) ?? []
+          (agree) =>
+            agree.lang === i18n.language &&
+            (config?.autoRegister || !!agree?.availableAt)
+        ) ?? []
         : [],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [agreementEnabled, config?.autoRegister, config?.agreements, i18n.language]
@@ -516,9 +519,8 @@ export const GuardLoginView = () => {
             )}
             {renderQrcodeWay && (
               <div
-                className={`g2-view-tabs ${qrcodeNone} ${
-                  hiddenTab && 'hidden'
-                }`}
+                className={`g2-view-tabs ${qrcodeNone} ${hiddenTab && 'hidden'
+                  }`}
               >
                 <Tabs
                   destroyInactiveTabPane={true}
@@ -593,16 +595,14 @@ export const GuardLoginView = () => {
                               tips: {
                                 title:
                                   i18n.language === 'zh-CN'
-                                    ? `${
-                                        isWeChatBrowser()
-                                          ? '长按二维码登录'
-                                          : '使用 微信 扫码登录'
-                                      }`
-                                    : `${
-                                        isWeChatBrowser()
-                                          ? 'Long press the QR code to log in'
-                                          : 'Use WeChat to scan and login'
-                                      } `,
+                                    ? `${isWeChatBrowser()
+                                      ? '长按二维码登录'
+                                      : '使用 微信 扫码登录'
+                                    }`
+                                    : `${isWeChatBrowser()
+                                      ? 'Long press the QR code to log in'
+                                      : 'Use WeChat to scan and login'
+                                    } `,
                                 expired: t('login.qrcodeExpired'),
                               },
                             }}
