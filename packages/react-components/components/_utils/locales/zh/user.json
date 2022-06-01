@@ -29,6 +29,7 @@
   "confirmModify": "确认修改",
   "modifyPwd": "修改密码",
   "modifyPwdText": "你的密码连续使用超过 {{number}} 个月，可能存在风险。请重新设置密码。",
+  "modifyNoticePwdText": "你的密码连续使用超过 {{number}} 个月，即将过期，为了不影响你的使用，请设置新密码",
   "personalInfo": "个人信息",
   "accPwd": "账号密码",
   "authenticationInfo": "认证信息",

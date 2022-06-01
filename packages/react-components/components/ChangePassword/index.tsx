@@ -100,3 +100,39 @@ export const GuardForcedPasswordResetView: React.FC = () => {
     </GuardChangePassword>
   )
 }
+
+export const GuardNoticePasswordResetView: React.FC = () => {
+  const { t } = useTranslation()
+
+  const { changeModule } = useGuardModule()
+
+  const initData = useGuardInitData<{
+    forcedCycle: number
+    onFinishCallBack: any
+  }>()
+
+  const onReset = () => {
+    message.success(t('common.updatePsswordSuccess'))
+    setTimeout(() => {
+      changeModule?.(GuardModuleType.LOGIN)
+    }, 500)
+  }
+
+  const coreForm = (
+    <RotateReset
+      onReset={onReset}
+      onFinishCallBack={initData.onFinishCallBack}
+    />
+  )
+
+  return (
+    <GuardChangePassword
+      title={t('user.modifyPwd')}
+      explain={t('user.modifyNoticePwdText', {
+        number: initData.forcedCycle,
+      })}
+    >
+      {coreForm}
+    </GuardChangePassword>
+  )
+}
