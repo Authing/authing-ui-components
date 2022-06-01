@@ -27,7 +27,7 @@ import {
 } from './businessRequest'
 import { extendsFieldsToMetaData, fieldValuesToRegisterProfile } from './utils'
 import { GuardModuleType } from '../Guard'
-import { message } from 'antd'
+import { Button, message } from 'antd'
 
 export const GuardCompleteInfo: React.FC<{
   metaData: CompleteInfoMetaData[]
@@ -41,16 +41,13 @@ export const GuardCompleteInfo: React.FC<{
 
   const { t } = useTranslation()
 
-  const [disabled, setDisabled] = useState(false)
+  const [skipLoading, setSkipLoading] = useState(false)
 
   const onSkip = async () => {
-    if (disabled) return
-    try {
-      setDisabled(true)
-      await businessRequest(CompleteInfoAuthFlowAction.Skip)
-    } catch (error) {
-      setDisabled(false)
-    }
+    setSkipLoading(true)
+
+    await businessRequest(CompleteInfoAuthFlowAction.Skip)
+    setSkipLoading(false)
   }
 
   return (
@@ -66,13 +63,22 @@ export const GuardCompleteInfo: React.FC<{
           />
 
           {skipComplateFileds && (
-            <span
+            // <span
+            //   className="g2-completeInfo-header-skip"
+            //   onClick={() => onSkip()}
+            // >
+            //   <IconFont type="authing-a-share-forward-line1" />
+            //   <span>{t('common.skip')}</span>
+            // </span>
+            <Button
               className="g2-completeInfo-header-skip"
+              type="text"
+              loading={skipLoading}
               onClick={() => onSkip()}
             >
               <IconFont type="authing-a-share-forward-line1" />
               <span>{t('common.skip')}</span>
-            </span>
+            </Button>
           )}
         </div>
 
