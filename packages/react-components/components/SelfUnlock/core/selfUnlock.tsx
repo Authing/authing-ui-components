@@ -17,7 +17,7 @@ import { useGuardHttp } from '../../_utils/guardHttp'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import {
   useGuardEvents,
-  useGuardIsAuthFlow,
+  useGuardInitData,
   useGuardPublicConfig,
 } from '../../_utils/context'
 
@@ -25,14 +25,7 @@ export enum InputMethodMap {
   email = 'email-code',
   phone = 'phone-code',
 }
-interface ResetPasswordProps {
-  onReset: any
-  publicConfig: any
-  onSend: (type: 'email' | 'phone') => void
-  onSendError: (type: 'email' | 'phone', error: any) => void
-  initData: any
-}
-export const SelfUnlock = (props: ResetPasswordProps) => {
+export const SelfUnlock = () => {
   const { t } = useTranslation()
   let [form] = Form.useForm()
   let [identify, setIdentify] = useState('')
@@ -40,25 +33,29 @@ export const SelfUnlock = (props: ResetPasswordProps) => {
   let submitButtonRef = useRef<any>(null)
   const { isPhoneMedia } = useMediaSize()
   let authClient = useGuardAuthClient()
-  const isAuthFlow = useGuardIsAuthFlow()
   const events = useGuardEvents()
-  console.log('identify', identify, 'codeMethod', codeMethod)
+
+  const initData = useGuardInitData<{
+    defaultEmail: 'string'
+    defaultPhone: 'string'
+  }>()
+
   useEffect(() => {
-    if (props.initData.defaultEmail) {
-      setIdentify(props.initData.defaultEmail)
+    if (initData.defaultEmail) {
+      setIdentify(initData.defaultEmail)
       form.setFieldsValue({
-        identify: props.initData.defaultEmail,
+        identify: initData.defaultEmail,
       })
       setCodeMethod('email')
     }
-    if (props.initData.defaultPhone) {
-      setIdentify(props.initData.defaultPhone)
+    if (initData.defaultPhone) {
+      setIdentify(initData.defaultPhone)
       form.setFieldsValue({
-        identify: props.initData.defaultPhone,
+        identify: initData.defaultPhone,
       })
       setCodeMethod('phone')
     }
-  }, [props.initData, form])
+  }, [initData, form])
   const { authFlow } = useGuardHttp()
 
   const {
@@ -77,44 +74,42 @@ export const SelfUnlock = (props: ResetPasswordProps) => {
 
     let password = values.password
 
-    if (isAuthFlow) {
-      const encryptPassWord = await authClient.options?.encryptFunction?.(
-        password,
-        publicKey
-      )
+    const encryptPassWord = await authClient.options?.encryptFunction?.(
+      password,
+      publicKey
+    )
 
-      if (codeMethod === 'email') {
-        const { isFlowEnd, data, onGuardHandling } = await authFlow(
-          'unlock-account-by-email',
-          {
-            email: identify, // 用户输入的邮箱
-            code, // 验证码
-            password: encryptPassWord, // 密码，经过加密后的
-          }
-        )
-        submitButtonRef.current?.onSpin(false)
-        if (isFlowEnd) {
-          events?.onLogin?.(data, authClient!) // 登录成功
-        } else {
-          onGuardHandling?.()
+    if (codeMethod === 'email') {
+      const { isFlowEnd, data, onGuardHandling } = await authFlow(
+        'unlock-account-by-email',
+        {
+          email: identify, // 用户输入的邮箱
+          code, // 验证码
+          password: encryptPassWord, // 密码，经过加密后的
         }
+      )
+      submitButtonRef.current?.onSpin(false)
+      if (isFlowEnd) {
+        events?.onLogin?.(data, authClient!) // 登录成功
+      } else {
+        onGuardHandling?.()
       }
-      if (codeMethod === 'phone') {
-        const { phoneNumber } = parsePhone(isInternationSms, identify)
-        const { isFlowEnd, data, onGuardHandling } = await authFlow(
-          'unlock-account-by-phone',
-          {
-            phone: phoneNumber, // 用户输入的邮箱
-            code, // 验证码
-            password: encryptPassWord, // 密码，经过加密后的
-          }
-        )
-        submitButtonRef.current?.onSpin(false)
-        if (isFlowEnd) {
-          events?.onLogin?.(data, authClient!) // 登录成功
-        } else {
-          onGuardHandling?.()
+    }
+    if (codeMethod === 'phone') {
+      const { phoneNumber } = parsePhone(isInternationSms, identify)
+      const { isFlowEnd, data, onGuardHandling } = await authFlow(
+        'unlock-account-by-phone',
+        {
+          phone: phoneNumber, // 用户输入的邮箱
+          code, // 验证码
+          password: encryptPassWord, // 密码，经过加密后的
         }
+      )
+      submitButtonRef.current?.onSpin(false)
+      if (isFlowEnd) {
+        events?.onLogin?.(data, authClient!) // 登录成功
+      } else {
+        onGuardHandling?.()
       }
     }
   }
