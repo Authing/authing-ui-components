@@ -279,6 +279,22 @@
     lodash "^4.17.15"
     resize-observer-polyfill "^1.5.0"
 
+"@authing/react-ui-components@^3.1.16":
+  version "3.1.16"
+  resolved "https://registry.npmjs.org/@authing/react-ui-components/-/react-ui-components-3.1.16.tgz#25b1432c8af14de96c1e555e37629440edb5ed64"
+  integrity sha512-L+ahGIgQITH5WTO5Y9WD3vF3DXZbQx+gBpT5/22Tr1xenAXMTAKvS87Niqf7UqvfvgsOIZmSNUcSSs2n24xCzg==
+  dependencies:
+    antd "^4.8.0"
+    authing-js-sdk "4.23.30-alpha.3"
+    fastclick "^1.0.6"
+    global "^4.4.0"
+    phone "^3.1.12"
+    qs "^6.9.4"
+    react-responsive "^9.0.0-beta.5"
+    react-use "^17.3.1"
+    ua-parser-js "^1.0.2"
+    wildcard "^1.1.2"
+
 "@babel/code-frame@7.10.4", "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.5.5":
   version "7.10.4"
   resolved "https://registry.npm.taobao.org/@babel/code-frame/download/@babel/code-frame-7.10.4.tgz"
@@ -4729,6 +4745,11 @@
   dependencies:
     "@types/jest" "*"
 
+"@types/ua-parser-js@^0.7.36":
+  version "0.7.36"
+  resolved "https://registry.npmjs.org/@types/ua-parser-js/-/ua-parser-js-0.7.36.tgz#9bd0b47f26b5a3151be21ba4ce9f5fa457c5f190"
+  integrity sha512-N1rW+njavs70y2cApeIw1vLMYXRwfBy+7trgavGuuTfOd7j1Yh7QTRc/yqsPl6ncokt72ZXuxEU0PiCp9bSwNQ==
+
 "@types/uglify-js@*":
   version "3.11.1"
   resolved "https://registry.npm.taobao.org/@types/uglify-js/download/@types/uglify-js-3.11.1.tgz?cache=0&sync_timestamp=1605057452755&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fuglify-js%2Fdownload%2F%40types%2Fuglify-js-3.11.1.tgz"
@@ -5970,6 +5991,17 @@ authing-js-sdk@4.23.30-alpha.3:
   version "4.23.30-alpha.3"
   resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.23.30-alpha.3.tgz#339c0fb98e53d16cc8df7f26e802dd56c16e9661"
   integrity sha512-dme1T52n7hd7JzMhMcy76b7M6TOjqI3KqHemqUzIj65P4n4r72RkhSvtvPrPmkqX1m1FXLXWQZXi19GK0TZdIQ==
+  dependencies:
+    axios "^0.19.2"
+    crypto-js "^4.0.0"
+    jsencrypt "^3.1.0"
+    jwt-decode "^2.2.0"
+    sm-crypto "^0.3.7"
+
+authing-js-sdk@4.23.32:
+  version "4.23.32"
+  resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.23.32.tgz#89dc2dd42a3d3cab92d439335c036581e35c7c48"
+  integrity sha512-zyUoRszXmdgCSn3S9fzVJSn8cMWMAmpUDtW+aYVMuIOdfyRFwfkGCVpffPbMHc3FcCrcE2AcUYOA9u78RXjs5w==
   dependencies:
     axios "^0.19.2"
     crypto-js "^4.0.0"
@@ -20673,7 +20705,7 @@ ua-parser-js@0.7.21:
   resolved "https://registry.npm.taobao.org/ua-parser-js/download/ua-parser-js-0.7.21.tgz"
   integrity sha1-hTz5zpP2QvZxdCc8w0Vlrm8wh3c=
 
-ua-parser-js@1.0.2:
+ua-parser-js@1.0.2, ua-parser-js@^1.0.2:
   version "1.0.2"
   resolved "https://registry.npmmirror.com/ua-parser-js/-/ua-parser-js-1.0.2.tgz"
   integrity sha512-00y/AXhx0/SsnI51fTc0rLRmafiGOM4/O+ny10Ps7f+j/b8p/ZY11ytMgznXkOVo4GQ+KwQG5UQLkLGirsACRg==
