@@ -92,6 +92,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
       <p className="authing-g2-mfa-tips">{t('login.bindPhoneInfo')}</p>
       <Form
         form={form}
+        onSubmitCapture={() => submitButtonRef.current.onSpin(true)}
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
       >

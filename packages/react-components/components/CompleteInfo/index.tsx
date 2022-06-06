@@ -63,21 +63,18 @@ export const GuardCompleteInfo: React.FC<{
           />
 
           {skipComplateFileds && (
-            // <span
-            //   className="g2-completeInfo-header-skip"
-            //   onClick={() => onSkip()}
-            // >
-            //   <IconFont type="authing-a-share-forward-line1" />
-            //   <span>{t('common.skip')}</span>
-            // </span>
             <Button
               className="g2-completeInfo-header-skip"
-              type="text"
+              type="link"
               loading={skipLoading}
               onClick={() => onSkip()}
             >
-              <IconFont type="authing-a-share-forward-line1" />
-              <span>{t('common.skip')}</span>
+              {!skipLoading ? (
+                <>
+                  <IconFont type="authing-a-share-forward-line1" />
+                  <span>{t('common.skip')}</span>
+                </>
+              ) : null}
             </Button>
           )}
         </div>
