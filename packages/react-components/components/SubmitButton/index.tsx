@@ -51,7 +51,7 @@ const SubmitButton = (props: SubmitButtonProps, ref: any) => {
       type="primary"
       htmlType="submit"
       loading={spin}
-      disabled={props?.disabled || false}
+      disabled={props?.disabled ?? spin}
       onClick={props.onClick ? props.onClick : () => {}}
       className={`authing-g2-submit-button ${propsCls} ${shakingCls}`}
     >
