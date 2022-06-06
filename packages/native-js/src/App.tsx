@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import "./App.css";
-import { Guard, GuardMode } from "./components";
+import { Guard, GuardEventsCamelToKebabMapping, GuardMode } from "./components";
 
 function App() {
+  console.log(GuardEventsCamelToKebabMapping);
+
   useEffect(() => {
     const guard = new Guard("6191cf610f772aa56dc70637", {
       target: ".App",

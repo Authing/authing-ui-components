@@ -1,21 +1,28 @@
 <template>
-  <div id="authing_guard_container" />
+  <div id="authing_guard_container"></div>
 </template>
 
 <script>
 import {
   getAuthClient,
   initAuthClient,
-  GuardEventsCamelToKebabMap,
   GuardMode,
   GuardScenes,
   LoginMethods,
   RegisterMethods,
+  Guard as NativeGuard,
+  GuardEventsCamelToKebabMapping,
 } from "@authing/native-js-ui-components";
 import "@authing/native-js-ui-components/lib/index.min.css";
-import { Guard as NativeGuard } from "@authing/native-js-ui-components/lib/index.min.js";
 
-export { getAuthClient, initAuthClient, GuardMode, GuardScenes, LoginMethods, RegisterMethods };
+export {
+  getAuthClient,
+  initAuthClient,
+  GuardMode,
+  GuardScenes,
+  LoginMethods,
+  RegisterMethods,
+};
 
 const callbackEvent = ["before-login", "before-register"];
 
@@ -24,9 +31,18 @@ export default {
   props: {
     appId: {
       type: String,
-      required: true,
+      required: false,
     },
+    tenantId: {
+      type: String,
+      required: false,
+    },
+
     config: {
+      type: Object,
+      required: false,
+    },
+    authClient: {
       type: Object,
       required: false,
     },
@@ -109,10 +125,17 @@ export default {
     },
   },
   mounted() {
-    this.guardInstance = new NativeGuard(this.appId, this.mergeConfig);
+    this.guardInstance = new NativeGuard({
+      appId: this.appId,
+      tenantId: this.tenantId,
+      config: this.mergeConfig,
+      authClient: this.authClient,
+    });
 
-    const evts = Object.values(GuardEventsCamelToKebabMap);
-    const kebabToCamelMap = Object.entries(GuardEventsCamelToKebabMap).reduce((acc, [camel, kebab]) => {
+    const evts = Object.values(GuardEventsCamelToKebabMapping);
+    const kebabToCamelMap = Object.entries(
+      GuardEventsCamelToKebabMapping
+    ).reduce((acc, [camel, kebab]) => {
       return Object.assign({}, acc, {
         [kebab]: camel,
       });
@@ -138,7 +161,9 @@ export default {
       });
     }, {});
 
-    evts.forEach((evtName) => this.guardInstance.on(evtName, listeners[evtName]));
+    evts.forEach((evtName) =>
+      this.guardInstance.on(evtName, listeners[evtName])
+    );
 
     if (this.localVisible) {
       this.guardInstance.show();

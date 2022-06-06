@@ -1,8 +1,7 @@
-import { Form } from 'antd'
+import { Form, message } from 'antd'
 import React, { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
-import { useGuardAuthClient } from '../../Guard/authClient'
 import { fieldRequiredRule, getDeviceName } from '../../_utils'
 import { Agreements } from '../components/Agreements'
 import SubmitButton from '../../SubmitButton'
@@ -14,8 +13,10 @@ import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
 import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
 import { parsePhone, useMediaSize } from '../../_utils/hooks'
 import { useIsChangeComplete } from '../utils'
-import { useGuardModule } from '../../_utils/context'
+import { useGuardFinallyConfig, useGuardModule } from '../../_utils/context'
 import { GuardModuleType } from '../../Guard'
+import { useGuardHttp } from '../../_utils/guardHttp'
+import { useGuardAuthClient } from '../../Guard/authClient'
 
 export interface RegisterWithPhoneProps {
   // onRegister: Function
@@ -37,23 +38,36 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
 
   const isChangeComplete = useIsChangeComplete('phone')
 
+  const config = useGuardFinallyConfig()
+
+  const needPassword = config.passwordLoginMethods?.includes('phone-password')
+
   const { isPhoneMedia } = useMediaSize()
+
+  const authClient = useGuardAuthClient()
 
   const { changeModule } = useGuardModule()
 
+  const { post } = useGuardHttp()
+
   const submitButtonRef = useRef<any>(null)
-  const authClient = useGuardAuthClient()
+
   const [form] = Form.useForm()
+
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
+
   const [validated, setValidated] = useState(false)
+
   // 区号 默认
   const [areaCode, setAreaCode] = useState(
     publicConfig?.internationalSmsConfig?.defaultISOType || 'CN'
   )
 
   const verifyCodeLength = publicConfig?.verifyCodeLength ?? 4
+
   const isInternationSms =
     publicConfig?.internationalSmsConfig?.enabled || false
+
   const onFinish = useCallback(
     async (values: any) => {
       try {
@@ -72,6 +86,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         const { phone, password = '', code } = values
 
         const context = registeContext ?? {}
+
         const { phoneNumber, countryCode: phoneCountryCode } = parsePhone(
           isInternationSms,
           phone,
@@ -100,34 +115,75 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           options,
         }
 
-        // 看看是否要跳转到 信息补全
-        if (isChangeComplete) {
-          changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
-            businessRequestName: 'registerByPhoneCode',
-            content: registerContent,
+        if (needPassword) {
+          // 判断验证码是否正确
+          const {
+            statusCode: checkCode,
+            data: { valid, message: checkMessage },
+          } = await post('/api/v2/sms/preCheckCode', {
+            phone: phoneNumber,
+            phoneCode: code,
+            phoneCountryCode,
           })
+          // 验证码校验通过 进入密码补全流程
+          if (checkCode === 200 && valid) {
+            changeModule?.(GuardModuleType.REGISTER_PASSWORD, {
+              businessRequestName: 'registerByPhoneCode',
+              content: registerContent,
+              isChangeComplete: isChangeComplete,
+            })
+            return
+          } else {
+            submitButtonRef.current.onError()
+            message.error(checkMessage)
+            return
+          }
+        } else {
+          // 看看是否要跳转到 信息补全
+          if (isChangeComplete) {
+            // 判断验证码是否正确
+            const {
+              statusCode: checkCode,
+              data: { valid, message: checkMessage },
+            } = await post('/api/v2/sms/preCheckCode', {
+              phone: phoneNumber,
+              phoneCode: code,
+              phoneCountryCode,
+            })
 
-          return
+            if (checkCode === 200 && valid) {
+              changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
+                businessRequestName: 'registerByPhoneCode',
+                content: registerContent,
+              })
+              return
+            } else {
+              submitButtonRef.current.onError()
+              message.error(checkMessage)
+              return
+            }
+          }
+
+          const user = await authClient.registerByPhoneCode(
+            phoneNumber,
+            code,
+            password,
+            {
+              browser:
+                typeof navigator !== 'undefined' ? navigator.userAgent : null,
+              device: getDeviceName(),
+            },
+            options
+          )
+
+          submitButtonRef.current?.onSpin(false)
+          onRegisterSuccess(user)
         }
-
-        const user = await authClient.registerByPhoneCode(
-          phoneNumber,
-          code,
-          password,
-          {
-            browser:
-              typeof navigator !== 'undefined' ? navigator.userAgent : null,
-            device: getDeviceName(),
-          },
-          options
-        )
-
-        submitButtonRef.current?.onSpin(false)
-        onRegisterSuccess(user)
       } catch (error: any) {
-        const { code, message, data } = error
+        const { message: errorMessage, code, data } = error
         submitButtonRef.current.onError()
-        onRegisterFailed(code, data, message)
+        message.error(errorMessage)
+        !needPassword && onRegisterFailed(code, data, errorMessage)
       } finally {
         submitButtonRef.current?.onSpin(false)
       }
@@ -139,10 +195,12 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
       registeContext,
       isInternationSms,
       areaCode,
+      needPassword,
+      post,
+      changeModule,
       isChangeComplete,
       authClient,
       onRegisterSuccess,
-      changeModule,
       onRegisterFailed,
     ]
   )

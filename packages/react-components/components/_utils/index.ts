@@ -3,12 +3,14 @@ import { Rule } from 'antd/lib/form'
 import qs from 'qs'
 import { useGuardContext } from '../context/global/context'
 import { i18n } from './locales'
-import { RegisterMethods, User } from 'authing-js-sdk'
+import { User } from 'authing-js-sdk'
 import { ApplicationConfig, ComplateFiledsPlace } from '../AuthingGuard/api'
 import { GuardProps } from '../Guard'
 import isEqual from 'lodash/isEqual'
 import omit from 'lodash/omit'
+import { NewRegisterMethods } from '../Type'
 import { getGuardWindow } from '../Guard/core/useAppendConfig'
+import UAParser from 'ua-parser-js'
 export * from './popupCenter'
 export * from './clipboard'
 
@@ -273,18 +275,77 @@ export const isWeWorkBuiltInBrowser = () => {
   )
 }
 // 特殊浏览器 后续可能会增加
-export const isSpecialBrowser = () => {
-  return (
-    isWeChatBrowser() ||
-    isLarkBrowser() ||
-    isQtWebEngine() ||
-    isXiaomiBrowser() ||
-    isDingtalkBrowser() ||
-    isQQBrowser() ||
-    isQQBuiltInBrowser() ||
-    isWeWorkBuiltInBrowser()
+
+export const isEdgeBrowser = () => {
+  const parser = UAParser()
+
+  return parser.browser.name === 'Edge'
+}
+
+export const isWeiboBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /Weibo/i.test(navigator.userAgent)
+}
+
+export const isAlipayBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /Alipay/i.test(navigator.userAgent)
+}
+
+export const isBaiduBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /Baidu/i.test(navigator.userAgent)
+}
+
+export const isWeComeBrowser = () => /wxwork/i.test(navigator.userAgent)
+
+export const isMobile = () => {
+  return window.navigator.userAgent.match(
+    /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
   )
 }
+
+/* 利用浏览器的 UA 判断是否为不支持弹窗的特殊浏览器 */
+export const isSpecialBrowser = () => {
+  // 1. 首先筛选出一定是特殊浏览器的 UA
+  if (
+    isWeChatBrowser() ||
+    isWeComeBrowser() ||
+    isLarkBrowser() ||
+    isDingtalkBrowser() ||
+    isQtWebEngine() ||
+    isXiaomiBrowser() ||
+    isQQBrowser() ||
+    isMobile()
+  ) {
+    return true
+  }
+
+  // 2. 利用 ua-parser-js 进一步判断，筛选出很可能不是特殊浏览器的 UA
+  // 由于一些特殊浏览器也可能会被误判为非特殊，所以需要首先经过第 1 步筛选
+  const parser = UAParser()
+  const nonSpecialBrowsers = [
+    'Chrome',
+    'Firefox',
+    'Safari',
+    'Opera',
+    'IE',
+    'Edge',
+  ]
+  if (nonSpecialBrowsers.includes(parser.browser.name ?? '')) {
+    return false
+  }
+
+  // 3. 可能有一些 UA 没有任何特征，这种情况下一律默认为特殊浏览器
+  return true
+}
+
 export const assembledAppHost = (identifier: string, host: string) => {
   const hostUrl = new URL(host)
 
@@ -294,6 +355,7 @@ export const assembledAppHost = (identifier: string, host: string) => {
 
   splitHost.shift()
 
+  // eslint-disable-next-line prettier/prettier
   return `${hostUrl.protocol}//${identifier}.${splitHost.join('.')}${
     port && `:${port}`
   }`
@@ -359,7 +421,8 @@ export const PASSWORD_STRENGTH_TEXT_MAP: Record<
 const SYMBOL_TYPE_PATTERNS = [
   /\d+/,
   /[a-zA-Z]/,
-  /[-!$%^&*()_+|~=`{}[\]:";'<>?,@./]/,
+  /[`~!@#$%^&*()_\-+=<>?:"{}|,.\\/;'\\[\]·~！@#￥%……&*（）——\-+={}|《》？：“”【】、；‘'，。、]/,
+  // /[-!$%^&*()_+|~=`{}[\]:";'<>?,@./]/,
 ]
 
 export const getSymbolTypeLength = (pwd: string) => {
@@ -566,9 +629,9 @@ export const shoudGoToComplete = (
 }
 
 export const tabSort = (
-  defaultValue: RegisterMethods,
-  tabList: RegisterMethods[]
-): RegisterMethods[] => {
+  defaultValue: NewRegisterMethods,
+  tabList: NewRegisterMethods[]
+): NewRegisterMethods[] => {
   const index = tabList.indexOf(defaultValue)
   const element = tabList.splice(index, 1)[0]
   tabList.unshift(element)

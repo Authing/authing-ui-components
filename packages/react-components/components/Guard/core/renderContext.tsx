@@ -31,6 +31,9 @@ import { GuardHttp, initGuardHttp } from '../../_utils/guardHttp'
 import { initI18n } from '../../_utils/locales'
 import { useGuardXContext } from '../../_utils/context'
 import { useGuardIconfont } from '../../IconFont/useGuardIconfont'
+import { useInitGuardAppendConfig } from './useAppendConfig'
+import { useInitAppId } from '../../_utils/initAppId'
+import { updateFlowHandle } from '../../_utils/flowHandleStorage'
 
 interface IBaseAction<T = string, P = any> {
   type: T & string
@@ -40,9 +43,8 @@ interface IBaseAction<T = string, P = any> {
 export const RenderContext: React.FC<{
   guardProps: GuardProps
   initState: ModuleState
-  forceUpdate: number
-}> = ({ guardProps, initState, children, forceUpdate }) => {
-  const { appId, tenantId, config } = guardProps
+}> = ({ guardProps, initState, children }) => {
+  const { tenantId, config } = guardProps
 
   const [events, setEvents] = useState<GuardEvents>()
   const [authClint, setAuthClint] = useState<AuthenticationClient>()
@@ -51,6 +53,10 @@ export const RenderContext: React.FC<{
   const [cdnBase, setCdnBase] = useState<string>()
   const [error, setError] = useState()
   const [isAuthFlow, setIsAuthFlow] = useState(true)
+
+  const appId = useInitAppId(guardProps.appId, guardProps.authClient, setError)
+
+  useInitGuardAppendConfig(appId, guardProps.appendConfig)
 
   // 状态机
   const [
@@ -76,6 +82,13 @@ export const RenderContext: React.FC<{
 
   // Modules Reducer
   const [moduleState, changeModule] = useReducer(moduleReducer, initState)
+
+  // Flow Handle init
+  useEffect(() => {
+    if (initState.initData?.flowHandle) {
+      updateFlowHandle(initState.initData.flowHandle)
+    }
+  }, [initState.initData])
 
   // Change Module
   const onChangeModule = useCallback(
@@ -103,9 +116,7 @@ export const RenderContext: React.FC<{
     if (!appId || !defaultMergedConfig) return
 
     const httpClient = initGuardHttp(defaultMergedConfig.host)
-
     httpClient.setAppId(appId)
-
     tenantId && httpClient.setTenantId(tenantId)
 
     setHttpClient(httpClient)
@@ -113,25 +124,20 @@ export const RenderContext: React.FC<{
 
   const finallyConfig = useMergePublicConfig(
     appId,
-    forceUpdate,
     defaultMergedConfig,
     httpClient,
     setError
   )
 
   // guardPageConfig
-  const guardPageConfig = useGuardPageConfig(
-    appId,
-    forceUpdate,
-    httpClient,
-    setError
-  )
+  const guardPageConfig = useGuardPageConfig(appId, httpClient, setError)
 
   const sdkClient = useInitGuardAuthClient({
     config: finallyConfig,
     appId,
     tenantId,
     setError,
+    authClient: guardProps.authClient,
   })
 
   // iconfont

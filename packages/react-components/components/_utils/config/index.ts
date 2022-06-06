@@ -1,4 +1,4 @@
-import { LoginMethods, RegisterMethods } from 'authing-js-sdk'
+import { LoginMethods } from 'authing-js-sdk'
 import { ApplicationConfig } from '../../AuthingGuard/api'
 import { assembledRequestHost as utilAssembledRequestHost } from '..'
 import { GuardComponentConfig, GuardLocalConfig } from '../../Guard/config'
@@ -7,6 +7,7 @@ import { AuthingResponse } from '../http'
 import { GuardHttp } from '../guardHttp'
 import { corsVerification } from '../corsVerification'
 import { Logger } from '../logger'
+import { NewRegisterMethods } from '../../Type'
 import { GuardPageConfig } from '../../Type'
 
 let publicConfigMap: Record<string, ApplicationConfig> = {}
@@ -42,6 +43,8 @@ const requestPublicConfig = async (
   corsVerification(res.data.allowedOrigins, res.data.corsWhitelist)
 
   setPublicConfig(appId, res.data)
+
+  httpClient.setUserpoolId(res.data.userPoolId)
 
   return getPublicConfig(appId)
 }
@@ -93,10 +96,10 @@ const mergedPublicConfig = (
       publicConfig.ssoPageComponentDisplay.autoRegisterThenLoginHintInfo,
     registerMethods:
       config.registerMethods ??
-      (publicConfig.registerTabs?.list as RegisterMethods[]),
+      (publicConfig.registerTabs?.list as NewRegisterMethods[]),
     defaultRegisterMethod:
       config.defaultRegisterMethod ??
-      (publicConfig.registerTabs.default as RegisterMethods),
+      (publicConfig.registerTabs.default as NewRegisterMethods),
     // 禁止注册
     disableRegister: !!(
       config.disableRegister ??
@@ -126,29 +129,30 @@ const assembledRequestHost = (
 }
 
 export const useMergePublicConfig = (
-  appId: string,
-  forceUpdate: number,
+  appId?: string,
   config?: GuardLocalConfig,
   httpClient?: GuardHttp,
-  serError?: any
+  setError?: any
 ) => {
   const [publicConfig, setPublicConfig] = useState<ApplicationConfig>()
+
   const initPublicConfig = useCallback(async () => {
-    if (httpClient && appId)
+    if (httpClient && appId) {
       if (!getPublicConfig(appId)) {
         try {
           await requestPublicConfig(appId, httpClient)
         } catch (error) {
-          serError(error)
+          setError(error)
         }
       }
 
-    setPublicConfig(getPublicConfig(appId))
-  }, [appId, httpClient, serError])
+      setPublicConfig(getPublicConfig(appId))
+    }
+  }, [appId, httpClient, setError])
 
   useEffect(() => {
     initPublicConfig()
-  }, [initPublicConfig, forceUpdate])
+  }, [initPublicConfig])
 
   return useMemo(() => {
     if (publicConfig && config) {
@@ -195,15 +199,14 @@ export const requestGuardPageConfig = async (
 }
 
 export const useGuardPageConfig = (
-  appId: string,
-  forceUpdate: number,
+  appId?: string,
   httpClient?: GuardHttp,
   serError?: any
 ) => {
   const [pageConfig, setPageConfig] = useState<GuardPageConfig>()
 
   const initPublicConfig = useCallback(async () => {
-    if (httpClient && appId)
+    if (httpClient && appId) {
       if (!getPageConfig(appId)) {
         try {
           await requestGuardPageConfig(appId, httpClient)
@@ -212,12 +215,13 @@ export const useGuardPageConfig = (
         }
       }
 
-    setPageConfig(getPageConfig(appId))
+      setPageConfig(getPageConfig(appId))
+    }
   }, [appId, httpClient, serError])
 
   useEffect(() => {
     initPublicConfig()
-  }, [initPublicConfig, forceUpdate])
+  }, [initPublicConfig])
 
   if (pageConfig) {
     return pageConfig

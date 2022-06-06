@@ -40,6 +40,7 @@ export const usePostMessage = () => {
       apiCode,
       message: authingMessage,
       data: authingResData,
+      flowHandle,
     } = parsedMessage
 
     const res = responseIntercept({
@@ -48,6 +49,7 @@ export const usePostMessage = () => {
       data: authingResData,
       message: authingMessage,
       code: authingCode,
+      flowHandle,
     })
 
     return res

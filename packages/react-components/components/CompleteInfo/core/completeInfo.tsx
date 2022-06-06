@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Form, Input, Select, DatePicker } from 'antd'
+import { Form, Input, Select, DatePicker, message } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { UploadImage } from '../../AuthingGuard/Forms/UploadImage'
@@ -56,7 +56,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
     config?.internationalSmsConfig?.defaultISOType || 'CN'
   )
 
-  const { get } = useGuardHttp()
+  const { get, post } = useGuardHttp()
 
   const { t } = useTranslation()
 
@@ -443,11 +443,13 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
 
   const [, onFinish] = useAsyncFn(
     async (values: any) => {
-      // submitButtonRef.current?.onSpin(true)
-
-      const fieldValues = Object.keys(values)
+      const fieldKeys = Object.keys(values)
         // 先过滤掉 为空的字段
         .filter((key) => values[key] !== undefined && values[key] !== '')
+
+      submitButtonRef.current?.onSpin(true)
+
+      const fieldValues = fieldKeys
         // 再过滤掉 两个验证码的字段
         .filter((key) => !['phoneCode', 'emailCode'].includes(key))
         .map((key) => {
@@ -477,7 +479,61 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           if (key === 'email') return { ...baseData, code: values.emailCode }
           return baseData
         })
+
       try {
+        // 对特殊字段提前进行 precheck 不然直接调用注册接口失败也会导致上一步验证码失效
+        // 用户名 check
+        if (fieldKeys.includes('username')) {
+          const { data: checkResult, code: checkCode } = await get(
+            '/api/v2/users/is-user-exists',
+            {
+              username: values.username,
+            }
+          )
+          // checkResult 为 true 时 代表用户名已存在 直接报message 并且不调用注册接口
+          if (checkCode === 200 && checkResult) {
+            message.error(t('common.userNameIsExists'))
+            return
+          }
+        }
+        // 手机验证码check
+        if (fieldKeys.includes('phone')) {
+          const options: any = {
+            phone: values.phone,
+            phoneCode: values.phoneCode,
+          }
+          if (isInternationSms) {
+            const { countryCode } = parsePhone(
+              isInternationSms,
+              values.phone,
+              areaCode
+            )
+            options.phoneCountryCode = countryCode
+          }
+          const {
+            statusCode: checkCode,
+            data: { valid, message: checkMessage },
+          } = await post('/api/v2/sms/preCheckCode', options)
+          if (checkCode !== 200 || !valid) {
+            message.error(checkMessage)
+            return
+          }
+        }
+        // 邮箱验证码check
+        if (fieldKeys.includes('email')) {
+          const {
+            statusCode: checkCode,
+            data: { valid, message: checkMessage },
+          } = await post('/api/v2/email/preCheckCode', {
+            email: values.email,
+            emailCode: values.emailCode,
+          })
+          if (checkCode !== 200 || !valid) {
+            message.error(checkMessage)
+            return
+          }
+        }
+
         await businessRequest?.({ fieldValues })
       } catch (error) {
         // TODO

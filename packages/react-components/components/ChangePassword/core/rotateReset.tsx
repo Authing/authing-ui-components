@@ -76,7 +76,7 @@ export const RotateReset = (props: RotateResetProps) => {
           oldPassword: oldPassword,
         })
         props.onReset({ code: 200, data: res })
-      } catch (error) {
+      } catch (error: any) {
         message.error(error.message)
         submitButtonRef?.current?.onError()
       } finally {

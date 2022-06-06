@@ -75,3 +75,69 @@ export const guardEventsHijacking = (
     ...newEvents,
   }
 }
+
+export const GuardEventsCamelToKebabMapping = {
+  onLoad: 'load',
+  onLoadError: 'load-error',
+  onLogin: 'login',
+  onBeforeLogin: 'before-login',
+  onLoginError: 'login-error',
+  onRegister: 'register',
+  onBeforeRegister: 'before-register',
+  onRegisterError: 'register-error',
+  onPwdEmailSend: 'pwd-email-send',
+  onPwdEmailSendError: 'pwd-email-send-error',
+  onPwdPhoneSend: 'pwd-phone-send',
+  onPwdPhoneSendError: 'pwd-phone-send-error',
+  onPwdReset: 'pwd-reset',
+  onPwdResetError: 'pwd-reset-error',
+  onClose: 'close',
+  onLoginTabChange: 'login-tab-change',
+  onRegisterTabChange: 'register-tab-change',
+  onRegisterInfoCompleted: 'register-info-completed',
+  onRegisterInfoCompletedError: 'register-info-completed-error',
+  onLangChange: 'lang-change',
+} as const
+
+export interface GuardEventsKebabToCamelType {
+  // 加载完成，userPool 配置和应用配置（如果有 appId）加载完成
+  load: GuardEvents['onLoad']
+  // 加载失败
+  'load-error': GuardEvents['onLoadError']
+  // 登录前，即表单校验完成，请求接口前
+  'before-login': GuardEvents['onBeforeLogin']
+  // 用户登录成功
+  login: GuardEvents['onLogin']
+  // 用户登录失败
+  'login-error': GuardEvents['onLoginError']
+  // 注册前，即表单校验完成，请求接口前
+  'before-register': GuardEvents['onBeforeRegister']
+  // 注册成功
+  register: GuardEvents['onRegister']
+  // 注册失败
+  'register-error': GuardEvents['onRegisterError']
+  // 忘记密码邮件发送成功
+  'pwd-email-send': GuardEvents['onPwdEmailSend']
+  // 忘记密码邮件发送失败
+  'pwd-email-send-error': GuardEvents['onPwdEmailSendError']
+  // 忘记密码手机验证码发送成功
+  'pwd-phone-send': GuardEvents['onPwdPhoneSend']
+  // 忘记密码手机验证码发送失败
+  'pwd-phone-send-error': GuardEvents['onPwdPhoneSendError']
+  // 重置密码成功
+  'pwd-reset': GuardEvents['onPwdReset']
+  // 重置密码失败
+  'pwd-reset-error': GuardEvents['onPwdResetError']
+  // 表单关闭事件
+  close: GuardEvents['onClose']
+  // 登录的 tab 切换
+  'login-tab-change': GuardEvents['onLoginTabChange']
+  // 注册的 tab 切换
+  'register-tab-change': GuardEvents['onRegisterTabChange']
+  // 注册信息补充完毕
+  'register-info-completed': GuardEvents['onRegisterInfoCompleted']
+  // 注册信息补充失败
+  'register-info-completed-error': GuardEvents['onRegisterInfoCompletedError']
+  // 语言切换
+  'lang-change': GuardEvents['onLangChange']
+}

@@ -61,7 +61,8 @@ export const initGuardAuthClient = (
 
 export const useInitGuardAuthClient = (props: {
   config?: GuardLocalConfig
-  appId: string
+  appId?: string
+  authClient?: AuthenticationClient
   setError?: any
   tenantId?: string
 }) => {
@@ -71,11 +72,11 @@ export const useInitGuardAuthClient = (props: {
   const [client, setClient] = useState<AuthenticationClient>()
 
   useEffect(() => {
-    if (!config) return
+    if (!config || !appId) return
 
     const host = config.host
     const lang = config.lang
-    const propsAuthClient = config.authClient
+    const propsAuthClient = authClient
 
     // 优先检测 props 中的 authClient 对象
     if (propsAuthClient) {

@@ -1,6 +1,6 @@
 {
   "name": "@authing/react-ui-components",
-  "version": "3.1.15-rc.0",
+  "version": "3.1.18-rc.1",
   "private": false,
   "main": "lib/index.min.js",
   "typings": "lib/index.d.ts",
@@ -11,13 +11,14 @@
   ],
   "dependencies": {
     "antd": "^4.8.0",
-    "authing-js-sdk": "4.23.30-alpha.3",
+    "authing-js-sdk": "4.23.32",
     "fastclick": "^1.0.6",
     "global": "^4.4.0",
     "phone": "^3.1.12",
     "qs": "^6.9.4",
     "react-responsive": "^9.0.0-beta.5",
     "react-use": "^17.3.1",
+    "ua-parser-js": "^1.0.2",
     "wildcard": "^1.1.2"
   },
   "peerDependencies": {
@@ -32,13 +33,13 @@
     "clear:lib": "rm -rf lib",
     "log-tag": "node ./scripts/tag.js",
     "pretty-quick": "pretty-quick",
-    "prestart": "npm run log-tag && npm run version && npm run generate-examples",
-    "prebuild:lib": "npm run log-tag && npm run version",
+    "prestart": "npm run log-tag && npm run generate-version && npm run generate-examples",
+    "prebuild:lib": "npm run log-tag && npm run generate-version && npm run generate-examples",
     "prepare": "cd ../.. && husky install packages/react-components/.husky",
     "pub": "npm run build:lib && node ./scripts/publish.js",
     "start": "PORT=1221 node ./scripts/start.js",
     "vite": "vite",
-    "version": "node ./scripts/generate-version",
+    "generate-version": "node ./scripts/generate-version",
     "generate-examples": "node ./scripts/generate-examples.js"
   },
   "publishConfig": {
@@ -121,6 +122,7 @@
     ]
   },
   "devDependencies": {
+    "@types/ua-parser-js": "^0.7.36",
     "@ant-design/icons": "^4.2.2",
     "@babel/core": "^7.17.8",
     "@babel/plugin-proposal-class-properties": "^7.16.7",

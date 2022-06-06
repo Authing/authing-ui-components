@@ -8,7 +8,7 @@ import { SendCode } from './index'
 import { getGuardHttp } from '../_utils/guardHttp'
 import { EmailScene } from '../Type'
 export interface SendCodeByEmailProps extends InputProps {
-  data: string
+  data?: string
   form?: any
   onSendCodeBefore?: any // 点击的时候先做这个
   fieldName?: string

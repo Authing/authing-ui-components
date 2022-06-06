@@ -2,58 +2,69 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Guard as ReactAuthingGuard } from "@authing/react-ui-components";
 import {
-  User,
   GuardMode,
-  GuardScenes,
-  LoginMethods,
-  getAuthClient,
-  CommonMessage,
-  initAuthClient,
-  RegisterMethods,
-  GuardEventsHandler,
+  GuardEvents,
   AuthenticationClient,
-  GuardEventsHandlerKebab,
-  GuardEventsCamelToKebabMap,
-  AuthenticationClientOptions,
+  GuardEventsKebabToCamelType,
+  GuardEventsCamelToKebabMapping,
 } from "@authing/react-ui-components";
 import "@authing/react-ui-components/lib/index.min.css";
-import {
-  GuardComponentConfig,
-  GuardLocalConfig,
-} from "@authing/react-ui-components/components/Guard/config";
-import { GuardEvents } from "@authing/react-ui-components/components/Guard/event";
+import { GuardComponentConfig, GuardLocalConfig } from "@authing/react-ui-components/components/Guard/config";
 
-export type {
-  User,
-  CommonMessage,
-  GuardEventsHandler,
-  AuthenticationClient,
-  GuardEventsHandlerKebab,
-  AuthenticationClientOptions,
-};
+export interface NativeGuardProps {
+  appId?: string;
+  config?: Partial<GuardLocalConfig>;
+  tenantId?: string;
+  authClient?: AuthenticationClient;
+}
 
-export {
-  GuardMode,
-  GuardScenes,
-  LoginMethods,
-  getAuthClient,
-  initAuthClient,
-  RegisterMethods,
-  GuardEventsCamelToKebabMap,
-};
+export interface NativeGuardConstructor {
+  (
+    appId?: string | NativeGuardProps,
+    config?: Partial<GuardLocalConfig>,
+    tenantId?: string,
+    authClient?: AuthenticationClient
+  ): void;
+
+  (props: NativeGuardProps): void;
+}
 
 export type GuardEventListeners = {
-  [key in keyof GuardEventsHandlerKebab]: Exclude<
-    Required<GuardEventsHandlerKebab>[key],
-    undefined
-  >[];
+  [key in keyof GuardEventsKebabToCamelType]: Exclude<Required<GuardEventsKebabToCamelType>[key], undefined>[];
 };
 
 export class Guard {
+  private appId?: string;
+  private config?: Partial<GuardLocalConfig>;
+  private tenantId?: string;
+  private authClient?: AuthenticationClient;
+
+  private visible?: boolean;
+
+  constructor(props?: NativeGuardProps);
+  constructor(appId?: string, config?: Partial<GuardLocalConfig>, tenantId?: string, authClient?: AuthenticationClient);
+
   constructor(
-    private appId: string,
-    private config?: Partial<GuardLocalConfig>
+    appIdOrProps?: string | NativeGuardProps,
+    config?: Partial<GuardLocalConfig>,
+    tenantId?: string,
+    authClient?: AuthenticationClient
   ) {
+    if (appIdOrProps && typeof appIdOrProps !== "string") {
+      const { appId, config: configProps, tenantId: tenantIdProps, authClient: authClientProps } = appIdOrProps;
+      this.appId = appId;
+      this.config = configProps;
+      this.tenantId = tenantIdProps;
+      this.authClient = authClientProps;
+    } else {
+      this.appId = appIdOrProps;
+      this.config = config;
+      this.tenantId = tenantId;
+      this.authClient = authClient;
+    }
+
+    this.visible = this.config?.mode === GuardMode.Modal ? false : true;
+
     this.render();
   }
 
@@ -78,21 +89,14 @@ export class Guard {
     return selector;
   }
 
-  private visible = this.config?.mode === GuardMode.Modal ? false : true;
-
-  private eventListeners = Object.values(GuardEventsCamelToKebabMap).reduce(
-    (acc, evtName) => {
-      return Object.assign({}, acc, {
-        [evtName]: [],
-      });
-    },
-    {} as GuardEventListeners
-  );
+  private eventListeners = Object.values(GuardEventsCamelToKebabMapping).reduce((acc, evtName) => {
+    return Object.assign({}, acc, {
+      [evtName as string]: [],
+    });
+  }, {} as GuardEventListeners);
 
   private render(cb?: () => void) {
-    const evts: GuardEventsHandler = Object.entries(
-      GuardEventsCamelToKebabMap
-    ).reduce((acc, [reactEvt, nativeEvt]) => {
+    const evts: GuardEvents = Object.entries(GuardEventsCamelToKebabMapping).reduce((acc, [reactEvt, nativeEvt]) => {
       return Object.assign({}, acc, {
         [reactEvt]: (...rest: any) => {
           if (nativeEvt === "close") {
@@ -101,7 +105,7 @@ export class Guard {
 
           // TODO 返回最后一个执行函数的值，实际应该只让监听一次
           return (
-            this.eventListeners[nativeEvt]
+            (this.eventListeners as any)[nativeEvt as string]
               // @ts-ignore
               .map((item: any) => {
                 return item(...rest);
@@ -110,7 +114,7 @@ export class Guard {
           );
         },
       });
-    }, {} as GuardEventsHandler);
+    }, {} as GuardEvents);
 
     return ReactDOM.render(
       <ReactAuthingGuard
@@ -118,17 +122,16 @@ export class Guard {
         appId={this.appId}
         config={this.config as GuardComponentConfig}
         visible={this.visible}
+        tenantId={this.tenantId}
+        authClient={this.authClient}
       />,
       Guard.getGuardContainer(this.config?.target),
       cb
     );
   }
 
-  on<T extends keyof GuardEventsHandlerKebab>(
-    evt: T,
-    handler: Exclude<GuardEventsHandlerKebab[T], undefined>
-  ) {
-    this.eventListeners[evt]!.push(handler as any);
+  on<T extends keyof GuardEventsKebabToCamelType>(evt: T, handler: Exclude<GuardEventsKebabToCamelType[T], undefined>) {
+    (this.eventListeners as any)[evt]!.push(handler as any);
   }
 
   show() {

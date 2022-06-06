@@ -6,6 +6,7 @@ import {
   GuardFirstLoginPasswordResetView,
   GuardForcedPasswordResetView,
   GuardNoticePasswordResetView,
+  GuardRegisterCompletePasswordView,
 } from '../../ChangePassword'
 import {
   GuardLoginCompleteInfoView,
@@ -41,6 +42,7 @@ import {
 import { GuardIdentityBindingView } from '../../IdentityBinding'
 import { GuardIdentityBindingAskView } from '../../IdentityBindingAsk'
 import '../styles.less'
+import { updateFlowHandle } from '../../_utils/flowHandleStorage'
 import { GuardUnlockView } from '../../SelfUnlock'
 
 const PREFIX_CLS = 'authing-ant'
@@ -143,6 +145,10 @@ export const RenderModule: React.FC<{
     [GuardModuleType.LOGIN_COMPLETE_INFO]: (key: string) => (
       <GuardLoginCompleteInfoView key={key} />
     ),
+    // 注册密码补全
+    [GuardModuleType.REGISTER_PASSWORD]: (key: string) => (
+      <GuardRegisterCompletePasswordView key={key} />
+    ),
     // 自助解锁
     [GuardModuleType.SELF_UNLOCK]: (key: string) => (
       <GuardUnlockView key={key} />
@@ -158,6 +164,9 @@ export const RenderModule: React.FC<{
       code: CodeAction,
       res: AuthingResponse
     ): AuthingGuardResponse => {
+      // 判断有没有 flowHandle
+      res.flowHandle && updateFlowHandle(res.flowHandle)
+
       const codeActionMapping = {
         [CodeAction.CHANGE_MODULE]: () => {
           const nextModule = ChangeModuleApiCodeMapping[res.apiCode!]

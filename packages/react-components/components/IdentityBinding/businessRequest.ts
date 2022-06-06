@@ -1,5 +1,4 @@
-// import { useGuardIsAuthFlow } from '../_utils/context'
-import { getGuardHttp } from '../_utils/guardHttp'
+import { getGuardHttp, useGuardHttp } from '../_utils/guardHttp'
 export enum IdentityBindingBusinessAction {
   PhoneCode = 'phone-code',
   EmailCode = 'emial-code',
@@ -18,6 +17,14 @@ export interface PasswordParams {
   account: string
   password: string
 }
+
+export enum IdentityBindingAction {
+  CreateUser = 'create-federation-account',
+  BindByPassword = 'bind-identity-by-password',
+  BindByPhoneCode = 'bind-identity-by-phone-code',
+  BindByEmailCode = 'bind-identity-by-email-code',
+}
+
 export const PhoneCode = async (params: PhoneCodeParams) => {
   // const { phone, code, phoneCountryCode } = params
 
@@ -49,28 +56,17 @@ export const Password = async (params: PasswordParams) => {
 }
 
 export const useIdentityBindingBusinessRequest = () => {
-  //   const isFlow = useGuardIsAuthFlow()
+  const { authFlow } = useGuardHttp()
 
   const request = {
     [IdentityBindingBusinessAction.PhoneCode]: (params: PhoneCodeParams) => {
-      //   if (isFlow) {
-      //     return authFlow(MfaBusinessAction.VerifyEmail, content)
-      //   }
-      return PhoneCode(params)
+      return authFlow(IdentityBindingAction.BindByPhoneCode, params)
     },
     [IdentityBindingBusinessAction.EmailCode]: (params: EmailCodeParams) => {
-      //   if (isFlow) {
-      //     return authFlow(MfaBusinessAction.VerifySms, content)
-      //   }
-
-      return EmailCode(params)
+      return authFlow(IdentityBindingAction.BindByEmailCode, params)
     },
     [IdentityBindingBusinessAction.Password]: (params: PasswordParams) => {
-      //   if (isFlow) {
-      //     return authFlow(MfaBusinessAction.VerifyTotp, content)
-      //   }
-
-      return Password(params)
+      return authFlow(IdentityBindingAction.BindByPassword, params)
     },
   }
 

@@ -6,13 +6,14 @@ import { GuardModuleType } from '../Guard/module'
 import { FacePlugin } from '../_utils/facePlugin/interface'
 
 export interface IG2FCProps extends IG2Events {
-  appId: string
+  appId?: string
   tenantId?: string
   config?: Partial<IG2Config>
   visible?: boolean
   initData?: any
   appendConfig?: GuardAppendConfig
   facePlugin?: FacePlugin
+  authClient?: AuthenticationClient
 }
 
 export interface GuardAppendConfig {
@@ -89,6 +90,11 @@ export interface GuardPageConfig {
   }
 }
 
+export enum NewRegisterMethods {
+  Email = 'email',
+  Phone = 'phone',
+  EmailCode = 'emailCode',
+}
 export enum EmailScene {
   // 通知模版
   // - 欢迎邮件 WELCOME

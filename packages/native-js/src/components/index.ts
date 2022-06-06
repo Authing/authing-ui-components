@@ -1,7 +1,49 @@
 // export * from "./Guard";
 import { Guard } from "./Guard";
-import { GuardConfig, GuardLocalConfig } from "@authing/react-ui-components";
-export * from "./AuthingGuard";
+import { AuthingGuard } from "./AuthingGuard";
 
-export { Guard };
-export type { GuardConfig, GuardLocalConfig };
+import {
+  User,
+  GuardMode,
+  UserConfig,
+  GuardScenes,
+  LoginMethods,
+  getAuthClient,
+  CommonMessage,
+  initAuthClient,
+  RegisterMethods,
+  GuardEventsHandler,
+  AuthenticationClient,
+  GuardEventsHandlerKebab,
+  GuardEventsCamelToKebabMap,
+  GuardEvents,
+  GuardEventsKebabToCamelType,
+  GuardEventsCamelToKebabMapping,
+  GuardConfig,
+  GuardLocalConfig,
+} from "@authing/react-ui-components";
+
+export {
+  Guard,
+  AuthingGuard,
+  GuardMode,
+  GuardScenes,
+  LoginMethods,
+  getAuthClient,
+  initAuthClient,
+  RegisterMethods,
+  GuardEventsCamelToKebabMap,
+  GuardEventsCamelToKebabMapping,
+};
+export type {
+  GuardConfig,
+  GuardLocalConfig,
+  GuardEvents,
+  User,
+  UserConfig,
+  CommonMessage,
+  GuardEventsHandler,
+  AuthenticationClient,
+  GuardEventsHandlerKebab,
+  GuardEventsKebabToCamelType,
+};

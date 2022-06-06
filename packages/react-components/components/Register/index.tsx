@@ -1,13 +1,12 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { message as Message, Tabs } from 'antd'
-import { RegisterMethods } from 'authing-js-sdk'
+import { Tabs } from 'antd'
 import { ChangeLanguage } from '../ChangeLanguage'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
 import { RegisterWithEmail } from './core/WithEmail'
 import { RegisterWithPhone } from './core/WithPhone'
-
+import { RegisterWithEmailCode } from './core/WithEmailCode'
 import { tabSort } from '../_utils'
 import { i18n } from '../_utils/locales'
 import {
@@ -17,6 +16,7 @@ import {
   useGuardPublicConfig,
 } from '../_utils/context'
 import { VerifyLoginMethods } from '../AuthingGuard/api'
+import { NewRegisterMethods } from '../Type'
 
 export const GuardRegisterView: React.FC = () => {
   const events = useGuardEvents()
@@ -45,7 +45,7 @@ export const GuardRegisterView: React.FC = () => {
         changeModule?.(GuardModuleType.LOGIN, {})
       },
       onRegisterFailed: (code: number, data: any = {}, message?: string) => {
-        if (message) Message.error(message)
+        // if (message) Message.error(message)
 
         events?.onRegisterError?.({
           code,
@@ -75,17 +75,21 @@ export const GuardRegisterView: React.FC = () => {
   )
 
   const tabMapping: Record<
-    RegisterMethods,
+    NewRegisterMethods,
     { component: React.ReactNode; name: string }
   > = useMemo(
     () => ({
-      [RegisterMethods.Email]: {
+      [NewRegisterMethods.Email]: {
         component: <RegisterWithEmail {...registerContextProps} />,
         name: t('common.emailLabel'),
       },
-      [RegisterMethods.Phone]: {
+      [NewRegisterMethods.Phone]: {
         component: <RegisterWithPhone {...registerContextProps} />,
         name: t('common.phoneLabel'),
+      },
+      [NewRegisterMethods.EmailCode]: {
+        component: <RegisterWithEmailCode {...registerContextProps} />,
+        name: t('common.emailLabel'),
       },
     }),
     [registerContextProps, t]
@@ -93,11 +97,23 @@ export const GuardRegisterView: React.FC = () => {
 
   const renderTab = useMemo(() => {
     const { registerMethods, defaultRegisterMethod } = config
-    return tabSort(defaultRegisterMethod!, registerMethods!)?.map((method) => (
-      <Tabs.TabPane tab={tabMapping[method].name} key={method}>
-        {tabMapping[method].component}
-      </Tabs.TabPane>
-    ))
+
+    //  TODO 过滤不支持的方式
+    const supportRegisterMethods = registerMethods?.filter((method) =>
+      [
+        NewRegisterMethods.Email,
+        NewRegisterMethods.EmailCode,
+        NewRegisterMethods.Phone,
+      ].includes(method)
+    )
+
+    return tabSort(defaultRegisterMethod!, supportRegisterMethods!)?.map(
+      (method) => (
+        <Tabs.TabPane tab={tabMapping[method].name} key={method}>
+          {tabMapping[method].component}
+        </Tabs.TabPane>
+      )
+    )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config?.defaultRegisterMethod, tabMapping])
 
@@ -113,7 +129,7 @@ export const GuardRegisterView: React.FC = () => {
           <Tabs
             defaultActiveKey={config?.defaultRegisterMethod}
             onChange={(activeKey) => {
-              events?.onRegisterTabChange?.(activeKey as RegisterMethods)
+              events?.onRegisterTabChange?.(activeKey as NewRegisterMethods)
             }}
           >
             {renderTab}

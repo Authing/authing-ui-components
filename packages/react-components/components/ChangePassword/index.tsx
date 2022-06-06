@@ -8,6 +8,7 @@ import {
   useGuardInitData,
   useGuardModule,
 } from '../_utils/context'
+import { CompletePassword } from './core/completePassword'
 import { FirstLoginReset } from './core/firstLoginReset'
 import { RotateReset } from './core/rotateReset'
 
@@ -133,6 +134,21 @@ export const GuardNoticePasswordResetView: React.FC = () => {
       })}
     >
       {coreForm}
+    </GuardChangePassword>
+  )
+}
+
+export const GuardRegisterCompletePasswordView: React.FC = () => {
+  const { t } = useTranslation()
+
+  const config = useGuardFinallyConfig()
+
+  return (
+    <GuardChangePassword
+      title={`${t('common.welcome')} ${config.title}`}
+      explain={t('common.initPasswordText')}
+    >
+      <CompletePassword />
     </GuardChangePassword>
   )
 }

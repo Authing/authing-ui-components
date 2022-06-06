@@ -17,13 +17,16 @@
   }
   .switch-img {
     @media (any-hover: hover) {
-      &:hover {
-        .imgae-mask {
-          border-width: 0;
-          right: 50px;
-          top: 50px;
-        }
-      }
+      // &:hover {
+      //   .imgae-mask {
+      //     border-width: 0;
+      //     right: 50px;
+      //     top: 50px;
+      //   }
+      // }
+    }
+    & + div {
+      z-index: 0;
     }
   }
   .imgae-mask {
@@ -36,6 +39,7 @@
     right: 0;
     top: 0;
     transition: 0.2s all;
+    cursor: pointer;
   }
   .qrcode-switch-image {
     // width: 50px;

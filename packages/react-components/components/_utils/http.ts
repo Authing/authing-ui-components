@@ -14,6 +14,7 @@ export interface AuthingResponse<T = any> {
   data?: T
   messages?: string
   message?: string
+  flowHandle?: string
 }
 
 export interface AuthingGuardResponse<T = any> extends AuthingResponse<T> {
@@ -54,22 +55,27 @@ requestClient.get = async <T>(
   if (requestClient.tenantId !== '')
     headers[requestClient.tenantHeader] = requestClient.tenantId
 
-  const res = await Promise.race([
-    timeoutAction(controller),
-    fetch(
-      `${requestClient.baseUrl}${path}${qs.stringify(query, {
-        addQueryPrefix: true,
-      })}`,
-      {
-        ...init,
-        credentials: 'include',
-        headers,
-        signal,
-      }
-    ),
-  ])
-
-  return (res as Response).json()
+  try {
+    const res = await Promise.race([
+      timeoutAction(controller),
+      fetch(
+        `${requestClient.baseUrl}${path}${qs.stringify(query, {
+          addQueryPrefix: true,
+        })}`,
+        {
+          ...init,
+          credentials: 'include',
+          headers,
+          signal,
+        }
+      ),
+    ])
+    return (res as Response).json()
+  } catch (e) {
+    return Promise.resolve({
+      code: -2,
+    })
+  }
 }
 
 requestClient.post = async <T>(
@@ -91,20 +97,27 @@ requestClient.post = async <T>(
   if (requestClient.tenantId !== '')
     headers[requestClient.tenantHeader] = requestClient.tenantId
 
-  const res = await Promise.race([
-    timeoutAction(controller),
-    fetch(`${requestClient.baseUrl}${path}`, {
-      signal,
-      method: 'POST',
-      body: JSON.stringify(data),
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        ...config?.headers,
-        [requestClient.langHeader]: i18n.language,
-      },
-    }),
-  ])
+  try {
+    const res = await Promise.race([
+      timeoutAction(controller),
+      fetch(`${requestClient.baseUrl}${path}`, {
+        signal,
+        method: 'POST',
+        body: JSON.stringify(data),
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          ...config?.headers,
+          [requestClient.langHeader]: i18n.language,
+        },
+      }),
+    ])
+    return (res as Response).json()
+  } catch (e) {
+    return Promise.resolve({
+      code: -2,
+    })
+  }
 
   // const res = await fetch(`${requestClient.baseUrl}${path}`, {
   //   method: 'POST',
@@ -116,8 +129,6 @@ requestClient.post = async <T>(
   //     [requestClient.langHeader]: i18n.language,
   //   },
   // })
-
-  return (res as Response).json()
 }
 
 requestClient.postForm = async <T>(
