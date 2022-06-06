@@ -23,7 +23,7 @@
   "inputCurrPwd": "请输入当前密码",
   "newPwd": "新密码",
   "inputNewPwd": "请输入新密码",
-  "inputOldPwd": "输入原登录密码",
+  "inputOldPwd": "请输入原登录密码",
   "confrimPwd": "确认密码",
   "needSameWithNewPwd": "需要与新密码一致",
   "confirmModify": "确认修改",

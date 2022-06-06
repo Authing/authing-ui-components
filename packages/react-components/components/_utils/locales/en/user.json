@@ -83,5 +83,6 @@
   "resetpasswordText1": "Enter your registered phone number/email, enter the verification code received, and we will reset your password.",
   "pleaseDownloadAuthenticator": "Open Google Authenticator or Microsoft Authenticator on your phone and scan below QR code",
   "modifyPwdText": "Your password has been used continuously for more than {{number}} months, which may be risky. Please reset your password.",
-  "modifyNoticePwdText": "Your password has been used continuously for more than {{number}} months, It will expire soon, in order not to affect your use, please set a new password"
+  "modifyNoticePwdText": "Your password has been used continuously for more than {{number}} months, It will expire soon, in order not to affect your use, please set a new password",
+  "unlockTip": "If you encounter problems with unlocking, please click"
 }
