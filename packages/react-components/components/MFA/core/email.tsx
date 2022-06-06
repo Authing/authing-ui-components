@@ -40,7 +40,6 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
       const error = JSON.parse(e?.message)
       submitButtonRef.current.onError()
       Message.error(error.message)
-    } finally {
       submitButtonRef.current?.onSpin(false)
     }
   }
