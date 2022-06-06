@@ -69,12 +69,10 @@ export const GuardCompleteInfo: React.FC<{
               loading={skipLoading}
               onClick={() => onSkip()}
             >
-              {!skipLoading ? (
-                <>
-                  <IconFont type="authing-a-share-forward-line1" />
-                  <span>{t('common.skip')}</span>
-                </>
-              ) : null}
+              {!skipLoading && (
+                <IconFont type="authing-a-share-forward-line1" />
+              )}
+              <span>{t('common.skip')}</span>
             </Button>
           )}
         </div>
