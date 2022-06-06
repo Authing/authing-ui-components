@@ -9,7 +9,15 @@ import {
   HIDE_SOCIALS,
   HIDE_SOCIALS_SHOWIN_ENTERPRISE,
 } from '../../AuthingGuard/constants'
-import { isLarkBrowser, isSpecialBrowser, isWeChatBrowser } from '..'
+import {
+  isDingtalkBrowser,
+  isLarkBrowser,
+  isQQBrowser,
+  isQQBuiltInBrowser,
+  isSpecialBrowser,
+  isWeChatBrowser,
+  isWeWorkBuiltInBrowser,
+} from '..'
 import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
 import { GuardLocalConfig } from '../../Guard'
 import { getGuardWindow } from '../../Guard/core/useAppendConfig'
@@ -178,9 +186,7 @@ export const useMethod: (params: {
   publicConfig: ApplicationConfig
 }) => any = ({ config, publicConfig }) => {
   const noLoginMethods = !config?.loginMethods?.length
-
   let enterpriseConnectionObjs: ApplicationConfig['identityProviders']
-
   if (config.enterpriseConnections) {
     enterpriseConnectionObjs =
       publicConfig?.identityProviders?.filter?.((item) =>
@@ -221,10 +227,16 @@ export const useMethod: (params: {
       }
       return true
     })
+    // 特殊浏览器登录方式
     .filter((item) =>
       isWeChatBrowser()
         ? item.provider === SocialConnectionProvider.WECHATMP
         : item.provider !== SocialConnectionProvider.WECHATMP
+    )
+    .filter((item) =>
+      isDingtalkBrowser()
+        ? item.provider !== SocialConnectionProvider.WECHATPC
+        : true
     )
     .filter((item) => {
       if (isLarkBrowser()) {
@@ -232,6 +244,45 @@ export const useMethod: (params: {
           item.provider === SocialConnectionProvider.LARK_INTERNAL ||
           item.provider === SocialConnectionProvider.LARK_PUBLIC
         )
+      } else {
+        return true
+      }
+    })
+    .filter((item) => {
+      if (isDingtalkBrowser()) {
+        return ![
+          SocialConnectionProvider.APPLE,
+          SocialConnectionProvider.APPLE_WEB,
+          SocialConnectionProvider.ALIPAY,
+          SocialConnectionProvider.GOOGLE,
+        ].includes(item.provider)
+      } else {
+        return true
+      }
+    })
+    .filter((item) => {
+      if (isQQBrowser()) {
+        return (
+          ![
+            SocialConnectionProvider.APPLE,
+            SocialConnectionProvider.APPLE_WEB,
+            SocialConnectionProvider.GOOGLE,
+          ].includes(item.provider) && !item.provider.includes('wechat')
+        )
+      } else {
+        return true
+      }
+    })
+    .filter((item) => {
+      if (isQQBuiltInBrowser()) {
+        return ![SocialConnectionProvider.ALIPAY].includes(item.provider)
+      } else {
+        return true
+      }
+    })
+    .filter((item) => {
+      if (isWeWorkBuiltInBrowser()) {
+        return ![SocialConnectionProvider.WECHATMP].includes(item.provider)
       } else {
         return true
       }

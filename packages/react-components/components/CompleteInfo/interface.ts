@@ -107,7 +107,15 @@ export interface CompleteInfoInitData {
 
 export interface RegisterCompleteInfoInitData {
   content: any
-  businessRequestName: 'registerByEmail' | 'registerByPhoneCode'
+  businessRequestName:
+    | 'registerByEmail'
+    | 'registerByPhoneCode'
+    | 'registerByEmailCode'
+}
+
+export interface RegisterCompletePasswordInitData
+  extends RegisterCompleteInfoInitData {
+  isChangeComplete: boolean
 }
 export interface CompleteInfoRequest {
   fieldValues: {
@@ -120,4 +128,5 @@ export interface CompleteInfoRequest {
 export enum OmitCompleteInfo {
   'registerByEmail' = 'email',
   'registerByPhoneCode' = 'phone',
+  'registerByEmailCode' = 'email',
 }

@@ -335,6 +335,7 @@ export const GuardLoginView = () => {
                 {/* <div className="switch-text">{switchText}</div> */}
                 <Popover
                   placement="leftTop"
+                  visible={true}
                   content={switchText}
                   overlayClassName="switch-text"
                   getPopupContainer={(node: any) => {
@@ -593,11 +594,15 @@ export const GuardLoginView = () => {
                                 title:
                                   i18n.language === 'zh-CN'
                                     ? `${
-                                        isWeChatBrowser() ? '长按' : '扫码'
-                                      }关注微信公众号登录`
+                                        isWeChatBrowser()
+                                          ? '长按二维码登录'
+                                          : '使用 微信 扫码登录'
+                                      }`
                                     : `${
-                                        isWeChatBrowser() ? 'Press' : 'Scan'
-                                      } to follow and login`,
+                                        isWeChatBrowser()
+                                          ? 'Long press the QR code to log in'
+                                          : 'Use WeChat to scan and login'
+                                      } `,
                                 expired: t('login.qrcodeExpired'),
                               },
                             }}

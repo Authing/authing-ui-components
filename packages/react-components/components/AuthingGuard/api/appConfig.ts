@@ -14,6 +14,7 @@ import {
 import { i18n } from '../../_utils/locales'
 import { requestClient } from '../../_utils/http'
 import { PasswordStrength } from '../../_utils'
+import { NewRegisterMethods } from '../../Type'
 
 export enum ApplicationMfaType {
   SMS = 'SMS',
@@ -106,6 +107,7 @@ export interface ApplicationConfig {
   }
   // 登录框自定义 css 代码
   css: string
+  customLoading?: string
   name: string
   logo: string
   description?: string
@@ -115,6 +117,15 @@ export interface ApplicationConfig {
     list: string[]
     default: string
     title: { [x: string]: string }
+  }
+  registerTabsConfig: {
+    list: string[]
+    default: string
+    title: { [x: string]: string }
+    registerTypeConfig: {
+      emailRegisterType?: NewRegisterMethods[]
+      phoneRegisterType?: NewRegisterMethods[]
+    }
   }
 
   qrcodeTabsSettings: QrcodeTabsSettings

@@ -5,6 +5,7 @@ import { GuardBindTotpView } from '../../BindTotp'
 import {
   GuardFirstLoginPasswordResetView,
   GuardForcedPasswordResetView,
+  GuardRegisterCompletePasswordView,
 } from '../../ChangePassword'
 import {
   GuardLoginCompleteInfoView,
@@ -137,6 +138,10 @@ export const RenderModule: React.FC<{
     // 登录信息补全
     [GuardModuleType.LOGIN_COMPLETE_INFO]: (key: string) => (
       <GuardLoginCompleteInfoView key={key} />
+    ),
+    // 注册密码补全
+    [GuardModuleType.REGISTER_PASSWORD]: (key: string) => (
+      <GuardRegisterCompletePasswordView key={key} />
     ),
   }
 

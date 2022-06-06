@@ -197,9 +197,9 @@
   "downloadTotpAppAndroid": "Android 下载",
   "downloadTotpAppDocs": "请使用手机扫码下载验证器",
   "bindTotp": "绑定 OTP",
-  "checkEmail": "无法使用此邮箱，请选择其他邮箱",
-  "checkUserName": "无法使用此用户名，请选择其他用户名",
-  "checkPhone": "无法使用此手机号，请选择其他手机号",
+  "checkEmail": "该邮箱已存在",
+  "checkUserName": "该用户名已存在",
+  "checkPhone": "该手机号已存在",
   "loginFailCheck": "温馨提示：你的密码错误，还可以尝试 {{number}} 次",
   "useRecoveryCodetips": "登录成功后，我们将生成一个新的恢复代码。",
   "bindSuccess": "完成绑定",
@@ -265,5 +265,7 @@
   "internationPhoneMessage": "请输入所在区号合法的手机号",
   "areaCodePhone": "+区号 手机号",
   "timeoutAD": "请求超时，AD 配置错误",
-  "timeout": "请求超时，请稍后重试"
+  "timeout": "请求超时，请稍后重试",
+  "userNameIsExists": "该用户名已存在!",
+  "fetchError": "网络连接失败，请稍后再试"
 }

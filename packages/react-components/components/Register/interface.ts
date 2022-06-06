@@ -1,5 +1,10 @@
-import { RegisterMethods } from 'authing-js-sdk'
-import { IG2FCProps, IG2Config, getDefaultG2Config, IG2Events } from '../Type'
+import {
+  IG2FCProps,
+  IG2Config,
+  getDefaultG2Config,
+  IG2Events,
+  NewRegisterMethods,
+} from '../Type'
 import {
   AuthenticationClient,
   User,
@@ -10,8 +15,8 @@ import { Agreement } from '../AuthingGuard/api'
 
 export interface RegisterConfig extends IG2Config {
   disableRegister?: boolean
-  registerMethods?: RegisterMethods[]
-  defaultRegisterMethod?: RegisterMethods
+  registerMethods?: NewRegisterMethods[]
+  defaultRegisterMethod?: NewRegisterMethods
   publicKey?: string
   agreementEnabled?: boolean
   agreements?: Agreement[]
@@ -29,7 +34,7 @@ export interface RegisterEvents extends IG2Events {
   ) => boolean | Promise<boolean>
   onRegister?: (user: User, authClient: AuthenticationClient) => void
   onRegisterError?: (error: any) => void
-  onRegisterTabChange?: (activeTab: RegisterMethods) => void
+  onRegisterTabChange?: (activeTab: NewRegisterMethods) => void
 }
 
 export interface GuardRegisterProps extends IG2FCProps, RegisterEvents {

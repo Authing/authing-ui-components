@@ -7,12 +7,13 @@ import SubmitButton from '../../SubmitButton'
 import CustomFormItem from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
-import { EmailScene, SceneType } from 'authing-js-sdk'
+import { SceneType } from 'authing-js-sdk'
 import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
 import { FormItemIdentify } from '../../Login/core/withVerifyCode/FormItemIdentify'
 import { InputIdentify } from '../../Login/core/withVerifyCode/inputIdentify'
-import { parsePhone } from '../../_utils/hooks'
+import { parsePhone, useMediaSize } from '../../_utils/hooks'
+import { EmailScene } from '../../Type'
 export enum InputMethodMap {
   email = 'email-code',
   phone = 'phone-code',
@@ -30,6 +31,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
   let [codeMethod, setCodeMethod] = useState<'phone' | 'email'>('phone')
   let client = useGuardAuthClient()
   let submitButtonRef = useRef<any>(null)
+  const { isPhoneMedia } = useMediaSize()
 
   const verifyCodeLength = props.publicConfig.verifyCodeLength ?? 4
   // 是否开启了国际化短信功能
@@ -113,7 +115,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
                   style={{ color: '#878A95' }}
                 />
               }
-              scene={EmailScene.ResetPassword}
+              scene={EmailScene.RESET_PASSWORD_VERIFY_CODE}
               maxLength={verifyCodeLength}
               data={identify}
               onSendCodeBefore={async () => {
@@ -148,6 +150,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
             methods={['email-code', 'phone-code']}
             className="authing-g2-input"
             autoComplete="off"
+            autoFocus={!isPhoneMedia}
             size="large"
             value={identify}
             onChange={(e) => {

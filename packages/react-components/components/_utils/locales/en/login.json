@@ -101,5 +101,6 @@
   "hardwareSupport": "Hardware does not support",
   "checkPreferences": "Please check preferences",
   "qrcodeExpired": "Click to refresh",
-  "noLoginMethodsDesc": "The login registration method is not configured"
+  "noLoginMethodsDesc": "No login method configured",
+  "inputNewPwd": "Please enter a new password"
 }

@@ -11,6 +11,7 @@ interface SubmitButtonProps {
   text?: string
   className?: string
   onClick?: any
+  disabled?: boolean
 }
 const SubmitButton = (props: SubmitButtonProps, ref: any) => {
   let [spin, setSpin] = useState(false) // spin 状态需要手动设置关闭
@@ -50,6 +51,7 @@ const SubmitButton = (props: SubmitButtonProps, ref: any) => {
       type="primary"
       htmlType="submit"
       loading={spin}
+      disabled={props?.disabled || false}
       onClick={props.onClick ? props.onClick : () => {}}
       className={`authing-g2-submit-button ${propsCls} ${shakingCls}`}
     >

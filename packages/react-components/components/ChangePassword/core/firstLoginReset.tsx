@@ -13,6 +13,7 @@ import {
 } from '../../_utils/context'
 import { authFlow, ChangePasswordBusinessAction } from '../businessRequest'
 import { ApiCode } from '../../_utils/responseManagement/interface'
+import { useMediaSize } from '../../_utils/hooks'
 interface FirstLoginResetProps {
   onReset: any
 }
@@ -32,6 +33,8 @@ export const FirstLoginReset: React.FC<FirstLoginResetProps> = ({
   let client = useGuardAuthClient()
 
   const encrypt = client.options.encryptFunction
+
+  const { isPhoneMedia } = useMediaSize()
 
   let submitButtonRef = useRef<any>(null)
 
@@ -88,6 +91,7 @@ export const FirstLoginReset: React.FC<FirstLoginResetProps> = ({
           required={true}
         >
           <InputPassword
+            autoFocus={!isPhoneMedia}
             className="authing-g2-input"
             size="large"
             placeholder={t('login.inputPwd')}
