@@ -223,9 +223,11 @@ export const SelfUnlock = () => {
         >
           <SendCode />
         </Form.Item>
-        <CustomFormItem.Password
+        <Form.Item
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           name="password"
+          rules={[...fieldRequiredRule(t('common.password'))]}
         >
           <InputPassword
             className="authing-g2-input"
@@ -238,7 +240,7 @@ export const SelfUnlock = () => {
               />
             }
           />
-        </CustomFormItem.Password>
+        </Form.Item>
         <Form.Item className="authing-g2-input-form submit-form">
           <SubmitButton
             className="forget-password"
