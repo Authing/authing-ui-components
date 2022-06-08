@@ -47,11 +47,11 @@ export const GuardIdentityBindingAskView: React.FC = () => {
   }
 
   const [createLoading, createAccount] = useAsyncFn(async () => {
-    const { code, onGuardHandling, data } = await authFlow(
+    const { code, onGuardHandling, data, isFlowEnd } = await authFlow(
       IdentityBindingAction.CreateUser
     )
 
-    if (code === 200) {
+    if (isFlowEnd) {
       onCreate(data)
     } else {
       onCreateError(code, data)
