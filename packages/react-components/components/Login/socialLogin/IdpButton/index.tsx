@@ -7,6 +7,7 @@ import { getGuardWindow } from '../../../Guard/core/useAppendConfig'
 import { IconFont } from '../../../IconFont'
 import version from '../../../version/version'
 import { isSpecialBrowser, popupCenter } from '../../../_utils'
+import { useGuardTenantId } from '../../../_utils/context'
 
 const baseLoginPathMapping: Record<Protocol, string | null> = {
   [Protocol.OIDC]: '/connections/oidc/init',
@@ -21,12 +22,14 @@ export const IdpButton = (props: any) => {
   const { i, appId, appHost, isHost } = props
 
   const { t } = useTranslation()
+  const tenantId = useGuardTenantId()
 
   const renderBtn = useCallback(() => {
     const query: Record<string, any> = {
       from_guard: '1',
       app_id: appId,
       guard_version: `Guard@${version}`,
+      ...(tenantId && { tenant_id: tenantId }),
     }
 
     if (isHost) {
@@ -112,6 +115,6 @@ export const IdpButton = (props: any) => {
         </Button>
       )
     }
-  }, [appId, i, t, isHost, appHost])
+  }, [appId, i, t, isHost, appHost, tenantId])
   return renderBtn()
 }
