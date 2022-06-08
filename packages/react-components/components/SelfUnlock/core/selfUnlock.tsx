@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { Form } from 'antd'
 import { fieldRequiredRule, validate } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
-import CustomFormItem from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
 import { SceneType } from 'authing-js-sdk'
@@ -157,7 +156,7 @@ export const SelfUnlock = () => {
                   style={{ color: '#878A95' }}
                 />
               }
-              scene={EmailScene.RESET_PASSWORD_VERIFY_CODE}
+              scene={EmailScene.SELF_UNLOCKING_VERIFY_CODE}
               maxLength={verifyCodeLength}
               data={identify}
               onSendCodeBefore={async () => {
