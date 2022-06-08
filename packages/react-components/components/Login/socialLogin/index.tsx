@@ -93,7 +93,10 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       from_guard: '1',
       app_id: appId,
       guard_version: `Guard@${version}`,
-      tenant_id: tenantId,
+    }
+
+    if (tenantId) {
+      query.tenant_id = tenantId
     }
 
     if (config?.isHost) {
