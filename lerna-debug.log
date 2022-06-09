@@ -1,26 +1,303 @@
 0 silly argv {
 0 silly argv   _: [ 'version' ],
+0 silly argv   y: true,
+0 silly argv   yes: true,
 0 silly argv   lernaVersion: '3.22.1',
-0 silly argv   '$0': '/Users/dongly/authing-ui-components/node_modules/.bin/lerna'
+0 silly argv   '$0': '/Users/lucsun/Code/Authing/authing-ui-components/node_modules/.bin/lerna',
+0 silly argv   bump: 'patch'
 0 silly argv }
 1 notice cli v3.22.1
-2 verbose rootPath /Users/dongly/authing-ui-components
-3 info current version 2.4.4
+2 verbose rootPath /Users/lucsun/Code/Authing/authing-ui-components
+3 info current version 3.1.15
 4 silly isAnythingCommitted
 5 verbose isAnythingCommitted 1
 6 silly currentBranch
-7 verbose currentBranch develop
+7 verbose currentBranch master
 8 silly remoteBranchExists
 9 silly isBehindUpstream
-10 error Error: Command failed: git remote update
-10 error fatal: unable to access 'https://git.authing.co/authing-next/authing-ui-components.git/': Failed to connect to 127.0.0.1 port 1080: Connection refused
-10 error error: Could not fetch origin
-10 error
-10 error Fetching origin
-10 error
-10 error     at makeError (/Users/dongly/authing-ui-components/node_modules/execa/index.js:174:9)
-10 error     at Function.module.exports.sync (/Users/dongly/authing-ui-components/node_modules/execa/index.js:338:15)
-10 error     at Object.execSync (/Users/dongly/authing-ui-components/node_modules/@lerna/child-process/index.js:26:16)
-10 error     at updateRemote (/Users/dongly/authing-ui-components/node_modules/@lerna/version/lib/is-behind-upstream.js:26:16)
-10 error     at isBehindUpstream (/Users/dongly/authing-ui-components/node_modules/@lerna/version/lib/is-behind-upstream.js:11:3)
-10 error     at VersionCommand.initialize (/Users/dongly/authing-ui-components/node_modules/@lerna/version/index.js:154:9)
+10 silly isBehindUpstream master is behind origin/master by 0 commit(s) and ahead by 0
+11 silly hasTags
+12 verbose hasTags true
+13 silly git-describe.sync "v3.1.9-34-g31f0d83" => {"lastTagName":"v3.1.9","lastVersion":"v3.1.9","refCount":"34","sha":"31f0d83","isDirty":false}
+14 info Looking for changed packages since v3.1.9
+15 silly checking diff packages/angular-components
+16 silly found diff in packages/angular-components/package-lock.json
+16 silly found diff in packages/angular-components/package.json
+16 silly found diff in packages/angular-components/projects/ng-ui-components/package.json
+16 silly found diff in packages/angular-components/projects/ng-ui-components/src/lib/Guard/guard.component.ts
+16 silly found diff in packages/angular-components/projects/ng-ui-components/src/public-api.ts
+17 verbose filtered diff [
+17 verbose filtered diff   'packages/angular-components/package-lock.json',
+17 verbose filtered diff   'packages/angular-components/package.json',
+17 verbose filtered diff   'packages/angular-components/projects/ng-ui-components/package.json',
+17 verbose filtered diff   'packages/angular-components/projects/ng-ui-components/src/lib/Guard/guard.component.ts',
+17 verbose filtered diff   'packages/angular-components/projects/ng-ui-components/src/public-api.ts'
+17 verbose filtered diff ]
+18 silly checking diff packages/angular-components/projects/ng-ui-components
+19 silly found diff in packages/angular-components/projects/ng-ui-components/package.json
+19 silly found diff in packages/angular-components/projects/ng-ui-components/src/lib/Guard/guard.component.ts
+19 silly found diff in packages/angular-components/projects/ng-ui-components/src/public-api.ts
+20 verbose filtered diff [
+20 verbose filtered diff   'packages/angular-components/projects/ng-ui-components/package.json',
+20 verbose filtered diff   'packages/angular-components/projects/ng-ui-components/src/lib/Guard/guard.component.ts',
+20 verbose filtered diff   'packages/angular-components/projects/ng-ui-components/src/public-api.ts'
+20 verbose filtered diff ]
+21 silly checking diff packages/native-js
+22 silly found diff in packages/native-js/package.json
+22 silly found diff in packages/native-js/src/App.tsx
+22 silly found diff in packages/native-js/src/components/AuthingGuard/index.tsx
+22 silly found diff in packages/native-js/src/components/Guard/index.tsx
+22 silly found diff in packages/native-js/src/components/index.ts
+23 verbose filtered diff [
+23 verbose filtered diff   'packages/native-js/package.json',
+23 verbose filtered diff   'packages/native-js/src/App.tsx',
+23 verbose filtered diff   'packages/native-js/src/components/AuthingGuard/index.tsx',
+23 verbose filtered diff   'packages/native-js/src/components/Guard/index.tsx',
+23 verbose filtered diff   'packages/native-js/src/components/index.ts'
+23 verbose filtered diff ]
+24 silly checking diff packages/react-components
+25 silly found diff in packages/react-components/.vscode/settings.json
+25 silly found diff in packages/react-components/components/AuthClientProvider/AuthClientProvider.tsx
+25 silly found diff in packages/react-components/components/AuthClientProvider/context.tsx
+25 silly found diff in packages/react-components/components/AuthClientProvider/index.ts
+25 silly found diff in packages/react-components/components/AuthingGuard/Forms/SocialAndIdpLogin/index.tsx
+25 silly found diff in packages/react-components/components/AuthingGuard/GuardLayout/index.tsx
+25 silly found diff in packages/react-components/components/AuthingGuard/api/appConfig.ts
+25 silly found diff in packages/react-components/components/AuthingGuard/hooks/useScreenSize.tsx
+25 silly found diff in packages/react-components/components/BindTotp/core/securityCode.tsx
+25 silly found diff in packages/react-components/components/ChangePassword/core/completePassword.tsx
+25 silly found diff in packages/react-components/components/ChangePassword/core/firstLoginReset.tsx
+25 silly found diff in packages/react-components/components/ChangePassword/core/rotateReset.tsx
+25 silly found diff in packages/react-components/components/ChangePassword/index.tsx
+25 silly found diff in packages/react-components/components/CompleteInfo/businessRequest.ts
+25 silly found diff in packages/react-components/components/CompleteInfo/core/completeInfo.tsx
+25 silly found diff in packages/react-components/components/CompleteInfo/index.tsx
+25 silly found diff in packages/react-components/components/CompleteInfo/interface.ts
+25 silly found diff in packages/react-components/components/ForgetPassword/core/resetPassword.tsx
+25 silly found diff in packages/react-components/components/Guard/Guard.tsx
+25 silly found diff in packages/react-components/components/Guard/GuardModule/stateMachine.ts
+25 silly found diff in packages/react-components/components/Guard/authClient.ts
+25 silly found diff in packages/react-components/components/Guard/config.tsx
+25 silly found diff in packages/react-components/components/Guard/core/index.tsx
+25 silly found diff in packages/react-components/components/Guard/core/renderContext.tsx
+25 silly found diff in packages/react-components/components/Guard/core/renderModule.tsx
+25 silly found diff in packages/react-components/components/Guard/core/useAppendConfig.tsx
+25 silly found diff in packages/react-components/components/Guard/core/usePlugin.ts
+25 silly found diff in packages/react-components/components/Guard/event.ts
+25 silly found diff in packages/react-components/components/Guard/module.ts
+25 silly found diff in packages/react-components/components/Guard/styles.less
+25 silly found diff in packages/react-components/components/IconFont/iconfont.js
+25 silly found diff in packages/react-components/components/IconFont/iconfont.ts
+25 silly found diff in packages/react-components/components/IconFont/svg.js
+25 silly found diff in packages/react-components/components/IconFont/useGuardIconfont.ts
+25 silly found diff in packages/react-components/components/IdentityBinding/businessRequest.ts
+25 silly found diff in packages/react-components/components/IdentityBindingAsk/IdentityBindingAsk.tsx
+25 silly found diff in packages/react-components/components/Login/core/withAD.tsx
+25 silly found diff in packages/react-components/components/Login/core/withAppQrcode.tsx
+25 silly found diff in packages/react-components/components/Login/core/withLDAP.tsx
+25 silly found diff in packages/react-components/components/Login/core/withPassword/FormItemAccount.tsx
+25 silly found diff in packages/react-components/components/Login/core/withPassword/index.tsx
+25 silly found diff in packages/react-components/components/Login/core/withVerifyCode/FormItemIdentify.tsx
+25 silly found diff in packages/react-components/components/Login/core/withVerifyCode/index.tsx
+25 silly found diff in packages/react-components/components/Login/core/withWechatMiniQrcode.tsx
+25 silly found diff in packages/react-components/components/Login/core/withWechatmpQrcode.tsx
+25 silly found diff in packages/react-components/components/Login/index.tsx
+25 silly found diff in packages/react-components/components/Login/socialLogin/IdpButton/index.tsx
+25 silly found diff in packages/react-components/components/Login/socialLogin/index.tsx
+25 silly found diff in packages/react-components/components/Login/socialLogin/postMessage.ts
+25 silly found diff in packages/react-components/components/Login/socialLogin/style.less
+25 silly found diff in packages/react-components/components/Login/styles.less
+25 silly found diff in packages/react-components/components/MFA/core/email.tsx
+25 silly found diff in packages/react-components/components/MFA/core/face.tsx
+25 silly found diff in packages/react-components/components/MFA/core/face_deps.tsx
+25 silly found diff in packages/react-components/components/MFA/core/sms.tsx
+25 silly found diff in packages/react-components/components/MFA/core/totp.tsx
+25 silly found diff in packages/react-components/components/MFA/styles.less
+25 silly found diff in packages/react-components/components/Register/core/WithEmail.tsx
+25 silly found diff in packages/react-components/components/Register/core/WithEmailCode.tsx
+25 silly found diff in packages/react-components/components/Register/core/WithPhone.tsx
+25 silly found diff in packages/react-components/components/Register/index.tsx
+25 silly found diff in packages/react-components/components/Register/interface.ts
+25 silly found diff in packages/react-components/components/Register/utils.ts
+25 silly found diff in packages/react-components/components/SendCode/SendCodeByEmail.tsx
+25 silly found diff in packages/react-components/components/ShieldSpin/index.tsx
+25 silly found diff in packages/react-components/components/ShieldSpin/loading.svg
+25 silly found diff in packages/react-components/components/SingleComponent/SingleComponent.tsx
+25 silly found diff in packages/react-components/components/SubmitButton/index.tsx
+25 silly found diff in packages/react-components/components/Type/index.ts
+25 silly found diff in packages/react-components/components/ValidatorRules/ValidatorFormItem.tsx
+25 silly found diff in packages/react-components/components/ValidatorRules/index.ts
+25 silly found diff in packages/react-components/components/_utils/appendConfig.ts
+25 silly found diff in packages/react-components/components/_utils/clipboard.ts
+25 silly found diff in packages/react-components/components/_utils/config.ts
+25 silly found diff in packages/react-components/components/_utils/config/index.ts
+25 silly found diff in packages/react-components/components/_utils/context.tsx
+25 silly found diff in packages/react-components/components/_utils/corsVerification.ts
+25 silly found diff in packages/react-components/components/_utils/facePlugin/index.ts
+25 silly found diff in packages/react-components/components/_utils/facePlugin/interface.ts
+25 silly found diff in packages/react-components/components/_utils/flowHandleStorage.ts
+25 silly found diff in packages/react-components/components/_utils/guardDocument.ts
+25 silly found diff in packages/react-components/components/_utils/guardHttp.ts
+25 silly found diff in packages/react-components/components/_utils/guardPageConfig.ts
+25 silly found diff in packages/react-components/components/_utils/hooks/index.ts
+25 silly found diff in packages/react-components/components/_utils/http.ts
+25 silly found diff in packages/react-components/components/_utils/index.ts
+25 silly found diff in packages/react-components/components/_utils/initAppId.ts
+25 silly found diff in packages/react-components/components/_utils/locales/en/common.json
+25 silly found diff in packages/react-components/components/_utils/locales/en/login.json
+25 silly found diff in packages/react-components/components/_utils/locales/index.ts
+25 silly found diff in packages/react-components/components/_utils/locales/zh/common.json
+25 silly found diff in packages/react-components/components/_utils/locales/zh/login.json
+25 silly found diff in packages/react-components/components/_utils/popupCenter.ts
+25 silly found diff in packages/react-components/components/_utils/responseManagement/index.ts
+25 silly found diff in packages/react-components/components/index.ts
+25 silly found diff in packages/react-components/config/webpack.config.js
+25 silly found diff in packages/react-components/package.json
+26 verbose filtered diff [
+26 verbose filtered diff   'packages/react-components/.vscode/settings.json',
+26 verbose filtered diff   'packages/react-components/components/AuthClientProvider/AuthClientProvider.tsx',
+26 verbose filtered diff   'packages/react-components/components/AuthClientProvider/context.tsx',
+26 verbose filtered diff   'packages/react-components/components/AuthClientProvider/index.ts',
+26 verbose filtered diff   'packages/react-components/components/AuthingGuard/Forms/SocialAndIdpLogin/index.tsx',
+26 verbose filtered diff   'packages/react-components/components/AuthingGuard/GuardLayout/index.tsx',
+26 verbose filtered diff   'packages/react-components/components/AuthingGuard/api/appConfig.ts',
+26 verbose filtered diff   'packages/react-components/components/AuthingGuard/hooks/useScreenSize.tsx',
+26 verbose filtered diff   'packages/react-components/components/BindTotp/core/securityCode.tsx',
+26 verbose filtered diff   'packages/react-components/components/ChangePassword/core/completePassword.tsx',
+26 verbose filtered diff   'packages/react-components/components/ChangePassword/core/firstLoginReset.tsx',
+26 verbose filtered diff   'packages/react-components/components/ChangePassword/core/rotateReset.tsx',
+26 verbose filtered diff   'packages/react-components/components/ChangePassword/index.tsx',
+26 verbose filtered diff   'packages/react-components/components/CompleteInfo/businessRequest.ts',
+26 verbose filtered diff   'packages/react-components/components/CompleteInfo/core/completeInfo.tsx',
+26 verbose filtered diff   'packages/react-components/components/CompleteInfo/index.tsx',
+26 verbose filtered diff   'packages/react-components/components/CompleteInfo/interface.ts',
+26 verbose filtered diff   'packages/react-components/components/ForgetPassword/core/resetPassword.tsx',
+26 verbose filtered diff   'packages/react-components/components/Guard/Guard.tsx',
+26 verbose filtered diff   'packages/react-components/components/Guard/GuardModule/stateMachine.ts',
+26 verbose filtered diff   'packages/react-components/components/Guard/authClient.ts',
+26 verbose filtered diff   'packages/react-components/components/Guard/config.tsx',
+26 verbose filtered diff   'packages/react-components/components/Guard/core/index.tsx',
+26 verbose filtered diff   'packages/react-components/components/Guard/core/renderContext.tsx',
+26 verbose filtered diff   'packages/react-components/components/Guard/core/renderModule.tsx',
+26 verbose filtered diff   'packages/react-components/components/Guard/core/useAppendConfig.tsx',
+26 verbose filtered diff   'packages/react-components/components/Guard/core/usePlugin.ts',
+26 verbose filtered diff   'packages/react-components/components/Guard/event.ts',
+26 verbose filtered diff   'packages/react-components/components/Guard/module.ts',
+26 verbose filtered diff   'packages/react-components/components/Guard/styles.less',
+26 verbose filtered diff   'packages/react-components/components/IconFont/iconfont.js',
+26 verbose filtered diff   'packages/react-components/components/IconFont/iconfont.ts',
+26 verbose filtered diff   'packages/react-components/components/IconFont/svg.js',
+26 verbose filtered diff   'packages/react-components/components/IconFont/useGuardIconfont.ts',
+26 verbose filtered diff   'packages/react-components/components/IdentityBinding/businessRequest.ts',
+26 verbose filtered diff   'packages/react-components/components/IdentityBindingAsk/IdentityBindingAsk.tsx',
+26 verbose filtered diff   'packages/react-components/components/Login/core/withAD.tsx',
+26 verbose filtered diff   'packages/react-components/components/Login/core/withAppQrcode.tsx',
+26 verbose filtered diff   'packages/react-components/components/Login/core/withLDAP.tsx',
+26 verbose filtered diff   'packages/react-components/components/Login/core/withPassword/FormItemAccount.tsx',
+26 verbose filtered diff   'packages/react-components/components/Login/core/withPassword/index.tsx',
+26 verbose filtered diff   'packages/react-components/components/Login/core/withVerifyCode/FormItemIdentify.tsx',
+26 verbose filtered diff   'packages/react-components/components/Login/core/withVerifyCode/index.tsx',
+26 verbose filtered diff   'packages/react-components/components/Login/core/withWechatMiniQrcode.tsx',
+26 verbose filtered diff   'packages/react-components/components/Login/core/withWechatmpQrcode.tsx',
+26 verbose filtered diff   'packages/react-components/components/Login/index.tsx',
+26 verbose filtered diff   'packages/react-components/components/Login/socialLogin/IdpButton/index.tsx',
+26 verbose filtered diff   'packages/react-components/components/Login/socialLogin/index.tsx',
+26 verbose filtered diff   'packages/react-components/components/Login/socialLogin/postMessage.ts',
+26 verbose filtered diff   'packages/react-components/components/Login/socialLogin/style.less',
+26 verbose filtered diff   'packages/react-components/components/Login/styles.less',
+26 verbose filtered diff   'packages/react-components/components/MFA/core/email.tsx',
+26 verbose filtered diff   'packages/react-components/components/MFA/core/face.tsx',
+26 verbose filtered diff   'packages/react-components/components/MFA/core/face_deps.tsx',
+26 verbose filtered diff   'packages/react-components/components/MFA/core/sms.tsx',
+26 verbose filtered diff   'packages/react-components/components/MFA/core/totp.tsx',
+26 verbose filtered diff   'packages/react-components/components/MFA/styles.less',
+26 verbose filtered diff   'packages/react-components/components/Register/core/WithEmail.tsx',
+26 verbose filtered diff   'packages/react-components/components/Register/core/WithEmailCode.tsx',
+26 verbose filtered diff   'packages/react-components/components/Register/core/WithPhone.tsx',
+26 verbose filtered diff   'packages/react-components/components/Register/index.tsx',
+26 verbose filtered diff   'packages/react-components/components/Register/interface.ts',
+26 verbose filtered diff   'packages/react-components/components/Register/utils.ts',
+26 verbose filtered diff   'packages/react-components/components/SendCode/SendCodeByEmail.tsx',
+26 verbose filtered diff   'packages/react-components/components/ShieldSpin/index.tsx',
+26 verbose filtered diff   'packages/react-components/components/ShieldSpin/loading.svg',
+26 verbose filtered diff   'packages/react-components/components/SingleComponent/SingleComponent.tsx',
+26 verbose filtered diff   'packages/react-components/components/SubmitButton/index.tsx',
+26 verbose filtered diff   'packages/react-components/components/Type/index.ts',
+26 verbose filtered diff   'packages/react-components/components/ValidatorRules/ValidatorFormItem.tsx',
+26 verbose filtered diff   'packages/react-components/components/ValidatorRules/index.ts',
+26 verbose filtered diff   'packages/react-components/components/_utils/appendConfig.ts',
+26 verbose filtered diff   'packages/react-components/components/_utils/clipboard.ts',
+26 verbose filtered diff   'packages/react-components/components/_utils/config.ts',
+26 verbose filtered diff   'packages/react-components/components/_utils/config/index.ts',
+26 verbose filtered diff   'packages/react-components/components/_utils/context.tsx',
+26 verbose filtered diff   'packages/react-components/components/_utils/corsVerification.ts',
+26 verbose filtered diff   'packages/react-components/components/_utils/facePlugin/index.ts',
+26 verbose filtered diff   'packages/react-components/components/_utils/facePlugin/interface.ts',
+26 verbose filtered diff   'packages/react-components/components/_utils/flowHandleStorage.ts',
+26 verbose filtered diff   'packages/react-components/components/_utils/guardDocument.ts',
+26 verbose filtered diff   'packages/react-components/components/_utils/guardHttp.ts',
+26 verbose filtered diff   'packages/react-components/components/_utils/guardPageConfig.ts',
+26 verbose filtered diff   'packages/react-components/components/_utils/hooks/index.ts',
+26 verbose filtered diff   'packages/react-components/components/_utils/http.ts',
+26 verbose filtered diff   'packages/react-components/components/_utils/index.ts',
+26 verbose filtered diff   'packages/react-components/components/_utils/initAppId.ts',
+26 verbose filtered diff   'packages/react-components/components/_utils/locales/en/common.json',
+26 verbose filtered diff   'packages/react-components/components/_utils/locales/en/login.json',
+26 verbose filtered diff   'packages/react-components/components/_utils/locales/index.ts',
+26 verbose filtered diff   'packages/react-components/components/_utils/locales/zh/common.json',
+26 verbose filtered diff   'packages/react-components/components/_utils/locales/zh/login.json',
+26 verbose filtered diff   'packages/react-components/components/_utils/popupCenter.ts',
+26 verbose filtered diff   'packages/react-components/components/_utils/responseManagement/index.ts',
+26 verbose filtered diff   'packages/react-components/components/index.ts',
+26 verbose filtered diff   'packages/react-components/config/webpack.config.js',
+26 verbose filtered diff   'packages/react-components/package.json'
+26 verbose filtered diff ]
+27 silly checking diff packages/vue-components
+28 silly found diff in packages/vue-components/components/Guard/src/index.vue
+28 silly found diff in packages/vue-components/config/rollup.config.js
+28 silly found diff in packages/vue-components/package.json
+29 verbose filtered diff [
+29 verbose filtered diff   'packages/vue-components/components/Guard/src/index.vue',
+29 verbose filtered diff   'packages/vue-components/config/rollup.config.js',
+29 verbose filtered diff   'packages/vue-components/package.json'
+29 verbose filtered diff ]
+30 verbose updated angular-components
+31 verbose updated @authing/ng-ui-components
+32 verbose updated @authing/native-js-ui-components
+33 verbose updated @authing/react-ui-components
+34 verbose updated @authing/vue-ui-components
+35 verbose git-describe undefined => "v3.1.9-34-g31f0d83"
+36 silly git-describe parsed => {"lastTagName":"v3.1.9","lastVersion":"v3.1.9","refCount":"34","sha":"31f0d83","isDirty":false}
+37 info auto-confirmed
+38 info execute Skipping releases
+39 silly lifecycle No script for "preversion" in "root", continuing
+40 silly lifecycle No script for "preversion" in "@authing/react-ui-components", continuing
+41 silly lifecycle No script for "version" in "@authing/react-ui-components", continuing
+42 silly lifecycle No script for "preversion" in "@authing/native-js-ui-components", continuing
+43 silly lifecycle No script for "version" in "@authing/native-js-ui-components", continuing
+44 silly lifecycle No script for "preversion" in "angular-components", continuing
+45 silly lifecycle No script for "preversion" in "@authing/ng-ui-components", continuing
+46 silly lifecycle No script for "preversion" in "@authing/vue-ui-components", continuing
+47 silly lifecycle No script for "version" in "@authing/ng-ui-components", continuing
+48 silly lifecycle No script for "version" in "@authing/vue-ui-components", continuing
+49 silly lifecycle No script for "version" in "angular-components", continuing
+50 silly lifecycle No script for "version" in "root", continuing
+51 silly gitAdd [
+51 silly gitAdd   'packages/react-components/package.json',
+51 silly gitAdd   'packages/native-js/package.json',
+51 silly gitAdd   'packages/angular-components/projects/ng-ui-components/package.json',
+51 silly gitAdd   'packages/vue-components/package.json',
+51 silly gitAdd   'packages/angular-components/package.json',
+51 silly gitAdd   'packages/angular-components/package-lock.json',
+51 silly gitAdd   'lerna.json'
+51 silly gitAdd ]
+52 silly gitCommit v3.1.16
+53 verbose git [ 'commit', '-m', 'v3.1.16' ]
+54 silly gitTag v3.1.16
+55 verbose git [ 'tag', 'v3.1.16', '-m', 'v3.1.16' ]
+56 error Error: Command failed: git tag v3.1.16 -m v3.1.16
+56 error fatal: tag 'v3.1.16' already exists
+56 error
+56 error     at makeError (/Users/lucsun/Code/Authing/authing-ui-components/node_modules/execa/index.js:174:9)
+56 error     at /Users/lucsun/Code/Authing/authing-ui-components/node_modules/execa/index.js:278:16
+56 error     at processTicksAndRejections (internal/process/task_queues.js:95:5)

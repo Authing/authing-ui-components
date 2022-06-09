@@ -2,7 +2,7 @@ import { message } from 'antd'
 import { getHundreds } from '..'
 import { AuthingGuardResponse, AuthingResponse } from '../http'
 import { i18n } from '../locales'
-import { CodeAction } from './interface'
+import { ApiCode, CodeAction } from './interface'
 
 export const errorCodeInterceptor: (
   res: AuthingResponse<any>,
@@ -23,6 +23,8 @@ export const errorCodeInterceptor: (
 
   const statusCode = res.statusCode
 
+  const apiCode = res.apiCode
+
   // if ([6].includes(getHundreds(statusCode))) {
   //   callBack(CodeAction.RENDER_MESSAGE, res)
 
@@ -35,7 +37,11 @@ export const errorCodeInterceptor: (
 
   switch (getHundreds(statusCode)) {
     case 3:
-      return callBack(CodeAction.CHANGE_MODULE, res)
+      if (apiCode === ApiCode.FLOW_END) {
+        return callBack(CodeAction.FLOW_END, res)
+      } else {
+        return callBack(CodeAction.CHANGE_MODULE, res)
+      }
 
     case 4:
     case 6:

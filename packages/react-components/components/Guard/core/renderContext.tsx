@@ -289,6 +289,7 @@ export const RenderContext: React.FC<{
             publicConfig,
             httpClient,
             appId,
+            tenantId,
             events,
             ...moduleEvents,
             initData: moduleState.initData,
@@ -308,6 +309,7 @@ export const RenderContext: React.FC<{
       moduleEvents,
       moduleState,
       publicConfig,
+      tenantId,
     ]
   )
 
