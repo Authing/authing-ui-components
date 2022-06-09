@@ -90,11 +90,6 @@ export interface GuardPageConfig {
   }
 }
 
-export enum NewRegisterMethods {
-  Email = 'email',
-  Phone = 'phone',
-  EmailCode = 'emailCode',
-}
 export enum EmailScene {
   // 通知模版
   // - 欢迎邮件 WELCOME

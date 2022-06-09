@@ -8,9 +8,9 @@ import { ApplicationConfig, ComplateFiledsPlace } from '../AuthingGuard/api'
 import { GuardProps } from '../Guard'
 import isEqual from 'lodash/isEqual'
 import omit from 'lodash/omit'
-import { NewRegisterMethods } from '../Type'
 import { getGuardWindow } from '../Guard/core/useAppendConfig'
 import UAParser from 'ua-parser-js'
+import { RegisterMethods } from '../AuthingGuard/types'
 export * from './popupCenter'
 export * from './clipboard'
 
@@ -629,9 +629,9 @@ export const shoudGoToComplete = (
 }
 
 export const tabSort = (
-  defaultValue: NewRegisterMethods,
-  tabList: NewRegisterMethods[]
-): NewRegisterMethods[] => {
+  defaultValue: any,
+  tabList: RegisterMethods[]
+): RegisterMethods[] => {
   const index = tabList.indexOf(defaultValue)
   const element = tabList.splice(index, 1)[0]
   tabList.unshift(element)

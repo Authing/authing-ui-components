@@ -37,6 +37,7 @@ export enum LoginMethods {
 export enum RegisterMethods {
   Email = 'email',
   Phone = 'phone',
+  EmailCode = 'emailCode',
 }
 
 export enum GuardScenes {
