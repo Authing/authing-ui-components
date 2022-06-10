@@ -17,7 +17,7 @@ import { getGuardHttp } from '../../_utils/guardHttp'
 import { EmailScene } from '../../Type'
 import { useMediaSize } from '../../_utils/hooks'
 import { LoginMethods } from '../../AuthingGuard/types'
-
+// ! 废弃 🚒
 export interface RegisterWithEmailCodeProps {
   // onRegister: Function
   onRegisterSuccess: Function

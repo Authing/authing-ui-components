@@ -10,7 +10,7 @@ import isEqual from 'lodash/isEqual'
 import omit from 'lodash/omit'
 import { getGuardWindow } from '../Guard/core/useAppendConfig'
 import UAParser from 'ua-parser-js'
-import { RegisterMethods } from '../AuthingGuard/types'
+import { LoginMethods, RegisterMethods } from '../AuthingGuard/types'
 export * from './popupCenter'
 export * from './clipboard'
 
@@ -668,4 +668,82 @@ export const getDocumentNode = (node: Node & ParentNode): Document => {
   }
 
   return getDocumentNode(node.parentNode as Node & ParentNode)
+}
+
+// 1. 手机号验证码注册
+//  - 手机号验证码登录
+//  - 手机号密码登录
+//  - 非手机号的密码登录
+// 2. 邮箱验证码注册
+//  - 邮箱验证码登录
+//  - 邮箱密码登录
+//  - 非邮箱的密码登录
+// 3. 邮箱密码注册
+//  - 邮箱密码登录
+//  - 邮箱验证码登录
+//  - 非邮箱的密码登录
+
+export const getLoginTypePipe = (
+  publicConfig: ApplicationConfig,
+  registerMethod: RegisterMethods
+) => {
+  const loginTabs = publicConfig?.loginTabs.list // 支持的登录方式
+  const verifyCodeTabMethods =
+    publicConfig?.verifyCodeTabConfig?.enabledLoginMethods ?? [] // 支持的验证码登录方式
+  const passwordTabMethods =
+    publicConfig?.passwordTabConfig?.enabledLoginMethods ?? [] // 支持的密码登录方式
+  // 通过手机验证码注册成功
+  if (registerMethod === RegisterMethods.Phone) {
+    if (
+      loginTabs.includes(LoginMethods.PhoneCode) &&
+      verifyCodeTabMethods.includes('phone-code')
+    ) {
+      // situation 1  手机号验证码登录
+      return LoginMethods.PhoneCode
+    } else if (
+      loginTabs.includes(LoginMethods.Password) &&
+      passwordTabMethods.includes('phone-password')
+    ) {
+      // situation 2 手机号密码登录
+      return LoginMethods.Password
+    } else {
+      return undefined
+    }
+  }
+  // 通过邮箱验证码注册成功
+  if (registerMethod === RegisterMethods.EmailCode) {
+    if (
+      loginTabs.includes(LoginMethods.PhoneCode) &&
+      verifyCodeTabMethods.includes('email-code')
+    ) {
+      // situation 1  邮箱验证码登录
+      return LoginMethods.PhoneCode
+    } else if (
+      loginTabs.includes(LoginMethods.Password) &&
+      passwordTabMethods.includes('email-password')
+    ) {
+      // situation 2 邮箱密码登录
+      return LoginMethods.Password
+    } else {
+      return undefined
+    }
+  }
+  // 通过邮箱密码注册成功
+  if (registerMethod === RegisterMethods.Email) {
+    if (
+      loginTabs.includes(LoginMethods.Password) &&
+      passwordTabMethods.includes('email-password')
+    ) {
+      // situation 1  邮箱密码登录
+      return LoginMethods.PhoneCode
+    } else if (
+      loginTabs.includes(LoginMethods.PhoneCode) &&
+      verifyCodeTabMethods.includes('email-code')
+    ) {
+      // situation 2 邮箱验证码登录
+      return LoginMethods.Password
+    } else {
+      return undefined
+    }
+  }
 }

@@ -6,7 +6,7 @@ import { useGuardAuthClient } from '../Guard/authClient'
 import { GuardModuleType } from '../Guard/module'
 import { RegisterWithEmail } from './core/WithEmail'
 import { RegisterWithCode } from './core/WithCode'
-import { tabSort } from '../_utils'
+import { getLoginTypePipe, tabSort } from '../_utils'
 import { i18n } from '../_utils/locales'
 import {
   useGuardEvents,
@@ -43,17 +43,24 @@ export const GuardRegisterView: React.FC = () => {
 
     return verifyLoginMethods
   }, [config])
-
+  console.log(publicConfig)
   const registerContextProps = useMemo(
     () => ({
       onRegisterSuccess: (
         data: any = {},
-        initData: Partial<GuardLoginInitData> = {},
+        registerFrom: RegisterMethods, //以何种方式注册成功
         message?: string
       ) => {
-        debugger
+        const specifyDefaultLoginMethod = getLoginTypePipe(
+          publicConfig,
+          registerFrom
+        )
+        const loginInitData: GuardLoginInitData = {}
+        if (specifyDefaultLoginMethod) {
+          loginInitData.specifyDefaultLoginMethod = specifyDefaultLoginMethod
+        }
         events?.onRegister?.(data, authClient)
-        changeModule?.(GuardModuleType.LOGIN, initData)
+        changeModule?.(GuardModuleType.LOGIN, loginInitData)
       },
       onRegisterFailed: (code: number, data: any = {}, message?: string) => {
         // if (message) Message.error(message)

@@ -173,6 +173,11 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
           options,
         }
 
+        // onRegisterSuccess 注册成功后需要回到对应的登录页面
+        const onRegisterSuccessIntercept = (user: any) => {
+          onRegisterSuccess(user, RegisterMethods.Phone)
+        }
+
         if (needPassword) {
           // 判断验证码是否正确
           const {
@@ -189,6 +194,8 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
               businessRequestName: 'registerByPhoneCode',
               content: registerContent,
               isChangeComplete: isPhoneChangeComplete,
+              onRegisterSuccess: onRegisterSuccessIntercept,
+              onRegisterFailed,
             })
             return
           } else {
@@ -213,6 +220,8 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
               changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
                 businessRequestName: 'registerByPhoneCode',
                 content: registerContent,
+                onRegisterSuccess: onRegisterSuccessIntercept,
+                onRegisterFailed,
               })
               return
             } else {
@@ -235,7 +244,7 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
           )
 
           submitButtonRef.current?.onSpin(false)
-          onRegisterSuccess(user)
+          onRegisterSuccessIntercept(user)
         }
       } catch (error: any) {
         const { message: errorMessage, code, data } = error
@@ -326,6 +335,11 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
           },
         }
 
+        // onRegisterSuccess 注册成功后需要回到对应的登录页面
+        const onRegisterSuccessIntercept = (user: any) => {
+          onRegisterSuccess(user, RegisterMethods.EmailCode)
+        }
+
         if (needPassword) {
           // 判断验证码是否正确
           const {
@@ -341,6 +355,8 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
               businessRequestName: 'registerByEmailCode', //用于判断后续使用哪个注册api
               content: registerContent,
               isChangeComplete: isEmailChangeComplete,
+              onRegisterSuccess: onRegisterSuccessIntercept,
+              onRegisterFailed,
             })
             return
           } else {
@@ -363,6 +379,8 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
               changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
                 businessRequestName: 'registerByEmailCode', //用于判断后续使用哪个注册api
                 content: registerContent,
+                onRegisterSuccess: onRegisterSuccessIntercept,
+                onRegisterFailed,
               })
               return
             } else {
@@ -385,7 +403,7 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
           })
           submitButtonRef.current.onSpin(false)
           if (resCode === 200) {
-            onRegisterSuccess(data)
+            onRegisterSuccessIntercept(data)
           } else {
             onGuardHandling?.()
             onRegisterFailed(code, data, registerMessage)

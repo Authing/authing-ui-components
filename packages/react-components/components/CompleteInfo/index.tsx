@@ -17,7 +17,6 @@ import {
   useGuardFinallyConfig,
   useGuardHttpClient,
   useGuardInitData,
-  useGuardModule,
   useGuardPublicConfig,
 } from '../_utils/context'
 import {
@@ -26,7 +25,6 @@ import {
   registerRequest,
 } from './businessRequest'
 import { extendsFieldsToMetaData, fieldValuesToRegisterProfile } from './utils'
-import { GuardModuleType } from '../Guard'
 import { message } from 'antd'
 
 export const GuardCompleteInfo: React.FC<{
@@ -128,17 +126,11 @@ export const GuardLoginCompleteInfoView: React.FC = () => {
 export const GuardRegisterCompleteInfoView: React.FC = () => {
   const initData = useGuardInitData<RegisterCompleteInfoInitData>()
 
-  const { changeModule } = useGuardModule()
-
   const publicConfig = useGuardPublicConfig()
 
   const { get } = useGuardHttpClient()
 
   const config = useGuardFinallyConfig()
-
-  const events = useGuardEvents()
-
-  const authClient = useGuardAuthClient()
 
   const [selectOptions, setSelectOptions] = useState<
     Array<{
