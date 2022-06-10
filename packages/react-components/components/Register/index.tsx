@@ -48,16 +48,25 @@ export const GuardRegisterView: React.FC = () => {
     () => ({
       onRegisterSuccess: (
         data: any = {},
-        registerFrom: RegisterMethods, //以何种方式注册成功
+        registerInfo: {
+          registerFrom: RegisterMethods
+          account: string
+        }, //以何种方式注册成功
         message?: string
       ) => {
-        const specifyDefaultLoginMethod = getLoginTypePipe(
+        const initData = getLoginTypePipe(
           publicConfig,
-          registerFrom
+          registerInfo.registerFrom
         )
         const loginInitData: GuardLoginInitData = {}
-        if (specifyDefaultLoginMethod) {
-          loginInitData.specifyDefaultLoginMethod = specifyDefaultLoginMethod
+        if (initData) {
+          loginInitData.specifyDefaultLoginMethod =
+            initData.specifyDefaultLoginMethod
+
+          initData?.lockMethod &&
+            (loginInitData._lockMethod = initData.lockMethod)
+
+          loginInitData._firstItemInitialValue = registerInfo.account
         }
         events?.onRegister?.(data, authClient)
         changeModule?.(GuardModuleType.LOGIN, loginInitData)
@@ -155,6 +164,7 @@ export const GuardRegisterView: React.FC = () => {
         </div>
         <div className="g2-view-tabs">
           <Tabs
+            destroyInactiveTabPane={true}
             defaultActiveKey={config?.defaultRegisterMethod}
             onChange={(activeKey) => {
               events?.onRegisterTabChange?.(activeKey as RegisterMethods)

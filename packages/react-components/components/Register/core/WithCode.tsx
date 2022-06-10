@@ -175,7 +175,10 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
 
         // onRegisterSuccess 注册成功后需要回到对应的登录页面
         const onRegisterSuccessIntercept = (user: any) => {
-          onRegisterSuccess(user, RegisterMethods.Phone)
+          onRegisterSuccess(user, {
+            regitserFrom: RegisterMethods.Phone,
+            account: isInternationSms ? '' : phoneNumber,
+          })
         }
 
         if (needPassword) {
@@ -337,7 +340,10 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
 
         // onRegisterSuccess 注册成功后需要回到对应的登录页面
         const onRegisterSuccessIntercept = (user: any) => {
-          onRegisterSuccess(user, RegisterMethods.EmailCode)
+          onRegisterSuccess(user, {
+            registerFrom: RegisterMethods.EmailCode,
+            account: email,
+          })
         }
 
         if (needPassword) {

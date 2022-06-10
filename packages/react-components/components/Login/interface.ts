@@ -57,6 +57,8 @@ export interface GuardLoginViewProps extends GuardLoginProps, IG2FCViewProps {
 
 export interface GuardLoginInitData {
   specifyDefaultLoginMethod?: LoginMethods //指定登录页默认登录方式
+  _firstItemInitialValue?: string //第一个输入框的回填值
+  _lockMethod?: string //锁定登录方式
 }
 
 export const getDefaultLoginConfig = (): LoginConfig => ({

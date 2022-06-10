@@ -108,7 +108,10 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
 
         // onRegisterSuccess 注册成功后需要回到对应的登录页面
         const onRegisterSuccessIntercept = (user: any) => {
-          onRegisterSuccess(user, RegisterMethods.Email)
+          onRegisterSuccess(user, {
+            registerFrom: RegisterMethods.Email,
+            account: email,
+          })
         }
         // 看看是否要跳转到 信息补全
         if (isChangeComplete) {

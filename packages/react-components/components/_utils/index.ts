@@ -699,13 +699,16 @@ export const getLoginTypePipe = (
       verifyCodeTabMethods.includes('phone-code')
     ) {
       // situation 1  手机号验证码登录
-      return LoginMethods.PhoneCode
+      return {
+        specifyDefaultLoginMethod: LoginMethods.PhoneCode,
+        lockMethod: 'phone-code',
+      }
     } else if (
       loginTabs.includes(LoginMethods.Password) &&
       passwordTabMethods.includes('phone-password')
     ) {
       // situation 2 手机号密码登录
-      return LoginMethods.Password
+      return { specifyDefaultLoginMethod: LoginMethods.Password }
     } else {
       return undefined
     }
@@ -717,13 +720,16 @@ export const getLoginTypePipe = (
       verifyCodeTabMethods.includes('email-code')
     ) {
       // situation 1  邮箱验证码登录
-      return LoginMethods.PhoneCode
+      return {
+        specifyDefaultLoginMethod: LoginMethods.PhoneCode,
+        lockMethod: 'email-code',
+      }
     } else if (
       loginTabs.includes(LoginMethods.Password) &&
       passwordTabMethods.includes('email-password')
     ) {
       // situation 2 邮箱密码登录
-      return LoginMethods.Password
+      return { specifyDefaultLoginMethod: LoginMethods.Password }
     } else {
       return undefined
     }
@@ -735,13 +741,16 @@ export const getLoginTypePipe = (
       passwordTabMethods.includes('email-password')
     ) {
       // situation 1  邮箱密码登录
-      return LoginMethods.PhoneCode
+      return { specifyDefaultLoginMethod: LoginMethods.Password }
     } else if (
       loginTabs.includes(LoginMethods.PhoneCode) &&
       verifyCodeTabMethods.includes('email-code')
     ) {
       // situation 2 邮箱验证码登录
-      return LoginMethods.Password
+      return {
+        specifyDefaultLoginMethod: LoginMethods.PhoneCode,
+        lockMethod: 'email-code',
+      }
     } else {
       return undefined
     }

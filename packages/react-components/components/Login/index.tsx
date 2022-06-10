@@ -390,6 +390,7 @@ export const GuardLoginView = () => {
               <div className={inputNone}>
                 <div className={`g2-view-tabs`}>
                   <Tabs
+                    destroyInactiveTabPane={true}
                     onChange={(k: any) => {
                       setLoginWay(k)
                       message.destroy()
