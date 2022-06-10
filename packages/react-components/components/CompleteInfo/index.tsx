@@ -194,25 +194,29 @@ export const GuardRegisterCompleteInfoView: React.FC = () => {
       // sdk 还没有这个接口 后续添加后 可以已 sdk 的逻辑执行
       if (initData.businessRequestName === 'registerByEmailCode') {
         if (user.code === 200) {
-          events?.onRegister?.(user.data, authClient)
-          changeModule?.(GuardModuleType.LOGIN)
+          initData.onRegisterSuccess(user.data)
+          // events?.onRegister?.(user.data, authClient)
+          // changeModule?.(GuardModuleType.LOGIN)
         } else {
           user?.onGuardHandling?.()
           const { code, message: errorMessage, data } = user
-          events?.onRegisterError?.({ code, data, message: errorMessage })
+          initData.onRegisterFailed(code, data, errorMessage)
+          // events?.onRegisterError?.({ code, data, message: errorMessage })
           // TODO 后续sdk的验证码逻辑改完后
         }
         return
       }
       if (user) {
-        events?.onRegister?.(user, authClient)
-        changeModule?.(GuardModuleType.LOGIN)
+        // events?.onRegister?.(user, authClient)
+        // changeModule?.(GuardModuleType.LOGIN)
+        initData.onRegisterSuccess(user.data)
       }
     } catch (error: any) {
       // TODO 后续sdk的验证码逻辑改完后·
       const { code, message: errorMessage, data } = error
       message.error(errorMessage)
-      events?.onRegisterError?.({ code, data, message: errorMessage })
+      // events?.onRegisterError?.({ code, data, message: errorMessage })
+      initData.onRegisterFailed(code, data, errorMessage)
     }
   }
 

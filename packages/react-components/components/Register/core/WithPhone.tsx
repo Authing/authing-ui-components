@@ -132,6 +132,8 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
               businessRequestName: 'registerByPhoneCode',
               content: registerContent,
               isChangeComplete: isChangeComplete,
+              onRegisterSuccess,
+              onRegisterFailed,
             })
             return
           } else {
@@ -156,6 +158,8 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
               changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
                 businessRequestName: 'registerByPhoneCode',
                 content: registerContent,
+                onRegisterSuccess,
+                onRegisterFailed,
               })
               return
             } else {

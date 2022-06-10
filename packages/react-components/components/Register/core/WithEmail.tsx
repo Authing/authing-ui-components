@@ -112,6 +112,8 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
             businessRequestName: 'registerByEmail',
             content: registerContent,
+            onRegisterSuccess,
+            onRegisterFailed,
           })
 
           return
@@ -130,9 +132,10 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           specifyDefaultLoginMethod: LoginMethods.Password,
         })
       } catch (error: any) {
-        const { code, data, message } = error
+        const { message: errorMessage, code, data } = error
         submitButtonRef.current.onError()
-        onRegisterFailed(code, data, message)
+        message.error(errorMessage)
+        onRegisterFailed(code, data, errorMessage)
       } finally {
         submitButtonRef.current?.onSpin(false)
       }

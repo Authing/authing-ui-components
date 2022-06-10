@@ -136,6 +136,8 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
               businessRequestName: 'registerByEmailCode', //用于判断后续使用哪个注册api
               content: registerContent,
               isChangeComplete: isChangeComplete,
+              onRegisterSuccess,
+              onRegisterFailed,
             })
             return
           } else {
@@ -158,6 +160,8 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
               changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
                 businessRequestName: 'registerByEmailCode', //用于判断后续使用哪个注册api
                 content: registerContent,
+                onRegisterSuccess,
+                onRegisterFailed,
               })
               return
             } else {

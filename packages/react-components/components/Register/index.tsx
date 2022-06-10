@@ -46,6 +46,7 @@ export const GuardRegisterView: React.FC = () => {
         initData: Partial<GuardLoginInitData> = {},
         message?: string
       ) => {
+        debugger
         events?.onRegister?.(data, authClient)
         changeModule?.(GuardModuleType.LOGIN, initData)
       },
