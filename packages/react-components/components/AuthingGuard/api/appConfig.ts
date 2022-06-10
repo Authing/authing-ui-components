@@ -2,6 +2,7 @@ import {
   Lang,
   LoginMethods,
   Protocol,
+  RegisterMethods,
 } from '../../../components/AuthingGuard/types'
 import {
   IAzureAdConnectionConfig,
@@ -14,7 +15,6 @@ import {
 import { i18n } from '../../_utils/locales'
 import { requestClient } from '../../_utils/http'
 import { PasswordStrength } from '../../_utils'
-import { NewRegisterMethods } from '../../Type'
 
 export enum ApplicationMfaType {
   SMS = 'SMS',
@@ -123,8 +123,8 @@ export interface ApplicationConfig {
     default: string
     title: { [x: string]: string }
     registerTypeConfig: {
-      emailRegisterType?: NewRegisterMethods[]
-      phoneRegisterType?: NewRegisterMethods[]
+      emailRegisterType?: RegisterMethods[]
+      phoneRegisterType?: RegisterMethods[]
     }
   }
 
