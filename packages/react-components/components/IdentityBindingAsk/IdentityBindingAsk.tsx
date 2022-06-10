@@ -6,6 +6,7 @@ import { GuardModuleType } from '..'
 import { BackLogin } from '../Back'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { IconFont } from '../IconFont'
+import { IdentityBindingAction } from '../IdentityBinding/businessRequest'
 import {
   useGuardEvents,
   useGuardInitData,
@@ -22,7 +23,7 @@ export const GuardIdentityBindingAskView: React.FC = () => {
 
   const { t } = useTranslation()
 
-  const { post } = useGuardHttp()
+  const { authFlow } = useGuardHttp()
 
   const authClient = useGuardAuthClient()
 
@@ -46,11 +47,11 @@ export const GuardIdentityBindingAskView: React.FC = () => {
   }
 
   const [createLoading, createAccount] = useAsyncFn(async () => {
-    const url = '/interaction/federation/binding/register'
+    const { code, onGuardHandling, data, isFlowEnd } = await authFlow(
+      IdentityBindingAction.CreateUser
+    )
 
-    const { code, onGuardHandling, data } = await post(url, {})
-
-    if (code === 200) {
+    if (isFlowEnd) {
       onCreate(data)
     } else {
       onCreateError(code, data)

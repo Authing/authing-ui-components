@@ -102,11 +102,23 @@ export const GuardRegisterView: React.FC = () => {
 
   const renderTab = useMemo(() => {
     const { registerMethods, defaultRegisterMethod } = config
-    return tabSort(defaultRegisterMethod!, registerMethods!)?.map((method) => (
-      <Tabs.TabPane tab={tabMapping[method].name} key={method}>
-        {tabMapping[method].component}
-      </Tabs.TabPane>
-    ))
+
+    //  TODO 过滤不支持的方式
+    const supportRegisterMethods = registerMethods?.filter((method) =>
+      [
+        NewRegisterMethods.Email,
+        NewRegisterMethods.EmailCode,
+        NewRegisterMethods.Phone,
+      ].includes(method)
+    )
+
+    return tabSort(defaultRegisterMethod!, supportRegisterMethods!)?.map(
+      (method) => (
+        <Tabs.TabPane tab={tabMapping[method].name} key={method}>
+          {tabMapping[method].component}
+        </Tabs.TabPane>
+      )
+    )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config?.defaultRegisterMethod, tabMapping])
 

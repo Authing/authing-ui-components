@@ -96,12 +96,10 @@ const mergedPublicConfig = (
       publicConfig.ssoPageComponentDisplay.autoRegisterThenLoginHintInfo,
     registerMethods:
       config.registerMethods ??
-      washRegisterMethods(publicConfig.registerTabsConfig).registerMethods,
-    // 默认注册方式
+      (publicConfig.registerTabs?.list as NewRegisterMethods[]),
     defaultRegisterMethod:
       config.defaultRegisterMethod ??
-      (washRegisterMethods(publicConfig.registerTabsConfig)
-        .defaultRegisterMethod as NewRegisterMethods),
+      (publicConfig.registerTabs.default as NewRegisterMethods),
     // 禁止注册
     disableRegister: !!(
       config.disableRegister ??
@@ -116,38 +114,6 @@ const mergedPublicConfig = (
   }
 
   return mergedPublicConfig
-}
-
-// 注册方式组合
-const washRegisterMethods = (
-  registerTabsConfig: ApplicationConfig['registerTabsConfig']
-) => {
-  let {
-    default: defaultRegisterMethod, //默认注册方式是list子集 但支持渲染的注册方式是由list+registerTypeConfig组合的方式(为了后续扩展) 组合出的注册方式是list的父集
-    list,
-    registerTypeConfig: {
-      emailRegisterType = [NewRegisterMethods.Email],
-      phoneRegisterType = [NewRegisterMethods.Phone],
-    },
-  } = registerTabsConfig
-  let registerMethods: NewRegisterMethods[] = []
-  if (list.length > 0) {
-    // 开启邮箱注册
-    if (list.includes('email')) {
-      registerMethods.push(...emailRegisterType)
-    }
-    // 开启手机号注册
-    if (list.includes('phone')) {
-      registerMethods.push(...phoneRegisterType)
-    }
-  }
-  //默认注册方式
-  defaultRegisterMethod =
-    registerMethods.find((item: string) =>
-      item.includes(defaultRegisterMethod)
-    ) || defaultRegisterMethod
-
-  return { registerMethods, defaultRegisterMethod }
 }
 
 // host 拼接

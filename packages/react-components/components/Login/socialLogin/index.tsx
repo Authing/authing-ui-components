@@ -9,7 +9,7 @@ import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
 import { IconFont } from '../../IconFont'
 import './style.less'
 import { useMediaSize } from '../../_utils/hooks'
-import { useGuardPublicConfig } from '../../_utils/context'
+import { useGuardPublicConfig, useGuardTenantId } from '../../_utils/context'
 import { IdpButton } from './IdpButton'
 import { usePostMessage } from './postMessage'
 import { CodeAction } from '../../_utils/responseManagement/interface'
@@ -46,6 +46,8 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
   const { isPhoneMedia } = useMediaSize()
 
   const onMessage = usePostMessage()
+
+  const tenantId = useGuardTenantId()
 
   useEffect(() => {
     const onPostMessage = (evt: MessageEvent) => {
@@ -91,6 +93,10 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       from_guard: '1',
       app_id: appId,
       guard_version: `Guard@${version}`,
+    }
+
+    if (tenantId) {
+      query.tenant_id = tenantId
     }
 
     if (config?.isHost) {
