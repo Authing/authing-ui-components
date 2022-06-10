@@ -29,6 +29,7 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
             return Promise.reject(t('login.inputCorrectPhone'))
           }
         },
+
         validateTrigger: 'onBlur',
       })
     }
@@ -57,6 +58,10 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
         validateTrigger: 'onBlur',
         validator: async (_: any, value: any) => {
           //无区号就走 默认区号
+          if (!value) {
+            // 无值直接通过 取消item error 锁定
+            return Promise.resolve()
+          }
           if (
             value &&
             (phone(value, { country: areaCode }).isValid ||
@@ -64,12 +69,10 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
           ) {
             return Promise.resolve()
           }
-
           return Promise.reject(t('login.inputCorrectPhone'))
         },
       })
     }
-
     if (methods.length !== 1)
       return (
         <FormItem

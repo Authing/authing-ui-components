@@ -43,7 +43,7 @@ export const GuardRegisterView: React.FC = () => {
 
     return verifyLoginMethods
   }, [config])
-  console.log(publicConfig)
+
   const registerContextProps = useMemo(
     () => ({
       onRegisterSuccess: (
