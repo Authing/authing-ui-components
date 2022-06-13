@@ -155,7 +155,9 @@ export const GuardLoginView = () => {
   }, [publicConfig, t])
 
   const hiddenTab = useMemo(() => {
-    const scanLogins = ms ?? [].filter((method) => qrcodeWays.includes(method)) //取到扫码登录类型
+    const scanLogins = ms
+      ? ms.filter((method) => qrcodeWays.includes(method))
+      : [] //取到扫码登录类型
     if (scanLogins.length > 1) {
       // 如果有两个以上的code 类型
       return false
