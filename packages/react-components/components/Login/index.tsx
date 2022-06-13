@@ -575,8 +575,8 @@ export const GuardLoginView = () => {
                           tips: {
                             title:
                               i18n.language === 'zh-CN'
-                                ? '使用 APP 扫码登录'
-                                : `Use APP to scan and login`,
+                                ? '使用移动端 APP 扫码登录'
+                                : `Use Mobile APP to scan and login`,
                             expired: t('login.qrcodeExpired'),
                           },
                         }}
