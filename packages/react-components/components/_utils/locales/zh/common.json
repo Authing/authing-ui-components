@@ -268,5 +268,6 @@
   "timeoutAD": "请求超时，AD 配置错误",
   "timeout": "请求超时，请稍后重试",
   "userNameIsExists": "该用户名已存在!",
-  "fetchError": "网络连接失败，请稍后再试"
+  "fetchError": "网络连接失败，请稍后再试",
+  "passwordUnsafeTip": "密码强度已更新，请刷新页面后重试"
 }

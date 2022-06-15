@@ -14,6 +14,7 @@ import {
 import { authFlow, ChangePasswordBusinessAction } from '../businessRequest'
 import { ApiCode } from '../../_utils/responseManagement/interface'
 import { useMediaSize } from '../../_utils/hooks'
+import { usePasswordErrorText } from '../../_utils/useErrorText'
 interface FirstLoginResetProps {
   onReset: any
 }
@@ -37,7 +38,10 @@ export const FirstLoginReset: React.FC<FirstLoginResetProps> = ({
   const { isPhoneMedia } = useMediaSize()
 
   let submitButtonRef = useRef<any>(null)
-
+  const {
+    getPassWordUnsafeText,
+    setPasswordErrorTextShow,
+  } = usePasswordErrorText()
   const onFinish = async (values: any) => {
     let newPassword = values.password
     submitButtonRef.current?.onSpin(true)
@@ -54,6 +58,8 @@ export const FirstLoginReset: React.FC<FirstLoginResetProps> = ({
 
       if (apiCode === ApiCode.ABORT_FLOW) {
         onReset()
+      } else if (apiCode === ApiCode.UNSAFE_PASSWORD_TIP) {
+        setPasswordErrorTextShow(true)
       } else {
         submitButtonRef.current?.onError()
         onGuardHandling?.()
@@ -134,7 +140,7 @@ export const FirstLoginReset: React.FC<FirstLoginResetProps> = ({
             }
           />
         </Form.Item>
-
+        {getPassWordUnsafeText()}
         <Form.Item className="authing-g2-input-form submit-form">
           <SubmitButton
             className="forget-password"
