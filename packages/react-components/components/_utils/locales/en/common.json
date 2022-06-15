@@ -235,6 +235,7 @@
   "totpCode": "Security code",
   "welcome": "Welcome",
   "initPasswordText": "To ensure account security, please set your new password.",
+  "unsafePasswordChangeText": "Your password strength does not meet the current password strength requirements, please set your new password.",
   "updatePsswordSuccess": "Change the password successfully, please log in again",
   "protocolTips": "Please check the required agreement first",
   "fullCaptchaCode": "Please fill in the complete",

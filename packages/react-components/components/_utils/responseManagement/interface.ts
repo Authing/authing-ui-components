@@ -29,6 +29,8 @@ export enum ApiCode {
   FIRST_LOGIN_PASSWORD = 1639,
 
   FORCED_PASSWORD_RESET = 2058,
+
+  UNSAFE_PASSWORD_RESET = 2059,
 }
 
 export const ChangeModuleApiCodeMapping: Record<string, GuardModuleType> = {
