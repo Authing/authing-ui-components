@@ -49,7 +49,7 @@
   "twoPwdNeedSame": "The two passwords must be the same",
   "pwdLogin": "Password",
   "verifyCodeLogin": "Phone",
-  "appScanLogin": "APP QR Code",
+  "appScanLogin": "Mobile APP QR Code",
   "scanLogin": "QR Code",
   "ldapLogin": "LDAP",
   "adLogin": "AD",

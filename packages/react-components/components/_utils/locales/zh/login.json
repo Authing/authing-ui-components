@@ -49,7 +49,7 @@
   "releaseBind": "解除绑定",
   "pwdLogin": "密码登录",
   "verifyCodeLogin": "手机号登录",
-  "appScanLogin": "APP 扫码登录",
+  "appScanLogin": "移动端 APP 扫码登录",
   "scanLogin": "扫码登录",
   "ldapLogin": "LDAP 登录",
   "adLogin": "AD 登录",
