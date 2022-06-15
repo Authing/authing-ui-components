@@ -20,6 +20,8 @@ export interface IGuardContext {
 
   appId: string
 
+  tenantId?: string
+
   initData: any
 
   currentModule: ModuleState
@@ -125,6 +127,8 @@ export const useGuardDefaultMergedConfig = () =>
   useContext(GuardXContext).defaultMergedConfig
 
 export const useGuardAppId = () => useContext(GuardXContext).appId
+
+export const useGuardTenantId = () => useContext(GuardXContext).tenantId
 
 export function useGuardInitData<T>(): T {
   const { initData } = useContext(GuardXContext)

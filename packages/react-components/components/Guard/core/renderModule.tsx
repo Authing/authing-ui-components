@@ -5,6 +5,7 @@ import { GuardBindTotpView } from '../../BindTotp'
 import {
   GuardFirstLoginPasswordResetView,
   GuardForcedPasswordResetView,
+  GuardNoticePasswordResetView,
   GuardRegisterCompletePasswordView,
 } from '../../ChangePassword'
 import {
@@ -42,6 +43,7 @@ import { GuardIdentityBindingView } from '../../IdentityBinding'
 import { GuardIdentityBindingAskView } from '../../IdentityBindingAsk'
 import '../styles.less'
 import { updateFlowHandle } from '../../_utils/flowHandleStorage'
+import { GuardUnlockView } from '../../SelfUnlock'
 
 const PREFIX_CLS = 'authing-ant'
 
@@ -111,6 +113,10 @@ export const RenderModule: React.FC<{
     [GuardModuleType.FIRST_LOGIN_PASSWORD]: (key: string) => (
       <GuardFirstLoginPasswordResetView key={key} />
     ),
+    // 提示修改密码
+    [GuardModuleType.NOTICE_PASSWORD_RESET]: (key: string) => (
+      <GuardNoticePasswordResetView key={key} />
+    ),
     // 登陆安全策略 密码轮换
     [GuardModuleType.FORCED_PASSWORD_RESET]: (key: string) => (
       <GuardForcedPasswordResetView key={key} />
@@ -142,6 +148,10 @@ export const RenderModule: React.FC<{
     // 注册密码补全
     [GuardModuleType.REGISTER_PASSWORD]: (key: string) => (
       <GuardRegisterCompletePasswordView key={key} />
+    ),
+    // 自助解锁
+    [GuardModuleType.SELF_UNLOCK]: (key: string) => (
+      <GuardUnlockView key={key} />
     ),
   }
 
@@ -201,6 +211,16 @@ export const RenderModule: React.FC<{
 
   const renderModule = useMemo(() => {
     if (contextLoaded) {
+      // 传入的渲染指令不正确的情况处理
+      if (!moduleName || ComponentsMapping[moduleName]) {
+        return (
+          <GuardErrorView
+            error={
+              new Error(`未知错误！moduleName 为 <b>${moduleName}</b> 无法识别`)
+            }
+          />
+        )
+      }
       return ComponentsMapping[moduleName](new Date().toString())
     } else if (loadingComponent) {
       return loadingComponent

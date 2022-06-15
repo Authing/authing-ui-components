@@ -71,10 +71,18 @@ export const GuardIdentityBindingView: React.FC = () => {
     },
     password: async (data: any) => {
       const { identity: account, password } = data
+
       const encrypt = authClient.options.encryptFunction
 
+      const captchaCode = data.captchaCode && data.captchaCode.trim()
+
       const encryptPassword = await encrypt!(password, publicKey!)
-      return await PasswordRequest({ account, password: encryptPassword })
+
+      return await PasswordRequest({
+        account,
+        password: encryptPassword,
+        captchaCode,
+      })
     },
   }
 
@@ -103,6 +111,17 @@ export const GuardIdentityBindingView: React.FC = () => {
     const res = await bindMethodsMap[
       type as 'phone-code' | 'email-code' | 'password'
     ]?.(data)
+
+    const { isFlowEnd } = res
+
+    if (isFlowEnd) {
+      // 🤮 TODO 日后必要优化
+      return {
+        ...res,
+        apiCode: 200,
+        code: 200,
+      }
+    }
 
     return res
   }

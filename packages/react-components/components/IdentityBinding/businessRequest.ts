@@ -16,6 +16,7 @@ export interface EmailCodeParams {
 export interface PasswordParams {
   account: string
   password: string
+  captchaCode: string
 }
 
 export enum IdentityBindingAction {

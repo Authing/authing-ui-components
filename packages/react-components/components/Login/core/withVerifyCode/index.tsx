@@ -260,7 +260,7 @@ export const LoginWithVerifyCode = (props: any) => {
     // 身份源绑定
     if (!!props.onLoginRequest) {
       const res = await props.onLoginRequest?.(loginInfo)
-      const { code, data, onGuardHandling } = res
+      const { code, apiCode, data, onGuardHandling } = res
 
       submitButtonRef.current?.onSpin(false)
 
@@ -269,7 +269,8 @@ export const LoginWithVerifyCode = (props: any) => {
       } else {
         const handMode = onGuardHandling?.()
         // 向上层抛出错误 执行绑定失败钩子
-        handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
+        handMode === CodeAction.RENDER_MESSAGE &&
+          onLoginFailed(apiCode ?? code, data)
       }
       return
     }
