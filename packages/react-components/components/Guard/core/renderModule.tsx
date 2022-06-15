@@ -212,7 +212,7 @@ export const RenderModule: React.FC<{
   const renderModule = useMemo(() => {
     if (contextLoaded) {
       // 传入的渲染指令不正确的情况处理
-      if (!moduleName || ComponentsMapping[moduleName]) {
+      if (!moduleName || !ComponentsMapping[moduleName]) {
         return (
           <GuardErrorView
             error={
