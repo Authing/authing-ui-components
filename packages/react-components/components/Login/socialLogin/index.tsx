@@ -128,7 +128,6 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
     }
 
     const shape = config.socialConnectionsBtnShape
-
     if (shape === 'button') {
       return (
         <Button
