@@ -2,7 +2,6 @@ import React, {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -12,23 +11,18 @@ import {
   FACE_SCORE,
   devicesConstraints,
   dataURItoBlob,
-  useCurrentFaceDetectionNet,
-  useIsFaceDetectionModelLoaded,
-  useFaceDetectorOptions,
+  getCurrentFaceDetectionNet,
+  getFaceDetectorOptions,
+  isFaceDetectionModelLoaded,
 } from './face_deps'
 import { ImagePro } from '../../ImagePro'
 import SubmitButton from '../../SubmitButton'
 import { message } from 'antd'
 import { faceErrorMessage } from '../../_utils/errorFace'
 import { MFABackStateContext } from '..'
-import {
-  useGuardButtonState,
-  useGuardModule,
-  useGuardPublicConfig,
-} from '../../_utils/context'
+import { useGuardButtonState, useGuardPublicConfig } from '../../_utils/context'
 import { MfaBusinessAction, useMfaBusinessRequest } from '../businessRequest'
 import { getFacePlugin } from '../../_utils/facePlugin'
-import { GuardModuleType } from '../../Guard'
 
 const useDashoffset = (percent: number) => {
   // 接受 0 - 1，返回 0-700 之间的偏移量
@@ -52,14 +46,6 @@ export const MFAFace = (props: any) => {
 
   const mfaBusinessRequest = useMfaBusinessRequest()
 
-  const currentFaceDetectionNet = useCurrentFaceDetectionNet()
-
-  const isFaceDetectionModelLoaded = useIsFaceDetectionModelLoaded()
-
-  const faceDetectorOptions = useFaceDetectorOptions()
-
-  const { changeModule } = useGuardModule()
-
   const { spinChange } = useGuardButtonState()
 
   const verifyRequest = mfaBusinessRequest[MfaBusinessAction.VerifyFace]
@@ -78,39 +64,15 @@ export const MFAFace = (props: any) => {
 
   let { offset, dashStyle } = useDashoffset(percent)
 
-  const detectSingleFace = useMemo(() => {
-    const facePlugin = getFacePlugin()
-
-    if (facePlugin) {
-      return facePlugin?.detectSingleFace
-    } else {
-      changeModule?.(GuardModuleType.ERROR, {
-        error: new Error('为使用 face 模块，请先安装 face-api-guard 插件'),
-      })
-    }
-  }, [changeModule])
-
   // 预加载数据
   useEffect(() => {
-    if (
-      [
-        currentFaceDetectionNet,
-        isFaceDetectionModelLoaded,
-        faceDetectorOptions,
-      ].includes(undefined)
-    ) {
-      return
-    }
     // 载入 cdn
-    currentFaceDetectionNet.loadFromUri(
+    getCurrentFaceDetectionNet().loadFromUri(
       `${cdnBase}/face-api/v1/tiny_face_detector_model-weights_manifest.json`
     )
 
     if (faceState !== 'identifying') {
       return // 不存在 video dom，不要去尝试了
-    }
-    if (typeof navigator === 'undefined') {
-      return // 不存在 navigator，ssr
     }
     let devicesContext = navigator.mediaDevices.getUserMedia(devicesConstraints)
     devicesContext
@@ -132,14 +94,7 @@ export const MFAFace = (props: any) => {
     return () => {
       interval.current && clearInterval(interval.current)
     }
-  }, [
-    cdnBase,
-    currentFaceDetectionNet,
-    faceDetectorOptions,
-    faceState,
-    isFaceDetectionModelLoaded,
-    t,
-  ])
+  }, [faceState, interval, props.config, cdnBase, t])
 
   // 监听 faceState
   useEffect(() => {
@@ -158,7 +113,6 @@ export const MFAFace = (props: any) => {
   // 上传文件
   const uploadImage = async (blob: Blob) => {
     spinChange(true)
-
     const formData = new FormData()
     formData.append('folder', 'photos')
     formData.append('file', blob, 'personal.jpeg')
@@ -183,8 +137,6 @@ export const MFAFace = (props: any) => {
   }
 
   const faceBind = async () => {
-    spinChange(true)
-
     const requestData = {
       photoA: p1.current!,
       photoB: p2.current!,
@@ -193,8 +145,6 @@ export const MFAFace = (props: any) => {
     const result = await bindRequest(requestData)
 
     const { isFlowEnd, onGuardHandling, code, data } = result
-
-    spinChange(false)
 
     if (isFlowEnd) {
       props.mfaLogin(200, data)
@@ -216,17 +166,18 @@ export const MFAFace = (props: any) => {
   }
 
   const faceCheck = async () => {
-    spinChange(true)
     const requestData = {
       photo: p1.current!,
       mfaToken: props.initData.mfaToken,
     }
 
+    spinChange(true)
+
     const result = await verifyRequest(requestData)
 
-    const { isFlowEnd, onGuardHandling, data, code } = result
-
     spinChange(false)
+
+    const { isFlowEnd, onGuardHandling, data, code } = result
 
     if (isFlowEnd) {
       props.mfaLogin(200, data)
@@ -288,10 +239,16 @@ export const MFAFace = (props: any) => {
       interval.current = setInterval(() => autoShoot(), 500)
     }
     const videoDom = videoRef.current!
-    if (videoDom?.paused || videoDom?.ended || !isFaceDetectionModelLoaded) {
+    if (videoDom?.paused || videoDom?.ended || !isFaceDetectionModelLoaded()) {
       return
     }
-    const options = faceDetectorOptions
+    const options = getFaceDetectorOptions()
+
+    const facePlugin = getFacePlugin()
+
+    if (!facePlugin) return
+
+    const { detectSingleFace } = facePlugin
 
     const result = await detectSingleFace(videoDom, options)
 
@@ -329,9 +286,6 @@ export const MFAFace = (props: any) => {
 
           <SubmitButton
             onClick={() => {
-              if (typeof navigator === 'undefined') {
-                return
-              }
               // 设置状态之前 校验是否支持面容 （api 和 设备）
               // TODO 之后添加人脸识别插件支持 减小包体积
               if (navigator.mediaDevices) {
