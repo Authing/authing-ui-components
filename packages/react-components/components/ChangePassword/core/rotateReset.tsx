@@ -15,6 +15,7 @@ import {
 import { authFlow, ChangePasswordBusinessAction } from '../businessRequest'
 import { ApiCode } from '../../_utils/responseManagement/interface'
 import { useMediaSize } from '../../_utils/hooks'
+import { usePasswordErrorText } from '../../_utils/useErrorText'
 
 interface RotateResetProps {
   onReset: any
@@ -41,10 +42,16 @@ export const RotateReset = (props: RotateResetProps) => {
   let submitButtonRef = useRef<any>(null)
 
   const initData = useGuardInitData<{ token: string }>()
-
+  const {
+    getPassWordUnsafeText,
+    setPasswordErrorTextShow,
+  } = usePasswordErrorText()
   const onFinish = async (values: any) => {
     if (onFinishCallBack instanceof Function) {
-      onFinishCallBack(values)
+      const data = onFinishCallBack(values)
+      if (data.code === ApiCode.UNSAFE_PASSWORD_TIP) {
+        setPasswordErrorTextShow(true)
+      }
       return
     }
     let { password, oldPassword } = values
@@ -64,6 +71,8 @@ export const RotateReset = (props: RotateResetProps) => {
       // 重置密码 返回的是流程终止
       if (apiCode === ApiCode.ABORT_FLOW) {
         onReset()
+      } else if (apiCode === ApiCode.UNSAFE_PASSWORD_TIP) {
+        setPasswordErrorTextShow(true)
       } else {
         submitButtonRef?.current?.onError()
         onGuardHandling?.()
@@ -161,6 +170,7 @@ export const RotateReset = (props: RotateResetProps) => {
             }
           />
         </CustomFormItem.Password>
+        {getPassWordUnsafeText()}
         <Form.Item className="authing-g2-input-form submit-form">
           <SubmitButton
             className="forget-password"

@@ -15,6 +15,8 @@ import { useIsChangeComplete } from '../utils'
 import { useGuardModule } from '../../_utils/context'
 import { GuardModuleType } from '../../Guard'
 import { useMediaSize } from '../../_utils/hooks'
+import { ApiCode } from '../../_utils/responseManagement/interface'
+import { usePasswordErrorText } from '../../_utils/useErrorText'
 
 export interface RegisterWithEmailProps {
   // onRegister: Function
@@ -45,7 +47,10 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
   const [validated, setValidated] = useState(false)
-
+  const {
+    getPassWordUnsafeText,
+    setPasswordErrorTextShow,
+  } = usePasswordErrorText()
   const [, onFinish] = useAsyncFn(
     async (values: any) => {
       submitButtonRef.current?.onSpin(true)
@@ -128,6 +133,9 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         onRegisterSuccess(user)
       } catch (error: any) {
         const { code, data, message } = error
+        if (code === ApiCode.UNSAFE_PASSWORD_TIP) {
+          setPasswordErrorTextShow(true)
+        }
         submitButtonRef.current.onError()
         onRegisterFailed(code, data, message)
       } finally {
@@ -237,6 +245,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
             showError={validated}
           />
         )}
+        {getPassWordUnsafeText()}
         <Form.Item>
           <SubmitButton
             // disabled={
