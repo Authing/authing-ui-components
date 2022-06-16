@@ -1,4 +1,4 @@
-import { getFacePlugin } from '../../_utils/facePlugin'
+import { getFacePlugin, useFacePlugin } from '../../_utils/facePlugin'
 
 let inputSize = 512
 let scoreThreshold = 0.5
@@ -11,19 +11,27 @@ export const devicesConstraints = {
 }
 export const FACE_SCORE = 0.65
 
-export function getFaceDetectorOptions() {
-  const { TinyFaceDetectorOptions } = getFacePlugin()
-  return new TinyFaceDetectorOptions({ inputSize, scoreThreshold })
+export const useFaceDetectorOptions = () => {
+  // const { TinyFaceDetectorOptions } = useFacePlugin()
+
+  const facePlugin = useFacePlugin()
+
+  return (
+    facePlugin?.TinyFaceDetectorOptions &&
+    new facePlugin.TinyFaceDetectorOptions({ inputSize, scoreThreshold })
+  )
 }
 
-export function getCurrentFaceDetectionNet() {
-  const { nets } = getFacePlugin()
+export const useCurrentFaceDetectionNet = () => {
+  const facePlugin = useFacePlugin()
 
-  return nets.tinyFaceDetector
+  return facePlugin?.nets && facePlugin.nets.tinyFaceDetector
 }
 
-export function isFaceDetectionModelLoaded() {
-  return !!getCurrentFaceDetectionNet().params
+export const useIsFaceDetectionModelLoaded = () => {
+  const currentFaceDetectionNet = useCurrentFaceDetectionNet()
+
+  return currentFaceDetectionNet && !!currentFaceDetectionNet.params
 }
 
 export function dataURItoBlob(base64Data: any) {

@@ -28,6 +28,7 @@ import {
 import { extendsFieldsToMetaData, fieldValuesToRegisterProfile } from './utils'
 import { GuardModuleType } from '../Guard'
 import { Button, message } from 'antd'
+import { GuardButton } from '../GuardButton'
 
 export const GuardCompleteInfo: React.FC<{
   metaData: CompleteInfoMetaData[]
@@ -63,7 +64,7 @@ export const GuardCompleteInfo: React.FC<{
           />
 
           {skipComplateFileds && (
-            <Button
+            <GuardButton
               className="g2-completeInfo-header-skip"
               type="link"
               loading={skipLoading}
@@ -73,7 +74,7 @@ export const GuardCompleteInfo: React.FC<{
                 <IconFont type="authing-a-share-forward-line1" />
               )}
               <span>{t('common.skip')}</span>
-            </Button>
+            </GuardButton>
           )}
         </div>
 

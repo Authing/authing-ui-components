@@ -257,7 +257,7 @@ export const RenderContext: React.FC<{
       iconfontLoaded,
     ]
 
-    return !list.includes(undefined)
+    return !list.includes(undefined) && !list.includes(false)
   }, [
     appId,
     events,
@@ -296,7 +296,9 @@ export const RenderContext: React.FC<{
             currentModule: moduleState,
             guardPageConfig,
           }
-        : null,
+        : {
+            defaultMergedConfig,
+          },
     [
       appId,
       contextLoaded,
@@ -344,7 +346,7 @@ export const RenderContext: React.FC<{
   const render = useMemo(() => {
     if (error) return renderErrorContext
 
-    if (contextLoaded || defaultMergedConfig) return renderContext
+    if (contextLoaded || Boolean(defaultMergedConfig)) return renderContext
 
     return null
   }, [
