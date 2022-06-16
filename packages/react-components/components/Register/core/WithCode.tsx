@@ -172,11 +172,10 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
           },
           options,
         }
-
         // onRegisterSuccess 注册成功后需要回到对应的登录页面
         const onRegisterSuccessIntercept = (user: any) => {
           onRegisterSuccess(user, {
-            regitserFrom: RegisterMethods.Phone,
+            registerFrom: RegisterMethods.Phone,
             account: isInternationSms ? '' : phoneNumber,
           })
         }
