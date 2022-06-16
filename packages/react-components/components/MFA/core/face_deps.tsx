@@ -1,4 +1,4 @@
-import { getFacePlugin, useFacePlugin } from '../../_utils/facePlugin'
+import { useFacePlugin } from '../../_utils/facePlugin'
 
 let inputSize = 512
 let scoreThreshold = 0.5

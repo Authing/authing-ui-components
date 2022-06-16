@@ -27,7 +27,7 @@ import {
 } from './businessRequest'
 import { extendsFieldsToMetaData, fieldValuesToRegisterProfile } from './utils'
 import { GuardModuleType } from '../Guard'
-import { Button, message } from 'antd'
+import { message } from 'antd'
 import { GuardButton } from '../GuardButton'
 
 export const GuardCompleteInfo: React.FC<{
