@@ -18,12 +18,13 @@ import { useMediaSize } from '../../_utils/hooks'
 
 interface RotateResetProps {
   onReset: any
+  onFinishCallBack?: any
 }
 
 export const RotateReset = (props: RotateResetProps) => {
   const { t } = useTranslation()
 
-  const { onReset } = props
+  const { onReset, onFinishCallBack } = props
 
   let [form] = Form.useForm()
 
@@ -42,6 +43,10 @@ export const RotateReset = (props: RotateResetProps) => {
   const initData = useGuardInitData<{ token: string }>()
 
   const onFinish = async (values: any) => {
+    if (onFinishCallBack instanceof Function) {
+      onFinishCallBack(values)
+      return
+    }
     let { password, oldPassword } = values
     submitButtonRef?.current?.onSpin(true)
 

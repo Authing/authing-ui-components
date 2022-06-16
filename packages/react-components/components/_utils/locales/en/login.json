@@ -43,6 +43,8 @@
   "rememberedSecret": "This key has been safely recorded",
   "resetEmailSent": "The password reset email has been sent to the mailbox {{email}}",
   "resetPwd": "Reset password",
+  "selfUnlock": "self unlock",
+  "selfUnlockText": "Your account has been locked, please enter the verification code and password to unlock it by yourself.",
   "resetPwdEmail": "Resend password reset email",
   "setPwdLimit": "Set 6-20 digit password",
   "thridAccLogin": "Or sign in with",

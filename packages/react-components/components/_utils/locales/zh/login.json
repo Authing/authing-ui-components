@@ -35,6 +35,8 @@
   "inputCorrectPhone": "请输入正确的手机号或邮箱",
   "inputPhoneOrEmail": "请输入手机号或邮箱",
   "resetPwd": "重置密码",
+  "selfUnlock": "自助解锁",
+  "selfUnlockText": "你的账号已被锁定，请输入验证码及密码自助解锁。",
   "otherAccLogin": "返回登录",
   "fourVerifyCode": "{{length}} 位验证码",
   "pwdLimie": "密码长度在 6-20 位",
