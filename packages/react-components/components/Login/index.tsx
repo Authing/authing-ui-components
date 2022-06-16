@@ -277,7 +277,7 @@ export const GuardLoginView = () => {
 
       if (containerDOM) {
         // @ts-ignore
-        containerDOM.style['min-height'] = isNoMethod ? '456px' : '320px'
+        containerDOM.style['min-height'] = isNoMethod ? '456px' : '280px'
         containerDOM.classList.add('no-login-methods-view')
         return () => {
           // @ts-ignore
