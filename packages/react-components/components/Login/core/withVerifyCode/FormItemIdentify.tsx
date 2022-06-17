@@ -92,7 +92,11 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
       return {
         validateTrigger: 'onBlur',
         validator: async (_, value) => {
-          if (!value || phone(value, { country: areaCode }).isValid)
+          if (
+            !value ||
+            phone(value, { country: areaCode }).isValid ||
+            phone(value).isValid
+          )
             return Promise.resolve()
           return Promise.reject(t('common.i18nCheckErrorMessage'))
         },
