@@ -109,9 +109,9 @@ export const GuardRegisterView: React.FC = () => {
     if (verifyRegisterMethods.length > 1) {
       verifyCodeLogin = t('common.verifyCodeLogin')
     } else {
-      if (verifyCodeLogin.includes('phone-code')) {
+      if (verifyRegisterMethods.includes('phone-code')) {
         verifyCodeLogin = t('common.phoneVerifyCode')
-      } else if (verifyCodeLogin.includes('email-code')) {
+      } else if (verifyRegisterMethods.includes('email-code')) {
         verifyCodeLogin = t('common.emailVerifyCode')
       } else {
         verifyCodeLogin = t('common.verifyCodeLogin')
