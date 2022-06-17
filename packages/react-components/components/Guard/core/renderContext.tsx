@@ -16,7 +16,6 @@ import {
   GuardStateMachine,
   initGuardStateMachine,
   ModuleState,
-  useHistoryHijack,
 } from '../GuardModule/stateMachine'
 import { AuthenticationClient } from '../..'
 import { ApplicationConfig } from '../../AuthingGuard/api'
@@ -66,9 +65,6 @@ export const RenderContext: React.FC<{
 
   const { Provider } = useGuardXContext()
 
-  // 劫持浏览器 History
-  const [historyNext] = useHistoryHijack(guardStateMachine?.back)
-
   // modules 定义
   const moduleReducer: (
     state: ModuleState,
@@ -92,17 +88,20 @@ export const RenderContext: React.FC<{
 
   // Change Module
   const onChangeModule = useCallback(
-    (moduleName: GuardModuleType, initData: any = {}) => {
-      historyNext(moduleName)
-
-      changeModule({
-        type: moduleName,
-        payload: {
-          initData: initData ?? {},
-        },
-      })
+    async (moduleName: GuardModuleType, initData: any = {}) => {
+      if (
+        !events?.onBeforeChangeModule ||
+        (await events.onBeforeChangeModule(moduleName, initData))
+      ) {
+        changeModule({
+          type: moduleName,
+          payload: {
+            initData: initData ?? {},
+          },
+        })
+      }
     },
-    [historyNext]
+    [events]
   )
 
   // 合并默认值
@@ -203,9 +202,10 @@ export const RenderContext: React.FC<{
     const guardStateMachine = initGuardStateMachine(onChangeModule, initState)
     setGuardStateMachine(guardStateMachine)
 
-    // TODO 这里有一个循环依赖问题，藏的有点深 待优化
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    return () => {
+      guardStateMachine.uninstallPopstate()
+    }
+  }, [initState, onChangeModule])
 
   // 自定义 CSS 处理
   useEffect(() => {
@@ -226,22 +226,13 @@ export const RenderContext: React.FC<{
     if (!events && !guardStateMachine) return undefined
     return {
       changeModule: async (moduleName: GuardModuleType, initData?: any) => {
-        // 单体组件处理
-        if (finallyConfig?.__singleComponent__) {
-          events?.__changeModule?.(moduleName, initData)
-        } else {
-          if (!events?.onBeforeChangeModule) {
-            guardStateMachine?.next(moduleName, initData)
-          } else if (await events.onBeforeChangeModule(moduleName, initData)) {
-            guardStateMachine?.next(moduleName, initData)
-          }
-        }
+        guardStateMachine?.next(moduleName, initData)
       },
       backModule: () => {
         guardStateMachine?.back()
       },
     }
-  }, [events, finallyConfig?.__singleComponent__, guardStateMachine])
+  }, [events, guardStateMachine])
 
   const contextLoaded = useMemo(() => {
     const list = [

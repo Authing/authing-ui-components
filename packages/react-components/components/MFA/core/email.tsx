@@ -33,13 +33,13 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
 
   const onFinish = async ({ email }: any) => {
     await form.validateFields()
+    submitButtonRef.current?.onSpin(false)
     try {
       onBind(email)
     } catch (e: any) {
       const error = JSON.parse(e?.message)
       submitButtonRef.current.onError()
       Message.error(error.message)
-      submitButtonRef.current?.onSpin(false)
     }
   }
   return (
