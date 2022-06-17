@@ -261,6 +261,7 @@ export const GuardLoginView = () => {
   // 渲染前执行
   useLayoutEffect(() => {
     if (noLoginMethods && !isPhoneMedia) {
+      // 无表单登录方式，且不是手机端
       const document = getGuardDocument()
       // pc 下
       const containerDOM = document.getElementsByClassName(
@@ -269,7 +270,7 @@ export const GuardLoginView = () => {
 
       if (containerDOM) {
         // @ts-ignore
-        containerDOM.style['min-height'] = '456px'
+        containerDOM.style['min-height'] = isNoMethod ? '456px' : '280px'
         containerDOM.classList.add('no-login-methods-view')
         return () => {
           // @ts-ignore
@@ -278,7 +279,7 @@ export const GuardLoginView = () => {
         }
       }
     }
-  }, [isPhoneMedia, noLoginMethods])
+  }, [isNoMethod, isPhoneMedia, noLoginMethods])
 
   useEffect(() => {
     const document = getGuardDocument()
