@@ -74,6 +74,32 @@ export const GuardFirstLoginPasswordResetView: React.FC = () => {
   )
 }
 
+export const GuardPasswordNotSafeResetView: React.FC = () => {
+  const { t } = useTranslation()
+
+  const { changeModule } = useGuardModule()
+
+  const onReset = () => {
+    message.success(t('common.updatePsswordSuccess'))
+    setTimeout(() => {
+      changeModule?.(GuardModuleType.LOGIN)
+    }, 500)
+  }
+
+  const config = useGuardFinallyConfig()
+
+  const coreForm = <FirstLoginReset onReset={onReset} />
+
+  return (
+    <GuardChangePassword
+      title={`${t('common.welcome')} ${config.title}`}
+      explain={t('common.unsafePasswordChangeText')}
+    >
+      {coreForm}
+    </GuardChangePassword>
+  )
+}
+
 export const GuardForcedPasswordResetView: React.FC = () => {
   const { t } = useTranslation()
 

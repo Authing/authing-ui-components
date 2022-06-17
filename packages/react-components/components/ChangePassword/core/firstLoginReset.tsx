@@ -100,7 +100,7 @@ export const FirstLoginReset: React.FC<FirstLoginResetProps> = ({
             autoFocus={!isPhoneMedia}
             className="authing-g2-input"
             size="large"
-            placeholder={t('login.inputPwd')}
+            placeholder={t('login.inputNewPwd')}
             prefix={
               <IconFont
                 type="authing-a-lock-line1"

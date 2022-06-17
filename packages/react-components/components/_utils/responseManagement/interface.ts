@@ -31,6 +31,8 @@ export enum ApiCode {
   FORCED_PASSWORD_RESET = 2058,
 
   UNSAFE_PASSWORD_TIP = 2061,
+
+  UNSAFE_PASSWORD_RESET = 2071,
 }
 
 export const ChangeModuleApiCodeMapping: Record<string, GuardModuleType> = {
@@ -43,4 +45,5 @@ export const ChangeModuleApiCodeMapping: Record<string, GuardModuleType> = {
   [ApiCode.FIRST_LOGIN_PASSWORD]: GuardModuleType.FIRST_LOGIN_PASSWORD,
   [ApiCode.FORCED_PASSWORD_RESET]: GuardModuleType.FORCED_PASSWORD_RESET,
   [ApiCode.UNLOCK]: GuardModuleType.SELF_UNLOCK,
+  [ApiCode.UNSAFE_PASSWORD_RESET]: GuardModuleType.UNSAFE_PASSWORD_RESET,
 }
