@@ -585,6 +585,8 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
           methods={methods}
           currentMethod={currentMethod}
           areaCode={areaCode}
+          checkRepeat={true}
+          required={true}
         >
           {isOnlyInternationSms ? (
             <AreaCodePhoneAccount autoFocus={!isPhoneMedia} />

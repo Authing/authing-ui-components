@@ -43,6 +43,7 @@ export const GuardRegisterView: React.FC = () => {
 
     return verifyLoginMethods
   }, [config])
+
   const registerContextProps = useMemo(
     () => ({
       onRegisterSuccess: (
@@ -103,19 +104,30 @@ export const GuardRegisterView: React.FC = () => {
   const tabMapping: Record<
     string,
     { component: React.ReactNode; name: string }
-  > = useMemo(
-    () => ({
+  > = useMemo(() => {
+    let verifyCodeLogin: string = ''
+    if (verifyRegisterMethods.length > 1) {
+      verifyCodeLogin = t('common.verifyCodeLogin')
+    } else {
+      if (verifyCodeLogin.includes('phone-code')) {
+        verifyCodeLogin = t('common.phoneVerifyCode')
+      } else if (verifyCodeLogin.includes('email-code')) {
+        verifyCodeLogin = t('common.emailVerifyCode')
+      } else {
+        verifyCodeLogin = t('common.verifyCodeLogin')
+      }
+    }
+    return {
       [RegisterMethods.Email]: {
         component: <RegisterWithEmail {...registerContextProps} />,
         name: t('common.emailLabel'),
       },
       [RegisterMethods.Phone]: {
         component: <RegisterWithCode {...registerContextProps} />,
-        name: '验证码',
+        name: verifyCodeLogin,
       },
-    }),
-    [registerContextProps, t]
-  )
+    }
+  }, [registerContextProps, t, verifyRegisterMethods])
 
   const renderTab = useMemo(() => {
     const { registerMethods, defaultRegisterMethod } = config
