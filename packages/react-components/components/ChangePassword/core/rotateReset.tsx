@@ -48,7 +48,7 @@ export const RotateReset = (props: RotateResetProps) => {
   } = usePasswordErrorText()
   const onFinish = async (values: any) => {
     if (onFinishCallBack instanceof Function) {
-      const data = onFinishCallBack(values)
+      const data = await onFinishCallBack(values)
       if (data.code === ApiCode.UNSAFE_PASSWORD_TIP) {
         message.error(data.message)
         setPasswordErrorTextShow(true)
