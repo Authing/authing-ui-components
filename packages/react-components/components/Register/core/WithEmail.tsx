@@ -132,8 +132,9 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         submitButtonRef.current?.onSpin(false)
         onRegisterSuccess(user)
       } catch (error: any) {
-        const { code, data, message } = error
+        const { code, data, message: errorMessage } = error
         if (code === ApiCode.UNSAFE_PASSWORD_TIP) {
+          message.error(errorMessage)
           setPasswordErrorTextShow(true)
         }
         submitButtonRef.current.onError()

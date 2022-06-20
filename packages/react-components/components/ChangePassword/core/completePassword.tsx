@@ -78,7 +78,7 @@ export const CompletePassword: React.FC = () => {
               code: resCode,
               data,
               onGuardHandling,
-              message,
+              message: errorMessage,
             } = await post('/api/v2/register/email-code', {
               email: content.email,
               code: content.code,
@@ -91,13 +91,14 @@ export const CompletePassword: React.FC = () => {
               events?.onRegister?.(data, authClient)
               changeModule?.(GuardModuleType.LOGIN)
             } else if (resCode === ApiCode.UNSAFE_PASSWORD_TIP) {
+              message.error(errorMessage)
               setPasswordErrorTextShow(true)
             } else {
               onGuardHandling?.()
               events?.onRegisterError?.({
                 code: resCode,
                 data,
-                message,
+                errorMessage,
               })
             }
           } else if (businessRequestName === 'registerByPhoneCode') {
@@ -139,6 +140,7 @@ export const CompletePassword: React.FC = () => {
       isChangeComplete,
       post,
       publicKey,
+      setPasswordErrorTextShow,
     ]
   )
 

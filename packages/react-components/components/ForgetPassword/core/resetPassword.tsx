@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form } from 'antd'
+import { Form, message } from 'antd'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { fieldRequiredRule, validate } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
@@ -84,8 +84,9 @@ export const ResetPassword = (props: ResetPasswordProps) => {
 
     context
       .then((r: any) => {
-        const { code } = r
+        const { code, message: errorMessage } = r
         if (code === ApiCode.UNSAFE_PASSWORD_TIP) {
+          message.error(errorMessage)
           setPasswordErrorTextShow(true)
         }
         props.onSend(codeMethod)
