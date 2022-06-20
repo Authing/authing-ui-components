@@ -252,10 +252,7 @@ export const isQQBrowser = () => {
   if (typeof navigator === 'undefined') {
     return null
   }
-  return (
-    /MQQBrowser/i.test(navigator.userAgent) &&
-    !/QQ/i.test(navigator.userAgent.replaceAll('MQQBrowser', ''))
-  )
+  return /MQQBrowser/i.test(navigator.userAgent)
 }
 // qq 内置浏览器
 export const isQQBuiltInBrowser = () => {
