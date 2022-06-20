@@ -107,20 +107,20 @@ export const GuardRegisterView: React.FC = () => {
   > = useMemo(() => {
     let verifyCodeLogin: string = ''
     if (verifyRegisterMethods.length > 1) {
-      verifyCodeLogin = t('common.verifyCodeLogin')
+      verifyCodeLogin = t('common.verifyCodeRegister')
     } else {
       if (verifyRegisterMethods.includes('phone-code')) {
         verifyCodeLogin = t('common.phoneVerifyCode')
       } else if (verifyRegisterMethods.includes('email-code')) {
         verifyCodeLogin = t('common.emailVerifyCode')
       } else {
-        verifyCodeLogin = t('common.verifyCodeLogin')
+        verifyCodeLogin = t('common.verifyCodeRegister')
       }
     }
     return {
       [RegisterMethods.Email]: {
         component: <RegisterWithEmail {...registerContextProps} />,
-        name: t('common.emailLabel'),
+        name: t('common.PasswordRegister'),
       },
       [RegisterMethods.Phone]: {
         component: <RegisterWithCode {...registerContextProps} />,
