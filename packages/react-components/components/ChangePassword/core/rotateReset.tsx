@@ -50,6 +50,7 @@ export const RotateReset = (props: RotateResetProps) => {
     if (onFinishCallBack instanceof Function) {
       const data = onFinishCallBack(values)
       if (data.code === ApiCode.UNSAFE_PASSWORD_TIP) {
+        message.error(data.message)
         setPasswordErrorTextShow(true)
       }
       return
@@ -58,7 +59,7 @@ export const RotateReset = (props: RotateResetProps) => {
     submitButtonRef?.current?.onSpin(true)
 
     if (isAuthFlow) {
-      const { apiCode, onGuardHandling } = await authFlow(
+      const { apiCode, onGuardHandling, message: msg } = await authFlow(
         ChangePasswordBusinessAction.ResetPassword,
         {
           password: await encrypt!(password, publicKey),
@@ -72,6 +73,7 @@ export const RotateReset = (props: RotateResetProps) => {
       if (apiCode === ApiCode.ABORT_FLOW) {
         onReset()
       } else if (apiCode === ApiCode.UNSAFE_PASSWORD_TIP) {
+        message.error(msg)
         setPasswordErrorTextShow(true)
       } else {
         submitButtonRef?.current?.onError()

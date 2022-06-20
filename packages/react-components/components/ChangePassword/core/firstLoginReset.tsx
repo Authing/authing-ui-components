@@ -48,7 +48,7 @@ export const FirstLoginReset: React.FC<FirstLoginResetProps> = ({
 
     if (isAuthFlow) {
       // 重置密码成功不会返回 UserInfo
-      const { apiCode, onGuardHandling } = await authFlow(
+      const { apiCode, onGuardHandling, message: msg } = await authFlow(
         ChangePasswordBusinessAction.FirstLoginReset,
         {
           password: await encrypt!(newPassword, publicKey),
@@ -59,6 +59,7 @@ export const FirstLoginReset: React.FC<FirstLoginResetProps> = ({
       if (apiCode === ApiCode.ABORT_FLOW) {
         onReset()
       } else if (apiCode === ApiCode.UNSAFE_PASSWORD_TIP) {
+        message.error(msg)
         setPasswordErrorTextShow(true)
       } else {
         submitButtonRef.current?.onError()
