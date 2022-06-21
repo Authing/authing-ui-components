@@ -31,6 +31,8 @@ export const VirtualDropdown: FC<VirtualDropdownProps> = (props) => {
           </div>
         </div>
       ),
+      region: info.regions,
+      region_en: info.regions_en,
     }
   })
 
@@ -46,7 +48,17 @@ export const VirtualDropdown: FC<VirtualDropdownProps> = (props) => {
       optionLabelProp="children"
       dropdownMatchSelectWidth={138}
       filterOption={(input, option: any) => {
-        return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        if (option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0) {
+          return true
+        }
+        if (option.region.toLowerCase().indexOf(input.toLowerCase()) >= 0) {
+          return true
+        }
+        if (option.region_en.toLowerCase().indexOf(input.toLowerCase()) >= 0) {
+          return true
+        }
+        return false
+        // return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
       }}
       suffixIcon={
         <IconFont
