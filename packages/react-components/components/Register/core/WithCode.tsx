@@ -572,6 +572,7 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
         form={form}
         name="emailRegister"
         autoComplete="off"
+        onSubmitCapture={() => submitButtonRef.current.onSpin(true)}
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
       >
