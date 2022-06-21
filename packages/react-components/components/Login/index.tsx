@@ -34,6 +34,7 @@ import { useMediaSize, useMethod } from '../_utils/hooks'
 import { getGuardDocument } from '../_utils/guardDocument'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { GuardLoginInitData } from './interface'
+import { GuardButton } from '../GuardButton'
 
 const inputWays = [
   LoginMethods.Password,
@@ -477,14 +478,15 @@ export const GuardLoginView = () => {
                 <div className={`g2-tips-line`}>
                   {!disableResetPwd && (
                     <div>
-                      <span
+                      <GuardButton
+                        type="link"
                         className="link-like forget-password-link"
                         onClick={() =>
                           changeModule?.(GuardModuleType.FORGET_PWD, {})
                         }
                       >
                         {t('login.forgetPwd')}
-                      </span>
+                      </GuardButton>
                       {(errorNumber >= 2 || accountLock) && (
                         <span style={{ margin: '0 4px', color: '#EAEBEE' }}>
                           丨
@@ -511,14 +513,15 @@ export const GuardLoginView = () => {
                   {!disableRegister && (
                     <span className="go-to-register">
                       {/* <span className="gray">{t('common.noAccYet')}</span> */}
-                      <span
+                      <GuardButton
+                        type="link"
                         className="link-like register-link"
                         onClick={() =>
                           changeModule?.(GuardModuleType.REGISTER, {})
                         }
                       >
                         {t('common.registerImmediate')}
-                      </span>
+                      </GuardButton>
                     </span>
                   )}
                 </div>

@@ -4,16 +4,19 @@ import React, {
   useImperativeHandle,
   useEffect,
 } from 'react'
-import { Button } from 'antd'
 import { useShaking } from '../_utils/hooks'
+import { GuardButton } from '../GuardButton'
+import { useGuardButtonState } from '../_utils/context'
+import { ButtonProps } from 'antd/lib/button'
 
-interface SubmitButtonProps {
+interface SubmitButtonProps extends ButtonProps {
   text?: string
   className?: string
   onClick?: any
   disabled?: boolean
 }
 const SubmitButton = (props: SubmitButtonProps, ref: any) => {
+  const { spinChange, spin: buttonSpin } = useGuardButtonState()
   let [spin, setSpin] = useState(false) // spin 状态需要手动设置关闭
   let [shaking, setShaking] = useState(false) // 抖动状态会自动关闭
   let { MountShaking, UnMountShaking } = useShaking() // 协议和 form input 抖动的挂载和卸载
@@ -36,9 +39,11 @@ const SubmitButton = (props: SubmitButtonProps, ref: any) => {
       setSpin(false)
       MountShaking()
       setShaking(true)
+      spinChange(false)
     },
     onSpin: (sp: boolean) => {
       setSpin(sp)
+      spinChange(sp)
     },
   }))
 
@@ -46,17 +51,18 @@ const SubmitButton = (props: SubmitButtonProps, ref: any) => {
   // let shakingCls = shaking ? 'shaking' : ''
   let shakingCls = ''
   return (
-    <Button
-      size="large"
-      type="primary"
-      htmlType="submit"
+    <GuardButton
+      {...props}
+      size={props?.size ?? 'large'}
+      type={props?.type ?? 'primary'}
+      htmlType={props?.htmlType ?? 'submit'}
       loading={spin}
-      disabled={props?.disabled || false}
+      disabled={buttonSpin ? true : props?.disabled ?? spin}
       onClick={props.onClick ? props.onClick : () => {}}
       className={`authing-g2-submit-button ${propsCls} ${shakingCls}`}
     >
       {props.text}
-    </Button>
+    </GuardButton>
   )
 }
 export default forwardRef(SubmitButton)

@@ -13,6 +13,7 @@ import './styles.less'
 import { IconFont } from '../IconFont'
 import { useGuardAuthClient } from '../Guard/authClient'
 import {
+  useGuardButtonState,
   useGuardEvents,
   useGuardFinallyConfig,
   useGuardHttpClient,
@@ -26,6 +27,7 @@ import {
 } from './businessRequest'
 import { extendsFieldsToMetaData, fieldValuesToRegisterProfile } from './utils'
 import { message } from 'antd'
+import { GuardButton } from '../GuardButton'
 
 export const GuardCompleteInfo: React.FC<{
   metaData: CompleteInfoMetaData[]
@@ -39,16 +41,17 @@ export const GuardCompleteInfo: React.FC<{
 
   const { t } = useTranslation()
 
-  const [disabled, setDisabled] = useState(false)
+  const { spinChange } = useGuardButtonState()
+
+  const [skipLoading, setSkipLoading] = useState(false)
 
   const onSkip = async () => {
-    if (disabled) return
-    try {
-      setDisabled(true)
-      await businessRequest(CompleteInfoAuthFlowAction.Skip)
-    } catch (error) {
-      setDisabled(false)
-    }
+    spinChange(true)
+    setSkipLoading(true)
+
+    await businessRequest(CompleteInfoAuthFlowAction.Skip)
+    setSkipLoading(false)
+    spinChange(false)
   }
 
   return (
@@ -64,13 +67,17 @@ export const GuardCompleteInfo: React.FC<{
           />
 
           {skipComplateFileds && (
-            <span
+            <GuardButton
               className="g2-completeInfo-header-skip"
+              type="link"
+              loading={skipLoading}
               onClick={() => onSkip()}
             >
-              <IconFont type="authing-a-share-forward-line1" />
+              {!skipLoading && (
+                <IconFont type="authing-a-share-forward-line1" />
+              )}
               <span>{t('common.skip')}</span>
-            </span>
+            </GuardButton>
           )}
         </div>
 

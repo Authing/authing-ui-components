@@ -223,6 +223,7 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
         form={form}
         name="emailRegister"
         autoComplete="off"
+        onSubmitCapture={() => submitButtonRef.current.onSpin(true)}
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
       >

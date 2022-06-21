@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { GuardModuleType } from '..'
+import { GuardButton } from '../GuardButton'
 import { IconFont } from '../IconFont'
 import { useGuardFinallyConfig, useGuardModule } from '../_utils/context'
 import './styles.less'
@@ -33,10 +34,14 @@ export const BackLogin: React.FC<BackProps> = (props) => {
     }
 
     return (
-      <span onClick={onBack} className="g2-view-mfa-back-hover">
+      <GuardButton
+        type="link"
+        onClick={onBack}
+        className="g2-view-mfa-back-hover"
+      >
         <IconFont type="authing-arrow-left-s-line" style={{ fontSize: 24 }} />
         <span>{t('common.backLoginPage')}</span>
-      </span>
+      </GuardButton>
     )
   }, [isRender, config.defaultScenes, onBack, t])
 
@@ -66,10 +71,14 @@ export const BackCustom: React.FC<BackCustomProps> = (props) => {
     if (!isRender) return null
 
     return (
-      <span onClick={onBack} className="g2-view-mfa-back-hover">
+      <GuardButton
+        type="link"
+        onClick={onBack}
+        className="g2-view-mfa-back-hover"
+      >
         <IconFont type="authing-arrow-left-s-line" style={{ fontSize: 24 }} />
         <span>{children}</span>
-      </span>
+      </GuardButton>
     )
   }, [children, isRender, onBack])
 
