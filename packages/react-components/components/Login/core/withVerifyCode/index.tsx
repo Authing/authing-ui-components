@@ -343,6 +343,7 @@ export const LoginWithVerifyCode = (props: any) => {
               : 'authing-g2-input-form'
           }
           methods={methods}
+          checkExist={!autoRegister}
           currentMethod={currentMethod}
           areaCode={areaCode}
         >
@@ -393,11 +394,6 @@ export const LoginWithVerifyCode = (props: any) => {
         )}
         <Form.Item>
           <SubmitButton
-            // disabled={
-            //   !!agreements.find(
-            //     (item: Agreement) => item.required && !acceptedAgreements
-            //   )
-            // }
             text={submitText}
             className="password"
             ref={submitButtonRef}

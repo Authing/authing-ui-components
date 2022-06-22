@@ -271,5 +271,8 @@
   "fetchError": "Network connection failed, please try again later",
   "i18nCheckErrorMessage": "Please enter a valid mobile phone number or valid email",
   "verifyCodeRegister": "Verify Code",
-  "PasswordRegister": "Password"
+  "PasswordRegister": "Password",
+  "noFindEmail": "Can't find the email account",
+  "noFindPhone": "Can't find the phone account",
+  "noFindUsername": "Can't find the username account"
 }

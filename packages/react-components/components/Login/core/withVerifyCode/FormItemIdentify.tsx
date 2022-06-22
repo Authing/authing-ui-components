@@ -13,7 +13,8 @@ import { VerifyLoginMethods } from '../../../AuthingGuard/api'
 import { useCheckRepeat } from '../../../ValidatorRules/useCheckRepeat'
 import { parsePhone } from '../../../_utils/hooks'
 export interface FormItemIdentifyProps extends FormItemProps {
-  checkRepeat?: boolean
+  checkRepeat?: boolean // 重复性校验
+  checkExist?: boolean //存在性校验
   methods: VerifyLoginMethods[]
   currentMethod: 'phone-code' | 'email-code' //当前 input 输入
   areaCode?: string //国际化手机号区号
@@ -30,6 +31,7 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
     areaCode = 'CN',
     currentMethod,
     checkRepeat,
+    checkExist,
     ...formItemProps
   } = props
   const publicConfig = useGuardPublicConfig()
@@ -45,14 +47,16 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
     if (currentMethod === 'email-code')
       return {
         field: t('common.emailLabel'),
-        checkErrorMessage: t('common.checkEmail'),
+        checkRepeatErrorMessage: t('common.checkEmail'),
+        checkExistErrorMessage: t('common.noFindEmail'),
         formatErrorMessage: t('login.inputCorrectPhone'),
         pattern: VALIDATE_PATTERN.email,
       }
     else
       return {
         field: t('common.phone'),
-        checkErrorMessage: t('common.checkPhone'),
+        checkRepeatErrorMessage: t('common.checkPhone'),
+        checkExistErrorMessage: t('common.noFindPhone'),
         formatErrorMessage: t('login.inputCorrectPhone'),
         pattern: VALIDATE_PATTERN.phone,
       }
@@ -77,10 +81,15 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
       key: checkValue,
       type: FindMethodConversion[currentMethod],
     }).then(({ data }) => {
-      if (Boolean(data)) {
-        reject(methodContent.checkErrorMessage)
-      } else {
-        resolve(true)
+      if (checkExist) {
+        Boolean(data)
+          ? resolve(true)
+          : reject(methodContent.checkExistErrorMessage)
+      }
+      if (checkRepeat) {
+        Boolean(data)
+          ? reject(methodContent.checkRepeatErrorMessage)
+          : resolve(true)
       }
     })
   }
@@ -126,7 +135,7 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
     rules.push(formatRules)
 
     // 是否校验重复
-    if (checkRepeat) {
+    if (checkRepeat || checkExist) {
       rules.push({
         validator: checkRepeatFn,
         validateTrigger: [],
@@ -134,7 +143,7 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
     }
 
     return rules
-  }, [t, formatRules, checkRepeat, checkRepeatFn])
+  }, [t, formatRules, checkRepeat, checkExist, checkRepeatFn])
   // TODO 未来抽离
   const renderTemplate = useMemo(() => {
     if (methods.length !== 1)
@@ -151,18 +160,24 @@ export const FormItemIdentify: React.FC<FormItemIdentifyProps> = (props) => {
       case 'phone-code':
         return (
           <CustomFormItem.Phone
-            areaCode={areaCode}
             {...formItemProps}
+            areaCode={areaCode}
             checkRepeat={checkRepeat}
+            checkExist={checkExist}
           />
         )
       case 'email-code':
         return (
-          <CustomFormItem.Email {...formItemProps} checkRepeat={checkRepeat} />
+          <CustomFormItem.Email
+            {...formItemProps}
+            checkRepeat={checkRepeat}
+            checkExist={checkExist}
+          />
         )
     }
   }, [
     areaCode,
+    checkExist,
     checkRepeat,
     currentMethod,
     formItemProps,
