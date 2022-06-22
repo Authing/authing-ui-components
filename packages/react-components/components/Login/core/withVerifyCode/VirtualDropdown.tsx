@@ -13,7 +13,6 @@ export interface VirtualDropdownProps {
 export const VirtualDropdown: FC<VirtualDropdownProps> = (props) => {
   const { value, onChange } = props
   // const [open, setOpen] = useState(false)
-  // TODO 先取 iso type 作为 select 获取的 value 后续映射表弄好改为 区号码
   const options = isoInfo.map((info: IsoType) => {
     return {
       value: info.iso,
