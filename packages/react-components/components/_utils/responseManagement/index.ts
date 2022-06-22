@@ -34,7 +34,7 @@ export const errorCodeInterceptor: (
   // TODO 临时逻辑 如果有 Code 的话 先不走 statusCode 的行为
   // 否则会出现 messages 渲染两次的问题
   // if (!!res.code) return res
-
+  debugger
   switch (getHundreds(statusCode)) {
     case 3:
       if (apiCode === ApiCode.FLOW_END) {

@@ -18,6 +18,12 @@ export const setPublicConfig = (appId: string, config: ApplicationConfig) => {
   return (publicConfigMap[appId] = config)
 }
 
+/**
+ * 请求 Server 获得当前 AppID 开启的 Guard 配置
+ * @param appId
+ * @param httpClient
+ * @returns
+ */
 const requestPublicConfig = async (
   appId: string,
   httpClient: GuardHttp
@@ -49,6 +55,12 @@ const requestPublicConfig = async (
   return getPublicConfig(appId)
 }
 
+/**
+ * 合并 config
+ * @param defaultConfig Guard 默认配置
+ * @param config 组件传入配置
+ * @returns
+ */
 export const useMergeDefaultConfig = (
   defaultConfig: GuardLocalConfig,
   config?: GuardComponentConfig
@@ -128,15 +140,26 @@ const assembledRequestHost = (
   return host
 }
 
+/**
+ * 合并最终 Guard 配置
+ * @param appId
+ * @param config  useMergeDefaultConfig 合并后的用户侧传入 props 和默认配置
+ * @param httpClient
+ * @param setError 错误函数
+ * @returns
+ */
 export const useMergePublicConfig = (
   appId?: string,
   config?: GuardLocalConfig,
-  httpClient?: GuardHttp,
+  // httpClient?: GuardHttp,
+  getHttpClient?: () => GuardHttp | undefined,
   setError?: any
 ) => {
   const [publicConfig, setPublicConfig] = useState<ApplicationConfig>()
 
   const initPublicConfig = useCallback(async () => {
+    const httpClient = getHttpClient && getHttpClient()
+
     if (httpClient && appId) {
       if (!getPublicConfig(appId)) {
         try {
@@ -148,7 +171,7 @@ export const useMergePublicConfig = (
 
       setPublicConfig(getPublicConfig(appId))
     }
-  }, [appId, httpClient, setError])
+  }, [appId, getHttpClient, setError])
 
   useEffect(() => {
     initPublicConfig()

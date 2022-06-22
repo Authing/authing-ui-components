@@ -22,6 +22,11 @@ export const getGuardWindow = () => {
 
 export const useGuardWindow = getGuardWindow
 
+/**
+ * 初始化props.appendConfig相关
+ * @param appId
+ * @param appendConfig
+ */
 export const useInitGuardAppendConfig = (
   appId?: string,
   appendConfig?: GuardAppendConfig

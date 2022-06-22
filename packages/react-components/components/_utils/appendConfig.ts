@@ -8,6 +8,10 @@ export const getAppendConfig = (): GuardAppendConfig => {
 
 export const useAppendConfig = getAppendConfig
 
+/**
+ * 初始化 appendConfigMapping
+ * @param appendConfig
+ */
 export const initAppendConfig = (appendConfig: GuardAppendConfig = {}) => {
   appendConfigMapping = appendConfig
 }

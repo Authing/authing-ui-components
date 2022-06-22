@@ -67,20 +67,38 @@ export const RenderModule: React.FC<{
 }> = ({ guardProps }) => {
   const defaultMergedConfig = useGuardDefaultMergedConfig()
 
+  /**
+   * 是否加载完成
+   */
   const contextLoaded = useGuardContextLoaded()
 
+  /**
+   * 当前渲染 module
+   */
   const { moduleName } = useGuardCurrentModule()
 
+  /**
+   * http instance
+   */
   const httpClient = useGuardHttpClient()
 
+  /**
+   * 切换视图方法
+   */
   const { changeModule } = useGuardModule()
 
   const { GuardButtonProvider } = useGuardButtonContext()
 
+  /**
+   * loading 态组件
+   */
   const loadingComponent = useMemo(() => {
     return defaultMergedConfig.loadingComponent
   }, [defaultMergedConfig])
 
+  /**
+   * 组件映射表 TODO: 这应该是常量 + dynamic import + preFetch
+   */
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const ComponentsMapping: Record<
     GuardModuleType,
@@ -158,7 +176,12 @@ export const RenderModule: React.FC<{
     ),
   }
 
-  // 初始化 请求拦截器 （Error Code）
+  /**
+   * 初始化 http 请求全局拦截器
+   * 初始化拦截器后 每次发送 HTTP 请求会首先进行拦截
+   * 全局在这一步骤里进行切换 Guard 的渲染
+   * 组件仅仅负责 ajax 发送，状态切换由 Server Api + 全局 interceptor 控制
+   */
   useEffect(() => {
     if (!httpClient || !changeModule) return
 
@@ -171,6 +194,9 @@ export const RenderModule: React.FC<{
       res.flowHandle && updateFlowHandle(res.flowHandle)
 
       const codeActionMapping = {
+        /**
+         * res.statusCode = 3 && res.apiCode != 1600
+         */
         [CodeAction.CHANGE_MODULE]: () => {
           const nextModule = ChangeModuleApiCodeMapping[res.apiCode!]
 
@@ -179,10 +205,16 @@ export const RenderModule: React.FC<{
           changeModule(nextModule, nextData)
           return CodeAction.CHANGE_MODULE
         },
+        /**
+         * res.statusCode = 4 || res.statusCode = 6
+         */
         [CodeAction.RENDER_MESSAGE]: () => {
           message.error(res.message ?? res.messages)
           return CodeAction.RENDER_MESSAGE
         },
+        /**
+         * res.statusCode = 3 && res.apiCode = 1600
+         */
         [CodeAction.FLOW_END]: () => {
           return CodeAction.FLOW_END
         },
@@ -192,6 +224,9 @@ export const RenderModule: React.FC<{
 
       if (!codeAction) return res
 
+      /**
+       * 流程结束：调用 callback 通知结束
+       */
       if (res.apiCode === ApiCode.FLOW_END) {
         const newData = res.data.user
 

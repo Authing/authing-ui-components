@@ -10,7 +10,6 @@ export const useGuardIconfont = (cdnBase?: string, setError?: any) => {
 
     try {
       const res = await fetch(`${cdnBase}/svg-string/guard`)
-
       const body = await res?.text()
 
       const guardWindow = getGuardWindow()

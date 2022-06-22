@@ -90,6 +90,8 @@ const useSwitchStates = (loginWay: LoginMethods) => {
 
   return { switchText, inputNone, qrcodeNone }
 }
+
+// TODO: 逻辑 & UI 耦合严重 -> 业务组件架构方式不合理
 export const GuardLoginView = () => {
   // const { config } = props
 
