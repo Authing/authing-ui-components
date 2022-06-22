@@ -25,15 +25,15 @@ export const InputAccount: React.FC<InputAccountProps> = (props) => {
     () => ({
       'email-password': {
         t: t('common.email'),
-        sort: 2,
+        sort: 1,
       },
       'phone-password': {
         t: t('common.phoneNumber'),
-        sort: 1,
+        sort: 0,
       },
       'username-password': {
         t: t('common.username'),
-        sort: 0,
+        sort: 2,
       },
     }),
     [t]

@@ -550,6 +550,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       layout="vertical"
       form={form}
       onFinish={onFinish}
+      onSubmitCapture={() => submitButtonRef.current.onSpin(true)}
       onFinishFailed={() => submitButtonRef.current.onError()}
       className="authing-g2-completeInfo-form authing-g2-form-required-item-icon-after"
     >

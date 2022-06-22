@@ -1,4 +1,3 @@
-import { useEffect, useMemo } from 'react'
 import { GuardComponentConfig, GuardLocalConfig } from '../config'
 import { GuardModuleType } from '../module'
 import isEqual from 'lodash/isEqual'
@@ -46,8 +45,15 @@ export class GuardStateMachine {
   constructor(changeModuleEvent: ChangeModuleEvent, initData: ModuleState) {
     this.changeModuleEvent = changeModuleEvent
 
+    this.globalWindow()?.addEventListener('popstate', this.onPopstate)
+
     this.historyPush(initData, ActionType.Init)
   }
+
+  uninstallPopstate = () => {
+    this.globalWindow()?.removeEventListener('popstate', this.onPopstate)
+  }
+
   globalWindow = (): Window | undefined => {
     const guardWindow = getGuardWindow()
 
@@ -55,6 +61,8 @@ export class GuardStateMachine {
   }
 
   next = (nextModule: GuardModuleType, initData: any) => {
+    const globalWindow = this.globalWindow()
+
     const moduleData: ModuleState = {
       moduleName: nextModule,
       initData,
@@ -62,6 +70,14 @@ export class GuardStateMachine {
     this.changeModuleEvent(nextModule, initData)
 
     const prevModuleData = this.moduleStateHistory.slice(1, 2)[0]
+
+    if (this.isUseHistoryHijack()) {
+      globalWindow?.history.pushState(
+        nextModule,
+        '',
+        globalWindow?.location.href
+      )
+    }
 
     // 快照history
     if (prevModuleData && isEqual(prevModuleData, moduleData)) {
@@ -77,6 +93,7 @@ export class GuardStateMachine {
   back = (initData: any = {}) => {
     if (this.moduleStateHistory.length <= 1) return
     const backModule = this.moduleStateHistory[1]
+
     this.changeModuleEvent(backModule.moduleName, {
       ...initData,
       ...backModule.initData,
@@ -112,6 +129,7 @@ export class GuardStateMachine {
     if (this.moduleStateHistory.length <= 1) return
 
     this.moduleStateHistory.splice(0, 1)
+
     this.stateMachineLog[this.order++] = {
       action: ActionType.Back,
       date: new Date().getTime(),
@@ -122,43 +140,51 @@ export class GuardStateMachine {
   setConfig = (config: GuardLocalConfig) => {
     this.config = config
   }
-}
 
-export const useHistoryHijack = (back?: () => void) => {
-  const globalWindow = getGuardWindow()
-
-  const isUseHistoryHijack = useMemo(
-    () => globalWindow?.location.href !== 'about:blank',
-
-    [globalWindow?.location.href]
-  )
-
-  const next = (state: any = {}) => {
-    if (!isUseHistoryHijack) {
-      return
-    }
-
-    globalWindow?.history.pushState(state, '', globalWindow?.location.href)
+  isUseHistoryHijack = () => {
+    return this.globalWindow()?.location.href !== 'about:blank'
   }
 
-  useEffect(() => {
-    if (!isUseHistoryHijack) {
-      return () => {}
-    }
-
-    const onPopstate = () => {
-      back?.()
-    }
-
-    back && globalWindow?.addEventListener('popstate', onPopstate)
-
-    return () => {
-      back && globalWindow?.removeEventListener('popstate', onPopstate)
-    }
-  }, [back, globalWindow, isUseHistoryHijack])
-
-  return [next]
+  onPopstate = () => {
+    this.back()
+  }
 }
+
+// export const useHistoryHijack = (back?: () => void) => {
+//   const globalWindow = getGuardWindow()
+
+//   const isUseHistoryHijack = useMemo(
+//     () => globalWindow?.location.href !== 'about:blank',
+
+//     [globalWindow?.location.href]
+//   )
+
+//   const next = (state: any = {}) => {
+//     if (!isUseHistoryHijack) {
+//       return
+//     }
+
+//     globalWindow?.history.pushState(state, '', globalWindow?.location.href)
+//   }
+
+//   useEffect(() => {
+//     if (!isUseHistoryHijack) {
+//       return () => {}
+//     }
+
+//     const onPopstate = () => {
+//       back?.()
+//     }
+
+//     back && globalWindow?.addEventListener('popstate', onPopstate)
+
+//     return () => {
+//       back && globalWindow?.removeEventListener('popstate', onPopstate)
+//     }
+//   }, [back, globalWindow, isUseHistoryHijack])
+
+//   return [next]
+// }
 
 export const initGuardStateMachine = (
   changeMouleEvent: ChangeModuleEvent,

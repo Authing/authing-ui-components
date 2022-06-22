@@ -26,7 +26,7 @@ export const LOGIN_METHODS_MAP = () => ({
   [LoginMethods.WechatMpQrcode]: i18n.t('login.wechatmpQrcode'),
 })
 
-export const REGISTER_METHODS_MAP = () => ({
+export const REGISTER_METHODS_MAP: any = () => ({
   [RegisterMethods.Email]: i18n.t('login.emailRegister'),
   [RegisterMethods.Phone]: i18n.t('login.phoneRegister'),
 })

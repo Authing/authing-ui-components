@@ -119,6 +119,43 @@ export const useGuardXContext = () => {
   }, [])
 }
 
+export interface IGuardContextProvider {
+  spin: boolean
+  spinChange: (spin: boolean) => void
+}
+
+const GuardButtonContext = React.createContext<IGuardContextProvider>({
+  spin: false,
+  spinChange: () => {},
+})
+
+export const useGuardButtonContext = () => {
+  const Provider = GuardButtonContext.Provider
+
+  const GuardButtonProvider: React.FC = ({ children }) => {
+    const [spin, setSpin] = React.useState(false)
+
+    return (
+      <Provider
+        value={{
+          spin: spin,
+          spinChange: (spin: boolean) => {
+            setSpin(spin)
+          },
+        }}
+      >
+        {children}
+      </Provider>
+    )
+  }
+
+  return {
+    GuardButtonProvider,
+  }
+}
+
+export const useGuardButtonState = () => useContext(GuardButtonContext)
+
 export const useGuardPublicConfig = () => useContext(GuardXContext).publicConfig
 
 export const useGuardHttpClient = () => useContext(GuardXContext).httpClient

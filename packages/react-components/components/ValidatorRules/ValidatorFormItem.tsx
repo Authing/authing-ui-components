@@ -115,7 +115,7 @@ const ValidatorFormItem: React.FC<ValidatorFormItemMetaProps> = (props) => {
     if (checkRepeat) {
       rules.push({
         validator: checkRepeatFn,
-        validateTrigger: ['onBlur'],
+        validateTrigger: [],
       })
     }
 
