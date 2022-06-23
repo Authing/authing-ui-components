@@ -47,17 +47,35 @@ const qrcodeWays = [
 ]
 
 const useMethods = (config: any) => {
+  /**
+   * 配置的默认登陆方式
+   */
   let dlm = config?.defaultLoginMethod
+  /**
+   * 支持的 loginMethod
+   */
   let propsMethods = config?.loginMethods
+  /**
+   * 不支持使用第 1 个
+   */
   if (!propsMethods?.includes(dlm)) {
     dlm = propsMethods?.[0]
   }
 
+  /**
+   * 密码输入页面
+   */
   let renderInputWay = intersection(propsMethods, inputWays).length > 0
+  /**
+   * 扫码页面
+   */
   let renderQrcodeWay = intersection(propsMethods, qrcodeWays).length > 0
   return [dlm, renderInputWay, renderQrcodeWay]
 }
 
+/**
+ * 是否**展示**忘记密码和注册
+ */
 const useDisables = (data: any) => {
   let { disableResetPwd, disableRegister } = data.config
   let { loginWay, autoRegister } = data
@@ -95,48 +113,98 @@ const useSwitchStates = (loginWay: LoginMethods) => {
 export const GuardLoginView = () => {
   // const { config } = props
 
+  /**
+   * Guard 所有配置
+   */
   const config = useGuardFinallyConfig()
 
   const appId = useGuardAppId()
 
+  /**
+   * 切换状态方法
+   */
   const { changeModule } = useGuardModule()
 
   const events = useGuardEvents()
 
+  /**
+   * Server 返回 Guard 配置
+   */
   const publicConfig = useGuardPublicConfig()
 
+  /**
+   * 获取渲染登陆渲染方式
+   * defaultMethod 默认渲染登陆方式
+   * renderInputWay 是否渲染密码输入页面
+   * renderQrcodeWay 是否渲染二维码登陆页面
+   */
   let [defaultMethod, renderInputWay, renderQrcodeWay] = useMethods(config)
+
+  /**
+   * TODO: 开启协议？
+   */
   const agreementEnabled = config?.agreementEnabled
 
   const { t } = useTranslation()
 
+  /**
+   * 渲染的登陆方式
+   */
   const [loginWay, setLoginWay] = useState(defaultMethod)
 
-  const [canLoop, setCanLoop] = useState(false) // 允许轮询
+  /**
+   * 开启轮询
+   */
+  const [canLoop, setCanLoop] = useState(false)
 
+  /**
+   * SDK 相关
+   */
   const client = useGuardAuthClient()
 
+  /**
+   * Server 返回二维码相关 TODO: 两个数组的意思是什么?
+   */
   const qrcodeTabsSettings = publicConfig?.qrcodeTabsSettings
 
   const [errorNumber, setErrorNumber] = useState(0)
 
   const [accountLock, setAccountLock] = useState(false)
 
+  /**
+   * TODO: publicKey ?
+   */
   let publicKey = config?.publicKey!
 
   // let autoRegister = props.config?.autoRegister
+  /**
+   * 支持的登陆方式
+   */
   let ms = config?.loginMethods
 
+  /**
+   * 输入界面需要支持的功能
+   */
   const firstInputWay = inputWays.filter((way) => ms?.includes(way))[0]
 
+  /**
+   * 二维码页面支持的功能
+   * TODO: 这里应该和 useMethods 一起处理
+   */
   const firstQRcodeWay = qrcodeWays.filter((way) => ms?.includes(way))[0]
 
+  /**
+   * 是否展示忘记密码和禁用（isShow 而非 disabled）
+   */
   let { disableResetPwd, disableRegister } = useDisables({
     config: config,
     loginWay,
     autoRegister: config?.autoRegister,
   })
 
+  /**
+   * 验证码类型文字 目前支持：邮箱/短信
+   */
   const verifyCodeLogin = useMemo(() => {
     const methods = publicConfig?.verifyCodeTabConfig?.enabledLoginMethods ?? [
       'phone-code',
@@ -151,6 +219,9 @@ export const GuardLoginView = () => {
     return t('common.verifyCodeLogin')
   }, [publicConfig, t])
 
+  /**
+   * 二维码登陆时，是否需要隐藏顶部 tab 栏
+   */
   const hiddenTab = useMemo(() => {
     const scanLogins = ms ?? [].filter((method) => qrcodeWays.includes(method)) //取到扫码登录类型
     if (scanLogins.length > 1) {
@@ -172,7 +243,11 @@ export const GuardLoginView = () => {
     }
   }, [ms, qrcodeTabsSettings])
 
+  /**
+   * 高亮的二维码 Tab
+   */
   const defaultQrCodeWay = useMemo(() => {
+    // 微信扫码 or 小程序扫码
     if (
       [LoginMethods.WechatMpQrcode, LoginMethods.WxMinQr].includes(
         defaultMethod
@@ -188,11 +263,17 @@ export const GuardLoginView = () => {
     }
   }, [defaultMethod, qrcodeTabsSettings])
 
+  /**
+   * success callback
+   */
   const onLoginSuccess = (data: any, message?: string) => {
     // data._message = message
     events?.onLogin?.(data, client)
   }
 
+  /**
+   * fail callback
+   */
   const onLoginFailed = (code: number, data: any, message?: string) => {
     // TODO 与拦截器中 render-message 同步
     const action = codeMap[code]
@@ -211,6 +292,9 @@ export const GuardLoginView = () => {
     })
   }
 
+  /**
+   * before login of callback
+   */
   const onBeforeLogin = (loginInfo: any) => {
     if (events?.onBeforeLogin) {
       return events?.onBeforeLogin?.(loginInfo, client)
@@ -243,6 +327,9 @@ export const GuardLoginView = () => {
     [agreementEnabled, config?.autoRegister, config?.agreements, i18n.language]
   )
 
+  /**
+   * Server 返回支持的验证码登陆方式（邮箱/短信）
+   */
   const verifyLoginMethods = useMemo<VerifyLoginMethods[]>(
     () =>
       publicConfig?.verifyCodeTabConfig?.enabledLoginMethods ?? ['phone-code'],
@@ -250,14 +337,24 @@ export const GuardLoginView = () => {
     [publicConfig?.verifyCodeTabConfig?.enabledLoginMethods]
   )
 
+  /**
+   * 没细看
+   * 社会身份源
+   * 企业身份源
+   * isNoMethod 不存在 OAuth
+   */
   const [
     socialConnectionObjs,
     enterpriseConnectionObjs,
     isNoMethod,
   ] = useMethod({ config, publicConfig })
 
+  // TODO: 这里 useMethod 不是已经有了吗
   const noLoginMethods = !config?.loginMethods?.length
 
+  /**
+   * 媒体查询
+   */
   const { isPhoneMedia } = useMediaSize()
 
   // 渲染前执行
@@ -270,6 +367,7 @@ export const GuardLoginView = () => {
         'g2-view-container'
       )?.[0]
 
+      // 直接操作 DOM 进行修改
       if (containerDOM) {
         // @ts-ignore
         containerDOM.style['min-height'] = isNoMethod ? '456px' : '280px'
@@ -373,7 +471,6 @@ export const GuardLoginView = () => {
                 </Popover>
               </div>
             )}
-
             <div className="g2-view-header">
               <img src={config?.logo} alt="" className="icon" />
               <div className="title">{config?.title}</div>
@@ -383,7 +480,6 @@ export const GuardLoginView = () => {
                 </div>
               )}
             </div>
-
             {renderInputWay && (
               <div className={inputNone}>
                 <div className={`g2-view-tabs`}>

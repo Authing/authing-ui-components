@@ -38,10 +38,17 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
 }) => {
   const noLoginMethods = !config?.loginMethods?.length
 
+  /**
+   * Guard 所有配置
+   */
   const publicConfig = useGuardPublicConfig()
 
   const userPoolId = publicConfig?.userPoolId
 
+  /**
+   * 国际化
+   * see: https://react.i18next.com/getting-started
+   */
   const { t } = useTranslation()
 
   const { isPhoneMedia } = useMediaSize()

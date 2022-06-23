@@ -45,14 +45,25 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
 
   let { t } = useTranslation()
   let { post } = useGuardHttp()
+  /**
+   * fetch 实例
+   */
   let client = useGuardAuthClient()
 
   let submitButtonRef = useRef<any>(null)
 
+  // 是否显示图形验证码
   const [showCaptcha, setShowCaptcha] = useState(false)
+  // 验证码 URL
   const [verifyCodeUrl, setVerifyCodeUrl] = useState('')
+  // 登陆错误可尝试次数
   const [remainCount, setRemainCount] = useState(0)
+  // 是否锁定账号
   const [accountLock, setAccountLock] = useState(false)
+
+  /**
+   * 获取验证码地址
+   */
   const getCaptchaUrl = () => {
     const url = new URL(props.host!)
     url.pathname = '/api/v2/security/captcha'
@@ -60,6 +71,9 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     return url.href
   }
 
+  /**
+   * SDK 相关 加密函数
+   */
   const encrypt = client.options.encryptFunction
 
   const loginRequest = useCallback(
@@ -151,9 +165,11 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         setAccountLock(true)
       }
 
+      // TODO: 为什么不在拦截器中自动做调用 ？
       // 响应拦截器处理通用错误以及changeModule
       const handMode = onGuardHandling?.()
       // 向上层抛出错误
+      // debugger
       handMode === CodeAction.RENDER_MESSAGE && onLoginFailed?.(code, data, msg)
     }
   }
@@ -165,7 +181,6 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
 
   const submitText = useMemo(() => {
     if (props.submitButText) return props.submitButText
-
     return props.autoRegister
       ? `${t('common.login')} / ${t('common.register')}`
       : t('common.login')

@@ -185,6 +185,7 @@ export const useMethod: (params: {
   config: GuardLocalConfig
   publicConfig: ApplicationConfig
 }) => any = ({ config, publicConfig }) => {
+  // 不支持人任何登陆
   const noLoginMethods = !config?.loginMethods?.length
   let enterpriseConnectionObjs: ApplicationConfig['identityProviders']
   if (config.enterpriseConnections) {

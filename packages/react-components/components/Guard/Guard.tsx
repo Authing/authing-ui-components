@@ -34,9 +34,9 @@ export const Guard = memo((props: GuardProps) => {
   // 锁定 Guard 中 window 指向
   useEffect(() => {
     if (!ref?.current) return
-
+    // 获取 document 节点
     const guardDocument = getDocumentNode(ref.current)
-
+    console.log(guardDocument, 'guardDocument')
     initGuardDocument(guardDocument)
 
     mounted(true)

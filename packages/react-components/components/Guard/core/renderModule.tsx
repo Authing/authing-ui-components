@@ -190,7 +190,7 @@ export const RenderModule: React.FC<{
       code: CodeAction,
       res: AuthingResponse
     ): AuthingGuardResponse => {
-      // 判断有没有 flowHandle
+      // 判断是否存在中断的流程
       res.flowHandle && updateFlowHandle(res.flowHandle)
 
       const codeActionMapping = {
