@@ -11,6 +11,7 @@ import {
 import { CompletePassword } from './core/completePassword'
 import { FirstLoginReset } from './core/firstLoginReset'
 import { RotateReset } from './core/rotateReset'
+import { PasswordNotSafeReset } from './core/PasswordNotSafeReset'
 
 // 手动修改密码，并非「忘记密码」
 // 进入的场景是读取配置：1开了首次登录修改密码 || 2开了密码轮换
@@ -88,7 +89,7 @@ export const GuardPasswordNotSafeResetView: React.FC = () => {
 
   const config = useGuardFinallyConfig()
 
-  const coreForm = <FirstLoginReset onReset={onReset} />
+  const coreForm = <PasswordNotSafeReset onReset={onReset} />
 
   return (
     <GuardChangePassword
