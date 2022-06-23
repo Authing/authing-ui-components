@@ -14,10 +14,11 @@ import {
 import { authFlow, ChangePasswordBusinessAction } from '../businessRequest'
 import { ApiCode } from '../../_utils/responseManagement/interface'
 import { useMediaSize } from '../../_utils/hooks'
-interface FirstLoginResetProps {
+import { usePasswordErrorText } from '../../_utils/useErrorText'
+interface PasswordNotSafeResetProps {
   onReset: any
 }
-export const PasswordNotSafeReset: React.FC<FirstLoginResetProps> = ({
+export const PasswordNotSafeReset: React.FC<PasswordNotSafeResetProps> = ({
   onReset,
 }) => {
   const { t } = useTranslation()
@@ -37,14 +38,17 @@ export const PasswordNotSafeReset: React.FC<FirstLoginResetProps> = ({
   const { isPhoneMedia } = useMediaSize()
 
   let submitButtonRef = useRef<any>(null)
-
+  const {
+    getPassWordUnsafeText,
+    setPasswordErrorTextShow,
+  } = usePasswordErrorText()
   const onFinish = async (values: any) => {
     let newPassword = values.password
     submitButtonRef.current?.onSpin(true)
 
     if (isAuthFlow) {
       // 重置密码成功不会返回 UserInfo
-      const { apiCode, onGuardHandling } = await authFlow(
+      const { apiCode, onGuardHandling, message: msg } = await authFlow(
         ChangePasswordBusinessAction.ResetPasswordStrengthDetection,
         {
           password: await encrypt!(newPassword, publicKey),
@@ -54,6 +58,9 @@ export const PasswordNotSafeReset: React.FC<FirstLoginResetProps> = ({
 
       if (apiCode === ApiCode.ABORT_FLOW) {
         onReset()
+      } else if (apiCode === ApiCode.UNSAFE_PASSWORD_TIP) {
+        message.error(msg)
+        setPasswordErrorTextShow(true)
       } else {
         submitButtonRef.current?.onError()
         onGuardHandling?.()
@@ -134,7 +141,7 @@ export const PasswordNotSafeReset: React.FC<FirstLoginResetProps> = ({
             }
           />
         </Form.Item>
-
+        {getPassWordUnsafeText()}
         <Form.Item className="authing-g2-input-form submit-form">
           <SubmitButton
             className="forget-password"
