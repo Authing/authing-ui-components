@@ -279,10 +279,10 @@
     lodash "^4.17.15"
     resize-observer-polyfill "^1.5.0"
 
-"@authing/react-ui-components@^3.1.17":
-  version "3.1.19"
-  resolved "https://registry.npmjs.org/@authing/react-ui-components/-/react-ui-components-3.1.19.tgz#c8281d2099f8383d77e82614fa113b6f296cc0c9"
-  integrity sha512-PCkC2VNCAyJR1XC/DKre2o3KCJRrN82f45C4yeiVUrencPgH82bPqs6INyODVv8AGF8pP/YIAjH9iZmX4epM/Q==
+"@authing/react-ui-components@^3.1.21":
+  version "3.1.22"
+  resolved "https://registry.npmjs.org/@authing/react-ui-components/-/react-ui-components-3.1.22.tgz#ac320b99fbb3794e90322c06df7bd72da4be80a1"
+  integrity sha512-qcN33B2WMpxW+Q33CTuylcQ3zu4CFXgGSNnDVQJpelt+pL3I1UBMpH19wK6cTdZ9TXEfOo0oB58SZaktqE7FKA==
   dependencies:
     antd "^4.8.0"
     authing-js-sdk "4.23.32"
