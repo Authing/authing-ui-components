@@ -13,7 +13,6 @@ export interface VirtualDropdownProps {
 export const VirtualDropdown: FC<VirtualDropdownProps> = (props) => {
   const { value, onChange } = props
   // const [open, setOpen] = useState(false)
-  // TODO 先取 iso type 作为 select 获取的 value 后续映射表弄好改为 区号码
   const options = isoInfo.map((info: IsoType) => {
     return {
       value: info.iso,
@@ -31,6 +30,8 @@ export const VirtualDropdown: FC<VirtualDropdownProps> = (props) => {
           </div>
         </div>
       ),
+      region: info.regions,
+      region_en: info.regions_en,
     }
   })
 
@@ -46,7 +47,17 @@ export const VirtualDropdown: FC<VirtualDropdownProps> = (props) => {
       optionLabelProp="children"
       dropdownMatchSelectWidth={138}
       filterOption={(input, option: any) => {
-        return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+        if (option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0) {
+          return true
+        }
+        if (option.region.toLowerCase().indexOf(input.toLowerCase()) >= 0) {
+          return true
+        }
+        if (option.region_en.toLowerCase().indexOf(input.toLowerCase()) >= 0) {
+          return true
+        }
+        return false
+        // return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
       }}
       suffixIcon={
         <IconFont

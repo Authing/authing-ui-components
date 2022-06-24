@@ -35,6 +35,8 @@ export const CompletePassword: React.FC = () => {
     businessRequestName,
     content,
     isChangeComplete,
+    onRegisterSuccess,
+    onRegisterFailed,
   } = useGuardInitData<RegisterCompletePasswordInitData>()
 
   let submitButtonRef = useRef<any>(null)
@@ -68,6 +70,8 @@ export const CompletePassword: React.FC = () => {
             ...content,
             password,
           },
+          onRegisterSuccess,
+          onRegisterFailed,
         })
         return
       } else {
@@ -88,13 +92,15 @@ export const CompletePassword: React.FC = () => {
             })
             submitButtonRef.current.onSpin(false)
             if (resCode === 200) {
-              events?.onRegister?.(data, authClient)
-              changeModule?.(GuardModuleType.LOGIN)
+              onRegisterSuccess(data)
+              // events?.onRegister?.(data, authClient)
+              // changeModule?.(GuardModuleType.LOGIN)
             } else if (resCode === ApiCode.UNSAFE_PASSWORD_TIP) {
               message.error(errorMessage)
               setPasswordErrorTextShow(true)
             } else {
               onGuardHandling?.()
+              onRegisterFailed(resCode, data, message)
               events?.onRegisterError?.({
                 code: resCode,
                 data,
@@ -110,8 +116,9 @@ export const CompletePassword: React.FC = () => {
               content.options
             )
             submitButtonRef.current?.onSpin(false)
-            events?.onRegister?.(user, authClient)
-            changeModule?.(GuardModuleType.LOGIN)
+            onRegisterSuccess(user)
+            // events?.onRegister?.(user, authClient)
+            // changeModule?.(GuardModuleType.LOGIN)
           }
         } catch (error: any) {
           const { code, message: errorMessage, data } = error
@@ -120,11 +127,12 @@ export const CompletePassword: React.FC = () => {
           }
           submitButtonRef.current.onError()
           message.error(errorMessage)
-          events?.onRegisterError?.({
-            code,
-            data,
-            message,
-          })
+          onRegisterFailed(code, data, errorMessage)
+          // events?.onRegisterError?.({
+          //   code,
+          //   data,
+          //   message,
+          // })
         } finally {
           submitButtonRef.current?.onSpin(false)
         }
@@ -138,6 +146,8 @@ export const CompletePassword: React.FC = () => {
       encrypt,
       events,
       isChangeComplete,
+      onRegisterFailed,
+      onRegisterSuccess,
       post,
       publicKey,
       setPasswordErrorTextShow,

@@ -23,6 +23,7 @@ import { GuardRecoveryCodeView } from '../../RecoveryCode'
 import { GuardRegisterView } from '../../Register'
 import { GuardSubmitSuccessView } from '../../SubmitSuccess'
 import {
+  useGuardButtonContext,
   useGuardContextLoaded,
   useGuardCurrentModule,
   useGuardDefaultMergedConfig,
@@ -74,6 +75,8 @@ export const RenderModule: React.FC<{
   const httpClient = useGuardHttpClient()
 
   const { changeModule } = useGuardModule()
+
+  const { GuardButtonProvider } = useGuardButtonContext()
 
   const loadingComponent = useMemo(() => {
     return defaultMergedConfig.loadingComponent
@@ -229,12 +232,17 @@ export const RenderModule: React.FC<{
     } else if (loadingComponent) {
       return loadingComponent
     }
+
     return null
   }, [ComponentsMapping, contextLoaded, loadingComponent, moduleName])
 
   const visible = useMemo(() => {
     return guardProps.visible
   }, [guardProps.visible])
+
+  const renderGuardContent = useMemo(() => {
+    return <GuardButtonProvider>{renderModule}</GuardButtonProvider>
+  }, [GuardButtonProvider, renderModule])
 
   return (
     <ConfigProvider
@@ -253,10 +261,10 @@ export const RenderModule: React.FC<{
           maskClosable={false} // 点击蒙层，是否允许关闭
           getContainer={defaultMergedConfig.target ?? false}
         >
-          <div className="authing-g2-render-module">{renderModule}</div>
+          <div className="authing-g2-render-module">{renderGuardContent}</div>
         </Modal>
       ) : (
-        <div className="authing-g2-render-module">{renderModule}</div>
+        <div className="authing-g2-render-module">{renderGuardContent}</div>
       )}
     </ConfigProvider>
   )

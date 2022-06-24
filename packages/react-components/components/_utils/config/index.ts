@@ -7,8 +7,8 @@ import { AuthingResponse } from '../http'
 import { GuardHttp } from '../guardHttp'
 import { corsVerification } from '../corsVerification'
 import { Logger } from '../logger'
-import { NewRegisterMethods } from '../../Type'
 import { GuardPageConfig } from '../../Type'
+import { RegisterMethods } from '../../AuthingGuard/types'
 
 let publicConfigMap: Record<string, ApplicationConfig> = {}
 
@@ -96,10 +96,10 @@ const mergedPublicConfig = (
       publicConfig.ssoPageComponentDisplay.autoRegisterThenLoginHintInfo,
     registerMethods:
       config.registerMethods ??
-      (publicConfig.registerTabs?.list as NewRegisterMethods[]),
+      (publicConfig.registerTabs?.list as RegisterMethods[]),
     defaultRegisterMethod:
       config.defaultRegisterMethod ??
-      (publicConfig.registerTabs.default as NewRegisterMethods),
+      (publicConfig.registerTabs.default as RegisterMethods),
     // 禁止注册
     disableRegister: !!(
       config.disableRegister ??

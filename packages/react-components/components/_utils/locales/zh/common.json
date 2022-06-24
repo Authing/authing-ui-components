@@ -270,5 +270,11 @@
   "timeout": "请求超时，请稍后重试",
   "userNameIsExists": "该用户名已存在!",
   "fetchError": "网络连接失败，请稍后再试",
-  "passwordUnsafeTip": "密码强度已更新，请刷新页面后重试"
+  "passwordUnsafeTip": "密码强度已更新，请刷新页面后重试",
+  "i18nCheckErrorMessage": "请输入所在区号合法的手机号或邮箱",
+  "verifyCodeRegister": "验证码注册",
+  "PasswordRegister": "密码注册",
+  "noFindEmail": "找不到该邮箱账号",
+  "noFindPhone": "找不到该手机账号",
+  "noFindUsername": "找不到该用户名账号"
 }
