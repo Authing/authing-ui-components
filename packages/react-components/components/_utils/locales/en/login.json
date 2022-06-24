@@ -31,7 +31,7 @@
   "inputRecoverCode": "Enter recovery code",
   "inputSixCode": "Enter 6-digit security code",
   "loginBy": "Sign in with {{name}}",
-  "mfaAfterReset": "After successful login, we will generate a new recovery code",
+  "mfaAfterReset": "A new recovery code will be generated after use. \nIf you forget the recovery code, please contact the administrator",
   "mustEqualToPwd": "Must match the password",
   "newGenered": "A new recovery code has been generated for you",
   "newPwdLimit": "6-20 digits new password",
