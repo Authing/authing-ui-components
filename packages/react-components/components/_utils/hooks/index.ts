@@ -213,85 +213,86 @@ export const useMethod: (params: {
       ) ?? []
   }
 
-  socialConnectionObjs = socialConnectionObjs
-    ?.filter((item) => {
-      // 某些社会化登录会在 tabs 中显示，或者无法在 Guard 中使用，所以底部不显示了
-      return !HIDE_SOCIALS.includes(item.provider)
-    })
-    .filter((item: any) => {
-      // 某些在企业身份源创建的社交身份源归为企业身份源方式显示
-      if (HIDE_SOCIALS_SHOWIN_ENTERPRISE.includes(item.provider)) {
-        if (
-          !enterpriseConnectionObjs.find(
-            (connection: any) => connection.identifier === item.identifier
-          )
-        ) {
-          enterpriseConnectionObjs.push(item)
-        }
-        return false
-      }
-      return true
-    })
-    // 特殊浏览器登录方式
-    .filter((item) =>
-      isWeChatBrowser()
-        ? item.provider === SocialConnectionProvider.WECHATMP
-        : item.provider !== SocialConnectionProvider.WECHATMP
-    )
-    .filter((item) =>
-      isDingtalkBrowser()
-        ? item.provider !== SocialConnectionProvider.WECHATPC
-        : true
-    )
-    .filter((item) => {
-      if (isLarkBrowser()) {
-        return (
-          item.provider === SocialConnectionProvider.LARK_INTERNAL ||
-          item.provider === SocialConnectionProvider.LARK_PUBLIC
-        )
-      } else {
-        return true
-      }
-    })
-    .filter((item) => {
-      if (isDingtalkBrowser()) {
-        return ![
-          SocialConnectionProvider.APPLE,
-          SocialConnectionProvider.APPLE_WEB,
-          SocialConnectionProvider.ALIPAY,
-          SocialConnectionProvider.GOOGLE,
-        ].includes(item.provider)
-      } else {
-        return true
-      }
-    })
-    .filter((item) => {
-      if (isQQBrowser()) {
-        return (
-          ![
-            SocialConnectionProvider.APPLE,
-            SocialConnectionProvider.APPLE_WEB,
-            SocialConnectionProvider.GOOGLE,
-          ].includes(item.provider) && !item.provider.includes('wechat')
-        )
-      } else {
-        return true
-      }
-    })
-    .filter((item) => {
-      if (isQQBuiltInBrowser()) {
-        return ![SocialConnectionProvider.ALIPAY].includes(item.provider)
-      } else {
-        return true
-      }
-    })
-    .filter((item) => {
-      if (isWeWorkBuiltInBrowser()) {
-        return ![SocialConnectionProvider.WECHATMP].includes(item.provider)
-      } else {
-        return true
-      }
-    })
+  // socialConnectionObjs = socialConnectionObjs
+  //   ?.filter((item) => {
+  //     // 某些社会化登录会在 tabs 中显示，或者无法在 Guard 中使用，所以底部不显示了
+  //     return !HIDE_SOCIALS.includes(item.provider)
+  //   })
+  //   .filter((item: any) => {
+  //     // 某些在企业身份源创建的社交身份源归为企业身份源方式显示
+  //     if (HIDE_SOCIALS_SHOWIN_ENTERPRISE.includes(item.provider)) {
+  //       if (
+  //         !enterpriseConnectionObjs.find(
+  //           (connection: any) => connection.identifier === item.identifier
+  //         )
+  //       ) {
+  //         enterpriseConnectionObjs.push(item)
+  //       }
+  //       return false
+  //     }
+  //     return true
+  //   })
+  //   // 特殊浏览器登录方式
+  //   .filter((item) =>
+  //     isWeChatBrowser()
+  //       ? item.provider === SocialConnectionProvider.WECHATMP
+  //       : item.provider !== SocialConnectionProvider.WECHATMP
+  //   )
+  //   .filter((item) =>
+  //     isDingtalkBrowser()
+  //       ? item.provider !== SocialConnectionProvider.WECHATPC
+  //       : true
+  //   )
+  //   .filter((item) => {
+  //     if (isLarkBrowser()) {
+  //       return (
+  //         item.provider === SocialConnectionProvider.LARK_INTERNAL ||
+  //         item.provider === SocialConnectionProvider.LARK_PUBLIC
+  //       )
+  //     } else {
+  //       return true
+  //     }
+  //   })
+  //   .filter((item) => {
+  //     if (isDingtalkBrowser()) {
+  //       return ![
+  //         SocialConnectionProvider.APPLE,
+  //         SocialConnectionProvider.APPLE_WEB,
+  //         SocialConnectionProvider.ALIPAY,
+  //         SocialConnectionProvider.GOOGLE,
+  //       ].includes(item.provider)
+  //     } else {
+  //       return true
+  //     }
+  //   })
+  //   .filter((item) => {
+  //     if (isQQBrowser()) {
+  //       return (
+  //         ![
+  //           SocialConnectionProvider.APPLE,
+  //           SocialConnectionProvider.APPLE_WEB,
+  //           SocialConnectionProvider.GOOGLE,
+  //         ].includes(item.provider) && !item.provider.includes('wechat')
+  //       )
+  //     } else {
+  //       return true
+  //     }
+  //   })
+  //   .filter((item) => {
+  //     if (isQQBuiltInBrowser()) {
+  //       return ![SocialConnectionProvider.ALIPAY].includes(item.provider)
+  //     } else {
+  //       return true
+  //     }
+  //   })
+  //   .filter((item) => {
+  //     if (isWeWorkBuiltInBrowser()) {
+  //       return ![SocialConnectionProvider.WECHATMP].includes(item.provider)
+  //     } else {
+  //       return true
+  //     }
+  //   })
+
   // 在所有身份源下都要隐藏
   const hiddenSocialConnection = [
     'wechat:mobile',
@@ -324,7 +325,7 @@ export const useMethod: (params: {
         'gitee',
         'gitlab',
       ]
-      socialConnectionObjs
+      socialConnectionObjs = socialConnectionObjs
         .filter((item) => !hiddenSocialConnection.includes(item.provider))
         .map((item) => {
           if (wechatDisplayButtonsMessage.includes(item.provider)) {
@@ -348,7 +349,7 @@ export const useMethod: (params: {
         'wechatwork:agency:qrconnect',
         'wechatwork:mobile',
       ]
-      socialConnectionObjs
+      socialConnectionObjs = socialConnectionObjs
         .filter((item) => !hiddenSocialConnection.includes(item.provider))
         .map((item) => {
           if (qqbuiltDisplayButtonsMessage.includes(item.provider)) {
@@ -380,7 +381,7 @@ export const useMethod: (params: {
         'gitee',
         'gitlab',
       ]
-      socialConnectionObjs
+      socialConnectionObjs = socialConnectionObjs
         .filter((item) => !hiddenSocialConnection.includes(item.provider))
         .map((item) => {
           if (weWorkBuiltDisplayButtonsMessage.includes(item.provider)) {
@@ -404,7 +405,7 @@ export const useMethod: (params: {
         'wechatwork:agency:qrconnect',
         'wechatwork:mobile',
       ]
-      socialConnectionObjs
+      socialConnectionObjs = socialConnectionObjs
         .filter((item) => !hiddenSocialConnection.includes(item.provider))
         .map((item) => {
           if (dingTalkDisplayButtonsMessage.includes(item.provider)) {
@@ -415,7 +416,7 @@ export const useMethod: (params: {
           return item
         })
       break
-    // 企业微信内置浏览器
+    // 飞书内置浏览器
     case isLarkBrowser():
       const larkDisplayButtonsMessage = [
         SocialConnectionProvider.WECHATPC,
@@ -435,7 +436,7 @@ export const useMethod: (params: {
         'wechatwork:agency:qrconnect',
         'wechatwork:mobile',
       ]
-      socialConnectionObjs
+      socialConnectionObjs = socialConnectionObjs
         .filter((item) => !hiddenSocialConnection.includes(item.provider))
         .map((item) => {
           if (larkDisplayButtonsMessage.includes(item.provider)) {
@@ -452,7 +453,7 @@ export const useMethod: (params: {
         SocialConnectionProvider.WECHATMP,
         'wechatwork:mobile',
       ]
-      socialConnectionObjs
+      socialConnectionObjs = socialConnectionObjs
         .filter((item) => !hiddenSocialConnection.includes(item.provider))
         .map((item) => {
           if (pcDisplayButtonsMessage.includes(item.provider)) {
