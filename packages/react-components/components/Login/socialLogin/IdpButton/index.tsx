@@ -1,4 +1,4 @@
-import { Avatar, Button, message } from 'antd'
+import { Avatar, message } from 'antd'
 import {
   IAzureAdConnectionConfig,
   ICasConnectionConfig,
@@ -12,6 +12,7 @@ import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import shortid from 'shortid'
 import { getGuardWindow } from '../../../Guard/core/useAppendConfig'
+import { GuardButton } from '../../../GuardButton'
 import { IconFont } from '../../../IconFont'
 import version from '../../../version/version'
 import { isSpecialBrowser, popupCenter } from '../../../_utils'
@@ -77,7 +78,7 @@ export const IdpButton = (props: any) => {
       }
 
       return (
-        <Button
+        <GuardButton
           key={i.identifier}
           className="g2-guard-third-login-btn"
           block
@@ -93,7 +94,7 @@ export const IdpButton = (props: any) => {
           {t('login.loginBy', {
             name: i.displayName,
           })}
-        </Button>
+        </GuardButton>
       )
     }
     if (i.protocol === Protocol.OIDC) {
@@ -110,7 +111,7 @@ export const IdpButton = (props: any) => {
       const url = `${configItem.authorizationEdpoint}?${query}`
 
       return (
-        <Button
+        <GuardButton
           key={i.identifier}
           className="g2-guard-third-login-btn"
           block
@@ -135,12 +136,12 @@ export const IdpButton = (props: any) => {
           {t('login.loginBy', {
             name: i.displayName,
           })}
-        </Button>
+        </GuardButton>
       )
     } else if (i.protocol === Protocol.SAML) {
       const config = i.config as ISamlConnectionConfig
       return (
-        <Button
+        <GuardButton
           key={i.identifier}
           className="g2-guard-third-login-btn"
           block
@@ -153,13 +154,13 @@ export const IdpButton = (props: any) => {
           {t('login.loginBy', {
             name: i.displayName,
           })}
-        </Button>
+        </GuardButton>
       )
     } else if (i.protocol === Protocol.CAS) {
       const config = i.config as ICasConnectionConfig
 
       return (
-        <Button
+        <GuardButton
           key={i.identifier}
           className="g2-guard-third-login-btn"
           block
@@ -172,13 +173,13 @@ export const IdpButton = (props: any) => {
           {t('login.loginBy', {
             name: i.displayName,
           })}
-        </Button>
+        </GuardButton>
       )
     } else if (i.protocol === Protocol.OAUTH) {
       const config = i.config as IOAuthConnectionConfig
 
       return (
-        <Button
+        <GuardButton
           key={i.identifier}
           className="g2-guard-third-login-btn"
           block
@@ -191,12 +192,12 @@ export const IdpButton = (props: any) => {
           {t('login.loginBy', {
             name: i.displayName,
           })}
-        </Button>
+        </GuardButton>
       )
     } else if (i.protocol === Protocol.AZURE_AD) {
       const configItem = i.config as IAzureAdConnectionConfig
       return (
-        <Button
+        <GuardButton
           key={i.identifier}
           className="g2-guard-third-login-btn"
           block
@@ -209,7 +210,7 @@ export const IdpButton = (props: any) => {
           {t('login.loginBy', {
             name: i.displayName,
           })}
-        </Button>
+        </GuardButton>
       )
     } else {
       return null

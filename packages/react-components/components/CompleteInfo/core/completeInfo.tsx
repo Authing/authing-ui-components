@@ -71,7 +71,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
 
     for (const [key, value] of Object.entries(countryMap)) {
       countryList.push({
-        label: value as string,
+        label: value + ` (${key})`,
         value: key,
       })
     }
@@ -550,6 +550,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       layout="vertical"
       form={form}
       onFinish={onFinish}
+      onSubmitCapture={() => submitButtonRef.current.onSpin(true)}
       onFinishFailed={() => submitButtonRef.current.onError()}
       className="authing-g2-completeInfo-form authing-g2-form-required-item-icon-after"
     >

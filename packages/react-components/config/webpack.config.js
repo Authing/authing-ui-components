@@ -159,8 +159,8 @@ module.exports = function (webpackEnv) {
             lessOptions: {
               javascriptEnabled: true,
               modifyVars: {
-                '@primary-color': '#396aff',
-                '@link-color': '#396aff',
+                '@primary-color': '#215AE5',
+                '@link-color': '#215AE5',
                 '@ant-prefix': 'authing-ant',
               },
             },

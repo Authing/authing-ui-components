@@ -68,7 +68,7 @@ export const RegisterLayout: FC = () => {
     setValue('activeTabs', next)
   }
 
-  const REGISTER_FORM_MAP = {
+  const REGISTER_FORM_MAP: any = {
     [RegisterMethods.Email]: <EmailRegisterForm {...formProps} />,
     [RegisterMethods.Phone]: <PhoneRegisterForm {...formProps} />,
   }

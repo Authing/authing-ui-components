@@ -10,6 +10,7 @@ import { VerifyCodeInput } from '../VerifyCodeInput'
 import { IconFont } from '../../IconFont'
 import { MfaBusinessAction, useMfaBusinessRequest } from '../businessRequest'
 import { useGuardInitData } from '../../_utils/context'
+import { GuardButton } from '../../GuardButton'
 
 export interface BindMFATotpProps {
   initData: GuardMFAInitData
@@ -108,7 +109,8 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
         <SubmitButton text={t('common.sure')} ref={submitButtonRef} />
         <p className="authing-g2-mfa-totp-recoveryCode">
           {t('common.hasLooseSaftyCode')}
-          <span
+          <GuardButton
+            type="link"
             onClick={() => {
               changeModule(GuardModuleType.RECOVERY_CODE, {
                 ...initData,
@@ -116,7 +118,7 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
             }}
           >
             {t('common.useRecoverCode')}
-          </span>
+          </GuardButton>
         </p>
       </Form>
     </>

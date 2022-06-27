@@ -1,4 +1,4 @@
-import { Button, message, Space, Tooltip } from 'antd'
+import { message, Space, Tooltip } from 'antd'
 import { Lang } from 'authing-js-sdk/build/main/types'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -8,14 +8,15 @@ import querystring from 'query-string'
 import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
 import { IconFont } from '../../IconFont'
 import './style.less'
-import { SocialConnectionEvent, useMediaSize } from '../../_utils/hooks'
-import { useGuardPublicConfig } from '../../_utils/context'
+import { useMediaSize, SocialConnectionEvent } from '../../_utils/hooks'
+import { useGuardPublicConfig, useGuardTenantId } from '../../_utils/context'
 import { IdpButton } from './IdpButton'
 import { usePostMessage } from './postMessage'
 import { CodeAction } from '../../_utils/responseManagement/interface'
 import version from '../../version/version'
 import { GuardLocalConfig } from '../../Guard'
 import { getGuardWindow } from '../../Guard/core/useAppendConfig'
+import { GuardButton } from '../../GuardButton'
 
 export interface SocialLoginProps {
   appId: string
@@ -46,6 +47,8 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
   const { isPhoneMedia } = useMediaSize()
 
   const onMessage = usePostMessage()
+
+  const tenantId = useGuardTenantId()
 
   useEffect(() => {
     const onPostMessage = (evt: MessageEvent) => {
@@ -93,6 +96,10 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       guard_version: `Guard@${version}`,
     }
 
+    if (tenantId) {
+      query.tenant_id = tenantId
+    }
+
     if (config?.isHost) {
       query.from_hosted_guard = '1'
 
@@ -133,10 +140,9 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
     }
 
     const shape = config.socialConnectionsBtnShape
-
     if (shape === 'button') {
       return (
-        <Button
+        <GuardButton
           key={item.id}
           block
           size="large"
@@ -155,27 +161,27 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
           {item.displayName ??
             (i18n.language === 'zh-CN' ? item.name : item.name_en) ??
             item.provider}
-        </Button>
+        </GuardButton>
       )
     } else if (shape === 'icon') {
       return isPhoneMedia ? (
-        <div className="g2-social-login-item" onClick={onLogin}>
+        <GuardButton className="g2-social-login-item" onClick={onLogin}>
           <IconFont type={`${iconType}-fill`} />
-        </div>
+        </GuardButton>
       ) : (
         <Tooltip
           key={item.id}
           title={item.tooltip?.[i18n.language as Lang] || item.name}
           trigger={['hover', 'click', 'contextMenu']}
         >
-          <div className="g2-social-login-item" onClick={onLogin}>
+          <GuardButton className="g2-social-login-item" onClick={onLogin}>
             <IconFont type={`${iconType}-fill`} />
-          </div>
+          </GuardButton>
         </Tooltip>
       )
     } else {
       return noLoginMethods ? (
-        <Button
+        <GuardButton
           key={item.id}
           block
           size="large"
@@ -191,11 +197,15 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
           {item.displayName ??
             (i18n.language === 'zh-CN' ? item.name : item.name_en) ??
             item.provider}
-        </Button>
+        </GuardButton>
       ) : isPhoneMedia ? (
-        <div className="g2-social-login-item" onClick={onLogin} key={item.id}>
+        <GuardButton
+          className="g2-social-login-item"
+          onClick={onLogin}
+          key={item.id}
+        >
           <IconFont type={`${iconType}-fill`} />
-        </div>
+        </GuardButton>
       ) : (
         <Tooltip
           overlayStyle={{ fontFamily: 'sans-serif' }}
@@ -207,9 +217,9 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
           }
           trigger={['hover', 'click', 'contextMenu']}
         >
-          <div className="g2-social-login-item" onClick={onLogin}>
+          <GuardButton className="g2-social-login-item" onClick={onLogin}>
             <IconFont type={`${iconType}-fill`} />
-          </div>
+          </GuardButton>
         </Tooltip>
       )
     }

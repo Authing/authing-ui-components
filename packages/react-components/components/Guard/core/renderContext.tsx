@@ -16,7 +16,6 @@ import {
   GuardStateMachine,
   initGuardStateMachine,
   ModuleState,
-  useHistoryHijack,
 } from '../GuardModule/stateMachine'
 import { AuthenticationClient } from '../..'
 import { ApplicationConfig } from '../../AuthingGuard/api'
@@ -33,6 +32,7 @@ import { useGuardXContext } from '../../_utils/context'
 import { useGuardIconfont } from '../../IconFont/useGuardIconfont'
 import { useInitGuardAppendConfig } from './useAppendConfig'
 import { useInitAppId } from '../../_utils/initAppId'
+import { updateFlowHandle } from '../../_utils/flowHandleStorage'
 
 interface IBaseAction<T = string, P = any> {
   type: T & string
@@ -65,9 +65,6 @@ export const RenderContext: React.FC<{
 
   const { Provider } = useGuardXContext()
 
-  // 劫持浏览器 History
-  const [historyNext] = useHistoryHijack(guardStateMachine?.back)
-
   // modules 定义
   const moduleReducer: (
     state: ModuleState,
@@ -82,19 +79,29 @@ export const RenderContext: React.FC<{
   // Modules Reducer
   const [moduleState, changeModule] = useReducer(moduleReducer, initState)
 
+  // Flow Handle init
+  useEffect(() => {
+    if (initState.initData?.flowHandle) {
+      updateFlowHandle(initState.initData.flowHandle)
+    }
+  }, [initState.initData])
+
   // Change Module
   const onChangeModule = useCallback(
-    (moduleName: GuardModuleType, initData: any = {}) => {
-      historyNext(moduleName)
-
-      changeModule({
-        type: moduleName,
-        payload: {
-          initData: initData ?? {},
-        },
-      })
+    async (moduleName: GuardModuleType, initData: any = {}) => {
+      if (
+        !events?.onBeforeChangeModule ||
+        (await events.onBeforeChangeModule(moduleName, initData))
+      ) {
+        changeModule({
+          type: moduleName,
+          payload: {
+            initData: initData ?? {},
+          },
+        })
+      }
     },
-    [historyNext]
+    [events]
   )
 
   // 合并默认值
@@ -195,9 +202,10 @@ export const RenderContext: React.FC<{
     const guardStateMachine = initGuardStateMachine(onChangeModule, initState)
     setGuardStateMachine(guardStateMachine)
 
-    // TODO 这里有一个循环依赖问题，藏的有点深 待优化
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    return () => {
+      guardStateMachine.uninstallPopstate()
+    }
+  }, [initState, onChangeModule])
 
   // 自定义 CSS 处理
   useEffect(() => {
@@ -218,22 +226,13 @@ export const RenderContext: React.FC<{
     if (!events && !guardStateMachine) return undefined
     return {
       changeModule: async (moduleName: GuardModuleType, initData?: any) => {
-        // 单体组件处理
-        if (finallyConfig?.__singleComponent__) {
-          events?.__changeModule?.(moduleName, initData)
-        } else {
-          if (!events?.onBeforeChangeModule) {
-            guardStateMachine?.next(moduleName, initData)
-          } else if (await events.onBeforeChangeModule(moduleName, initData)) {
-            guardStateMachine?.next(moduleName, initData)
-          }
-        }
+        guardStateMachine?.next(moduleName, initData)
       },
       backModule: () => {
         guardStateMachine?.back()
       },
     }
-  }, [events, finallyConfig?.__singleComponent__, guardStateMachine])
+  }, [events, guardStateMachine])
 
   const contextLoaded = useMemo(() => {
     const list = [
@@ -249,7 +248,7 @@ export const RenderContext: React.FC<{
       iconfontLoaded,
     ]
 
-    return !list.includes(undefined)
+    return !list.includes(undefined) && !list.includes(false)
   }, [
     appId,
     events,
@@ -281,13 +280,16 @@ export const RenderContext: React.FC<{
             publicConfig,
             httpClient,
             appId,
+            tenantId,
             events,
             ...moduleEvents,
             initData: moduleState.initData,
             currentModule: moduleState,
             guardPageConfig,
           }
-        : null,
+        : {
+            defaultMergedConfig,
+          },
     [
       appId,
       contextLoaded,
@@ -300,6 +302,7 @@ export const RenderContext: React.FC<{
       moduleEvents,
       moduleState,
       publicConfig,
+      tenantId,
     ]
   )
 
@@ -334,7 +337,7 @@ export const RenderContext: React.FC<{
   const render = useMemo(() => {
     if (error) return renderErrorContext
 
-    if (contextLoaded || defaultMergedConfig) return renderContext
+    if (contextLoaded || Boolean(defaultMergedConfig)) return renderContext
 
     return null
   }, [

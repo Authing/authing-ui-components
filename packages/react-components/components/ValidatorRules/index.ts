@@ -10,13 +10,12 @@ import {
 export interface ValidatorFormItemProps extends FormItemProps {
   form?: FormInstance
   checkRepeat?: boolean
+  checkExist?: boolean
   areaCode?: string //国际化区号
   isCheckI18nSms?: boolean // 是否开启国际化手机号校验
 }
 
 export interface ValidatorFormItemMetaProps extends ValidatorFormItemProps {
-  form?: FormInstance
-  checkRepeat?: boolean
   method: 'email' | 'phone' | 'username'
 }
 

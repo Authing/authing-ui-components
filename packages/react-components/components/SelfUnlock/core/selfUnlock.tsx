@@ -1,10 +1,8 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Form } from 'antd'
-import { useGuardAuthClient } from '../../Guard/authClient'
 import { fieldRequiredRule, validate } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
-import CustomFormItem from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
 import { SceneType } from 'authing-js-sdk'
@@ -14,62 +12,105 @@ import { FormItemIdentify } from '../../Login/core/withVerifyCode/FormItemIdenti
 import { InputIdentify } from '../../Login/core/withVerifyCode/inputIdentify'
 import { parsePhone, useMediaSize } from '../../_utils/hooks'
 import { EmailScene } from '../../Type'
+import { useGuardHttp } from '../../_utils/guardHttp'
+import { useGuardAuthClient } from '../../Guard/authClient'
+import {
+  useGuardEvents,
+  useGuardInitData,
+  useGuardPublicConfig,
+} from '../../_utils/context'
+
 export enum InputMethodMap {
   email = 'email-code',
   phone = 'phone-code',
 }
-interface ResetPasswordProps {
-  onReset: any
-  publicConfig: any
-  onSend: (type: 'email' | 'phone') => void
-  onSendError: (type: 'email' | 'phone', error: any) => void
-}
-export const ResetPassword = (props: ResetPasswordProps) => {
+export const SelfUnlock = () => {
   const { t } = useTranslation()
   let [form] = Form.useForm()
   let [identify, setIdentify] = useState('')
   let [codeMethod, setCodeMethod] = useState<'phone' | 'email'>('phone')
-  let client = useGuardAuthClient()
   let submitButtonRef = useRef<any>(null)
   const { isPhoneMedia } = useMediaSize()
+  let authClient = useGuardAuthClient()
+  const events = useGuardEvents()
 
-  const verifyCodeLength = props.publicConfig.verifyCodeLength ?? 4
+  const initData = useGuardInitData<{
+    defaultEmail: 'string'
+    defaultPhone: 'string'
+  }>()
+
+  useEffect(() => {
+    if (initData.defaultEmail) {
+      setIdentify(initData.defaultEmail)
+      form.setFieldsValue({
+        identify: initData.defaultEmail,
+      })
+      setCodeMethod('email')
+    }
+    if (initData.defaultPhone) {
+      setIdentify(initData.defaultPhone)
+      form.setFieldsValue({
+        identify: initData.defaultPhone,
+      })
+      setCodeMethod('phone')
+    }
+  }, [initData, form])
+  const { authFlow } = useGuardHttp()
+
+  const {
+    publicKey,
+    verifyCodeLength,
+    internationalSmsConfig,
+  } = useGuardPublicConfig()
+
   // 是否开启了国际化短信功能
-  const isInternationSms =
-    props.publicConfig.internationalSmsConfig?.enabled || false
+  const isInternationSms = internationalSmsConfig?.enabled || false
 
   const onFinish = async (values: any) => {
     let identify = values.identify
+
     let code = values.code
-    let newPassword = values.password
-    let context = new Promise(() => {})
+
+    let password = values.password
+
+    const encryptPassWord = await authClient.options?.encryptFunction?.(
+      password,
+      publicKey
+    )
 
     if (codeMethod === 'email') {
-      context = client.resetPasswordByEmailCode(identify, code, newPassword)
+      const { isFlowEnd, data, onGuardHandling } = await authFlow(
+        'unlock-account-by-email',
+        {
+          email: identify, // 用户输入的邮箱
+          code, // 验证码
+          password: encryptPassWord, // 密码，经过加密后的
+        }
+      )
+      submitButtonRef.current?.onSpin(false)
+      if (isFlowEnd) {
+        events?.onLogin?.(data, authClient!) // 登录成功
+      } else {
+        onGuardHandling?.()
+      }
     }
     if (codeMethod === 'phone') {
-      const { phoneNumber, countryCode } = parsePhone(
-        isInternationSms,
-        identify
+      const { phoneNumber } = parsePhone(isInternationSms, identify)
+      const { isFlowEnd, data, onGuardHandling } = await authFlow(
+        'unlock-account-by-phone',
+        {
+          phone: phoneNumber, // 用户输入的邮箱
+          code, // 验证码
+          password: encryptPassWord, // 密码，经过加密后的
+        }
       )
-      context = client.resetPasswordByPhoneCode(
-        phoneNumber,
-        code,
-        newPassword,
-        countryCode
-      )
+      submitButtonRef.current?.onSpin(false)
+      if (isFlowEnd) {
+        events?.onLogin?.(data, authClient!) // 登录成功
+      } else {
+        onGuardHandling?.()
+      }
     }
-
-    context
-      .then((r) => {
-        props.onSend(codeMethod)
-        props.onReset(r)
-      })
-      .catch((e) => {
-        submitButtonRef.current.onError()
-        props.onSendError(codeMethod, e)
-        props.onReset(e)
-      })
   }
 
   const SendCode = useCallback(
@@ -115,12 +156,13 @@ export const ResetPassword = (props: ResetPasswordProps) => {
                   style={{ color: '#878A95' }}
                 />
               }
-              scene={EmailScene.RESET_PASSWORD_VERIFY_CODE}
+              scene={EmailScene.SELF_UNLOCKING_VERIFY_CODE}
               maxLength={verifyCodeLength}
               data={identify}
               onSendCodeBefore={async () => {
                 await form.validateFields(['identify'])
               }}
+              value={identify}
             />
           )}
         </>
@@ -145,7 +187,6 @@ export const ResetPassword = (props: ResetPasswordProps) => {
           className="authing-g2-input-form"
           methods={['email-code', 'phone-code']}
           currentMethod={InputMethodMap[codeMethod]}
-          checkExist={true}
         >
           <InputIdentify
             methods={['email-code', 'phone-code']}
@@ -180,14 +221,16 @@ export const ResetPassword = (props: ResetPasswordProps) => {
         >
           <SendCode />
         </Form.Item>
-        <CustomFormItem.Password
+        <Form.Item
+          validateTrigger={['onBlur', 'onChange']}
           className="authing-g2-input-form"
           name="password"
+          rules={[...fieldRequiredRule(t('common.password'))]}
         >
           <InputPassword
             className="authing-g2-input"
             size="large"
-            placeholder={t('user.inputNewPwd')}
+            placeholder={t('user.inputOldPwd')}
             prefix={
               <IconFont
                 type="authing-a-lock-line1"
@@ -195,11 +238,11 @@ export const ResetPassword = (props: ResetPasswordProps) => {
               />
             }
           />
-        </CustomFormItem.Password>
+        </Form.Item>
         <Form.Item className="authing-g2-input-form submit-form">
           <SubmitButton
             className="forget-password"
-            text={t('common.confirm')}
+            text={t('common.unlock')}
             ref={submitButtonRef}
           />
         </Form.Item>

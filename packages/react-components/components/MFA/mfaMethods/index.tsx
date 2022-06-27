@@ -1,11 +1,12 @@
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button } from 'antd'
 import { IconFont } from '../../IconFont'
 import { GuardMFAInitData, MFAType } from '../interface'
 import { i18n } from '../../_utils/locales'
 import './style.less'
 import { useGuardInitData } from '../../_utils/context'
+import { GuardButton } from '../../GuardButton'
+import { getFacePlugin } from '../../_utils/facePlugin'
 
 export interface MFAMethodsProps {
   method: MFAType
@@ -53,9 +54,18 @@ export const MFAMethods: React.FC<MFAMethodsProps> = ({
           Object.keys(methodTitleMapping).includes(item.mfaPolicy)
         )
         .filter((item) => item.mfaPolicy !== currentMethod)
+        .filter((item) => {
+          if (item.mfaPolicy === MFAType.FACE) {
+            const facePlugin = getFacePlugin()
+
+            return Boolean(facePlugin)
+          }
+
+          return true
+        })
         .sort((a, b) => a.sort - b.sort)
         .map((item) => (
-          <Button
+          <GuardButton
             className="g2-guard-mfa-methods-btn"
             onClick={(e) => {
               onChangeMethod(item.mfaPolicy)
@@ -65,7 +75,7 @@ export const MFAMethods: React.FC<MFAMethodsProps> = ({
           >
             <IconFont type={methodTitleMapping[item.mfaPolicy].icon} />
             {`${methodTitleMapping[item.mfaPolicy].title()}`}
-          </Button>
+          </GuardButton>
         )),
     [applicationMfa, currentMethod, onChangeMethod]
   )

@@ -1,12 +1,14 @@
-import { Button } from 'antd'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { GuardModuleType } from '..'
 import { BackLogin } from '../Back'
 import { useGuardAuthClient } from '../Guard/authClient'
+import { GuardButton } from '../GuardButton'
 import { IconFont } from '../IconFont'
+import { IdentityBindingAction } from '../IdentityBinding/businessRequest'
 import {
+  useGuardButtonState,
   useGuardEvents,
   useGuardInitData,
   useGuardModule,
@@ -22,11 +24,13 @@ export const GuardIdentityBindingAskView: React.FC = () => {
 
   const { t } = useTranslation()
 
-  const { post } = useGuardHttp()
+  const { authFlow } = useGuardHttp()
 
   const authClient = useGuardAuthClient()
 
   const events = useGuardEvents()
+
+  const { spinChange } = useGuardButtonState()
 
   const onCreate = (data: any) => {
     events?.onLogin?.(data, authClient)
@@ -46,11 +50,14 @@ export const GuardIdentityBindingAskView: React.FC = () => {
   }
 
   const [createLoading, createAccount] = useAsyncFn(async () => {
-    const url = '/interaction/federation/binding/register'
+    spinChange(true)
+    const { code, onGuardHandling, data, isFlowEnd } = await authFlow(
+      IdentityBindingAction.CreateUser
+    )
 
-    const { code, onGuardHandling, data } = await post(url, {})
+    spinChange(false)
 
-    if (code === 200) {
+    if (isFlowEnd) {
       onCreate(data)
     } else {
       onCreateError(code, data)
@@ -81,20 +88,20 @@ export const GuardIdentityBindingAskView: React.FC = () => {
           <IconFont type="authing-bind" />
         </div>
         <div className="g2-view-identity-binding-ask-content-button-group">
-          <Button
+          <GuardButton
             className="g2-view-identity-binding-ask-content-button g2-view-identity-binding-ask-content-button-create"
             loading={createLoading.loading}
             onClick={createAccount}
           >
             {t('common.identityBindingCreate')}
-          </Button>
-          <Button
+          </GuardButton>
+          <GuardButton
             className=" g2-view-identity-binding-ask-content-button g2-view-identity-binding-ask-content-button-binding authing-g2-submit-button"
             onClick={bindingAccount}
             type="primary"
           >
             {t('common.identityBindingBinding')}
-          </Button>
+          </GuardButton>
         </div>
       </div>
     </div>

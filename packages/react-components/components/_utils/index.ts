@@ -8,8 +8,9 @@ import { ApplicationConfig, ComplateFiledsPlace } from '../AuthingGuard/api'
 import { GuardProps } from '../Guard'
 import isEqual from 'lodash/isEqual'
 import omit from 'lodash/omit'
-import { NewRegisterMethods } from '../Type'
 import { getGuardWindow } from '../Guard/core/useAppendConfig'
+import UAParser from 'ua-parser-js'
+import { LoginMethods, RegisterMethods } from '../AuthingGuard/types'
 export * from './popupCenter'
 export * from './clipboard'
 
@@ -251,10 +252,7 @@ export const isQQBrowser = () => {
   if (typeof navigator === 'undefined') {
     return null
   }
-  return (
-    /MQQBrowser/i.test(navigator.userAgent) &&
-    !/QQ/i.test(navigator.userAgent.replaceAll('MQQBrowser', ''))
-  )
+  return /MQQBrowser/i.test(navigator.userAgent)
 }
 // qq 内置浏览器
 export const isQQBuiltInBrowser = () => {
@@ -274,18 +272,77 @@ export const isWeWorkBuiltInBrowser = () => {
   )
 }
 // 特殊浏览器 后续可能会增加
-export const isSpecialBrowser = () => {
-  return (
-    isWeChatBrowser() ||
-    isLarkBrowser() ||
-    isQtWebEngine() ||
-    isXiaomiBrowser() ||
-    isDingtalkBrowser() ||
-    isQQBrowser() ||
-    isQQBuiltInBrowser() ||
-    isWeWorkBuiltInBrowser()
+
+export const isEdgeBrowser = () => {
+  const parser = UAParser()
+
+  return parser.browser.name === 'Edge'
+}
+
+export const isWeiboBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /Weibo/i.test(navigator.userAgent)
+}
+
+export const isAlipayBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /Alipay/i.test(navigator.userAgent)
+}
+
+export const isBaiduBrowser = () => {
+  if (typeof navigator === 'undefined') {
+    return null
+  }
+  return /Baidu/i.test(navigator.userAgent)
+}
+
+export const isWeComeBrowser = () => /wxwork/i.test(navigator.userAgent)
+
+export const isMobile = () => {
+  return window.navigator.userAgent.match(
+    /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
   )
 }
+
+/* 利用浏览器的 UA 判断是否为不支持弹窗的特殊浏览器 */
+export const isSpecialBrowser = () => {
+  // 1. 首先筛选出一定是特殊浏览器的 UA
+  if (
+    isWeChatBrowser() ||
+    isWeComeBrowser() ||
+    isLarkBrowser() ||
+    isDingtalkBrowser() ||
+    isQtWebEngine() ||
+    isXiaomiBrowser() ||
+    isQQBrowser() ||
+    isMobile()
+  ) {
+    return true
+  }
+
+  // 2. 利用 ua-parser-js 进一步判断，筛选出很可能不是特殊浏览器的 UA
+  // 由于一些特殊浏览器也可能会被误判为非特殊，所以需要首先经过第 1 步筛选
+  const parser = UAParser()
+  const nonSpecialBrowsers = [
+    'Chrome',
+    'Firefox',
+    'Safari',
+    'Opera',
+    'IE',
+    'Edge',
+  ]
+  if (nonSpecialBrowsers.includes(parser.browser.name ?? '')) {
+    return false
+  }
+
+  // 3. 可能有一些 UA 没有任何特征，这种情况下一律默认为特殊浏览器
+  return true
+}
+
 export const assembledAppHost = (identifier: string, host: string) => {
   const hostUrl = new URL(host)
 
@@ -295,6 +352,7 @@ export const assembledAppHost = (identifier: string, host: string) => {
 
   splitHost.shift()
 
+  // eslint-disable-next-line prettier/prettier
   return `${hostUrl.protocol}//${identifier}.${splitHost.join('.')}${
     port && `:${port}`
   }`
@@ -568,9 +626,9 @@ export const shoudGoToComplete = (
 }
 
 export const tabSort = (
-  defaultValue: NewRegisterMethods,
-  tabList: NewRegisterMethods[]
-): NewRegisterMethods[] => {
+  defaultValue: any,
+  tabList: RegisterMethods[]
+): RegisterMethods[] => {
   const index = tabList.indexOf(defaultValue)
   const element = tabList.splice(index, 1)[0]
   tabList.unshift(element)
@@ -607,4 +665,91 @@ export const getDocumentNode = (node: Node & ParentNode): Document => {
   }
 
   return getDocumentNode(node.parentNode as Node & ParentNode)
+}
+
+// 1. 手机号验证码注册
+//  - 手机号验证码登录
+//  - 手机号密码登录
+//  - 非手机号的密码登录
+// 2. 邮箱验证码注册
+//  - 邮箱验证码登录
+//  - 邮箱密码登录
+//  - 非邮箱的密码登录
+// 3. 邮箱密码注册
+//  - 邮箱密码登录
+//  - 邮箱验证码登录
+//  - 非邮箱的密码登录
+
+export const getLoginTypePipe = (
+  publicConfig: ApplicationConfig,
+  registerMethod: RegisterMethods
+) => {
+  const loginTabs = publicConfig?.loginTabs.list // 支持的登录方式
+  const verifyCodeTabMethods =
+    publicConfig?.verifyCodeTabConfig?.enabledLoginMethods ?? [] // 支持的验证码登录方式
+  const passwordTabMethods =
+    publicConfig?.passwordTabConfig?.enabledLoginMethods ?? [] // 支持的密码登录方式
+  // 通过手机验证码注册成功
+  if (registerMethod === RegisterMethods.Phone) {
+    if (
+      loginTabs.includes(LoginMethods.PhoneCode) &&
+      verifyCodeTabMethods.includes('phone-code')
+    ) {
+      // situation 1  手机号验证码登录
+      return {
+        specifyDefaultLoginMethod: LoginMethods.PhoneCode,
+        lockMethod: 'phone-code',
+      }
+    } else if (
+      loginTabs.includes(LoginMethods.Password) &&
+      passwordTabMethods.includes('phone-password')
+    ) {
+      // situation 2 手机号密码登录
+      return { specifyDefaultLoginMethod: LoginMethods.Password }
+    } else {
+      return undefined
+    }
+  }
+  // 通过邮箱验证码注册成功
+  if (registerMethod === RegisterMethods.EmailCode) {
+    if (
+      loginTabs.includes(LoginMethods.PhoneCode) &&
+      verifyCodeTabMethods.includes('email-code')
+    ) {
+      // situation 1  邮箱验证码登录
+      return {
+        specifyDefaultLoginMethod: LoginMethods.PhoneCode,
+        lockMethod: 'email-code',
+      }
+    } else if (
+      loginTabs.includes(LoginMethods.Password) &&
+      passwordTabMethods.includes('email-password')
+    ) {
+      // situation 2 邮箱密码登录
+      return { specifyDefaultLoginMethod: LoginMethods.Password }
+    } else {
+      return undefined
+    }
+  }
+  // 通过邮箱密码注册成功
+  if (registerMethod === RegisterMethods.Email) {
+    if (
+      loginTabs.includes(LoginMethods.Password) &&
+      passwordTabMethods.includes('email-password')
+    ) {
+      // situation 1  邮箱密码登录
+      return { specifyDefaultLoginMethod: LoginMethods.Password }
+    } else if (
+      loginTabs.includes(LoginMethods.PhoneCode) &&
+      verifyCodeTabMethods.includes('email-code')
+    ) {
+      // situation 2 邮箱验证码登录
+      return {
+        specifyDefaultLoginMethod: LoginMethods.PhoneCode,
+        lockMethod: 'email-code',
+      }
+    } else {
+      return undefined
+    }
+  }
 }
