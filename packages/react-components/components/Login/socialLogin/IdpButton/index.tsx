@@ -85,6 +85,7 @@ export const IdpButton = (props: any) => {
       )
     }
     if (i.protocol === Protocol.OIDC) {
+      // TODO：移动端下该模式点击无反应
       const configItem = i.config as OIDCConnectionConfig
       const state = shortid.generate()
       const query = qs.stringify({

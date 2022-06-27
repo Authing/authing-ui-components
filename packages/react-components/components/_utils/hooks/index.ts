@@ -364,6 +364,7 @@ export const useMethod: (params: {
     case isWeWorkBuiltInBrowser():
       const weWorkBuiltDisplayButtonsMessage = [
         SocialConnectionProvider.WECHATPC,
+        SocialConnectionProvider.WECHATMP,
         SocialConnectionProvider.GITHUB,
         SocialConnectionProvider.QQ,
         SocialConnectionProvider.APPLE_WEB,
