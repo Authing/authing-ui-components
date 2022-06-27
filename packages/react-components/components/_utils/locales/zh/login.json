@@ -28,7 +28,7 @@
   "confirmSavedCode": "请确保你已保存密钥",
   "rememberedSecret": "已经安全地记录了这段密钥",
   "newGenered": "已为你生成新的恢复代码",
-  "mfaAfterReset": "成功登录后，我们将生成一个新的恢复代码",
+  "mfaAfterReset": "如果你没有恢复代码，请联系管理员处理",
   "findedSafetyCode": "找到安全码直接验证",
   "getBackPwd": "\b找回密码",
   "noEmpty": "不能为空",
