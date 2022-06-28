@@ -107,8 +107,13 @@ export const IdpButton = (props: any) => {
 
         initUrl = `${appHost}${basePath}?${qs.stringify(query)}`
       } else {
+        const field = loginUrlFieldMapping[i.protocol as Protocol]
+        if (!field) {
+          return null
+        }
+
         // 嵌入式组件，从配置字段获取登录 URL
-        initUrl = i.config[loginUrlFieldMapping[i.protocol as Protocol]]
+        initUrl = i.config[field]
       }
 
       return (
