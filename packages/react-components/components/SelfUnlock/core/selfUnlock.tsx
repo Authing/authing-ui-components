@@ -211,8 +211,7 @@ export const SelfUnlock = ({
               setIdentify(v)
               if (validate('email', v)) {
                 setCodeMethod('email')
-              }
-              if (validate('phone', v)) {
+              } else {
                 setCodeMethod('phone')
               }
             }}

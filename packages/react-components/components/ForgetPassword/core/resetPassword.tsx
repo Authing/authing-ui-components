@@ -145,6 +145,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
           className="authing-g2-input-form"
           methods={['email-code', 'phone-code']}
           currentMethod={InputMethodMap[codeMethod]}
+          checkExist={true}
         >
           <InputIdentify
             methods={['email-code', 'phone-code']}
@@ -158,8 +159,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
               setIdentify(v)
               if (validate('email', v)) {
                 setCodeMethod('email')
-              }
-              if (validate('phone', v)) {
+              } else {
                 setCodeMethod('phone')
               }
             }}

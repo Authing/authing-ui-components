@@ -64,13 +64,15 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
       const codes = [...verifyCode]
       codes[index] = val.split('').slice(-1)[0] || ''
       onChange(codes as string[])
-
       if (Boolean(val) && Boolean(inputRef.current[index + 1])) {
         setFocusIndex(index + 1)
       }
 
       // 验证码填写完成后 直接触发 onFinish
-      if (codes.filter((code) => Boolean(code)).length >= length) {
+      if (
+        codes.filter((code) => Boolean(code)).length >= length &&
+        index >= length - 1
+      ) {
         onFinish?.(codes)
       }
     },
@@ -158,15 +160,23 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
               autoFocus={index === 0}
               onKeyDown={(evt) => handleKeyDown(evt, index)}
               value={verifyCode[index]}
-              maxLength={1}
+              maxLength={2}
               onChange={(evt) => {
                 evt.persist()
                 // @ts-ignore
                 if (evt.nativeEvent.isComposing) {
                   return
                 }
+                const nextValue = evt.target.value
+                if (!/^[0-9]*$/.test(nextValue)) {
+                  return
+                }
+                const preValue = verifyCode[index] || ''
+                const changeValue =
+                  nextValue.split('').filter((item) => item !== preValue)[0] ||
+                  nextValue.slice(-1)
 
-                handleChange(evt.target.value, index)
+                handleChange(changeValue, index)
               }}
               pattern="[0-9]*"
               type="tel"

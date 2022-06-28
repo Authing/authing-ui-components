@@ -16,7 +16,8 @@ import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
 import { getGuardHttp } from '../../_utils/guardHttp'
 import { EmailScene } from '../../Type'
 import { useMediaSize } from '../../_utils/hooks'
-
+import { LoginMethods } from '../../AuthingGuard/types'
+// ! 废弃 🚒
 export interface RegisterWithEmailCodeProps {
   // onRegister: Function
   onRegisterSuccess: Function
@@ -135,6 +136,8 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
               businessRequestName: 'registerByEmailCode', //用于判断后续使用哪个注册api
               content: registerContent,
               isChangeComplete: isChangeComplete,
+              onRegisterSuccess,
+              onRegisterFailed,
             })
             return
           } else {
@@ -157,6 +160,8 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
               changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
                 businessRequestName: 'registerByEmailCode', //用于判断后续使用哪个注册api
                 content: registerContent,
+                onRegisterSuccess,
+                onRegisterFailed,
               })
               return
             } else {
@@ -179,7 +184,9 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
           })
           submitButtonRef.current.onSpin(false)
           if (resCode === 200) {
-            onRegisterSuccess(data)
+            onRegisterSuccess(data, {
+              specifyDefaultLoginMethod: LoginMethods.PhoneCode,
+            })
           } else {
             onGuardHandling?.()
             onRegisterFailed(code, data, registerMessage)

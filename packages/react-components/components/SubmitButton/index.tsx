@@ -16,7 +16,7 @@ interface SubmitButtonProps extends ButtonProps {
   disabled?: boolean
 }
 const SubmitButton = (props: SubmitButtonProps, ref: any) => {
-  const { spinChange } = useGuardButtonState()
+  const { spinChange, spin: buttonSpin } = useGuardButtonState()
   let [spin, setSpin] = useState(false) // spin 状态需要手动设置关闭
   let [shaking, setShaking] = useState(false) // 抖动状态会自动关闭
   let { MountShaking, UnMountShaking } = useShaking() // 协议和 form input 抖动的挂载和卸载
@@ -57,7 +57,7 @@ const SubmitButton = (props: SubmitButtonProps, ref: any) => {
       type={props?.type ?? 'primary'}
       htmlType={props?.htmlType ?? 'submit'}
       loading={spin}
-      disabled={props?.disabled ?? spin}
+      disabled={buttonSpin ? true : props?.disabled ?? spin}
       onClick={props.onClick ? props.onClick : () => {}}
       className={`authing-g2-submit-button ${propsCls} ${shakingCls}`}
     >

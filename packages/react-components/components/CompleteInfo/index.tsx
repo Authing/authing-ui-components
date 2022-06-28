@@ -13,11 +13,11 @@ import './styles.less'
 import { IconFont } from '../IconFont'
 import { useGuardAuthClient } from '../Guard/authClient'
 import {
+  useGuardButtonState,
   useGuardEvents,
   useGuardFinallyConfig,
   useGuardHttpClient,
   useGuardInitData,
-  useGuardModule,
   useGuardPublicConfig,
 } from '../_utils/context'
 import {
@@ -26,7 +26,6 @@ import {
   registerRequest,
 } from './businessRequest'
 import { extendsFieldsToMetaData, fieldValuesToRegisterProfile } from './utils'
-import { GuardModuleType } from '../Guard'
 import { message } from 'antd'
 import { GuardButton } from '../GuardButton'
 
@@ -42,13 +41,17 @@ export const GuardCompleteInfo: React.FC<{
 
   const { t } = useTranslation()
 
+  const { spinChange } = useGuardButtonState()
+
   const [skipLoading, setSkipLoading] = useState(false)
 
   const onSkip = async () => {
+    spinChange(true)
     setSkipLoading(true)
 
     await businessRequest(CompleteInfoAuthFlowAction.Skip)
     setSkipLoading(false)
+    spinChange(false)
   }
 
   return (
@@ -130,17 +133,11 @@ export const GuardLoginCompleteInfoView: React.FC = () => {
 export const GuardRegisterCompleteInfoView: React.FC = () => {
   const initData = useGuardInitData<RegisterCompleteInfoInitData>()
 
-  const { changeModule } = useGuardModule()
-
   const publicConfig = useGuardPublicConfig()
 
   const { get } = useGuardHttpClient()
 
   const config = useGuardFinallyConfig()
-
-  const events = useGuardEvents()
-
-  const authClient = useGuardAuthClient()
 
   const [selectOptions, setSelectOptions] = useState<
     Array<{
@@ -196,25 +193,29 @@ export const GuardRegisterCompleteInfoView: React.FC = () => {
       // sdk 还没有这个接口 后续添加后 可以已 sdk 的逻辑执行
       if (initData.businessRequestName === 'registerByEmailCode') {
         if (user.code === 200) {
-          events?.onRegister?.(user.data, authClient)
-          changeModule?.(GuardModuleType.LOGIN)
+          initData.onRegisterSuccess(user.data)
+          // events?.onRegister?.(user.data, authClient)
+          // changeModule?.(GuardModuleType.LOGIN)
         } else {
           user?.onGuardHandling?.()
           const { code, message: errorMessage, data } = user
-          events?.onRegisterError?.({ code, data, message: errorMessage })
+          initData.onRegisterFailed(code, data, errorMessage)
+          // events?.onRegisterError?.({ code, data, message: errorMessage })
           // TODO 后续sdk的验证码逻辑改完后
         }
         return
       }
       if (user) {
-        events?.onRegister?.(user, authClient)
-        changeModule?.(GuardModuleType.LOGIN)
+        // events?.onRegister?.(user, authClient)
+        // changeModule?.(GuardModuleType.LOGIN)
+        initData.onRegisterSuccess(user.data)
       }
     } catch (error: any) {
       // TODO 后续sdk的验证码逻辑改完后·
       const { code, message: errorMessage, data } = error
       message.error(errorMessage)
-      events?.onRegisterError?.({ code, data, message: errorMessage })
+      // events?.onRegisterError?.({ code, data, message: errorMessage })
+      initData.onRegisterFailed(code, data, errorMessage)
     }
   }
 

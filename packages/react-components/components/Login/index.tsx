@@ -29,6 +29,7 @@ import {
   useGuardAppId,
   useGuardEvents,
   useGuardFinallyConfig,
+  useGuardInitData,
   useGuardModule,
   useGuardPublicConfig,
 } from '../_utils/context'
@@ -38,6 +39,7 @@ import { VerifyLoginMethods, PasswordLoginMethods } from '../AuthingGuard/api'
 import { useMediaSize, useMethod } from '../_utils/hooks'
 import { getGuardDocument } from '../_utils/guardDocument'
 import { useGuardAuthClient } from '../Guard/authClient'
+import { GuardLoginInitData } from './interface'
 import { GuardButton } from '../GuardButton'
 
 const inputWays = [
@@ -98,6 +100,7 @@ const useSwitchStates = (loginWay: LoginMethods) => {
 }
 export const GuardLoginView = () => {
   // const { config } = props
+  const { specifyDefaultLoginMethod } = useGuardInitData<GuardLoginInitData>()
 
   const config = useGuardFinallyConfig()
 
@@ -110,11 +113,14 @@ export const GuardLoginView = () => {
   const publicConfig = useGuardPublicConfig()
 
   let [defaultMethod, renderInputWay, renderQrcodeWay] = useMethods(config)
+
   const agreementEnabled = config?.agreementEnabled
 
   const { t } = useTranslation()
 
-  const [loginWay, setLoginWay] = useState(defaultMethod)
+  const [loginWay, setLoginWay] = useState(
+    specifyDefaultLoginMethod || defaultMethod
+  )
 
   const [canLoop, setCanLoop] = useState(false) // 允许轮询
 
@@ -158,7 +164,9 @@ export const GuardLoginView = () => {
   }, [publicConfig, t])
 
   const hiddenTab = useMemo(() => {
-    const scanLogins = ms ?? [].filter((method) => qrcodeWays.includes(method)) //取到扫码登录类型
+    const scanLogins = ms
+      ? ms.filter((method) => qrcodeWays.includes(method))
+      : [] //取到扫码登录类型
     if (scanLogins.length > 1) {
       // 如果有两个以上的code 类型
       return false
@@ -431,6 +439,7 @@ export const GuardLoginView = () => {
               <div className={inputNone}>
                 <div className={`g2-view-tabs`}>
                   <Tabs
+                    destroyInactiveTabPane={true}
                     onChange={(k: any) => {
                       setLoginWay(k)
                       message.destroy()
@@ -621,8 +630,8 @@ export const GuardLoginView = () => {
                           tips: {
                             title:
                               i18n.language === 'zh-CN'
-                                ? '使用 APP 扫码登录'
-                                : `Use APP to scan and login`,
+                                ? '使用 移动端 APP 扫码登录'
+                                : `Use Mobile APP to scan and login`,
                             expired: t('login.qrcodeExpired'),
                           },
                         }}

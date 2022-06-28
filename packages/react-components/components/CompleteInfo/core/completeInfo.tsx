@@ -71,7 +71,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
 
     for (const [key, value] of Object.entries(countryMap)) {
       countryList.push({
-        label: value as string,
+        label: value + ` (${key})`,
         value: key,
       })
     }

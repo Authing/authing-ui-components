@@ -106,11 +106,20 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           },
         }
 
+        // onRegisterSuccess 注册成功后需要回到对应的登录页面
+        const onRegisterSuccessIntercept = (user: any) => {
+          onRegisterSuccess(user, {
+            registerFrom: RegisterMethods.Email,
+            account: email,
+          })
+        }
         // 看看是否要跳转到 信息补全
         if (isChangeComplete) {
           changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
             businessRequestName: 'registerByEmail',
             content: registerContent,
+            onRegisterSuccess: onRegisterSuccessIntercept,
+            onRegisterFailed,
           })
 
           return
@@ -125,11 +134,12 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         )
 
         submitButtonRef.current?.onSpin(false)
-        onRegisterSuccess(user)
+        onRegisterSuccessIntercept(user)
       } catch (error: any) {
-        const { code, data, message } = error
+        const { message: errorMessage, code, data } = error
         submitButtonRef.current.onError()
-        onRegisterFailed(code, data, message)
+        message.error(errorMessage)
+        onRegisterFailed(code, data, errorMessage)
       } finally {
         submitButtonRef.current?.onSpin(false)
       }

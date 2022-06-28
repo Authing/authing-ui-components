@@ -111,6 +111,8 @@ export interface RegisterCompleteInfoInitData {
     | 'registerByEmail'
     | 'registerByPhoneCode'
     | 'registerByEmailCode'
+  onRegisterFailed: Function
+  onRegisterSuccess: Function
 }
 
 export interface RegisterCompletePasswordInitData

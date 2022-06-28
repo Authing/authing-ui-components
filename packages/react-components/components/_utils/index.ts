@@ -8,9 +8,9 @@ import { ApplicationConfig, ComplateFiledsPlace } from '../AuthingGuard/api'
 import { GuardProps } from '../Guard'
 import isEqual from 'lodash/isEqual'
 import omit from 'lodash/omit'
-import { NewRegisterMethods } from '../Type'
 import { getGuardWindow } from '../Guard/core/useAppendConfig'
 import UAParser from 'ua-parser-js'
+import { LoginMethods, RegisterMethods } from '../AuthingGuard/types'
 export * from './popupCenter'
 export * from './clipboard'
 
@@ -626,9 +626,9 @@ export const shoudGoToComplete = (
 }
 
 export const tabSort = (
-  defaultValue: NewRegisterMethods,
-  tabList: NewRegisterMethods[]
-): NewRegisterMethods[] => {
+  defaultValue: any,
+  tabList: RegisterMethods[]
+): RegisterMethods[] => {
   const index = tabList.indexOf(defaultValue)
   const element = tabList.splice(index, 1)[0]
   tabList.unshift(element)
@@ -665,4 +665,91 @@ export const getDocumentNode = (node: Node & ParentNode): Document => {
   }
 
   return getDocumentNode(node.parentNode as Node & ParentNode)
+}
+
+// 1. 手机号验证码注册
+//  - 手机号验证码登录
+//  - 手机号密码登录
+//  - 非手机号的密码登录
+// 2. 邮箱验证码注册
+//  - 邮箱验证码登录
+//  - 邮箱密码登录
+//  - 非邮箱的密码登录
+// 3. 邮箱密码注册
+//  - 邮箱密码登录
+//  - 邮箱验证码登录
+//  - 非邮箱的密码登录
+
+export const getLoginTypePipe = (
+  publicConfig: ApplicationConfig,
+  registerMethod: RegisterMethods
+) => {
+  const loginTabs = publicConfig?.loginTabs.list // 支持的登录方式
+  const verifyCodeTabMethods =
+    publicConfig?.verifyCodeTabConfig?.enabledLoginMethods ?? [] // 支持的验证码登录方式
+  const passwordTabMethods =
+    publicConfig?.passwordTabConfig?.enabledLoginMethods ?? [] // 支持的密码登录方式
+  // 通过手机验证码注册成功
+  if (registerMethod === RegisterMethods.Phone) {
+    if (
+      loginTabs.includes(LoginMethods.PhoneCode) &&
+      verifyCodeTabMethods.includes('phone-code')
+    ) {
+      // situation 1  手机号验证码登录
+      return {
+        specifyDefaultLoginMethod: LoginMethods.PhoneCode,
+        lockMethod: 'phone-code',
+      }
+    } else if (
+      loginTabs.includes(LoginMethods.Password) &&
+      passwordTabMethods.includes('phone-password')
+    ) {
+      // situation 2 手机号密码登录
+      return { specifyDefaultLoginMethod: LoginMethods.Password }
+    } else {
+      return undefined
+    }
+  }
+  // 通过邮箱验证码注册成功
+  if (registerMethod === RegisterMethods.EmailCode) {
+    if (
+      loginTabs.includes(LoginMethods.PhoneCode) &&
+      verifyCodeTabMethods.includes('email-code')
+    ) {
+      // situation 1  邮箱验证码登录
+      return {
+        specifyDefaultLoginMethod: LoginMethods.PhoneCode,
+        lockMethod: 'email-code',
+      }
+    } else if (
+      loginTabs.includes(LoginMethods.Password) &&
+      passwordTabMethods.includes('email-password')
+    ) {
+      // situation 2 邮箱密码登录
+      return { specifyDefaultLoginMethod: LoginMethods.Password }
+    } else {
+      return undefined
+    }
+  }
+  // 通过邮箱密码注册成功
+  if (registerMethod === RegisterMethods.Email) {
+    if (
+      loginTabs.includes(LoginMethods.Password) &&
+      passwordTabMethods.includes('email-password')
+    ) {
+      // situation 1  邮箱密码登录
+      return { specifyDefaultLoginMethod: LoginMethods.Password }
+    } else if (
+      loginTabs.includes(LoginMethods.PhoneCode) &&
+      verifyCodeTabMethods.includes('email-code')
+    ) {
+      // situation 2 邮箱验证码登录
+      return {
+        specifyDefaultLoginMethod: LoginMethods.PhoneCode,
+        lockMethod: 'email-code',
+      }
+    } else {
+      return undefined
+    }
+  }
 }
