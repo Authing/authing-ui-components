@@ -12,7 +12,7 @@ import {
 import {
   isDingtalkBrowser,
   isLarkBrowser,
-  isQQBrowser,
+  // isQQBrowser,
   isQQBuiltInBrowser,
   isSpecialBrowser,
   isWeChatBrowser,
@@ -213,25 +213,25 @@ export const useMethod: (params: {
       ) ?? []
   }
 
-  // socialConnectionObjs = socialConnectionObjs
-  //   ?.filter((item) => {
-  //     // 某些社会化登录会在 tabs 中显示，或者无法在 Guard 中使用，所以底部不显示了
-  //     return !HIDE_SOCIALS.includes(item.provider)
-  //   })
-  //   .filter((item: any) => {
-  //     // 某些在企业身份源创建的社交身份源归为企业身份源方式显示
-  //     if (HIDE_SOCIALS_SHOWIN_ENTERPRISE.includes(item.provider)) {
-  //       if (
-  //         !enterpriseConnectionObjs.find(
-  //           (connection: any) => connection.identifier === item.identifier
-  //         )
-  //       ) {
-  //         enterpriseConnectionObjs.push(item)
-  //       }
-  //       return false
-  //     }
-  //     return true
-  //   })
+  socialConnectionObjs = socialConnectionObjs
+    ?.filter((item) => {
+      // 某些社会化登录会在 tabs 中显示，或者无法在 Guard 中使用，所以底部不显示了
+      return !HIDE_SOCIALS.includes(item.provider)
+    })
+    .filter((item: any) => {
+      // 某些在企业身份源创建的社交身份源归为企业身份源方式显示
+      if (HIDE_SOCIALS_SHOWIN_ENTERPRISE.includes(item.provider)) {
+        if (
+          !enterpriseConnectionObjs.find(
+            (connection: any) => connection.identifier === item.identifier
+          )
+        ) {
+          enterpriseConnectionObjs.push(item)
+        }
+        return false
+      }
+      return true
+    })
   //   // 特殊浏览器登录方式
   //   .filter((item) =>
   //     isWeChatBrowser()
@@ -335,6 +335,19 @@ export const useMethod: (params: {
           }
           return item
         })
+      enterpriseConnectionObjs = enterpriseConnectionObjs
+        .filter(
+          (item: any) =>
+            !(item?.provider && hiddenSocialConnection.includes(item.provider))
+        )
+        .map((item: any) => {
+          if (wechatDisplayButtonsMessage.includes(item.provider)) {
+            item.action = SocialConnectionEvent.Message
+          } else {
+            item.action = SocialConnectionEvent.Auth
+          }
+          return item
+        })
       break
     // qq 内置浏览器
     case isQQBuiltInBrowser():
@@ -352,6 +365,19 @@ export const useMethod: (params: {
       socialConnectionObjs = socialConnectionObjs
         .filter((item) => !hiddenSocialConnection.includes(item.provider))
         .map((item) => {
+          if (qqbuiltDisplayButtonsMessage.includes(item.provider)) {
+            item.action = SocialConnectionEvent.Message
+          } else {
+            item.action = SocialConnectionEvent.Auth
+          }
+          return item
+        })
+      enterpriseConnectionObjs = enterpriseConnectionObjs
+        .filter(
+          (item: any) =>
+            !(item?.provider && hiddenSocialConnection.includes(item.provider))
+        )
+        .map((item: any) => {
           if (qqbuiltDisplayButtonsMessage.includes(item.provider)) {
             item.action = SocialConnectionEvent.Message
           } else {
@@ -392,6 +418,19 @@ export const useMethod: (params: {
           }
           return item
         })
+      enterpriseConnectionObjs = enterpriseConnectionObjs
+        .filter(
+          (item: any) =>
+            !(item?.provider && hiddenSocialConnection.includes(item.provider))
+        )
+        .map((item: any) => {
+          if (weWorkBuiltDisplayButtonsMessage.includes(item.provider)) {
+            item.action = SocialConnectionEvent.Message
+          } else {
+            item.action = SocialConnectionEvent.Auth
+          }
+          return item
+        })
       break
     // 钉钉内置浏览器
     case isDingtalkBrowser():
@@ -409,6 +448,19 @@ export const useMethod: (params: {
       socialConnectionObjs = socialConnectionObjs
         .filter((item) => !hiddenSocialConnection.includes(item.provider))
         .map((item) => {
+          if (dingTalkDisplayButtonsMessage.includes(item.provider)) {
+            item.action = SocialConnectionEvent.Message
+          } else {
+            item.action = SocialConnectionEvent.Auth
+          }
+          return item
+        })
+      enterpriseConnectionObjs = enterpriseConnectionObjs
+        .filter(
+          (item: any) =>
+            !(item?.provider && hiddenSocialConnection.includes(item.provider))
+        )
+        .map((item: any) => {
           if (dingTalkDisplayButtonsMessage.includes(item.provider)) {
             item.action = SocialConnectionEvent.Message
           } else {
@@ -447,6 +499,19 @@ export const useMethod: (params: {
           }
           return item
         })
+      enterpriseConnectionObjs = enterpriseConnectionObjs
+        .filter(
+          (item: any) =>
+            !(item?.provider && hiddenSocialConnection.includes(item.provider))
+        )
+        .map((item: any) => {
+          if (larkDisplayButtonsMessage.includes(item.provider)) {
+            item.action = SocialConnectionEvent.Message
+          } else {
+            item.action = SocialConnectionEvent.Auth
+          }
+          return item
+        })
       break
     // pc 浏览器
     default:
@@ -464,8 +529,23 @@ export const useMethod: (params: {
           }
           return item
         })
+      enterpriseConnectionObjs = enterpriseConnectionObjs
+        .filter(
+          (item: any) =>
+            !(item?.provider && hiddenSocialConnection.includes(item.provider))
+        )
+        .map((item: any) => {
+          if (pcDisplayButtonsMessage.includes(item.provider)) {
+            item.action = SocialConnectionEvent.Message
+          } else {
+            item.action = SocialConnectionEvent.Auth
+          }
+          return item
+        })
       break
   }
+
+  console.log(socialConnectionObjs, enterpriseConnectionObjs)
 
   const guardWindow = getGuardWindow()
 

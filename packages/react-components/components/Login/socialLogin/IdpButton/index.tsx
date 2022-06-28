@@ -1,4 +1,4 @@
-import { Avatar } from 'antd'
+import { Avatar, message } from 'antd'
 import {
   IAzureAdConnectionConfig,
   ICasConnectionConfig,
@@ -17,6 +17,8 @@ import { IconFont } from '../../../IconFont'
 import version from '../../../version/version'
 import { isSpecialBrowser, popupCenter } from '../../../_utils'
 import { useGuardHttp } from '../../../_utils/guardHttp'
+import { SocialConnectionEvent } from '../../../_utils/hooks'
+import { i18n } from '../../../_utils/locales'
 
 export const IdpButton = (props: any) => {
   // TODO: 能不能加个类型
@@ -54,13 +56,24 @@ export const IdpButton = (props: any) => {
       }
 
       const onLogin = () => {
-        const initUrl = `${appHost}/connections/social/${
-          i.identifier
-        }?${qs.stringify(query)}`
-        if (query.redirected) {
-          window.location.replace(initUrl)
-        } else {
-          popupCenter(initUrl)
+        if (i.action === SocialConnectionEvent.Message) {
+          message.error(
+            t('login.socialConnectionMessage', {
+              provider:
+                i.displayName ??
+                (i18n.language === 'zh-CN' ? i.name : i.name_en) ??
+                i.provider,
+            })
+          )
+        } else if (i.action === SocialConnectionEvent.Auth) {
+          const initUrl = `${appHost}/connections/social/${
+            i.identifier
+          }?${qs.stringify(query)}`
+          if (query.redirected) {
+            window.location.replace(initUrl)
+          } else {
+            popupCenter(initUrl)
+          }
         }
       }
 
