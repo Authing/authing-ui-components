@@ -7,7 +7,7 @@ import { UploadFile } from 'antd/lib/upload/interface'
 import { useGuardHttp } from '../../_utils/guardHttp'
 import { fieldRequiredRule, validate } from '../../_utils'
 import { IconFont } from '../../IconFont'
-
+import { useGuardInitData } from '../../_utils/context'
 interface describeQuestionsProps {
   appId: string
   host: string
@@ -16,6 +16,7 @@ interface describeQuestionsProps {
 
 export const DescribeQuestions = (props: describeQuestionsProps) => {
   const { t } = useTranslation()
+  const initData = useGuardInitData<{ identify: string }>()
   // 不清楚为什么放出去之后，i18n 的结果全是 undefeated
   const typeProblemMap: any = {
     0: [
@@ -145,6 +146,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
           name="identify"
           label={t('common.problem.form.phone')}
           validateFirst={true}
+          initialValue={initData?.identify}
           rules={[
             ...fieldRequiredRule(t('common.problem.form.phone')),
             {

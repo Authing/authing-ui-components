@@ -24,7 +24,11 @@ export enum InputMethodMap {
   email = 'email-code',
   phone = 'phone-code',
 }
-export const SelfUnlock = () => {
+export const SelfUnlock = ({
+  identifyRef,
+}: {
+  identifyRef?: React.MutableRefObject<string>
+}) => {
   const { t } = useTranslation()
   let [form] = Form.useForm()
   let [identify, setIdentify] = useState('')
@@ -55,6 +59,13 @@ export const SelfUnlock = () => {
       setCodeMethod('phone')
     }
   }, [initData, form])
+
+  useEffect(() => {
+    if (identifyRef) {
+      identifyRef.current = identify
+    }
+  }, [identify])
+
   const { authFlow } = useGuardHttp()
 
   const {

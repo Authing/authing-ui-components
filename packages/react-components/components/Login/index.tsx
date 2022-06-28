@@ -1,4 +1,10 @@
-import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+  useRef,
+} from 'react'
 import { useTranslation } from 'react-i18next'
 import { message, Popover, Tabs, Tooltip } from 'antd'
 import intersection from 'lodash/intersection'
@@ -26,9 +32,9 @@ import {
   useGuardModule,
   useGuardPublicConfig,
 } from '../_utils/context'
-import { isWeChatBrowser } from '../_utils'
+import { isWeChatBrowser, validate } from '../_utils'
 import { LoginWithVerifyCode } from './core/withVerifyCode'
-import { VerifyLoginMethods } from '../AuthingGuard/api'
+import { VerifyLoginMethods, PasswordLoginMethods } from '../AuthingGuard/api'
 import { useMediaSize, useMethod } from '../_utils/hooks'
 import { getGuardDocument } from '../_utils/guardDocument'
 import { useGuardAuthClient } from '../Guard/authClient'
@@ -120,6 +126,8 @@ export const GuardLoginView = () => {
 
   const [accountLock, setAccountLock] = useState(false)
 
+  const identifyRef = useRef<Record<string, string>>({} as any)
+
   let publicKey = config?.publicKey!
 
   // let autoRegister = props.config?.autoRegister
@@ -189,6 +197,43 @@ export const GuardLoginView = () => {
   const onLoginSuccess = (data: any, message?: string) => {
     // data._message = message
     events?.onLogin?.(data, client)
+  }
+
+  const getPasswordIdentify = (
+    identity: string,
+    methods: PasswordLoginMethods[]
+  ): string => {
+    if (methods.length !== 1) {
+      return validate('phone', identity) || validate('email', identity)
+        ? identity
+        : ''
+    }
+    switch (methods[0]) {
+      case 'phone-password':
+        return identity
+      case 'email-password':
+        return identity
+      default:
+        return ''
+    }
+  }
+
+  // 保存用户输入的手机号、邮箱，在点击 问题反馈时带上
+  const saveIdentify = (type: LoginMethods, identity: string) => {
+    if (type === LoginMethods.PhoneCode) {
+      // 手机号的时候，直接保存输入的数据
+      identifyRef.current = { ...identifyRef.current, [type]: identity }
+    } else if (type === LoginMethods.Password) {
+      // 密码保存时分情况保存
+      identifyRef.current = {
+        ...identifyRef.current,
+        [type]: getPasswordIdentify(
+          identity,
+          config?.passwordLoginMethods ?? []
+        ),
+      }
+    }
+    // LDAP、AD 情况，不会输入 手机号或者用户名
   }
 
   const onLoginFailed = (code: number, data: any, message?: string) => {
@@ -407,6 +452,7 @@ export const GuardLoginView = () => {
                           onLoginSuccess={onLoginSuccess}
                           onLoginFailed={onLoginFailed}
                           onBeforeLogin={onBeforeLogin}
+                          saveIdentify={saveIdentify}
                           passwordLoginMethods={
                             config?.passwordLoginMethods ?? []
                           }
@@ -426,6 +472,7 @@ export const GuardLoginView = () => {
                           // onLogin={onLogin}
                           onLoginSuccess={onLoginSuccess}
                           onLoginFailed={onLoginFailed}
+                          saveIdentify={saveIdentify}
                           agreements={agreements}
                           methods={verifyLoginMethods}
                         />
@@ -490,7 +537,9 @@ export const GuardLoginView = () => {
                       <div
                         className="touch-tip question-feedback"
                         onClick={() =>
-                          changeModule?.(GuardModuleType.ANY_QUESTIONS, {})
+                          changeModule?.(GuardModuleType.ANY_QUESTIONS, {
+                            identify: identifyRef.current[loginWay],
+                          })
                         }
                       >
                         <IconFont
