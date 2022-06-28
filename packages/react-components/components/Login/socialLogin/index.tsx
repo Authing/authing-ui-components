@@ -1,4 +1,4 @@
-import { Button, Space, Tooltip } from 'antd'
+import { Space, Tooltip } from 'antd'
 import { Lang } from 'authing-js-sdk/build/main/types'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -16,6 +16,7 @@ import { CodeAction } from '../../_utils/responseManagement/interface'
 import version from '../../version/version'
 import { GuardLocalConfig } from '../../Guard'
 import { getGuardWindow } from '../../Guard/core/useAppendConfig'
+import { GuardButton } from '../../GuardButton'
 
 export interface SocialLoginProps {
   appId: string
@@ -128,10 +129,9 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
     }
 
     const shape = config.socialConnectionsBtnShape
-
     if (shape === 'button') {
       return (
-        <Button
+        <GuardButton
           key={item.id}
           block
           size="large"
@@ -150,27 +150,27 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
           {item.displayName ??
             (i18n.language === 'zh-CN' ? item.name : item.name_en) ??
             item.provider}
-        </Button>
+        </GuardButton>
       )
     } else if (shape === 'icon') {
       return isPhoneMedia ? (
-        <div className="g2-social-login-item" onClick={onLogin}>
+        <GuardButton className="g2-social-login-item" onClick={onLogin}>
           <IconFont type={`${iconType}-fill`} />
-        </div>
+        </GuardButton>
       ) : (
         <Tooltip
           key={item.id}
           title={item.tooltip?.[i18n.language as Lang] || item.name}
           trigger={['hover', 'click', 'contextMenu']}
         >
-          <div className="g2-social-login-item" onClick={onLogin}>
+          <GuardButton className="g2-social-login-item" onClick={onLogin}>
             <IconFont type={`${iconType}-fill`} />
-          </div>
+          </GuardButton>
         </Tooltip>
       )
     } else {
       return noLoginMethods ? (
-        <Button
+        <GuardButton
           key={item.id}
           block
           size="large"
@@ -186,11 +186,15 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
           {item.displayName ??
             (i18n.language === 'zh-CN' ? item.name : item.name_en) ??
             item.provider}
-        </Button>
+        </GuardButton>
       ) : isPhoneMedia ? (
-        <div className="g2-social-login-item" onClick={onLogin} key={item.id}>
+        <GuardButton
+          className="g2-social-login-item"
+          onClick={onLogin}
+          key={item.id}
+        >
           <IconFont type={`${iconType}-fill`} />
-        </div>
+        </GuardButton>
       ) : (
         <Tooltip
           overlayStyle={{ fontFamily: 'sans-serif' }}
@@ -202,9 +206,9 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
           }
           trigger={['hover', 'click', 'contextMenu']}
         >
-          <div className="g2-social-login-item" onClick={onLogin}>
+          <GuardButton className="g2-social-login-item" onClick={onLogin}>
             <IconFont type={`${iconType}-fill`} />
-          </div>
+          </GuardButton>
         </Tooltip>
       )
     }

@@ -8,6 +8,7 @@ import { useGuardAuthClient } from '../Guard/authClient'
 import { LoginWithPassword } from '../Login/core/withPassword'
 import { LoginWithVerifyCode } from '../Login/core/withVerifyCode'
 import {
+  useGuardButtonState,
   useGuardEvents,
   useGuardFinallyConfig,
   useGuardInitData,
@@ -36,6 +37,8 @@ export const GuardIdentityBindingView: React.FC = () => {
   const { publicKey, agreementEnabled } = config
 
   const publicConfig = useGuardPublicConfig()
+
+  const { spinChange } = useGuardButtonState()
 
   const isInternationSms =
     publicConfig?.internationalSmsConfig?.enabled || false
@@ -71,10 +74,18 @@ export const GuardIdentityBindingView: React.FC = () => {
     },
     password: async (data: any) => {
       const { identity: account, password } = data
+
       const encrypt = authClient.options.encryptFunction
 
+      const captchaCode = data.captchaCode && data.captchaCode.trim()
+
       const encryptPassword = await encrypt!(password, publicKey!)
-      return await PasswordRequest({ account, password: encryptPassword })
+
+      return await PasswordRequest({
+        account,
+        password: encryptPassword,
+        captchaCode,
+      })
     },
   }
 
@@ -100,9 +111,24 @@ export const GuardIdentityBindingView: React.FC = () => {
   const onBind = async (loginInfo: any) => {
     const { type, data } = loginInfo
 
+    spinChange(true)
+
     const res = await bindMethodsMap[
       type as 'phone-code' | 'email-code' | 'password'
     ]?.(data)
+
+    const { isFlowEnd } = res
+
+    spinChange(false)
+
+    if (isFlowEnd) {
+      // 🤮 TODO 日后必要优化
+      return {
+        ...res,
+        apiCode: 200,
+        code: 200,
+      }
+    }
 
     return res
   }

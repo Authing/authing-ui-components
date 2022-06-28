@@ -1,22 +1,35 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { ErrorInitData } from './interface'
 import { i18n } from '../_utils/locales'
 import './styles.less'
-import { IconFont } from '../IconFont'
 import { useGuardInitData } from '../_utils/context'
 
-export const GuardErrorView: React.FC = () => {
-  const { error } = useGuardInitData<ErrorInitData>()
+export interface ErrorProps {
+  error?: Error
+}
 
-  const messages = error?.message
-    ? `${error?.message} `
-    : `${i18n.t('user.contactAdministrator')}`
+export const GuardErrorView: React.FC<ErrorProps> = (propsInitData) => {
+  const guardXInitData = useGuardInitData<ErrorInitData>()
+
+  const messages = useMemo(() => {
+    const error = propsInitData?.error ?? guardXInitData?.error
+
+    return `${error?.message}` ?? `${i18n.t('user.contactAdministrator')}`
+  }, [guardXInitData?.error, propsInitData?.error])
 
   return (
     <div className="g2-view-container g2-view-error">
       <div className="g2-error-content">
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <IconFont type="authing-bianzu" style={{ width: 240, height: 160 }} />
+          <div
+            style={{
+              width: 240,
+              height: 160,
+              backgroundImage:
+                'url(https://authing-files.oss-cn-zhangjiakou.aliyuncs.com/authing-guard/authing_error.svg)',
+              backgroundSize: 'contain',
+            }}
+          />
         </div>
         <div className="g2-error-message">{i18n.t('user.error')}</div>
         <span

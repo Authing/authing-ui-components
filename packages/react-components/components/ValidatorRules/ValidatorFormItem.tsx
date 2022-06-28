@@ -12,6 +12,7 @@ import { useCheckRepeat } from './useCheckRepeat'
 const ValidatorFormItem: React.FC<ValidatorFormItemMetaProps> = (props) => {
   const {
     checkRepeat = false,
+    checkExist = false,
     method,
     name,
     required,
@@ -20,7 +21,6 @@ const ValidatorFormItem: React.FC<ValidatorFormItemMetaProps> = (props) => {
     ...formItemProps
   } = props
   const publicConfig = useGuardPublicConfig()
-
   const { get } = useGuardHttp()
   const { t } = useTranslation()
 
@@ -36,21 +36,24 @@ const ValidatorFormItem: React.FC<ValidatorFormItemMetaProps> = (props) => {
     if (method === 'email')
       return {
         field: t('common.emailLabel'),
-        checkErrorMessage: t('common.checkEmail'),
+        checkRepeatErrorMessage: t('common.checkEmail'),
         formatErrorMessage: t('common.emailFormatError'),
+        checkExistErrorMessage: t('common.noFindEmail'),
         pattern: VALIDATE_PATTERN.email,
       }
     else if (method === 'username') {
       return {
         field: t('common.username'),
-        checkErrorMessage: t('common.checkUserName'),
+        checkRepeatErrorMessage: t('common.checkUserName'),
+        checkExistErrorMessage: t('common.noFindUsername'),
         formatErrorMessage: t('common.usernameFormatError'),
         pattern: VALIDATE_PATTERN.username,
       }
     } else
       return {
         field: t('common.phone'),
-        checkErrorMessage: t('common.checkPhone'),
+        checkRepeatErrorMessage: t('common.checkPhone'),
+        checkExistErrorMessage: t('common.noFindPhone'),
         formatErrorMessage: t('common.phoneFormateError'),
         pattern: VALIDATE_PATTERN.phone,
       }
@@ -66,10 +69,15 @@ const ValidatorFormItem: React.FC<ValidatorFormItemMetaProps> = (props) => {
       key: value,
       type: method,
     }).then(({ data }) => {
-      if (Boolean(data)) {
-        reject(methodContent.checkErrorMessage)
-      } else {
-        resolve(true)
+      if (checkExist) {
+        Boolean(data)
+          ? resolve(true)
+          : reject(methodContent.checkExistErrorMessage)
+      }
+      if (checkRepeat) {
+        Boolean(data)
+          ? reject(methodContent.checkRepeatErrorMessage)
+          : resolve(true)
       }
     })
   }
@@ -112,15 +120,22 @@ const ValidatorFormItem: React.FC<ValidatorFormItemMetaProps> = (props) => {
     rules.push(formatRules)
 
     // 是否校验重复
-    if (checkRepeat) {
+    if (checkRepeat || checkExist) {
       rules.push({
         validator: checkRepeatFn,
-        validateTrigger: ['onBlur'],
+        validateTrigger: [],
       })
     }
 
     return rules
-  }, [required, methodContent.field, formatRules, checkRepeat, checkRepeatFn])
+  }, [
+    required,
+    methodContent.field,
+    formatRules,
+    checkRepeat,
+    checkExist,
+    checkRepeatFn,
+  ])
 
   return (
     <Form.Item

@@ -29,13 +29,13 @@ export const InputIdentify: React.FC<InputIdentifyProps> = (props) => {
     () => ({
       'email-code': {
         t: t('common.email'),
-        sort: 1,
+        sort: 2,
       },
       'phone-code': {
         t: publicConfig?.internationalSmsConfig?.enabled
           ? t('common.areaCodePhone')
           : t('common.phoneNumber'),
-        sort: 2,
+        sort: 1,
       },
     }),
     [publicConfig, t]

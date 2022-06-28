@@ -1,22 +1,17 @@
-import {
-  IG2FCProps,
-  IG2Config,
-  getDefaultG2Config,
-  IG2Events,
-  NewRegisterMethods,
-} from '../Type'
+import { IG2FCProps, IG2Config, getDefaultG2Config, IG2Events } from '../Type'
 import {
   AuthenticationClient,
   User,
   EmailRegisterParams,
   PhoneRegisterParams,
+  RegisterMethods,
 } from '..'
 import { Agreement } from '../AuthingGuard/api'
 
 export interface RegisterConfig extends IG2Config {
   disableRegister?: boolean
-  registerMethods?: NewRegisterMethods[]
-  defaultRegisterMethod?: NewRegisterMethods
+  registerMethods?: RegisterMethods[]
+  defaultRegisterMethod?: RegisterMethods
   publicKey?: string
   agreementEnabled?: boolean
   agreements?: Agreement[]
@@ -34,7 +29,7 @@ export interface RegisterEvents extends IG2Events {
   ) => boolean | Promise<boolean>
   onRegister?: (user: User, authClient: AuthenticationClient) => void
   onRegisterError?: (error: any) => void
-  onRegisterTabChange?: (activeTab: NewRegisterMethods) => void
+  onRegisterTabChange?: (activeTab: RegisterMethods) => void
 }
 
 export interface GuardRegisterProps extends IG2FCProps, RegisterEvents {

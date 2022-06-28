@@ -90,11 +90,6 @@ export interface GuardPageConfig {
   }
 }
 
-export enum NewRegisterMethods {
-  Email = 'email',
-  Phone = 'phone',
-  EmailCode = 'emailCode',
-}
 export enum EmailScene {
   // 通知模版
   // - 欢迎邮件 WELCOME
@@ -127,4 +122,6 @@ export enum EmailScene {
   EMAIL_BIND_VERIFY_CODE = 'EMAIL_BIND_VERIFY_CODE',
   // - 邮箱解绑验证码
   EMAIL_UNBIND_VERIFY_CODE = 'EMAIL_UNBIND_VERIFY_CODE',
+  // 自助解锁验证码
+  SELF_UNLOCKING_VERIFY_CODE = 'SELF_UNLOCKING_VERIFY_CODE',
 }

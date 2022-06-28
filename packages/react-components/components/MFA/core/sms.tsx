@@ -39,15 +39,13 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
   const [form] = Form.useForm()
 
   const onFinish = async ({ phone }: any) => {
-    submitButtonRef.current?.onSpin(true)
     await form.validateFields()
+    submitButtonRef.current?.onSpin(false)
     try {
       onBind(phone)
     } catch (e) {
       // do nothing
       submitButtonRef.current?.onError()
-    } finally {
-      submitButtonRef.current?.onSpin(false)
     }
   }
 
@@ -92,6 +90,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
       <p className="authing-g2-mfa-tips">{t('login.bindPhoneInfo')}</p>
       <Form
         form={form}
+        onSubmitCapture={() => submitButtonRef.current.onSpin(true)}
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
       >

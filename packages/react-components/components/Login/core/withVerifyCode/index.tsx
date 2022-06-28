@@ -13,6 +13,7 @@ import { SceneType } from 'authing-js-sdk'
 import { SendCodeByPhone } from '../../../SendCode/SendCodeByPhone'
 import {
   useGuardHttpClient,
+  useGuardInitData,
   useGuardPublicConfig,
 } from '../../../_utils/context'
 import { SendCodeByEmail } from '../../../SendCode/SendCodeByEmail'
@@ -23,10 +24,16 @@ import { InputInternationPhone } from './InputInternationPhone'
 import { parsePhone, useMediaSize } from '../../../_utils/hooks'
 import { EmailScene, InputMethod } from '../../../Type'
 import { CodeAction } from '../../../_utils/responseManagement/interface'
+import { GuardLoginInitData } from '../../interface'
+import { LoginMethods } from '../../../AuthingGuard/types'
 
 export const LoginWithVerifyCode = (props: any) => {
   const config = useGuardPublicConfig()
-
+  const {
+    _firstItemInitialValue = '',
+    specifyDefaultLoginMethod,
+    _lockMethod,
+  } = useGuardInitData<GuardLoginInitData>()
   const {
     agreements,
     methods,
@@ -51,7 +58,9 @@ export const LoginWithVerifyCode = (props: any) => {
 
   const [identify, setIdentify] = useState('')
 
-  const [currentMethod, setCurrentMethod] = useState<InputMethod>(methods[0])
+  const [currentMethod, setCurrentMethod] = useState<InputMethod>(
+    specifyDefaultLoginMethod ? _lockMethod ?? methods[0] : methods[0]
+  )
   // 是否仅开启国际化短信
   const [isOnlyInternationSms, setInternationSms] = useState(false)
   // 区号 默认
@@ -116,6 +125,8 @@ export const LoginWithVerifyCode = (props: any) => {
               }
               scene={SceneType.SCENE_TYPE_LOGIN}
               maxLength={verifyCodeLength}
+              form={form}
+              fieldName={'identify'}
               data={identify}
               onSendCodeBefore={async () => {
                 await form.validateFields(['identify'])
@@ -137,6 +148,8 @@ export const LoginWithVerifyCode = (props: any) => {
                   style={{ color: '#878A95' }}
                 />
               }
+              form={form}
+              fieldName={'identify'}
               scene={EmailScene.LOGIN_VERIFY_CODE}
               maxLength={verifyCodeLength}
               data={identify}
@@ -260,7 +273,7 @@ export const LoginWithVerifyCode = (props: any) => {
     // 身份源绑定
     if (!!props.onLoginRequest) {
       const res = await props.onLoginRequest?.(loginInfo)
-      const { code, data, onGuardHandling } = res
+      const { code, apiCode, data, onGuardHandling } = res
 
       submitButtonRef.current?.onSpin(false)
 
@@ -269,7 +282,8 @@ export const LoginWithVerifyCode = (props: any) => {
       } else {
         const handMode = onGuardHandling?.()
         // 向上层抛出错误 执行绑定失败钩子
-        handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
+        handMode === CodeAction.RENDER_MESSAGE &&
+          onLoginFailed(apiCode ?? code, data)
       }
       return
     }
@@ -317,6 +331,11 @@ export const LoginWithVerifyCode = (props: any) => {
         autoComplete="off"
       >
         <FormItemIdentify
+          initialValue={
+            specifyDefaultLoginMethod === LoginMethods.PhoneCode
+              ? _firstItemInitialValue
+              : ''
+          }
           name="identify"
           className={
             isOnlyInternationSms
@@ -324,6 +343,7 @@ export const LoginWithVerifyCode = (props: any) => {
               : 'authing-g2-input-form'
           }
           methods={methods}
+          checkExist={!autoRegister}
           currentMethod={currentMethod}
           areaCode={areaCode}
         >
@@ -374,11 +394,6 @@ export const LoginWithVerifyCode = (props: any) => {
         )}
         <Form.Item>
           <SubmitButton
-            // disabled={
-            //   !!agreements.find(
-            //     (item: Agreement) => item.required && !acceptedAgreements
-            //   )
-            // }
             text={submitText}
             className="password"
             ref={submitButtonRef}

@@ -306,6 +306,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
         form={form}
         name="emailRegister"
         autoComplete="off"
+        onSubmitCapture={() => submitButtonRef.current.onSpin(true)}
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
       >
@@ -343,13 +344,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
           />
         )}
         <Form.Item>
-          <SubmitButton
-            // disabled={
-            //   !!agreements.find((item) => item.required && !acceptedAgreements)
-            // }
-            text={t('common.register')}
-            ref={submitButtonRef}
-          />
+          <SubmitButton text={t('common.register')} ref={submitButtonRef} />
         </Form.Item>
       </Form>
     </div>

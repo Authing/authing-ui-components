@@ -17,6 +17,8 @@ import { Agreements } from '../../../Register/components/Agreements'
 import { AuthingGuardResponse, AuthingResponse } from '../../../_utils/http'
 import { CodeAction } from '../../../_utils/responseManagement/interface'
 import { useMediaSize } from '../../../_utils/hooks'
+import { useGuardInitData } from '../../../_utils/context'
+import { GuardLoginInitData } from '../../interface'
 interface LoginWithPasswordProps {
   // configs
   publicKey: string
@@ -39,6 +41,12 @@ interface LoginWithPasswordProps {
 
 export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   const { agreements, onLoginFailed, onLoginSuccess } = props
+
+  const {
+    _firstItemInitialValue = '',
+    specifyDefaultLoginMethod,
+  } = useGuardInitData<GuardLoginInitData>()
+
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
   const { isPhoneMedia } = useMediaSize()
   const [validated, setValidated] = useState(false)
@@ -120,37 +128,37 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   }
 
   const onLoginRes = (res: AuthingGuardResponse) => {
-    const { code, message: msg, data, onGuardHandling } = res
-
-    if (code === ErrorCode.INPUT_CAPTCHACODE) {
-      setVerifyCodeUrl(getCaptchaUrl())
-      setShowCaptcha(true)
-    }
-
-    if (code === ErrorCode.PASSWORD_ERROR) {
-      if ((data as any)?.remainCount ?? false) {
-        setRemainCount((data as any)?.remainCount ?? 0)
-        submitButtonRef?.current?.onSpin(false)
-        // TODO 临时拦截密码错误限制不报 message
-        // props.onLogin(9999, data, msg)
-        onLoginFailed?.(9999, data, msg)
-        return
-      }
-    }
-
-    if (
-      code === ErrorCode.ACCOUNT_LOCK ||
-      code === ErrorCode.MULTIPLE_ERROR_LOCK
-    ) {
-      // 账号锁定
-      setAccountLock(true)
-    }
+    const { code, apiCode, message: msg, data, onGuardHandling } = res
 
     submitButtonRef?.current?.onSpin(false)
 
     if (code === 200) {
       onLoginSuccess(data, msg)
     } else {
+      if (apiCode === ErrorCode.INPUT_CAPTCHACODE) {
+        setVerifyCodeUrl(getCaptchaUrl())
+        setShowCaptcha(true)
+      }
+
+      if (apiCode === ErrorCode.PASSWORD_ERROR) {
+        if ((data as any)?.remainCount ?? false) {
+          setRemainCount((data as any)?.remainCount ?? 0)
+          submitButtonRef?.current?.onSpin(false)
+          // TODO 临时拦截密码错误限制不报 message
+          // props.onLogin(9999, data, msg)
+          onLoginFailed?.(9999, data, msg)
+          return
+        }
+      }
+
+      if (
+        apiCode === ErrorCode.ACCOUNT_LOCK ||
+        apiCode === ErrorCode.MULTIPLE_ERROR_LOCK
+      ) {
+        // 账号锁定
+        setAccountLock(true)
+      }
+
       // 响应拦截器处理通用错误以及changeModule
       const handMode = onGuardHandling?.()
       // 向上层抛出错误
@@ -182,6 +190,11 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
           name="account"
           className="authing-g2-input-form"
           passwordLoginMethods={props.passwordLoginMethods}
+          initialValue={
+            specifyDefaultLoginMethod === LoginMethods.Password
+              ? _firstItemInitialValue
+              : ''
+          }
           // TODO
           // 开启国际化手机号场景且只有手机号情况下 不应再根据区号去验证手机号
         >

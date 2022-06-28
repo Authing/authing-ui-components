@@ -12,14 +12,22 @@ export const devicesConstraints = {
 export const FACE_SCORE = 0.65
 
 export function getFaceDetectorOptions() {
-  const { TinyFaceDetectorOptions } = getFacePlugin()
-  return new TinyFaceDetectorOptions({ inputSize, scoreThreshold })
+  const facePlugin = getFacePlugin()
+
+  if (facePlugin) {
+    const { TinyFaceDetectorOptions } = facePlugin
+    return new TinyFaceDetectorOptions({ inputSize, scoreThreshold })
+  }
 }
 
 export function getCurrentFaceDetectionNet() {
-  const { nets } = getFacePlugin()
+  const facePlugin = getFacePlugin()
 
-  return nets.tinyFaceDetector
+  if (facePlugin) {
+    const { nets } = facePlugin
+
+    return nets.tinyFaceDetector
+  }
 }
 
 export function isFaceDetectionModelLoaded() {

@@ -1,9 +1,10 @@
-import { Avatar, Button } from 'antd'
+import { Avatar } from 'antd'
 import { Protocol } from 'authing-js-sdk'
 import qs from 'qs'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getGuardWindow } from '../../../Guard/core/useAppendConfig'
+import { GuardButton } from '../../../GuardButton'
 import { IconFont } from '../../../IconFont'
 import version from '../../../version/version'
 import { isSpecialBrowser, popupCenter } from '../../../_utils'
@@ -15,6 +16,14 @@ const baseLoginPathMapping: Record<Protocol, string | null> = {
   [Protocol.CAS]: '/connections/cas/init',
   [Protocol.OAUTH]: '/connections/oauth2/init',
   [Protocol.AZURE_AD]: '/connections/azure-ad/init',
+}
+
+const loginUrlFieldMapping: Record<Protocol, string> = {
+  [Protocol.OIDC]: 'oidcConnectionLoginUrl',
+  [Protocol.SAML]: 'samlRequest',
+  [Protocol.CAS]: 'casConnectionLoginUrl',
+  [Protocol.OAUTH]: 'authUrl',
+  [Protocol.AZURE_AD]: 'authorizationUrl',
 }
 
 export const IdpButton = (props: any) => {
@@ -66,7 +75,7 @@ export const IdpButton = (props: any) => {
       }
 
       return (
-        <Button
+        <GuardButton
           key={i.identifier}
           className="g2-guard-third-login-btn"
           block
@@ -82,26 +91,34 @@ export const IdpButton = (props: any) => {
           {t('login.loginBy', {
             name: i.displayName,
           })}
-        </Button>
+        </GuardButton>
       )
     } else {
-      query.identifier = i.identifier
+      let initUrl: string
 
-      const basePath = baseLoginPathMapping[i.protocol as Protocol]
-      if (!basePath) {
-        return null
+      if (isHost) {
+        // 托管登录页，直接写死登录 URL
+        query.identifier = i.identifier
+
+        const basePath = baseLoginPathMapping[i.protocol as Protocol]
+        if (!basePath) {
+          return null
+        }
+
+        initUrl = `${appHost}${basePath}?${qs.stringify(query)}`
+      } else {
+        // 嵌入式组件，从配置字段获取登录 URL
+        initUrl = i[loginUrlFieldMapping[i.protocol as Protocol]]
       }
 
       return (
-        <Button
+        <GuardButton
           key={i.identifier}
           className="g2-guard-third-login-btn"
           block
           size="large"
           icon={<Avatar size={20} src={i.logo} style={{ marginRight: 8 }} />}
           onClick={() => {
-            const initUrl = `${appHost}${basePath}?${qs.stringify(query)}`
-
             if (query.redirected) {
               window.location.replace(initUrl)
             } else {
@@ -112,7 +129,7 @@ export const IdpButton = (props: any) => {
           {t('login.loginBy', {
             name: i.displayName,
           })}
-        </Button>
+        </GuardButton>
       )
     }
   }, [appId, i, t, isHost, appHost, tenantId])
