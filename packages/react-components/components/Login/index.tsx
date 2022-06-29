@@ -33,7 +33,7 @@ import {
   useGuardModule,
   useGuardPublicConfig,
 } from '../_utils/context'
-import { isWeChatBrowser, validate } from '../_utils'
+import { isWeChatBrowser, getPasswordIdentify } from '../_utils'
 import { LoginWithVerifyCode } from './core/withVerifyCode'
 import { VerifyLoginMethods, PasswordLoginMethods } from '../AuthingGuard/api'
 import { useMediaSize, useMethod } from '../_utils/hooks'
@@ -207,41 +207,12 @@ export const GuardLoginView = () => {
     events?.onLogin?.(data, client)
   }
 
-  const getPasswordIdentify = (
-    identity: string,
-    methods: PasswordLoginMethods[]
-  ): string => {
-    if (methods.length !== 1) {
-      return validate('phone', identity) || validate('email', identity)
-        ? identity
-        : ''
-    }
-    switch (methods[0]) {
-      case 'phone-password':
-        return identity
-      case 'email-password':
-        return identity
-      default:
-        return ''
-    }
-  }
-
   // 保存用户输入的手机号、邮箱，在点击 问题反馈时带上
   const saveIdentify = (type: LoginMethods, identity: string) => {
-    if (type === LoginMethods.PhoneCode) {
-      // 手机号的时候，直接保存输入的数据
-      identifyRef.current = { ...identifyRef.current, [type]: identity }
-    } else if (type === LoginMethods.Password) {
-      // 密码保存时分情况保存
-      identifyRef.current = {
-        ...identifyRef.current,
-        [type]: getPasswordIdentify(
-          identity,
-          config?.passwordLoginMethods ?? []
-        ),
-      }
+    identifyRef.current = {
+      ...identifyRef.current,
+      [type]: getPasswordIdentify(identity),
     }
-    // LDAP、AD 情况，不会输入 手机号或者用户名
   }
 
   const onLoginFailed = (code: number, data: any, message?: string) => {

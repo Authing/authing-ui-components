@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Form } from 'antd'
-import { fieldRequiredRule, validate } from '../../_utils'
+import { fieldRequiredRule, validate, getPasswordIdentify } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
 import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
@@ -62,7 +62,7 @@ export const SelfUnlock = ({
 
   useEffect(() => {
     if (identifyRef) {
-      identifyRef.current = identify
+      identifyRef.current = getPasswordIdentify(identify)
     }
   }, [identify])
 
