@@ -545,8 +545,6 @@ export const useMethod: (params: {
       break
   }
 
-  console.log(socialConnectionObjs, enterpriseConnectionObjs)
-
   const guardWindow = getGuardWindow()
 
   if (!guardWindow) return
