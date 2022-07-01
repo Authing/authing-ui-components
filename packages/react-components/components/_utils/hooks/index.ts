@@ -485,6 +485,8 @@ export const useMethod: (params: {
         SocialConnectionProvider.FACEBOOK,
         SocialConnectionProvider.SLACK,
         SocialConnectionProvider.DINGTALK,
+        'gitlab',
+        'gitee',
         'instagram',
         'wechatwork:agency:qrconnect',
         'wechatwork:mobile',
