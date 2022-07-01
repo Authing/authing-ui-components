@@ -753,3 +753,10 @@ export const getLoginTypePipe = (
     }
   }
 }
+
+// 对用户输入的数据进行校验判断是否是手机号或者邮箱
+export const getPasswordIdentify = (identity: string): string => {
+  return validate('phone', identity) || validate('email', identity)
+    ? identity
+    : ''
+}
