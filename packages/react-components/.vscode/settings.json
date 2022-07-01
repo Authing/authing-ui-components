@@ -29,6 +29,6 @@
   "i18n-ally.namespace": true,
   "i18n-ally.sourceLanguage": "zh",
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   }
 }

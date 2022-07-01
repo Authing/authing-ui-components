@@ -1,4 +1,4 @@
-import { Space, Tooltip } from 'antd'
+import { message, Space, Tooltip } from 'antd'
 import { Lang } from 'authing-js-sdk/build/main/types'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -8,7 +8,7 @@ import querystring from 'query-string'
 import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
 import { IconFont } from '../../IconFont'
 import './style.less'
-import { useMediaSize } from '../../_utils/hooks'
+import { useMediaSize, SocialConnectionEvent } from '../../_utils/hooks'
 import { useGuardPublicConfig, useGuardTenantId } from '../../_utils/context'
 import { IdpButton } from './IdpButton'
 import { usePostMessage } from './postMessage'
@@ -117,14 +117,25 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
     }
 
     const onLogin = () => {
-      const initUrl = `${config.host}/connections/social/${
-        item.identifier
-      }?${querystring.stringify(query)}`
+      if (item.action === SocialConnectionEvent.Message) {
+        message.error(
+          t('login.socialConnectionMessage', {
+            provider:
+              item.displayName ??
+              (i18n.language === 'zh-CN' ? item.name : item.name_en) ??
+              item.provider,
+          })
+        )
+      } else if (item.action === SocialConnectionEvent.Auth) {
+        const initUrl = `${config.host}/connections/social/${
+          item.identifier
+        }?${querystring.stringify(query)}`
 
-      if (query.redirected) {
-        window.location.replace(initUrl)
-      } else {
-        popupCenter(initUrl)
+        if (query.redirected) {
+          window.location.replace(initUrl)
+        } else {
+          popupCenter(initUrl)
+        }
       }
     }
 
