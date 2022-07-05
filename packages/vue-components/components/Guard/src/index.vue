@@ -181,5 +181,8 @@ export default {
   beforeUnmount() {
     this.guardInstance.unmountComponent();
   },
+  beforeDestroy() {
+    this.guardInstance.unmountComponent();
+  },
 };
 </script>
