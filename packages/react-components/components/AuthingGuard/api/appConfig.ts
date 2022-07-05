@@ -113,6 +113,7 @@ export interface ApplicationConfig {
   description?: string
   redirectUris: string[]
   registerDisabled: boolean
+  mergeAdAndAccountPasswordLogin: boolean
   registerTabs: {
     list: string[]
     default: string
