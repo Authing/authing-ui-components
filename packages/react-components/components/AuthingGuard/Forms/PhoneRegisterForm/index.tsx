@@ -64,7 +64,7 @@ export const PhoneRegisterForm = forwardRef<
           setLoading(false)
           return
         }
-      } catch (e) {
+      } catch (e: any) {
         if (typeof e === 'string') {
           message.error(e)
         } else {

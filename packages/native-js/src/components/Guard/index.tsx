@@ -143,4 +143,12 @@ export class Guard {
     this.visible = false;
     this.render();
   }
+
+  unmountComponent() {
+    const node = Guard.getGuardContainer(this.config?.target);
+
+    if (node) {
+      ReactDOM.unmountComponentAtNode(node);
+    }
+  }
 }

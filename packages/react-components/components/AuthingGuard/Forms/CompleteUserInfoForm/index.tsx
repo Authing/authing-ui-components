@@ -65,7 +65,7 @@ export const CompleteUserInfoForm: FC<CompleteUserInfoFormProps> = ({
       message.success(t('common.saveSuccess'))
       guardEvents.onRegisterInfoCompleted?.(user, udfs, authClient)
       onSuccess?.(user)
-    } catch (e) {
+    } catch (e: any) {
       guardEvents.onRegisterInfoCompletedError?.(e, udfs, authClient)
       setSubmitting(false)
     } finally {

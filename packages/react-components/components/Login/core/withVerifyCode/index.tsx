@@ -41,6 +41,7 @@ export const LoginWithVerifyCode = (props: any) => {
     submitButText,
     onLoginFailed,
     onLoginSuccess,
+    saveIdentify,
   } = props
 
   const verifyCodeLength = config?.verifyCodeLength ?? 4
@@ -321,6 +322,13 @@ export const LoginWithVerifyCode = (props: any) => {
     },
     [areaCode, form]
   )
+
+  const formValuesChange = (changedValues: Record<string, any>) => {
+    if (changedValues?.identify && saveIdentify) {
+      saveIdentify(LoginMethods.PhoneCode, changedValues?.identify)
+    }
+  }
+
   return (
     <div className="authing-g2-login-phone-code">
       <Form
@@ -329,6 +337,7 @@ export const LoginWithVerifyCode = (props: any) => {
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
         autoComplete="off"
+        onValuesChange={formValuesChange}
       >
         <FormItemIdentify
           initialValue={

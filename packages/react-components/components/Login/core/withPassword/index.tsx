@@ -37,10 +37,11 @@ interface LoginWithPasswordProps {
   agreements: Agreement[]
   loginWay?: LoginMethods
   submitButText?: string
+  saveIdentify?: (type: LoginMethods, identity: string) => void
 }
 
 export const LoginWithPassword = (props: LoginWithPasswordProps) => {
-  const { agreements, onLoginFailed, onLoginSuccess } = props
+  const { agreements, onLoginFailed, onLoginSuccess, saveIdentify } = props
 
   const {
     _firstItemInitialValue = '',
@@ -178,6 +179,13 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
       ? `${t('common.login')} / ${t('common.register')}`
       : t('common.login')
   }, [props, t])
+
+  const formValuesChange = (changedValues: Record<string, any>) => {
+    if (changedValues?.account && saveIdentify) {
+      saveIdentify(LoginMethods.Password, changedValues?.account)
+    }
+  }
+
   return (
     <div className="authing-g2-login-password">
       <Form
@@ -185,6 +193,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
         autoComplete="off"
+        onValuesChange={formValuesChange}
       >
         <FormItemAccount
           name="account"

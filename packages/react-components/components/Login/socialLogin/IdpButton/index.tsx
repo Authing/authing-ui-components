@@ -1,4 +1,4 @@
-import { Avatar } from 'antd'
+import { Avatar, message } from 'antd'
 import { Protocol } from 'authing-js-sdk'
 import qs from 'qs'
 import React, { useCallback } from 'react'
@@ -9,6 +9,8 @@ import { IconFont } from '../../../IconFont'
 import version from '../../../version/version'
 import { isSpecialBrowser, popupCenter } from '../../../_utils'
 import { useGuardTenantId } from '../../../_utils/context'
+import { SocialConnectionEvent } from '../../../_utils/hooks'
+import { i18n } from '../../../_utils/locales'
 
 const baseLoginPathMapping: Record<Protocol, string | null> = {
   [Protocol.OIDC]: '/connections/oidc/init',
@@ -63,14 +65,24 @@ export const IdpButton = (props: any) => {
       const iconType = `authing-${i.provider.replace(/:/g, '-')}`
 
       const onLogin = () => {
-        const initUrl = `${appHost}/connections/social/${
-          i.identifier
-        }?${qs.stringify(query)}`
-
-        if (query.redirected) {
-          window.location.replace(initUrl)
-        } else {
-          popupCenter(initUrl)
+        if (i.action === SocialConnectionEvent.Message) {
+          message.error(
+            t('login.socialConnectionMessage', {
+              provider:
+                i.displayName ??
+                (i18n.language === 'zh-CN' ? i.name : i.name_en) ??
+                i.provider,
+            })
+          )
+        } else if (i.action === SocialConnectionEvent.Auth) {
+          const initUrl = `${appHost}/connections/social/${
+            i.identifier
+          }?${qs.stringify(query)}`
+          if (query.redirected) {
+            window.location.replace(initUrl)
+          } else {
+            popupCenter(initUrl)
+          }
         }
       }
 

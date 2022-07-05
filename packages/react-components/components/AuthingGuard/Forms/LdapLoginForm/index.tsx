@@ -53,7 +53,7 @@ export const LdapLoginForm = forwardRef<FormInstance, PasswordLoginFormProps>(
             setLoading(false)
             return
           }
-        } catch (e) {
+        } catch (e: any) {
           if (typeof e === 'string') {
             message.error(e)
           } else {
@@ -70,7 +70,7 @@ export const LdapLoginForm = forwardRef<FormInstance, PasswordLoginFormProps>(
 
         const user = await authClient.loginByLdap(identity, password)
         onSuccess && onSuccess(user)
-      } catch (error) {
+      } catch (error: any) {
         if (typeof error.message === 'string') {
           // js sdk httpclient 的报错，这里只有一种情况就是用户开启了 mfa 的报错
           try {

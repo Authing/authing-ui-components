@@ -158,7 +158,7 @@ export const PasswordLoginForm = forwardRef<
           setLoading(false)
           return
         }
-      } catch (e) {
+      } catch (e: any) {
         if (typeof e === 'string') {
           message.error(e)
         } else {
@@ -173,7 +173,7 @@ export const PasswordLoginForm = forwardRef<
       let user: User | undefined
       user = await login(values)
       user && onSuccess && onSuccess(user)
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === NEED_CAPTCHA && verifyCodeUrl === null) {
         setNeedCaptcha(true)
         setVerifyCodeUrl(getCaptchaUrl())

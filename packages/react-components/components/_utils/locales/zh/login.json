@@ -28,7 +28,7 @@
   "confirmSavedCode": "请确保你已保存密钥",
   "rememberedSecret": "已经安全地记录了这段密钥",
   "newGenered": "已为你生成新的恢复代码",
-  "mfaAfterReset": "成功登录后，我们将生成一个新的恢复代码",
+  "mfaAfterReset": "如果你没有恢复代码，请联系管理员处理",
   "findedSafetyCode": "找到安全码直接验证",
   "getBackPwd": "\b找回密码",
   "noEmpty": "不能为空",
@@ -104,5 +104,6 @@
   "hardwareSupport": "硬件不支持",
   "qrcodeExpired": "点击刷新",
   "noLoginMethodsDesc": "未配置登录方式",
+  "socialConnectionMessage": "不支持使用{{provider}}登录,请选择其他方式登录，或在其它浏览器中重试"
   "inputNewPwd": "请输入新密码"
 }

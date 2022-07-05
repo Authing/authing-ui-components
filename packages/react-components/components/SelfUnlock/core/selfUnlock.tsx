@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Form } from 'antd'
-import { fieldRequiredRule, validate } from '../../_utils'
+import { fieldRequiredRule, validate, getPasswordIdentify } from '../../_utils'
 import SubmitButton from '../../SubmitButton'
 import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
@@ -24,7 +24,11 @@ export enum InputMethodMap {
   email = 'email-code',
   phone = 'phone-code',
 }
-export const SelfUnlock = () => {
+export const SelfUnlock = ({
+  identifyRef,
+}: {
+  identifyRef?: React.MutableRefObject<string>
+}) => {
   const { t } = useTranslation()
   let [form] = Form.useForm()
   let [identify, setIdentify] = useState('')
@@ -55,6 +59,13 @@ export const SelfUnlock = () => {
       setCodeMethod('phone')
     }
   }, [initData, form])
+
+  useEffect(() => {
+    if (identifyRef) {
+      identifyRef.current = getPasswordIdentify(identify)
+    }
+  }, [identify])
+
   const { authFlow } = useGuardHttp()
 
   const {
