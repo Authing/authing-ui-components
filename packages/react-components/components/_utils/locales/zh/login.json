@@ -104,6 +104,6 @@
   "hardwareSupport": "硬件不支持",
   "qrcodeExpired": "点击刷新",
   "noLoginMethodsDesc": "未配置登录方式",
-  "socialConnectionMessage": "不支持使用{{provider}}登录,请选择其他方式登录，或在其它浏览器中重试"
+  "socialConnectionMessage": "不支持使用{{provider}}登录,请选择其他方式登录，或在其它浏览器中重试",
   "inputNewPwd": "请输入新密码"
 }
