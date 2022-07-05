@@ -31,7 +31,7 @@ export const ResetPasswordStep1: FC<ResetPasswordStep1Props> = ({
         guardEvents.onPwdEmailSend?.(authClient)
         message.success(t('login.emailSent'))
         onSuccess(ResetPwdMethods.Email, value)
-      } catch (e) {
+      } catch (e: any) {
         guardEvents.onPwdEmailSendError?.(e, authClient)
       } finally {
         setLoading(false)

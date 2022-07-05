@@ -45,7 +45,7 @@ export const ADLoginForm = forwardRef<FormInstance, ADLoginFormProps>(
             setLoading(false)
             return
           }
-        } catch (e) {
+        } catch (e: any) {
           if (typeof e === 'string') {
             message.error(e)
           } else {
@@ -61,7 +61,7 @@ export const ADLoginForm = forwardRef<FormInstance, ADLoginFormProps>(
         const password = values.password && values.password.trim()
         const user = await authClient.loginByAd(identity, password)
         onSuccess && onSuccess(user)
-      } catch (error) {
+      } catch (error: any) {
         if (typeof error.message === 'string') {
           // js sdk httpclient 的报错，这里只有一种情况就是用户开启了 mfa 的报错
           try {
