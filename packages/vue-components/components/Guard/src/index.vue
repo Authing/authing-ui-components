@@ -177,5 +177,9 @@ export default {
       this.guardInstance.hide();
     },
   },
+
+  beforeUnmount() {
+    this.guardInstance.unmountComponent();
+  },
 };
 </script>
