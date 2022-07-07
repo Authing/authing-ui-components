@@ -6,6 +6,7 @@ import {
   GuardPageConfig,
 } from '..'
 import { ApplicationConfig } from '../AuthingGuard/api'
+import { StoreInstance } from '../Guard/core/hooks/useMultipAccounts'
 import { ModuleState } from '../Guard/GuardModule/stateMachine'
 import { GuardHttp } from './guardHttp'
 
@@ -37,6 +38,11 @@ export interface IGuardContext {
   contextLoaded: boolean
 
   guardPageConfig: Partial<GuardPageConfig>
+
+  /**
+   * 多账号 store 实例
+   */
+  multipleInstance?: StoreInstance
 }
 
 const DefaultGuardX: IGuardContext = {
@@ -61,6 +67,8 @@ const DefaultGuardX: IGuardContext = {
   contextLoaded: false,
 
   guardPageConfig: {} as Partial<GuardPageConfig>,
+
+  multipleInstance: undefined,
 }
 
 const GuardXContext = React.createContext<IGuardContext>(DefaultGuardX)
@@ -196,3 +204,9 @@ export const useGuardIsAuthFlow = () => useContext(GuardXContext).isAuthFlow
 
 export const useGuardPageConfig = () =>
   useContext(GuardXContext).guardPageConfig
+
+/**
+ * 多账号登录 store 实例
+ */
+export const useGuardMultipleInstance = () =>
+  useContext(GuardXContext).multipleInstance

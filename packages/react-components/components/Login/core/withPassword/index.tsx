@@ -19,6 +19,7 @@ import { CodeAction } from '../../../_utils/responseManagement/interface'
 import { useMediaSize } from '../../../_utils/hooks'
 import { useGuardInitData, useGuardPublicConfig } from '../../../_utils/context'
 import { GuardLoginInitData } from '../../interface'
+import { StoreInstance } from '../../../Guard/core/hooks/useMultipAccounts'
 interface LoginWithPasswordProps {
   // configs
   publicKey: string
@@ -38,10 +39,20 @@ interface LoginWithPasswordProps {
   loginWay?: LoginMethods
   submitButText?: string
   saveIdentify?: (type: LoginMethods, identity: string) => void
+  /**
+   * 根据输入的账号 & 返回获得对应的登录方法
+   */
+  multipleInstance?: StoreInstance
 }
 
 export const LoginWithPassword = (props: LoginWithPasswordProps) => {
-  const { agreements, onLoginFailed, onLoginSuccess, saveIdentify } = props
+  const {
+    agreements,
+    onLoginFailed,
+    onLoginSuccess,
+    saveIdentify,
+    multipleInstance,
+  } = props
 
   const {
     _firstItemInitialValue = '',
@@ -129,13 +140,15 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
 
     const res = await loginRequest(loginInfo)
 
-    onLoginRes(res)
+    onLoginRes(res, values.account)
   }
 
-  const onLoginRes = (res: AuthingGuardResponse) => {
+  const onLoginRes = (res: AuthingGuardResponse, account: string) => {
     const { code, apiCode, message: msg, data, onGuardHandling } = res
-
     submitButtonRef?.current?.onSpin(false)
+
+    // 更新本次登录方式
+    multipleInstance && multipleInstance.setLoginWayByHttpData(account, data)
 
     if (code === 200) {
       onLoginSuccess(data, msg)
@@ -165,7 +178,10 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
       }
 
       // 响应拦截器处理通用错误以及changeModule
+      // 本次请求成功 && 当前请求
       const handMode = onGuardHandling?.()
+      if (handMode) {
+      }
       // 向上层抛出错误
       handMode === CodeAction.RENDER_MESSAGE && onLoginFailed?.(code, data, msg)
     }

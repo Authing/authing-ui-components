@@ -1,0 +1,22 @@
+{
+  "62bd8e57ab53a924e929e7c8": {
+    "62c6d48bc26de677a691c373": {
+      "way": "username",
+      "photo": "https://files.authing.co/authing-console/default-user-avatar.png",
+      "nickname": null,
+      "phone": null,
+      "username": "eee",
+      "email": null,
+      "id": "62c6d48bc26de677a691c373"
+    },
+    "62c6b99af66c819175ff7dab": {
+      "way": "username",
+      "photo": "https://files.authing.co/authing-console/default-user-avatar.png",
+      "nickname": null,
+      "phone": "17765810762",
+      "username": "ccc",
+      "email": null,
+      "id": "62c6b99af66c819175ff7dab"
+    }
+  }
+}
