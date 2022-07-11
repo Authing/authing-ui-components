@@ -446,6 +446,7 @@ export const getPasswordValidate = (
     },
   ]
   const getCustomPassword = () => {
+    console.log(i18n, i18n.language, customPasswordStrength)
     if (i18n.language === 'zh-CN' && customPasswordStrength?.zhMessageOpen) {
       return customPasswordStrength?.zhMessage
     }
