@@ -35,7 +35,7 @@ import { useInitAppId } from '../../_utils/initAppId'
 import { updateFlowHandle } from '../../_utils/flowHandleStorage'
 
 // hooks
-import useMultipleAccounts from './hooks/useMultipAccounts'
+import useMultipleAccounts from './hooks/useMultipleAccounts'
 
 interface IBaseAction<T = string, P = any> {
   type: T & string
@@ -57,12 +57,6 @@ export const RenderContext: React.FC<{
   const [isAuthFlow, setIsAuthFlow] = useState(true)
 
   const appId = useInitAppId(guardProps.appId, guardProps.authClient, setError)
-
-  const [multipleInstance] = useMultipleAccounts({
-    appId,
-  })
-
-  console.log(multipleInstance, 'multipInstance')
 
   useInitGuardAppendConfig(appId, guardProps.appendConfig)
 
@@ -137,6 +131,11 @@ export const RenderContext: React.FC<{
     setError
   )
 
+  const multipleInstance = useMultipleAccounts({
+    appId,
+    finallyConfig,
+  })
+
   // guardPageConfig
   const guardPageConfig = useGuardPageConfig(appId, httpClient, setError)
 
@@ -201,7 +200,7 @@ export const RenderContext: React.FC<{
       {
         ...guardProps,
       },
-      multipleInstance,
+      multipleInstance.instance,
       defaultMergedConfig?.openEventsMapping
     )
     setEvents(events)
@@ -256,6 +255,7 @@ export const RenderContext: React.FC<{
       authClint,
       guardPageConfig,
       iconfontLoaded,
+      // 保证 store 加载完成
       multipleInstance,
     ]
 
@@ -298,6 +298,7 @@ export const RenderContext: React.FC<{
             initData: moduleState.initData,
             currentModule: moduleState,
             guardPageConfig,
+            // 多账号相关信息 store 实例
             multipleInstance,
           }
         : {

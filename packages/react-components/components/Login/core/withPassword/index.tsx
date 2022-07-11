@@ -19,7 +19,12 @@ import { CodeAction } from '../../../_utils/responseManagement/interface'
 import { useMediaSize } from '../../../_utils/hooks'
 import { useGuardInitData, useGuardPublicConfig } from '../../../_utils/context'
 import { GuardLoginInitData } from '../../interface'
-import { StoreInstance } from '../../../Guard/core/hooks/useMultipAccounts'
+import {
+  BackFillMultipleState,
+  StoreInstance,
+} from '../../../Guard/core/hooks/useMultipleAccounts'
+import { useForm } from 'antd/lib/form/Form'
+import { useLoginMultipleBackFill } from '../../hooks/useLoginMultiple'
 interface LoginWithPasswordProps {
   // configs
   publicKey: string
@@ -43,6 +48,10 @@ interface LoginWithPasswordProps {
    * 根据输入的账号 & 返回获得对应的登录方法
    */
   multipleInstance?: StoreInstance
+  /**
+   * 多账号回填的数据
+   */
+  backfillData?: BackFillMultipleState
 }
 
 export const LoginWithPassword = (props: LoginWithPasswordProps) => {
@@ -52,7 +61,12 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     onLoginSuccess,
     saveIdentify,
     multipleInstance,
+    backfillData,
   } = props
+
+  const [form] = useForm()
+
+  useLoginMultipleBackFill(form, LoginMethods.Password, 'account', backfillData)
 
   const {
     _firstItemInitialValue = '',
@@ -148,7 +162,9 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
     submitButtonRef?.current?.onSpin(false)
 
     // 更新本次登录方式
-    multipleInstance && multipleInstance.setLoginWayByHttpData(account, data)
+    data &&
+      multipleInstance &&
+      multipleInstance.setLoginWayByHttpData(account, data)
 
     if (code === 200) {
       onLoginSuccess(data, msg)
@@ -213,6 +229,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
         autoComplete="off"
+        form={form}
         onValuesChange={formValuesChange}
       >
         <FormItemAccount

@@ -1,19 +1,26 @@
 import Input, { InputProps } from 'antd/lib/input'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 export interface InputNumberProps extends InputProps {}
+
+const isPhone = (propsValue?: string | number | readonly string[]) =>
+  /^[0-9]*$/.test(String(propsValue))
 
 export const InputNumber = React.forwardRef<any, InputNumberProps>(
   (props, ref) => {
     const { onChange, value: propsValue, ...inputProps } = props
     const [value, setValue] = useState<InputNumberProps['value']>(
-      /^[0-9]*$/.test(String(propsValue)) ? propsValue : ''
+      isPhone(propsValue) ? propsValue : ''
     )
 
     const valueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setValue(e.target.value)
       onChange?.(e)
     }
+
+    useEffect(() => {
+      setValue(isPhone(propsValue) ? propsValue : '')
+    }, [propsValue])
 
     return (
       <Input

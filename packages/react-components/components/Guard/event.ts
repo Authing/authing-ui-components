@@ -8,7 +8,7 @@ import { IdentityBindingAskEvents } from '../IdentityBindingAsk'
 import { LoginEvents } from '../Login/interface'
 import { RegisterEvents } from '../Register/interface'
 import { i18n } from '../_utils/locales'
-import { StoreInstance } from './core/hooks/useMultipAccounts'
+import { StoreInstance } from './core/hooks/useMultipleAccounts'
 
 export interface GuardEvents
   extends LoginEvents,

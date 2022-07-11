@@ -3,7 +3,6 @@ import React, {
   useLayoutEffect,
   useState,
   useRef,
-  useContext,
   useMemo,
 } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -18,7 +17,7 @@ import { LoginWithWechatMiniQrcode } from './core/withWechatMiniQrcode'
 import { LoginWithWechatmpQrcode } from './core/withWechatmpQrcode'
 import { codeMap } from './codemap'
 import { SocialLogin } from './socialLogin'
-// import { MultipleAccounts } from './multipleAccounts'
+import { MultipleAccounts } from './multipleAccounts'
 
 import { GuardModuleType } from '../Guard/module'
 import { LoginMethods } from '../AuthingGuard/types'
@@ -33,7 +32,6 @@ import {
   useGuardFinallyConfig,
   useGuardInitData,
   useGuardModule,
-  useGuardMultipleInstance,
   useGuardPublicConfig,
 } from '../_utils/context'
 import { isWeChatBrowser, getPasswordIdentify } from '../_utils'
@@ -44,6 +42,7 @@ import { getGuardDocument } from '../_utils/guardDocument'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { GuardLoginInitData } from './interface'
 import { GuardButton } from '../GuardButton'
+import { useLoginMultiple } from './hooks/useLoginMultiple'
 
 const inputWays = [
   LoginMethods.Password,
@@ -63,7 +62,6 @@ const useMethods = (config: any) => {
   if (!propsMethods?.includes(dlm)) {
     dlm = propsMethods?.[0]
   }
-
   let renderInputWay = intersection(propsMethods, inputWays).length > 0
   let renderQrcodeWay = intersection(propsMethods, qrcodeWays).length > 0
   return [dlm, renderInputWay, renderQrcodeWay]
@@ -106,9 +104,6 @@ export const GuardLoginView = () => {
 
   const config = useGuardFinallyConfig()
 
-  // 多账号实例
-  const multipleInstance = useGuardMultipleInstance()
-
   const appId = useGuardAppId()
 
   const { changeModule } = useGuardModule()
@@ -126,6 +121,14 @@ export const GuardLoginView = () => {
   const [loginWay, setLoginWay] = useState(
     specifyDefaultLoginMethod || defaultMethod
   )
+
+  const {
+    defaultQrWay,
+    backfillData,
+    multipleInstance,
+    isMultipleAccount,
+    referMultipleState,
+  } = useLoginMultiple(setLoginWay)
 
   const [canLoop, setCanLoop] = useState(false) // 允许轮询
 
@@ -192,6 +195,10 @@ export const GuardLoginView = () => {
   }, [ms, qrcodeTabsSettings])
 
   const defaultQrCodeWay = useMemo(() => {
+    // 如果存在多账号的二维码方式
+    if (defaultQrWay) {
+      return defaultQrWay
+    }
     if (
       [LoginMethods.WechatMpQrcode, LoginMethods.WxMinQr].includes(
         defaultMethod
@@ -205,7 +212,7 @@ export const GuardLoginView = () => {
     } else {
       return defaultMethod
     }
-  }, [defaultMethod, qrcodeTabsSettings])
+  }, [defaultQrWay, defaultMethod, qrcodeTabsSettings])
 
   const onLoginSuccess = (data: any, message?: string) => {
     // data._message = Message
@@ -360,11 +367,9 @@ export const GuardLoginView = () => {
             </div>
           </>
         ) : (
-          // TODO: 多账号登录 这里还得在出现一个多账号登录页面
-
           <>
             {/* 两种方式都需要渲染的时候，才出现切换按钮 */}
-            {renderInputWay && renderQrcodeWay && (
+            {!isMultipleAccount && renderInputWay && renderQrcodeWay && (
               <div className="g2-qrcode-switch">
                 {/* <div className="switch-text">{switchText}</div> */}
                 <Popover
@@ -403,7 +408,6 @@ export const GuardLoginView = () => {
                 </Popover>
               </div>
             )}
-
             <div className="g2-view-header">
               <img src={config?.logo} alt="" className="icon" />
               <div className="title">{config?.title}</div>
@@ -413,11 +417,13 @@ export const GuardLoginView = () => {
                 </div>
               )}
             </div>
-
-            {false ? (
-              <div>123</div>
+            {isMultipleAccount ? (
+              <MultipleAccounts
+                multipleInstance={multipleInstance}
+                referMultipleState={referMultipleState}
+                changeModule={changeModule}
+              />
             ) : (
-              // <MultipleAccounts />
               <>
                 {renderInputWay && (
                   <div className={inputNone}>
@@ -442,6 +448,7 @@ export const GuardLoginView = () => {
                               autoRegister={config?.autoRegister}
                               host={config?.host}
                               // onLogin={onLogin}
+                              backfillData={backfillData}
                               onLoginSuccess={onLoginSuccess}
                               onLoginFailed={onLoginFailed}
                               onBeforeLogin={onBeforeLogin}
@@ -460,6 +467,7 @@ export const GuardLoginView = () => {
                             tab={verifyCodeLogin}
                           >
                             <LoginWithVerifyCode
+                              backfillData={backfillData}
                               verifyCodeLength={publicConfig?.verifyCodeLength}
                               autoRegister={config?.autoRegister}
                               onBeforeLogin={onBeforeLogin}
@@ -469,6 +477,7 @@ export const GuardLoginView = () => {
                               saveIdentify={saveIdentify}
                               agreements={agreements}
                               methods={verifyLoginMethods}
+                              multipleInstance={multipleInstance}
                             />
                           </Tabs.TabPane>
                         )}
@@ -569,10 +578,6 @@ export const GuardLoginView = () => {
                   >
                     <Tabs
                       destroyInactiveTabPane={true}
-                      onChange={(k: any) => {
-                        message.destroy()
-                        events?.onLoginTabChange?.(k)
-                      }}
                       defaultActiveKey={defaultQrCodeWay}
                     >
                       {ms?.includes(LoginMethods.WxMinQr) &&
@@ -583,6 +588,7 @@ export const GuardLoginView = () => {
                               tab={item.title ?? t('login.scanLogin')}
                             >
                               <LoginWithWechatMiniQrcode
+                                id={item.id}
                                 // onLogin={onLogin}
                                 onLoginSuccess={onLoginSuccess}
                                 canLoop={canLoop}
@@ -608,8 +614,10 @@ export const GuardLoginView = () => {
                         >
                           <LoginWithAppQrcode
                             // onLogin={onLogin}
+
                             onLoginSuccess={onLoginSuccess}
                             canLoop={canLoop}
+                            multipleInstance={multipleInstance}
                             qrCodeScanOptions={{
                               ...config?.qrCodeScanOptions,
                               tips: {
@@ -632,8 +640,10 @@ export const GuardLoginView = () => {
                             >
                               <LoginWithWechatmpQrcode
                                 // onLogin={onLogin}
+                                id={item.id}
                                 onLoginSuccess={onLoginSuccess}
                                 canLoop={canLoop}
+                                multipleInstance={multipleInstance}
                                 qrCodeScanOptions={{
                                   ...config?.qrCodeScanOptions,
                                   extIdpConnId: item.id,
@@ -662,11 +672,11 @@ export const GuardLoginView = () => {
                 )}
               </>
             )}
-
             <div className="g2-social-login">
               <SocialLogin
                 appId={appId}
                 config={config!}
+                multipleInstance={multipleInstance}
                 // onLogin={onLogin}
                 onLoginSuccess={onLoginSuccess}
                 onLoginFailed={onLoginFailed}

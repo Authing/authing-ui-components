@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Form } from 'antd'
+import { Form, Input } from 'antd'
 import { useTranslation } from 'react-i18next'
 import {
   fieldRequiredRule,
@@ -26,8 +26,9 @@ import { EmailScene, InputMethod } from '../../../Type'
 import { CodeAction } from '../../../_utils/responseManagement/interface'
 import { GuardLoginInitData } from '../../interface'
 import { LoginMethods } from '../../../AuthingGuard/types'
+import { useLoginMultipleBackFill } from '../../hooks/useLoginMultiple'
 
-export const LoginWithVerifyCode = (props: any) => {
+const LoginWithVerifyCode = (props: any) => {
   const config = useGuardPublicConfig()
   const {
     _firstItemInitialValue = '',
@@ -42,6 +43,8 @@ export const LoginWithVerifyCode = (props: any) => {
     onLoginFailed,
     onLoginSuccess,
     saveIdentify,
+    multipleInstance,
+    backfillData,
   } = props
 
   const verifyCodeLength = config?.verifyCodeLength ?? 4
@@ -70,6 +73,15 @@ export const LoginWithVerifyCode = (props: any) => {
   )
 
   let [form] = Form.useForm()
+
+  useLoginMultipleBackFill(
+    form,
+    LoginMethods.PhoneCode,
+    'identify',
+    backfillData,
+    isOnlyInternationSms,
+    setAreaCode
+  )
 
   let submitButtonRef = useRef<any>(null)
   const { t } = useTranslation()
@@ -215,6 +227,7 @@ export const LoginWithVerifyCode = (props: any) => {
     }
   }
 
+  // 邮箱验证码登录
   const loginByEmailCode = async (values: any) => {
     const reqContent = {
       email: values.identify,
@@ -277,7 +290,6 @@ export const LoginWithVerifyCode = (props: any) => {
       const { code, apiCode, data, onGuardHandling } = res
 
       submitButtonRef.current?.onSpin(false)
-
       if (code === 200) {
         onLoginSuccess(data)
       } else {
@@ -288,6 +300,12 @@ export const LoginWithVerifyCode = (props: any) => {
       }
       return
     }
+    // 其实这里应该是保存两个 一个是 countryCode 一个是对应的 code
+    multipleInstance &&
+      multipleInstance.setLoginWay('input', 'phone-code', undefined, {
+        phoneCountryCode,
+        areaCode,
+      })
 
     if (currentMethod === 'phone-code') {
       await loginByPhoneCode({ ...values, phoneNumber, phoneCountryCode })
@@ -412,3 +430,5 @@ export const LoginWithVerifyCode = (props: any) => {
     </div>
   )
 }
+
+export { LoginWithVerifyCode }

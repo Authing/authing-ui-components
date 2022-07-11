@@ -136,7 +136,6 @@ const ValidatorFormItem: React.FC<ValidatorFormItemMetaProps> = (props) => {
     checkExist,
     checkRepeatFn,
   ])
-
   return (
     <Form.Item
       validateFirst={true}
