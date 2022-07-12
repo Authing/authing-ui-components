@@ -1,7 +1,7 @@
 import qs from 'qs'
 import { i18n } from './locales'
 import { CodeAction } from './responseManagement/interface'
-import Axios from 'axios'
+import Axios, { AxiosRequestConfig, CancelTokenSource } from 'axios'
 export const requestClient = async (...rest: Parameters<typeof fetch>) => {
   const res = await fetch(...rest)
   return res.json()
@@ -22,7 +22,7 @@ export interface AuthingGuardResponse<T = any> extends AuthingResponse<T> {
   isFlowEnd?: boolean
 }
 
-const timeoutAction = (controller: AbortController) => {
+const timeoutAction = (cancel: CancelTokenSource['cancel']) => {
   const timer: number = 10
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -33,7 +33,7 @@ const timeoutAction = (controller: AbortController) => {
       }
       resolve(response)
 
-      controller.abort() // 发送终止信号
+      cancel() // 发送终止信号
     }, timer * 1000)
   })
 }
@@ -41,10 +41,10 @@ const timeoutAction = (controller: AbortController) => {
 requestClient.get = async <T>(
   path: string,
   query: Record<string, any> = {},
-  init?: RequestInit
+  init?: AxiosRequestConfig
 ): Promise<AuthingResponse<T>> => {
-  let controller = new AbortController()
-  let signal = controller.signal
+  // let controller = new AbortController()
+  // let signal = controller.signal
 
   const headers: Record<string, any> = {
     ...init?.headers,
@@ -55,8 +55,11 @@ requestClient.get = async <T>(
   if (requestClient.tenantId !== '')
     headers[requestClient.tenantHeader] = requestClient.tenantId
   try {
+    const CancelToken = Axios.CancelToken
+    const source = CancelToken.source()
+
     const res: any = await Promise.race([
-      timeoutAction(controller),
+      timeoutAction(source.cancel),
       Axios(
         `${requestClient.baseUrl}${path}${qs.stringify(query, {
           addQueryPrefix: true,
@@ -66,7 +69,7 @@ requestClient.get = async <T>(
           ...init,
           withCredentials: true,
           headers,
-          signal,
+          cancelToken: source.token,
         }
       ),
     ])
@@ -85,8 +88,8 @@ requestClient.post = async <T>(
     headers: any
   }
 ): Promise<AuthingResponse<T>> => {
-  let controller = new AbortController()
-  let signal = controller.signal
+  // let controller = new AbortController()
+  // let signal = controller.signal
 
   const headers: Record<string, any> = {
     ...config?.headers,
@@ -98,13 +101,16 @@ requestClient.post = async <T>(
     headers[requestClient.tenantHeader] = requestClient.tenantId
 
   try {
+    const CancelToken = Axios.CancelToken
+    const source = CancelToken.source()
+
     const res: any = await Promise.race([
-      timeoutAction(controller),
+      timeoutAction(source.cancel),
       Axios(`${requestClient.baseUrl}${path}`, {
-        signal,
         data,
         method: 'POST',
         withCredentials: true,
+        cancelToken: source.token,
         headers: {
           'Content-Type': 'application/json',
           ...config?.headers,
@@ -138,24 +144,32 @@ requestClient.postForm = async <T>(
     headers: any
   }
 ): Promise<AuthingResponse<T>> => {
-  let controller = new AbortController()
-  let signal = controller.signal
+  // let controller = new AbortController()
+  // let signal = controller.signal
+  try {
+    const CancelToken = Axios.CancelToken
+    const source = CancelToken.source()
 
-  const res = await Promise.race([
-    timeoutAction(controller),
-    fetch(`${requestClient.baseUrl}${path}`, {
-      signal,
-      method: 'post',
-      body: formData,
-      credentials: 'include',
-      headers: {
-        ...config?.headers,
-        [requestClient.langHeader]: i18n.language,
-      },
-    }),
-  ])
+    const res = await Promise.race([
+      timeoutAction(source.cancel),
+      Axios(`${requestClient.baseUrl}${path}`, {
+        method: 'POST',
+        data: formData,
+        withCredentials: true,
+        cancelToken: source.token,
+        headers: {
+          ...config?.headers,
+          [requestClient.langHeader]: i18n.language,
+        },
+      }),
+    ])
 
-  return (res as Response).json()
+    return (res as Response).json()
+  } catch (e) {
+    return Promise.resolve({
+      code: -2,
+    })
+  }
 }
 
 requestClient.baseUrl = ''
