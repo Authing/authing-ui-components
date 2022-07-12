@@ -11,6 +11,9 @@
     border-radius: 4px;
     margin-bottom: 20px;
     &:hover {
+      .g2-multiple__title {
+        color: #215ae5;
+      }
       cursor: pointer;
       background-color: #f7f8fa;
     }
@@ -53,14 +56,36 @@
       background: #e5e6eb;
     }
   }
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  &__icon--add-line {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
   &__op-wrapper {
     .authing-ant-popover-inner-content {
       padding: 4px 0px;
+      background-color: #fff;
+      color: #1d2129;
+      .g2-multiple__del {
+        background: #f2f3f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #1d2129;
+      }
     }
   }
   &__del {
     width: 108px;
     height: 36px;
     background: #e5e6eb;
+    cursor: pointer;
   }
 }

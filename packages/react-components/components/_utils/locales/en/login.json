@@ -105,5 +105,7 @@
   "qrcodeExpired": "Click to refresh",
   "noLoginMethodsDesc": "No login method configured",
   "inputNewPwd": "Please enter a new password",
-  "socialConnectionMessage": "Login with {{provider}} is not supported, please choose another way to log in, or try again in another browser"
+  "socialConnectionMessage": "Login with {{provider}} is not supported, please choose another way to log in, or try again in another browser",
+  "selectLoginAccount": "Select login account",
+  "useOtherAccount": "Use other Account"
 }

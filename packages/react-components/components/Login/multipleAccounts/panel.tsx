@@ -1,6 +1,8 @@
 import { Popover } from 'antd'
 import React, { useMemo, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import { IconFont } from '../../IconFont'
+import { useMediaSize } from '../../_utils/hooks'
 import './style.less'
 
 interface SelectPanelProps {
@@ -36,10 +38,26 @@ export interface SelectOptions {
    * 显示操作栏 default: true
    */
   operation?: boolean
+  /**
+   * 登录时间
+   */
+  _updateTime: number
+  /**
+   * 替代图片元素
+   */
+  element?: React.ReactElement
 }
 
 const SelectPanel: React.FC<SelectPanelProps> = (props) => {
   const { lists, handleDel, onClick } = props
+
+  const { t } = useTranslation()
+
+  const { isPhoneMedia } = useMediaSize()
+
+  const triggerWay = useMemo(() => {
+    return isPhoneMedia ? 'click' : 'hover'
+  }, [isPhoneMedia])
 
   const finallyLists = useMemo(() => {
     return [
@@ -47,11 +65,15 @@ const SelectPanel: React.FC<SelectPanelProps> = (props) => {
       {
         operation: false,
         id: 'other',
-        title: '使用其他账号',
-        photo: '', // 这里应该是 CDN 的图片
+        title: t('login.useOtherAccount'),
+        element: (
+          <div className="g2-multiple__icon--add-line">
+            <IconFont type="authing-add-line"></IconFont>
+          </div>
+        ),
       },
     ]
-  }, [lists])
+  }, [lists, t])
 
   const onDel = useCallback(
     (e: React.MouseEvent, id: string) => {
@@ -63,10 +85,22 @@ const SelectPanel: React.FC<SelectPanelProps> = (props) => {
 
   const renderLits = useMemo(() => {
     return finallyLists.map((option) => {
-      const { photo, title, description, id, operation = true } = option
+      const {
+        photo,
+        title,
+        description,
+        id,
+        operation = true,
+        element,
+      } = option as SelectOptions
       return (
         <li className="g2-multiple__li" key={id} onClick={() => onClick(id)}>
-          <img className="g2-multiple__avatar" alt="" src={photo} />
+          {element ? (
+            element
+          ) : (
+            <img className="g2-multiple__avatar" alt="" src={photo} />
+          )}
+
           <section className="g2-multiple__body">
             {title && <span className="g2-multiple__title">{title}</span>}
             <span className="g2-multiple__desc">{description}</span>
@@ -77,28 +111,34 @@ const SelectPanel: React.FC<SelectPanelProps> = (props) => {
               onClick={(e) => e.stopPropagation()}
             >
               <Popover
+                trigger={triggerWay}
+                overlayClassName="g2-multiple__op-wrapper"
                 content={
                   <div
                     className="g2-multiple__del"
                     onClick={(e: React.MouseEvent) => onDel(e, id)}
                   >
                     <IconFont
-                      style={{ fontSize: 20, marginRight: 8 }}
-                      type="authing-add-circle-line"
+                      style={{
+                        fontSize: 20,
+                        marginRight: 8,
+                      }}
+                      type="authing-indeterminate-circle-line"
                     />
-                    移除
+                    {t('common.del')}
                   </div>
                 }
-                overlayClassName="g2-multiple__op-wrapper"
               >
-                ...
+                <div className="g2-multiple__icon">
+                  <IconFont type="authing-more-fill"></IconFont>
+                </div>
               </Popover>
             </span>
           )}
         </li>
       )
     })
-  }, [finallyLists, onClick, onDel])
+  }, [finallyLists, onClick, onDel, t, triggerWay])
 
   return <ul className="g2-multiple">{renderLits}</ul>
 }

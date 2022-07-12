@@ -8,7 +8,7 @@ const MULTIPLE_ACCOUNT_KEY = '__authing__multiple_accounts'
 
 // 多账号计算 way 方式
 const MULTIPLE_ACCOUNT_LISTS: LoginWay[] = [
-  'email', 'phone', 'password', 'phone-code', 'email-code'
+  'email', 'phone', 'password', 'phone-code', 'email-code', 'ad', 'ldap'
 ]
 
 // 扫码登录方式
@@ -20,7 +20,7 @@ export const QR_CODE_WAY: LoginWay[] = [
 const EXCLUDE_CODE_WAY: LoginWay[] = QR_CODE_WAY.concat('social')
 
 /**
- * 登录时所有支持的登录列表
+ * 登录时所有支持的登录列表(前端定义列表)
  */
 export type LoginWay =
   | 'email' // 邮箱密码登录
@@ -32,13 +32,15 @@ export type LoginWay =
   | 'wechat-miniprogram-qrcode' // 小程序扫码登录
   | 'wechatmp-qrcode' // 公众号扫码登录方式
   | 'app-qrcode' // App 扫码登录方式
+  | 'ad' // AD 登录方式
+  | 'ldap' // LDAP 登录方式
 
 
 /**
  * when： 多账号页面跳转进入登录页面
  * 携带的回填数据信息
  */
-export interface BackFillMultipleState extends Omit<User, 'id' | 'name' | 'nickname' | 'username' | 'phone' | 'email' | 'photo' | ''> {
+export interface BackFillMultipleState extends Omit<User, 'id' | 'name' | 'nickname' | 'username' | 'phone' | 'email' | 'photo' | '_updateTime'> {
   /**
    * 回填的账号名称 邮箱/用户名/手机
     */
@@ -113,6 +115,10 @@ export interface User {
    * 国际化短信选择框回填
    */
   areaCode?: string;
+  /**
+   * 登录时间
+   */
+  _updateTime?: string;
 }
 
 class MultipleAccount {
@@ -195,6 +201,7 @@ class MultipleAccount {
     // TODO: 单独抽离 utils 方法 localStorage
     this.originStore =
       JSON.parse(localStorage.getItem(MULTIPLE_ACCOUNT_KEY) || '{}') || {}
+
     // 当前 Appid 中所有的内容
     this.currentStore = this.getCurrentStore(this.originStore)
     // 初始化回填页面 & 回填数据
@@ -204,7 +211,7 @@ class MultipleAccount {
   }
 
   /**
-   * 初始化多账号登录页面
+   * 初始化记住账号相关信息
    * @param normalCount 
    * @returns 
    */
@@ -262,6 +269,7 @@ class MultipleAccount {
    * 初始化第一次的数据 TODO: 逻辑有点脏 待整理
    */
   private initBackfillData = (initWay: 'qrCode' | 'input') => {
+    // TODO: backfillData 回填时考虑 AD 和  LDAP 对应的账号
     const wayLists = initWay === 'qrCode' ? QR_CODE_WAY : MULTIPLE_ACCOUNT_LISTS
     const userLists = Object.values(this.currentStore)
     const user = userLists.find(i => wayLists.includes(i.way))
@@ -290,6 +298,10 @@ class MultipleAccount {
     // 排除 social 方式 TODO: Mappint 常量抽离
     const mapping: Record<
       Exclude<LoginWay, 'social'>, string> = {
+      //  缺少后台对应的 AD 的方式 
+      // TODO: 缺少对应的 IDAP 方式
+      'ldap': 'ldap',
+      'ad': "ad",
       'email': 'password',
       'password': 'password',
       'phone': 'password',
@@ -358,6 +370,7 @@ class MultipleAccount {
    * 
    * @param tab 一级Tab状态
    * @param way 二级Tab状态
+   * @param id 二维码登录时 记录对应的二维码 ID 
    */
   private setLoginWay = (tab: 'input' | 'qrcode', way: LoginWay, id?: string, internation?: {
     phoneCountryCode: string,
@@ -383,7 +396,7 @@ class MultipleAccount {
     if (!user || !this.loginWay || !this.tabStatus) {
       console.log(`User or LoginWay does not exist.`)
     }
-    const { photo, nickname, phone, username, email, id } = user
+    const { photo, nickname, phone, username, email, id, name } = user
     this.currentStore[id] = Object.assign({
       way: this.loginWay, // 登录方式
       tab: this.tabStatus, // 当前大tab 扫码 or 输入
@@ -391,11 +404,13 @@ class MultipleAccount {
       nickname,
       phone,
       username,
+      name,
       email,
       id,
       qrCodeId: this.qrCodeId,
       phoneCountryCode: this.phoneCountryCode,
-      areaCode: this.areaCode
+      areaCode: this.areaCode,
+      _updateTime: Date.now()
     })
     this.saveStore()
   }
@@ -462,7 +477,7 @@ class MultipleAccount {
         result.push(value)
       }
     }
-    return result
+    return result.sort((a, b) => b._updateTime - a._updateTime)
   }
 
   /**
@@ -487,8 +502,8 @@ class MultipleAccount {
   }
 
   /**
-   * 该方法仅仅针对密码登录
-   * 当用户名/手机号/邮箱 相同时，根据登录顺序匹配不同的账号
+   * 该方法仅仅需要回填账号的登录方式，其他都不计入
+   * 当用户名/手机号/邮箱/AD/LDAP 相同时，根据登录顺序匹配不同的账号
    * 根据记住的用户登录方式获取对应的登录账户名
    * @param way
    * @param user
@@ -501,7 +516,7 @@ class MultipleAccount {
     way: LoginWay,
     user: User
   ) => {
-      const { email, phone, username } = user
+      const { email, phone, username, name } = user
       // 根据对应的 LoginWay 进行返回
       switch (way) {
         case 'email':
@@ -514,13 +529,17 @@ class MultipleAccount {
           return { account: phone!, way: 'password' }
         case 'password':
           return { account: username!, way: 'password' }
+        case 'ad':
+          return { account: email!, way: 'ad' }
+        case 'ldap':
+          return { account: name!, way: 'ldap' }
         default:
           throw new Error(`已登录用户匹配不到的登录方式`)
       }
     }
 
   private _mappingUser = (value: User) => {
-    const { id, photo, name, nickname, username, email, phone } = value
+    const { id, photo, name, nickname, username, email, phone, _updateTime } = value
     // 1. 姓名 > 昵称 > username
     const title = name || nickname || username || undefined
     // 2. phone > email
@@ -530,6 +549,7 @@ class MultipleAccount {
       description,
       id,
       photo: photo || '',
+      _updateTime: parseInt(_updateTime || '0')
     }
   }
 

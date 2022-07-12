@@ -410,7 +410,11 @@ export const GuardLoginView = () => {
             )}
             <div className="g2-view-header">
               <img src={config?.logo} alt="" className="icon" />
-              <div className="title">{config?.title}</div>
+              <div className="title">
+                {isMultipleAccount
+                  ? t('login.selectLoginAccount')
+                  : config?.title}
+              </div>
               {!!publicConfig?.welcomeMessage && (
                 <div className="title-description">
                   {publicConfig?.welcomeMessage[i18n.language]}
@@ -467,7 +471,6 @@ export const GuardLoginView = () => {
                             tab={verifyCodeLogin}
                           >
                             <LoginWithVerifyCode
-                              backfillData={backfillData}
                               verifyCodeLength={publicConfig?.verifyCodeLength}
                               autoRegister={config?.autoRegister}
                               onBeforeLogin={onBeforeLogin}
@@ -477,6 +480,7 @@ export const GuardLoginView = () => {
                               saveIdentify={saveIdentify}
                               agreements={agreements}
                               methods={verifyLoginMethods}
+                              backfillData={backfillData}
                               multipleInstance={multipleInstance}
                             />
                           </Tabs.TabPane>
@@ -495,6 +499,8 @@ export const GuardLoginView = () => {
                               onLoginFailed={onLoginFailed}
                               onBeforeLogin={onBeforeLogin}
                               agreements={agreements}
+                              backfillData={backfillData}
+                              multipleInstance={multipleInstance}
                             />
                           </Tabs.TabPane>
                         )}
@@ -503,7 +509,10 @@ export const GuardLoginView = () => {
                             key={LoginMethods.AD}
                             tab={t('login.adLogin')}
                           >
+                            {LoginMethods.AD}
                             <LoginWithAD
+                              backfillData={backfillData}
+                              multipleInstance={multipleInstance}
                               publicKey={publicKey}
                               autoRegister={config?.autoRegister}
                               // onLogin={onLogin}
