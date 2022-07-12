@@ -302,10 +302,17 @@ const LoginWithVerifyCode = (props: any) => {
     }
     // 其实这里应该是保存两个 一个是 countryCode 一个是对应的 code
     multipleInstance &&
-      multipleInstance.setLoginWay('input', 'phone-code', undefined, {
-        phoneCountryCode,
-        areaCode,
-      })
+      multipleInstance.setLoginWay(
+        'input',
+        'phone-code',
+        undefined,
+        isInternationSms
+          ? {
+              phoneCountryCode,
+              areaCode,
+            }
+          : undefined
+      )
 
     if (currentMethod === 'phone-code') {
       await loginByPhoneCode({ ...values, phoneNumber, phoneCountryCode })

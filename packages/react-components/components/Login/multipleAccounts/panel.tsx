@@ -68,7 +68,10 @@ const SelectPanel: React.FC<SelectPanelProps> = (props) => {
         title: t('login.useOtherAccount'),
         element: (
           <div className="g2-multiple__icon--add-line">
-            <IconFont type="authing-add-line"></IconFont>
+            <IconFont
+              style={{ fontSize: 24, color: '#4E5969' }}
+              type="authing-add-line"
+            ></IconFont>
           </div>
         ),
       },
