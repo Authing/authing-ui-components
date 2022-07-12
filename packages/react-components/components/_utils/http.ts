@@ -150,7 +150,7 @@ requestClient.postForm = async <T>(
     const CancelToken = Axios.CancelToken
     const source = CancelToken.source()
 
-    const res = await Promise.race([
+    const res: any = await Promise.race([
       timeoutAction(source.cancel),
       Axios(`${requestClient.baseUrl}${path}`, {
         method: 'POST',
@@ -164,7 +164,7 @@ requestClient.postForm = async <T>(
       }),
     ])
 
-    return (res as Response).json()
+    return res?.data
   } catch (e) {
     return Promise.resolve({
       code: -2,
