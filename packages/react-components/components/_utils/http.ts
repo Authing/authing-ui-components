@@ -1,7 +1,7 @@
 import qs from 'qs'
 import { i18n } from './locales'
 import { CodeAction } from './responseManagement/interface'
-
+import Axios from 'axios'
 export const requestClient = async (...rest: Parameters<typeof fetch>) => {
   const res = await fetch(...rest)
   return res.json()
@@ -26,11 +26,11 @@ const timeoutAction = (controller: AbortController) => {
   const timer: number = 10
   return new Promise((resolve) => {
     setTimeout(() => {
-      const response = new Response(
-        JSON.stringify({
+      const response = {
+        data: {
           code: -1,
-        })
-      )
+        },
+      }
       resolve(response)
 
       controller.abort() // 发送终止信号
@@ -54,23 +54,23 @@ requestClient.get = async <T>(
 
   if (requestClient.tenantId !== '')
     headers[requestClient.tenantHeader] = requestClient.tenantId
-
   try {
-    const res = await Promise.race([
+    const res: any = await Promise.race([
       timeoutAction(controller),
-      fetch(
+      Axios(
         `${requestClient.baseUrl}${path}${qs.stringify(query, {
           addQueryPrefix: true,
         })}`,
         {
+          method: 'GET',
           ...init,
-          credentials: 'include',
+          withCredentials: true,
           headers,
           signal,
         }
       ),
     ])
-    return (res as Response).json()
+    return res?.data
   } catch (e) {
     return Promise.resolve({
       code: -2,
@@ -98,13 +98,13 @@ requestClient.post = async <T>(
     headers[requestClient.tenantHeader] = requestClient.tenantId
 
   try {
-    const res = await Promise.race([
+    const res: any = await Promise.race([
       timeoutAction(controller),
-      fetch(`${requestClient.baseUrl}${path}`, {
+      Axios(`${requestClient.baseUrl}${path}`, {
         signal,
+        data,
         method: 'POST',
-        body: JSON.stringify(data),
-        credentials: 'include',
+        withCredentials: true,
         headers: {
           'Content-Type': 'application/json',
           ...config?.headers,
@@ -112,7 +112,7 @@ requestClient.post = async <T>(
         },
       }),
     ])
-    return (res as Response).json()
+    return res?.data
   } catch (e) {
     return Promise.resolve({
       code: -2,

@@ -70,7 +70,6 @@ export class GuardHttp {
       ...config,
       headers: { ...this.headers, ...config?.headers },
     })
-
     return this.responseIntercept(res)
   }
 

@@ -64,6 +64,7 @@ export const SelfUnlock = ({
     if (identifyRef) {
       identifyRef.current = getPasswordIdentify(identify)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [identify])
 
   const { authFlow } = useGuardHttp()
