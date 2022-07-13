@@ -20,10 +20,4 @@ export interface SessionData {
 }
 
 export const trackSession = () =>
-  requestClient.get<SessionData>(
-    `/cas/session`,
-    {},
-    {
-      credentials: 'include',
-    }
-  )
+  requestClient.get<SessionData>(`/cas/session`, {})

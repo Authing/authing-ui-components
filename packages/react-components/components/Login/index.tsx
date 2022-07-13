@@ -36,7 +36,7 @@ import {
 } from '../_utils/context'
 import { isWeChatBrowser, getPasswordIdentify } from '../_utils'
 import { LoginWithVerifyCode } from './core/withVerifyCode'
-import { VerifyLoginMethods, PasswordLoginMethods } from '../AuthingGuard/api'
+import { VerifyLoginMethods } from '../AuthingGuard/api'
 import { useMediaSize, useMethod } from '../_utils/hooks'
 import { getGuardDocument } from '../_utils/guardDocument'
 import { useGuardAuthClient } from '../Guard/authClient'

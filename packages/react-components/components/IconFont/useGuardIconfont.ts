@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { getGuardWindow } from '../Guard/core/useAppendConfig'
 import { GenerateSvg } from './iconfont'
-
+import Axios from 'axios'
 export const useGuardIconfont = (cdnBase?: string, setError?: any) => {
   const [loaded, setLoaded] = useState<boolean>(false)
 
@@ -9,9 +9,9 @@ export const useGuardIconfont = (cdnBase?: string, setError?: any) => {
     if (!cdnBase) return
 
     try {
-      const res = await fetch(`${cdnBase}/svg-string/guard`)
+      const res = await Axios(`${cdnBase}/svg-string/guard`)
 
-      const body = await res?.text()
+      const body = res.data
 
       const guardWindow = getGuardWindow()
 

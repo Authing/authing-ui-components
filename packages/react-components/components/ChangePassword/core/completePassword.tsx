@@ -16,6 +16,8 @@ import {
 import { GuardModuleType } from '../../Guard'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { getGuardHttp } from '../../_utils/guardHttp'
+import { usePasswordErrorText } from '../../_utils/useErrorText'
+import { ApiCode } from '../../_utils/responseManagement/interface'
 export const CompletePassword: React.FC = () => {
   const { t } = useTranslation()
 
@@ -46,7 +48,10 @@ export const CompletePassword: React.FC = () => {
   let client = useGuardAuthClient()
 
   const encrypt = client.options.encryptFunction
-
+  const {
+    getPassWordUnsafeText,
+    setPasswordErrorTextShow,
+  } = usePasswordErrorText()
   const onFinish = useCallback(
     async (values: any) => {
       // 密码加密处理（邮箱验证码是通过 post 直接发送需要加密 其他通过 sdk 在内部加密了 这一步无需加密）
@@ -91,6 +96,9 @@ export const CompletePassword: React.FC = () => {
               // events?.onRegister?.(data, authClient)
               // changeModule?.(GuardModuleType.LOGIN)
             } else {
+              if (resCode === ApiCode.UNSAFE_PASSWORD_TIP) {
+                setPasswordErrorTextShow(true)
+              }
               onGuardHandling?.()
               onRegisterFailed(resCode, data, message)
               events?.onRegisterError?.({
@@ -114,6 +122,9 @@ export const CompletePassword: React.FC = () => {
           }
         } catch (error: any) {
           const { code, message: errorMessage, data } = error
+          if (code === ApiCode.UNSAFE_PASSWORD_TIP) {
+            setPasswordErrorTextShow(true)
+          }
           submitButtonRef.current.onError()
           message.error(errorMessage)
           onRegisterFailed(code, data, errorMessage)
@@ -139,6 +150,7 @@ export const CompletePassword: React.FC = () => {
       onRegisterSuccess,
       post,
       publicKey,
+      setPasswordErrorTextShow,
     ]
   )
 
@@ -202,7 +214,7 @@ export const CompletePassword: React.FC = () => {
             }
           />
         </Form.Item>
-
+        {getPassWordUnsafeText()}
         <Form.Item className="authing-g2-input-form submit-form">
           <SubmitButton
             className="forget-password"
