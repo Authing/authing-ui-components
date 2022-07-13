@@ -212,7 +212,11 @@ export const LoginWithAD = (props: LoginWithADProps) => {
                 className="authing-g2-input"
                 autoComplete="off"
                 size="large"
-                placeholder={t('login.inputAdUsername')}
+                placeholder={
+                  publicConfig?.mergeAdAndAccountPasswordLogin
+                    ? t('login.inputUsername')
+                    : t('login.inputAdUsername')
+                }
                 prefix={
                   <IconFont
                     type="authing-a-user-line1"
@@ -231,7 +235,11 @@ export const LoginWithAD = (props: LoginWithADProps) => {
                 autoComplete="off"
                 className="authing-g2-input"
                 size="large"
-                placeholder={t('login.inputAdPwd')}
+                placeholder={
+                  publicConfig?.mergeAdAndAccountPasswordLogin
+                    ? t('login.inputPwd')
+                    : t('login.inputAdPwd')
+                }
                 prefix={
                   <IconFont
                     type="authing-a-lock-line1"
