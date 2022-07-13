@@ -17,7 +17,7 @@ import { Agreements } from '../../../Register/components/Agreements'
 import { AuthingGuardResponse, AuthingResponse } from '../../../_utils/http'
 import { CodeAction } from '../../../_utils/responseManagement/interface'
 import { useMediaSize } from '../../../_utils/hooks'
-import { useGuardInitData } from '../../../_utils/context'
+import { useGuardInitData, useGuardPublicConfig } from '../../../_utils/context'
 import { GuardLoginInitData } from '../../interface'
 interface LoginWithPasswordProps {
   // configs
@@ -56,6 +56,8 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   let { post } = useGuardHttp()
   let client = useGuardAuthClient()
 
+  const publicConfig = useGuardPublicConfig()
+
   let submitButtonRef = useRef<any>(null)
 
   const [showCaptcha, setShowCaptcha] = useState(false)
@@ -80,7 +82,9 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
 
       // onLogin
       const { data: loginData } = loginInfo
-      let url = '/api/v2/login/account'
+      let url = publicConfig?.mergeAdAndAccountPasswordLogin
+        ? '/api/v2/login/ad-all-in-one'
+        : '/api/v2/login/account'
       let account = loginData.identity && loginData.identity.trim()
       let password = loginData.password && loginData.password.trim()
       let captchaCode = loginData.captchaCode && loginData.captchaCode.trim()
@@ -97,7 +101,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
 
       return res
     },
-    [encrypt, post, props]
+    [encrypt, post, props, publicConfig.mergeAdAndAccountPasswordLogin]
   )
 
   const onFinish = async (values: any) => {
