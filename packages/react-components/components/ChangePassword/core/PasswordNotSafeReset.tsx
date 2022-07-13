@@ -15,10 +15,10 @@ import { authFlow, ChangePasswordBusinessAction } from '../businessRequest'
 import { ApiCode } from '../../_utils/responseManagement/interface'
 import { useMediaSize } from '../../_utils/hooks'
 import { usePasswordErrorText } from '../../_utils/useErrorText'
-interface FirstLoginResetProps {
+interface PasswordNotSafeResetProps {
   onReset: any
 }
-export const FirstLoginReset: React.FC<FirstLoginResetProps> = ({
+export const PasswordNotSafeReset: React.FC<PasswordNotSafeResetProps> = ({
   onReset,
 }) => {
   const { t } = useTranslation()
@@ -49,7 +49,7 @@ export const FirstLoginReset: React.FC<FirstLoginResetProps> = ({
     if (isAuthFlow) {
       // 重置密码成功不会返回 UserInfo
       const { apiCode, onGuardHandling, message: msg } = await authFlow(
-        ChangePasswordBusinessAction.FirstLoginReset,
+        ChangePasswordBusinessAction.ResetPasswordStrengthDetection,
         {
           password: await encrypt!(newPassword, publicKey),
         }

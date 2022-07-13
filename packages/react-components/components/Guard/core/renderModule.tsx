@@ -6,6 +6,7 @@ import {
   GuardFirstLoginPasswordResetView,
   GuardForcedPasswordResetView,
   GuardNoticePasswordResetView,
+  GuardPasswordNotSafeResetView,
   GuardRegisterCompletePasswordView,
 } from '../../ChangePassword'
 import {
@@ -155,6 +156,9 @@ export const RenderModule: React.FC<{
     // 自助解锁
     [GuardModuleType.SELF_UNLOCK]: (key: string) => (
       <GuardUnlockView key={key} />
+    ),
+    [GuardModuleType.UNSAFE_PASSWORD_RESET]: (key) => (
+      <GuardPasswordNotSafeResetView key={key} />
     ),
   }
 
