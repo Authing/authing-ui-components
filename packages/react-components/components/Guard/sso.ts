@@ -21,11 +21,5 @@ export interface SessionData {
 
 export const trackSession = async () => {
   const { get } = getGuardHttp()
-  return await get<SessionData>(
-    `/cas/session`,
-    {},
-    {
-      credentials: 'include',
-    }
-  )
+  return await get<SessionData>(`/cas/session`, {})
 }

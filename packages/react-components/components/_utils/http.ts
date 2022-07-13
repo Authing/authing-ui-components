@@ -1,7 +1,7 @@
 import qs from 'qs'
 import { i18n } from './locales'
 import { CodeAction } from './responseManagement/interface'
-
+import Axios, { AxiosRequestConfig, CancelTokenSource } from 'axios'
 export const requestClient = async (...rest: Parameters<typeof fetch>) => {
   const res = await fetch(...rest)
   return res.json()
@@ -22,18 +22,18 @@ export interface AuthingGuardResponse<T = any> extends AuthingResponse<T> {
   isFlowEnd?: boolean
 }
 
-const timeoutAction = (controller: AbortController) => {
+const timeoutAction = (cancel: CancelTokenSource['cancel']) => {
   const timer: number = 10
   return new Promise((resolve) => {
     setTimeout(() => {
-      const response = new Response(
-        JSON.stringify({
+      const response = {
+        data: {
           code: -1,
-        })
-      )
+        },
+      }
       resolve(response)
 
-      controller.abort() // 发送终止信号
+      cancel() // 发送终止信号
     }, timer * 1000)
   })
 }
@@ -41,10 +41,10 @@ const timeoutAction = (controller: AbortController) => {
 requestClient.get = async <T>(
   path: string,
   query: Record<string, any> = {},
-  init?: RequestInit
+  init?: AxiosRequestConfig
 ): Promise<AuthingResponse<T>> => {
-  let controller = new AbortController()
-  let signal = controller.signal
+  // let controller = new AbortController()
+  // let signal = controller.signal
 
   const headers: Record<string, any> = {
     ...init?.headers,
@@ -54,23 +54,26 @@ requestClient.get = async <T>(
 
   if (requestClient.tenantId !== '')
     headers[requestClient.tenantHeader] = requestClient.tenantId
-
   try {
-    const res = await Promise.race([
-      timeoutAction(controller),
-      fetch(
+    const CancelToken = Axios.CancelToken
+    const source = CancelToken.source()
+
+    const res: any = await Promise.race([
+      timeoutAction(source.cancel),
+      Axios(
         `${requestClient.baseUrl}${path}${qs.stringify(query, {
           addQueryPrefix: true,
         })}`,
         {
+          method: 'GET',
           ...init,
-          credentials: 'include',
+          withCredentials: true,
           headers,
-          signal,
+          cancelToken: source.token,
         }
       ),
     ])
-    return (res as Response).json()
+    return res?.data
   } catch (e) {
     return Promise.resolve({
       code: -2,
@@ -85,8 +88,8 @@ requestClient.post = async <T>(
     headers: any
   }
 ): Promise<AuthingResponse<T>> => {
-  let controller = new AbortController()
-  let signal = controller.signal
+  // let controller = new AbortController()
+  // let signal = controller.signal
 
   const headers: Record<string, any> = {
     ...config?.headers,
@@ -98,13 +101,16 @@ requestClient.post = async <T>(
     headers[requestClient.tenantHeader] = requestClient.tenantId
 
   try {
-    const res = await Promise.race([
-      timeoutAction(controller),
-      fetch(`${requestClient.baseUrl}${path}`, {
-        signal,
+    const CancelToken = Axios.CancelToken
+    const source = CancelToken.source()
+
+    const res: any = await Promise.race([
+      timeoutAction(source.cancel),
+      Axios(`${requestClient.baseUrl}${path}`, {
+        data,
         method: 'POST',
-        body: JSON.stringify(data),
-        credentials: 'include',
+        withCredentials: true,
+        cancelToken: source.token,
         headers: {
           'Content-Type': 'application/json',
           ...config?.headers,
@@ -112,7 +118,7 @@ requestClient.post = async <T>(
         },
       }),
     ])
-    return (res as Response).json()
+    return res?.data
   } catch (e) {
     return Promise.resolve({
       code: -2,
@@ -138,24 +144,32 @@ requestClient.postForm = async <T>(
     headers: any
   }
 ): Promise<AuthingResponse<T>> => {
-  let controller = new AbortController()
-  let signal = controller.signal
+  // let controller = new AbortController()
+  // let signal = controller.signal
+  try {
+    const CancelToken = Axios.CancelToken
+    const source = CancelToken.source()
 
-  const res = await Promise.race([
-    timeoutAction(controller),
-    fetch(`${requestClient.baseUrl}${path}`, {
-      signal,
-      method: 'post',
-      body: formData,
-      credentials: 'include',
-      headers: {
-        ...config?.headers,
-        [requestClient.langHeader]: i18n.language,
-      },
-    }),
-  ])
+    const res: any = await Promise.race([
+      timeoutAction(source.cancel),
+      Axios(`${requestClient.baseUrl}${path}`, {
+        method: 'POST',
+        data: formData,
+        withCredentials: true,
+        cancelToken: source.token,
+        headers: {
+          ...config?.headers,
+          [requestClient.langHeader]: i18n.language,
+        },
+      }),
+    ])
 
-  return (res as Response).json()
+    return res?.data
+  } catch (e) {
+    return Promise.resolve({
+      code: -2,
+    })
+  }
 }
 
 requestClient.baseUrl = ''
