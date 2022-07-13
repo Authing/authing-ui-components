@@ -37,8 +37,6 @@ const wrapperEvents = <N extends keyof GuardEvents, T extends (Required<GuardEve
   // @ts-ignore TODO: 后续类型处理
   events[eventName] = (...props: Parameters<T>) => {
     callback(oldEvents, ...props)
-    // @ts-ignore
-    oldEvents && oldEvents(...props)
     return props
   }
 }
