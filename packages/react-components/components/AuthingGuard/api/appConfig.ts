@@ -190,6 +190,8 @@ export interface ApplicationConfig {
   welcomeMessage: any
 
   skipComplateFileds: boolean
+
+  selfUnlockStrategy: 'captcha' | 'password-captcha'
 }
 
 export const fetchAppConfig = (appId: string) =>
