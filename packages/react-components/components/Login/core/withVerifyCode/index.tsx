@@ -74,14 +74,15 @@ const LoginWithVerifyCode = (props: any) => {
 
   let [form] = Form.useForm()
 
-  useLoginMultipleBackFill(
+  useLoginMultipleBackFill({
     form,
-    LoginMethods.PhoneCode,
-    'identify',
+    way: LoginMethods.PhoneCode,
+    formKey: 'identify',
     backfillData,
     isOnlyInternationSms,
-    setAreaCode
-  )
+    setAreaCode,
+    cancelBackfill: specifyDefaultLoginMethod === LoginMethods.PhoneCode,
+  })
 
   let submitButtonRef = useRef<any>(null)
   const { t } = useTranslation()

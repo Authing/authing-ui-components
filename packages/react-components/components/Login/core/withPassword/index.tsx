@@ -66,12 +66,18 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
 
   const [form] = useForm()
 
-  useLoginMultipleBackFill(form, LoginMethods.Password, 'account', backfillData)
-
   const {
     _firstItemInitialValue = '',
     specifyDefaultLoginMethod,
   } = useGuardInitData<GuardLoginInitData>()
+
+  useLoginMultipleBackFill({
+    form,
+    way: LoginMethods.Password,
+    formKey: 'account',
+    backfillData,
+    cancelBackfill: LoginMethods.Password === specifyDefaultLoginMethod,
+  })
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
   const { isPhoneMedia } = useMediaSize()

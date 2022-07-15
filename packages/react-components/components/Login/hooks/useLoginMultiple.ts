@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { FormInstance } from 'antd/lib/form'
-import { useEffect, useCallback, useRef, useLayoutEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useEffect, useCallback, useRef, useLayoutEffect, } from 'react'
 import {
   BackFillMultipleState,
   LoginWay,
@@ -14,13 +13,17 @@ import { useGuardMultipleInstance } from '../../_utils/context'
  * 调用地方 core 中需要回填的两个登录方式
  */
 function useLoginMultipleBackFill(
-  form: FormInstance<any>,
-  way: LoginWay,
-  formKey: string,
-  backfillData?: BackFillMultipleState,
-  isOnlyInternationSms?: boolean,
-  setAreaCode?: React.Dispatch<React.SetStateAction<string>>
+  options: {
+    form: FormInstance<any>,
+    way: LoginWay,
+    formKey: string,
+    backfillData?: BackFillMultipleState,
+    isOnlyInternationSms?: boolean,
+    setAreaCode?: React.Dispatch<React.SetStateAction<string>>,
+    cancelBackfill?: boolean
+  }
 ) {
+  const { form, way, formKey, backfillData, isOnlyInternationSms, setAreaCode, cancelBackfill } = options
   // 获得格式化后的回填 account，如果是国际化选择框，还需要改变对应选项
   const parseFillData = useCallback(() => {
     const prefix = isOnlyInternationSms
@@ -39,16 +42,18 @@ function useLoginMultipleBackFill(
     }
   }, [isOnlyInternationSms, backfillData])
 
+  // initData 如果存在值表示已经回填过了
   useEffect(() => {
     const matchLoginWay = backfillData?.way === way
-    if (backfillData && matchLoginWay) {
+    if (backfillData && matchLoginWay && !cancelBackfill) {
+
       const { account, areaCode } = parseFillData()
       areaCode && setAreaCode?.(areaCode)
       form.setFieldsValue({
         [formKey]: account,
       })
     }
-  }, [backfillData, form, formKey, way, setAreaCode, parseFillData])
+  }, [backfillData, cancelBackfill, form, formKey, way, setAreaCode, parseFillData])
 }
 
 /**

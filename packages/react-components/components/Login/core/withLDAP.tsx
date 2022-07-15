@@ -53,7 +53,12 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
   const [form] = Form.useForm()
 
   // const { responseIntercept } = useGuardHttpClient()
-  useLoginMultipleBackFill(form, 'ldap', 'account', backfillData)
+  useLoginMultipleBackFill({
+    form,
+    way: 'ldap',
+    formKey: 'account',
+    backfillData,
+  })
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
 

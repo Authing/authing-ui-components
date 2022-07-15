@@ -50,7 +50,6 @@ export interface SelectOptions {
 
 const SelectPanel: React.FC<SelectPanelProps> = (props) => {
   const { lists, handleDel, onClick } = props
-
   const { t } = useTranslation()
 
   const { isPhoneMedia } = useMediaSize()

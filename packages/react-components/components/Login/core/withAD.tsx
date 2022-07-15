@@ -79,7 +79,12 @@ export const LoginWithAD = (props: LoginWithADProps) => {
 
   const [form] = useForm()
 
-  useLoginMultipleBackFill(form, 'ad', 'account', backfillData)
+  useLoginMultipleBackFill({
+    form,
+    way: 'ad',
+    formKey: 'account',
+    backfillData,
+  })
 
   let submitButtonRef = useRef<any>(null)
 

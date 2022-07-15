@@ -298,13 +298,11 @@ class MultipleAccount {
     // 排除 social 方式 TODO: Mappint 常量抽离
     const mapping: Record<
       Exclude<LoginWay, 'social'>, string> = {
-      //  缺少后台对应的 AD 的方式 
-      // TODO: 缺少对应的 IDAP 方式
       'ldap': 'ldap',
       'ad': "ad",
-      'email': 'password',
-      'password': 'password',
-      'phone': 'password',
+      'email': 'email-password',
+      'password': 'username-password',
+      'phone': 'phone-password',
       'email-code': 'phone-code',
       'phone-code': 'phone-code',
       'wechat-miniprogram-qrcode': 'wechat-miniprogram-qrcode',
@@ -477,6 +475,7 @@ class MultipleAccount {
         result.push(value)
       }
     }
+    // 这里没有过滤
     return result.sort((a, b) => b._updateTime - a._updateTime)
   }
 
@@ -539,17 +538,21 @@ class MultipleAccount {
     }
 
   private _mappingUser = (value: User) => {
-    const { id, photo, name, nickname, username, email, phone, _updateTime } = value
+    const { id, photo, name, nickname, username, email, phone, _updateTime, phoneCountryCode } = value
     // 1. 姓名 > 昵称 > username
     const title = name || nickname || username || undefined
-    // 2. phone > email
-    const description = phone || email || undefined
+    // 2. 处理手机号是否是国家化显示
+    const parsePhone = phoneCountryCode ? `${phoneCountryCode} ${phone}` : phone
+    // 3. phone > email
+    const description = parsePhone || email || undefined
     return {
       title,
       description,
       id,
       photo: photo || '',
-      _updateTime: parseInt(_updateTime || '0')
+      // 国家化  phoneCountryCode
+      _updateTime: parseInt(_updateTime || '0'),
+
     }
   }
 
@@ -647,7 +650,9 @@ const useMultipleAccounts = ({ appId, finallyConfig }: { appId?: string, finally
     }
     const publicConfig = getPublicConfig(appId)
     // 最终支持的登录方式 用于过滤有效登录方式
-    const serverSideLoginMethods = finallyConfig.loginMethods
+    const serverSideLoginMethods = finallyConfig?.loginMethods || []
+    // 输入框 邮箱/用户名/手机号 + 密码
+    const configLists = finallyConfig?.passwordLoginMethods || []
     // 是否支持国际化短信 
     const isInternationSms = publicConfig?.internationalSmsConfig?.enabled || false
     // 创建实例
@@ -656,7 +661,7 @@ const useMultipleAccounts = ({ appId, finallyConfig }: { appId?: string, finally
     const storeInstance = instance.getStore()
     // 增加一个多的 国际化短信是否开启
     storeInstance.initStore(appId, {
-      serverSideLoginMethods,
+      serverSideLoginMethods: [...configLists, ...serverSideLoginMethods],
       isInternationSms
     })
     setStoreInstance(storeInstance)
