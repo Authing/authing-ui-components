@@ -186,7 +186,7 @@ export const LoginWithAD = (props: LoginWithADProps) => {
                 size="large"
                 placeholder={
                   publicConfig?.mergeAdAndAccountPasswordLogin
-                    ? t('login.inputUsername')
+                    ? t('common.jobNumber')
                     : t('login.inputAdUsername')
                 }
                 prefix={
