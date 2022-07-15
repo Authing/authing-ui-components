@@ -21,7 +21,9 @@ const initI18n = (localesConfig: LocalesConfig = {}, lang?: string) => {
 
   if (guardWindow) {
     initLang =
-      guardWindow.navigator.language.split('-')[0] === 'zh' ? 'zh-CN' : 'en-US'
+      guardWindow?.navigator?.language?.split('-')?.[0] === 'zh'
+        ? 'zh-CN'
+        : 'en-US'
   }
 
   if (Boolean(i18n.language)) {

@@ -64,13 +64,12 @@ export class GuardHttp {
   public get = async <T = any>(
     path: string,
     query: Record<string, any> = {},
-    config?: RequestInit
+    config?: any
   ): Promise<AuthingGuardResponse<T>> => {
     const res = await requestClient.get<T>(path, query, {
       ...config,
       headers: { ...this.headers, ...config?.headers },
     })
-
     return this.responseIntercept(res)
   }
 

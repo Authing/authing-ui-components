@@ -14,6 +14,10 @@ import { FormItemIdentify } from '../../Login/core/withVerifyCode/FormItemIdenti
 import { InputIdentify } from '../../Login/core/withVerifyCode/inputIdentify'
 import { parsePhone, useMediaSize } from '../../_utils/hooks'
 import { EmailScene } from '../../Type'
+import { usePasswordErrorText } from '../../_utils/useErrorText'
+import { getGuardHttp } from '../../_utils/guardHttp'
+import { ApiCode } from '../../_utils/responseManagement/interface'
+import { useGuardPublicConfig } from '../../_utils/context'
 export enum InputMethodMap {
   email = 'email-code',
   phone = 'phone-code',
@@ -29,39 +33,61 @@ export const ResetPassword = (props: ResetPasswordProps) => {
   let [form] = Form.useForm()
   let [identify, setIdentify] = useState('')
   let [codeMethod, setCodeMethod] = useState<'phone' | 'email'>('phone')
-  let client = useGuardAuthClient()
   let submitButtonRef = useRef<any>(null)
   const { isPhoneMedia } = useMediaSize()
-
+  const { post } = getGuardHttp()
+  let authClient = useGuardAuthClient()
+  const { publicKey } = useGuardPublicConfig()
   const verifyCodeLength = props.publicConfig.verifyCodeLength ?? 4
   // 是否开启了国际化短信功能
   const isInternationSms =
     props.publicConfig.internationalSmsConfig?.enabled || false
-
+  const {
+    getPassWordUnsafeText,
+    setPasswordErrorTextShow,
+  } = usePasswordErrorText()
   const onFinish = async (values: any) => {
     let identify = values.identify
     let code = values.code
-    let newPassword = values.password
+    let tempPassword = values.password
     let context = new Promise(() => {})
-
+    const newPassword = await authClient.options?.encryptFunction?.(
+      tempPassword,
+      publicKey
+    )
     if (codeMethod === 'email') {
-      context = client.resetPasswordByEmailCode(identify, code, newPassword)
+      context = post('/api/v2/users/password/reset', {
+        email: identify,
+        code,
+        newPassword,
+      })
+      // context = client.resetPasswordByEmailCode(identify, code, newPassword)
     }
     if (codeMethod === 'phone') {
-      const { phoneNumber, countryCode } = parsePhone(
+      const { phoneNumber: phone, countryCode: phoneCountryCode } = parsePhone(
         isInternationSms,
         identify
       )
-      context = client.resetPasswordByPhoneCode(
-        phoneNumber,
+      context = post('/api/v2/users/password/reset', {
+        phone,
         code,
         newPassword,
-        countryCode
-      )
+        phoneCountryCode,
+      })
+      // context = client.resetPasswordByPhoneCode(
+      //   phoneNumber,
+      //   code,
+      //   newPassword,
+      //   countryCode
+      // )
     }
 
     context
-      .then((r) => {
+      .then((r: any) => {
+        const { code } = r
+        if (code === ApiCode.UNSAFE_PASSWORD_TIP) {
+          setPasswordErrorTextShow(true)
+        }
         props.onSend(codeMethod)
         props.onReset(r)
       })
@@ -196,6 +222,7 @@ export const ResetPassword = (props: ResetPasswordProps) => {
             }
           />
         </CustomFormItem.Password>
+        {getPassWordUnsafeText()}
         <Form.Item className="authing-g2-input-form submit-form">
           <SubmitButton
             className="forget-password"
