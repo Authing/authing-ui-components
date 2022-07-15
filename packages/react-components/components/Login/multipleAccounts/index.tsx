@@ -26,7 +26,7 @@ interface MultipleAccountsProps {
 
 const MultipleAccountsFC: React.FC<MultipleAccountsProps> = (props) => {
   const [, setState] = useState<number>(0)
-  const { multipleInstance, referMultipleState } = props
+  const { multipleInstance, referMultipleState, changeModule } = props
 
   // 默认只有一个多选实例
   const lists = multipleInstance?.getMemoUser()
@@ -43,8 +43,13 @@ const MultipleAccountsFC: React.FC<MultipleAccountsProps> = (props) => {
    */
   const handleDelAccount = (id: string) => {
     multipleInstance?.delUserById(id)
-    forceUpdate()
-    setState(Math.random())
+    const lists = multipleInstance?.getMemoUser()
+    if (lists?.length === 0) {
+      // 7.15: 如果仅剩一个需求跳转
+      referMultipleState?.('login')
+    } else {
+      forceUpdate()
+    }
   }
 
   /**

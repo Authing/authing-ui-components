@@ -458,6 +458,7 @@ class MultipleAccount {
       // 2. 更新 localStorage
       this.saveStore()
     }
+    return id
   }
 
   /**

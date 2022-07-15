@@ -8,7 +8,6 @@ import React, {
 import { useTranslation } from 'react-i18next'
 import { message, Popover, Tabs, Tooltip } from 'antd'
 import intersection from 'lodash/intersection'
-import className from 'classnames'
 
 import { LoginWithPassword } from './core/withPassword/index'
 import { LoginWithLDAP } from './core/withLDAP'
@@ -130,10 +129,6 @@ export const GuardLoginView = () => {
     isMultipleAccount,
     referMultipleState,
   } = useLoginMultiple(setLoginWay)
-
-  const classes = className('g2-view-container', 'g2-view-login', {
-    'g2-multiple-wrapper': isMultipleAccount,
-  })
 
   const [canLoop, setCanLoop] = useState(false) // 允许轮询
 
@@ -348,7 +343,7 @@ export const GuardLoginView = () => {
   }, [isPhoneMedia, noLoginMethods])
 
   return (
-    <div className={classes}>
+    <div className="g2-view-container g2-view-login">
       <div className="g2-view-container-inner">
         {isNoMethod ? (
           <>
