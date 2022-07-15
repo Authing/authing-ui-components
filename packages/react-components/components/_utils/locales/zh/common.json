@@ -276,5 +276,6 @@
   "PasswordRegister": "密码注册",
   "noFindEmail": "找不到该邮箱账号",
   "noFindPhone": "找不到该手机账号",
-  "noFindUsername": "找不到该用户名账号"
+  "noFindUsername": "找不到该用户名账号",
+  "jobNumber": "工号首字母大写"
 }
