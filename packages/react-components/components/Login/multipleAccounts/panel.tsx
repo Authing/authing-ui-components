@@ -115,6 +115,7 @@ const SelectPanel: React.FC<SelectPanelProps> = (props) => {
               <Popover
                 trigger={triggerWay}
                 overlayClassName="g2-multiple__op-wrapper"
+                getPopupContainer={(triggerNode) => triggerNode}
                 content={
                   <div
                     className="g2-multiple__del"

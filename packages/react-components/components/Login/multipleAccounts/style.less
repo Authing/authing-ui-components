@@ -11,11 +11,14 @@
     border-radius: 4px;
     margin-bottom: 20px;
     &:hover {
+      cursor: pointer;
+      background-color: #f7f8fa;
       .g2-multiple__title {
         color: #215ae5;
       }
-      cursor: pointer;
-      background-color: #f7f8fa;
+      .g2-multiple__icon--add-line {
+        background-color: #e5e6eb;
+      }
     }
   }
 
@@ -48,7 +51,7 @@
   &__op {
     position: absolute;
     top: 18px;
-    right: 28px;
+    right: 16px;
     width: 24px;
     height: 24px;
     border-radius: 4px;
@@ -79,17 +82,19 @@
       color: #1d2129;
       .g2-multiple__del {
         padding-left: 15px;
-        background: #f2f3f5;
         display: flex;
         align-items: center;
         color: #1d2129;
+        &:hover {
+          background: #f2f3f5;
+        }
       }
     }
   }
   &__del {
     width: 108px;
     height: 36px;
-    background: #e5e6eb;
+    // background: #e5e6eb;
     cursor: pointer;
   }
 }
