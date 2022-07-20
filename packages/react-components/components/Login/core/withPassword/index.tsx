@@ -111,6 +111,9 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
       return
     }
     setRemainCount(0)
+
+    setAccountLock(false)
+
     // onBeforeLogin
     submitButtonRef?.current?.onSpin(true)
     let loginInfo = {
