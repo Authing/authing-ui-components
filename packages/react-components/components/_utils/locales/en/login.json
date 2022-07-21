@@ -107,5 +107,6 @@
   "referQrcodeText": "Scan the code again",
   "noLoginMethodsDesc": "No login method configured",
   "inputNewPwd": "Please enter a new password",
-  "socialConnectionMessage": "Login with {{provider}} is not supported, please choose another way to log in, or try again in another browser"
+  "socialConnectionMessage": "Login with {{provider}} is not supported, please choose another way to log in, or try again in another browser",
+  "qrcodeMiddle": "Please confirm the account login on the mobile terminal"
 }
