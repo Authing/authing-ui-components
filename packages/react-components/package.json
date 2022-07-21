@@ -1,10 +1,6 @@
 {
   "name": "@authing/react-ui-components",
-<<<<<<< HEAD
-  "version": "3.1.32-beta.0",
-=======
   "version": "3.1.32",
->>>>>>> master
   "private": false,
   "main": "lib/index.min.js",
   "typings": "lib/index.d.ts",
@@ -15,7 +11,7 @@
   ],
   "dependencies": {
     "antd": "^4.8.0",
-    "authing-js-sdk": "4.23.35-alpha.2",
+    "authing-js-sdk": "4.23.35",
     "fastclick": "^1.0.6",
     "global": "^4.4.0",
     "phone": "^3.1.12",
