@@ -492,11 +492,14 @@ class MultipleAccount {
     const currentUser = this.currentStore[userId]
     if (currentUser) {
       // 根据登录方式进行处理
-      const { way } = currentUser
+      const { way, phoneCountryCode, areaCode } = currentUser
       const { account, way: parseWay } = this.getAccountByWay(way, currentUser)
       return {
         account,
         way: parseWay,
+        // fix: 回填时需要携带国际化信息。
+        phoneCountryCode,
+        areaCode
       }
     }
   }
@@ -524,6 +527,7 @@ class MultipleAccount {
         case 'email-code':
           return { account: email!, way: 'phone-code' }
         case 'phone-code':
+          // TODO: 需要额外处理国际化短信回填
           return { account: phone!, way: 'phone-code' }
         case 'phone':
           return { account: phone!, way: 'password' }
@@ -551,7 +555,7 @@ class MultipleAccount {
       description,
       id,
       photo: photo || '',
-      // 国家化  phoneCountryCode
+      // 国际化  phoneCountryCode
       _updateTime: parseInt(_updateTime || '0'),
 
     }
@@ -629,6 +633,7 @@ const useMultipleAccounts = ({ appId, finallyConfig }: { appId?: string, finally
     (type: 'login' | 'multiple', data?: BackFillMultipleState) => {
       changeMultipleState(type)
       if (data) {
+        // updateBackFillData
         updateBackFillData(data)
       }
     },

@@ -245,21 +245,3 @@ export const useGuardPageConfig = () =>
  */
 export const useGuardMultipleInstance = () =>
   useContext(GuardXContext).multipleInstance
-
-/**
- * 登录页面状态
-//  */
-// export const useGuardMultipleState = () =>
-//   useContext(GuardXContext).isMultipleAccount
-
-// /**
-//  * 切换登录页面多账号状态
-//  */
-// export const useGuardMultipleReferState = () =>
-//   useContext(GuardXContext).referMultipleState
-
-// /**
-//  * 多页面下的回填状态
-//  */
-// export const useGuardMultipleBackFill = () =>
-//   useContext(GuardXContext).multipleAccountData

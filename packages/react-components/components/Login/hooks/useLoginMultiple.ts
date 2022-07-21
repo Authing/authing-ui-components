@@ -29,7 +29,7 @@ function useLoginMultipleBackFill(
     const prefix = isOnlyInternationSms
       ? ''
       : backfillData?.phoneCountryCode
-        ? backfillData?.phoneCountryCode + `&nbsp`
+        ? backfillData?.phoneCountryCode + ` `
         : ''
 
     const content = backfillData?.account || ''
