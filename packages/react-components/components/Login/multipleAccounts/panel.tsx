@@ -105,7 +105,11 @@ const SelectPanel: React.FC<SelectPanelProps> = (props) => {
 
           <section className="g2-multiple__body">
             {title && <span className="g2-multiple__title">{title}</span>}
-            <span className="g2-multiple__desc">{description}</span>
+            <span
+              className={title ? 'g2-multiple__desc' : 'g2-multiple__title'}
+            >
+              {description}
+            </span>
           </section>
           {operation && (
             <span
