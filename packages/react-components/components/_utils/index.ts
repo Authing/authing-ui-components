@@ -215,6 +215,7 @@ export const getUserRegisterParams = (params?: string[]) => {
       key,
       value: query[key],
     }))
+    .filter((item) => item.value)
     .filter((item) => (params ? params.includes(item.key) : true))
 }
 
