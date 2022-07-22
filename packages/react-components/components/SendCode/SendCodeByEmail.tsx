@@ -45,12 +45,13 @@ export const SendCodeByEmail: FC<SendCodeByEmailProps> = (props) => {
           scene,
         }
       )
-      if (code === 200) {
-        return true
-      } else if (apiCode === 2080) {
+      if (apiCode === 2080) {
         // 一分钟只能发一次邮箱验证码的提示信息，特殊处理
         message.error(tips)
         return false
+      }
+      if (code === 200) {
+        return true
       } else {
         message.error(t('login.sendCodeTimeout'))
         return false

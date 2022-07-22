@@ -114,13 +114,14 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
           scene: EmailScene.MFA_VERIFY_CODE,
         }
       )
-      if (code === 200) {
-        setSent(true)
-        return true
-      } else if (apiCode === 2080) {
+      if (apiCode === 2080) {
         // 一分钟只能发一次邮箱验证码的提示信息，特殊处理
         message.error(tips)
         return false
+      }
+      if (code === 200) {
+        setSent(true)
+        return true
       } else {
         message.error(t('login.sendCodeTimeout'))
         return false
