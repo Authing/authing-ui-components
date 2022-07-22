@@ -64,8 +64,7 @@ export const SelfUnlock = ({
     if (identifyRef) {
       identifyRef.current = getPasswordIdentify(identify)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [identify])
+  }, [identify, identifyRef])
 
   const { authFlow } = useGuardHttp()
 
@@ -73,6 +72,7 @@ export const SelfUnlock = ({
     publicKey,
     verifyCodeLength,
     internationalSmsConfig,
+    selfUnlockStrategy = 'password-captcha', // 'captcha' | 'password-captcha'
   } = useGuardPublicConfig()
 
   // 是否开启了国际化短信功能
@@ -83,12 +83,15 @@ export const SelfUnlock = ({
 
     let code = values.code
 
-    let password = values.password
+    let password = values.password || ''
 
     const encryptPassWord = await authClient.options?.encryptFunction?.(
       password,
       publicKey
     )
+    // 密码，经过加密后的, 仅“验证码”时不传 password 字段
+    password =
+      selfUnlockStrategy === 'password-captcha' ? encryptPassWord : undefined
 
     if (codeMethod === 'email') {
       const { isFlowEnd, data, onGuardHandling } = await authFlow(
@@ -96,7 +99,7 @@ export const SelfUnlock = ({
         {
           email: identify, // 用户输入的邮箱
           code, // 验证码
-          password: encryptPassWord, // 密码，经过加密后的
+          password,
         }
       )
       submitButtonRef.current?.onSpin(false)
@@ -113,7 +116,7 @@ export const SelfUnlock = ({
         {
           phone: phoneNumber, // 用户输入的邮箱
           code, // 验证码
-          password: encryptPassWord, // 密码，经过加密后的
+          password,
         }
       )
       submitButtonRef.current?.onSpin(false)
@@ -233,24 +236,26 @@ export const SelfUnlock = ({
         >
           <SendCode />
         </Form.Item>
-        <Form.Item
-          validateTrigger={['onBlur', 'onChange']}
-          className="authing-g2-input-form"
-          name="password"
-          rules={[...fieldRequiredRule(t('common.password'))]}
-        >
-          <InputPassword
-            className="authing-g2-input"
-            size="large"
-            placeholder={t('user.inputOldPwd')}
-            prefix={
-              <IconFont
-                type="authing-a-lock-line1"
-                style={{ color: '#878A95' }}
-              />
-            }
-          />
-        </Form.Item>
+        {selfUnlockStrategy === 'password-captcha' && (
+          <Form.Item
+            validateTrigger={['onBlur', 'onChange']}
+            className="authing-g2-input-form"
+            name="password"
+            rules={[...fieldRequiredRule(t('common.password'))]}
+          >
+            <InputPassword
+              className="authing-g2-input"
+              size="large"
+              placeholder={t('user.inputOldPwd')}
+              prefix={
+                <IconFont
+                  type="authing-a-lock-line1"
+                  style={{ color: '#878A95' }}
+                />
+              }
+            />
+          </Form.Item>
+        )}
         <Form.Item className="authing-g2-input-form submit-form">
           <SubmitButton
             className="forget-password"

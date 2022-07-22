@@ -275,5 +275,6 @@
   "PasswordRegister": "Password",
   "noFindEmail": "Can't find the email account",
   "noFindPhone": "Can't find the phone account",
-  "noFindUsername": "Can't find the username account"
+  "noFindUsername": "Can't find the username account",
+  "jobNumber": "Account first letter must be capital"
 }

@@ -26,7 +26,7 @@ export const FormItemAccount: React.FC<FormItemAccountProps> = (props) => {
     switch (methods[0]) {
       case 'phone-password':
         return (
-          <CustomFormItem.Phone {...formItemPtops} isCheckI18nSms={false} />
+          <CustomFormItem.Phone {...formItemPtops} isCheckPattern={false} />
         )
       case 'email-password':
         return <CustomFormItem.Email {...formItemPtops} />
