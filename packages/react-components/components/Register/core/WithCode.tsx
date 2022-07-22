@@ -163,7 +163,7 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
           // 托管模式下注册携带query上自定义参数login_page_context
           params: config?.isHost
             ? getUserRegisterParams(['login_page_context'])
-            : null,
+            : undefined,
         }
 
         if (isInternationSms) {
@@ -346,7 +346,7 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
             // 托管模式下注册携带query上自定义参数login_page_context
             params: config?.isHost
               ? JSON.stringify(getUserRegisterParams(['login_page_context'])) // 特殊处理 resetful api
-              : null,
+              : undefined,
           },
         }
 
