@@ -215,7 +215,7 @@ export const getUserRegisterParams = (params?: string[]) => {
       key,
       value: query[key],
     }))
-    .filter((item) => params?.includes(item.key))
+    .filter((item) => (params ? params.includes(item.key) : true))
 }
 
 // 微信内置浏览器
