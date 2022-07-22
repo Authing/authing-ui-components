@@ -509,7 +509,6 @@ export const GuardLoginView = () => {
                             key={LoginMethods.AD}
                             tab={t('login.adLogin')}
                           >
-                            {LoginMethods.AD}
                             <LoginWithAD
                               backfillData={backfillData}
                               multipleInstance={multipleInstance}
