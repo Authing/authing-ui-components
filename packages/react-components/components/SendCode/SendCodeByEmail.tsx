@@ -38,12 +38,19 @@ export const SendCodeByEmail: FC<SendCodeByEmailProps> = (props) => {
       return false
     }
     try {
-      const { code } = await post('/api/v2/email/send', {
-        email,
-        scene,
-      })
+      const { code, message: tips, apiCode } = await post(
+        '/api/v2/email/send',
+        {
+          email,
+          scene,
+        }
+      )
       if (code === 200) {
         return true
+      } else if (apiCode === 2080) {
+        // 一分钟只能发一次邮箱验证码的提示信息，特殊处理
+        message.error(tips)
+        return false
       } else {
         message.error(t('login.sendCodeTimeout'))
         return false
