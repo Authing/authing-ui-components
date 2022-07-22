@@ -202,15 +202,22 @@ export function deepMerge<T extends any = any>(
   return deepMerge(target, ...sources)
 }
 
-export const getUserRegisterParams = () => {
+/**
+ *  在托管页下上传query中指定的用户自定义字段进行补全
+ * @param params 指定上传的用户自定义字段
+ */
+export const getUserRegisterParams = (params?: string[]) => {
   const query = qs.parse(window.location.search, {
     ignoreQueryPrefix: true,
   })
-  return Object.keys(query).map((key) => ({
-    key,
-    value: query[key],
-  }))
+  return Object.keys(query)
+    .map((key) => ({
+      key,
+      value: query[key],
+    }))
+    .filter((item) => (params ? params.includes(item.key) : true))
 }
+
 // 微信内置浏览器
 export const isWeChatBrowser = () => {
   if (typeof navigator === 'undefined') {
