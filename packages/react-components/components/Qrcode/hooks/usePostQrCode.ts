@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { ReactNode, useCallback, useEffect } from 'react'
 import { sleep } from '../../_utils'
 import { AuthingGuardResponse, AuthingResponse } from '../../_utils/http'
 import { CodeStatus } from '../UiQrCode'
@@ -32,6 +32,12 @@ export interface QrCodeResponse {
  * 二维码请求相关
  */
 interface QrCodeRequest {
+  genCodeRequest?: () => Promise<
+    AuthingGuardResponse<{
+      random: string
+      url: string
+    }>
+  >
   /**
    * 未扫码下的请求方法
    */
@@ -54,7 +60,6 @@ interface QrCodeOptions {
   }>
   descriptions: CodeStatusDescriptions
   sleepTime?: number
-  referQrCode: () => Promise<any>
   /**
    * 状态改变时触发事件，仅在 Server 返回的二维码状态改变时进行触发
    */
@@ -68,15 +73,16 @@ interface QrCodeOptions {
  * 2. 根据不同返回状态码进行处理
  */
 export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
+  let destroy = false
+
   const { state, dispatch, descriptions, sleepTime, onStatusChange } = options
 
   const {
     readyCheckedRequest,
     alreadyCheckedRequest,
     exchangeUserInfo,
+    genCodeRequest,
   } = request
-
-  const mounted = useRef(true)
 
   /**
    * 根据 Server 返回的状态码决定对应的二维码展示状态
@@ -112,11 +118,11 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
   // already 待确认状态的请求方法
   const processAReady = async () => {
     if (state.status === 'already' && alreadyCheckedRequest) {
+      console.log(state.status, 'already 状态下的状态')
       // 修改描述
       changeDesc(descriptions.already)
       // 沉睡
       sleepTime && (await sleep(sleepTime))
-      // 再次发起请求
       uniteRequestHandler(alreadyCheckedRequest)
     }
   }
@@ -149,7 +155,7 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
     }
   }
 
-  // 未知错误
+  // Server 返回未知错误
   const processError = () => {
     // 修改 status 同时修改
     if (state.status === 'error') {
@@ -163,10 +169,9 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
    * @param data
    */
   const emitEvents = async (status: CodeStatus, data: QrCodeResponse) => {
-    // 这里有一处额外的逻辑 如果是移动端 App 登录的话
     if (data.ticket && exchangeUserInfo) {
       const { data: user } = await exchangeUserInfo(data.ticket)
-      onStatusChange && onStatusChange(status, user)
+      onStatusChange && onStatusChange(status, { ...user, ticket: data.ticket })
     } else {
       onStatusChange && onStatusChange(status, data)
     }
@@ -178,6 +183,9 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
   const processFlowByResponse: (res: QrCodeResponse) => void = (
     res: QrCodeResponse
   ) => {
+    if (destroy) {
+      return
+    }
     const prev = state.status
     const next = getStatusByRes(res)
     const statusWillChange = prev !== next
@@ -249,7 +257,7 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
    * @param description
    * @returns
    */
-  const changeDesc = (description?: string) =>
+  const changeDesc = (description?: ReactNode) =>
     description &&
     dispatch({
       type: 'changeDesc',
@@ -264,10 +272,9 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
   const uniteRequestHandler = async (
     request: () => Promise<AuthingGuardResponse<QrCodeResponse>>
   ) => {
-    if (!mounted.current) {
-      return
-    }
     try {
+      // 状态切换时 请求还在请求中，所以状态切换完毕后
+      // 会继续根据状态进行处理
       const { data } = await request()
       if (data) {
         await processFlowByResponse(data)
@@ -287,8 +294,27 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
     }
   }
 
+  // loading 状态表示重新刷新了二维码
+  const processLoading = async () => {
+    // 重新切换为 Loading 时，重新生成二维码
+    if (genCodeRequest) {
+      const { data } = await genCodeRequest()
+      if (data) {
+        const { url, random } = data
+        dispatch({
+          type: 'change',
+          payload: {
+            src: url,
+            random,
+          },
+        })
+      }
+    }
+  }
+
   // 每个状态下的处理函数
   const flowHandlers = {
+    loading: processLoading,
     ready: processReady,
     already: processAReady,
     success: processSuccess,
@@ -300,14 +326,11 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
 
   // 每次状态变化流转下一个 flowHandler
   useEffect(() => {
-    if (state.status !== 'loading') {
-      mounted.current = true
-      const handler = flowHandlers[state.status]
-      handler()
-    }
+    const handler = flowHandlers[state.status]
+    handler()
     return () => {
-      // TODO: 临时Hack处理 正常来说应该是每次状态改变调用上一次请求的 Cancel
-      mounted.current = false
+      // 阻止上一次 Render 内的作用域方法
+      destroy = true
     }
   }, [state.status])
 }

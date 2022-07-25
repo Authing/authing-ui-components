@@ -3,6 +3,7 @@ import className from 'classnames'
 import './index.less'
 import { useImage } from './hooks/useImage'
 import { useStatus } from './hooks/useStatus'
+import { ShieldSpin } from '../ShieldSpin'
 
 // 配合一些额外的状态吧
 // 得多增加一些状态 TODO: 错误分为 1.已过期 2. 未知错误 3. 取消扫码 5. 未知错误
@@ -20,10 +21,6 @@ export const prefix = 'refactor'
 
 export interface UiQrProps {
   /**
-   * 组件加载状态
-   */
-  // loading?: boolean
-  /**
    * Loading 组件
    */
   loadingComponent?: React.ReactElement
@@ -40,9 +37,9 @@ export interface UiQrProps {
    */
   src?: string
   /**
-   * 二维码底部描述文字
+   * 二维码底部内容
    */
-  description: string
+  description: React.ReactNode
   /**
    * 外层 container 样式
    */
@@ -59,6 +56,11 @@ export interface UiQrProps {
    * 点击遮罩中的内容区
    * status 当前组件所处状态
    */
+  onClickMaskEl?: (status: CodeStatus) => void
+  /**
+   * 点击全部遮罩区域
+   * status 当前组件所处状态
+   */
   onMaskContent?: (status: CodeStatus) => void
 }
 
@@ -71,6 +73,7 @@ const QrCode: React.FC<UiQrProps> = (props) => {
     containerStyle,
     imageStyle,
     onLoad,
+    onClickMaskEl,
     onMaskContent,
   } = props
 
@@ -83,7 +86,7 @@ const QrCode: React.FC<UiQrProps> = (props) => {
   const classes = className(`${prefix}-qrcode`, statusCls)
 
   const Loading = useMemo(() => {
-    return loadingComponent || <div>default Loading</div>
+    return loadingComponent || <ShieldSpin />
   }, [loadingComponent])
 
   return (
@@ -92,17 +95,21 @@ const QrCode: React.FC<UiQrProps> = (props) => {
         Loading
       ) : (
         <>
-          <span className={`${prefix}__image-wrapper`}>
+          <span
+            className={`${prefix}__image-wrapper`}
+            onClick={() => onMaskContent && onMaskContent(status)}
+          >
             {statusComponent && (
               <div className={`${prefix}-qrcode__mask`}>
                 {React.cloneElement(statusComponent as ReactElement, {
                   onClick: (e: React.MouseEvent) => {
-                    onMaskContent && onMaskContent(status)
+                    onClickMaskEl && onClickMaskEl(status)
                     ;(statusComponent as ReactElement).props.onClick?.(e)
                   },
                 })}
               </div>
             )}
+            {/* 这里的点击看看是要如何处理点击 */}
             <img
               className={`${prefix}__image`}
               src={baseUrl}
@@ -110,7 +117,11 @@ const QrCode: React.FC<UiQrProps> = (props) => {
               style={imageStyle}
             />
           </span>
-          <div className={`${prefix}__desc`}>{description}</div>
+          {typeof description === 'string' ? (
+            <div className={`${prefix}__desc`}>{description}</div>
+          ) : description ? (
+            description
+          ) : null}
         </>
       )}
     </div>

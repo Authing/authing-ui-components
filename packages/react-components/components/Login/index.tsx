@@ -572,14 +572,6 @@ export const GuardLoginView = () => {
                             // onLogin={onLogin}
                             onLoginSuccess={onLoginSuccess}
                             canLoop={canLoop}
-                            qrCodeScanOptions={{
-                              context: config?.qrCodeScanOptions?.context,
-                              params: config?.qrCodeScanOptions?.customData,
-                              extIdpConnId:
-                                config.qrCodeScanOptions?.extIdpConnId,
-                              withCustomData:
-                                config.qrCodeScanOptions?.withCustomData,
-                            }}
                             // qrCodeScanOptions={{
                             //   ...config?.qrCodeScanOptions,
                             //   extIdpConnId: item.id,
@@ -597,16 +589,16 @@ export const GuardLoginView = () => {
                         // onLogin={onLogin}
                         onLoginSuccess={onLoginSuccess}
                         canLoop={canLoop}
-                        qrCodeScanOptions={{
-                          ...config?.qrCodeScanOptions,
-                          tips: {
-                            title:
-                              i18n.language === 'zh-CN'
-                                ? '使用 移动端 APP 扫码登录'
-                                : `Use Mobile APP to scan and login`,
-                            expired: t('login.qrcodeExpired'),
-                          },
-                        }}
+                        // qrCodeScanOptions={{
+                        //   ...config?.qrCodeScanOptions,
+                        //   tips: {
+                        //     title:
+                        //       i18n.language === 'zh-CN'
+                        //         ? '使用 移动端 APP 扫码登录'
+                        //         : `Use Mobile APP to scan and login`,
+                        //     expired: t('login.qrcodeExpired'),
+                        //   },
+                        // }}
                       />
                     </Tabs.TabPane>
                   )}

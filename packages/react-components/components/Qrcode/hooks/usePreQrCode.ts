@@ -5,9 +5,21 @@ import { CodeStatus } from '../UiQrCode'
 export type ReducerType = 'change' | 'changeStatus' | 'changeDesc'
 
 export type RootState = {
+  /**
+   * 状态
+   */
   status: CodeStatus
-  description: string
+  /**
+   * 底部描述
+   */
+  description: React.ReactNode
+  /**
+   * 当前二维码 URL
+   */
   src?: string
+  /**
+   * 二维码随机值
+   */
   random?: string
 }
 
@@ -39,14 +51,7 @@ const reducer = (
 /**
  * QrCode 准备阶段 Hook
  */
-const usePreQrCode = (
-  genCodeRequest: () => Promise<
-    AuthingGuardResponse<{
-      random: string
-      url: string
-    }>
-  >
-) => {
+const usePreQrCode = () => {
   /**
    * reducer 控制
    */
@@ -60,34 +65,34 @@ const usePreQrCode = (
   /**
    * 刷新二维码方法
    */
-  const referQrCode = useCallback(async () => {
-    dispatch({
-      type: 'changeStatus',
-      payload: {
-        status: 'loading',
-      },
-    })
-    const { data } = await genCodeRequest()
-    if (data) {
-      const { url, random } = data
-      dispatch({
-        type: 'change',
-        payload: {
-          src: url,
-          random,
-        },
-      })
-      return { ...data }
-    }
-  }, [genCodeRequest, dispatch])
+  // const referQrCode = useCallback(async () => {
+  //   dispatch({
+  //     type: 'changeStatus',
+  //     payload: {
+  //       status: 'loading',
+  //     },
+  //   })
+  //   // const { data } = await genCodeRequest()
+  //   // if (data) {
+  //   //   const { url, random } = data
+  //   //   dispatch({
+  //   //     type: 'change',
+  //   //     payload: {
+  //   //       src: url,
+  //   //       random,
+  //   //     },
+  //   //   })
+  //   //   return { ...data }
+  //   // }
+  // }, [genCodeRequest, dispatch])
 
-  useLayoutEffect(() => {
-    referQrCode()
-  }, [referQrCode])
+  // useLayoutEffect(() => {
+  //   referQrCode()
+  // }, [referQrCode])
 
   return {
     state,
-    referQrCode,
+    // referQrCode,
     dispatch,
   }
 }

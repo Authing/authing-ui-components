@@ -1,16 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { message } from 'antd'
-import { ShieldSpin } from '../../ShieldSpin'
-import { useGuardAuthClient } from '../../Guard/authClient'
-import { useGuardFinallyConfig, useGuardHttpClient } from '../../_utils/context'
-import { getGuardWindow } from '../../Guard/core/useAppendConfig'
+import React from 'react'
 import { QrCode } from '../../Qrcode'
+import { QrCodeResponse } from '../../Qrcode/hooks/usePostQrCode'
+import { CodeStatus } from '../../Qrcode/UiQrCode'
+import { useGuardHttpClient } from '../../_utils/context'
 
 interface LoginWithWechatMiniQrcodeProps {
   // onLogin: any
   onLoginSuccess: any
   canLoop: boolean
-  qrCodeScanOptions: any
+  // qrCodeScanOptions: any
 }
 
 export const LoginWithWechatMiniQrcode = (
@@ -18,70 +16,35 @@ export const LoginWithWechatMiniQrcode = (
 ) => {
   const { canLoop } = props
 
+  const { responseIntercept } = useGuardHttpClient()
+
   if (!canLoop) {
     return null
   }
 
-  // useEffect(() => {
-  //   const guardWindow = getGuardWindow()
-  //   if (!guardWindow) return
-
-  //   if (!!config._qrCodeScanOptions) return
-
-  //   const document = guardWindow.document
-
-  //   if (!props.canLoop) {
-  //     return () => clearInterval(timerRef.current)
-  //   }
-
-  //   setLoading(true)
-
-  //   appQrcodeClient.startScanning(domId, {
-  //     currentDocument: document,
-  //     autoExchangeUserInfo: true,
-  //     ...props.qrCodeScanOptions,
-  //     onCodeShow() {
-  //       setLoading(false)
-  //     },
-  //     onStart(timer) {
-  //       timerRef.current = timer
-  //     },
-  //     onSuccess(user) {
-  //       // props.onLogin(200, user)
-  //       clearInterval(timerRef.current)
-  //       props.onLoginSuccess(user)
-  //     },
-  //     onError: (ms) => {
-  //       if (ms) {
-  //         message.error(ms)
-  //       }
-  //     },
-  //     onCodeLoadFailed: ({ message: mes }: any) => {
-  //       message.error(JSON.parse(mes).message)
-  //       setLoading(false)
-  //     },
-  //     onRetry: () => {
-  //       setLoading(true)
-  //     },
-  //     onAuthFlow: (scannedResult) => {
-  //       clearInterval(timerRef.current)
-  //       const { onGuardHandling } = responseIntercept(scannedResult)
-  //       onGuardHandling?.()
-  //     },
-  //   })
-  //   return () => clearInterval(timerRef.current)
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [appQrcodeClient, props.canLoop])
-  const { qrCodeScanOptions } = props
-
-  const onStatusChange = () => {
-    //
+  const onStatusChange = (status: CodeStatus, data: QrCodeResponse) => {
+    switch (status) {
+      case 'success':
+        props.onLoginSuccess(data)
+        break
+      // 这里是 Error 的处理
+      case 'error':
+        if (data.scannedResult) {
+          // const { errmsg } = data.scannedResult
+          // message.error(errmsg)
+        }
+        break
+      case 'MFA':
+        const { onGuardHandling } = responseIntercept(data.scannedResult!)
+        onGuardHandling?.()
+        break
+      default:
+        break
+    }
   }
 
   return (
     <QrCode
-      genRequestParams={qrCodeScanOptions}
       scene="WXAPP_AUTH"
       descriptions={{
         error: '糟糕，发生错误了',

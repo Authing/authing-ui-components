@@ -1,34 +1,31 @@
-import React, { FC, useCallback } from 'react'
+import React, {
+  forwardRef,
+  ForwardRefRenderFunction,
+  useCallback,
+  useImperativeHandle,
+} from 'react'
 import { ShieldSpin } from '../ShieldSpin'
-import { useGuardHttpClient } from '../_utils/context'
+import { useGuardFinallyConfig, useGuardHttpClient } from '../_utils/context'
 import { usePreQrCode } from './hooks/usePreQrCode'
-import { QrCodeResponse, useQrCode } from './hooks/useQrCode'
+import { QrCodeResponse, useQrCode } from './hooks/usePostQrCode'
 import { CodeStatus, UiQrCode, UiQrProps } from './UiQrCode'
+import { CancelToken } from 'axios'
 
 /**
  * 二维码不同状态下的底部描述文字
  */
 export type CodeStatusDescriptions = Partial<
-  Record<Exclude<CodeStatus, 'loading'>, string>
+  Record<Exclude<CodeStatus, 'loading'>, UiQrProps['description']>
 >
 
-export type GenRequestParams = {
-  /**
-   * @description 请求上下文，将会传递到 Pipeline 中
-   */
-  context?: { [x: string]: any }
-  /**
-   *  是否获取用户自定义数据
-   */
-  customData?: { [x: string]: any }
-  /**
-   * 多租户用的额外的 Idp Id。
-   */
-  extIdpConnId?: string
-  /**
-   * @description 是否获取用户自定义数据
-   */
-  withCustomData?: boolean
+export interface WorkQrCodeRef {
+  referQrCode: () => Promise<
+    | {
+        random: string
+        url: string
+      }
+    | undefined
+  >
 }
 
 interface WorkQrCodeProps extends Omit<UiQrProps, 'description' | 'status'> {
@@ -37,29 +34,45 @@ interface WorkQrCodeProps extends Omit<UiQrProps, 'description' | 'status'> {
    */
   scene: 'WXAPP_AUTH' | 'APP_AUTH' | 'WECHATMP_AUTH'
   /**
-   * TODO: 生成二维码时需要携带的参数，从SDK抄的 我不清楚代表的含义
-   */
-  genRequestParams: GenRequestParams
-  /**
    * 不同状态请求文字
    */
   descriptions: CodeStatusDescriptions
   /**
+   * 睡眠时间 默认 1000
+   */
+  sleepTime?: number
+  /**
    * 每当状态变化时，触发的 callback 。
    */
   onStatusChange?: (status: CodeStatus, data: QrCodeResponse) => void
+  /**
+   * 不同状态下点击遮罩中间区域方法
+   */
+  onClickMaskContent?: (status: CodeStatus) => void
 }
 
-const WorkQrCode: FC<WorkQrCodeProps> = (props) => {
+//  FC<WorkQrCodeProps>
+
+const WorkQrCodeComponent: ForwardRefRenderFunction<any, WorkQrCodeProps> = (
+  props,
+  ref
+) => {
   const {
     scene,
     descriptions,
+    sleepTime = 1000,
     onStatusChange,
-    genRequestParams,
+    onClickMaskContent,
     ...rest
   } = props
 
-  const { context, customData, withCustomData, extIdpConnId } = genRequestParams
+  const { qrCodeScanOptions = {} } = useGuardFinallyConfig()
+  const {
+    context,
+    customData,
+    withCustomData,
+    extIdpConnId,
+  } = qrCodeScanOptions
 
   const { get, post } = useGuardHttpClient()
 
@@ -71,15 +84,27 @@ const WorkQrCode: FC<WorkQrCodeProps> = (props) => {
       post<{ random: string; url: string }>(`/api/v2/qrcode/gene`, {
         autoMergeQrCode: false,
         scene,
+        /**
+         * 请求上下文，将会传递到 Pipeline 中
+         */
         context,
+        /**
+         * 是否获取用户自定义数据
+         */
         params: customData,
+        /**
+         * 是否获取用户自定义数据
+         */
         withCustomData,
+        /**
+         * 多租户用的额外的 Idp Id。
+         */
         extIdpConnId,
       }),
     [scene, post, context, customData, extIdpConnId, withCustomData]
   )
 
-  const { state, dispatch, referQrCode } = usePreQrCode(genCodeRequest)
+  const { state, dispatch } = usePreQrCode()
 
   /**
    * 状态检查
@@ -89,26 +114,29 @@ const WorkQrCode: FC<WorkQrCodeProps> = (props) => {
     [state.random, get]
   )
 
+  /**
+   * 交换用户信息方法
+   */
   const exchangeUserInfo = useCallback(
     async (ticket: string) =>
       post(`/api/v2/qrcode/userinfo`, {
         ticket,
       }),
-    []
+    [post]
   )
 
   useQrCode(
     {
       state,
       dispatch,
-      sleepTime: 1000,
-      referQrCode,
+      sleepTime,
       descriptions,
       onStatusChange,
     },
     {
       readyCheckedRequest: checkedRequest,
       alreadyCheckedRequest: checkedRequest,
+      genCodeRequest,
       exchangeUserInfo,
     }
   )
@@ -125,13 +153,50 @@ const WorkQrCode: FC<WorkQrCodeProps> = (props) => {
     })
   }
 
+  const referQrCode = useCallback(() => {
+    dispatch({
+      type: 'changeStatus',
+      payload: {
+        status: 'loading',
+      },
+    })
+  }, [dispatch])
+
   /**
-   * 点击出现遮罩的中间内容区
+   * 内置的默认遮罩中间元素点击事件
+   */
+  const processDefaultMaskClick = (status: CodeStatus) => {
+    switch (status) {
+      case 'cancel':
+      case 'expired':
+        referQrCode()
+        break
+      default:
+        break
+    }
+  }
+
+  /**
+   * 点击出现遮罩的中间内容区 TODO: 不同状态等待处理
    * @param status
    */
-  const onClickMaskContent = (status: CodeStatus) => {
-    referQrCode()
+  const handlerMaskClick = (status: CodeStatus) => {
+    if (onClickMaskContent) {
+      onClickMaskContent(status)
+    } else {
+      processDefaultMaskClick(status)
+    }
   }
+
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        referQrCode,
+      }
+    },
+    [referQrCode]
+  )
 
   return (
     <UiQrCode
@@ -140,10 +205,12 @@ const WorkQrCode: FC<WorkQrCodeProps> = (props) => {
       status={state.status}
       loadingComponent={<ShieldSpin />}
       onLoad={onLoadQrcCode}
-      onMaskContent={onClickMaskContent}
+      onMaskContent={handlerMaskClick}
       {...rest}
     ></UiQrCode>
   )
 }
+
+const WorkQrCode = forwardRef(WorkQrCodeComponent)
 
 export { WorkQrCode }
