@@ -573,16 +573,17 @@ export const GuardLoginView = () => {
                             onLoginSuccess={onLoginSuccess}
                             canLoop={canLoop}
                             qrCodeScanOptions={{
-                              ...config?.qrCodeScanOptions,
-                              extIdpConnId: item.id,
-                              tips: {
-                                title:
-                                  i18n.language === 'zh-CN'
-                                    ? '使用 微信 扫码登录'
-                                    : `Use WeChat to scan and login`,
-                                expired: t('login.qrcodeExpired'),
-                              },
+                              context: config?.qrCodeScanOptions?.context,
+                              params: config?.qrCodeScanOptions?.customData,
+                              extIdpConnId:
+                                config.qrCodeScanOptions?.extIdpConnId,
+                              withCustomData:
+                                config.qrCodeScanOptions?.withCustomData,
                             }}
+                            // qrCodeScanOptions={{
+                            //   ...config?.qrCodeScanOptions,
+                            //   extIdpConnId: item.id,
+                            // }}
                           />
                         </Tabs.TabPane>
                       )

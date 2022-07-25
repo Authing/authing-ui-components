@@ -1,9 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { ShieldSpin } from '../../ShieldSpin'
-import { useGuardAuthClient } from '../../Guard/authClient'
+// import React, { useEffect, useRef, useState } from 'react'
+// import { ShieldSpin } from '../../ShieldSpin'
+// import { useGuardAuthClient } from '../../Guard/authClient'
+// import { message } from 'antd'
+// import { useGuardFinallyConfig, useGuardHttpClient } from '../../_utils/context'
+// import { getGuardWindow } from '../../Guard/core/useAppendConfig'
+import { QrCode } from '../../Qrcode'
+// import { QrCodeResponse, useQrCode } from '../hooks/useQrCode'
+// import { usePreQrCode } from '../hooks/usePreQrCode'
+import React from 'react'
+import { CodeStatus } from '../../Qrcode/UiQrCode'
+import { QrCodeResponse } from '../../Qrcode/hooks/useQrCode'
 import { message } from 'antd'
-import { useGuardFinallyConfig, useGuardHttpClient } from '../../_utils/context'
-import { getGuardWindow } from '../../Guard/core/useAppendConfig'
+import { useGuardHttpClient } from '../../_utils/context'
 
 interface LoginWithAppQrcodeProps {
   // onLogin: any
@@ -13,75 +21,52 @@ interface LoginWithAppQrcodeProps {
 }
 
 export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
-  const timerRef = useRef<any>()
-  const client = useGuardAuthClient()
-  const [loading, setLoading] = useState(true)
-  const appQrcodeClient = client.qrcode
+  const { qrCodeScanOptions, canLoop } = props
+
   const { responseIntercept } = useGuardHttpClient()
-  const config = useGuardFinallyConfig()
-  useEffect(() => {
-    const guardWindow = getGuardWindow()
 
-    if (!guardWindow) return
+  if (!canLoop) {
+    return null
+  }
 
-    if (!!config?._qrCodeScanOptions) return
-
-    const document = guardWindow.document
-
-    if (!props.canLoop) {
-      return () => clearInterval(timerRef.current)
-    }
-    setLoading(true)
-    appQrcodeClient.startScanning('authingGuardAppQrcode', {
-      currentDocument: document,
-      autoExchangeUserInfo: true,
-      ...props.qrCodeScanOptions,
-      onCodeShow() {
-        setLoading(false)
-      },
-      onStart(timer) {
-        timerRef.current = timer
-      },
-      onSuccess(user) {
-        // props.onLogin(200, user)
-        clearInterval(timerRef.current)
-        props.onLoginSuccess(user)
-      },
-      onError: (ms) => {
-        if (ms) {
-          message.error(ms)
+  /**
+   * Sever Status 发生变化
+   * @param status
+   * @param data
+   */
+  const onStatusChange = (status: CodeStatus, data: QrCodeResponse) => {
+    switch (status) {
+      case 'success':
+        console.log(data, '返回的用户信息')
+        props.onLoginSuccess(data)
+        break
+      case 'error':
+        if (data) {
+          message.error(data)
         }
-      },
-      onCodeLoadFailed: ({ message: mes }: any) => {
-        message.error(JSON.parse(mes).message)
-        setLoading(false)
-      },
-      onRetry: () => {
-        setLoading(true)
-      },
-      onAuthFlow: (scannedResult) => {
-        clearInterval(timerRef.current)
-        const { onGuardHandling } = responseIntercept(scannedResult)
+        break
+      case 'MFA':
+        const { onGuardHandling } = responseIntercept(data.scannedResult!)
         onGuardHandling?.()
-      },
-    })
-    return () => clearInterval(timerRef.current)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [appQrcodeClient, props.canLoop])
+        break
+      default:
+        break
+    }
+  }
 
   return (
-    <div className="authing-g2-login-app-qrcode">
-      {config._qrCodeScanOptions ? (
-        <div className="qrcode">
-          <img src={config._qrCodeScanOptions.appQrcode.qrcode} alt="" />
-          <span>{props.qrCodeScanOptions.tips.title}</span>
-        </div>
-      ) : (
-        <>
-          {loading && <ShieldSpin />}
-          <div id="authingGuardAppQrcode"></div>
-        </>
-      )}
-    </div>
+    <QrCode
+      genRequestParams={qrCodeScanOptions}
+      scene="APP_AUTH"
+      descriptions={{
+        error: '糟糕，发生错误了',
+        ready: '准备好了，扫码吧',
+        already: '请确认',
+        success: '成功!',
+        expired: '被取消了哦',
+        MFA: 'MFA 提示的文字',
+      }}
+      onStatusChange={onStatusChange}
+    />
   )
 }
