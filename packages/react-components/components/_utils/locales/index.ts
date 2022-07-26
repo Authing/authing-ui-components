@@ -3,7 +3,8 @@ import { initReactI18next } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 
 import * as enUsTrans from './en'
-import * as zhCnTrans from './zh'
+import * as zhCnTrans from './zh-cn'
+import * as zhTwTrans from './zh-tw'
 import { LocalesConfig, Lang } from '../../AuthingGuard/types'
 import { getGuardWindow } from '../../Guard/core/useAppendConfig'
 
@@ -42,6 +43,9 @@ const initI18n = (localesConfig: LocalesConfig = {}, lang?: string) => {
           },
           'zh-CN': {
             translation: zhCnTrans,
+          },
+          'zh-TW': {
+            translation: zhTwTrans,
           },
         },
         fallbackLng: lang ?? initLang,

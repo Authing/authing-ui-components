@@ -1,0 +1,16 @@
+{
+  "contactAdministrator": "未知的錯誤～ 請你聯繫管理員進行處理",
+  "error": "錯誤信息",
+  "inputCurrPwd": "請輸入當前密碼",
+  "inputNewPwd": "請輸入新密碼",
+  "inputOldPwd": "請輸入原登錄密碼",
+  "mfaBind": "MFA 綁定",
+  "modifyNoticePwdText": "你的密碼連續使用超過 {{number}} 個月，即將過期，為了不影響你的使用，請設置新密碼",
+  "modifyPwd": "修改密碼",
+  "modifyPwdText": "你的密碼連續使用超過 {{number}} 個月，可能存在風險。\n請重新設置密碼。",
+  "newPwd": "新密碼",
+  "nextStep": "下一步",
+  "numberSafteyCode": "數字安全碼",
+  "resetpasswordText1": "輸入你的註冊電話/郵箱，輸入收到的驗證碼，我們將為你進行密碼重置。",
+  "unlockTip": "若解鎖遇到問題，請點"
+}
