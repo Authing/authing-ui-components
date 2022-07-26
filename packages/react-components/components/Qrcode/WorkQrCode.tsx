@@ -9,7 +9,6 @@ import { useGuardFinallyConfig, useGuardHttpClient } from '../_utils/context'
 import { usePreQrCode } from './hooks/usePreQrCode'
 import { QrCodeResponse, useQrCode } from './hooks/usePostQrCode'
 import { CodeStatus, UiQrCode, UiQrProps } from './UiQrCode'
-import { CancelToken } from 'axios'
 
 /**
  * 二维码不同状态下的底部描述文字
@@ -50,8 +49,6 @@ interface WorkQrCodeProps extends Omit<UiQrProps, 'description' | 'status'> {
    */
   onClickMaskContent?: (status: CodeStatus) => void
 }
-
-//  FC<WorkQrCodeProps>
 
 const WorkQrCodeComponent: ForwardRefRenderFunction<any, WorkQrCodeProps> = (
   props,
@@ -107,7 +104,7 @@ const WorkQrCodeComponent: ForwardRefRenderFunction<any, WorkQrCodeProps> = (
   const { state, dispatch } = usePreQrCode()
 
   /**
-   * 状态检查
+   * 状态检查方法
    */
   const checkedRequest = useCallback(
     async () => get(`/api/v2/qrcode/check?random=${state.random}`),
@@ -153,6 +150,9 @@ const WorkQrCodeComponent: ForwardRefRenderFunction<any, WorkQrCodeProps> = (
     })
   }
 
+  /**
+   * 刷新二维码方法
+   */
   const referQrCode = useCallback(() => {
     dispatch({
       type: 'changeStatus',
@@ -163,12 +163,13 @@ const WorkQrCodeComponent: ForwardRefRenderFunction<any, WorkQrCodeProps> = (
   }, [dispatch])
 
   /**
-   * 内置的默认遮罩中间元素点击事件
+   * 内置的默认遮罩点击事件
    */
   const processDefaultMaskClick = (status: CodeStatus) => {
     switch (status) {
       case 'cancel':
       case 'expired':
+      case 'error':
         referQrCode()
         break
       default:
@@ -177,7 +178,7 @@ const WorkQrCodeComponent: ForwardRefRenderFunction<any, WorkQrCodeProps> = (
   }
 
   /**
-   * 点击出现遮罩的中间内容区 TODO: 不同状态等待处理
+   * 点击遮罩触发
    * @param status
    */
   const handlerMaskClick = (status: CodeStatus) => {
@@ -192,6 +193,7 @@ const WorkQrCodeComponent: ForwardRefRenderFunction<any, WorkQrCodeProps> = (
     ref,
     () => {
       return {
+        // 刷新二维码
         referQrCode,
       }
     },

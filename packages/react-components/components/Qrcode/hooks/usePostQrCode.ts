@@ -202,6 +202,26 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
   }
 
   /**
+   * Loading 状态的处理函数
+   */
+  const processLoading = async () => {
+    // 重新切换为 Loading 时，重新调用生成二维码的方式
+    if (genCodeRequest) {
+      const { data } = await genCodeRequest()
+      if (data) {
+        const { url, random } = data
+        dispatch({
+          type: 'change',
+          payload: {
+            src: url,
+            random,
+          },
+        })
+      }
+    }
+  }
+
+  /**
    * 响应状态未改变下的 Flow 处理
    * @param res
    */
@@ -274,7 +294,6 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
   ) => {
     try {
       // 状态切换时 请求还在请求中，所以状态切换完毕后
-      // 会继续根据状态进行处理
       const { data } = await request()
       if (data) {
         await processFlowByResponse(data)
@@ -284,31 +303,6 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
     } catch (e: any) {
       // TODO: 这里是请求直接发生错误的处理
       changeStatus('error')
-      changeDesc('糟糕，发生错误了。')
-      dispatch({
-        type: 'change',
-        payload: {
-          status: 'error',
-        },
-      })
-    }
-  }
-
-  // loading 状态表示重新刷新了二维码
-  const processLoading = async () => {
-    // 重新切换为 Loading 时，重新生成二维码
-    if (genCodeRequest) {
-      const { data } = await genCodeRequest()
-      if (data) {
-        const { url, random } = data
-        dispatch({
-          type: 'change',
-          payload: {
-            src: url,
-            random,
-          },
-        })
-      }
     }
   }
 

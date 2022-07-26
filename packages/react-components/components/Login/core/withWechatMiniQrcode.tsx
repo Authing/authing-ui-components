@@ -1,3 +1,4 @@
+import { message } from 'antd'
 import React from 'react'
 import { QrCode } from '../../Qrcode'
 import { QrCodeResponse } from '../../Qrcode/hooks/usePostQrCode'
@@ -22,6 +23,11 @@ export const LoginWithWechatMiniQrcode = (
     return null
   }
 
+  /**
+   * 状态发生变化时的处理函数
+   * @param status
+   * @param data
+   */
   const onStatusChange = (status: CodeStatus, data: QrCodeResponse) => {
     switch (status) {
       case 'success':
@@ -29,9 +35,10 @@ export const LoginWithWechatMiniQrcode = (
         break
       // 这里是 Error 的处理
       case 'error':
+        // 怎么模拟这里的 error
         if (data.scannedResult) {
-          // const { errmsg } = data.scannedResult
-          // message.error(errmsg)
+          const { message: msg } = data.scannedResult
+          message.error(msg)
         }
         break
       case 'MFA':
@@ -49,7 +56,6 @@ export const LoginWithWechatMiniQrcode = (
       descriptions={{
         error: '糟糕，发生错误了',
         ready: '准备好了，扫码吧',
-        already: '请确认',
         success: '成功!',
         expired: '被取消了哦',
         MFA: 'MFA 提示的文字',

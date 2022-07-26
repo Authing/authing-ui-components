@@ -55,7 +55,6 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
    * 点击刷新二维码
    */
   const onClickRefer = () => {
-    console.log(codeRef.current, '点击')
     if (codeRef.current) {
       codeRef.current.referQrCode()
     }
