@@ -384,10 +384,12 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
 
   const inputElement = useCallback(
     (metaData: CompleteInfoMetaData) => {
-      const label =
-        i18n.language === 'zh-CN'
-          ? metaData.label || metaData.name
-          : metaData.name
+      // const label =
+      //   i18n.language === 'zh-CN'
+      //     ? metaData.label || metaData.name
+      //     : metaData.name
+
+      const label = metaData.label || metaData.name
 
       // 这部分的控件分两种 一个集成控件（手机号 + 验证码）一种是基础控件 分开处理
       if (
