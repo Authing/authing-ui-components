@@ -569,13 +569,8 @@ export const GuardLoginView = () => {
                           tab={item.title ?? t('login.scanLogin')}
                         >
                           <LoginWithWechatMiniQrcode
-                            // onLogin={onLogin}
                             onLoginSuccess={onLoginSuccess}
                             canLoop={canLoop}
-                            // qrCodeScanOptions={{
-                            //   ...config?.qrCodeScanOptions,
-                            //   extIdpConnId: item.id,
-                            // }}
                           />
                         </Tabs.TabPane>
                       )
@@ -586,19 +581,8 @@ export const GuardLoginView = () => {
                       tab={t('login.appScanLogin')}
                     >
                       <LoginWithAppQrcode
-                        // onLogin={onLogin}
                         onLoginSuccess={onLoginSuccess}
                         canLoop={canLoop}
-                        // qrCodeScanOptions={{
-                        //   ...config?.qrCodeScanOptions,
-                        //   tips: {
-                        //     title:
-                        //       i18n.language === 'zh-CN'
-                        //         ? '使用 移动端 APP 扫码登录'
-                        //         : `Use Mobile APP to scan and login`,
-                        //     expired: t('login.qrcodeExpired'),
-                        //   },
-                        // }}
                       />
                     </Tabs.TabPane>
                   )}
@@ -610,28 +594,8 @@ export const GuardLoginView = () => {
                           tab={item.title ?? t('login.wechatmpQrcode')}
                         >
                           <LoginWithWechatmpQrcode
-                            // onLogin={onLogin}
                             onLoginSuccess={onLoginSuccess}
                             canLoop={canLoop}
-                            qrCodeScanOptions={{
-                              ...config?.qrCodeScanOptions,
-                              extIdpConnId: item.id,
-                              tips: {
-                                title:
-                                  i18n.language === 'zh-CN'
-                                    ? `${
-                                        isWeChatBrowser()
-                                          ? '长按二维码登录'
-                                          : '使用 微信 扫码登录'
-                                      }`
-                                    : `${
-                                        isWeChatBrowser()
-                                          ? 'Long press the QR code to log in'
-                                          : 'Use WeChat to scan and login'
-                                      } `,
-                                expired: t('login.qrcodeExpired'),
-                              },
-                            }}
                           />
                         </Tabs.TabPane>
                       )

@@ -15,7 +15,9 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    min-height: 288px;
+    min-height: 200px;
+    // BFC
+    margin-top: 16px;
     .@{namespace}__image-wrapper {
       position: relative;
     }
@@ -61,6 +63,10 @@
       align-items: center;
       transform: translate(-50%, -50%);
     }
+  }
+
+  &__desc {
+    height: 20px;
   }
 
   &__image-wrapper {

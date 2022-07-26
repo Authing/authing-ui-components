@@ -24,7 +24,7 @@ const useStatus = (status: CodeStatus) => {
       ready: null,
       already: (
         <>
-          <SuccessIcon style={{ width: '48px', height: '48px' }} />
+          <SuccessIcon style={{ width: '40px', height: '40px' }} />
           <span className={`${prefix}-inner__title--already`}>
             {t('login.scanSuccess')}
           </span>
@@ -32,7 +32,7 @@ const useStatus = (status: CodeStatus) => {
       ),
       cancel: (
         <>
-          <ReferIcon style={{ width: '48px', height: '48px' }} />
+          <ReferIcon style={{ width: '40px', height: '40px' }} />
           <span className={`${prefix}-inner__title--refer`}>
             {t('login.qrcodeRefer')}
           </span>
@@ -40,7 +40,7 @@ const useStatus = (status: CodeStatus) => {
       ),
       expired: (
         <>
-          <ReferIcon style={{ width: '48px', height: '48px' }} />
+          <ReferIcon style={{ width: '40px', height: '40px' }} />
           <span className={`${prefix}-inner__title--refer`}>
             {t('login.qrcodeRefer')}
           </span>
@@ -48,7 +48,7 @@ const useStatus = (status: CodeStatus) => {
       ),
       error: (
         <>
-          <ReferIcon style={{ width: '48px', height: '48px' }} />
+          <ReferIcon style={{ width: '40px', height: '40px' }} />
           <span className={`${prefix}-inner__title--refer`}>
             {t('login.qrcodeNetWorkError')}
           </span>

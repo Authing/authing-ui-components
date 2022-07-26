@@ -54,22 +54,15 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
     }
   }
 
-  /**
-   * 点击刷新二维码
-   */
-  const onClickRefer = () => {
-    if (codeRef.current) {
-      codeRef.current.referQrCode()
-    }
-  }
-
   return (
     <QrCode
       ref={codeRef}
       scene="APP_AUTH"
       descriptions={{
         already: (referQrCode) => (
-          <span onClick={referQrCode}>{t('login.appScanLogin')}</span>
+          <span className="qrcode__again-scan" onClick={referQrCode}>
+            {t('login.scanAgain')}
+          </span>
         ),
         ready: t('login.appScanLogin'),
         success: t('common.LoginSuccess'),
@@ -77,8 +70,8 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
       }}
       onStatusChange={onStatusChange}
       imageStyle={{
-        height: '200px',
-        width: '200px',
+        height: '172px',
+        width: '172px',
       }}
     />
   )

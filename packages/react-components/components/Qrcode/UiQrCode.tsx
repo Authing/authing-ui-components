@@ -109,7 +109,6 @@ const QrCode: React.FC<UiQrProps> = (props) => {
                 })}
               </div>
             )}
-            {/* 这里的点击看看是要如何处理点击 */}
             <img
               className={`${prefix}__image`}
               src={baseUrl}
@@ -118,12 +117,7 @@ const QrCode: React.FC<UiQrProps> = (props) => {
             />
           </span>
           {/* 统一的处理模板 */}
-          {descriptions[status]}
-          {/* {typeof description === 'string' ? (
-            <div className={`${prefix}__desc`}>{description}</div>
-          ) : description ? (
-            description
-          ) : null} */}
+          <div className={`${prefix}__desc`}>{descriptions[status]}</div>
         </>
       )}
     </div>

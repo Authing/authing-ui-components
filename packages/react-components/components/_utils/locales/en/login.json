@@ -53,6 +53,7 @@
   "verifyCodeLogin": "Phone",
   "appScanLogin": "Mobile APP QR Code",
   "scanLogin": "QR Code",
+  "scanAgain": "Again scan",
   "scanSuccess": "Success",
   "wechatScanLogin": "WeChat QR Code",
   "ldapLogin": "LDAP",

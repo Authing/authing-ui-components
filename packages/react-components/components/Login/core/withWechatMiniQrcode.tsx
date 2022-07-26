@@ -64,8 +64,8 @@ export const LoginWithWechatMiniQrcode = (
       descriptions={descriptions}
       onStatusChange={onStatusChange}
       imageStyle={{
-        height: '200px',
-        width: '200px',
+        height: '172px',
+        width: '172px',
       }}
     />
   )
