@@ -534,7 +534,7 @@ class MultipleAccount {
         case 'password':
           return { account: username!, way: 'password' }
         case 'ad':
-          return { account: email!, way: 'ad' }
+          return { account: name!, way: 'ad' }
         case 'ldap':
           return { account: name!, way: 'ldap' }
         default:
