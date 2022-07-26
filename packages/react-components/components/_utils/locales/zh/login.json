@@ -53,6 +53,8 @@
   "verifyCodeLogin": "手机号登录",
   "appScanLogin": "移动端 APP 扫码登录",
   "scanLogin": "扫码登录",
+  "wechatScanLogin": "请使用微信扫描二维码",
+  "scanSuccess": "扫描成功",
   "ldapLogin": "LDAP 登录",
   "adLogin": "AD 登录",
   "emailRegister": "邮箱注册",
@@ -103,7 +105,10 @@
   "requireError": "无法满足要求错误",
   "hardwareSupport": "硬件不支持",
   "qrcodeExpired": "点击刷新",
+  "qrcodeNetWorkError": "网络异常 点击重试",
+  "qrcodeRefer": "刷新",
   "noLoginMethodsDesc": "未配置登录方式",
   "socialConnectionMessage": "不支持使用{{provider}}登录,请选择其他方式登录，或在其它浏览器中重试",
   "inputNewPwd": "请输入新密码"
+
 }

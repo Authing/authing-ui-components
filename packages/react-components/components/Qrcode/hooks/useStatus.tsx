@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ReactComponent as SuccessIcon } from '../assets/checkbox-circle-fill.svg'
+import { ReactComponent as ReferIcon } from '../assets/refer-qr-code.svg'
 import { CodeStatus, prefix } from '../UiQrCode'
 
 /**
@@ -9,22 +11,54 @@ import { CodeStatus, prefix } from '../UiQrCode'
 const useStatus = (status: CodeStatus) => {
   const classes = `${prefix}-qrcode--${status}`
 
+  const { t } = useTranslation()
+
   /**
    * 不同状态的中间组件
+   * TODO: 应该外部传入 具体看后续需求吧，如果有非统一状态外部覆盖
+   * 否则保持内部统一模板无需改动
    */
   const componentMapping = useMemo(() => {
     const mapping: Record<CodeStatus, React.ReactNode> = {
       loading: null,
       ready: null,
-      already: <SuccessIcon />,
-      cancel: <span>用户取消了登录</span>,
-      expired: <span>糟糕，过期了</span>,
-      error: <span>扫码失败</span>,
-      success: <span>扫码成功</span>,
-      MFA: <span>扫码成功</span>,
+      already: (
+        <>
+          <SuccessIcon style={{ width: '48px', height: '48px' }} />
+          <span className={`${prefix}-inner__title--already`}>
+            {t('login.scanSuccess')}
+          </span>
+        </>
+      ),
+      cancel: (
+        <>
+          <ReferIcon style={{ width: '48px', height: '48px' }} />
+          <span className={`${prefix}-inner__title--refer`}>
+            {t('login.qrcodeRefer')}
+          </span>
+        </>
+      ),
+      expired: (
+        <>
+          <ReferIcon style={{ width: '48px', height: '48px' }} />
+          <span className={`${prefix}-inner__title--refer`}>
+            {t('login.qrcodeRefer')}
+          </span>
+        </>
+      ),
+      error: (
+        <>
+          <ReferIcon style={{ width: '48px', height: '48px' }} />
+          <span className={`${prefix}-inner__title--refer`}>
+            {t('login.qrcodeNetWorkError')}
+          </span>
+        </>
+      ),
+      success: null,
+      MFA: null,
     }
     return mapping[status]
-  }, [status])
+  }, [status, t])
 
   return [classes, componentMapping]
 }

@@ -53,6 +53,8 @@
   "verifyCodeLogin": "Phone",
   "appScanLogin": "Mobile APP QR Code",
   "scanLogin": "QR Code",
+  "scanSuccess": "Success",
+  "wechatScanLogin": "WeChat QR Code",
   "ldapLogin": "LDAP",
   "adLogin": "AD",
   "emailRegister": "Email",
@@ -103,6 +105,8 @@
   "hardwareSupport": "Hardware does not support",
   "checkPreferences": "Please check preferences",
   "qrcodeExpired": "Click to refresh",
+  "qrcodeRefer": "Refresh",
+  "qrcodeNetWorkError": "Error Click To Refresh",
   "noLoginMethodsDesc": "No login method configured",
   "inputNewPwd": "Please enter a new password",
   "socialConnectionMessage": "Login with {{provider}} is not supported, please choose another way to log in, or try again in another browser"

@@ -5,6 +5,7 @@ import { QrCodeResponse } from '../../Qrcode/hooks/usePostQrCode'
 import { message } from 'antd'
 import { useGuardHttpClient } from '../../_utils/context'
 import { WorkQrCodeRef } from '../../Qrcode/WorkQrCode'
+import { useTranslation } from 'react-i18next'
 
 interface LoginWithAppQrcodeProps {
   // onLogin: any
@@ -19,6 +20,8 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
   const { canLoop } = props
 
   const { responseIntercept } = useGuardHttpClient()
+
+  const { t } = useTranslation()
 
   if (!canLoop) {
     return null
@@ -65,19 +68,18 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
       ref={codeRef}
       scene="APP_AUTH"
       descriptions={{
-        error: '糟糕，发生错误了',
-        ready: '扫码吧小伙子',
-        already: (
-          <>
-            <span>准备好了，扫码吧</span>
-            <a onClick={onClickRefer}>重新扫码</a>
-          </>
+        already: (referQrCode) => (
+          <span onClick={referQrCode}>{t('login.appScanLogin')}</span>
         ),
-        success: '成功!',
-        expired: '被取消了哦',
-        MFA: 'MFA 提示的文字',
+        ready: t('login.appScanLogin'),
+        success: t('common.LoginSuccess'),
+        MFA: t('common.LoginSuccess'),
       }}
       onStatusChange={onStatusChange}
+      imageStyle={{
+        height: '200px',
+        width: '200px',
+      }}
     />
   )
 }

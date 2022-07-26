@@ -1,5 +1,4 @@
-import { useCallback, useLayoutEffect, useReducer } from 'react'
-import { AuthingGuardResponse } from '../../_utils/http'
+import { useReducer } from 'react'
 import { CodeStatus } from '../UiQrCode'
 
 export type ReducerType = 'change' | 'changeStatus' | 'changeDesc'
@@ -12,7 +11,7 @@ export type RootState = {
   /**
    * 底部描述
    */
-  description: React.ReactNode
+  // description: React.ReactNode
   /**
    * 当前二维码 URL
    */
@@ -36,11 +35,11 @@ const reducer = (
         return state
       }
       return { ...state, ...action.payload }
-    case 'changeDesc':
-      if (state.description === action.payload.description) {
-        return state
-      }
-      return { ...state, ...action.payload }
+    // case 'changeDesc':
+    //   if (state.description === action.payload.description) {
+    //     return state
+    //   }
+    //   return { ...state, ...action.payload }
     case 'change':
       return { ...state, ...action.payload }
     default:
@@ -57,42 +56,13 @@ const usePreQrCode = () => {
    */
   const [state, dispatch] = useReducer(reducer, {
     status: 'loading',
-    description: '',
+    // description: '',
     src: undefined,
     random: undefined,
   })
 
-  /**
-   * 刷新二维码方法
-   */
-  // const referQrCode = useCallback(async () => {
-  //   dispatch({
-  //     type: 'changeStatus',
-  //     payload: {
-  //       status: 'loading',
-  //     },
-  //   })
-  //   // const { data } = await genCodeRequest()
-  //   // if (data) {
-  //   //   const { url, random } = data
-  //   //   dispatch({
-  //   //     type: 'change',
-  //   //     payload: {
-  //   //       src: url,
-  //   //       random,
-  //   //     },
-  //   //   })
-  //   //   return { ...data }
-  //   // }
-  // }, [genCodeRequest, dispatch])
-
-  // useLayoutEffect(() => {
-  //   referQrCode()
-  // }, [referQrCode])
-
   return {
     state,
-    // referQrCode,
     dispatch,
   }
 }

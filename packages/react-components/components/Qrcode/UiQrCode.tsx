@@ -1,12 +1,12 @@
-import React, { ReactElement, useCallback, useMemo } from 'react'
+import React, { ReactElement, useMemo } from 'react'
 import className from 'classnames'
 import './index.less'
 import { useImage } from './hooks/useImage'
 import { useStatus } from './hooks/useStatus'
 import { ShieldSpin } from '../ShieldSpin'
+import { CodeStatusDescriptions } from './WorkQrCode'
 
-// 配合一些额外的状态吧
-// 得多增加一些状态 TODO: 错误分为 1.已过期 2. 未知错误 3. 取消扫码 5. 未知错误
+// 目前 UI 支持的状态（满载）
 export type CodeStatus =
   | 'loading'
   | 'ready'
@@ -39,7 +39,7 @@ export interface UiQrProps {
   /**
    * 二维码底部内容
    */
-  description: React.ReactNode
+  descriptions: CodeStatusDescriptions
   /**
    * 外层 container 样式
    */
@@ -69,7 +69,7 @@ const QrCode: React.FC<UiQrProps> = (props) => {
     status,
     loadingComponent,
     src,
-    description,
+    descriptions,
     containerStyle,
     imageStyle,
     onLoad,
@@ -117,11 +117,13 @@ const QrCode: React.FC<UiQrProps> = (props) => {
               style={imageStyle}
             />
           </span>
-          {typeof description === 'string' ? (
+          {/* 统一的处理模板 */}
+          {descriptions[status]}
+          {/* {typeof description === 'string' ? (
             <div className={`${prefix}__desc`}>{description}</div>
           ) : description ? (
             description
-          ) : null}
+          ) : null} */}
         </>
       )}
     </div>

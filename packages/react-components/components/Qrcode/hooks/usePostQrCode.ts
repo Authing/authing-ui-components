@@ -106,9 +106,6 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
   // 根据响应
   const processReady = async () => {
     if (state.status === 'ready' && readyCheckedRequest) {
-      // 修改描述
-      changeDesc(descriptions.ready)
-      // 沉睡
       sleepTime && (await sleep(sleepTime))
       // 再次发起请求
       uniteRequestHandler(readyCheckedRequest)
@@ -118,40 +115,37 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
   // already 待确认状态的请求方法
   const processAReady = async () => {
     if (state.status === 'already' && alreadyCheckedRequest) {
-      console.log(state.status, 'already 状态下的状态')
-      // 修改描述
-      changeDesc(descriptions.already)
-      // 沉睡
       sleepTime && (await sleep(sleepTime))
       uniteRequestHandler(alreadyCheckedRequest)
     }
   }
 
+  // TODO: 方法留着，以后业务扩充。当状态改变时，内部需要处理的状态
   // success 下的处理
   const processSuccess = () => {
     if (state.status === 'success') {
-      changeDesc(descriptions.success)
+      // changeDesc(descriptions.success)
     }
   }
 
   // 处理过期
   const processExpired = () => {
     if (state.status === 'expired') {
-      changeDesc(descriptions.expired)
+      // changeDesc(descriptions.expired)
     }
   }
 
   // 处理用户取消确认
   const processCancel = () => {
     if (state.status === 'cancel') {
-      changeDesc(descriptions.cancel)
+      // changeDesc(descriptions.cancel)
     }
   }
 
   // 处理 MFA 状态的函数
   const processMFA = () => {
     if (state.status === 'MFA') {
-      changeDesc(descriptions.MFA)
+      // changeDesc(descriptions.MFA)
     }
   }
 
@@ -159,7 +153,7 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
   const processError = () => {
     // 修改 status 同时修改
     if (state.status === 'error') {
-      changeDesc(descriptions.error)
+      // changeDesc(descriptions.error)
     }
   }
 
@@ -277,14 +271,13 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
    * @param description
    * @returns
    */
-  const changeDesc = (description?: ReactNode) =>
-    description &&
-    dispatch({
-      type: 'changeDesc',
-      payload: {
-        description,
-      },
-    })
+  // const changeDesc = (description?: ReactNode) =>
+  //   dispatch({
+  //     type: 'changeDesc',
+  //     payload: {
+  //       description,
+  //     },
+  //   })
 
   /**
    * 共用的统一的请求处理
@@ -301,7 +294,6 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
         throw new Error(`返回数据不匹配`)
       }
     } catch (e: any) {
-      // TODO: 这里是请求直接发生错误的处理
       changeStatus('error')
     }
   }

@@ -3,6 +3,7 @@ import React, {
   ForwardRefRenderFunction,
   useCallback,
   useImperativeHandle,
+  useMemo,
 } from 'react'
 import { ShieldSpin } from '../ShieldSpin'
 import { useGuardFinallyConfig, useGuardHttpClient } from '../_utils/context'
@@ -14,7 +15,10 @@ import { CodeStatus, UiQrCode, UiQrProps } from './UiQrCode'
  * 二维码不同状态下的底部描述文字
  */
 export type CodeStatusDescriptions = Partial<
-  Record<Exclude<CodeStatus, 'loading'>, UiQrProps['description']>
+  Record<
+    Exclude<CodeStatus, 'loading'>,
+    React.ReactNode | ((referQrCode?: () => void) => React.ReactNode)
+  >
 >
 
 export interface WorkQrCodeRef {
@@ -193,17 +197,34 @@ const WorkQrCodeComponent: ForwardRefRenderFunction<any, WorkQrCodeProps> = (
     ref,
     () => {
       return {
-        // 刷新二维码
         referQrCode,
       }
     },
     [referQrCode]
   )
 
+  /**
+   * 渲染时进行格式化描述
+   */
+  const formatterDescriptions = useMemo(() => {
+    let formatDescriptions: CodeStatusDescriptions = {}
+    descriptions &&
+      Object.keys(descriptions).forEach((key) => {
+        const parseKey = key as keyof CodeStatusDescriptions
+        const value = descriptions[parseKey]
+        if (typeof value === 'function') {
+          formatDescriptions[parseKey] = value(referQrCode)
+        } else {
+          formatDescriptions[parseKey] = value
+        }
+      })
+    return formatDescriptions
+  }, [descriptions, referQrCode])
+
   return (
     <UiQrCode
       src={state.src}
-      description={state.description}
+      descriptions={formatterDescriptions}
       status={state.status}
       loadingComponent={<ShieldSpin />}
       onLoad={onLoadQrcCode}
@@ -214,5 +235,4 @@ const WorkQrCodeComponent: ForwardRefRenderFunction<any, WorkQrCodeProps> = (
 }
 
 const WorkQrCode = forwardRef(WorkQrCodeComponent)
-
 export { WorkQrCode }

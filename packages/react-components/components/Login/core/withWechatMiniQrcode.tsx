@@ -1,5 +1,6 @@
 import { message } from 'antd'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { QrCode } from '../../Qrcode'
 import { QrCodeResponse } from '../../Qrcode/hooks/usePostQrCode'
 import { CodeStatus } from '../../Qrcode/UiQrCode'
@@ -17,10 +18,18 @@ export const LoginWithWechatMiniQrcode = (
 ) => {
   const { canLoop } = props
 
+  const { t } = useTranslation()
+
   const { responseIntercept } = useGuardHttpClient()
 
   if (!canLoop) {
     return null
+  }
+
+  const descriptions = {
+    ready: t('login.wechatScanLogin'),
+    success: t('common.LoginSuccess'),
+    MFA: t('common.LoginSuccess'),
   }
 
   /**
@@ -33,7 +42,6 @@ export const LoginWithWechatMiniQrcode = (
       case 'success':
         props.onLoginSuccess(data)
         break
-      // 这里是 Error 的处理
       case 'error':
         // 怎么模拟这里的 error
         if (data.scannedResult) {
@@ -53,13 +61,7 @@ export const LoginWithWechatMiniQrcode = (
   return (
     <QrCode
       scene="WXAPP_AUTH"
-      descriptions={{
-        error: '糟糕，发生错误了',
-        ready: '准备好了，扫码吧',
-        success: '成功!',
-        expired: '被取消了哦',
-        MFA: 'MFA 提示的文字',
-      }}
+      descriptions={descriptions}
       onStatusChange={onStatusChange}
       imageStyle={{
         height: '200px',
