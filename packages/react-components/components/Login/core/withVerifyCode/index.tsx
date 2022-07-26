@@ -12,6 +12,7 @@ import { Agreements } from '../../../Register/components/Agreements'
 import { SceneType } from 'authing-js-sdk'
 import { SendCodeByPhone } from '../../../SendCode/SendCodeByPhone'
 import {
+  useGuardFinallyConfig,
   useGuardHttpClient,
   useGuardInitData,
   useGuardPublicConfig,
@@ -28,7 +29,10 @@ import { GuardLoginInitData } from '../../interface'
 import { LoginMethods } from '../../../AuthingGuard/types'
 
 export const LoginWithVerifyCode = (props: any) => {
-  const config = useGuardPublicConfig()
+  const publicConfig = useGuardPublicConfig()
+
+  const config = useGuardFinallyConfig()
+
   const {
     _firstItemInitialValue = '',
     specifyDefaultLoginMethod,
@@ -44,14 +48,15 @@ export const LoginWithVerifyCode = (props: any) => {
     saveIdentify,
   } = props
 
-  const verifyCodeLength = config?.verifyCodeLength ?? 4
+  const verifyCodeLength = publicConfig?.verifyCodeLength ?? 4
 
   const { post } = useGuardHttpClient()
 
   const { isPhoneMedia } = useMediaSize()
 
   // 是否开启了国际化短信功能
-  const isInternationSms = config?.internationalSmsConfig?.enabled || false
+  const isInternationSms =
+    publicConfig?.internationalSmsConfig?.enabled || false
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
 
@@ -66,7 +71,7 @@ export const LoginWithVerifyCode = (props: any) => {
   const [isOnlyInternationSms, setInternationSms] = useState(false)
   // 区号 默认
   const [areaCode, setAreaCode] = useState(
-    config?.internationalSmsConfig?.defaultISOType || 'CN'
+    publicConfig?.internationalSmsConfig?.defaultISOType || 'CN'
   )
 
   let [form] = Form.useForm()
@@ -179,23 +184,25 @@ export const LoginWithVerifyCode = (props: any) => {
     if (
       methods.length === 1 &&
       methods[0] === 'phone-code' &&
-      config &&
-      config.internationalSmsConfig?.enabled
+      publicConfig &&
+      publicConfig.internationalSmsConfig?.enabled
     ) {
       setInternationSms(true)
     }
-  }, [config, methods])
+  }, [publicConfig, methods])
 
   const loginByPhoneCode = async (values: any) => {
     const reqContent: any = {
       phone: values.phoneNumber,
       code: values.code,
-      customData: getUserRegisterParams(),
+      customData: config?.isHost
+        ? getUserRegisterParams(['login_page_context'])
+        : undefined,
       autoRegister: autoRegister,
-      withCustomData: true,
+      withCustomData: false,
     }
 
-    if (config && config.internationalSmsConfig?.enabled)
+    if (publicConfig && publicConfig.internationalSmsConfig?.enabled)
       reqContent.phoneCountryCode = values.phoneCountryCode
 
     const { code, data, onGuardHandling } = await post(
@@ -219,9 +226,11 @@ export const LoginWithVerifyCode = (props: any) => {
     const reqContent = {
       email: values.identify,
       code: values.code,
-      customData: getUserRegisterParams(),
+      customData: config?.isHost
+        ? getUserRegisterParams(['login_page_context'])
+        : undefined,
       autoRegister: autoRegister,
-      withCustomData: true,
+      withCustomData: false,
     }
     const { code, data, onGuardHandling } = await post(
       '/api/v2/login/email-code',
