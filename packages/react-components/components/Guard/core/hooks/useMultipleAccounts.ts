@@ -8,7 +8,7 @@ const MULTIPLE_ACCOUNT_KEY = '__authing__multiple_accounts'
 
 // 多账号计算 way 方式
 const MULTIPLE_ACCOUNT_LISTS: LoginWay[] = [
-  'email', 'phone', 'password', 'phone-code', 'email-code', 'ad', 'ldap'
+  'email', 'phone', 'password', 'phone-code', 'email-code', 'ad', 'ldap', 'ldap-password', 'ldap-email', 'ldap-phone'
 ]
 
 // 扫码登录方式
@@ -21,6 +21,7 @@ const EXCLUDE_CODE_WAY: LoginWay[] = QR_CODE_WAY.concat('social')
 
 /**
  * 登录时所有支持的登录列表(前端定义列表)
+ * 这里稍微有点乱 因为Login中的登录方式和这里的不匹配，暂时放在了一起
  */
 export type LoginWay =
   | 'email' // 邮箱密码登录
@@ -34,6 +35,9 @@ export type LoginWay =
   | 'app-qrcode' // App 扫码登录方式
   | 'ad' // AD 登录方式
   | 'ldap' // LDAP 登录方式
+  | 'ldap-password'
+  | 'ldap-email'
+  | 'ldap-phone'
 
 
 /**
@@ -283,6 +287,7 @@ class MultipleAccount {
         account: '',
         way: user.way
       } : this.getAccountByWay(user.way, user)
+
       return {
         ...data,
         tab: user.tab,
@@ -303,6 +308,9 @@ class MultipleAccount {
     const mapping: Record<
       Exclude<LoginWay, 'social'>, string> = {
       'ldap': 'ldap',
+      'ldap-password': 'ldap',
+      'ldap-phone': 'ldap',
+      'ldap-email': 'ldap',
       'ad': "ad",
       'email': 'email-password',
       'password': 'username-password',
@@ -387,8 +395,6 @@ class MultipleAccount {
       this.phoneCountryCode = phoneCountryCode
       this.areaCode = areaCode
     }
-
-
   }
 
   /**
@@ -451,6 +457,32 @@ class MultipleAccount {
         return this.setLoginWay('input', 'phone')
       case email:
         return this.setLoginWay('input', 'email')
+    }
+  }
+
+  /**
+ * 根据登录的 account 判断本次LDAP登录方式
+ * @param account 登录输入的账号
+ * @param param1 登录成功返回的相关信息 用户名/手机号/邮箱
+ * @returns
+ */
+  private setLoginWayByLDAPData = (
+    account: string,
+    data: {
+      name?: string
+      phone?: string
+      email?: string
+    }
+  ) => {
+    this.originAccount = account;
+    const { name, phone, email } = data
+    switch (account) {
+      case name:
+        return this.setLoginWay('input', 'ldap-password')
+      case phone:
+        return this.setLoginWay('input', 'ldap-phone')
+      case email:
+        return this.setLoginWay('input', 'ldap-email')
     }
   }
 
@@ -533,7 +565,6 @@ class MultipleAccount {
         case 'email-code':
           return { account: email!, way: 'phone-code' }
         case 'phone-code':
-          // TODO: 需要额外处理国际化短信回填
           return { account: phone!, way: 'phone-code' }
         case 'phone':
           return { account: phone!, way: 'password' }
@@ -541,8 +572,12 @@ class MultipleAccount {
           return { account: username!, way: 'password' }
         case 'ad':
           return { account: name!, way: 'ad' }
-        case 'ldap':
+        case 'ldap-password':
           return { account: name!, way: 'ldap' }
+        case 'ldap-email':
+          return { account: email!, way: 'ldap' }
+        case 'ldap-phone':
+          return { account: phone!, way: 'ldap' }
         default:
           throw new Error(`已登录用户匹配不到的登录方式`)
       }
@@ -579,6 +614,7 @@ class MultipleAccount {
       setUserInfo: this.setUserInfo,
       // TODO: 脏逻辑
       setLoginWayByHttpData: this.setLoginWayByHttpData,
+      setLoginWayByLDAPData: this.setLoginWayByLDAPData,
       // 获得当前 AppId 下对应的数据
       getMemoUser: this.getMemoUser,
       // 获得当前 userId 下的对应单个用户信息

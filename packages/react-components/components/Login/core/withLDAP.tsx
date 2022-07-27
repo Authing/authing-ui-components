@@ -112,7 +112,9 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
 
       submitButtonRef.current.onSpin(false)
       // 更新本次登录方式
-      data && multipleInstance && multipleInstance.setLoginWay('input', 'ldap')
+      data &&
+        multipleInstance &&
+        multipleInstance.setLoginWayByLDAPData(username, data)
 
       if (code === 200) {
         onLoginSuccess(data)
