@@ -17,7 +17,11 @@ import { Agreements } from '../../../Register/components/Agreements'
 import { AuthingGuardResponse, AuthingResponse } from '../../../_utils/http'
 import { CodeAction } from '../../../_utils/responseManagement/interface'
 import { useMediaSize } from '../../../_utils/hooks'
-import { useGuardInitData, useGuardPublicConfig } from '../../../_utils/context'
+import {
+  useGuardFinallyConfig,
+  useGuardInitData,
+  useGuardPublicConfig,
+} from '../../../_utils/context'
 import { GuardLoginInitData } from '../../interface'
 import {
   BackFillMultipleState,
@@ -88,6 +92,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   let client = useGuardAuthClient()
 
   const publicConfig = useGuardPublicConfig()
+  const config = useGuardFinallyConfig()
 
   let submitButtonRef = useRef<any>(null)
 
@@ -124,15 +129,23 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         account: account,
         password: await encrypt!(password, props.publicKey),
         captchaCode,
-        customData: getUserRegisterParams(),
+        customData: config?.isHost
+          ? getUserRegisterParams(['login_page_context'])
+          : undefined,
         autoRegister: props.autoRegister,
-        withCustomData: true,
+        withCustomData: false,
       }
       const res = await post(url, body)
 
       return res
     },
-    [encrypt, post, props, publicConfig.mergeAdAndAccountPasswordLogin]
+    [
+      config?.isHost,
+      encrypt,
+      post,
+      props,
+      publicConfig?.mergeAdAndAccountPasswordLogin,
+    ]
   )
 
   const onFinish = async (values: any) => {
@@ -142,6 +155,9 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
       return
     }
     setRemainCount(0)
+
+    setAccountLock(false)
+
     // onBeforeLogin
     submitButtonRef?.current?.onSpin(true)
     let loginInfo = {

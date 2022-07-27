@@ -1,13 +1,13 @@
 {
   "name": "@authing/ng-ui-components",
-  "version": "3.1.25",
+  "version": "3.1.31",
   "main": "src/public-api.ts",
   "peerDependencies": {
     "@angular/common": ">=10.2.0",
     "@angular/core": ">=10.2.0"
   },
   "dependencies": {
-    "@authing/native-js-ui-components": "^3.1.25",
+    "@authing/native-js-ui-components": "^3.1.31",
     "tslib": "^2.0.0"
   },
   "publishConfig": {

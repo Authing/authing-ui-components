@@ -12,7 +12,10 @@ export interface ValidatorFormItemProps extends FormItemProps {
   checkRepeat?: boolean
   checkExist?: boolean
   areaCode?: string //国际化区号
-  isCheckI18nSms?: boolean // 是否开启国际化手机号校验
+  /**
+   * 控制内部FormItem组件关于pattern的校验规则
+   */
+  isCheckPattern?: boolean
 }
 
 export interface ValidatorFormItemMetaProps extends ValidatorFormItemProps {

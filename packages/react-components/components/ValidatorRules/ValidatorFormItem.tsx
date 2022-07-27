@@ -17,7 +17,7 @@ const ValidatorFormItem: React.FC<ValidatorFormItemMetaProps> = (props) => {
     name,
     required,
     areaCode, //国际化区号
-    isCheckI18nSms = true,
+    isCheckPattern = true,
     ...formItemProps
   } = props
   const publicConfig = useGuardPublicConfig()
@@ -28,9 +28,9 @@ const ValidatorFormItem: React.FC<ValidatorFormItemMetaProps> = (props) => {
     return (
       publicConfig.internationalSmsConfig?.enabled &&
       method === 'phone' &&
-      isCheckI18nSms
+      isCheckPattern
     )
-  }, [isCheckI18nSms, method, publicConfig.internationalSmsConfig?.enabled])
+  }, [isCheckPattern, method, publicConfig.internationalSmsConfig?.enabled])
 
   const methodContent = useMemo(() => {
     if (method === 'email')
@@ -55,9 +55,12 @@ const ValidatorFormItem: React.FC<ValidatorFormItemMetaProps> = (props) => {
         checkRepeatErrorMessage: t('common.checkPhone'),
         checkExistErrorMessage: t('common.noFindPhone'),
         formatErrorMessage: t('common.phoneFormateError'),
-        pattern: VALIDATE_PATTERN.phone,
+        pattern:
+          !isCheckPattern && publicConfig.internationalSmsConfig?.enabled
+            ? /^[0-9]*$/
+            : VALIDATE_PATTERN.phone, //开启国际化短信，但不限制pattern eg：单手机号密码登录方式时🤢
       }
-  }, [method, t])
+  }, [isCheckPattern, method, publicConfig.internationalSmsConfig?.enabled, t])
 
   const checkRepeatRet = (
     value: any,

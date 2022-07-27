@@ -8,6 +8,7 @@ import {
   BackFillMultipleState,
   StoreInstance,
 } from '../../Guard/core/hooks/useMultipleAccounts'
+import { useGuardAuthClient } from '../../Guard/authClient'
 // import { useGuardAuthClient } from '../../Guard/authClient'
 import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
@@ -73,7 +74,8 @@ export const LoginWithAD = (props: LoginWithADProps) => {
   const { t } = useTranslation()
 
   const { isPhoneMedia } = useMediaSize()
-  // let client = useGuardAuthClient()
+
+  let client = useGuardAuthClient()
 
   // const { post } = useGuardHttpClient()
 
@@ -113,13 +115,17 @@ export const LoginWithAD = (props: LoginWithADProps) => {
     let username = values.account && values.account.trim()
     let password = values.password && values.password.trim()
 
+    const encrypt = client.options.encryptFunction
+
+    const encryptPassword = await encrypt!(password, props.publicKey)
+
     // todo
     try {
       const api = `${host}/api/v2/ad/verify-user`
 
       const fetchRes = await fetch(api, {
         method: 'POST',
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password: encryptPassword }),
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
@@ -219,7 +225,7 @@ export const LoginWithAD = (props: LoginWithADProps) => {
                 size="large"
                 placeholder={
                   publicConfig?.mergeAdAndAccountPasswordLogin
-                    ? t('login.inputUsername')
+                    ? t('common.jobNumber')
                     : t('login.inputAdUsername')
                 }
                 prefix={

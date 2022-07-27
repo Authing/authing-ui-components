@@ -628,6 +628,9 @@ export const GuardLoginView = () => {
                             qrCodeScanOptions={{
                               ...config?.qrCodeScanOptions,
                               tips: {
+                                referText: t('login.referQrcodeText'),
+                                succeed: t('login.qrcodeSucceed'),
+                                middleTitle: t('login.qrcodeMiddle'),
                                 title:
                                   i18n.language === 'zh-CN'
                                     ? '使用 移动端 APP 扫码登录'

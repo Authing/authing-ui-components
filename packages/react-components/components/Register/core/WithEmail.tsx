@@ -5,14 +5,14 @@ import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
 import { useGuardAuthClient } from '../../Guard/authClient'
-import { getDeviceName } from '../../_utils'
+import { getDeviceName, getUserRegisterParams } from '../../_utils'
 import { Agreements } from '../components/Agreements'
 import SubmitButton from '../../SubmitButton'
 import CustomFormItem from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
 import { useIsChangeComplete } from '../utils'
-import { useGuardModule } from '../../_utils/context'
+import { useGuardFinallyConfig, useGuardModule } from '../../_utils/context'
 import { GuardModuleType } from '../../Guard'
 import { useMediaSize } from '../../_utils/hooks'
 import { ApiCode } from '../../_utils/responseManagement/interface'
@@ -40,9 +40,8 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
   const { isPhoneMedia } = useMediaSize()
   const authClient = useGuardAuthClient()
   const [form] = Form.useForm()
-
+  const config = useGuardFinallyConfig()
   const isChangeComplete = useIsChangeComplete('email')
-
   const { changeModule } = useGuardModule()
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
@@ -107,7 +106,10 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           options: {
             context,
             generateToken: true,
-            // params: getUserRegisterParams(),
+            // 托管模式下注册携带query上自定义参数login_page_context
+            params: config?.isHost
+              ? getUserRegisterParams(['login_page_context'])
+              : undefined,
           },
         }
 

@@ -325,8 +325,18 @@ export const useMethod: (params: {
         'gitee',
         'gitlab',
       ]
+
+      // 各个浏览器下特殊的身份源隐藏规则
+      const hiddenSocialConnectionInWeChatBrowser: string[] = []
+
       socialConnectionObjs = socialConnectionObjs
-        .filter((item) => !hiddenSocialConnection.includes(item.provider))
+        .filter(
+          (item) =>
+            ![
+              ...hiddenSocialConnection,
+              ...hiddenSocialConnectionInWeChatBrowser,
+            ].includes(item.provider)
+        )
         .map((item) => {
           if (wechatDisplayButtonsMessage.includes(item.provider)) {
             item.action = SocialConnectionEvent.Message
@@ -362,8 +372,18 @@ export const useMethod: (params: {
         'wechatwork:agency:qrconnect',
         'wechatwork:mobile',
       ]
+      // 各个浏览器下特殊的身份源隐藏规则
+      const hiddenSocialConnectionInQQBuiltInBrowser = [
+        SocialConnectionProvider.WECHATMP,
+      ]
       socialConnectionObjs = socialConnectionObjs
-        .filter((item) => !hiddenSocialConnection.includes(item.provider))
+        .filter(
+          (item) =>
+            ![
+              ...hiddenSocialConnection,
+              ...hiddenSocialConnectionInQQBuiltInBrowser,
+            ].includes(item.provider)
+        )
         .map((item) => {
           if (qqbuiltDisplayButtonsMessage.includes(item.provider)) {
             item.action = SocialConnectionEvent.Message
@@ -408,8 +428,18 @@ export const useMethod: (params: {
         'gitee',
         'gitlab',
       ]
+      // 各个浏览器下特殊的身份源隐藏规则
+      const hiddenSocialConnectionInWeWorkBuiltInBrowser = [
+        SocialConnectionProvider.WECHATMP,
+      ]
       socialConnectionObjs = socialConnectionObjs
-        .filter((item) => !hiddenSocialConnection.includes(item.provider))
+        .filter(
+          (item) =>
+            ![
+              ...hiddenSocialConnection,
+              ...hiddenSocialConnectionInWeWorkBuiltInBrowser,
+            ].includes(item.provider)
+        )
         .map((item) => {
           if (weWorkBuiltDisplayButtonsMessage.includes(item.provider)) {
             item.action = SocialConnectionEvent.Message
@@ -445,8 +475,20 @@ export const useMethod: (params: {
         'wechatwork:agency:qrconnect',
         'wechatwork:mobile',
       ]
+
+      // 各个浏览器下特殊的身份源隐藏规则
+      const hiddenSocialConnectionInDingtalkBrowser = [
+        SocialConnectionProvider.WECHATMP,
+      ]
+
       socialConnectionObjs = socialConnectionObjs
-        .filter((item) => !hiddenSocialConnection.includes(item.provider))
+        .filter(
+          (item) =>
+            ![
+              ...hiddenSocialConnection,
+              ...hiddenSocialConnectionInDingtalkBrowser,
+            ].includes(item.provider)
+        )
         .map((item) => {
           if (dingTalkDisplayButtonsMessage.includes(item.provider)) {
             item.action = SocialConnectionEvent.Message
@@ -491,8 +533,20 @@ export const useMethod: (params: {
         'wechatwork:agency:qrconnect',
         'wechatwork:mobile',
       ]
+
+      // 各个浏览器下特殊的身份源隐藏规则
+      const hiddenSocialConnectionInLarkBrowser = [
+        SocialConnectionProvider.WECHATMP,
+      ]
+
       socialConnectionObjs = socialConnectionObjs
-        .filter((item) => !hiddenSocialConnection.includes(item.provider))
+        .filter(
+          (item) =>
+            ![
+              ...hiddenSocialConnection,
+              ...hiddenSocialConnectionInLarkBrowser,
+            ].includes(item.provider)
+        )
         .map((item) => {
           if (larkDisplayButtonsMessage.includes(item.provider)) {
             item.action = SocialConnectionEvent.Message
@@ -521,8 +575,20 @@ export const useMethod: (params: {
         SocialConnectionProvider.WECHATMP,
         'wechatwork:mobile',
       ]
+
+      // 各个浏览器下特殊的身份源隐藏规则
+      const hiddenSocialConnectionInPCBrowser = [
+        SocialConnectionProvider.WECHATMP,
+      ]
+
       socialConnectionObjs = socialConnectionObjs
-        .filter((item) => !hiddenSocialConnection.includes(item.provider))
+        .filter(
+          (item) =>
+            ![
+              ...hiddenSocialConnection,
+              ...hiddenSocialConnectionInPCBrowser,
+            ].includes(item.provider)
+        )
         .map((item) => {
           if (pcDisplayButtonsMessage.includes(item.provider)) {
             item.action = SocialConnectionEvent.Message
