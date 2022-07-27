@@ -1,5 +1,5 @@
 import { getDefaultG2Config, IG2Config, IG2Events, IG2FCProps } from '../Type'
-import { AuthenticationClient, User } from '..'
+import { AuthenticationClient, User } from 'authing-js-sdk'
 
 export interface MFAConfig extends IG2Config {
   autoRegister: boolean

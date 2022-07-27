@@ -25,7 +25,7 @@ import { parsePhone, useMediaSize } from '../../../_utils/hooks'
 import { EmailScene, InputMethod } from '../../../Type'
 import { CodeAction } from '../../../_utils/responseManagement/interface'
 import { GuardLoginInitData } from '../../interface'
-import { LoginMethods } from '../../../AuthingGuard/types'
+import { LoginMethods } from '../../../Type/application'
 
 export const LoginWithVerifyCode = (props: any) => {
   const config = useGuardPublicConfig()

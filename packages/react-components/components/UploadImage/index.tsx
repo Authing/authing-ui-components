@@ -3,7 +3,7 @@ import { message, Spin, Upload } from 'antd'
 import { UploadChangeParam } from 'antd/lib/upload'
 import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useGuardContext } from '../../../context/global/context'
+import { useGuardFinallyConfig } from '../_utils/context'
 
 export const UploadImage: FC<{
   value?: string
@@ -11,11 +11,7 @@ export const UploadImage: FC<{
 }> = ({ value, onChange }) => {
   const [uploading, setUploading] = useState(false)
   const { t } = useTranslation()
-  const {
-    state: {
-      config: { apiHost },
-    },
-  } = useGuardContext()
+  const { host } = useGuardFinallyConfig()
 
   const onStatusChange = (info: UploadChangeParam) => {
     const { status } = info.file
@@ -55,7 +51,7 @@ export const UploadImage: FC<{
       accept="image/*"
       listType="picture-card"
       showUploadList={false}
-      action={`${apiHost}/api/v2/upload?folder=photos`}
+      action={`${host}/api/v2/upload?folder=photos`}
       onChange={onStatusChange}
     >
       <Spin size="small" spinning={uploading}>

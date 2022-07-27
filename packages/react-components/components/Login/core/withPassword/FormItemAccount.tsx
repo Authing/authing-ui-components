@@ -2,7 +2,7 @@ import { FormItemProps } from 'antd/lib/form'
 import FormItem from 'antd/lib/form/FormItem'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PasswordLoginMethods } from '../../../AuthingGuard/api'
+import { PasswordLoginMethods } from '../../../Type/application'
 import CustomFormItem from '../../../ValidatorRules'
 import { fieldRequiredRule } from '../../../_utils'
 

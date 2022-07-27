@@ -1,12 +1,11 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
-
-import * as enUsTrans from './en'
+import * as enUsTrans from './en-us'
 import * as zhCnTrans from './zh-cn'
 import * as zhTwTrans from './zh-tw'
-import { LocalesConfig, Lang } from '../../AuthingGuard/types'
 import { getGuardWindow } from '../../Guard/core/useAppendConfig'
+import { Lang } from '../../Type'
 
 let langChangeFN: (lang: Lang) => void = () => {}
 
@@ -15,7 +14,7 @@ export const changeLang = (lang: Lang) => {
   langChangeFN && langChangeFN(lang)
 }
 
-const initI18n = (localesConfig: LocalesConfig = {}, lang?: string) => {
+const initI18n = (localesConfig = {}, lang?: string) => {
   let initLang: 'zh-CN' | 'en-US' = 'zh-CN'
 
   const guardWindow = getGuardWindow()
@@ -54,9 +53,9 @@ const initI18n = (localesConfig: LocalesConfig = {}, lang?: string) => {
           escapeValue: false, // react already safes from xss
         },
       })
-    if (localesConfig.onChange) {
-      langChangeFN = localesConfig.onChange
-    }
+    // if (localesConfig.onChange) {
+    //   langChangeFN = localesConfig.onChange
+    // }
   }
 }
 

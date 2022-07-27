@@ -5,8 +5,8 @@ import {
   GuardModuleType,
   GuardPageConfig,
 } from '..'
-import { ApplicationConfig } from '../AuthingGuard/api'
 import { ModuleState } from '../Guard/GuardModule/stateMachine'
+import { ApplicationConfig } from '../Type/application'
 import { GuardHttp } from './guardHttp'
 
 export interface IGuardContext {

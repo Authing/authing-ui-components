@@ -3,10 +3,6 @@ export * from './_utils/responseManagement/interface'
 
 export * from './AuthClientProvider'
 
-export * from './AuthingGuard/types'
-export * from './AuthingGuard/hooks'
-export * from './AuthingGuard'
-
 export * from './Guard'
 export * from './Type'
 

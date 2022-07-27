@@ -2,11 +2,11 @@ import { Tabs } from 'antd'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { GuardModuleType } from '..'
-import { PasswordLoginMethods } from '../AuthingGuard/api'
 import { BackCustom, BackLogin } from '../Back'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { LoginWithPassword } from '../Login/core/withPassword'
 import { LoginWithVerifyCode } from '../Login/core/withVerifyCode'
+import { PasswordLoginMethods } from '../Type/application'
 import {
   useGuardButtonState,
   useGuardEvents,

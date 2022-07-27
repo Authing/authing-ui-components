@@ -17,8 +17,6 @@ import {
   initGuardStateMachine,
   ModuleState,
 } from '../GuardModule/stateMachine'
-import { AuthenticationClient } from '../..'
-import { ApplicationConfig } from '../../AuthingGuard/api'
 import { SessionData, trackSession } from '../sso'
 import {
   getPublicConfig,
@@ -33,6 +31,8 @@ import { useGuardIconfont } from '../../IconFont/useGuardIconfont'
 import { useInitGuardAppendConfig } from './useAppendConfig'
 import { useInitAppId } from '../../_utils/initAppId'
 import { updateFlowHandle } from '../../_utils/flowHandleStorage'
+import { ApplicationConfig } from '../../Type/application'
+import { AuthenticationClient } from 'authing-js-sdk'
 
 interface IBaseAction<T = string, P = any> {
   type: T & string

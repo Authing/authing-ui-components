@@ -6,8 +6,6 @@ import { useGuardAuthClient } from '../../../Guard/authClient'
 import { fieldRequiredRule, getUserRegisterParams } from '../../../_utils'
 import { ErrorCode } from '../../../_utils/GuardErrorCode'
 import SubmitButton from '../../../SubmitButton'
-import { Agreement, PasswordLoginMethods } from '../../../AuthingGuard/api'
-import { LoginMethods } from '../../..'
 import { FormItemAccount } from './FormItemAccount'
 import { InputAccount } from './InputAccount'
 import { GraphicVerifyCode } from './GraphicVerifyCode'
@@ -19,6 +17,12 @@ import { CodeAction } from '../../../_utils/responseManagement/interface'
 import { useMediaSize } from '../../../_utils/hooks'
 import { useGuardInitData, useGuardPublicConfig } from '../../../_utils/context'
 import { GuardLoginInitData } from '../../interface'
+import {
+  Agreement,
+  LoginMethods,
+  PasswordLoginMethods,
+} from '../../../Type/application'
+
 interface LoginWithPasswordProps {
   // configs
   publicKey: string

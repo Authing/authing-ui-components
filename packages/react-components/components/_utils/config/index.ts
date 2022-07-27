@@ -1,5 +1,4 @@
 import { LoginMethods } from 'authing-js-sdk'
-import { ApplicationConfig } from '../../AuthingGuard/api'
 import { assembledRequestHost as utilAssembledRequestHost } from '..'
 import { GuardComponentConfig, GuardLocalConfig } from '../../Guard/config'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -8,7 +7,7 @@ import { GuardHttp } from '../guardHttp'
 import { corsVerification } from '../corsVerification'
 import { Logger } from '../logger'
 import { GuardPageConfig } from '../../Type'
-import { RegisterMethods } from '../../AuthingGuard/types'
+import { ApplicationConfig, RegisterMethods } from '../../Type/application'
 
 let publicConfigMap: Record<string, ApplicationConfig> = {}
 

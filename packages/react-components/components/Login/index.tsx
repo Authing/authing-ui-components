@@ -19,7 +19,6 @@ import { codeMap } from './codemap'
 import { SocialLogin } from './socialLogin'
 
 import { GuardModuleType } from '../Guard/module'
-import { LoginMethods } from '../AuthingGuard/types'
 import { IconFont } from '../IconFont'
 import { ChangeLanguage } from '../ChangeLanguage'
 import { i18n } from '../_utils/locales'
@@ -35,12 +34,12 @@ import {
 } from '../_utils/context'
 import { isWeChatBrowser, getPasswordIdentify } from '../_utils'
 import { LoginWithVerifyCode } from './core/withVerifyCode'
-import { VerifyLoginMethods } from '../AuthingGuard/api'
 import { useMediaSize, useMethod } from '../_utils/hooks'
 import { getGuardDocument } from '../_utils/guardDocument'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { GuardLoginInitData } from './interface'
 import { GuardButton } from '../GuardButton'
+import { LoginMethods, VerifyLoginMethods } from '../Type/application'
 
 const inputWays = [
   LoginMethods.Password,

@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Form, Input, Select, DatePicker, message } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
-import { UploadImage } from '../../AuthingGuard/Forms/UploadImage'
 import { i18n } from '../../_utils/locales'
 import {
   CompleteInfoBaseControls,
@@ -22,6 +21,7 @@ import { useGuardPublicConfig } from '../../_utils/context'
 import { parsePhone } from '../../_utils/hooks'
 import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
 import { EmailScene } from '../../Type'
+import { UploadImage } from '../../UploadImage'
 export interface CompleteInfoProps {
   metaData: CompleteInfoMetaData[]
   businessRequest: (data: CompleteInfoRequest) => Promise<void>

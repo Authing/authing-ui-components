@@ -1,7 +1,7 @@
 import { IG2Config, IG2Events, IG2FCProps, IG2FCViewProps } from '..'
-import { Agreement } from '../AuthingGuard/api'
-import { AuthenticationClient, User } from '..'
+import { AuthenticationClient, User } from 'authing-js-sdk'
 import { GuardModuleType } from '../Guard'
+import { Agreement } from '../Type/application'
 
 export interface IdentityBindingConfig extends IG2Config {
   autoRegister?: boolean

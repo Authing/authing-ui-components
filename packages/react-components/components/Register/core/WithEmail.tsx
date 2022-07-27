@@ -3,7 +3,6 @@ import { RegisterMethods } from 'authing-js-sdk'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
-import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { getDeviceName, getUserRegisterParams } from '../../_utils'
 import { Agreements } from '../components/Agreements'
@@ -17,6 +16,7 @@ import { GuardModuleType } from '../../Guard'
 import { useMediaSize } from '../../_utils/hooks'
 import { ApiCode } from '../../_utils/responseManagement/interface'
 import { usePasswordErrorText } from '../../_utils/useErrorText'
+import { Agreement, ApplicationConfig } from '../../Type/application'
 
 export interface RegisterWithEmailProps {
   // onRegister: Function

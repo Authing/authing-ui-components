@@ -9,9 +9,9 @@ import {
   useGuardHttpClient,
   useGuardPublicConfig,
 } from '../../../_utils/context'
-import { VerifyLoginMethods } from '../../../AuthingGuard/api'
 import { useCheckRepeat } from '../../../ValidatorRules/useCheckRepeat'
 import { parsePhone } from '../../../_utils/hooks'
+import { VerifyLoginMethods } from '../../../Type/application'
 export interface FormItemIdentifyProps extends FormItemProps {
   checkRepeat?: boolean // 重复性校验
   checkExist?: boolean //存在性校验

@@ -1,36 +1,129 @@
-import {
-  Lang,
-  LoginMethods,
-  Protocol,
-  RegisterMethods,
-} from '../../../components/AuthingGuard/types'
-import {
-  IAzureAdConnectionConfig,
-  ICasConnectionConfig,
-  IOAuthConnectionConfig,
-  ISamlConnectionConfig,
-  OIDCConnectionConfig,
-  SocialConnectionItem,
-} from './userPoolConfig'
-import { i18n } from '../../_utils/locales'
-import { requestClient } from '../../_utils/http'
-import { PasswordStrength } from '../../_utils'
+import { Lang } from '..'
+import { PasswordStrength } from '../_utils'
 
-export enum ApplicationMfaType {
-  SMS = 'SMS',
-  EMAIL = 'EMAIL',
-  // OTP = 'OTP',
-  // FACE = 'FACE',
-  // FINGERPRINT = 'FINGERPRINT',
+export enum LoginMethods {
+  LDAP = 'ldap',
+  AppQr = 'app-qrcode',
+  Password = 'password',
+  PhoneCode = 'phone-code',
+  WxMinQr = 'wechat-miniprogram-qrcode', // 对应社会化登录的 wechat:miniprogram:qrconnect(小程序扫码登录)
+  AD = 'ad', // 对应企业身份源的 Windows AD 登录
+  WechatMpQrcode = 'wechatmp-qrcode', // 微信扫码关注登录
+}
+export enum OIDCConnectionMode {
+  FRONT_CHANNEL = 'FRONT_CHANNEL',
+  BACK_CHANNEL = 'BACK_CHANNEL',
 }
 
-export const ApplicationMfaTypeLabel: () => Record<
-  ApplicationMfaType,
-  string
-> = () => ({
-  [ApplicationMfaType.SMS]: i18n.t('common.SMS'),
-  [ApplicationMfaType.EMAIL]: i18n.t('common.EmailVerification'),
-})
+export declare enum SocialConnectionProvider {
+  ALIPAY = 'alipay',
+  GOOGLE = 'google',
+  WECHATPC = 'wechat:pc',
+  WECHATMP = 'wechat:webpage-authorization',
+  WECHAT_MINIPROGRAM = 'wechat:miniprogram:default',
+  WECHAT_MINIPROGRAM_QRCODE = 'wechat:miniprogram:qrconnect',
+  WECHAT_MINIPROGRAM_APPLAUNCH = 'wechat:miniprogram:app-launch',
+  WECHATMOBILE = 'wechat:mobile',
+  GITHUB = 'github',
+  QQ = 'qq',
+  WECHATWORK_ADDRESS_BOOK = 'wechatwork:addressbook',
+  WECHATWORK_CORP_QRCONNECT = 'wechatwork:corp:qrconnect',
+  WECHATWORK_SERVICEPROVIDER_QRCONNECT = 'wechatwork:service-provider:qrconnect',
+  DINGTALK = 'dingtalk',
+  WEIBO = 'weibo',
+  APPLE = 'apple',
+  APPLE_WEB = 'apple:web',
+  LARK_PUBLIC = 'lark-public',
+  LARK_INTERNAL = 'lark-internal',
+  BAIDU = 'baidu',
+  LINKEDIN = 'linkedin',
+  SLACK = 'slack',
+  YIDUN = 'yidun',
+  QINGCLOUD = 'qingcloud',
+  FACEBOOK = 'facebook',
+}
+
+export enum Protocol {
+  AD = 'ad',
+  CAS = 'cas',
+  LDAP = 'ldap',
+  OIDC = 'oidc',
+  SAML = 'saml',
+  OAUTH = 'oauth',
+  AZURE_AD = 'azure-ad',
+}
+
+export interface IOAuthConnectionConfig {
+  authEndPoint: string
+  tokenEndPoint: string
+  scope: string
+  clientId: string
+  clientSecret: string
+  authUrlTemplate: string
+  codeToTokenScript: string
+  tokenToUserInfoScript: string
+  tokenToUserInfoScriptFuncId: string
+  codeToTokenScriptFuncId: string
+  authUrl?: string // 根据模板拼接出来的授权 url
+}
+
+export interface IAzureAdConnectionConfig {
+  microsoftAzureAdDomain: string
+  clientId: string
+  syncUserProfileOnLogin: string
+  emailVerifiedDefault: boolean
+  authorizationUrl: string
+  callbackUrl: string
+}
+
+export interface ISamlConnectionConfig {
+  signInEndPoint: string
+  samlRequest?: string
+
+  // saml assertion 验签公钥
+
+  samlIdpCert: string
+
+  // saml request 验签公钥
+
+  samlSpCert: string
+
+  // saml request 签名私钥
+
+  samlSpKey: string
+
+  signOutEndPoint: string
+
+  signSamlRequest: boolean
+
+  signatureAlgorithm: string
+
+  digestAlgorithm: string
+
+  protocolBinding: string
+}
+
+export interface ICasConnectionConfig {
+  casConnectionLoginUrl: string
+}
+
+export interface SocialConnectionItem {
+  name: string
+  name_en: string
+  displayName: string
+  logo: string
+  description: string
+  identifier: string
+  provider: SocialConnectionProvider
+  authorizationUrl: string
+  tooltip: Record<Lang, string>
+}
+
+export enum RegisterMethods {
+  Email = 'email',
+  Phone = 'phone',
+  EmailCode = 'emailCode',
+}
 
 export type QrcodeTabsSettings = Record<
   LoginMethods,
@@ -48,6 +141,18 @@ export interface OidcClientMetadata {
   scope: string
   response_types: ResponseType[]
 }
+
+export interface OIDCConnectionConfig {
+  issuerUrl: string
+  authorizationEdpoint: string
+  responseType: string
+  mode: OIDCConnectionMode
+  clientId: string
+  clientSecret: string
+  scopes: string
+  redirectUri: string
+}
+
 export interface InternalExtendsField {
   type: 'internal'
   name: string
@@ -93,6 +198,7 @@ export type PasswordLoginMethods =
 export type VerifyLoginMethods = 'email-code' | 'phone-code'
 
 export type ComplateFiledsPlace = 'register' | 'login'
+
 export interface ApplicationConfig {
   id: string
   allowedOrigins: string[]
@@ -193,11 +299,3 @@ export interface ApplicationConfig {
 
   selfUnlockStrategy: 'captcha' | 'password-captcha'
 }
-
-export const fetchAppConfig = (appId: string) =>
-  requestClient.get<ApplicationConfig>(
-    `/api/v2/applications/${appId}/public-config`,
-    {
-      credentials: 'include',
-    }
-  )
