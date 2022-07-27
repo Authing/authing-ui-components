@@ -182,7 +182,6 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   const onLoginRes = (res: AuthingGuardResponse, account: string) => {
     const { code, apiCode, message: msg, data, onGuardHandling } = res
     submitButtonRef?.current?.onSpin(false)
-
     // 更新本次登录方式
     data &&
       multipleInstance &&

@@ -122,6 +122,10 @@ export interface User {
 }
 
 class MultipleAccount {
+  /** 
+   * 原始的登录账号
+  */
+  private originAccount: string = '';
   /**
    * 原始的 localStore 值
    */
@@ -437,6 +441,8 @@ class MultipleAccount {
       email?: string
     }
   ) => {
+    // TODO: 临时保存对应的account
+    this.originAccount = account;
     const { username, phone, email } = data
     switch (account) {
       case username:
@@ -582,7 +588,9 @@ class MultipleAccount {
       // 是否存在已经登陆账号 > 1
       getMemberState: () => this.memberState,
       // 首次需要回填的数据 单账号记住登录下
-      getFirstBackFillData: () => this.firstBackFillData
+      getFirstBackFillData: () => this.firstBackFillData,
+      // 原始的登录账号和密码
+      getOriginAccount: () => this.originAccount
     }
   }
 }
