@@ -597,7 +597,6 @@ export const GuardLoginView = () => {
                             >
                               <LoginWithWechatMiniQrcode
                                 id={item.id}
-                                // onLogin={onLogin}
                                 onLoginSuccess={onLoginSuccess}
                                 canLoop={canLoop}
                                 qrCodeScanOptions={{
