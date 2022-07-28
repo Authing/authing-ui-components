@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { IconFont } from '../IconFont'
 import { Lang } from '../Type'
 import { useGuardPageConfig } from '../_utils/context'
-import { changeLang } from '../_utils/locales'
 import './style.less'
 
 const LngTextMapping: Record<
@@ -28,22 +27,34 @@ const LngTextMapping: Record<
   },
 }
 
-export const ChangeLanguage = (props: any) => {
+export const ChangeLanguage = (props: {
+  onLangChange?: (lang: Lang) => void
+  langRange: string[]
+}) => {
+  const { onLangChange } = props
   const { i18n } = useTranslation()
 
   const guardPageConfig = useGuardPageConfig()
 
-  const onChangeLng = useCallback((lng: Lang) => {
-    changeLang(lng)
-  }, [])
+  const onChangeLng = useCallback(
+    (lng: Lang) => {
+      i18n.changeLanguage(lng)
+      onLangChange?.(lng)
+    },
+    [i18n, onLangChange]
+  )
 
   const showChangeLng = useMemo(() => {
     return guardPageConfig.global?.showChangeLanguage
   }, [guardPageConfig])
 
   const currentLng = useMemo<Lang>(() => {
-    return i18n.language as Lang
-  }, [i18n.language])
+    if (Object.keys(LngTextMapping).includes(i18n.language)) {
+      return i18n.language as Lang
+    } else {
+      return i18n.languages[i18n.languages.length - 1] as Lang
+    }
+  }, [i18n.language, i18n.languages])
 
   const currentLngText = useMemo(() => {
     return (
@@ -58,7 +69,20 @@ export const ChangeLanguage = (props: any) => {
   }, [currentLng])
 
   const lngMenu = useMemo(() => {
-    const menuItem = Object.keys(LngTextMapping).map((lng) => ({
+    let menuItem: {
+      key: string
+      label: string
+    }[] = []
+
+    if (props?.langRange) {
+      menuItem = Object.keys(LngTextMapping)
+        .filter((lng) => props.langRange.includes(lng as Lang))
+        .map((lng) => ({
+          key: lng,
+          label: LngTextMapping[lng as Lang].label,
+        }))
+    }
+    menuItem = Object.keys(LngTextMapping).map((lng) => ({
       key: lng,
       label: LngTextMapping[lng as Lang].label,
     }))
@@ -72,7 +96,11 @@ export const ChangeLanguage = (props: any) => {
             <Menu.Item
               key={key}
               className={isCurrent ? 'select' : ''}
-              onClick={() => onChangeLng(key as Lang)}
+              onClick={() => {
+                if (currentLng !== key) {
+                  onChangeLng(key as Lang)
+                }
+              }}
             >
               <span>{label}</span>
               {isCurrent && <IconFont type="authing-close-line" />}
@@ -81,9 +109,9 @@ export const ChangeLanguage = (props: any) => {
         })}
       </Menu>
     )
-  }, [currentLng, onChangeLng])
+  }, [currentLng, onChangeLng, props.langRange])
 
-  if (!showChangeLng) {
+  if (!showChangeLng || props?.langRange.length === 0) {
     return null
   }
 
@@ -91,7 +119,7 @@ export const ChangeLanguage = (props: any) => {
     <div className="g2-change-language-container">
       <Dropdown
         overlay={lngMenu}
-        trigger={['click', 'hover']}
+        trigger={['click']}
         placement="bottomCenter"
         overlayClassName="authing-g2-change-language-menu"
         getPopupContainer={(node) => {

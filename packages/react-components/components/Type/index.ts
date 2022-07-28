@@ -92,9 +92,7 @@ export enum GuardPageSene {
 export interface GuardPageConfig {
   [GuardPageSene.Global]: {
     showChangeLanguage: boolean
-    defaultLanguage: Lang
-    languageFollowsBrowser: boolean
-    optionalLanguage: Lang[]
+    defaultLanguage: Lang | 'browser'
   }
 }
 
