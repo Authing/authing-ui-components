@@ -142,9 +142,7 @@ export const LoginWithAD = (props: LoginWithADProps) => {
       const { code, data, onGuardHandling } = responseIntercept(res)
 
       // 更新本次登录方式
-      data &&
-        multipleInstance &&
-        multipleInstance.setLoginWayByHttpData(username, data)
+      data && multipleInstance && multipleInstance.setLoginWay('input', 'ad')
 
       submitButtonRef.current?.onSpin(false)
 
