@@ -1,8 +1,19 @@
 /* eslint-disable prettier/prettier */
+/** 
+ * 整体的思路：
+ * 在所有登录方式中，当进行登录时保存登录方式（FE侧自定义）
+ * 之后在登录成功（onLogin）中，触发store的方法保存用户信息以及对应的登录方式进入localStorage。
+ * 当用户再次打开页面时，拿出数据进行对比。（主要对比 LoginWay ），TODO: 这里的代码主要显得乱的原因是因为枚举的不正当使用。（主要要和Server端进行互相映射，后续维护时可优化）
+ * 
+ * 核心思路：登录成功时，保存的FE侧自定义 LoginWay 
+ * 再次打开页面时，初始化时先根据 FE 自定义的 LoginWay 跳转到不同的 tab 下（way）下使用 account 进行回填。TODO: 这里也可优化，应该在登录成功时候就进行 LoginWay 的格式化，而非转来转去。（但是这样无法直观的体现是哪种方式进行登录）
+*/
+
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { cloneDeep } from 'lodash'
 import { SelectOptions } from '../../../Login/multipleAccounts/panel'
 import { getPublicConfig } from '../../../_utils/config'
+
 
 const MULTIPLE_ACCOUNT_KEY = '__authing__multiple_accounts'
 
