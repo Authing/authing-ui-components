@@ -141,6 +141,7 @@ class MultipleAccount {
    * 原始的登录账号
   */
   private originAccount: string = '';
+  private originWay: string = '';
   /**
    * 原始的 localStore 值
    */
@@ -460,6 +461,7 @@ class MultipleAccount {
   ) => {
     // TODO: 临时保存对应的account
     this.originAccount = account;
+    this.originWay = 'password'
     const { username, phone, email } = data
     switch (account) {
       case username:
@@ -486,6 +488,7 @@ class MultipleAccount {
     }
   ) => {
     this.originAccount = account;
+    this.originWay = 'ldap'
     const { name, phone, email } = data
     switch (account) {
       case name:
@@ -637,7 +640,8 @@ class MultipleAccount {
       // 首次需要回填的数据 单账号记住登录下
       getFirstBackFillData: () => this.firstBackFillData,
       // 原始的登录账号和密码
-      getOriginAccount: () => this.originAccount
+      getOriginAccount: () => this.originAccount,
+      getOriginWay: () => this.originWay
     }
   }
 }
