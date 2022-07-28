@@ -23,11 +23,13 @@ export const getGuardWindow = () => {
 export const useGuardWindow = getGuardWindow
 
 export const useInitGuardAppendConfig = (
+  setForceUpdate: any,
   appId?: string,
   appendConfig?: GuardAppendConfig
 ) => {
   useEffect(() => {
     if (!appId) return
+    setForceUpdate(Date.now())
 
     initAppendConfig(appendConfig)
 
@@ -38,5 +40,5 @@ export const useInitGuardAppendConfig = (
     if (appendConfig?.pageConfig) {
       setPageConfig(appId, appendConfig.pageConfig)
     }
-  }, [appId, appendConfig])
+  }, [appId, appendConfig, setForceUpdate])
 }
