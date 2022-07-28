@@ -142,7 +142,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         return
       }
 
-      const { statusCode, data, message: errorMessage, code } = await post(
+      const { statusCode, data, message: errorMessage, apiCode } = await post(
         `/api/v2/register-email`,
         {
           ...registerContent,
@@ -153,11 +153,11 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
       if (statusCode === 200) {
         onRegisterSuccessIntercept(data)
       } else {
-        if (code === ApiCode.UNSAFE_PASSWORD_TIP) {
+        if (apiCode === ApiCode.UNSAFE_PASSWORD_TIP) {
           setPasswordErrorTextShow(true)
         }
         submitButtonRef.current.onError()
-        onRegisterFailed(code, data, errorMessage)
+        onRegisterFailed(apiCode, data, errorMessage)
         message.error(errorMessage)
       }
     },

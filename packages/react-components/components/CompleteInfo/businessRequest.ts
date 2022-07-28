@@ -24,8 +24,6 @@ const registerMethod = (
   content: any,
   profile: any
 ) => {
-  const authClient = getGuardAuthClient()
-
   const { post } = getGuardHttp()
 
   if (fnName === 'registerByEmail') {
@@ -39,29 +37,21 @@ const registerMethod = (
         ...content.profile,
         ...profile,
       },
-      options: {
-        ...content.options,
-        phoneToken,
-      },
+      ...content.options,
+      phoneToken,
     })
   } else if (fnName === 'registerByPhoneCode') {
     const emailToken = profile?.emailToken
 
     delete profile?.emailToken
-
-    return authClient!.registerByPhoneCode(
-      content.phone,
-      content.code,
-      content.password,
-      {
+    return post(`/api/v2/register-phone-code`, {
+      ...content,
+      profile: {
         ...content.profile,
         ...profile,
       },
-      {
-        ...content.options,
-        emailToken,
-      }
-    )
+      emailToken,
+    })
   } else if (fnName === 'registerByEmailCode') {
     const phoneToken = profile.phoneToken
 
@@ -88,16 +78,17 @@ export const registerSkipMethod = (
   const { post } = getGuardHttp()
 
   if (fnName === 'registerByEmail') {
-    return authClient!.registerByEmail(
-      content.email,
-      content.password,
-      {
-        ...content.profile,
-      },
-      {
-        ...content.options,
-      }
-    )
+    return post(`/api/v2/register-email`, content)
+    // return authClient!.registerByEmail(
+    //   content.email,
+    //   content.password,
+    //   {
+    //     ...content.profile,
+    //   },
+    //   {
+    //     ...content.options,
+    //   }
+    // )
   } else if (fnName === 'registerByPhoneCode') {
     return authClient!.registerByPhoneCode(
       content.phone,

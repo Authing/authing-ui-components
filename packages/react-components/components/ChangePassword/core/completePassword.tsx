@@ -55,10 +55,7 @@ export const CompletePassword: React.FC = () => {
   const onFinish = useCallback(
     async (values: any) => {
       // 密码加密处理（邮箱验证码是通过 post 直接发送需要加密 其他通过 sdk 在内部加密了 这一步无需加密）
-      const password =
-        businessRequestName === 'registerByEmailCode'
-          ? await encrypt!(values.password, publicKey)
-          : values.password
+      const password = await encrypt!(values.password, publicKey)
 
       submitButtonRef.current?.onSpin(true)
 
@@ -108,38 +105,55 @@ export const CompletePassword: React.FC = () => {
               })
             }
           } else if (businessRequestName === 'registerByPhoneCode') {
-            const user = await authClient.registerByPhoneCode(
-              content.phone,
-              content.code,
+            // TODO: 修改 Rustful
+            const {
+              data,
+              statusCode,
+              apiCode,
+              message: errorMessage,
+            } = await post(`/api/v2/register-phone-code`, {
+              phone: content.phone,
+              code: content.code,
               password,
-              content.profile,
-              content.options
-            )
-            submitButtonRef.current?.onSpin(false)
-            onRegisterSuccess(user)
-            // events?.onRegister?.(user, authClient)
-            // changeModule?.(GuardModuleType.LOGIN)
+              profile: content.profile,
+              ...content.options,
+              postUserInfoPipeline: content.postUserInfoPipeline,
+            })
+            if (statusCode === 200) {
+              submitButtonRef.current?.onSpin(false)
+              onRegisterSuccess(data)
+            } else {
+              if (apiCode === ApiCode.UNSAFE_PASSWORD_TIP) {
+                setPasswordErrorTextShow(true)
+              }
+              submitButtonRef.current?.onSpin(false)
+              message.error(errorMessage)
+              onRegisterFailed(apiCode, data, errorMessage)
+              events?.onRegisterError?.({
+                apiCode,
+                data,
+                message,
+              })
+            }
           }
         } catch (error: any) {
-          const { code, message: errorMessage, data } = error
-          if (code === ApiCode.UNSAFE_PASSWORD_TIP) {
-            setPasswordErrorTextShow(true)
-          }
-          submitButtonRef.current.onError()
-          message.error(errorMessage)
-          onRegisterFailed(code, data, errorMessage)
+          submitButtonRef.current?.onSpin(false)
+          // const { code, message: errorMessage, data } = error
+          // if (code === ApiCode.UNSAFE_PASSWORD_TIP) {
+          //   setPasswordErrorTextShow(true)
+          // }
+          // submitButtonRef.current.onError()
+          // message.error(errorMessage)
+          // onRegisterFailed(code, data, errorMessage)
           // events?.onRegisterError?.({
           //   code,
           //   data,
           //   message,
           // })
-        } finally {
-          submitButtonRef.current?.onSpin(false)
         }
       }
     },
     [
-      authClient,
       businessRequestName,
       changeModule,
       content,

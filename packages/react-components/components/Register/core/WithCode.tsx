@@ -37,6 +37,11 @@ export interface RegisterWithCodeProps {
   methods: any[]
 }
 
+/**
+ * 手机 Code 注册
+ * @param param0
+ * @returns
+ */
 export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
   onRegisterSuccess,
   onRegisterFailed,
@@ -146,7 +151,7 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
           return
         }
 
-        const { phone, password = '', code } = values
+        const { phone, code } = values
 
         const context = registeContext ?? {}
 
@@ -157,29 +162,37 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
         )
 
         // 注册
-        const options: any = {
-          context,
-          generateToken: true,
-          // 托管模式下注册携带query上自定义参数login_page_context
-          params: config?.isHost
-            ? getUserRegisterParams(['login_page_context'])
-            : undefined,
-        }
+        // const options: any = {
+        //   context,
+        //   generateToken: true,
+        //   // 托管模式下注册携带query上自定义参数login_page_context
+        //   params: config?.isHost
+        //     ? getUserRegisterParams(['login_page_context'])
+        //     : undefined,
+        // }
 
-        if (isInternationSms) {
-          options.phoneCountryCode = phoneCountryCode
-        }
+        // if (isInternationSms) {
+        //   options.phoneCountryCode = phoneCountryCode
+        // }
 
         const registerContent = {
           phone: phoneNumber,
           code,
-          password,
+          phoneCountryCode: isInternationSms ? phoneCountryCode : undefined,
+          // password: undefined, // TODO: 手机号验证码不需要密码
           profile: {
             browser:
               typeof navigator !== 'undefined' ? navigator.userAgent : null,
             device: getDeviceName(),
           },
-          options,
+          forceLogin: false,
+          generateToken: true,
+          clientIp: undefined,
+          params: config?.isHost
+            ? JSON.stringify(getUserRegisterParams(['login_page_context']))
+            : undefined,
+          context: JSON.stringify(context),
+          emailToken: undefined,
         }
         // onRegisterSuccess 注册成功后需要回到对应的登录页面
         const onRegisterSuccessIntercept = (user: any) => {
@@ -203,7 +216,10 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
           if (checkCode === 200 && valid) {
             changeModule?.(GuardModuleType.REGISTER_PASSWORD, {
               businessRequestName: 'registerByPhoneCode',
-              content: registerContent,
+              content: {
+                ...registerContent,
+                postUserInfoPipeline: true,
+              },
               isChangeComplete: isPhoneChangeComplete,
               onRegisterSuccess: onRegisterSuccessIntercept,
               onRegisterFailed,
@@ -230,7 +246,10 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
             if (checkCode === 200 && valid) {
               changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
                 businessRequestName: 'registerByPhoneCode',
-                content: registerContent,
+                content: {
+                  ...registerContent,
+                  postUserInfoPipeline: true,
+                },
                 onRegisterSuccess: onRegisterSuccessIntercept,
                 onRegisterFailed,
               })
@@ -242,22 +261,41 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
             }
           }
 
-          const user = await authClient.registerByPhoneCode(
-            phoneNumber,
-            code,
-            password,
+          /**
+           * 手机号注册接口
+           */
+          const { data, statusCode, apiCode, message: errMessage } = await post(
+            `/api/v2/register-phone-code`,
             {
-              browser:
-                typeof navigator !== 'undefined' ? navigator.userAgent : null,
-              device: getDeviceName(),
-            },
-            options
+              ...registerContent,
+              postUserInfoPipeline: false,
+            }
           )
+          if (statusCode === 200) {
+            submitButtonRef.current?.onSpin(false)
+            onRegisterSuccessIntercept(data)
+          } else {
+            submitButtonRef.current.onError()
+            message.error(errMessage)
+            !needPassword && onRegisterFailed(apiCode, data, errMessage)
+          }
+          // const user = await authClient.registerByPhoneCode(
+          //   phoneNumber,
+          //   code,
+          //   password,
+          //   {
+          //     browser:
+          //       typeof navigator !== 'undefined' ? navigator.userAgent : null,
+          //     device: getDeviceName(),
+          //   },
+          //   options
+          // )
 
-          submitButtonRef.current?.onSpin(false)
-          onRegisterSuccessIntercept(user)
+          // submitButtonRef.current?.onSpin(false)
+          // onRegisterSuccessIntercept(user)
         }
       } catch (error: any) {
+        // TODO 确认无误后 删除 catch
         const { message: errorMessage, code, data } = error
         submitButtonRef.current.onError()
         message.error(errorMessage)

@@ -181,43 +181,33 @@ export const GuardRegisterCompleteInfoView: React.FC = () => {
       extendsFields,
       data?.fieldValues
     )
-    try {
-      // sdk 直接 throw error 拿不到错误详细信息 不能手动给他执行我们的拦截
-      const user: any = await registerRequest(
-        action,
-        initData.businessRequestName,
-        initData.content,
-        registerProfile
-      )
-      // sdk 还没有这个接口 后续添加后 可以已 sdk 的逻辑执行
-      if (
-        initData.businessRequestName === 'registerByEmailCode' ||
-        'registerByEmail'
-      ) {
-        if (user.statusCode === 200) {
-          initData.onRegisterSuccess(user.data)
-          // events?.onRegister?.(user.data, authClient)
-          // changeModule?.(GuardModuleType.LOGIN)
-        } else {
-          user?.onGuardHandling?.()
-          const { code, message: errorMessage, data } = user
-          initData.onRegisterFailed(code, data, errorMessage)
-          // events?.onRegisterError?.({ code, data, message: errorMessage })
-          // TODO 后续sdk的验证码逻辑改完后
-        }
-        return
-      }
-      if (user) {
-        // events?.onRegister?.(user, authClient)
-        // changeModule?.(GuardModuleType.LOGIN)
+    const user: any = await registerRequest(
+      action,
+      initData.businessRequestName,
+      initData.content,
+      registerProfile
+    )
+    // sdk 还没有这个接口 后续添加后 可以已 sdk 的逻辑执行
+    if (
+      initData.businessRequestName === 'registerByEmailCode' ||
+      'registerByEmail'
+    ) {
+      if (user.statusCode === 200) {
         initData.onRegisterSuccess(user.data)
+        // events?.onRegister?.(user.data, authClient)
+        // changeModule?.(GuardModuleType.LOGIN)
+      } else {
+        user?.onGuardHandling?.()
+        const { apiCode, message: errorMessage, data } = user
+        initData.onRegisterFailed(apiCode, data, errorMessage)
+        // events?.onRegisterError?.({ code, data, message: errorMessage })
       }
-    } catch (error: any) {
-      // TODO 后续sdk的验证码逻辑改完后·
-      const { code, message: errorMessage, data } = error
-      message.error(errorMessage)
-      // events?.onRegisterError?.({ code, data, message: errorMessage })
-      initData.onRegisterFailed(code, data, errorMessage)
+      return
+    }
+    if (user) {
+      // events?.onRegister?.(user, authClient)
+      // changeModule?.(GuardModuleType.LOGIN)
+      initData.onRegisterSuccess(user.data)
     }
   }
 
