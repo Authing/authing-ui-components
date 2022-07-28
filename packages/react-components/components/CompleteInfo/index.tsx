@@ -117,13 +117,17 @@ export const GuardLoginCompleteInfoView: React.FC = () => {
       data
     )
 
-    // 第一次登录的信息
+    // 第一次登录的信息 TODO: 脏逻辑 没时间
     const originAccount = multipleInstance?.getOriginAccount()
-
+    const methods: any =
+      multipleInstance?.getOriginWay() === 'password'
+        ? multipleInstance?.setLoginWayByLDAPData
+        : multipleInstance?.setLoginWayByHttpData
+    // 这里得区别一下 到底是 Login 来的，还是
     resData &&
       multipleInstance &&
       originAccount &&
-      multipleInstance.setLoginWayByHttpData(originAccount, resData)
+      methods(originAccount, resData)
 
     if (isFlowEnd) {
       // TODO: 这里同样需要记录登录方式
