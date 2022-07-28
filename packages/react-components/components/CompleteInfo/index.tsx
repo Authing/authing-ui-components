@@ -132,7 +132,6 @@ export const GuardLoginCompleteInfoView: React.FC = () => {
 
 export const GuardRegisterCompleteInfoView: React.FC = () => {
   const initData = useGuardInitData<RegisterCompleteInfoInitData>()
-
   const publicConfig = useGuardPublicConfig()
 
   const { get } = useGuardHttpClient()
@@ -191,8 +190,11 @@ export const GuardRegisterCompleteInfoView: React.FC = () => {
         registerProfile
       )
       // sdk 还没有这个接口 后续添加后 可以已 sdk 的逻辑执行
-      if (initData.businessRequestName === 'registerByEmailCode') {
-        if (user.code === 200) {
+      if (
+        initData.businessRequestName === 'registerByEmailCode' ||
+        'registerByEmail'
+      ) {
+        if (user.statusCode === 200) {
           initData.onRegisterSuccess(user.data)
           // events?.onRegister?.(user.data, authClient)
           // changeModule?.(GuardModuleType.LOGIN)

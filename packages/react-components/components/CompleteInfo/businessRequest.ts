@@ -33,18 +33,17 @@ const registerMethod = (
 
     delete profile.phoneToken
 
-    return authClient!.registerByEmail(
-      content.email,
-      content.password,
-      {
+    return post(`/api/v2/register-email`, {
+      ...content,
+      profile: {
         ...content.profile,
         ...profile,
       },
-      {
+      options: {
         ...content.options,
         phoneToken,
-      }
-    )
+      },
+    })
   } else if (fnName === 'registerByPhoneCode') {
     const emailToken = profile?.emailToken
 
