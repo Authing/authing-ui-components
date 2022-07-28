@@ -86,6 +86,7 @@ export const CompletePassword: React.FC = () => {
               password,
               profile: content.profile,
               ...content.options,
+              postUserInfoPipeline: content.postUserInfoPipeline,
             })
             submitButtonRef.current.onSpin(false)
             if (resCode === 200) {

@@ -188,27 +188,27 @@ export const GuardRegisterCompleteInfoView: React.FC = () => {
       registerProfile
     )
     // sdk 还没有这个接口 后续添加后 可以已 sdk 的逻辑执行
-    if (
-      initData.businessRequestName === 'registerByEmailCode' ||
-      'registerByEmail'
-    ) {
-      if (user.statusCode === 200) {
-        initData.onRegisterSuccess(user.data)
-        // events?.onRegister?.(user.data, authClient)
-        // changeModule?.(GuardModuleType.LOGIN)
-      } else {
-        user?.onGuardHandling?.()
-        const { apiCode, message: errorMessage, data } = user
-        initData.onRegisterFailed(apiCode, data, errorMessage)
-        // events?.onRegisterError?.({ code, data, message: errorMessage })
-      }
-      return
-    }
-    if (user) {
-      // events?.onRegister?.(user, authClient)
-      // changeModule?.(GuardModuleType.LOGIN)
+    // if (
+    //   initData.businessRequestName === 'registerByEmailCode' ||
+    //   'registerByEmail'
+    // ) {
+    if (user.statusCode === 200) {
       initData.onRegisterSuccess(user.data)
+      // events?.onRegister?.(user.data, authClient)
+      // changeModule?.(GuardModuleType.LOGIN)
+    } else {
+      user?.onGuardHandling?.()
+      const { apiCode, message: errorMessage, data } = user
+      initData.onRegisterFailed(apiCode, data, errorMessage)
+      // events?.onRegisterError?.({ code, data, message: errorMessage })
     }
+    // return
+    // }
+    // if (user) {
+    //   // events?.onRegister?.(user, authClient)
+    //   // changeModule?.(GuardModuleType.LOGIN)
+    //   initData.onRegisterSuccess(user.data)
+    // }
   }
 
   useEffect(() => {

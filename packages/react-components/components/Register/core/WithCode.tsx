@@ -409,7 +409,10 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
           if (checkCode === 200 && valid) {
             changeModule?.(GuardModuleType.REGISTER_PASSWORD, {
               businessRequestName: 'registerByEmailCode', //用于判断后续使用哪个注册api
-              content: registerContent,
+              content: {
+                ...registerContent,
+                postUserInfoPipeline: true,
+              },
               isChangeComplete: isEmailChangeComplete,
               onRegisterSuccess: onRegisterSuccessIntercept,
               onRegisterFailed,
@@ -434,7 +437,10 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
             if (checkCode === 200 && valid) {
               changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
                 businessRequestName: 'registerByEmailCode', //用于判断后续使用哪个注册api
-                content: registerContent,
+                content: {
+                  ...registerContent,
+                  postUserInfoPipeline: true,
+                },
                 onRegisterSuccess: onRegisterSuccessIntercept,
                 onRegisterFailed,
               })
@@ -456,6 +462,7 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
             code: registerContent.code,
             profile: registerContent.profile,
             ...registerContent.options,
+            postUserInfoPipeline: false,
           })
           submitButtonRef.current.onSpin(false)
           if (resCode === 200) {
