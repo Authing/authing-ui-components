@@ -310,11 +310,12 @@ const LoginWithVerifyCode = (props: any) => {
       }
       return
     }
+
     // 其实这里应该是保存两个 一个是 countryCode 一个是对应的 code
     multipleInstance &&
       multipleInstance.setLoginWay(
         'input',
-        'phone-code',
+        currentMethod === 'phone-code' ? 'phone-code' : 'email-code',
         undefined,
         isInternationSms
           ? {
