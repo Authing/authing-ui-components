@@ -121,9 +121,8 @@ export const GuardLoginCompleteInfoView: React.FC = () => {
     const originAccount = multipleInstance?.getOriginAccount()
     const methods: any =
       multipleInstance?.getOriginWay() === 'password'
-        ? multipleInstance?.setLoginWayByLDAPData
-        : multipleInstance?.setLoginWayByHttpData
-    // 这里得区别一下 到底是 Login 来的，还是
+        ? multipleInstance?.setLoginWayByHttpData
+        : multipleInstance?.setLoginWayByLDAPData
     resData &&
       multipleInstance &&
       originAccount &&
