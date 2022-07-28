@@ -1,5 +1,5 @@
 import Input, { InputProps } from 'antd/lib/input'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { VirtualDropdown } from './VirtualDropdown'
@@ -18,9 +18,15 @@ export const InputInternationPhone: React.FC<InputInternationPhoneProps> = (
     ...inputProps
   } = props
   const { t } = useTranslation()
+
   const [value, setValue] = useState(
     /^[^a-zA-Z]*$/.test(String(formValue)) ? formValue : ''
   )
+
+  // 当formValue变化时候
+  useEffect(() => {
+    setValue(/^[^a-zA-Z]*$/.test(String(formValue)) ? formValue : '')
+  }, [formValue])
 
   const valueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)

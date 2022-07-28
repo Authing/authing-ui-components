@@ -23,6 +23,12 @@ import {
   useGuardPublicConfig,
 } from '../../../_utils/context'
 import { GuardLoginInitData } from '../../interface'
+import {
+  BackFillMultipleState,
+  StoreInstance,
+} from '../../../Guard/core/hooks/useMultipleAccounts'
+import { useForm } from 'antd/lib/form/Form'
+import { useLoginMultipleBackFill } from '../../hooks/useLoginMultiple'
 interface LoginWithPasswordProps {
   // configs
   publicKey: string
@@ -42,15 +48,40 @@ interface LoginWithPasswordProps {
   loginWay?: LoginMethods
   submitButText?: string
   saveIdentify?: (type: LoginMethods, identity: string) => void
+  /**
+   * 根据输入的账号 & 返回获得对应的登录方法
+   */
+  multipleInstance?: StoreInstance
+  /**
+   * 多账号回填的数据
+   */
+  backfillData?: BackFillMultipleState
 }
 
 export const LoginWithPassword = (props: LoginWithPasswordProps) => {
-  const { agreements, onLoginFailed, onLoginSuccess, saveIdentify } = props
+  const {
+    agreements,
+    onLoginFailed,
+    onLoginSuccess,
+    saveIdentify,
+    multipleInstance,
+    backfillData,
+  } = props
+
+  const [form] = useForm()
 
   const {
     _firstItemInitialValue = '',
     specifyDefaultLoginMethod,
   } = useGuardInitData<GuardLoginInitData>()
+
+  useLoginMultipleBackFill({
+    form,
+    way: LoginMethods.Password,
+    formKey: 'account',
+    backfillData,
+    cancelBackfill: LoginMethods.Password === specifyDefaultLoginMethod,
+  })
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
   const { isPhoneMedia } = useMediaSize()
@@ -145,13 +176,16 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
 
     const res = await loginRequest(loginInfo)
 
-    onLoginRes(res)
+    onLoginRes(res, values.account)
   }
 
-  const onLoginRes = (res: AuthingGuardResponse) => {
+  const onLoginRes = (res: AuthingGuardResponse, account: string) => {
     const { code, apiCode, message: msg, data, onGuardHandling } = res
-
     submitButtonRef?.current?.onSpin(false)
+    // 更新本次登录方式
+    data &&
+      multipleInstance &&
+      multipleInstance.setLoginWayByHttpData(account, data)
 
     if (code === 200) {
       onLoginSuccess(data, msg)
@@ -181,7 +215,10 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
       }
 
       // 响应拦截器处理通用错误以及changeModule
+      // 本次请求成功 && 当前请求
       const handMode = onGuardHandling?.()
+      if (handMode) {
+      }
       // 向上层抛出错误
       handMode === CodeAction.RENDER_MESSAGE && onLoginFailed?.(code, data, msg)
     }
@@ -213,6 +250,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
         autoComplete="off"
+        form={form}
         onValuesChange={formValuesChange}
       >
         <FormItemAccount

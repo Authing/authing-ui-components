@@ -34,6 +34,9 @@ import { useInitGuardAppendConfig } from './useAppendConfig'
 import { useInitAppId } from '../../_utils/initAppId'
 import { updateFlowHandle } from '../../_utils/flowHandleStorage'
 
+// hooks
+import useMultipleAccounts from './hooks/useMultipleAccounts'
+
 interface IBaseAction<T = string, P = any> {
   type: T & string
   payload?: Partial<P>
@@ -128,6 +131,11 @@ export const RenderContext: React.FC<{
     setError
   )
 
+  const multipleInstance = useMultipleAccounts({
+    appId,
+    finallyConfig,
+  })
+
   // guardPageConfig
   const guardPageConfig = useGuardPageConfig(appId, httpClient, setError)
 
@@ -192,10 +200,11 @@ export const RenderContext: React.FC<{
       {
         ...guardProps,
       },
+      multipleInstance.instance,
       defaultMergedConfig?.openEventsMapping
     )
     setEvents(events)
-  }, [guardProps, defaultMergedConfig])
+  }, [guardProps, multipleInstance, defaultMergedConfig])
 
   // 状态机相关
   useEffect(() => {
@@ -246,6 +255,8 @@ export const RenderContext: React.FC<{
       authClint,
       guardPageConfig,
       iconfontLoaded,
+      // 保证 store 加载完成
+      multipleInstance,
     ]
 
     return !list.includes(undefined) && !list.includes(false)
@@ -260,6 +271,7 @@ export const RenderContext: React.FC<{
     authClint,
     guardPageConfig,
     iconfontLoaded,
+    multipleInstance,
   ])
 
   // TODO 触发 onLoad 事件
@@ -286,6 +298,8 @@ export const RenderContext: React.FC<{
             initData: moduleState.initData,
             currentModule: moduleState,
             guardPageConfig,
+            // 多账号相关信息 store 实例
+            multipleInstance,
           }
         : {
             defaultMergedConfig,
@@ -303,6 +317,7 @@ export const RenderContext: React.FC<{
       moduleState,
       publicConfig,
       tenantId,
+      multipleInstance,
     ]
   )
 

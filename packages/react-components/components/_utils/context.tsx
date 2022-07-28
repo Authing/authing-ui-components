@@ -6,6 +6,10 @@ import {
   GuardPageConfig,
 } from '..'
 import { ApplicationConfig } from '../AuthingGuard/api'
+import {
+  BackFillMultipleState,
+  StoreInstance,
+} from '../Guard/core/hooks/useMultipleAccounts'
 import { ModuleState } from '../Guard/GuardModule/stateMachine'
 import { GuardHttp } from './guardHttp'
 
@@ -37,6 +41,30 @@ export interface IGuardContext {
   contextLoaded: boolean
 
   guardPageConfig: Partial<GuardPageConfig>
+
+  multipleInstance: {
+    /**
+     * 多账号相关
+     */
+    isMultipleAccount: boolean
+    /**
+     * when： 多账号页面跳转进入登录页面
+     * 携带的回填数据信息
+     */
+    multipleAccountData?: BackFillMultipleState
+    /**
+     * 多账号 store 实例
+     */
+    instance?: StoreInstance
+    /**
+     * 切换多账号 isMultipleAccount 状态
+     */
+    referMultipleState?: (type: 'login' | 'multiple') => void
+    /**
+     * 清空回填数据
+     */
+    clearBackFillData?: () => void
+  }
 }
 
 const DefaultGuardX: IGuardContext = {
@@ -61,6 +89,21 @@ const DefaultGuardX: IGuardContext = {
   contextLoaded: false,
 
   guardPageConfig: {} as Partial<GuardPageConfig>,
+
+  /**
+   * 多账号 状态
+   */
+  multipleInstance: {
+    isMultipleAccount: false,
+
+    instance: undefined,
+
+    referMultipleState: undefined,
+
+    multipleAccountData: undefined,
+
+    clearBackFillData: undefined,
+  },
 }
 
 const GuardXContext = React.createContext<IGuardContext>(DefaultGuardX)
@@ -196,3 +239,9 @@ export const useGuardIsAuthFlow = () => useContext(GuardXContext).isAuthFlow
 
 export const useGuardPageConfig = () =>
   useContext(GuardXContext).guardPageConfig
+
+/**
+ * 多账号登录 store 实例
+ */
+export const useGuardMultipleInstance = () =>
+  useContext(GuardXContext).multipleInstance

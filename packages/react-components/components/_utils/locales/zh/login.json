@@ -106,7 +106,10 @@
   "qrcodeSucceed": "扫码成功",
   "referQrcodeText": "重新扫码",
   "noLoginMethodsDesc": "未配置登录方式",
+  "inputNewPwd": "请输入新的密码",
   "socialConnectionMessage": "不支持使用{{provider}}登录,请选择其他方式登录，或在其它浏览器中重试",
+  "selectLoginAccount": "选择登录账号",
+  "useOtherAccount": "使用其他账号",
   "inputNewPwd": "请输入新密码",
   "qrcodeMiddle": "请在移动端确认账号登录"
 }
