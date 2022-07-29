@@ -27,8 +27,8 @@
   },
   "scripts": {
     "build": "node ./scripts/build.js",
-    "build:types": "tsc",
-    "build:lib": "clear && tsc && node ./scripts/lib.js",
+    "build:types": "npx tsc",
+    "build:lib": "clear && npm run build:types && node ./scripts/lib.js",
     "clear": "npm run clear:dist && npm run clear:lib && npm run clear:types",
     "clear:dist": "rm -rf dist",
     "clear:lib": "rm -rf lib",
