@@ -39,3 +39,4 @@ pnpm-lock.yaml
 
 components/version/version.tsx
 examples.tsx
+/types

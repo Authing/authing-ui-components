@@ -298,4 +298,6 @@ export interface ApplicationConfig {
   skipComplateFileds: boolean
 
   selfUnlockStrategy: 'captcha' | 'password-captcha'
+
+  defaultLanguageConfig: Lang
 }

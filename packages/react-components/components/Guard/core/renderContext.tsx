@@ -25,7 +25,7 @@ import {
   useGuardPageConfig,
 } from '../../_utils/config'
 import { GuardHttp, initGuardHttp } from '../../_utils/guardHttp'
-import { initI18n } from '../../_utils/locales'
+import { initGuardI18n } from '../../_utils/locales'
 import { useGuardXContext } from '../../_utils/context'
 import { useGuardIconfont } from '../../IconFont/useGuardIconfont'
 import { useInitGuardAppendConfig } from './useAppendConfig'
@@ -33,6 +33,7 @@ import { useInitAppId } from '../../_utils/initAppId'
 import { updateFlowHandle } from '../../_utils/flowHandleStorage'
 import { ApplicationConfig } from '../../Type/application'
 import { AuthenticationClient } from 'authing-js-sdk'
+import { Lang } from '../../Type'
 
 interface IBaseAction<T = string, P = any> {
   type: T & string
@@ -171,9 +172,14 @@ export const RenderContext: React.FC<{
 
   // I18n
   useEffect(() => {
-    // TODO  国际化 这部分有点小问题 等待优化
-    initI18n({}, config?.lang)
-  }, [config?.lang])
+    if (guardPageConfig && publicConfig && defaultMergedConfig) {
+      const { defaultLanguage } = guardPageConfig.global
+
+      initGuardI18n({
+        defaultLanguage: (defaultMergedConfig?.lang as Lang) ?? defaultLanguage,
+      })
+    }
+  }, [defaultMergedConfig, guardPageConfig, publicConfig])
 
   useEffect(() => {
     if (!appId) return
