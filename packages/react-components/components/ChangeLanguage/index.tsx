@@ -10,20 +10,16 @@ const LngTextMapping: Record<
   Lang,
   {
     label: string
-    icon: React.ReactNode
   }
 > = {
   'zh-CN': {
     label: '简体中文',
-    icon: 'authing-zhongwen',
   },
   'zh-TW': {
     label: '繁体中文',
-    icon: 'authing-zhongwen',
   },
   'en-US': {
     label: 'English',
-    icon: 'authing-a-yingwen1',
   },
 }
 
@@ -59,10 +55,6 @@ export const ChangeLanguage = (props: {
   const currentLngText = useMemo(() => {
     return (
       <>
-        <IconFont
-          type={LngTextMapping[currentLng].icon as string}
-          className="lng-svg"
-        />
         <span>{LngTextMapping[currentLng].label}</span>
       </>
     )
@@ -103,7 +95,7 @@ export const ChangeLanguage = (props: {
               }}
             >
               <span>{label}</span>
-              {isCurrent && <IconFont type="authing-close-line" />}
+              {isCurrent && <IconFont type="authing-check-fill" />}
             </Menu.Item>
           )
         })}
