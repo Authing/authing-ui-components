@@ -6,7 +6,7 @@ import { Lang } from '../Type'
 import { useGuardPageConfig } from '../_utils/context'
 import './style.less'
 
-const LngTextMapping: Record<
+export const LngTextMapping: Record<
   Lang,
   {
     label: string
@@ -25,8 +25,10 @@ const LngTextMapping: Record<
 
 export const ChangeLanguage = (props: {
   onLangChange?: (lang: Lang) => void
-  langRange: string[]
+  langRange?: string[]
 }) => {
+  const { langRange = ['zh-CN', 'zh-TW', 'en-US'] } = props
+
   const { onLangChange } = props
   const { i18n } = useTranslation()
 
@@ -66,9 +68,9 @@ export const ChangeLanguage = (props: {
       label: string
     }[] = []
 
-    if (props?.langRange) {
+    if (langRange) {
       menuItem = Object.keys(LngTextMapping)
-        .filter((lng) => props.langRange.includes(lng as Lang))
+        .filter((lng) => langRange.includes(lng as Lang))
         .map((lng) => ({
           key: lng,
           label: LngTextMapping[lng as Lang].label,
@@ -101,9 +103,9 @@ export const ChangeLanguage = (props: {
         })}
       </Menu>
     )
-  }, [currentLng, onChangeLng, props.langRange])
+  }, [currentLng, langRange, onChangeLng])
 
-  if (!showChangeLng || props?.langRange.length === 0) {
+  if (!showChangeLng || langRange.length === 0) {
     return null
   }
 

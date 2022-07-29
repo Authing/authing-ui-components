@@ -36,8 +36,8 @@ export interface IG2FCViewProps extends IG2FCProps {
 export interface IG2Config {
   title?: string
   logo?: string
-  lang: string
-  langRange: string[]
+  lang?: string
+  langRange?: string[]
   host: string
   isHost?: boolean // 判断是否处于托管页面
   mode: GuardMode
@@ -52,8 +52,6 @@ export interface IG2Config {
 }
 
 const defaultG2Config: IG2Config = {
-  lang: 'zh-CN',
-  langRange: ['zh-CN', 'en-US'],
   escCloseable: true,
   clickCloseable: true,
   mode: GuardMode.Normal,

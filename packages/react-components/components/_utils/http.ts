@@ -2,6 +2,8 @@ import qs from 'qs'
 import { i18n } from './locales'
 import { CodeAction } from './responseManagement/interface'
 import Axios, { AxiosRequestConfig, CancelTokenSource } from 'axios'
+import { getCurrentLng } from '.'
+
 export const requestClient = async (...rest: Parameters<typeof fetch>) => {
   const res = await fetch(...rest)
   return res.json()
@@ -49,7 +51,7 @@ requestClient.get = async <T>(
   const headers: Record<string, any> = {
     ...init?.headers,
     'Content-Type': 'application/json',
-    [requestClient.langHeader]: i18n.language,
+    [requestClient.langHeader]: getCurrentLng(),
   }
 
   if (requestClient.tenantId !== '')
@@ -114,7 +116,7 @@ requestClient.post = async <T>(
         headers: {
           'Content-Type': 'application/json',
           ...config?.headers,
-          [requestClient.langHeader]: i18n.language,
+          [requestClient.langHeader]: getCurrentLng(),
         },
       }),
     ])
@@ -159,7 +161,7 @@ requestClient.postForm = async <T>(
         cancelToken: source.token,
         headers: {
           ...config?.headers,
-          [requestClient.langHeader]: i18n.language,
+          [requestClient.langHeader]: getCurrentLng(),
         },
       }),
     ])

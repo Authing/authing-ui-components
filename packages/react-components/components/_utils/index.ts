@@ -13,6 +13,8 @@ import {
   LoginMethods,
   RegisterMethods,
 } from '../Type/application'
+import { LngTextMapping } from '../ChangeLanguage'
+import { Lang } from '../Type'
 export * from './popupCenter'
 export * from './clipboard'
 
@@ -759,4 +761,12 @@ export const getPasswordIdentify = (identity: string): string => {
   return validate('phone', identity) || validate('email', identity)
     ? identity
     : ''
+}
+
+export const getCurrentLng = () => {
+  if (Object.keys(LngTextMapping).includes(i18n.language)) {
+    return i18n.language as Lang
+  } else {
+    return i18n?.languages?.[i18n?.languages?.length - 1] as Lang
+  }
 }
