@@ -45,6 +45,8 @@ export const RenderContext: React.FC<{
   initState: ModuleState
 }> = ({ guardProps, initState, children }) => {
   const { tenantId, config } = guardProps
+  // 强制刷新
+  const [forceUpdate, setForceUpdate] = useState(Date.now())
 
   const [events, setEvents] = useState<GuardEvents>()
   const [authClint, setAuthClint] = useState<AuthenticationClient>()
@@ -56,7 +58,7 @@ export const RenderContext: React.FC<{
 
   const appId = useInitAppId(guardProps.appId, guardProps.authClient, setError)
 
-  useInitGuardAppendConfig(appId, guardProps.appendConfig)
+  useInitGuardAppendConfig(setForceUpdate, appId, guardProps.appendConfig)
 
   // 状态机
   const [
@@ -123,6 +125,7 @@ export const RenderContext: React.FC<{
   }, [appId, defaultMergedConfig, tenantId])
 
   const finallyConfig = useMergePublicConfig(
+    forceUpdate,
     appId,
     defaultMergedConfig,
     httpClient,
@@ -130,7 +133,12 @@ export const RenderContext: React.FC<{
   )
 
   // guardPageConfig
-  const guardPageConfig = useGuardPageConfig(appId, httpClient, setError)
+  const guardPageConfig = useGuardPageConfig(
+    forceUpdate,
+    appId,
+    httpClient,
+    setError
+  )
 
   const sdkClient = useInitGuardAuthClient({
     config: finallyConfig,

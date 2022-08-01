@@ -76,7 +76,7 @@ export const useInitGuardAuthClient = (props: {
 
     const host = config.host
     const lang = config.lang
-    const propsAuthClient = authClient
+    const propsAuthClient = props?.authClient
 
     // 优先检测 props 中的 authClient 对象
     if (propsAuthClient) {
@@ -120,7 +120,7 @@ export const useInitGuardAuthClient = (props: {
     } catch (error) {
       setError(error)
     }
-  }, [appId, config, globalClient, setError, tenantId])
+  }, [appId, config, globalClient, props?.authClient, setError, tenantId])
 
   useMemo(() => {
     if (!client) return
