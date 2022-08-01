@@ -12,6 +12,7 @@
   "dependencies": {
     "antd": "^4.8.0",
     "authing-js-sdk": "4.23.32",
+    "classnames": "^2.3.1",
     "fastclick": "^1.0.6",
     "global": "^4.4.0",
     "phone": "^3.1.12",

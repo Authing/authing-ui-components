@@ -279,6 +279,22 @@
     lodash "^4.17.15"
     resize-observer-polyfill "^1.5.0"
 
+"@authing/react-ui-components@^3.1.31":
+  version "3.1.39"
+  resolved "https://registry.npmjs.org/@authing/react-ui-components/-/react-ui-components-3.1.39.tgz#336a29b21256fddd3b99319ef893670e96368128"
+  integrity sha512-DhPtbHbRSFtFv6XbKF+wiO7Y39UkgDaREBNai7VwKfv8LCOP/SfPdockQpGWHKh29AdbaHEMq+ExDvhpkNsPDw==
+  dependencies:
+    antd "^4.8.0"
+    authing-js-sdk "4.23.35"
+    fastclick "^1.0.6"
+    global "^4.4.0"
+    phone "^3.1.12"
+    qs "^6.9.4"
+    react-responsive "^9.0.0-beta.5"
+    react-use "^17.3.1"
+    ua-parser-js "^1.0.2"
+    wildcard "^1.1.2"
+
 "@babel/code-frame@7.10.4", "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.5.5":
   version "7.10.4"
   resolved "https://registry.npm.taobao.org/@babel/code-frame/download/@babel/code-frame-7.10.4.tgz"
@@ -6025,6 +6041,17 @@ authing-js-sdk@4.23.32:
     jwt-decode "^2.2.0"
     sm-crypto "^0.3.7"
 
+authing-js-sdk@4.23.35:
+  version "4.23.35"
+  resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.23.35.tgz#d99e545dfd66c92649e9f7bba5fa1f4367db111a"
+  integrity sha512-EdrDl1tczeInFc/NGqO4dasl8BZTSLDnduv4rTMw9bIuBb5Ko+4SDmbag1bZpSCpclbTBSmLDTD/6bCtgx6YAQ==
+  dependencies:
+    axios "^0.19.2"
+    crypto-js "^4.0.0"
+    jsencrypt "^3.1.0"
+    jwt-decode "^2.2.0"
+    sm-crypto "^0.3.7"
+
 autoprefixer@9.8.6, autoprefixer@^9.6.1, autoprefixer@^9.6.5:
   version "9.8.6"
   resolved "https://registry.npm.taobao.org/autoprefixer/download/autoprefixer-9.8.6.tgz"
@@ -7196,11 +7223,6 @@ class-utils@^0.3.5:
     define-property "^0.2.5"
     isobject "^3.0.0"
     static-extend "^0.1.1"
-
-classname@^0.0.0:
-  version "0.0.0"
-  resolved "https://registry.npmjs.org/classname/-/classname-0.0.0.tgz#43d171b484e354c7a293a5b78004df6852db20d6"
-  integrity sha512-kkhsspEJdUW+VhuvNzb2sQf0KbafDPfd36dB1qf03Uu42dWZwMQzaQuyNkaRr5ir0ZiAN0+TlH/EOOfwb/aaXg==
 
 classnames@2.x, classnames@^2.2.1, classnames@^2.2.3, classnames@^2.2.5, classnames@^2.2.6:
   version "2.2.6"
