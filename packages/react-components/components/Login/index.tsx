@@ -575,10 +575,9 @@ export const GuardLoginView = () => {
                               ...config?.qrCodeScanOptions,
                               extIdpConnId: item.id,
                               tips: {
-                                title:
-                                  i18n.language === 'zh-CN'
-                                    ? '使用 微信 扫码登录'
-                                    : `Use WeChat to scan and login`,
+                                title: t(
+                                  'common.loginWithWechatMiniQrcodeTipsTitle'
+                                ),
                                 expired: t('login.qrcodeExpired'),
                               },
                             }}
@@ -601,10 +600,7 @@ export const GuardLoginView = () => {
                             referText: t('login.referQrcodeText'),
                             succeed: t('login.qrcodeSucceed'),
                             middleTitle: t('login.qrcodeMiddle'),
-                            title:
-                              i18n.language === 'zh-CN'
-                                ? '使用 移动端 APP 扫码登录'
-                                : `Use Mobile APP to scan and login`,
+                            title: t('common.loginWithAppQrcodeTipsTitle'),
                             expired: t('login.qrcodeExpired'),
                           },
                         }}
@@ -626,18 +622,11 @@ export const GuardLoginView = () => {
                               ...config?.qrCodeScanOptions,
                               extIdpConnId: item.id,
                               tips: {
-                                title:
-                                  i18n.language === 'zh-CN'
-                                    ? `${
-                                        isWeChatBrowser()
-                                          ? '长按二维码登录'
-                                          : '使用 微信 扫码登录'
-                                      }`
-                                    : `${
-                                        isWeChatBrowser()
-                                          ? 'Long press the QR code to log in'
-                                          : 'Use WeChat to scan and login'
-                                      } `,
+                                title: isWeChatBrowser()
+                                  ? t('common.loginWithWechatmpQrcodeTipsTitle')
+                                  : t(
+                                      'common.loginWithWechatMiniQrcodeTipsTitle'
+                                    ),
                                 expired: t('login.qrcodeExpired'),
                               },
                             }}
