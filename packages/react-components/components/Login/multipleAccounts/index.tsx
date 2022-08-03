@@ -26,7 +26,7 @@ interface MultipleAccountsProps {
 
 const MultipleAccountsFC: React.FC<MultipleAccountsProps> = (props) => {
   const [, setState] = useState<number>(0)
-  const { multipleInstance, referMultipleState, changeModule } = props
+  const { multipleInstance, referMultipleState } = props
 
   // 默认只有一个多选实例
   const lists = multipleInstance?.getMemoUser()

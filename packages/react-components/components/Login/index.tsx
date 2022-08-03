@@ -585,11 +585,11 @@ export const GuardLoginView = () => {
                   >
                     <Tabs
                       destroyInactiveTabPane={true}
-                          defaultActiveKey={defaultQrCodeWay}
-                          onChange={(k: any) => {
-                            message.destroy()
-                            events?.onLoginTabChange?.(k)
-                          }}    
+                      defaultActiveKey={defaultQrCodeWay}
+                      onChange={(k: any) => {
+                        message.destroy()
+                        events?.onLoginTabChange?.(k)
+                      }}
                     >
                       {ms?.includes(LoginMethods.WxMinQr) &&
                         qrcodeTabsSettings?.[LoginMethods.WxMinQr].map(
@@ -657,10 +657,12 @@ export const GuardLoginView = () => {
                                   extIdpConnId: item.id,
                                   tips: {
                                     title: isWeChatBrowser()
-                                    ? t('common.loginWithWechatmpQrcodeTipsTitle')
-                                    : t(
-                                        'common.loginWithWechatMiniQrcodeTipsTitle'
-                                      ),
+                                      ? t(
+                                          'common.loginWithWechatmpQrcodeTipsTitle'
+                                        )
+                                      : t(
+                                          'common.loginWithWechatMiniQrcodeTipsTitle'
+                                        ),
                                     expired: t('login.qrcodeExpired'),
                                   },
                                 }}
