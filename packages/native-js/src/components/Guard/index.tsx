@@ -1,15 +1,15 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Guard as ReactAuthingGuard } from "@authing/react-ui-components";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Guard as ReactAuthingGuard } from '@authing/react-ui-components';
 import {
   GuardMode,
   GuardEvents,
   AuthenticationClient,
   GuardEventsKebabToCamelType,
   GuardEventsCamelToKebabMapping,
-} from "@authing/react-ui-components";
-import "@authing/react-ui-components/lib/index.min.css";
-import { GuardComponentConfig, GuardLocalConfig } from "@authing/react-ui-components/components/Guard/config";
+} from '@authing/react-ui-components';
+import '@authing/react-ui-components/lib/index.min.css';
+import { GuardComponentConfig, GuardLocalConfig } from '@authing/react-ui-components/components/Guard/config';
 
 export interface NativeGuardProps {
   appId?: string;
@@ -34,12 +34,12 @@ export type GuardEventListeners = {
 };
 
 export class Guard {
-  private appId?: string;
-  private config?: Partial<GuardLocalConfig>;
-  private tenantId?: string;
-  private authClient?: AuthenticationClient;
+  public appId?: string;
+  public config?: Partial<GuardLocalConfig>;
+  public tenantId?: string;
+  public authClient?: AuthenticationClient;
 
-  private visible?: boolean;
+  public visible?: boolean;
   constructor(props?: NativeGuardProps);
   constructor(appId?: string, config?: Partial<GuardLocalConfig>, tenantId?: string, authClient?: AuthenticationClient);
 
@@ -49,7 +49,7 @@ export class Guard {
     tenantId?: string,
     authClient?: AuthenticationClient
   ) {
-    if (appIdOrProps && typeof appIdOrProps !== "string") {
+    if (appIdOrProps && typeof appIdOrProps !== 'string') {
       const { appId, config: configProps, tenantId: tenantIdProps, authClient: authClientProps } = appIdOrProps;
       this.appId = appId;
       this.config = configProps;
@@ -68,12 +68,12 @@ export class Guard {
   }
 
   static getGuardContainer(selector?: string | HTMLElement) {
-    const defaultId = "authing_guard_container";
+    const defaultId = 'authing_guard_container';
 
     if (!selector) {
       let container = document.querySelector(`#${defaultId}`);
       if (!container) {
-        container = document.createElement("div");
+        container = document.createElement('div');
         container.id = defaultId;
         document.body.appendChild(container);
       }
@@ -81,7 +81,7 @@ export class Guard {
       return container;
     }
 
-    if (typeof selector === "string") {
+    if (typeof selector === 'string') {
       return document.querySelector(selector);
     }
 
@@ -96,18 +96,18 @@ export class Guard {
 
   public render(): void;
   public render(aliginOrCb: () => void): void;
-  public render(aliginOrCb: "none" | "center" | "left" | "right"): void;
-  public render(aliginOrCb: "none" | "center" | "left" | "right", callback: () => void): void;
+  public render(aliginOrCb: 'none' | 'center' | 'left' | 'right'): void;
+  public render(aliginOrCb: 'none' | 'center' | 'left' | 'right', callback: () => void): void;
   public render(aliginOrCb?: any, cb?: any) {
     const l = arguments.length;
-    let align: "none" | "center" | "left" | "right";
+    let align: 'none' | 'center' | 'left' | 'right';
 
     let callback: (() => void) | undefined;
     if (l === 0) {
-      align = "none";
+      align = 'none';
     } else if (l === 1) {
-      if (typeof aliginOrCb === "function") {
-        align = "none";
+      if (typeof aliginOrCb === 'function') {
+        align = 'none';
         callback = aliginOrCb;
       } else {
         align = aliginOrCb;
@@ -116,7 +116,7 @@ export class Guard {
       align = aliginOrCb;
       callback = cb;
     } else {
-      throw new Error("参数格式错误");
+      throw new Error('参数格式错误');
     }
 
     // 两个都有
@@ -133,7 +133,7 @@ export class Guard {
     const evts: GuardEvents = Object.entries(GuardEventsCamelToKebabMapping).reduce((acc, [reactEvt, nativeEvt]) => {
       return Object.assign({}, acc, {
         [reactEvt]: (...rest: any) => {
-          if (nativeEvt === "close") {
+          if (nativeEvt === 'close') {
             this.hide();
           }
 
@@ -153,8 +153,8 @@ export class Guard {
     return ReactDOM.render(
       <div
         style={{
-          display: "flex",
-          alignItems: "center",
+          display: 'flex',
+          alignItems: 'center',
           justifyContent: align,
         }}
       >
