@@ -443,15 +443,15 @@ export const getPasswordValidate = (
 ): Rule[] => {
   const required = [
     ...fieldRequiredRule(i18n.t('common.password'), fieldRequiredRuleMessage),
-    {
-      validateTrigger: 'onBlur',
-      validator(_: any, value: any) {
-        if ((value ?? '').indexOf(' ') !== -1) {
-          return Promise.reject(i18n.t('common.checkPasswordHasSpace'))
-        }
-        return Promise.resolve()
-      },
-    },
+    // {
+    //   validateTrigger: 'onBlur',
+    //   validator(_: any, value: any) {
+    //     if ((value ?? '').indexOf(' ') !== -1) {
+    //       return Promise.reject(i18n.t('common.checkPasswordHasSpace'))
+    //     }
+    //     return Promise.resolve()
+    //   },
+    // },
   ]
   const getCustomPassword = () => {
     console.log(i18n, i18n.language, customPasswordStrength)

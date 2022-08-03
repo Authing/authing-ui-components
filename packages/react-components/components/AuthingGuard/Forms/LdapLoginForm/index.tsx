@@ -66,7 +66,7 @@ export const LdapLoginForm = forwardRef<FormInstance, PasswordLoginFormProps>(
 
       try {
         const identity = values.identity && values.identity.trim()
-        const password = values.password && values.password.trim()
+        const password = values.password
 
         const user = await authClient.loginByLdap(identity, password)
         onSuccess && onSuccess(user)
