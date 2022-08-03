@@ -113,7 +113,7 @@ export const LoginWithAD = (props: LoginWithADProps) => {
 
     // onLogin
     let username = values.account && values.account.trim()
-    let password = values.password && values.password.trim()
+    let password = values.password
 
     const encrypt = client.options.encryptFunction
 

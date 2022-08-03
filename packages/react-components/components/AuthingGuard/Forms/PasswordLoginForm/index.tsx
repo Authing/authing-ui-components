@@ -103,7 +103,7 @@ export const PasswordLoginForm = forwardRef<
 
   const login = async (values: any) => {
     const identity = values.identity && values.identity.trim()
-    const password = values.password && values.password.trim()
+    const password = values.password
     const captchaCode = values.captchaCode && values.captchaCode.trim()
 
     const encrypt = authClient.options.encryptFunction
