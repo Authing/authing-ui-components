@@ -1,16 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ShieldSpin } from '../../ShieldSpin'
 import { useGuardAuthClient } from '../../Guard/authClient'
-import {
-  useGuardFinallyConfig,
-  useGuardHttpClient,
-  useGuardPublicConfig,
-} from '../../_utils/context'
+import { useGuardFinallyConfig, useGuardHttpClient } from '../../_utils/context'
 import { message } from 'antd'
 import { getGuardWindow } from '../../Guard/core/useAppendConfig'
+import { LoginMethods } from '../../Type/application'
 import { StoreInstance } from '../../Guard/core/hooks/useMultipleAccounts'
-import { LoginMethods } from '../../AuthingGuard/types'
-
 interface LoginWithWechatmpQrcodeProps {
   // onLogin: any
   onLoginSuccess: any

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Form, Input } from 'antd'
+import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import {
   fieldRequiredRule,

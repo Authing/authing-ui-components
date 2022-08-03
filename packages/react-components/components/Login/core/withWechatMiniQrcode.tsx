@@ -5,7 +5,7 @@ import { useGuardAuthClient } from '../../Guard/authClient'
 import { useGuardFinallyConfig, useGuardHttpClient } from '../../_utils/context'
 import { getGuardWindow } from '../../Guard/core/useAppendConfig'
 import { StoreInstance } from '../../Guard/core/hooks/useMultipleAccounts'
-import { LoginMethods } from '../../AuthingGuard/types'
+import { LoginMethods } from '../../Type/application'
 
 interface LoginWithWechatMiniQrcodeProps {
   // onLogin: any
