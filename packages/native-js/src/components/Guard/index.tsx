@@ -40,7 +40,6 @@ export class Guard {
   private authClient?: AuthenticationClient;
 
   private visible?: boolean;
-
   constructor(props?: NativeGuardProps);
   constructor(appId?: string, config?: Partial<GuardLocalConfig>, tenantId?: string, authClient?: AuthenticationClient);
 
@@ -95,7 +94,42 @@ export class Guard {
     });
   }, {} as GuardEventListeners);
 
-  private render(cb?: () => void) {
+  public render(): void;
+  public render(aliginOrCb: () => void): void;
+  public render(aliginOrCb: "none" | "center" | "left" | "right"): void;
+  public render(aliginOrCb: "none" | "center" | "left" | "right", callback: () => void): void;
+  public render(aliginOrCb?: any, cb?: any) {
+    const l = arguments.length;
+    let align: "none" | "center" | "left" | "right";
+
+    let callback: (() => void) | undefined;
+    if (l === 0) {
+      align = "none";
+    } else if (l === 1) {
+      if (typeof aliginOrCb === "function") {
+        align = "none";
+        callback = aliginOrCb;
+      } else {
+        align = aliginOrCb;
+      }
+    } else if (l === 2) {
+      align = aliginOrCb;
+      callback = cb;
+    } else {
+      throw new Error("参数格式错误");
+    }
+
+    // 两个都有
+
+    // let justifyContent = "none";
+    // let renderCb;
+    // if (typeof aligin === "string") {
+    //   justifyContent = aligin;
+    //   renderCb = cb;
+    // } else {
+    //   renderCb = aligin;
+    // }
+
     const evts: GuardEvents = Object.entries(GuardEventsCamelToKebabMapping).reduce((acc, [reactEvt, nativeEvt]) => {
       return Object.assign({}, acc, {
         [reactEvt]: (...rest: any) => {
@@ -117,16 +151,24 @@ export class Guard {
     }, {} as GuardEvents);
 
     return ReactDOM.render(
-      <ReactAuthingGuard
-        {...(evts as GuardEvents)}
-        appId={this.appId}
-        config={this.config as GuardComponentConfig}
-        visible={this.visible}
-        tenantId={this.tenantId}
-        authClient={this.authClient}
-      />,
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: align,
+        }}
+      >
+        <ReactAuthingGuard
+          {...(evts as GuardEvents)}
+          appId={this.appId}
+          config={this.config as GuardComponentConfig}
+          visible={this.visible}
+          tenantId={this.tenantId}
+          authClient={this.authClient}
+        />
+      </div>,
       Guard.getGuardContainer(this.config?.target),
-      cb
+      callback
     );
   }
 
