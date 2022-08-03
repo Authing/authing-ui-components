@@ -1,7 +1,12 @@
 import { Form, Input, message } from 'antd'
+import { useForm } from 'antd/lib/form/Form'
 import { LoginMethods } from 'authing-js-sdk'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import {
+  BackFillMultipleState,
+  StoreInstance,
+} from '../../Guard/core/hooks/useMultipleAccounts'
 import { useGuardAuthClient } from '../../Guard/authClient'
 // import { useGuardAuthClient } from '../../Guard/authClient'
 import { IconFont } from '../../IconFont'
@@ -21,6 +26,7 @@ import { useMediaSize } from '../../_utils/hooks'
 import { requestClient } from '../../_utils/http'
 import { i18n } from '../../_utils/locales'
 import { CodeAction } from '../../_utils/responseManagement/interface'
+import { useLoginMultipleBackFill } from '../hooks/useLoginMultiple'
 
 interface LoginWithADProps {
   // configs
@@ -34,10 +40,24 @@ interface LoginWithADProps {
   onLoginFailed: any
   onBeforeLogin: any
   agreements: Agreement[]
+  /**
+   * 回填的数据
+   */
+  backfillData?: BackFillMultipleState
+  /**
+   * 根据输入的账号 & 返回获得对应的登录方法
+   */
+  multipleInstance?: StoreInstance
 }
 
 export const LoginWithAD = (props: LoginWithADProps) => {
-  const { agreements, onLoginFailed, onLoginSuccess } = props
+  const {
+    agreements,
+    onLoginFailed,
+    onLoginSuccess,
+    multipleInstance,
+    backfillData,
+  } = props
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
 
@@ -58,6 +78,15 @@ export const LoginWithAD = (props: LoginWithADProps) => {
   let client = useGuardAuthClient()
 
   // const { post } = useGuardHttpClient()
+
+  const [form] = useForm()
+
+  useLoginMultipleBackFill({
+    form,
+    way: 'ad',
+    formKey: 'account',
+    backfillData,
+  })
 
   let submitButtonRef = useRef<any>(null)
 
@@ -111,6 +140,9 @@ export const LoginWithAD = (props: LoginWithADProps) => {
       const res = await fetchRes.json()
 
       const { code, data, onGuardHandling } = responseIntercept(res)
+
+      // 更新本次登录方式
+      data && multipleInstance && multipleInstance.setLoginWay('input', 'ad')
 
       submitButtonRef.current?.onSpin(false)
 
@@ -172,6 +204,7 @@ export const LoginWithAD = (props: LoginWithADProps) => {
   return (
     <div className="authing-g2-login-ad">
       <Form
+        form={form}
         name="adLogin"
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}

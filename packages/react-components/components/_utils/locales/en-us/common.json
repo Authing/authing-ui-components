@@ -168,5 +168,6 @@
   "passwordUnsafeTip": "Password strength has been updated, please refresh the page and try again",
   "loginWithWechatMiniQrcodeTipsTitle": "Use WeChat to scan and login",
   "loginWithAppQrcodeTipsTitle": "Use Mobile APP to scan and login",
-  "loginWithWechatmpQrcodeTipsTitle": "Long press the QR code to login"
+  "loginWithWechatmpQrcodeTipsTitle": "Long press the QR code to login",
+  "del": "Delete"
 }

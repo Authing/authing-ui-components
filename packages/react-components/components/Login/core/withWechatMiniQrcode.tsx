@@ -4,12 +4,17 @@ import { ShieldSpin } from '../../ShieldSpin'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { useGuardFinallyConfig, useGuardHttpClient } from '../../_utils/context'
 import { getGuardWindow } from '../../Guard/core/useAppendConfig'
+import { StoreInstance } from '../../Guard/core/hooks/useMultipleAccounts'
+import { LoginMethods } from '../../AuthingGuard/types'
 
 interface LoginWithWechatMiniQrcodeProps {
   // onLogin: any
   onLoginSuccess: any
   canLoop: boolean
   qrCodeScanOptions: any
+  // 当前登录方式 对应的id
+  id: string
+  multipleInstance?: StoreInstance
 }
 
 export const LoginWithWechatMiniQrcode = (
@@ -50,6 +55,12 @@ export const LoginWithWechatMiniQrcode = (
       },
       onSuccess(user) {
         // props.onLogin(200, user)
+        props.multipleInstance &&
+          props.multipleInstance.setLoginWay(
+            'qrcode',
+            LoginMethods.WxMinQr,
+            props.id
+          )
         clearInterval(timerRef.current)
         props.onLoginSuccess(user)
       },
@@ -66,6 +77,12 @@ export const LoginWithWechatMiniQrcode = (
         setLoading(true)
       },
       onAuthFlow: (scannedResult) => {
+        props.multipleInstance &&
+          props.multipleInstance.setLoginWay(
+            'qrcode',
+            LoginMethods.WxMinQr,
+            props.id
+          )
         clearInterval(timerRef.current)
         const { onGuardHandling } = responseIntercept(scannedResult)
         onGuardHandling?.()

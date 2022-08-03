@@ -6,14 +6,16 @@ function App() {
   console.log(GuardEventsCamelToKebabMapping);
 
   useEffect(() => {
-    const guard = new Guard("6191cf610f772aa56dc70637", {
+    const guard = new Guard("62cd66dc014378042b55154f", {
       target: ".App",
       mode: GuardMode.Modal,
     });
 
     // @ts-ignore
     window.guard = guard;
-
+    guard.render("center", () => {
+      console.log("mount");
+    });
     guard.show();
 
     guard.on("load", (e: any) => {

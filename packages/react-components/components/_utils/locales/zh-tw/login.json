@@ -57,5 +57,7 @@
   "socialConnectionMessage": "不支持使用{{provider}}登錄,請選擇其他方式登錄，或在其它瀏覽器中重試",
   "thridAccLogin": "第三方賬號登錄",
   "verifyCodeSended": "驗證碼已發送至",
-  "wechatmpQrcode": "公眾號關注登錄"
+  "wechatmpQrcode": "公眾號關注登錄",
+  "selectLoginAccount": "選擇登錄賬號",
+  "useOtherAccount": "使用其他賬號"
 }

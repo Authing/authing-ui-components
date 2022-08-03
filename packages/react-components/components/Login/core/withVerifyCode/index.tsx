@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Form } from 'antd'
+import { Form, Input } from 'antd'
 import { useTranslation } from 'react-i18next'
 import {
   fieldRequiredRule,
@@ -12,6 +12,7 @@ import { Agreements } from '../../../Register/components/Agreements'
 import { SceneType } from 'authing-js-sdk'
 import { SendCodeByPhone } from '../../../SendCode/SendCodeByPhone'
 import {
+  useGuardFinallyConfig,
   useGuardHttpClient,
   useGuardInitData,
   useGuardPublicConfig,
@@ -26,9 +27,13 @@ import { EmailScene, InputMethod } from '../../../Type'
 import { CodeAction } from '../../../_utils/responseManagement/interface'
 import { GuardLoginInitData } from '../../interface'
 import { LoginMethods } from '../../../Type/application'
+import { useLoginMultipleBackFill } from '../../hooks/useLoginMultiple'
 
-export const LoginWithVerifyCode = (props: any) => {
-  const config = useGuardPublicConfig()
+const LoginWithVerifyCode = (props: any) => {
+  const publicConfig = useGuardPublicConfig()
+
+  const config = useGuardFinallyConfig()
+
   const {
     _firstItemInitialValue = '',
     specifyDefaultLoginMethod,
@@ -42,16 +47,19 @@ export const LoginWithVerifyCode = (props: any) => {
     onLoginFailed,
     onLoginSuccess,
     saveIdentify,
+    multipleInstance,
+    backfillData,
   } = props
 
-  const verifyCodeLength = config?.verifyCodeLength ?? 4
+  const verifyCodeLength = publicConfig?.verifyCodeLength ?? 4
 
   const { post } = useGuardHttpClient()
 
   const { isPhoneMedia } = useMediaSize()
 
   // 是否开启了国际化短信功能
-  const isInternationSms = config?.internationalSmsConfig?.enabled || false
+  const isInternationSms =
+    publicConfig?.internationalSmsConfig?.enabled || false
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
 
@@ -66,10 +74,20 @@ export const LoginWithVerifyCode = (props: any) => {
   const [isOnlyInternationSms, setInternationSms] = useState(false)
   // 区号 默认
   const [areaCode, setAreaCode] = useState(
-    config?.internationalSmsConfig?.defaultISOType || 'CN'
+    publicConfig?.internationalSmsConfig?.defaultISOType || 'CN'
   )
 
   let [form] = Form.useForm()
+
+  useLoginMultipleBackFill({
+    form,
+    way: LoginMethods.PhoneCode,
+    formKey: 'identify',
+    backfillData,
+    isOnlyInternationSms,
+    setAreaCode,
+    cancelBackfill: specifyDefaultLoginMethod === LoginMethods.PhoneCode,
+  })
 
   let submitButtonRef = useRef<any>(null)
   const { t } = useTranslation()
@@ -179,23 +197,25 @@ export const LoginWithVerifyCode = (props: any) => {
     if (
       methods.length === 1 &&
       methods[0] === 'phone-code' &&
-      config &&
-      config.internationalSmsConfig?.enabled
+      publicConfig &&
+      publicConfig.internationalSmsConfig?.enabled
     ) {
       setInternationSms(true)
     }
-  }, [config, methods])
+  }, [publicConfig, methods])
 
   const loginByPhoneCode = async (values: any) => {
     const reqContent: any = {
       phone: values.phoneNumber,
       code: values.code,
-      customData: getUserRegisterParams(),
+      customData: config?.isHost
+        ? getUserRegisterParams(['login_page_context'])
+        : undefined,
       autoRegister: autoRegister,
-      withCustomData: true,
+      withCustomData: false,
     }
 
-    if (config && config.internationalSmsConfig?.enabled)
+    if (publicConfig && publicConfig.internationalSmsConfig?.enabled)
       reqContent.phoneCountryCode = values.phoneCountryCode
 
     const { code, data, onGuardHandling } = await post(
@@ -215,13 +235,16 @@ export const LoginWithVerifyCode = (props: any) => {
     }
   }
 
+  // 邮箱验证码登录
   const loginByEmailCode = async (values: any) => {
     const reqContent = {
       email: values.identify,
       code: values.code,
-      customData: getUserRegisterParams(),
+      customData: config?.isHost
+        ? getUserRegisterParams(['login_page_context'])
+        : undefined,
       autoRegister: autoRegister,
-      withCustomData: true,
+      withCustomData: false,
     }
     const { code, data, onGuardHandling } = await post(
       '/api/v2/login/email-code',
@@ -277,7 +300,6 @@ export const LoginWithVerifyCode = (props: any) => {
       const { code, apiCode, data, onGuardHandling } = res
 
       submitButtonRef.current?.onSpin(false)
-
       if (code === 200) {
         onLoginSuccess(data)
       } else {
@@ -288,6 +310,20 @@ export const LoginWithVerifyCode = (props: any) => {
       }
       return
     }
+
+    // 其实这里应该是保存两个 一个是 countryCode 一个是对应的 code
+    multipleInstance &&
+      multipleInstance.setLoginWay(
+        'input',
+        currentMethod === 'phone-code' ? 'phone-code' : 'email-code',
+        undefined,
+        isInternationSms
+          ? {
+              phoneCountryCode,
+              areaCode,
+            }
+          : undefined
+      )
 
     if (currentMethod === 'phone-code') {
       await loginByPhoneCode({ ...values, phoneNumber, phoneCountryCode })
@@ -412,3 +448,5 @@ export const LoginWithVerifyCode = (props: any) => {
     </div>
   )
 }
+
+export { LoginWithVerifyCode }

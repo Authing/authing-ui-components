@@ -4,12 +4,15 @@ import { useGuardAuthClient } from '../../Guard/authClient'
 import { message } from 'antd'
 import { useGuardFinallyConfig, useGuardHttpClient } from '../../_utils/context'
 import { getGuardWindow } from '../../Guard/core/useAppendConfig'
+import { StoreInstance } from '../../Guard/core/hooks/useMultipleAccounts'
+import { LoginMethods } from '../../AuthingGuard/types'
 
 interface LoginWithAppQrcodeProps {
   // onLogin: any
   onLoginSuccess: any
   canLoop: boolean
   qrCodeScanOptions: any
+  multipleInstance?: StoreInstance
 }
 
 export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
@@ -44,6 +47,8 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
       },
       onSuccess(user) {
         // props.onLogin(200, user)
+        props.multipleInstance &&
+          props.multipleInstance.setLoginWay('qrcode', LoginMethods.AppQr)
         clearInterval(timerRef.current)
         props.onLoginSuccess(user)
       },

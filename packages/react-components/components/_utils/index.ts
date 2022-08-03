@@ -447,7 +447,16 @@ export const getPasswordValidate = (
       },
     },
   ]
-
+  const getCustomPassword = () => {
+    console.log(i18n, i18n.language, customPasswordStrength)
+    if (i18n.language === 'zh-CN' && customPasswordStrength?.zhMessageOpen) {
+      return customPasswordStrength?.zhMessage
+    }
+    if (i18n.language === 'en-US' && customPasswordStrength?.enMessageOpen) {
+      return customPasswordStrength?.enMessage
+    }
+    return customPasswordStrength?.message
+  }
   const validateMap: Record<PasswordStrength, Rule[]> = {
     [PasswordStrength.NoCheck]: [...required],
     [PasswordStrength.Low]: [
@@ -501,7 +510,7 @@ export const getPasswordValidate = (
       {
         validateTrigger: 'onBlur',
         pattern: customPasswordStrength?.regex,
-        message: customPasswordStrength?.message,
+        message: getCustomPassword(),
       },
     ],
   }

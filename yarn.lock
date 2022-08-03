@@ -6014,10 +6014,10 @@ authing-js-sdk@4.23.30-alpha.3:
     jwt-decode "^2.2.0"
     sm-crypto "^0.3.7"
 
-authing-js-sdk@4.23.32:
-  version "4.23.32"
-  resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.23.32.tgz#89dc2dd42a3d3cab92d439335c036581e35c7c48"
-  integrity sha512-zyUoRszXmdgCSn3S9fzVJSn8cMWMAmpUDtW+aYVMuIOdfyRFwfkGCVpffPbMHc3FcCrcE2AcUYOA9u78RXjs5w==
+authing-js-sdk@4.23.35:
+  version "4.23.35"
+  resolved "https://registry.npmjs.org/authing-js-sdk/-/authing-js-sdk-4.23.35.tgz#d99e545dfd66c92649e9f7bba5fa1f4367db111a"
+  integrity sha512-EdrDl1tczeInFc/NGqO4dasl8BZTSLDnduv4rTMw9bIuBb5Ko+4SDmbag1bZpSCpclbTBSmLDTD/6bCtgx6YAQ==
   dependencies:
     axios "^0.19.2"
     crypto-js "^4.0.0"

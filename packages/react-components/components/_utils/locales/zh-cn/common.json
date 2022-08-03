@@ -168,5 +168,6 @@
   "jobNumber": "工号首字母大写",
   "loginWithWechatMiniQrcodeTipsTitle": "使用 微信 扫码登录",
   "loginWithAppQrcodeTipsTitle": "使用 移动端 APP 扫码登录",
-  "loginWithWechatmpQrcodeTipsTitle": "长按二维码登录"
+  "loginWithWechatmpQrcodeTipsTitle": "长按二维码登录",
+  "del": "移除"
 }
