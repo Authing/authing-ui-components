@@ -35,7 +35,6 @@ export const LoginWithWechatmpQrcode = (
   const domId = `authingGuardMpQrcode-${props.qrCodeScanOptions.extIdpConnId}`
 
   const config = useGuardFinallyConfig()
-  console.log(props.id, 'loginWay')
   useEffect(() => {
     const guardWindow = getGuardWindow()
 

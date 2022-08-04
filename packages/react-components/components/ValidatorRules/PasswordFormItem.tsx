@@ -21,12 +21,7 @@ export const PasswordFormItem: React.FC<ExPasswordFormItemProps> = (props) => {
     passwordStrength = userPasswordStrength
     customPasswordStrength = userCustomPasswordStrength
   }
-  console.log(
-    passwordStrength,
-    'passwordStrength',
-    customPasswordStrength,
-    'customPasswordStrength'
-  )
+
   return publicConfig ? (
     <Form.Item
       validateTrigger={['onChange', 'onBlur']}
