@@ -30,8 +30,8 @@ export const initGuardI18n = (options: InitGuardI18nOptions) => {
       ...[
         'querystring',
         'cookie',
-        'localStorage',
         'navigator',
+        'localStorage',
         'htmlTag',
         'path',
         'subdomain',
