@@ -353,7 +353,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         formRules.push({
           required: true,
           validateTrigger: 'onChange',
-          message: `${label} ${t('login.noEmpty')}`,
+          message: t('login.noEmpty', { label: label }),
         })
       }
 

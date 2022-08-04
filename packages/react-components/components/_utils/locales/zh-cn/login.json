@@ -17,7 +17,7 @@
   "inputRecoverCode": "请输入恢复代码",
   "rememberedSecret": "已经安全地记录了这段密钥",
   "mfaAfterReset": "如果你没有恢复代码，请联系管理员处理",
-  "noEmpty": "不能为空",
+  "noEmpty": "{{label}} 不能为空",
   "inputCorrectPhone": "请输入正确的手机号或邮箱",
   "inputPhoneOrEmail": "请输入手机号或邮箱",
   "resetPwd": "重置密码",
