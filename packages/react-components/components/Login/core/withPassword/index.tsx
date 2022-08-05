@@ -125,7 +125,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
         ? '/api/v2/login/ad-all-in-one'
         : '/api/v2/login/account'
       let account = loginData.identity && loginData.identity.trim()
-      let password = loginData.password && loginData.password.trim()
+      let password = loginData.password
       let captchaCode = loginData.captchaCode && loginData.captchaCode.trim()
 
       let body = {

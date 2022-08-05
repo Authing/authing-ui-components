@@ -98,7 +98,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
 
     // onLogin
     let username = values.account && values.account.trim()
-    let password = values.password && values.password.trim()
+    let password = values.password
 
     try {
       const { code, data, onGuardHandling } = await post(
