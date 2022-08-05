@@ -10,6 +10,6 @@
   "modifyPwdText": "您的密碼連續使用超過 {{number}} 個月，可能存在風險。\n請重新設置密碼。",
   "nextStep": "下一步",
   "numberSafteyCode": "數字安全碼",
-  "resetpasswordText1": "請輸入您的註冊電子郵件 / 手機號碼，以及收到的\n驗證碼，我們將為您進行密碼重設。",
+  "resetpasswordText1": "請輸入您的註冊電子郵件 / 手機號碼，以及收到的驗證碼，我們將為您進行密碼重設。",
   "unlockTip": "若解鎖遇到問題，請點"
 }
