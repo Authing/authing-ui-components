@@ -1,6 +1,6 @@
 {
   "name": "@authing/react-ui-components",
-  "version": "4.0.0-rc.4",
+  "version": "4.0.0-rc.5",
   "private": false,
   "main": "lib/index.min.js",
   "typings": "types/index.d.ts",
@@ -48,7 +48,7 @@
   },
   "publishConfig": {
     "access": "public",
-    "registry": "http://localhost:4873/"
+    "registry": "https://registry.npmjs.org"
   },
   "eslintConfig": {
     "extends": [
