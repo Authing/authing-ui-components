@@ -14,7 +14,7 @@ import SubmitButton from '../../SubmitButton'
 import { InputNumber } from '../../InputNumber'
 import { SceneType } from 'authing-js-sdk'
 import CustomFormItem from '../../ValidatorRules'
-import { fieldRequiredRule } from '../../_utils'
+import { fieldRequiredRule, getCurrentLng } from '../../_utils'
 import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
 import { useGuardPublicConfig } from '../../_utils/context'
@@ -336,14 +336,30 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
     [PhoneAccount, areaCode, form, isInternationSms, t, verifyCodeLength]
   )
 
+  const getMetaDateLabel = useCallback(
+    (metaData: CompleteInfoMetaData) => {
+      let label: string = ''
+
+      const fieldsI18n = config.extendsFieldsI18n?.[metaData.name]
+
+      const currentLng = getCurrentLng()
+
+      if (fieldsI18n?.[currentLng]?.enabled && fieldsI18n?.[currentLng].value) {
+        label = fieldsI18n?.[currentLng].value
+      } else {
+        label = metaData.label || metaData.name
+      }
+
+      return label
+    },
+    [config.extendsFieldsI18n]
+  )
+
   const generateRules = useCallback(
     (metaData: CompleteInfoMetaData) => {
       const formRules = []
 
-      const label =
-        i18n.language === 'zh-CN'
-          ? metaData.label || metaData.name
-          : metaData.name
+      const label = getMetaDateLabel(metaData)
 
       const rules = metaData.validateRules ?? []
 
@@ -379,7 +395,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       })
       return formRules
     },
-    [t]
+    [getMetaDateLabel, t]
   )
 
   const inputElement = useCallback(
@@ -388,8 +404,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       //   i18n.language === 'zh-CN'
       //     ? metaData.label || metaData.name
       //     : metaData.name
-
-      const label = metaData.label || metaData.name
+      const label = getMetaDateLabel(metaData)
 
       // 这部分的控件分两种 一个集成控件（手机号 + 验证码）一种是基础控件 分开处理
       if (
@@ -436,7 +451,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         )
       }
     },
-    [baseControlMap, generateRules, internalControlMap]
+    [baseControlMap, generateRules, getMetaDateLabel, internalControlMap]
   )
 
   const formFieldsV2 = useMemo(() => {

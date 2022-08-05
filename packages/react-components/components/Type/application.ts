@@ -248,6 +248,9 @@ export interface ApplicationConfig {
   complateFiledsPlace: ComplateFiledsPlace[]
   extendsFieldsEnabled: boolean
   extendsFields: ExtendsField[]
+  extendsFieldsI18n?: {
+    [key: string]: Record<Lang, { enabled: boolean; value: string }>
+  }
 
   identifier: string
   requestHostname: string
