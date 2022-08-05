@@ -16,7 +16,7 @@ export const LngTextMapping: Record<
     label: '简体中文',
   },
   'zh-TW': {
-    label: '繁体中文',
+    label: '繁體中文',
   },
   'en-US': {
     label: 'English',

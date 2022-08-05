@@ -4,6 +4,7 @@ import {
   CompleteInfoExtendsControls,
   CompleteInfoMetaData,
   CompleteInfoRequest,
+  CompleteInfoRule,
   ExtendsField,
 } from '../CompleteInfo/interface'
 import { ApplicationConfig } from '../Type/application'
@@ -66,7 +67,11 @@ export const extendsFieldsToMetaData = (
       label: item.label,
       name: item.name,
       required: item.required,
-      validateRules: item.validateRules,
+      validateRules: item.validateRules.map<CompleteInfoRule>((rule) => ({
+        type: rule.type,
+        content: rule.content,
+        errorMessage: rule.error,
+      })),
       options: selectOptions.find((option) => option.key === item.name)
         ?.options,
     }

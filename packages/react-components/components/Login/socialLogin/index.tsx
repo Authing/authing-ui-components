@@ -17,6 +17,7 @@ import { GuardLocalConfig } from '../../Guard'
 import { getGuardWindow } from '../../Guard/core/useAppendConfig'
 import { GuardButton } from '../../GuardButton'
 import { ApplicationConfig, SocialConnectionItem } from '../../Type/application'
+import { StoreInstance } from '../../Guard/core/hooks/useMultipleAccounts'
 
 export interface SocialLoginProps {
   appId: string
@@ -26,6 +27,10 @@ export interface SocialLoginProps {
   onLoginSuccess: any
   enterpriseConnectionObjs: ApplicationConfig['identityProviders']
   socialConnectionObjs: SocialConnectionItem[]
+  /**
+   * 根据输入的账号 & 返回获得对应的登录方法
+   */
+  multipleInstance?: StoreInstance
 }
 
 export const SocialLogin: React.FC<SocialLoginProps> = ({
@@ -35,6 +40,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
   onLoginSuccess,
   enterpriseConnectionObjs,
   socialConnectionObjs,
+  multipleInstance,
 }) => {
   const noLoginMethods = !config?.loginMethods?.length
 
@@ -53,10 +59,13 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
   useEffect(() => {
     const onPostMessage = (evt: MessageEvent) => {
       const res = onMessage(evt)
-
       if (!res) return
 
+      // 更新本次登录方式
+      multipleInstance && multipleInstance.setLoginWay('input', 'social')
+
       const { code, data, onGuardHandling } = res
+
       if (code === 200) {
         onLoginSuccess(data)
       } else {
@@ -72,7 +81,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
     return () => {
       guardWindow?.removeEventListener('message', onPostMessage)
     }
-  }, [onLoginFailed, onLoginSuccess, onMessage])
+  }, [onLoginFailed, multipleInstance, onLoginSuccess, onMessage])
 
   const idpButtons = enterpriseConnectionObjs.map((i: any) => {
     return (

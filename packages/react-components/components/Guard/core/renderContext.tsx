@@ -35,6 +35,9 @@ import { ApplicationConfig } from '../../Type/application'
 import { AuthenticationClient } from 'authing-js-sdk'
 import { Lang } from '../../Type'
 
+// hooks
+import useMultipleAccounts from './hooks/useMultipleAccounts'
+
 interface IBaseAction<T = string, P = any> {
   type: T & string
   payload?: Partial<P>
@@ -45,6 +48,8 @@ export const RenderContext: React.FC<{
   initState: ModuleState
 }> = ({ guardProps, initState, children }) => {
   const { tenantId, config } = guardProps
+  // 强制刷新
+  const [forceUpdate, setForceUpdate] = useState(Date.now())
 
   const [events, setEvents] = useState<GuardEvents>()
   const [authClint, setAuthClint] = useState<AuthenticationClient>()
@@ -56,7 +61,7 @@ export const RenderContext: React.FC<{
 
   const appId = useInitAppId(guardProps.appId, guardProps.authClient, setError)
 
-  useInitGuardAppendConfig(appId, guardProps.appendConfig)
+  useInitGuardAppendConfig(setForceUpdate, appId, guardProps.appendConfig)
 
   // 状态机
   const [
@@ -123,14 +128,25 @@ export const RenderContext: React.FC<{
   }, [appId, defaultMergedConfig, tenantId])
 
   const finallyConfig = useMergePublicConfig(
+    forceUpdate,
     appId,
     defaultMergedConfig,
     httpClient,
     setError
   )
 
+  const multipleInstance = useMultipleAccounts({
+    appId,
+    finallyConfig,
+  })
+
   // guardPageConfig
-  const guardPageConfig = useGuardPageConfig(appId, httpClient, setError)
+  const guardPageConfig = useGuardPageConfig(
+    forceUpdate,
+    appId,
+    httpClient,
+    setError
+  )
 
   const sdkClient = useInitGuardAuthClient({
     config: finallyConfig,
@@ -198,10 +214,11 @@ export const RenderContext: React.FC<{
       {
         ...guardProps,
       },
+      multipleInstance.instance,
       defaultMergedConfig?.openEventsMapping
     )
     setEvents(events)
-  }, [guardProps, defaultMergedConfig])
+  }, [guardProps, multipleInstance, defaultMergedConfig])
 
   // 状态机相关
   useEffect(() => {
@@ -252,6 +269,8 @@ export const RenderContext: React.FC<{
       authClint,
       guardPageConfig,
       iconfontLoaded,
+      // 保证 store 加载完成
+      multipleInstance,
     ]
 
     return !list.includes(undefined) && !list.includes(false)
@@ -266,6 +285,7 @@ export const RenderContext: React.FC<{
     authClint,
     guardPageConfig,
     iconfontLoaded,
+    multipleInstance,
   ])
 
   // TODO 触发 onLoad 事件
@@ -292,6 +312,8 @@ export const RenderContext: React.FC<{
             initData: moduleState.initData,
             currentModule: moduleState,
             guardPageConfig,
+            // 多账号相关信息 store 实例
+            multipleInstance,
           }
         : {
             defaultMergedConfig,
@@ -309,6 +331,7 @@ export const RenderContext: React.FC<{
       moduleState,
       publicConfig,
       tenantId,
+      multipleInstance,
     ]
   )
 

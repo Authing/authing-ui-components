@@ -365,10 +365,11 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
 
       const required = metaData.required ?? false
 
-      if (metaData.required) {
+      if (required) {
         formRules.push({
           required: true,
-          message: `${label} ${t('login.noEmpty')}`,
+          validateTrigger: 'onChange',
+          message: t('login.noEmpty', { label: label }),
         })
       }
 
@@ -378,13 +379,13 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           case 'isNumber':
             formRules.push({
               type: 'number',
-              required,
+              validateTrigger: 'onBlur',
               message: rule.errorMessage || '请填写数字',
             })
             break
           case 'regExp':
             formRules.push({
-              required,
+              validateTrigger: 'onBlur',
               pattern: new RegExp((rule.content as any).replaceAll('/', '')),
               message: rule.errorMessage,
             })
@@ -430,8 +431,8 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             {children}
           </Form.Item>
         )
-
-        if (Object.keys(baseControlMap).includes(metaData.name)) {
+        // 国家名和性别的控件需要单独和name匹配
+        if (['country', 'gender'].includes(metaData.name)) {
           return userFormItem(
             baseControlMap[metaData.name]({
               options: metaData.options,

@@ -11,3 +11,17 @@ fs.writeFileSync(
 )
 
 console.log(chalk.green(`Generated version: ${version}`))
+
+const generateVersion = () => {
+  fs.writeFileSync(
+    path.join(__dirname, '..', 'components', 'version', 'version.tsx'),
+    `export default '${version}'`,
+    'utf8'
+  )
+
+  console.log(chalk.green(`Generated version: ${version}`))
+}
+
+module.exports = {
+  generateVersion,
+}

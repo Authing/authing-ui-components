@@ -4,12 +4,19 @@ import { useGuardAuthClient } from '../../Guard/authClient'
 import { useGuardFinallyConfig, useGuardHttpClient } from '../../_utils/context'
 import { message } from 'antd'
 import { getGuardWindow } from '../../Guard/core/useAppendConfig'
-
+import { LoginMethods } from '../../Type/application'
+import { StoreInstance } from '../../Guard/core/hooks/useMultipleAccounts'
 interface LoginWithWechatmpQrcodeProps {
   // onLogin: any
   onLoginSuccess: any
   canLoop: boolean
   qrCodeScanOptions: any
+  // 当前登录方式 对应的id
+  id: string
+  /**
+   * 多账号存储实例
+   */
+  multipleInstance?: StoreInstance
 }
 
 export const LoginWithWechatmpQrcode = (
@@ -28,7 +35,6 @@ export const LoginWithWechatmpQrcode = (
   const domId = `authingGuardMpQrcode-${props.qrCodeScanOptions.extIdpConnId}`
 
   const config = useGuardFinallyConfig()
-
   useEffect(() => {
     const guardWindow = getGuardWindow()
 
@@ -55,7 +61,14 @@ export const LoginWithWechatmpQrcode = (
       },
       onSuccess(user) {
         // props.onLogin(200, user)
+        props.multipleInstance &&
+          props.multipleInstance.setLoginWay(
+            'qrcode',
+            LoginMethods.WechatMpQrcode,
+            props.id
+          )
         props.onLoginSuccess(user)
+        // 登录成功 这里设置登录方式
         clearInterval(timerRef.current)
       },
       onError: (ms) => {
@@ -71,6 +84,12 @@ export const LoginWithWechatmpQrcode = (
         setLoading(true)
       },
       onAuthFlow: (scannedResult) => {
+        props.multipleInstance &&
+          props.multipleInstance.setLoginWay(
+            'qrcode',
+            LoginMethods.WechatMpQrcode,
+            props.id
+          )
         // props.onLogin(code, mfaData, message)
         clearInterval(timerRef.current)
         const { onGuardHandling } = responseIntercept(scannedResult)

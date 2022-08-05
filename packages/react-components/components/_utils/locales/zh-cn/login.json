@@ -17,7 +17,7 @@
   "inputRecoverCode": "请输入恢复代码",
   "rememberedSecret": "已经安全地记录了这段密钥",
   "mfaAfterReset": "如果你没有恢复代码，请联系管理员处理",
-  "noEmpty": "不能为空",
+  "noEmpty": "{{label}} 不能为空",
   "inputCorrectPhone": "请输入正确的手机号或邮箱",
   "inputPhoneOrEmail": "请输入手机号或邮箱",
   "resetPwd": "重置密码",
@@ -55,7 +55,9 @@
   "qrcodeSucceed": "扫码成功",
   "referQrcodeText": "重新扫码",
   "noLoginMethodsDesc": "未配置登录方式",
+  "inputNewPwd": "请输入新的密码",
   "socialConnectionMessage": "不支持使用{{provider}}登录,请选择其他方式登录，或在其它浏览器中重试",
-  "inputNewPwd": "请输入新密码",
+  "selectLoginAccount": "选择登录账号",
+  "useOtherAccount": "使用其他账号",
   "qrcodeMiddle": "请在移动端确认账号登录"
 }

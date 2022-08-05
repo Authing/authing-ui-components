@@ -25,7 +25,6 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
   ...inputProps
 }) => {
   const { t } = useTranslation()
-
   return (
     <>
       <Row justify="space-between" align="middle">
