@@ -94,7 +94,7 @@
       "questionDescript": "問題描述",
       "submit": "提交"
     },
-    "locked": "帳號被鎖主",
+    "locked": "帳號被鎖住",
     "lockedTips": "如果您的賬號被鎖定，請聯繫管理員解鎖後再嘗試登入",
     "noAccount": "帳號遺失",
     "noAccountTip": {
