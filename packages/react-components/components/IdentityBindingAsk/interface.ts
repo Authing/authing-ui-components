@@ -1,4 +1,4 @@
-import { AuthenticationClient, User } from '..'
+import { AuthenticationClient, User } from 'authing-js-sdk'
 import { IG2Config, IG2Events, IG2FCProps, IG2FCViewProps } from '..'
 
 export interface IdentityBindingAskConfig extends IG2Config {}

@@ -1,6 +1,6 @@
 import { getDefaultG2Config, IG2Config, IG2Events, IG2FCProps } from '../Type'
-import { AuthenticationClient, User } from '..'
 import { GuardMFAInitData } from '../MFA/interface'
+import { AuthenticationClient, User } from 'authing-js-sdk'
 
 export interface BindTotpConfig extends IG2Config {
   autoRegister: boolean

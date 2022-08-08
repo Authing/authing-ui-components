@@ -27,7 +27,7 @@
   "i18n-ally.annotations": true,
   "i18n-ally.extract.targetPickingStrategy": "file-previous",
   "i18n-ally.namespace": true,
-  "i18n-ally.sourceLanguage": "zh",
+  "i18n-ally.sourceLanguage": "zh-cn",
   "[typescriptreact]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   }

@@ -5,12 +5,12 @@ import {
   GuardModuleType,
   GuardPageConfig,
 } from '..'
-import { ApplicationConfig } from '../AuthingGuard/api'
 import {
   BackFillMultipleState,
   StoreInstance,
 } from '../Guard/core/hooks/useMultipleAccounts'
 import { ModuleState } from '../Guard/GuardModule/stateMachine'
+import { ApplicationConfig } from '../Type/application'
 import { GuardHttp } from './guardHttp'
 
 export interface IGuardContext {

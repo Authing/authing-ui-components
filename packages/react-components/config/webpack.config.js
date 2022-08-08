@@ -822,12 +822,6 @@ module.exports = function (webpackEnv) {
           },
         },
       }),
-      isEnvLib &&
-        new NpmDtsWebpackPlugin({
-          output: 'lib/index.d.ts',
-          entry: 'components/index',
-          logLevel: 'debug',
-        }),
       // 包大小分析
       // new WebpackBundleAnalyzer.BundleAnalyzerPlugin(),
     ].filter(Boolean),

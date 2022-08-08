@@ -1,4 +1,4 @@
-import { User } from '..'
+import { User } from 'authing-js-sdk'
 import { getGuardHttp } from '../_utils/guardHttp'
 
 export interface SessionData {

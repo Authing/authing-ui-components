@@ -3,7 +3,6 @@ import { useForm } from 'antd/lib/form/Form'
 import { LoginMethods } from 'authing-js-sdk'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Agreement } from '../../AuthingGuard/api'
 import {
   BackFillMultipleState,
   StoreInstance,
@@ -14,6 +13,7 @@ import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
 import { Agreements } from '../../Register/components/Agreements'
 import SubmitButton from '../../SubmitButton'
+import { Agreement } from '../../Type/application'
 import version from '../../version/version'
 import { fieldRequiredRule } from '../../_utils'
 import {

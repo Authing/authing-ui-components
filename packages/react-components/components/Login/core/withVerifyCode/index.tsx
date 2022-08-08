@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Form, Input } from 'antd'
+import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import {
   fieldRequiredRule,
@@ -26,7 +26,7 @@ import { parsePhone, useMediaSize } from '../../../_utils/hooks'
 import { EmailScene, InputMethod } from '../../../Type'
 import { CodeAction } from '../../../_utils/responseManagement/interface'
 import { GuardLoginInitData } from '../../interface'
-import { LoginMethods } from '../../../AuthingGuard/types'
+import { LoginMethods } from '../../../Type/application'
 import { useLoginMultipleBackFill } from '../../hooks/useLoginMultiple'
 
 const LoginWithVerifyCode = (props: any) => {

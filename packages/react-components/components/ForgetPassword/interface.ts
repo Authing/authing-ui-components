@@ -1,4 +1,4 @@
-import { AuthenticationClient, CommonMessage } from '..'
+import { AuthenticationClient, CommonMessage } from 'authing-js-sdk'
 import { IG2Config, IG2Events, IG2FCProps, IG2FCViewProps } from '../Type'
 
 export interface ForgetPasswordEvents extends IG2Events {

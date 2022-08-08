@@ -7,14 +7,13 @@ import { ResetPassword } from './core/resetPassword'
 
 import { ImagePro } from '../ImagePro'
 import { useGuardAuthClient } from '../Guard/authClient'
-import { CommonMessage } from '..'
 import {
   useGuardEvents,
   useGuardFinallyConfig,
   useGuardModule,
   useGuardPublicConfig,
 } from '../_utils/context'
-// import { ChangeLanguage } from '../ChangeLanguage'
+import { CommonMessage } from 'authing-js-sdk'
 
 export const GuardForgetPassword: React.FC = () => {
   const { t } = useTranslation()

@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Form, Input, message } from 'antd'
-import { LoginMethods } from '../../'
 import { ErrorCode } from '../../_utils/GuardErrorCode'
 // import { useGuardAuthClient } from '../../Guard/authClient'
 import SubmitButton from '../../SubmitButton'
@@ -9,10 +8,10 @@ import { fieldRequiredRule } from '../../_utils'
 import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
 import { Agreements } from '../../Register/components/Agreements'
-import { Agreement } from '../../AuthingGuard/api'
 import { useGuardHttpClient } from '../../_utils/context'
 import { CodeAction } from '../../_utils/responseManagement/interface'
 import { useMediaSize } from '../../_utils/hooks'
+import { Agreement, LoginMethods } from '../../Type/application'
 import {
   BackFillMultipleState,
   StoreInstance,

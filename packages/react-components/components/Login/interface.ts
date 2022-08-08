@@ -5,18 +5,17 @@ import {
   IG2FCProps,
   IG2FCViewProps,
 } from '../Type'
-import { SocialConnectionProvider } from 'authing-js-sdk'
-import { QrCodeAuthenticationClient } from 'authing-js-sdk/build/main/lib/authentication/QrCodeAuthenticationClient'
-import { Agreement, PasswordLoginMethods } from '../AuthingGuard/api'
 import {
-  PasswordLoginParams,
-  LDAPLoginParams,
-  ADLoginParams,
-  PhoneCodeLoginParams,
   AuthenticationClient,
+  SocialConnectionProvider,
   User,
-} from '..'
-import { LoginMethods } from '../AuthingGuard/types'
+} from 'authing-js-sdk'
+import { QrCodeAuthenticationClient } from 'authing-js-sdk/build/main/lib/authentication/QrCodeAuthenticationClient'
+import {
+  Agreement,
+  LoginMethods,
+  PasswordLoginMethods,
+} from '../Type/application'
 
 export interface LoginConfig extends IG2Config {
   autoRegister?: boolean
@@ -39,11 +38,8 @@ export interface LoginEvents extends IG2Events {
   onLoginError?: (errorMessages: any) => void
   onLoginTabChange?: (activeTab: LoginMethods) => void
   onBeforeLogin?: (
-    loginInfo:
-      | PasswordLoginParams
-      | LDAPLoginParams
-      | ADLoginParams
-      | PhoneCodeLoginParams,
+    // TODO 具体的类型定义
+    loginInfo: any,
     authClient: AuthenticationClient
   ) => boolean | Promise<boolean>
 }

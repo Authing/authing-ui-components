@@ -1,8 +1,8 @@
 import Input, { InputProps } from 'antd/lib/input'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PasswordLoginMethods } from '../../../AuthingGuard/api'
 import { InputNumber } from '../../../InputNumber'
+import { PasswordLoginMethods } from '../../../Type/application'
 
 export interface InputAccountProps extends InputProps {
   passwordLoginMethods: PasswordLoginMethods[]

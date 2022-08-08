@@ -1,7 +1,7 @@
 import { Form, Input } from 'antd'
 import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { User } from '../..'
+import { User } from 'authing-js-sdk'
 import { IconFont } from '../../IconFont'
 import SubmitButton from '../../SubmitButton'
 import { useGuardIsAuthFlow } from '../../_utils/context'

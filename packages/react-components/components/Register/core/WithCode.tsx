@@ -1,7 +1,6 @@
 import { Form, message } from 'antd'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
 import {
   fieldRequiredRule,
   getDeviceName,
@@ -10,7 +9,6 @@ import {
 } from '../../_utils'
 import { Agreements } from '../components/Agreements'
 import SubmitButton from '../../SubmitButton'
-
 import { IconFont } from '../../IconFont'
 import { SceneType } from 'authing-js-sdk'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
@@ -23,8 +21,13 @@ import { useGuardHttp } from '../../_utils/guardHttp'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { FormItemIdentify } from '../../Login/core/withVerifyCode/FormItemIdentify'
 import { InputIdentify } from '../../Login/core/withVerifyCode/inputIdentify'
-import { EmailScene, InputMethod, RegisterMethods } from '../..'
+import { EmailScene, InputMethod } from '../..'
 import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
+import {
+  Agreement,
+  ApplicationConfig,
+  RegisterMethods,
+} from '../../Type/application'
 
 export interface RegisterWithCodeProps {
   // onRegister: Function

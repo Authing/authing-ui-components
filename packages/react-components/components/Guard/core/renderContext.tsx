@@ -17,8 +17,6 @@ import {
   initGuardStateMachine,
   ModuleState,
 } from '../GuardModule/stateMachine'
-import { AuthenticationClient } from '../..'
-import { ApplicationConfig } from '../../AuthingGuard/api'
 import { SessionData, trackSession } from '../sso'
 import {
   getPublicConfig,
@@ -27,12 +25,15 @@ import {
   useGuardPageConfig,
 } from '../../_utils/config'
 import { GuardHttp, initGuardHttp } from '../../_utils/guardHttp'
-import { initI18n } from '../../_utils/locales'
+import { initGuardI18n } from '../../_utils/locales'
 import { useGuardXContext } from '../../_utils/context'
 import { useGuardIconfont } from '../../IconFont/useGuardIconfont'
 import { useInitGuardAppendConfig } from './useAppendConfig'
 import { useInitAppId } from '../../_utils/initAppId'
 import { updateFlowHandle } from '../../_utils/flowHandleStorage'
+import { ApplicationConfig } from '../../Type/application'
+import { AuthenticationClient } from 'authing-js-sdk'
+import { Lang } from '../../Type'
 
 // hooks
 import useMultipleAccounts from './hooks/useMultipleAccounts'
@@ -47,6 +48,8 @@ export const RenderContext: React.FC<{
   initState: ModuleState
 }> = ({ guardProps, initState, children }) => {
   const { tenantId, config } = guardProps
+  // 强制刷新
+  const [forceUpdate, setForceUpdate] = useState(Date.now())
 
   const [events, setEvents] = useState<GuardEvents>()
   const [authClint, setAuthClint] = useState<AuthenticationClient>()
@@ -58,7 +61,7 @@ export const RenderContext: React.FC<{
 
   const appId = useInitAppId(guardProps.appId, guardProps.authClient, setError)
 
-  useInitGuardAppendConfig(appId, guardProps.appendConfig)
+  useInitGuardAppendConfig(setForceUpdate, appId, guardProps.appendConfig)
 
   // 状态机
   const [
@@ -125,6 +128,7 @@ export const RenderContext: React.FC<{
   }, [appId, defaultMergedConfig, tenantId])
 
   const finallyConfig = useMergePublicConfig(
+    forceUpdate,
     appId,
     defaultMergedConfig,
     httpClient,
@@ -137,7 +141,12 @@ export const RenderContext: React.FC<{
   })
 
   // guardPageConfig
-  const guardPageConfig = useGuardPageConfig(appId, httpClient, setError)
+  const guardPageConfig = useGuardPageConfig(
+    forceUpdate,
+    appId,
+    httpClient,
+    setError
+  )
 
   const sdkClient = useInitGuardAuthClient({
     config: finallyConfig,
@@ -171,9 +180,14 @@ export const RenderContext: React.FC<{
 
   // I18n
   useEffect(() => {
-    // TODO  国际化 这部分有点小问题 等待优化
-    initI18n({}, config?.lang)
-  }, [config?.lang])
+    if (guardPageConfig && publicConfig && defaultMergedConfig) {
+      const { defaultLanguage } = guardPageConfig.global
+
+      initGuardI18n({
+        defaultLanguage: (defaultMergedConfig?.lang as Lang) ?? defaultLanguage,
+      })
+    }
+  }, [defaultMergedConfig, guardPageConfig, publicConfig])
 
   useEffect(() => {
     if (!appId) return

@@ -1,16 +1,20 @@
-import { useEffect } from 'react'
 import { Rule } from 'antd/lib/form'
 import qs from 'qs'
-import { useGuardContext } from '../context/global/context'
 import { i18n } from './locales'
 import { User } from 'authing-js-sdk'
-import { ApplicationConfig, ComplateFiledsPlace } from '../AuthingGuard/api'
 import { GuardProps } from '../Guard'
 import isEqual from 'lodash/isEqual'
 import omit from 'lodash/omit'
 import { getGuardWindow } from '../Guard/core/useAppendConfig'
 import UAParser from 'ua-parser-js'
-import { LoginMethods, RegisterMethods } from '../AuthingGuard/types'
+import {
+  ApplicationConfig,
+  ComplateFiledsPlace,
+  LoginMethods,
+  RegisterMethods,
+} from '../Type/application'
+import { LngTextMapping } from '../ChangeLanguage'
+import { Lang } from '../Type'
 export * from './popupCenter'
 export * from './clipboard'
 
@@ -145,16 +149,6 @@ export const removeStyles = (recordKey: STYLE_RECORD_KEY) => {
   styleElt.parentNode?.removeChild(styleElt)
 
   insertedRecord[recordKey] = null
-}
-
-export const useTitle = (title: string, prefix?: string) => {
-  const {
-    state: { config },
-  } = useGuardContext()
-
-  useEffect(() => {
-    document.title = `${prefix ?? `${config.title} `} ${title}`
-  }, [config.title, prefix, title])
 }
 
 export const getClassnames = (classnames: (string | boolean | undefined)[]) => {
@@ -454,7 +448,6 @@ export const getPasswordValidate = (
     // },
   ]
   const getCustomPassword = () => {
-    console.log(i18n, i18n.language, customPasswordStrength)
     if (i18n.language === 'zh-CN' && customPasswordStrength?.zhMessageOpen) {
       return customPasswordStrength?.zhMessage
     }
@@ -776,4 +769,12 @@ export const getPasswordIdentify = (identity: string): string => {
   return validate('phone', identity) || validate('email', identity)
     ? identity
     : ''
+}
+
+export const getCurrentLng = () => {
+  if (Object.keys(LngTextMapping).includes(i18n.language)) {
+    return i18n.language as Lang
+  } else {
+    return i18n?.languages?.[i18n?.languages?.length - 1] as Lang
+  }
 }

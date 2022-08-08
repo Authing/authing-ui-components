@@ -6,8 +6,6 @@ import { useGuardAuthClient } from '../../../Guard/authClient'
 import { fieldRequiredRule, getUserRegisterParams } from '../../../_utils'
 import { ErrorCode } from '../../../_utils/GuardErrorCode'
 import SubmitButton from '../../../SubmitButton'
-import { Agreement, PasswordLoginMethods } from '../../../AuthingGuard/api'
-import { LoginMethods } from '../../..'
 import { FormItemAccount } from './FormItemAccount'
 import { InputAccount } from './InputAccount'
 import { GraphicVerifyCode } from './GraphicVerifyCode'
@@ -23,6 +21,11 @@ import {
   useGuardPublicConfig,
 } from '../../../_utils/context'
 import { GuardLoginInitData } from '../../interface'
+import {
+  Agreement,
+  LoginMethods,
+  PasswordLoginMethods,
+} from '../../../Type/application'
 import {
   BackFillMultipleState,
   StoreInstance,

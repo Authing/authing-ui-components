@@ -1,14 +1,13 @@
 {
   "name": "@authing/react-ui-components",
-  "version": "3.1.39-beta.2",
+  "version": "4.0.0-rc.8",
   "private": false,
   "main": "lib/index.min.js",
-  "typings": "lib/index.d.ts",
-  "types": "react-app-env.d.ts",
-  "version": "3.1.35-publish.config.1",
+  "typings": "types/index.d.ts",
   "files": [
     "dist",
-    "lib"
+    "lib",
+    "types"
   ],
   "dependencies": {
     "antd": "^4.8.0",
@@ -29,10 +28,12 @@
   },
   "scripts": {
     "build": "node ./scripts/build.js",
-    "build:lib": "node ./scripts/lib.js",
-    "clear": "clear:lib && clear:dist",
+    "build:types": "npx tsc",
+    "build:lib": "clear && npm run build:types && node ./scripts/lib.js",
+    "clear": "npm run clear:dist && npm run clear:lib && npm run clear:types",
     "clear:dist": "rm -rf dist",
     "clear:lib": "rm -rf lib",
+    "clear:types": "rm -rf types",
     "log-tag": "node ./scripts/tag.js",
     "pretty-quick": "pretty-quick",
     "prestart": "npm run log-tag && npm run generate-version && npm run generate-examples",
@@ -47,7 +48,7 @@
   },
   "publishConfig": {
     "access": "public",
-    "registry": "http://localhost:4873/"
+    "registry": "https://registry.npmjs.org"
   },
   "eslintConfig": {
     "extends": [
