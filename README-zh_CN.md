@@ -10,7 +10,7 @@
 
 <br />
 
-[English](./README.md) | 简体中文 |
+[English](./README.md) | 简体中文 
 
 [Authing](https://authing.cn) 是一个企业级身份认证提供商，其集成了 OAuth、LDAP、OIDC 等多种身份认证和授权解决方案。此仓库包含了 Authing 提供的一些 UI 组件。
 

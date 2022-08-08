@@ -10,7 +10,7 @@
 
 <br />
 
-English | [简体中文](./README-zh_CN.md) |
+English | [简体中文](./README-zh_CN.md) 
 
 [Authing](https://authing.cn) is an enterprise-class identity provider that integrates with OAuth, LDAP, OIDC, and other authentication and authorization solutions. This repository contains some of the UI components provided by Authing.
 
