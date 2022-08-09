@@ -600,6 +600,7 @@ export const GuardLoginView = () => {
                             >
                               <LoginWithWechatMiniQrcode
                                 id={item.id}
+                                multipleInstance={multipleInstance}
                                 onLoginSuccess={onLoginSuccess}
                                 canLoop={canLoop}
                                 qrCodeScanOptions={{
@@ -615,6 +616,7 @@ export const GuardLoginView = () => {
                           tab={t('login.appScanLogin')}
                         >
                           <LoginWithAppQrcode
+                            multipleInstance={multipleInstance}
                             onLoginSuccess={onLoginSuccess}
                             canLoop={canLoop}
                           />
@@ -629,6 +631,7 @@ export const GuardLoginView = () => {
                             >
                               <LoginWithWechatmpQrcode
                                 id={item.id}
+                                multipleInstance={multipleInstance}
                                 onLoginSuccess={onLoginSuccess}
                                 canLoop={canLoop}
                                 qrCodeScanOptions={{

@@ -6,6 +6,7 @@ import { CodeStatus } from '../../Qrcode/UiQrCode'
 import { QrCodeResponse } from '../../Qrcode/hooks/usePostQrCode'
 import { useTranslation } from 'react-i18next'
 import { StoreInstance } from '../../Guard/core/hooks/useMultipleAccounts'
+import { LoginMethods } from '../..'
 interface LoginWithWechatmpQrcodeProps {
   // onLogin: any
   onLoginSuccess: any
@@ -46,6 +47,13 @@ export const LoginWithWechatmpQrcode = (
   const onStatusChange = (status: CodeStatus, data: QrCodeResponse) => {
     switch (status) {
       case 'success':
+        props.multipleInstance &&
+          props.multipleInstance.setLoginWay(
+            'qrcode',
+            LoginMethods.WechatMpQrcode,
+            props.id
+          )
+
         props.onLoginSuccess(data)
         break
       case 'error':

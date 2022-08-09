@@ -6,6 +6,7 @@ import { QrCodeResponse } from '../../Qrcode/hooks/usePostQrCode'
 import { CodeStatus } from '../../Qrcode/UiQrCode'
 import { useGuardHttpClient } from '../../_utils/context'
 import { StoreInstance } from '../../Guard/core/hooks/useMultipleAccounts'
+import { LoginMethods } from '../..'
 
 interface LoginWithWechatMiniQrcodeProps {
   // onLogin: any
@@ -44,6 +45,13 @@ export const LoginWithWechatMiniQrcode = (
   const onStatusChange = (status: CodeStatus, data: QrCodeResponse) => {
     switch (status) {
       case 'success':
+        props.multipleInstance &&
+          props.multipleInstance.setLoginWay(
+            'qrcode',
+            LoginMethods.WxMinQr,
+            props.id
+          )
+
         props.onLoginSuccess(data)
         break
       case 'error':
