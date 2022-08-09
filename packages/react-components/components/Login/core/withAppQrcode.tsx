@@ -30,6 +30,17 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
     return null
   }
 
+  const descriptions = {
+    already: (referQrCode: () => void) => (
+      <span className="qrcode__again-scan" onClick={referQrCode}>
+        {t('login.scanAgain')}
+      </span>
+    ),
+    ready: t('login.appScanLogin'),
+    success: t('common.LoginSuccess'),
+    MFA: t('common.LoginSuccess'),
+  }
+
   /**
    * Sever Status 发生变化
    * @param status
@@ -63,16 +74,7 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
     <QrCode
       ref={codeRef}
       scene="APP_AUTH"
-      descriptions={{
-        already: (referQrCode) => (
-          <span className="qrcode__again-scan" onClick={referQrCode}>
-            {t('login.scanAgain')}
-          </span>
-        ),
-        ready: t('login.appScanLogin'),
-        success: t('common.LoginSuccess'),
-        MFA: t('common.LoginSuccess'),
-      }}
+      descriptions={descriptions}
       onStatusChange={onStatusChange}
       imageStyle={{
         height: '172px',

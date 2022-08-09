@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ReactComponent as SuccessIcon } from '../assets/checkbox-circle-fill.svg'
-import { ReactComponent as ReferIcon } from '../assets/refer-qr-code.svg'
+import { IconFont } from '../../IconFont'
 import { CodeStatus, prefix } from '../UiQrCode'
 
 /**
@@ -24,7 +23,10 @@ const useStatus = (status: CodeStatus) => {
       ready: null,
       already: (
         <>
-          <SuccessIcon style={{ width: '40px', height: '40px' }} />
+          <IconFont
+            type="authing-checkbox-circle-fill"
+            style={{ width: '40px', height: '40px' }}
+          />
           <span className={`${prefix}-inner__title--already`}>
             {t('login.scanSuccess')}
           </span>
@@ -32,7 +34,10 @@ const useStatus = (status: CodeStatus) => {
       ),
       cancel: (
         <>
-          <ReferIcon style={{ width: '40px', height: '40px' }} />
+          <IconFont
+            type="authing-refer-qr-code"
+            style={{ width: '40px', height: '40px' }}
+          />
           <span className={`${prefix}-inner__title--refer`}>
             {t('login.qrcodeRefer')}
           </span>
@@ -40,7 +45,10 @@ const useStatus = (status: CodeStatus) => {
       ),
       expired: (
         <>
-          <ReferIcon style={{ width: '40px', height: '40px' }} />
+          <IconFont
+            type="authing-refer-qr-code"
+            style={{ width: '40px', height: '40px' }}
+          />
           <span className={`${prefix}-inner__title--refer`}>
             {t('login.qrcodeRefer')}
           </span>
@@ -48,7 +56,10 @@ const useStatus = (status: CodeStatus) => {
       ),
       error: (
         <>
-          <ReferIcon style={{ width: '40px', height: '40px' }} />
+          <IconFont
+            type="authing-refer-qr-code"
+            style={{ width: '40px', height: '40px' }}
+          />
           <span className={`${prefix}-inner__title--refer`}>
             {t('login.qrcodeNetWorkError')}
           </span>

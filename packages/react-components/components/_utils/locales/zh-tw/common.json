@@ -164,8 +164,6 @@
   "welcome": "歡迎訪問",
   "welcomeDoc": "歡迎加入 {{name}} ，為了提供最佳的線上體驗，請填寫您的個人資訊",
   "yes": "是",
-  "loginWithWechatMiniQrcodeTipsTitle": "使用 微信 掃碼登入",
-  "loginWithAppQrcodeTipsTitle": "使用 移動端 APP 掃碼登入",
   "loginWithWechatmpQrcodeTipsTitle": "長按二維碼登入",
   "del": "移除"
 }

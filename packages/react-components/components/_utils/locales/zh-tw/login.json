@@ -40,10 +40,6 @@
   "otherLoginWay": "其他登入方式",
   "otherVerifyWay": "其他驗證方式",
   "pwdLogin": "帳號",
-  "qrcodeExpired": "點擊刷新",
-  "qrcodeMiddle": "請在移動端確認賬號登入",
-  "qrcodeSucceed": "掃碼成功",
-  "referQrcodeText": "重新掃碼",
   "rememberedSecret": "已經安全地記錄了這段密鑰",
   "resetPwd": "重設密碼",
   "scanLogin": "掃碼登入",
@@ -59,5 +55,10 @@
   "verifyCodeSended": "驗證碼已發送至",
   "wechatmpQrcode": "公眾號關注登入",
   "selectLoginAccount": "選擇登入賬號",
-  "useOtherAccount": "使用其他賬號"
+  "useOtherAccount": "使用其他賬號",
+  "wechatScanLogin": "使用 微信 掃描登入",
+  "qrcodeRefer": "刷新",
+  "qrcodeNetWorkError": "網絡異常 點擊重試",
+  "scanAgain": "重新掃碼",
+  "scanSuccess": "掃描成功"
 }

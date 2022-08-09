@@ -7,6 +7,7 @@ import { CodeStatus } from '../../Qrcode/UiQrCode'
 import { useGuardHttpClient } from '../../_utils/context'
 import { StoreInstance } from '../../Guard/core/hooks/useMultipleAccounts'
 import { LoginMethods } from '../..'
+import { isWeChatBrowser } from '../../_utils'
 
 interface LoginWithWechatMiniQrcodeProps {
   // onLogin: any
@@ -32,7 +33,9 @@ export const LoginWithWechatMiniQrcode = (
   }
 
   const descriptions = {
-    ready: t('login.wechatScanLogin'),
+    ready: isWeChatBrowser()
+      ? t('common.loginWithWechatmpQrcodeTipsTitle')
+      : t('login.wechatScanLogin'),
     success: t('common.LoginSuccess'),
     MFA: t('common.LoginSuccess'),
   }

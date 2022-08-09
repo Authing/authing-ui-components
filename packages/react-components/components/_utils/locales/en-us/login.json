@@ -51,13 +51,14 @@
   "inputCorrectPhoneOrEmail": "Enter a valid Email or Phone number",
   "sendCodeTimeout": "Sending failed, please try later",
   "mediaDevicesSupport": "The current device does not support face recognition",
-  "qrcodeExpired": "Click to refresh",
-  "qrcodeSucceed": "Success",
-  "referQrcodeText": "Scan the code again",
   "noLoginMethodsDesc": "No login method configured",
   "inputNewPwd": "Please enter a new password",
   "socialConnectionMessage": "Login with {{provider}} is not supported, please choose another way to log in, or try again in another browser",
-  "qrcodeMiddle": "Please confirm on the mobile terminal",
   "selectLoginAccount": "Select login account",
-  "useOtherAccount": "Use another account"
+  "useOtherAccount": "Use another account",
+  "wechatScanLogin": "WeChat QR Code",
+  "qrcodeRefer": "Refresh",
+  "qrcodeNetWorkError": "Network exception Click to retry",
+  "scanAgain": "Scan the code again",
+  "scanSuccess": "Scan was successful"
 }

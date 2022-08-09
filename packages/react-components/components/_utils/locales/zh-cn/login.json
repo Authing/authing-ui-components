@@ -25,10 +25,9 @@
   "selfUnlockText": "你的账号已被锁定，请输入验证码及密码自助解锁。",
   "pwdLogin": "密码登录",
   "appScanLogin": "移动端 APP 扫码登录",
-  "": "",
   "scanLogin": "扫码登录",
   "scanAgain": "重新扫码",
-  "wechatScanLogin": "请使用微信扫描二维码",
+  "wechatScanLogin": "使用 微信 扫描登录",
   "scanSuccess": "扫描成功",
   "ldapLogin": "LDAP 登录",
   "adLogin": "AD 登录",
@@ -55,15 +54,11 @@
   "inputCorrectPhoneOrEmail": "请输入有效的手机号或邮箱",
   "sendCodeTimeout": "发送失败,请稍后尝试",
   "mediaDevicesSupport": "当前设备暂不支持人脸识别",
-  "qrcodeExpired": "点击刷新",
   "qrcodeNetWorkError": "网络异常 点击重试",
   "qrcodeRefer": "刷新",
-  "qrcodeSucceed": "扫码成功",
-  "referQrcodeText": "重新扫码",
   "noLoginMethodsDesc": "未配置登录方式",
   "socialConnectionMessage": "不支持使用{{provider}}登录,请选择其他方式登录，或在其它浏览器中重试",
   "inputNewPwd": "请输入新密码",
   "selectLoginAccount": "选择登录账号",
-  "useOtherAccount": "使用其他账号",
-  "qrcodeMiddle": "请在移动端确认账号登录"
+  "useOtherAccount": "使用其他账号"
 }

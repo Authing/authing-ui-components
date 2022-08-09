@@ -7,6 +7,7 @@ import { QrCodeResponse } from '../../Qrcode/hooks/usePostQrCode'
 import { useTranslation } from 'react-i18next'
 import { StoreInstance } from '../../Guard/core/hooks/useMultipleAccounts'
 import { LoginMethods } from '../..'
+import { isWeChatBrowser } from '../../_utils'
 interface LoginWithWechatmpQrcodeProps {
   // onLogin: any
   onLoginSuccess: any
@@ -34,7 +35,9 @@ export const LoginWithWechatmpQrcode = (
   }
 
   const descriptions = {
-    ready: t('login.wechatScanLogin'),
+    ready: isWeChatBrowser()
+      ? t('common.loginWithWechatmpQrcodeTipsTitle')
+      : t('login.wechatScanLogin'),
     success: t('common.LoginSuccess'),
     MFA: t('common.LoginSuccess'),
   }
