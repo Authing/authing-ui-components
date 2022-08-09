@@ -2,6 +2,7 @@
   "name": "root",
   "private": true,
   "scripts": {
+    "test": "node ./scripts/pre-build",
     "build:lib": "lerna run build:lib --stream",
     "build:demo": "node scripts/buildDemo.js",
     "version:latest": "lerna version patch",

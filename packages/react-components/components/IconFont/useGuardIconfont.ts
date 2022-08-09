@@ -16,12 +16,11 @@ export const useGuardIconfont = (cdnBase?: string, setError?: any) => {
       const guardWindow = getGuardWindow()
 
       if (!guardWindow) return
-
       GenerateSvg(guardWindow.document, body)
 
       setLoaded(true)
     } catch (error) {
-      setError(error)
+      setError?.(error)
     }
   }, [cdnBase, setError])
 

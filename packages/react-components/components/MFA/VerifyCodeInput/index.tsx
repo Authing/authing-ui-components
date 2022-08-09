@@ -36,6 +36,8 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
 
   const codeInputRef = useRef<HTMLDivElement>(null)
 
+  const fromClipboard = useRef<boolean>(false)
+
   const [verifyCode, setVerifyCode] = useState(value ?? [])
   const [focusIndex, setFocusIndex] = useState<number>(0)
 
@@ -146,6 +148,7 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
         return (
           <Fragment key={index}>
             <Input
+              onFocus={() => setFocusIndex(index)}
               ref={(el) => (inputRef.current[index] = el)}
               style={{
                 width: size,
@@ -163,14 +166,29 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
               maxLength={2}
               onChange={(evt) => {
                 evt.persist()
+                if (fromClipboard.current) {
+                  fromClipboard.current = false
+                  return false
+                }
                 // @ts-ignore
                 if (evt.nativeEvent.isComposing) {
                   return
                 }
+
                 const nextValue = evt.target.value
-                if (!/^[0-9]*$/.test(nextValue)) {
+                /**
+                 * https://github.com/devfolioco/react-otp-input/issues/322
+                 * ios 下 otp 自动填充在chrome内核浏览器下会触发两次 并且第一次会直接塞otp复制的值(maxlength 限制无效) 如 1246 第二次则根据maxlength 截取塞 12
+                 * 针对这种情况取第一次值隔离第二次调用
+                 * safari 是单个input 塞对应的值
+                 */
+                if (nextValue.length === length) {
+                  fromClipboard.current = true
+                  onChange(nextValue.split(''))
+                  setFocusIndex(length - 1)
                   return
                 }
+
                 const preValue = verifyCode[index] || ''
                 const changeValue =
                   nextValue.split('').filter((item) => item !== preValue)[0] ||

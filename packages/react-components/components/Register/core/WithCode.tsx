@@ -1,11 +1,14 @@
 import { Form, message } from 'antd'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
-import { fieldRequiredRule, getDeviceName, validate } from '../../_utils'
+import {
+  fieldRequiredRule,
+  getDeviceName,
+  getUserRegisterParams,
+  validate,
+} from '../../_utils'
 import { Agreements } from '../components/Agreements'
 import SubmitButton from '../../SubmitButton'
-
 import { IconFont } from '../../IconFont'
 import { SceneType } from 'authing-js-sdk'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
@@ -18,8 +21,13 @@ import { useGuardHttp } from '../../_utils/guardHttp'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { FormItemIdentify } from '../../Login/core/withVerifyCode/FormItemIdentify'
 import { InputIdentify } from '../../Login/core/withVerifyCode/inputIdentify'
-import { EmailScene, InputMethod, RegisterMethods } from '../..'
+import { EmailScene, InputMethod } from '../..'
 import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
+import {
+  Agreement,
+  ApplicationConfig,
+  RegisterMethods,
+} from '../../Type/application'
 
 export interface RegisterWithCodeProps {
   // onRegister: Function
@@ -155,6 +163,10 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
         const options: any = {
           context,
           generateToken: true,
+          // 托管模式下注册携带query上自定义参数login_page_context
+          params: config?.isHost
+            ? getUserRegisterParams(['login_page_context'])
+            : undefined,
         }
 
         if (isInternationSms) {
@@ -258,6 +270,7 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
       }
     },
     [
+      config?.isHost,
       config.passwordLoginMethods,
       onBeforeRegister,
       authClient,
@@ -333,7 +346,10 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
           options: {
             context: JSON.stringify(context),
             generateToken: true,
-            // params: getUserRegisterParams(),
+            // 托管模式下注册携带query上自定义参数login_page_context
+            params: config?.isHost
+              ? JSON.stringify(getUserRegisterParams(['login_page_context'])) // 特殊处理 resetful api
+              : undefined,
           },
         }
 
@@ -424,6 +440,7 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
       }
     },
     [
+      config?.isHost,
       config.passwordLoginMethods,
       onBeforeRegister,
       authClient,

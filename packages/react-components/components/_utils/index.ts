@@ -1,16 +1,20 @@
-import { useEffect } from 'react'
 import { Rule } from 'antd/lib/form'
 import qs from 'qs'
-import { useGuardContext } from '../context/global/context'
 import { i18n } from './locales'
 import { User } from 'authing-js-sdk'
-import { ApplicationConfig, ComplateFiledsPlace } from '../AuthingGuard/api'
 import { GuardProps } from '../Guard'
 import isEqual from 'lodash/isEqual'
 import omit from 'lodash/omit'
 import { getGuardWindow } from '../Guard/core/useAppendConfig'
 import UAParser from 'ua-parser-js'
-import { LoginMethods, RegisterMethods } from '../AuthingGuard/types'
+import {
+  ApplicationConfig,
+  ComplateFiledsPlace,
+  LoginMethods,
+  RegisterMethods,
+} from '../Type/application'
+import { LngTextMapping } from '../ChangeLanguage'
+import { Lang } from '../Type'
 export * from './popupCenter'
 export * from './clipboard'
 
@@ -147,16 +151,6 @@ export const removeStyles = (recordKey: STYLE_RECORD_KEY) => {
   insertedRecord[recordKey] = null
 }
 
-export const useTitle = (title: string, prefix?: string) => {
-  const {
-    state: { config },
-  } = useGuardContext()
-
-  useEffect(() => {
-    document.title = `${prefix ?? `${config.title} `} ${title}`
-  }, [config.title, prefix, title])
-}
-
 export const getClassnames = (classnames: (string | boolean | undefined)[]) => {
   return classnames.filter(Boolean).join(' ')
 }
@@ -202,15 +196,23 @@ export function deepMerge<T extends any = any>(
   return deepMerge(target, ...sources)
 }
 
-export const getUserRegisterParams = () => {
+/**
+ *  在托管页下上传query中指定的用户自定义字段进行补全
+ * @param params 指定上传的用户自定义字段
+ */
+export const getUserRegisterParams = (params?: string[]) => {
   const query = qs.parse(window.location.search, {
     ignoreQueryPrefix: true,
   })
-  return Object.keys(query).map((key) => ({
-    key,
-    value: query[key],
-  }))
+  return Object.keys(query)
+    .map((key) => ({
+      key,
+      value: query[key],
+    }))
+    .filter((item) => item.value)
+    .filter((item) => (params ? params.includes(item.key) : true))
 }
+
 // 微信内置浏览器
 export const isWeChatBrowser = () => {
   if (typeof navigator === 'undefined') {
@@ -435,17 +437,25 @@ export const getPasswordValidate = (
 ): Rule[] => {
   const required = [
     ...fieldRequiredRule(i18n.t('common.password'), fieldRequiredRuleMessage),
-    {
-      validateTrigger: 'onBlur',
-      validator(_: any, value: any) {
-        if ((value ?? '').indexOf(' ') !== -1) {
-          return Promise.reject(i18n.t('common.checkPasswordHasSpace'))
-        }
-        return Promise.resolve()
-      },
-    },
+    // {
+    //   validateTrigger: 'onBlur',
+    //   validator(_: any, value: any) {
+    //     if ((value ?? '').indexOf(' ') !== -1) {
+    //       return Promise.reject(i18n.t('common.checkPasswordHasSpace'))
+    //     }
+    //     return Promise.resolve()
+    //   },
+    // },
   ]
-
+  const getCustomPassword = () => {
+    if (i18n.language === 'zh-CN' && customPasswordStrength?.zhMessageOpen) {
+      return customPasswordStrength?.zhMessage
+    }
+    if (i18n.language === 'en-US' && customPasswordStrength?.enMessageOpen) {
+      return customPasswordStrength?.enMessage
+    }
+    return customPasswordStrength?.message
+  }
   const validateMap: Record<PasswordStrength, Rule[]> = {
     [PasswordStrength.NoCheck]: [...required],
     [PasswordStrength.Low]: [
@@ -499,7 +509,7 @@ export const getPasswordValidate = (
       {
         validateTrigger: 'onBlur',
         pattern: customPasswordStrength?.regex,
-        message: customPasswordStrength?.message,
+        message: getCustomPassword(),
       },
     ],
   }
@@ -759,4 +769,12 @@ export const getPasswordIdentify = (identity: string): string => {
   return validate('phone', identity) || validate('email', identity)
     ? identity
     : ''
+}
+
+export const getCurrentLng = () => {
+  if (Object.keys(LngTextMapping).includes(i18n.language)) {
+    return i18n.language as Lang
+  } else {
+    return i18n?.languages?.[i18n?.languages?.length - 1] as Lang
+  }
 }

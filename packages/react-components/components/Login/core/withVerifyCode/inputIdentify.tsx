@@ -1,9 +1,9 @@
 import Input, { InputProps } from 'antd/lib/input'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { VerifyLoginMethods } from '../../../AuthingGuard/api'
 import { IconFont } from '../../../IconFont'
 import { InputNumber } from '../../../InputNumber'
+import { VerifyLoginMethods } from '../../../Type/application'
 import { useGuardPublicConfig } from '../../../_utils/context'
 
 export interface InputIdentifyProps extends InputProps {

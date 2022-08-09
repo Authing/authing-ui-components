@@ -1,8 +1,12 @@
 {
   "compilerOptions": {
-    "outDir": "lib/",
+    "outDir": "types/",
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -17,7 +21,16 @@
     "declaration": true,
     "noEmit": false,
     "jsx": "react",
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "emitDeclarationOnly": true
   },
-  "exclude": ["node_modules", "lib", "build", "dist"]
+  "include": [
+    "components/**/*",
+  ],
+  "exclude": [
+    "node_modules",
+    "lib",
+    "build",
+    "dist"
+  ]
 }

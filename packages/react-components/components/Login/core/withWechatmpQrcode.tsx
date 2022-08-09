@@ -5,12 +5,18 @@ import { QrCode } from '../../Qrcode'
 import { CodeStatus } from '../../Qrcode/UiQrCode'
 import { QrCodeResponse } from '../../Qrcode/hooks/usePostQrCode'
 import { useTranslation } from 'react-i18next'
-
+import { StoreInstance } from '../../Guard/core/hooks/useMultipleAccounts'
 interface LoginWithWechatmpQrcodeProps {
   // onLogin: any
   onLoginSuccess: any
   canLoop: boolean
   qrCodeScanOptions: any
+  // 当前登录方式 对应的id
+  id: string
+  /**
+   * 多账号存储实例
+   */
+  multipleInstance?: StoreInstance
 }
 
 export const LoginWithWechatmpQrcode = (

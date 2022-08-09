@@ -18,6 +18,7 @@ import {
   useGuardFinallyConfig,
   useGuardHttpClient,
   useGuardInitData,
+  useGuardMultipleInstance,
   useGuardPublicConfig,
 } from '../_utils/context'
 import {
@@ -105,6 +106,8 @@ export const GuardLoginCompleteInfoView: React.FC = () => {
 
   const authClient = useGuardAuthClient()
 
+  const { instance: multipleInstance } = useGuardMultipleInstance()
+
   const businessRequest = async (
     action: CompleteInfoAuthFlowAction,
     data?: CompleteInfoRequest
@@ -114,7 +117,19 @@ export const GuardLoginCompleteInfoView: React.FC = () => {
       data
     )
 
+    // 第一次登录的信息 TODO: 脏逻辑 没时间
+    const originAccount = multipleInstance?.getOriginAccount()
+    const methods: any =
+      multipleInstance?.getOriginWay() === 'password'
+        ? multipleInstance?.setLoginWayByHttpData
+        : multipleInstance?.setLoginWayByLDAPData
+    resData &&
+      multipleInstance &&
+      originAccount &&
+      methods(originAccount, resData)
+
     if (isFlowEnd) {
+      // TODO: 这里同样需要记录登录方式
       events?.onLogin?.(resData, authClient)
     } else {
       onGuardHandling?.()

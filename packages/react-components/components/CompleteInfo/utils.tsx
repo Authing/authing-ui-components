@@ -1,12 +1,13 @@
 import { User } from 'authing-js-sdk'
-import { ApplicationConfig } from '../AuthingGuard/api'
 import {
   CompleteInfoBaseControls,
   CompleteInfoExtendsControls,
   CompleteInfoMetaData,
   CompleteInfoRequest,
+  CompleteInfoRule,
   ExtendsField,
 } from '../CompleteInfo/interface'
+import { ApplicationConfig } from '../Type/application'
 
 export const completeFieldsFilter = (user: User, field: ExtendsField) => {
   if (!user) {
@@ -66,7 +67,11 @@ export const extendsFieldsToMetaData = (
       label: item.label,
       name: item.name,
       required: item.required,
-      validateRules: item.validateRules,
+      validateRules: item.validateRules.map<CompleteInfoRule>((rule) => ({
+        type: rule.type,
+        content: rule.content,
+        errorMessage: rule.error,
+      })),
       options: selectOptions.find((option) => option.key === item.name)
         ?.options,
     }

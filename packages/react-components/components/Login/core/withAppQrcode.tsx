@@ -6,12 +6,14 @@ import { message } from 'antd'
 import { useGuardHttpClient } from '../../_utils/context'
 import { WorkQrCodeRef } from '../../Qrcode/WorkQrCode'
 import { useTranslation } from 'react-i18next'
+import { StoreInstance } from '../../Guard/core/hooks/useMultipleAccounts'
 
 interface LoginWithAppQrcodeProps {
   // onLogin: any
   onLoginSuccess: any
   canLoop: boolean
   // qrCodeScanOptions: any
+  multipleInstance?: StoreInstance
 }
 
 export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {

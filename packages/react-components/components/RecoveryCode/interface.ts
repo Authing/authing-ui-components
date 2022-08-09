@@ -1,5 +1,5 @@
 import { getDefaultG2Config, IG2Config, IG2Events } from '../Type'
-import { AuthenticationClient, User } from '..'
+import { AuthenticationClient, User } from 'authing-js-sdk'
 
 export interface RecoveryCodeConfig extends IG2Config {}
 

@@ -5,12 +5,16 @@ import { QrCode } from '../../Qrcode'
 import { QrCodeResponse } from '../../Qrcode/hooks/usePostQrCode'
 import { CodeStatus } from '../../Qrcode/UiQrCode'
 import { useGuardHttpClient } from '../../_utils/context'
+import { StoreInstance } from '../../Guard/core/hooks/useMultipleAccounts'
 
 interface LoginWithWechatMiniQrcodeProps {
   // onLogin: any
   onLoginSuccess: any
   canLoop: boolean
   qrCodeScanOptions: any
+  // 当前登录方式 对应的id
+  id: string
+  multipleInstance?: StoreInstance
 }
 
 export const LoginWithWechatMiniQrcode = (
