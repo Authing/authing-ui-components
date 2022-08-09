@@ -6,7 +6,7 @@ import React, {
   useMemo,
 } from 'react'
 import { ShieldSpin } from '../ShieldSpin'
-import { useGuardFinallyConfig, useGuardHttpClient } from '../_utils/context'
+import { useGuardHttpClient } from '../_utils/context'
 import { usePreQrCode } from './hooks/usePreQrCode'
 import { QrCodeResponse, useQrCode } from './hooks/usePostQrCode'
 import { CodeStatus, UiQrCode, UiQrProps } from './UiQrCode'
@@ -52,6 +52,10 @@ interface WorkQrCodeProps extends Omit<UiQrProps, 'description' | 'status'> {
    * 不同状态下点击遮罩中间区域方法
    */
   onClickMaskContent?: (status: CodeStatus) => void
+  /**
+   * 不同二维码下生成配置
+   */
+  qrCodeScanOptions?: any
 }
 
 const WorkQrCodeComponent: ForwardRefRenderFunction<any, WorkQrCodeProps> = (
@@ -64,10 +68,11 @@ const WorkQrCodeComponent: ForwardRefRenderFunction<any, WorkQrCodeProps> = (
     sleepTime = 1000,
     onStatusChange,
     onClickMaskContent,
+    qrCodeScanOptions = {},
     ...rest
   } = props
 
-  const { qrCodeScanOptions = {} } = useGuardFinallyConfig()
+  // const { qrCodeScanOptions = {} } = useGuardFinallyConfig()
   const {
     context,
     customData,

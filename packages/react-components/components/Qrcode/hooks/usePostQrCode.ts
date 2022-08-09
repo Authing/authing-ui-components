@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { sleep } from '../../_utils'
 import { AuthingGuardResponse, AuthingResponse } from '../../_utils/http'
 import { CodeStatus } from '../UiQrCode'
@@ -73,9 +73,9 @@ interface QrCodeOptions {
  * 2. 根据不同返回状态码进行处理
  */
 export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
-  let destroy = false
+  let destroy = useRef<boolean>(false)
 
-  const { state, dispatch, descriptions, sleepTime, onStatusChange } = options
+  const { state, dispatch, sleepTime, onStatusChange } = options
 
   const {
     readyCheckedRequest,
@@ -177,7 +177,7 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
   const processFlowByResponse: (res: QrCodeResponse) => void = (
     res: QrCodeResponse
   ) => {
-    if (destroy) {
+    if (destroy.current) {
       return
     }
     const prev = state.status
@@ -316,7 +316,8 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
     handler()
     return () => {
       // 阻止上一次 Render 内的作用域方法
-      destroy = true
+      destroy.current = true
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.status])
 }

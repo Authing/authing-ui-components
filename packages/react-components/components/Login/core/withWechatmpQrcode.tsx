@@ -10,13 +10,13 @@ interface LoginWithWechatmpQrcodeProps {
   // onLogin: any
   onLoginSuccess: any
   canLoop: boolean
-  // qrCodeScanOptions: any
+  qrCodeScanOptions: any
 }
 
 export const LoginWithWechatmpQrcode = (
   props: LoginWithWechatmpQrcodeProps
 ) => {
-  const { canLoop } = props
+  const { canLoop, qrCodeScanOptions } = props
 
   const { t } = useTranslation()
 
@@ -63,6 +63,7 @@ export const LoginWithWechatmpQrcode = (
       scene="WECHATMP_AUTH"
       descriptions={descriptions}
       onStatusChange={onStatusChange}
+      qrCodeScanOptions={qrCodeScanOptions}
       imageStyle={{
         height: '172px',
         width: '172px',

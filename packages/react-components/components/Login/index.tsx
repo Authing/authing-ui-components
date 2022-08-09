@@ -33,7 +33,7 @@ import {
   useGuardModule,
   useGuardPublicConfig,
 } from '../_utils/context'
-import { isWeChatBrowser, getPasswordIdentify } from '../_utils'
+import { getPasswordIdentify } from '../_utils'
 import { LoginWithVerifyCode } from './core/withVerifyCode'
 import { VerifyLoginMethods } from '../AuthingGuard/api'
 import { useMediaSize, useMethod } from '../_utils/hooks'
@@ -571,6 +571,9 @@ export const GuardLoginView = () => {
                           <LoginWithWechatMiniQrcode
                             onLoginSuccess={onLoginSuccess}
                             canLoop={canLoop}
+                            qrCodeScanOptions={{
+                              extIdpConnId: item.id,
+                            }}
                           />
                         </Tabs.TabPane>
                       )
@@ -594,6 +597,9 @@ export const GuardLoginView = () => {
                           tab={item.title ?? t('login.wechatmpQrcode')}
                         >
                           <LoginWithWechatmpQrcode
+                            qrCodeScanOptions={{
+                              extIdpConnId: item.id,
+                            }}
                             onLoginSuccess={onLoginSuccess}
                             canLoop={canLoop}
                           />

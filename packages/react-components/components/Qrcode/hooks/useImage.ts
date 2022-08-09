@@ -33,6 +33,7 @@ const useImage = (
     if (src) {
       preFetchImage()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [src])
 
   return [baseUrl]
