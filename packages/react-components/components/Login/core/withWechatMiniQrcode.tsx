@@ -80,8 +80,8 @@ export const LoginWithWechatMiniQrcode = (
       onStatusChange={onStatusChange}
       qrCodeScanOptions={qrCodeScanOptions}
       imageStyle={{
-        height: '172px',
-        width: '172px',
+        height: '166px',
+        width: '166px',
       }}
     />
   )

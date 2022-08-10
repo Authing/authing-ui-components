@@ -77,8 +77,8 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
       descriptions={descriptions}
       onStatusChange={onStatusChange}
       imageStyle={{
-        height: '172px',
-        width: '172px',
+        height: '166px',
+        width: '166px',
       }}
     />
   )
