@@ -574,7 +574,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
     >
       {formFieldsV2}
 
-      <Form.Item className="authing-g2-input-form">
+      <Form.Item className="authing-g2-sumbit-form">
         <SubmitButton
           text={t('common.problem.form.submit')}
           ref={submitButtonRef}

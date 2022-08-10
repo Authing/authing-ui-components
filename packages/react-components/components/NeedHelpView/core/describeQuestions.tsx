@@ -291,7 +291,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
           </div>
         </div>
 
-        <Form.Item className="authing-g2-input-form submit-form">
+        <Form.Item className="authing-g2-sumbit-form submit-form">
           <SubmitButton
             className="forget-password"
             text={t('common.problem.form.submit')}

@@ -255,7 +255,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
             showError={validated}
           />
         )}
-        <Form.Item>
+        <Form.Item className="authing-g2-sumbit-form">
           <SubmitButton
             // disabled={
             //   !!agreements.find((item) => item.required && !acceptedAgreements)
