@@ -188,7 +188,6 @@ export const VerifyCodeInput: FC<VerifyCodeInputProps> = ({
                   setFocusIndex(length - 1)
                   return
                 }
-
                 const preValue = verifyCode[index] || ''
                 const changeValue =
                   nextValue.split('').filter((item) => item !== preValue)[0] ||
