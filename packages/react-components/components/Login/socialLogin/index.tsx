@@ -139,8 +139,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         const initUrl = `${config.host}/connections/social/${
           item.identifier
         }?${querystring.stringify(query)}`
-        console.log(initUrl)
-        debugger
+
         if (query.redirected) {
           window.location.replace(initUrl)
         } else {
