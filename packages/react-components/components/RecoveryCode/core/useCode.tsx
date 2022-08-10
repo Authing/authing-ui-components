@@ -107,7 +107,7 @@ export const UseCode: React.FC<UseCodeProps> = ({ mfaToken, onSubmit }) => {
           />
         </Form.Item>
 
-        <Form.Item className="authing-g2-input-form submit-form">
+        <Form.Item className="authing-g2-sumbit-form submit-form">
           <SubmitButton text={t('common.sure')} ref={submitButtonRef} />
         </Form.Item>
       </Form>

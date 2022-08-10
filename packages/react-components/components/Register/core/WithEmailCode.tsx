@@ -290,7 +290,7 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
             showError={validated}
           />
         )}
-        <Form.Item>
+        <Form.Item className="authing-g2-sumbit-form">
           <SubmitButton text={t('common.register')} ref={submitButtonRef} />
         </Form.Item>
       </Form>

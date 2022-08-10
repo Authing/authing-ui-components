@@ -36,6 +36,7 @@ export const InputInternationPhone: React.FC<InputInternationPhoneProps> = (
   return (
     <>
       <Input
+        autoComplete="off"
         pattern="[^a-zA-Z]*"
         value={value}
         placeholder={t('login.inputPhone')}

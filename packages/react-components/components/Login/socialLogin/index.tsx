@@ -174,18 +174,22 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       )
     } else if (shape === 'icon') {
       return isPhoneMedia ? (
-        <GuardButton className="g2-social-login-item" onClick={onLogin}>
-          <IconFont type={`${iconType}-fill`} />
-        </GuardButton>
+        <GuardButton
+          className="g2-social-login-item"
+          onClick={onLogin}
+          icon={<IconFont type={`${iconType}-fill`} />}
+        ></GuardButton>
       ) : (
         <Tooltip
           key={item.id}
           title={item.tooltip?.[i18n.language as Lang] || item.name}
           trigger={['hover', 'click', 'contextMenu']}
         >
-          <GuardButton className="g2-social-login-item" onClick={onLogin}>
-            <IconFont type={`${iconType}-fill`} />
-          </GuardButton>
+          <GuardButton
+            className="g2-social-login-item"
+            onClick={onLogin}
+            icon={<IconFont type={`${iconType}-fill`} />}
+          ></GuardButton>
         </Tooltip>
       )
     } else {
@@ -212,9 +216,8 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
           className="g2-social-login-item"
           onClick={onLogin}
           key={item.id}
-        >
-          <IconFont type={`${iconType}-fill`} />
-        </GuardButton>
+          icon={<IconFont type={`${iconType}-fill`} />}
+        ></GuardButton>
       ) : (
         <Tooltip
           overlayStyle={{ fontFamily: 'sans-serif' }}
@@ -226,9 +229,11 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
           }
           trigger={['hover', 'click', 'contextMenu']}
         >
-          <GuardButton className="g2-social-login-item" onClick={onLogin}>
-            <IconFont type={`${iconType}-fill`} />
-          </GuardButton>
+          <GuardButton
+            className="g2-social-login-item"
+            onClick={onLogin}
+            icon={<IconFont type={`${iconType}-fill`} />}
+          ></GuardButton>
         </Tooltip>
       )
     }
@@ -270,12 +275,12 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         <div
           style={{
             flex: 1,
-            minHeight: 32,
+            minHeight: 16,
           }}
         />
       )}
       <Space
-        size={noLoginMethods ? 0 : 12}
+        size={noLoginMethods ? 0 : 8}
         direction="vertical"
         className="g2-guard-full-width-space"
       >

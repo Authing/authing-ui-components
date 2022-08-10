@@ -351,7 +351,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
             showError={validated}
           />
         )}
-        <Form.Item>
+        <Form.Item className="authing-g2-sumbit-form">
           <SubmitButton
             // TODO 产品还没想好 暂时不上
             // disabled={

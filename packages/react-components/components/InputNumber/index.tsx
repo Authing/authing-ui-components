@@ -24,6 +24,7 @@ export const InputNumber = React.forwardRef<any, InputNumberProps>(
 
     return (
       <Input
+        autoComplete="off"
         {...inputProps}
         ref={ref}
         value={value}

@@ -8,6 +8,7 @@ export const InputPassword = React.forwardRef<
 >((props, ref) => {
   return (
     <Input.Password
+      autoComplete="off"
       ref={ref}
       {...props}
       iconRender={(visible) => (

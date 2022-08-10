@@ -437,7 +437,7 @@ const LoginWithVerifyCode = (props: any) => {
             showError={validated}
           />
         )}
-        <Form.Item>
+        <Form.Item className="authing-g2-sumbit-form">
           <SubmitButton
             text={submitText}
             className="password"
