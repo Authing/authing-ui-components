@@ -234,6 +234,7 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
       case 1:
         processAReady()
         break
+      // 成功状态
       case 2:
         processSuccess()
         break
@@ -241,6 +242,7 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
       case 3:
         processCancel()
         break
+      // mfa 状态
       case 4:
         processMFA()
         break

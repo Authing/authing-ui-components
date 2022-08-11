@@ -5,6 +5,7 @@ import { useImage } from './hooks/useImage'
 import { useStatus } from './hooks/useStatus'
 import { ShieldSpin } from '../ShieldSpin'
 import { CodeStatusDescriptions } from './WorkQrCode'
+import { useTranslation } from 'react-i18next'
 
 // 目前 UI 支持的状态（满载）
 export type CodeStatus =
@@ -76,7 +77,7 @@ const QrCode: React.FC<UiQrProps> = (props) => {
     onClickMaskEl,
     onMaskContent,
   } = props
-
+  const { t } = useTranslation()
   const [statusCls, statusComponent] = useStatus(status)
 
   const [baseUrl] = useImage(src, {
@@ -112,7 +113,7 @@ const QrCode: React.FC<UiQrProps> = (props) => {
             <img
               className={`${prefix}__image`}
               src={baseUrl}
-              alt="二维码"
+              alt={t('common.qrcode')}
               style={imageStyle}
             />
           </span>

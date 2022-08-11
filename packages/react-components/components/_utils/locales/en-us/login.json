@@ -60,5 +60,5 @@
   "qrcodeRefer": "Refresh",
   "qrcodeNetWorkError": "Retry",
   "scanAgain": "Scan the code again",
-  "scanSuccess": "Scan was successful"
+  "scanSuccess": "Scan Success"
 }

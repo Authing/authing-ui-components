@@ -165,5 +165,6 @@
   "welcomeDoc": "歡迎加入 {{name}} ，為了提供最佳的線上體驗，請填寫您的個人資訊",
   "yes": "是",
   "loginWithWechatmpQrcodeTipsTitle": "長按二維碼登入",
-  "del": "移除"
+  "del": "移除",
+  "qrcode": "二維碼"
 }

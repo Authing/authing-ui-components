@@ -167,5 +167,6 @@
   "noFindUsername": "找不到该用户名账号",
   "jobNumber": "工号首字母大写",
   "loginWithWechatmpQrcodeTipsTitle": "长按二维码登录",
-  "del": "移除"
+  "del": "移除",
+  "qrcode": "二维码"
 }

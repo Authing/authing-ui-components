@@ -35,6 +35,11 @@ export const LoginWithWechatmpQrcode = (
   }
 
   const descriptions = {
+    already: (referQrCode: () => void) => (
+      <span className="qrcode__again-scan" onClick={referQrCode}>
+        {t('login.scanAgain')}
+      </span>
+    ),
     ready: isWeChatBrowser()
       ? t('common.loginWithWechatmpQrcodeTipsTitle')
       : t('login.wechatScanLogin'),

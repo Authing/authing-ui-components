@@ -30,7 +30,6 @@ const MultipleAccountsFC: React.FC<MultipleAccountsProps> = (props) => {
 
   // 默认只有一个多选实例
   const lists = multipleInstance?.getMemoUser()
-
   const forceUpdate = useCallback(() => setState(Math.random), [])
 
   if (!lists) {

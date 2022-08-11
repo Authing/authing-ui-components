@@ -65,7 +65,17 @@ const useStatus = (status: CodeStatus) => {
           </span>
         </>
       ),
-      success: null,
+      success: (
+        <>
+          <IconFont
+            type="authing-checkbox-circle-fill"
+            style={{ width: '40px', height: '40px' }}
+          />
+          <span className={`${prefix}-inner__title--already`}>
+            {t('login.scanSuccess')}
+          </span>
+        </>
+      ),
       MFA: null,
     }
     return mapping[status]
