@@ -51,7 +51,7 @@ interface LoginWithADProps {
 }
 
 export const LoginWithAD = (props: LoginWithADProps) => {
-  const { agreements, onLoginFailed, onLoginSuccess, multipleInstance } = props
+  const { agreements, onLoginFailed, onLoginSuccess } = props
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
 
@@ -135,8 +135,8 @@ export const LoginWithAD = (props: LoginWithADProps) => {
 
       const { code, data, onGuardHandling } = responseIntercept(res)
 
-      // 更新本次登录方式
-      data && multipleInstance && multipleInstance.setLoginWay('input', 'ad')
+      // // 更新本次登录方式
+      // data && multipleInstance && multipleInstance.setLoginWay('input', 'ad')
 
       submitButtonRef.current?.onSpin(false)
 
