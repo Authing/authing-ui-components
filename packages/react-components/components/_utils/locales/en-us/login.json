@@ -58,7 +58,7 @@
   "useOtherAccount": "Use another account",
   "wechatScanLogin": "WeChat QR Code",
   "qrcodeRefer": "Refresh",
-  "qrcodeNetWorkError": "Network exception Click to retry",
+  "qrcodeNetWorkError": "Retry",
   "scanAgain": "Scan the code again",
   "scanSuccess": "Scan was successful"
 }
