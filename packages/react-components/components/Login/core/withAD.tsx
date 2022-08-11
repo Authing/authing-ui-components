@@ -26,7 +26,7 @@ import { useMediaSize } from '../../_utils/hooks'
 import { requestClient } from '../../_utils/http'
 import { i18n } from '../../_utils/locales'
 import { CodeAction } from '../../_utils/responseManagement/interface'
-import { useLoginMultipleBackFill } from '../hooks/useLoginMultiple'
+// import { useLoginMultipleBackFill } from '../hooks/useLoginMultiple'
 
 interface LoginWithADProps {
   // configs
@@ -51,13 +51,7 @@ interface LoginWithADProps {
 }
 
 export const LoginWithAD = (props: LoginWithADProps) => {
-  const {
-    agreements,
-    onLoginFailed,
-    onLoginSuccess,
-    multipleInstance,
-    backfillData,
-  } = props
+  const { agreements, onLoginFailed, onLoginSuccess, multipleInstance } = props
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
 
@@ -81,12 +75,12 @@ export const LoginWithAD = (props: LoginWithADProps) => {
 
   const [form] = useForm()
 
-  useLoginMultipleBackFill({
-    form,
-    way: 'ad',
-    formKey: 'account',
-    backfillData,
-  })
+  // useLoginMultipleBackFill({
+  //   form,
+  //   way: 'ad',
+  //   formKey: 'account',
+  //   backfillData,
+  // })
 
   let submitButtonRef = useRef<any>(null)
 
