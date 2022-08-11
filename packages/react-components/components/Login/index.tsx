@@ -310,7 +310,7 @@ export const GuardLoginView = () => {
         containerDOM.classList.add('no-login-methods-view')
         return () => {
           // @ts-ignore
-          containerDOM.style['min-height'] = '610px'
+          containerDOM.style['min-height'] = '540px'
           containerDOM.classList.remove('no-login-methods-view')
         }
       }
