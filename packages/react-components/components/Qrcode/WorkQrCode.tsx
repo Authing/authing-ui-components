@@ -6,7 +6,7 @@ import React, {
   useMemo,
 } from 'react'
 import { ShieldSpin } from '../ShieldSpin'
-import { useGuardHttpClient } from '../_utils/context'
+import { useGuardFinallyConfig, useGuardHttpClient } from '../_utils/context'
 import { usePreQrCode } from './hooks/usePreQrCode'
 import { QrCodeResponse, useQrCode } from './hooks/usePostQrCode'
 import { CodeStatus, UiQrCode, UiQrProps } from './UiQrCode'
@@ -72,7 +72,8 @@ const WorkQrCodeComponent: ForwardRefRenderFunction<any, WorkQrCodeProps> = (
     ...rest
   } = props
 
-  // const { qrCodeScanOptions = {} } = useGuardFinallyConfig()
+  const finallyConfig = useGuardFinallyConfig()
+
   const {
     context,
     customData,
@@ -139,11 +140,16 @@ const WorkQrCodeComponent: ForwardRefRenderFunction<any, WorkQrCodeProps> = (
       descriptions,
       onStatusChange,
     },
+
     {
-      readyCheckedRequest: checkedRequest,
-      alreadyCheckedRequest: checkedRequest,
       genCodeRequest,
       exchangeUserInfo,
+      readyCheckedRequest: finallyConfig?._closeLoopCheckQrcode
+        ? undefined
+        : checkedRequest,
+      alreadyCheckedRequest: finallyConfig?._closeLoopCheckQrcode
+        ? undefined
+        : checkedRequest,
     }
   )
 
