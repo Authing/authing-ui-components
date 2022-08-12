@@ -8,7 +8,6 @@ import {
   StoreInstance,
 } from '../../Guard/core/hooks/useMultipleAccounts'
 import { useGuardAuthClient } from '../../Guard/authClient'
-// import { useGuardAuthClient } from '../../Guard/authClient'
 import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
 import { Agreements } from '../../Register/components/Agreements'

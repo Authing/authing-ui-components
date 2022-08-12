@@ -1,30 +1,40 @@
 /* eslint-disable prettier/prettier */
-/** 
+/**
  * 整体的思路：
  * 在所有登录方式中，当进行登录时保存登录方式（FE侧自定义）
  * 之后在登录成功（onLogin）中，触发store的方法保存用户信息以及对应的登录方式进入localStorage。
  * 当用户再次打开页面时，拿出数据进行对比。（主要对比 LoginWay ），TODO: 这里的代码主要显得乱的原因是因为枚举的不正当使用。（主要要和Server端进行互相映射，后续维护时可优化）
- * 
- * 核心思路：登录成功时，保存的FE侧自定义 LoginWay 
+ *
+ * 核心思路：登录成功时，保存的FE侧自定义 LoginWay
  * 再次打开页面时，初始化时先根据 FE 自定义的 LoginWay 跳转到不同的 tab 下（way）下使用 account 进行回填。TODO: 这里也可优化，应该在登录成功时候就进行 LoginWay 的格式化，而非转来转去。（但是这样无法直观的体现是哪种方式进行登录）
-*/
+ */
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { cloneDeep } from 'lodash'
 import { SelectOptions } from '../../../Login/multipleAccounts/panel'
 import { getPublicConfig } from '../../../_utils/config'
 
-
 const MULTIPLE_ACCOUNT_KEY = '__authing__multiple_accounts'
 
 // 多账号计算 way 方式
 const MULTIPLE_ACCOUNT_LISTS: LoginWay[] = [
-  'email', 'phone', 'password', 'phone-code', 'email-code', 'ad', 'ldap', 'ldap-password', 'ldap-email', 'ldap-phone'
+  'email',
+  'phone',
+  'password',
+  'phone-code',
+  'email-code',
+  'ad',
+  'ldap',
+  'ldap-password',
+  'ldap-email',
+  'ldap-phone',
 ]
 
 // 扫码登录方式
 export const QR_CODE_WAY: LoginWay[] = [
-  'wechat-miniprogram-qrcode', 'wechatmp-qrcode', 'app-qrcode'
+  'wechat-miniprogram-qrcode',
+  'wechatmp-qrcode',
+  'app-qrcode',
 ]
 
 // 展示多账号时 默认排除的登录方式
@@ -50,15 +60,25 @@ export type LoginWay =
   | 'ldap-email'
   | 'ldap-phone'
 
-
 /**
  * when： 多账号页面跳转进入登录页面
  * 携带的回填数据信息
  */
-export interface BackFillMultipleState extends Omit<User, 'id' | 'name' | 'nickname' | 'username' | 'phone' | 'email' | 'photo' | '_updateTime'> {
+export interface BackFillMultipleState
+  extends Omit<
+    User,
+    | 'id'
+    | 'name'
+    | 'nickname'
+    | 'username'
+    | 'phone'
+    | 'email'
+    | 'photo'
+    | '_updateTime'
+  > {
   /**
    * 回填的账号名称 邮箱/用户名/手机
-    */
+   */
   account: string
 }
 
@@ -119,29 +139,29 @@ export interface User {
    */
   photo?: string | null
   /**
-   * qrCodeId 对应的ID  
+   * qrCodeId 对应的ID
    */
-  qrCodeId?: string;
+  qrCodeId?: string
   /**
    * 国际化短信区号
    */
-  phoneCountryCode?: string;
+  phoneCountryCode?: string
   /**
    * 国际化短信选择框回填
    */
-  areaCode?: string;
+  areaCode?: string
   /**
    * 登录时间
    */
-  _updateTime?: string;
+  _updateTime?: string
 }
 
 class MultipleAccount {
-  /** 
+  /**
    * 原始的登录账号
-  */
-  private originAccount: string = '';
-  private originWay: string = '';
+   */
+  private originAccount: string = ''
+  private originWay: string = ''
   /**
    * 原始的 localStore 值
    */
@@ -155,9 +175,9 @@ class MultipleAccount {
    */
   private firstBackFillData?: BackFillMultipleState
   /**
-  * server 返回支持的登录方式
-  */
-  private serverSideLoginMethods: LoginWay[];
+   * server 返回支持的登录方式
+   */
+  private serverSideLoginMethods: LoginWay[]
 
   /**
    * 是否显示多账号登录页面
@@ -165,17 +185,17 @@ class MultipleAccount {
    */
   private memberState: boolean
   /**
- * 二维码登录时的ID
- */
-  private qrCodeId?: string;
+   * 二维码登录时的ID
+   */
+  private qrCodeId?: string
   /**
- * 国际化短信前缀 区号
- */
+   * 国际化短信前缀 区号
+   */
   private phoneCountryCode?: string
   /**
-* 国际化短信前缀 选中地区编号
-*/
-  private areaCode?: string;
+   * 国际化短信前缀 选中地区编号
+   */
+  private areaCode?: string
   private tabStatus?: 'qrcode' | 'input'
   /**
    * 当前登录二级状态
@@ -185,13 +205,13 @@ class MultipleAccount {
   /**
    * 是否开启国际化短信
    */
-  private isInternationSms?: boolean;
+  private isInternationSms?: boolean
 
   constructor() {
     // 二级别Tab
-    this.loginWay = undefined;
+    this.loginWay = undefined
     // 一级Tab
-    this.tabStatus = undefined;
+    this.tabStatus = undefined
     this.qrCodeId = undefined
     // 国际化短信
     this.phoneCountryCode = undefined
@@ -210,10 +230,13 @@ class MultipleAccount {
    * 页面首次加载时初始化 Store
    * 从 LocalStore 中拿值 放到这里来
    */
-  private initStore = (appId: string, options: {
-    serverSideLoginMethods: LoginWay[],
-    isInternationSms: boolean
-  }) => {
+  private initStore = (
+    appId: string,
+    options: {
+      serverSideLoginMethods: LoginWay[]
+      isInternationSms: boolean
+    }
+  ) => {
     const { serverSideLoginMethods, isInternationSms } = options
     this.appId = appId
     this.isInternationSms = isInternationSms
@@ -225,15 +248,15 @@ class MultipleAccount {
     // 当前 Appid 中所有的内容
     this.currentStore = this.getCurrentStore(this.originStore)
     // 初始化回填页面 & 回填数据
-    const { backfillData, memberState } = this.initMemberState();
+    const { backfillData, memberState } = this.initMemberState()
     this.firstBackFillData = backfillData
     this.memberState = memberState
   }
 
   /**
    * 初始化记住账号相关信息
-   * @param normalCount 
-   * @returns 
+   * @param normalCount
+   * @returns
    */
   private initMemberState = () => {
     // 获取到对应的 验证码个数，默认的个数
@@ -256,7 +279,7 @@ class MultipleAccount {
     }
     return {
       memberState,
-      backfillData
+      backfillData,
     }
   }
 
@@ -265,23 +288,23 @@ class MultipleAccount {
    * @returns qrCount 有效的二维码登录个数 normalCount 有效的账号登录方式
    */
   private memberStateCount = () => {
-    let qrCount = 0;
-    let normalCount = 0;
+    let qrCount = 0
+    let normalCount = 0
     const values = Object.values(this.currentStore)
     for (const value of values) {
       const { tab } = value
       // 1. 扫码登录
       if (tab === 'qrcode') {
-        qrCount++;
+        qrCount++
       }
       // 2. 正常回填的个数
       if (tab === 'input') {
-        normalCount++;
+        normalCount++
       }
     }
     return {
       qrCount,
-      normalCount
+      normalCount,
     }
   }
 
@@ -292,46 +315,47 @@ class MultipleAccount {
     // TODO: backfillData 回填时考虑 AD 和  LDAP 对应的账号
     const wayLists = initWay === 'qrCode' ? QR_CODE_WAY : MULTIPLE_ACCOUNT_LISTS
     const userLists = Object.values(this.currentStore)
-    const user = userLists.find(i => wayLists.includes(i.way))
+    const user = userLists.find((i) => wayLists.includes(i.way))
     // 如果是扫码的用户 回填状态就可以了
     if (user && wayLists.includes(user.way)) {
-      const data = initWay === 'qrCode' ? {
-        account: '',
-        way: user.way
-      } : this.getAccountByWay(user.way, user)
+      const data =
+        initWay === 'qrCode'
+          ? {
+              account: '',
+              way: user.way,
+            }
+          : this.getAccountByWay(user.way, user)
 
       return {
         ...data,
         tab: user.tab,
         qrCodeId: user.qrCodeId,
         phoneCountryCode: user.phoneCountryCode,
-        areaCode: user.areaCode
+        areaCode: user.areaCode,
       }
     }
-
   }
 
   /**
    * 根据前端存储的登录方式返回后端映射方式
-   * @param front 
+   * @param front
    */
   private getServerLoginMethodByFront = (front: LoginWay) => {
     // 排除 social 方式 TODO: Mappint 常量抽离
-    const mapping: Record<
-      Exclude<LoginWay, 'social'>, string> = {
-      'ldap': 'ldap',
+    const mapping: Record<Exclude<LoginWay, 'social'>, string> = {
+      ldap: 'ldap',
       'ldap-password': 'ldap',
       'ldap-phone': 'ldap',
       'ldap-email': 'ldap',
-      'ad': "ad",
-      'email': 'email-password',
-      'password': 'username-password',
-      'phone': 'phone-password',
+      ad: 'ad',
+      email: 'email-password',
+      password: 'username-password',
+      phone: 'phone-password',
       'email-code': 'phone-code',
       'phone-code': 'phone-code',
       'wechat-miniprogram-qrcode': 'wechat-miniprogram-qrcode',
       'wechatmp-qrcode': 'wechatmp-qrcode',
-      'app-qrcode': 'app-qrcode'
+      'app-qrcode': 'app-qrcode',
     }
     if (front !== 'social') {
       return mapping[front]
@@ -376,28 +400,36 @@ class MultipleAccount {
 
   /**
    * 校验有效的登录方式账号
-   * @param user 
-   * @param serverSideLoginMethods 
-   * @returns 
+   * @param user
+   * @param serverSideLoginMethods
+   * @returns
    */
   private validateMethod = (user: User, serverSideLoginMethods: LoginWay[]) => {
     const { way } = user
     const serverWay = this.getServerLoginMethodByFront(way)
     const validateInternationSms = this.validateInternationSms(user)
-    return validateInternationSms && serverWay && serverSideLoginMethods.includes(serverWay as any)
-
+    return (
+      validateInternationSms &&
+      serverWay &&
+      serverSideLoginMethods.includes(serverWay as any)
+    )
   }
 
   /**
-   * 
+   *
    * @param tab 一级Tab状态
    * @param way 二级Tab状态
-   * @param id 二维码登录时 记录对应的二维码 ID 
+   * @param id 二维码登录时 记录对应的二维码 ID
    */
-  private setLoginWay = (tab: 'input' | 'qrcode', way: LoginWay, id?: string, internation?: {
-    phoneCountryCode: string,
-    areaCode: string
-  }) => {
+  private setLoginWay = (
+    tab: 'input' | 'qrcode',
+    way: LoginWay,
+    id?: string,
+    internation?: {
+      phoneCountryCode: string
+      areaCode: string
+    }
+  ) => {
     this.tabStatus = tab
     this.loginWay = way
     this.qrCodeId = id
@@ -412,9 +444,13 @@ class MultipleAccount {
   /**
    * 设置/更新 store 内的用户信息
    */
-  private setUserInfo = (user: Omit<User & { id: string }, 'way' | 'tab' | 'phoneCountryCode'>) => {
-    if (!user || !this.loginWay || !this.tabStatus) {
+  private setUserInfo = (
+    user: Omit<User & { id: string }, 'way' | 'tab' | 'phoneCountryCode'>
+  ) => {
+    // 排除 ad 登录方式
+    if (!user || !this.loginWay || !this.tabStatus || this.loginWay === 'ad') {
       console.log(`User or LoginWay does not exist.`)
+      return
     }
     const { photo, nickname, phone, username, email, id, name } = user
     this.currentStore[id] = Object.assign({
@@ -430,7 +466,7 @@ class MultipleAccount {
       qrCodeId: this.qrCodeId,
       phoneCountryCode: this.phoneCountryCode,
       areaCode: this.areaCode,
-      _updateTime: Date.now()
+      _updateTime: Date.now(),
     })
     this.saveStore()
   }
@@ -460,7 +496,7 @@ class MultipleAccount {
     }
   ) => {
     // TODO: 临时保存对应的account
-    this.originAccount = account;
+    this.originAccount = account
     this.originWay = 'password'
     const { username, phone, email } = data
     switch (account) {
@@ -474,11 +510,11 @@ class MultipleAccount {
   }
 
   /**
- * 根据登录的 account 判断本次LDAP登录方式
- * @param account 登录输入的账号
- * @param param1 登录成功返回的相关信息 用户名/手机号/邮箱
- * @returns
- */
+   * 根据登录的 account 判断本次LDAP登录方式
+   * @param account 登录输入的账号
+   * @param param1 登录成功返回的相关信息 用户名/手机号/邮箱
+   * @returns
+   */
   private setLoginWayByLDAPData = (
     account: string,
     data: {
@@ -487,7 +523,7 @@ class MultipleAccount {
       email?: string
     }
   ) => {
-    this.originAccount = account;
+    this.originAccount = account
     this.originWay = 'ldap'
     const { name, phone, email } = data
     switch (account) {
@@ -497,7 +533,7 @@ class MultipleAccount {
         return this.setLoginWay('input', 'ldap-phone')
       case email:
         return this.setLoginWay('input', 'ldap-email')
-      // MFA 情况都不匹配，那么直接处理 name 
+      // MFA 情况都不匹配，那么直接处理 name
       default:
         return this.setLoginWay('input', 'ldap-password')
     }
@@ -554,7 +590,7 @@ class MultipleAccount {
         way: parseWay,
         // fix: 回填时需要携带国际化信息。
         phoneCountryCode,
-        areaCode
+        areaCode,
       }
     }
   }
@@ -570,38 +606,45 @@ class MultipleAccount {
   private getAccountByWay: (
     way: LoginWay,
     user: User
-  ) => { way: LoginWay; account: string } = (
-    way: LoginWay,
-    user: User
-  ) => {
-      const { email, phone, username, name } = user
-      // 根据对应的 LoginWay 进行返回
-      switch (way) {
-        case 'email':
-          return { account: email!, way: 'password' }
-        case 'email-code':
-          return { account: email!, way: 'phone-code' }
-        case 'phone-code':
-          return { account: phone!, way: 'phone-code' }
-        case 'phone':
-          return { account: phone!, way: 'password' }
-        case 'password':
-          return { account: username!, way: 'password' }
-        case 'ad':
-          return { account: name!, way: 'ad' }
-        case 'ldap-password':
-          return { account: name!, way: 'ldap' }
-        case 'ldap-email':
-          return { account: email!, way: 'ldap' }
-        case 'ldap-phone':
-          return { account: phone!, way: 'ldap' }
-        default:
-          throw new Error(`已登录用户匹配不到的登录方式`)
-      }
+  ) => { way: LoginWay; account: string } = (way: LoginWay, user: User) => {
+    const { email, phone, username, name } = user
+    // 根据对应的 LoginWay 进行返回
+    switch (way) {
+      case 'email':
+        return { account: email!, way: 'password' }
+      case 'email-code':
+        return { account: email!, way: 'phone-code' }
+      case 'phone-code':
+        return { account: phone!, way: 'phone-code' }
+      case 'phone':
+        return { account: phone!, way: 'password' }
+      case 'password':
+        return { account: username!, way: 'password' }
+      case 'ad':
+        return { account: name!, way: 'ad' }
+      case 'ldap-password':
+        return { account: name!, way: 'ldap' }
+      case 'ldap-email':
+        return { account: email!, way: 'ldap' }
+      case 'ldap-phone':
+        return { account: phone!, way: 'ldap' }
+      default:
+        throw new Error(`已登录用户匹配不到的登录方式`)
     }
+  }
 
   private _mappingUser = (value: User) => {
-    const { id, photo, name, nickname, username, email, phone, _updateTime, phoneCountryCode } = value
+    const {
+      id,
+      photo,
+      name,
+      nickname,
+      username,
+      email,
+      phone,
+      _updateTime,
+      phoneCountryCode,
+    } = value
     // 1. 姓名 > 昵称 > username
     const title = name || nickname || username || undefined
     // 2. 处理手机号是否是国家化显示
@@ -615,7 +658,6 @@ class MultipleAccount {
       photo: photo || '',
       // 国际化  phoneCountryCode
       _updateTime: parseInt(_updateTime || '0'),
-
     }
   }
 
@@ -644,7 +686,7 @@ class MultipleAccount {
       getFirstBackFillData: () => this.firstBackFillData,
       // 原始的登录账号和密码
       getOriginAccount: () => this.originAccount,
-      getOriginWay: () => this.originWay
+      getOriginWay: () => this.originWay,
     }
   }
 }
@@ -653,7 +695,13 @@ class MultipleAccount {
  * MultipleAccounts 相关 Hook
  * Finally Config 类型过滤
  */
-const useMultipleAccounts = ({ appId, finallyConfig }: { appId?: string, finallyConfig?: any }) => {
+const useMultipleAccounts = ({
+  appId,
+  finallyConfig,
+}: {
+  appId?: string
+  finallyConfig?: any
+}) => {
   // 页面状态，两种 'isMultipleAccount' TODO: 改成 reducer
   const [isMultipleAccount, setMultipleAccount] = useState(false)
   // 页面记住的数据 给一个初始值
@@ -661,7 +709,9 @@ const useMultipleAccounts = ({ appId, finallyConfig }: { appId?: string, finally
     undefined | BackFillMultipleState
   >(undefined)
 
-  const [storeInstance, setStoreInstance] = useState<StoreInstance | undefined>(undefined)
+  const [storeInstance, setStoreInstance] = useState<StoreInstance | undefined>(
+    undefined
+  )
 
   /**
    * 修改登录页是否是多账号登录的状态
@@ -683,10 +733,9 @@ const useMultipleAccounts = ({ appId, finallyConfig }: { appId?: string, finally
   /**
    * 清空数据
    */
-  const clearBackFillData =
-    useCallback(() => {
-      setMultipleAccountData(undefined)
-    }, [])
+  const clearBackFillData = useCallback(() => {
+    setMultipleAccountData(undefined)
+  }, [])
 
   /**
    * 更新页面状态 & 数据回填
@@ -705,14 +754,16 @@ const useMultipleAccounts = ({ appId, finallyConfig }: { appId?: string, finally
   /**
    * 初始化数据 & 初始化登录页面渲染状态
    */
-  const initFirstState = useCallback((storeInstance: StoreInstance) => {
-    const type = storeInstance.getMemberState() ? 'multiple' : 'login'
-    // 根据初始值 初始化数据
-    referMultipleState(type, storeInstance.getFirstBackFillData())
-  }, [referMultipleState])
+  const initFirstState = useCallback(
+    (storeInstance: StoreInstance) => {
+      const type = storeInstance.getMemberState() ? 'multiple' : 'login'
+      // 根据初始值 初始化数据
+      referMultipleState(type, storeInstance.getFirstBackFillData())
+    },
+    [referMultipleState]
+  )
 
   useEffect(() => {
-
     if (!appId || !finallyConfig) {
       return
     }
@@ -721,8 +772,9 @@ const useMultipleAccounts = ({ appId, finallyConfig }: { appId?: string, finally
     const serverSideLoginMethods = finallyConfig?.loginMethods || []
     // 输入框 邮箱/用户名/手机号 + 密码
     const configLists = finallyConfig?.passwordLoginMethods || []
-    // 是否支持国际化短信 
-    const isInternationSms = publicConfig?.internationalSmsConfig?.enabled || false
+    // 是否支持国际化短信
+    const isInternationSms =
+      publicConfig?.internationalSmsConfig?.enabled || false
     // 创建实例
     const instance = new MultipleAccount()
     // 获取实例
@@ -730,12 +782,11 @@ const useMultipleAccounts = ({ appId, finallyConfig }: { appId?: string, finally
     // 增加一个多的 国际化短信是否开启
     storeInstance.initStore(appId, {
       serverSideLoginMethods: [...configLists, ...serverSideLoginMethods],
-      isInternationSms
+      isInternationSms,
     })
     setStoreInstance(storeInstance)
     // 根据 instance 中的状态和数据初始化登录页面状态
     initFirstState(storeInstance)
-
   }, [appId, finallyConfig, referMultipleState, initFirstState])
 
   return useMemo(() => {
@@ -744,9 +795,15 @@ const useMultipleAccounts = ({ appId, finallyConfig }: { appId?: string, finally
       isMultipleAccount,
       referMultipleState,
       multipleAccountData,
-      clearBackFillData
+      clearBackFillData,
     }
-  }, [storeInstance, isMultipleAccount, referMultipleState, multipleAccountData, clearBackFillData])
+  }, [
+    storeInstance,
+    isMultipleAccount,
+    referMultipleState,
+    multipleAccountData,
+    clearBackFillData,
+  ])
 }
 
 export default useMultipleAccounts
