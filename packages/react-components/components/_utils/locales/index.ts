@@ -31,7 +31,7 @@ export const initGuardI18n = (options: InitGuardI18nOptions) => {
         'querystring',
         'cookie',
         'navigator',
-        'localStorage',
+        'localStorage', //不保存用户所选语言 刷新重新走浏览器语言检测
         'htmlTag',
         'path',
         'subdomain',
@@ -48,6 +48,7 @@ export const initGuardI18n = (options: InitGuardI18nOptions) => {
     lng: lng,
     detection: {
       order: detectionOrder,
+      lookupLocalStorage: '_guard_i18nextLng', //与console主要业务i18n相关的key脱离
     },
     resources: LanguageResources,
     // 兜底语言
