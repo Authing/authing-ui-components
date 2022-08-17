@@ -82,6 +82,7 @@ export const CompletePassword: React.FC = () => {
             } = await post('/api/v2/register/email-code', {
               ...content,
               password,
+              postUserInfoPipeline: false,
             })
             submitButtonRef.current.onSpin(false)
             if (statusCode === 200) {
@@ -111,6 +112,7 @@ export const CompletePassword: React.FC = () => {
             } = await post(`/api/v2/register-phone-code`, {
               ...content,
               password,
+              postUserInfoPipeline: false,
             })
             if (statusCode === 200) {
               submitButtonRef.current?.onSpin(false)

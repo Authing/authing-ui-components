@@ -221,7 +221,6 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
               businessRequestName: 'registerByPhoneCode',
               content: {
                 ...registerContent,
-                postUserInfoPipeline: true,
               },
               isChangeComplete: isPhoneChangeComplete,
               onRegisterSuccess: onRegisterSuccessIntercept,
@@ -251,7 +250,6 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
                 businessRequestName: 'registerByPhoneCode',
                 content: {
                   ...registerContent,
-                  postUserInfoPipeline: true,
                 },
                 onRegisterSuccess: onRegisterSuccessIntercept,
                 onRegisterFailed,
@@ -398,7 +396,6 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
               businessRequestName: 'registerByEmailCode', //用于判断后续使用哪个注册api
               content: {
                 ...registerContent,
-                postUserInfoPipeline: true,
               },
               isChangeComplete: isEmailChangeComplete,
               onRegisterSuccess: onRegisterSuccessIntercept,
@@ -426,7 +423,6 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
                 businessRequestName: 'registerByEmailCode', //用于判断后续使用哪个注册api
                 content: {
                   ...registerContent,
-                  postUserInfoPipeline: true,
                 },
                 onRegisterSuccess: onRegisterSuccessIntercept,
                 onRegisterFailed,

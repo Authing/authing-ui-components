@@ -133,7 +133,6 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           businessRequestName: 'registerByEmail',
           content: {
             ...registerContent,
-            postUserInfoPipeline: true,
           },
           onRegisterSuccess: onRegisterSuccessIntercept,
           onRegisterFailed,

@@ -37,6 +37,7 @@ const registerMethod = (
         ...profile,
       },
       phoneToken,
+      postUserInfoPipeline: true,
     })
   } else if (fnName === 'registerByPhoneCode') {
     const emailToken = profile?.emailToken
@@ -49,6 +50,7 @@ const registerMethod = (
         ...profile,
       },
       emailToken,
+      postUserInfoPipeline: true,
     })
   } else if (fnName === 'registerByEmailCode') {
     const phoneToken = profile.phoneToken
@@ -61,6 +63,7 @@ const registerMethod = (
         ...profile,
       },
       phoneToken,
+      postUserInfoPipeline: true,
     }) as Promise<User>
   }
 }
