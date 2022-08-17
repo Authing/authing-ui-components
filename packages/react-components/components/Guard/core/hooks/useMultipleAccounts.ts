@@ -768,6 +768,10 @@ const useMultipleAccounts = ({
       return
     }
     const publicConfig = getPublicConfig(appId)
+
+    if (publicConfig?.enableLoginAccountSwitch) {
+      return
+    }
     // 最终支持的登录方式 用于过滤有效登录方式
     const serverSideLoginMethods = finallyConfig?.loginMethods || []
     // 输入框 邮箱/用户名/手机号 + 密码
