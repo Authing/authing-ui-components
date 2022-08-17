@@ -1,5 +1,4 @@
 import { User } from 'authing-js-sdk'
-import { getGuardAuthClient } from '../Guard/authClient'
 import { getGuardHttp } from '../_utils/guardHttp'
 import { CompleteInfoRequest, RegisterCompleteInfoInitData } from './interface'
 
@@ -37,7 +36,6 @@ const registerMethod = (
         ...content.profile,
         ...profile,
       },
-      ...content.options,
       phoneToken,
     })
   } else if (fnName === 'registerByPhoneCode') {
@@ -57,14 +55,11 @@ const registerMethod = (
 
     delete profile.phoneToken
     return post('/api/v2/register/email-code', {
-      email: content.email,
-      code: content.code,
-      password: content.password,
+      ...content,
       profile: {
         ...content.profile,
         ...profile,
       },
-      ...content.options,
       phoneToken,
     }) as Promise<User>
   }
@@ -74,43 +69,14 @@ export const registerSkipMethod = (
   fnName: RegisterCompleteInfoInitData['businessRequestName'],
   content: any
 ) => {
-  const authClient = getGuardAuthClient()
   const { post } = getGuardHttp()
 
   if (fnName === 'registerByEmail') {
     return post(`/api/v2/register-email`, content)
-    // return authClient!.registerByEmail(
-    //   content.email,
-    //   content.password,
-    //   {
-    //     ...content.profile,
-    //   },
-    //   {
-    //     ...content.options,
-    //   }
-    // )
   } else if (fnName === 'registerByPhoneCode') {
-    return authClient!.registerByPhoneCode(
-      content.phone,
-      content.code,
-      content.password,
-      {
-        ...content.profile,
-      },
-      {
-        ...content.options,
-      }
-    )
+    return post(`/api/v2/register-phone-code`, content)
   } else if (fnName === 'registerByEmailCode') {
-    return post('/api/v2/register/email-code', {
-      email: content.email,
-      code: content.code,
-      password: content.password,
-      profile: {
-        ...content.profile,
-      },
-      ...content.options,
-    })
+    return post('/api/v2/register/email-code', content)
   }
 }
 

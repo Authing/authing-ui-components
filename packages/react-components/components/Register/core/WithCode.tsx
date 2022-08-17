@@ -279,20 +279,6 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
             message.error(errMessage)
             !needPassword && onRegisterFailed(apiCode, data, errMessage)
           }
-          // const user = await authClient.registerByPhoneCode(
-          //   phoneNumber,
-          //   code,
-          //   password,
-          //   {
-          //     browser:
-          //       typeof navigator !== 'undefined' ? navigator.userAgent : null,
-          //     device: getDeviceName(),
-          //   },
-          //   options
-          // )
-
-          // submitButtonRef.current?.onSpin(false)
-          // onRegisterSuccessIntercept(user)
         }
       } catch (error: any) {
         // TODO 确认无误后 删除 catch
@@ -378,14 +364,12 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
               typeof navigator !== 'undefined' ? navigator.userAgent : null,
             device: getDeviceName(),
           },
-          options: {
-            context: JSON.stringify(context),
-            generateToken: true,
-            // 托管模式下注册携带query上自定义参数login_page_context
-            params: config?.isHost
-              ? JSON.stringify(getUserRegisterParams(['login_page_context'])) // 特殊处理 resetful api
-              : undefined,
-          },
+          context: JSON.stringify(context),
+          generateToken: true,
+          // 托管模式下注册携带query上自定义参数login_page_context
+          params: config?.isHost
+            ? JSON.stringify(getUserRegisterParams(['login_page_context'])) // 特殊处理 resetful api
+            : undefined,
         }
 
         // onRegisterSuccess 注册成功后需要回到对应的登录页面
@@ -453,23 +437,21 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
           }
           // 注册
           const {
-            code: resCode,
+            statusCode,
             data,
+            apiCode,
             onGuardHandling,
             message: registerMessage,
           } = await post('/api/v2/register/email-code', {
-            email: registerContent.email,
-            code: registerContent.code,
-            profile: registerContent.profile,
-            ...registerContent.options,
+            ...registerContent,
             postUserInfoPipeline: false,
           })
           submitButtonRef.current.onSpin(false)
-          if (resCode === 200) {
+          if (statusCode === 200) {
             onRegisterSuccessIntercept(data)
           } else {
             onGuardHandling?.()
-            onRegisterFailed(code, data, registerMessage)
+            onRegisterFailed(apiCode, data, registerMessage)
           }
         }
       } catch (error: any) {

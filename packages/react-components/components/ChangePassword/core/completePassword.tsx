@@ -1,5 +1,5 @@
 import React, { useRef, useCallback } from 'react'
-import { Form, message } from 'antd'
+import { Form } from 'antd'
 import CustomFormItem from '../../ValidatorRules'
 import { InputPassword } from '../../InputPassword'
 import { useMediaSize } from '../../_utils/hooks'
@@ -26,8 +26,6 @@ export const CompletePassword: React.FC = () => {
   const [form] = Form.useForm()
 
   const { isPhoneMedia } = useMediaSize()
-
-  const authClient = useGuardAuthClient()
 
   const { post } = getGuardHttp()
 
@@ -76,31 +74,28 @@ export const CompletePassword: React.FC = () => {
         try {
           if (businessRequestName === 'registerByEmailCode') {
             const {
-              code: resCode,
+              statusCode,
+              apiCode,
               data,
               onGuardHandling,
               message,
             } = await post('/api/v2/register/email-code', {
-              email: content.email,
-              code: content.code,
+              ...content,
               password,
-              profile: content.profile,
-              ...content.options,
-              postUserInfoPipeline: content.postUserInfoPipeline,
             })
             submitButtonRef.current.onSpin(false)
-            if (resCode === 200) {
+            if (statusCode === 200) {
               onRegisterSuccess(data)
               // events?.onRegister?.(data, authClient)
               // changeModule?.(GuardModuleType.LOGIN)
             } else {
-              if (resCode === ApiCode.UNSAFE_PASSWORD_TIP) {
+              if (statusCode === ApiCode.UNSAFE_PASSWORD_TIP) {
                 setPasswordErrorTextShow(true)
               }
               onGuardHandling?.()
-              onRegisterFailed(resCode, data, message)
+              onRegisterFailed(apiCode, data, message)
               events?.onRegisterError?.({
-                code: resCode,
+                code: apiCode,
                 data,
                 message,
               })
@@ -111,14 +106,11 @@ export const CompletePassword: React.FC = () => {
               data,
               statusCode,
               apiCode,
-              message: errorMessage,
+              onGuardHandling,
+              message,
             } = await post(`/api/v2/register-phone-code`, {
-              phone: content.phone,
-              code: content.code,
+              ...content,
               password,
-              profile: content.profile,
-              ...content.options,
-              postUserInfoPipeline: content.postUserInfoPipeline,
             })
             if (statusCode === 200) {
               submitButtonRef.current?.onSpin(false)
@@ -127,9 +119,9 @@ export const CompletePassword: React.FC = () => {
               if (apiCode === ApiCode.UNSAFE_PASSWORD_TIP) {
                 setPasswordErrorTextShow(true)
               }
+              onGuardHandling?.()
               submitButtonRef.current?.onSpin(false)
-              message.error(errorMessage)
-              onRegisterFailed(apiCode, data, errorMessage)
+              onRegisterFailed(apiCode, data, message)
               events?.onRegisterError?.({
                 apiCode,
                 data,
