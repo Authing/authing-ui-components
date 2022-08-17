@@ -2,7 +2,7 @@ import React, { FC, useState, useMemo, useEffect } from 'react'
 import { Space, Checkbox } from 'antd'
 import './style.less'
 import { getClassnames } from '../../../_utils'
-import { Agreement } from '../../../AuthingGuard/api'
+import { Agreement } from '../../../Type/application'
 
 export interface AgreementsProps {
   value?: boolean

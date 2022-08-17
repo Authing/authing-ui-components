@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next'
 import { i18n } from '../../_utils/locales'
 import { isSpecialBrowser, popupCenter } from '../../_utils'
 import querystring from 'query-string'
-import { ApplicationConfig, SocialConnectionItem } from '../../AuthingGuard/api'
 import { IconFont } from '../../IconFont'
 import './style.less'
 import { useMediaSize, SocialConnectionEvent } from '../../_utils/hooks'
@@ -17,6 +16,8 @@ import version from '../../version/version'
 import { GuardLocalConfig } from '../../Guard'
 import { getGuardWindow } from '../../Guard/core/useAppendConfig'
 import { GuardButton } from '../../GuardButton'
+import { ApplicationConfig, SocialConnectionItem } from '../../Type/application'
+import { StoreInstance } from '../../Guard/core/hooks/useMultipleAccounts'
 
 export interface SocialLoginProps {
   appId: string
@@ -26,6 +27,10 @@ export interface SocialLoginProps {
   onLoginSuccess: any
   enterpriseConnectionObjs: ApplicationConfig['identityProviders']
   socialConnectionObjs: SocialConnectionItem[]
+  /**
+   * 根据输入的账号 & 返回获得对应的登录方法
+   */
+  multipleInstance?: StoreInstance
 }
 
 export const SocialLogin: React.FC<SocialLoginProps> = ({
@@ -35,6 +40,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
   onLoginSuccess,
   enterpriseConnectionObjs,
   socialConnectionObjs,
+  multipleInstance,
 }) => {
   const noLoginMethods = !config?.loginMethods?.length
 
@@ -53,10 +59,13 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
   useEffect(() => {
     const onPostMessage = (evt: MessageEvent) => {
       const res = onMessage(evt)
-
       if (!res) return
 
+      // 更新本次登录方式
+      multipleInstance && multipleInstance.setLoginWay('input', 'social')
+
       const { code, data, onGuardHandling } = res
+
       if (code === 200) {
         onLoginSuccess(data)
       } else {
@@ -72,7 +81,7 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
     return () => {
       guardWindow?.removeEventListener('message', onPostMessage)
     }
-  }, [onLoginFailed, onLoginSuccess, onMessage])
+  }, [onLoginFailed, multipleInstance, onLoginSuccess, onMessage])
 
   const idpButtons = enterpriseConnectionObjs.map((i: any) => {
     return (
@@ -165,18 +174,22 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
       )
     } else if (shape === 'icon') {
       return isPhoneMedia ? (
-        <GuardButton className="g2-social-login-item" onClick={onLogin}>
-          <IconFont type={`${iconType}-fill`} />
-        </GuardButton>
+        <GuardButton
+          className="g2-social-login-item"
+          onClick={onLogin}
+          icon={<IconFont type={`${iconType}-fill`} />}
+        ></GuardButton>
       ) : (
         <Tooltip
           key={item.id}
           title={item.tooltip?.[i18n.language as Lang] || item.name}
           trigger={['hover', 'click', 'contextMenu']}
         >
-          <GuardButton className="g2-social-login-item" onClick={onLogin}>
-            <IconFont type={`${iconType}-fill`} />
-          </GuardButton>
+          <GuardButton
+            className="g2-social-login-item"
+            onClick={onLogin}
+            icon={<IconFont type={`${iconType}-fill`} />}
+          ></GuardButton>
         </Tooltip>
       )
     } else {
@@ -203,9 +216,8 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
           className="g2-social-login-item"
           onClick={onLogin}
           key={item.id}
-        >
-          <IconFont type={`${iconType}-fill`} />
-        </GuardButton>
+          icon={<IconFont type={`${iconType}-fill`} />}
+        ></GuardButton>
       ) : (
         <Tooltip
           overlayStyle={{ fontFamily: 'sans-serif' }}
@@ -217,9 +229,11 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
           }
           trigger={['hover', 'click', 'contextMenu']}
         >
-          <GuardButton className="g2-social-login-item" onClick={onLogin}>
-            <IconFont type={`${iconType}-fill`} />
-          </GuardButton>
+          <GuardButton
+            className="g2-social-login-item"
+            onClick={onLogin}
+            icon={<IconFont type={`${iconType}-fill`} />}
+          ></GuardButton>
         </Tooltip>
       )
     }
@@ -261,12 +275,12 @@ export const SocialLogin: React.FC<SocialLoginProps> = ({
         <div
           style={{
             flex: 1,
-            minHeight: 32,
+            minHeight: 16,
           }}
         />
       )}
       <Space
-        size={noLoginMethods ? 0 : 12}
+        size={noLoginMethods ? 0 : 8}
         direction="vertical"
         className="g2-guard-full-width-space"
       >

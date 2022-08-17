@@ -16,6 +16,24 @@
     height: 100%;
   }
 }
+// 🤢 这部分完全是因为user-portal dom结构很难做到针对使用guard页面做样式优化
+.authing-guard-layout {
+  padding: 24px 0;
+}
+
+// pad 端 居中
+@media only screen and (max-width: 600px) {
+  body .authing-guard-layout {
+    align-items: center !important;
+  }
+}
+
+// 移动端去掉padding
+@media only screen and (max-width: 456px) {
+  .authing-guard-layout {
+    padding: 0;
+  }
+}
 
 // 侵入 core 的样式代码，guard view 皮肤
 .g2-view-container {
@@ -28,7 +46,7 @@
   @media only screen and (max-width: 450px) {
     width: 100%;
   }
-  min-height: 610px;
+  min-height: 540px;
   box-sizing: border-box;
   padding: 16px;
   border-radius: 8px;
@@ -77,6 +95,7 @@
   .g2-view-header {
     user-select: none;
     padding: 24px 38px 0;
+    margin-bottom: 16px;
     @media only screen and (max-width: 450px) {
       padding-left: 8px;
       padding-right: 8px;
@@ -93,7 +112,7 @@
       width: 48px;
       height: 48px;
       border-radius: 4px;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
     }
     .title {
       color: #282d3c;
@@ -110,7 +129,6 @@
       font-size: 14px;
       color: #545968;
     }
-    margin-bottom: 24px;
   }
 
   .g2-view-tabs {
@@ -123,6 +141,15 @@
       .authing-ant-tabs-nav-wrap {
         display: none;
       }
+      .authing-ant-tabs-content-holder {
+        min-height: 240px;
+        display: flex;
+        .authing-ant-tabs-content {
+          flex: 1;
+          align-items: center;
+        }
+      }
+
       .authing-ant-tabs-nav::before {
         display: none;
       }
@@ -142,12 +169,11 @@
       border-color: #618eff;
       color: #fff;
     }
-
+    box-shadow: none;
     width: calc(100% - 4px);
     border-radius: 4px;
     height: 42px;
     margin: 0 2px;
-    margin-top: 16px;
     &.shaking {
       animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
     }
@@ -279,6 +305,9 @@
       }
     }
   }
+}
+.authing-g2-sumbit-form {
+  margin-bottom: 12px;
 }
 @keyframes authingShake {
   10%,
@@ -496,7 +525,7 @@
   @media only screen and (max-width: 450px) {
     width: 100%;
   }
-  min-height: 610px;
+  min-height: 540px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -537,7 +566,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 610px;
+  min-height: 540px;
   .plate {
     margin-bottom: 14px;
   }
@@ -564,7 +593,7 @@
   margin: unset;
 }
 .g2-change-language-container {
-  margin: 35px 0 8px 0;
+  margin: 8px 0 0 0;
   text-align: center;
   .g2-change-language-button {
     display: flex;

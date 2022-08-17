@@ -1,99 +1,95 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { ShieldSpin } from '../../ShieldSpin'
-import { useGuardAuthClient } from '../../Guard/authClient'
-import { useGuardFinallyConfig, useGuardHttpClient } from '../../_utils/context'
+import React from 'react'
+import { useGuardHttpClient } from '../../_utils/context'
 import { message } from 'antd'
-import { getGuardWindow } from '../../Guard/core/useAppendConfig'
-
+import { QrCode } from '../../Qrcode'
+import { CodeStatus } from '../../Qrcode/UiQrCode'
+import { QrCodeResponse } from '../../Qrcode/hooks/usePostQrCode'
+import { useTranslation } from 'react-i18next'
+import { StoreInstance } from '../../Guard/core/hooks/useMultipleAccounts'
+import { LoginMethods } from '../..'
+import { isWeChatBrowser } from '../../_utils'
 interface LoginWithWechatmpQrcodeProps {
   // onLogin: any
   onLoginSuccess: any
   canLoop: boolean
   qrCodeScanOptions: any
+  // 当前登录方式 对应的id
+  id: string
+  /**
+   * 多账号存储实例
+   */
+  multipleInstance?: StoreInstance
 }
 
 export const LoginWithWechatmpQrcode = (
   props: LoginWithWechatmpQrcodeProps
 ) => {
-  const timerRef = useRef<any>()
+  const { canLoop, qrCodeScanOptions } = props
 
-  const client = useGuardAuthClient()
+  const { t } = useTranslation()
 
   const { responseIntercept } = useGuardHttpClient()
 
-  const [loading, setLoading] = useState(true)
+  if (!canLoop) {
+    return null
+  }
 
-  const appQrcodeClient = client.wechatmpqrcode
+  const descriptions = {
+    already: (referQrCode: () => void) => (
+      <span className="qrcode__again-scan" onClick={referQrCode}>
+        {t('login.scanAgain')}
+      </span>
+    ),
+    ready: isWeChatBrowser()
+      ? t('common.loginWithWechatmpQrcodeTipsTitle')
+      : t('login.wechatScanLogin'),
+    success: t('common.LoginSuccess'),
+    MFA: t('common.LoginSuccess'),
+  }
 
-  const domId = `authingGuardMpQrcode-${props.qrCodeScanOptions.extIdpConnId}`
+  /**
+   * 状态发生变化时的处理函数
+   * @param status
+   * @param data
+   */
+  const onStatusChange = (status: CodeStatus, data: QrCodeResponse) => {
+    switch (status) {
+      case 'success':
+        props.multipleInstance &&
+          props.multipleInstance.setLoginWay(
+            'qrcode',
+            LoginMethods.WechatMpQrcode,
+            props.id
+          )
 
-  const config = useGuardFinallyConfig()
-
-  useEffect(() => {
-    const guardWindow = getGuardWindow()
-
-    if (!guardWindow) return
-
-    if (!!config._qrCodeScanOptions) return
-
-    const document = guardWindow.document
-
-    if (!props.canLoop) {
-      return () => clearInterval(timerRef.current)
-    }
-    setLoading(true)
-    appQrcodeClient.startScanning(domId, {
-      currentDocument: document,
-      autoExchangeUserInfo: true,
-      ...props.qrCodeScanOptions,
-
-      onCodeShow() {
-        setLoading(false)
-      },
-      onStart(timer) {
-        timerRef.current = timer
-      },
-      onSuccess(user) {
-        // props.onLogin(200, user)
-        props.onLoginSuccess(user)
-        clearInterval(timerRef.current)
-      },
-      onError: (ms) => {
-        if (ms) {
-          message.error(ms)
+        props.onLoginSuccess(data)
+        break
+      case 'error':
+        // 怎么模拟这里的 error
+        if (data.scannedResult) {
+          const { message: msg } = data.scannedResult
+          message.error(msg)
         }
-      },
-      onCodeLoadFailed: ({ message: mes }: any) => {
-        message.error(JSON.parse(mes).message)
-        setLoading(false)
-      },
-      onRetry: () => {
-        setLoading(true)
-      },
-      onAuthFlow: (scannedResult) => {
-        // props.onLogin(code, mfaData, message)
-        clearInterval(timerRef.current)
-        const { onGuardHandling } = responseIntercept(scannedResult)
+        break
+      case 'MFA':
+        const { onGuardHandling } = responseIntercept(data.scannedResult!)
         onGuardHandling?.()
-      },
-    })
-    return () => clearInterval(timerRef.current)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [appQrcodeClient, props.canLoop])
+        break
+      default:
+        break
+    }
+  }
 
   return (
-    <div className="authing-g2-login-app-qrcode">
-      {config._qrCodeScanOptions ? (
-        <div className="qrcode">
-          <img src={config._qrCodeScanOptions.wechatmpQrcode.qrcode} alt="" />
-          <span>{props.qrCodeScanOptions.tips.title}</span>
-        </div>
-      ) : (
-        <>
-          {loading && <ShieldSpin />}
-          <div id={domId}></div>
-        </>
-      )}
-    </div>
+    <QrCode
+      scene="WECHATMP_AUTH"
+      descriptions={descriptions}
+      onStatusChange={onStatusChange}
+      qrCodeScanOptions={qrCodeScanOptions}
+      imageStyle={{
+        height: '166px',
+        width: '166px',
+      }}
+    />
   )
 }

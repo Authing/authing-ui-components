@@ -1,7 +1,7 @@
 import { Form, Input } from 'antd'
 import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { User } from '../..'
+import { User } from 'authing-js-sdk'
 import { IconFont } from '../../IconFont'
 import SubmitButton from '../../SubmitButton'
 import { useGuardIsAuthFlow } from '../../_utils/context'
@@ -107,7 +107,7 @@ export const UseCode: React.FC<UseCodeProps> = ({ mfaToken, onSubmit }) => {
           />
         </Form.Item>
 
-        <Form.Item className="authing-g2-input-form submit-form">
+        <Form.Item className="authing-g2-sumbit-form submit-form">
           <SubmitButton text={t('common.sure')} ref={submitButtonRef} />
         </Form.Item>
       </Form>

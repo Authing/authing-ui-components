@@ -15,7 +15,7 @@ import {
   useGuardPublicConfig,
 } from '../_utils/context'
 import { GuardLoginInitData } from '../Login/interface'
-import { RegisterMethods } from '../AuthingGuard/types'
+import { RegisterMethods } from '../Type/application'
 
 export const GuardRegisterView: React.FC = () => {
   const events = useGuardEvents()

@@ -1,59 +1,97 @@
-import i18n from 'i18next'
+import i18n, { InitOptions, Resource } from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
+import * as enUsTrans from './en-us'
+import * as zhCnTrans from './zh-cn'
+import * as zhTwTrans from './zh-tw'
+import { Lang } from '../../Type'
 
-import * as enUsTrans from './en'
-import * as zhCnTrans from './zh'
-import { LocalesConfig, Lang } from '../../AuthingGuard/types'
-import { getGuardWindow } from '../../Guard/core/useAppendConfig'
-
-let langChangeFN: (lang: Lang) => void = () => {}
-
-export const changeLang = (lang: Lang) => {
-  i18n.changeLanguage(lang)
-  langChangeFN && langChangeFN(lang)
+const LanguageResources: Resource = {
+  'en-US': { translation: enUsTrans },
+  'zh-CN': { translation: zhCnTrans },
+  'zh-TW': { translation: zhTwTrans },
 }
 
-const initI18n = (localesConfig: LocalesConfig = {}, lang?: string) => {
-  let initLang: 'zh-CN' | 'en-US' = 'zh-CN'
+export interface InitGuardI18nOptions {
+  // 默认显示
+  defaultLanguage?: Lang | 'browser'
+}
 
-  const guardWindow = getGuardWindow()
+export const initGuardI18n = (options: InitGuardI18nOptions) => {
+  const { defaultLanguage } = options
 
-  if (guardWindow) {
-    initLang =
-      guardWindow?.navigator?.language?.split('-')?.[0] === 'zh'
-        ? 'zh-CN'
-        : 'en-US'
-  }
+  const detectionOrder: string[] = []
 
-  if (Boolean(i18n.language)) {
-    i18n.changeLanguage(lang)
+  let lng: Lang | undefined = undefined
+
+  // 如果需要跟随浏览器语言, 则添加到监测顺序
+  if (defaultLanguage === 'browser') {
+    detectionOrder.push(
+      ...[
+        'querystring',
+        'cookie',
+        'navigator',
+        'localStorage', //不保存用户所选语言 刷新重新走浏览器语言检测
+        'htmlTag',
+        'path',
+        'subdomain',
+      ]
+    )
   } else {
-    i18n
-      .use(LanguageDetector) // 监测当前浏览器语言
-      .use(initReactI18next) // 初始化 i18n
-      .init({
-        detection: {
-          order: [],
-        },
-        resources: {
-          'en-US': {
-            translation: enUsTrans,
-          },
-          'zh-CN': {
-            translation: zhCnTrans,
-          },
-        },
-        fallbackLng: lang ?? initLang,
-        debug: false,
-        interpolation: {
-          escapeValue: false, // react already safes from xss
-        },
-      })
-    if (localesConfig.onChange) {
-      langChangeFN = localesConfig.onChange
-    }
+    // 此处 defaultLanguage 可能为 Lng 也可能是 undefined
+    lng = defaultLanguage
   }
+
+  // 统一拼装一下 i18n 的 options
+  const i18nOptions: InitOptions = {
+    // 默认语言
+    lng: lng,
+    detection: {
+      order: detectionOrder,
+      lookupLocalStorage: '_guard_i18nextLng', //与console主要业务i18n相关的key脱离
+    },
+    resources: LanguageResources,
+    // 兜底语言
+    fallbackLng: (code = '') => {
+      if (!code || code === 'en') return ['en-US']
+
+      if (!code || code === 'zh') return ['zh-CN']
+
+      const fallbacks = []
+
+      if (code.startsWith('en-')) {
+        fallbacks.push(`en-US`)
+        return fallbacks
+      }
+
+      if (code.startsWith('zh-')) {
+        if (
+          ['zh-tw', 'zh-hk', 'zh-mo', 'zh-hant'].includes(
+            code.toLocaleLowerCase()
+          )
+        ) {
+          fallbacks.push(`zh-TW`)
+        } else if (
+          ['zh-cn', 'zh-sg', 'zh-my'].includes(code.toLocaleLowerCase())
+        ) {
+          fallbacks.push(`zh-CN`)
+        } else {
+          fallbacks.push(`zh-CN`)
+        }
+
+        return fallbacks
+      }
+
+      return ['en-US']
+    },
+    debug: false,
+    interpolation: {
+      escapeValue: false,
+    },
+  }
+
+  // 开始初始化了嗷~
+  i18n.use(LanguageDetector).use(initReactI18next).init(i18nOptions)
 }
 
-export { i18n, initI18n }
+export { i18n }

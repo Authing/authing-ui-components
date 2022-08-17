@@ -1,7 +1,6 @@
 import { Form, message } from 'antd'
 import React, { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
 import { fieldRequiredRule, getDeviceName } from '../../_utils'
 import { Agreements } from '../components/Agreements'
 import SubmitButton from '../../SubmitButton'
@@ -17,6 +16,7 @@ import { useGuardFinallyConfig, useGuardModule } from '../../_utils/context'
 import { GuardModuleType } from '../../Guard'
 import { useGuardHttp } from '../../_utils/guardHttp'
 import { useGuardAuthClient } from '../../Guard/authClient'
+import { Agreement, ApplicationConfig } from '../../Type/application'
 
 export interface RegisterWithPhoneProps {
   // onRegister: Function
@@ -343,7 +343,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
             showError={validated}
           />
         )}
-        <Form.Item>
+        <Form.Item className="authing-g2-sumbit-form">
           <SubmitButton text={t('common.register')} ref={submitButtonRef} />
         </Form.Item>
       </Form>

@@ -1,7 +1,6 @@
 import { Form, Input, message } from 'antd'
 import React, { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Agreement, ApplicationConfig } from '../../AuthingGuard/api'
 import { useGuardAuthClient } from '../../Guard/authClient'
 import { fieldRequiredRule, getDeviceName } from '../../_utils'
 import { Agreements } from '../components/Agreements'
@@ -16,7 +15,11 @@ import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
 import { getGuardHttp } from '../../_utils/guardHttp'
 import { EmailScene } from '../../Type'
 import { useMediaSize } from '../../_utils/hooks'
-import { LoginMethods } from '../../AuthingGuard/types'
+import {
+  Agreement,
+  ApplicationConfig,
+  LoginMethods,
+} from '../../Type/application'
 // ! 废弃 🚒
 export interface RegisterWithEmailCodeProps {
   // onRegister: Function
@@ -287,7 +290,7 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
             showError={validated}
           />
         )}
-        <Form.Item>
+        <Form.Item className="authing-g2-sumbit-form">
           <SubmitButton text={t('common.register')} ref={submitButtonRef} />
         </Form.Item>
       </Form>

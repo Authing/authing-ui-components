@@ -1,5 +1,4 @@
 import { User } from 'authing-js-sdk'
-import { ApplicationConfig } from '../AuthingGuard/api'
 import {
   CompleteInfoBaseControls,
   CompleteInfoExtendsControls,
@@ -8,6 +7,7 @@ import {
   CompleteInfoRule,
   ExtendsField,
 } from '../CompleteInfo/interface'
+import { ApplicationConfig } from '../Type/application'
 
 export const completeFieldsFilter = (user: User, field: ExtendsField) => {
   if (!user) {

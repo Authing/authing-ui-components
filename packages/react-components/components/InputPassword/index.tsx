@@ -1,13 +1,14 @@
 import { Input } from 'antd'
 import { PasswordProps } from 'antd/lib/input'
 import React from 'react'
-import { IconFont } from '../AuthingGuard/IconFont'
+import { IconFont } from '../IconFont'
 export const InputPassword = React.forwardRef<
   React.RefObject<Input>,
   PasswordProps
 >((props, ref) => {
   return (
     <Input.Password
+      autoComplete="off"
       ref={ref}
       {...props}
       iconRender={(visible) => (

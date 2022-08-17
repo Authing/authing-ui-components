@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Form, Input, Modal, Progress, Select, Upload } from 'antd'
+import { Form, Input, message, Modal, Progress, Select, Upload } from 'antd'
 import SubmitButton from '../../SubmitButton'
 import { PlusOutlined } from '@ant-design/icons'
 import { UploadFile } from 'antd/lib/upload/interface'
@@ -106,6 +106,9 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
       if (res.code === 200) {
         submitButtonRef?.current?.onSpin(false)
         props.onSuccess()
+      } else {
+        submitButtonRef?.current?.onSpin(false)
+        message.error(res.message)
       }
     })
   }
@@ -288,7 +291,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
           </div>
         </div>
 
-        <Form.Item className="authing-g2-input-form submit-form">
+        <Form.Item className="authing-g2-sumbit-form submit-form">
           <SubmitButton
             className="forget-password"
             text={t('common.problem.form.submit')}

@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Form, Input, message } from 'antd'
-import { LoginMethods } from '../../'
 import { ErrorCode } from '../../_utils/GuardErrorCode'
 // import { useGuardAuthClient } from '../../Guard/authClient'
 import SubmitButton from '../../SubmitButton'
@@ -9,10 +8,16 @@ import { fieldRequiredRule } from '../../_utils'
 import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
 import { Agreements } from '../../Register/components/Agreements'
-import { Agreement } from '../../AuthingGuard/api'
 import { useGuardHttpClient } from '../../_utils/context'
 import { CodeAction } from '../../_utils/responseManagement/interface'
 import { useMediaSize } from '../../_utils/hooks'
+import { Agreement, LoginMethods } from '../../Type/application'
+import {
+  BackFillMultipleState,
+  StoreInstance,
+} from '../../Guard/core/hooks/useMultipleAccounts'
+import { useLoginMultipleBackFill } from '../hooks/useLoginMultiple'
+
 interface LoginWithLDAPProps {
   // configs
   publicKey: string
@@ -25,12 +30,34 @@ interface LoginWithLDAPProps {
   onLoginFailed: any
   onBeforeLogin: any
   agreements: Agreement[]
+  /**
+   * 根据输入的账号 & 返回获得对应的登录方法
+   */
+  multipleInstance?: StoreInstance
+  /**
+   * 多账号回填的数据
+   */
+  backfillData?: BackFillMultipleState
 }
 
 export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
-  const { agreements, onLoginSuccess, onLoginFailed } = props
+  const {
+    agreements,
+    onLoginSuccess,
+    onLoginFailed,
+    multipleInstance,
+    backfillData,
+  } = props
+
+  const [form] = Form.useForm()
 
   // const { responseIntercept } = useGuardHttpClient()
+  useLoginMultipleBackFill({
+    form,
+    way: 'ldap',
+    formKey: 'account',
+    backfillData,
+  })
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
 
@@ -71,7 +98,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
 
     // onLogin
     let username = values.account && values.account.trim()
-    let password = values.password && values.password.trim()
+    let password = values.password
 
     try {
       const { code, data, onGuardHandling } = await post(
@@ -83,6 +110,10 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
       )
 
       submitButtonRef.current.onSpin(false)
+      // 更新本次登录方式
+      data &&
+        multipleInstance &&
+        multipleInstance.setLoginWayByLDAPData(username, data)
 
       if (code === 200) {
         onLoginSuccess(data)
@@ -149,6 +180,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
   return (
     <div className="authing-g2-login-ldap">
       <Form
+        form={form}
         name="passworLogin"
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current?.onError()}
@@ -223,7 +255,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
             showError={validated}
           />
         )}
-        <Form.Item>
+        <Form.Item className="authing-g2-sumbit-form">
           <SubmitButton
             // disabled={
             //   !!agreements.find((item) => item.required && !acceptedAgreements)

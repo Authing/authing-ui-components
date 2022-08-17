@@ -40,3 +40,4 @@ types
 
 components/version/version.tsx
 examples.tsx
+/types

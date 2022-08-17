@@ -1,12 +1,6 @@
+import { AuthenticationClient, User } from 'authing-js-sdk'
 import { IG2FCProps, IG2Config, getDefaultG2Config, IG2Events } from '../Type'
-import {
-  AuthenticationClient,
-  User,
-  EmailRegisterParams,
-  PhoneRegisterParams,
-  RegisterMethods,
-} from '..'
-import { Agreement } from '../AuthingGuard/api'
+import { Agreement, RegisterMethods } from '../Type/application'
 
 export interface RegisterConfig extends IG2Config {
   disableRegister?: boolean
@@ -24,7 +18,8 @@ const defaultConfig: RegisterConfig = {
 
 export interface RegisterEvents extends IG2Events {
   onBeforeRegister?: (
-    registerInfo: EmailRegisterParams | PhoneRegisterParams,
+    // TODO 类型定义补充
+    registerInfo: any,
     authClient: AuthenticationClient
   ) => boolean | Promise<boolean>
   onRegister?: (user: User, authClient: AuthenticationClient) => void

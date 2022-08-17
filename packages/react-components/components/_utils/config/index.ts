@@ -1,5 +1,4 @@
 import { LoginMethods } from 'authing-js-sdk'
-import { ApplicationConfig } from '../../AuthingGuard/api'
 import { assembledRequestHost as utilAssembledRequestHost } from '..'
 import { GuardComponentConfig, GuardLocalConfig } from '../../Guard/config'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -8,7 +7,7 @@ import { GuardHttp } from '../guardHttp'
 import { corsVerification } from '../corsVerification'
 import { Logger } from '../logger'
 import { GuardPageConfig } from '../../Type'
-import { RegisterMethods } from '../../AuthingGuard/types'
+import { ApplicationConfig, RegisterMethods } from '../../Type/application'
 
 let publicConfigMap: Record<string, ApplicationConfig> = {}
 
@@ -129,6 +128,7 @@ const assembledRequestHost = (
 }
 
 export const useMergePublicConfig = (
+  forceUpdate: number,
   appId?: string,
   config?: GuardLocalConfig,
   httpClient?: GuardHttp,
@@ -152,7 +152,7 @@ export const useMergePublicConfig = (
 
   useEffect(() => {
     initPublicConfig()
-  }, [initPublicConfig])
+  }, [initPublicConfig, forceUpdate])
 
   return useMemo(() => {
     if (publicConfig && config) {
@@ -199,6 +199,7 @@ export const requestGuardPageConfig = async (
 }
 
 export const useGuardPageConfig = (
+  forceUpdate: number,
   appId?: string,
   httpClient?: GuardHttp,
   serError?: any
@@ -221,7 +222,7 @@ export const useGuardPageConfig = (
 
   useEffect(() => {
     initPublicConfig()
-  }, [initPublicConfig])
+  }, [initPublicConfig, forceUpdate])
 
   if (pageConfig) {
     return pageConfig

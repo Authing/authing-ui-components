@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { message } from 'antd'
 import { GuardModuleType } from '.'
 import { CompleteInfoEvents } from '../CompleteInfo/interface'
@@ -7,21 +8,44 @@ import { IdentityBindingAskEvents } from '../IdentityBindingAsk'
 import { LoginEvents } from '../Login/interface'
 import { RegisterEvents } from '../Register/interface'
 import { i18n } from '../_utils/locales'
+import { StoreInstance } from './core/hooks/useMultipleAccounts'
 
 export interface GuardEvents
   extends LoginEvents,
-    RegisterEvents,
-    CompleteInfoEvents,
-    ForgetPasswordEvents,
-    IdentityBindingEvents,
-    IdentityBindingAskEvents {
+  RegisterEvents,
+  CompleteInfoEvents,
+  ForgetPasswordEvents,
+  IdentityBindingEvents,
+  IdentityBindingAskEvents {
   onBeforeChangeModule?: (
     key: GuardModuleType,
     initData?: any
   ) => boolean | Promise<boolean>
 }
 
-export const guardEventsFilter = (props: any, openEventsMapping?: boolean) => {
+/**
+ * 包裹用户 Events
+ * 这里为必须存在的 Events
+ * @param eventName 事件名
+ * @param events 事件列表
+ * @param callback 事件触发时前置函数
+ */
+const wrapperEvents = <N extends keyof GuardEvents, T extends (Required<GuardEvents>)[N] = (Required<GuardEvents>)[N]>(eventName: N, events: GuardEvents, callback:
+  (oldEvent: any, ...props: Parameters<T>) => ReturnType<T>) => {
+  // 对于特殊event进行处理
+  const oldEvents = events[eventName];
+  // @ts-ignore TODO: 后续类型处理
+  events[eventName] = (...props: Parameters<T>) => {
+    callback(oldEvents, ...props)
+    return props
+  }
+}
+
+export const guardEventsFilter = (
+  props: any,
+  multipleInstance?: StoreInstance,
+  openEventsMapping?: boolean
+) => {
   const events: GuardEvents = {}
 
   const eventsNameWhiteList = ['__changeModule']
@@ -32,6 +56,13 @@ export const guardEventsFilter = (props: any, openEventsMapping?: boolean) => {
 
   eventsName.forEach((eventName) => {
     events[eventName as keyof GuardEvents] = props[eventName]
+  })
+
+  // 保证必须存在 onLogin 函数
+  wrapperEvents<'onLogin'>('onLogin', events, (oldEvents, ...props) => {
+    const [user] = props
+    multipleInstance?.setUserInfo(user)
+    oldEvents && oldEvents(...props)
   })
 
   return guardEventsHijacking(events, openEventsMapping)
@@ -55,6 +86,7 @@ const eventsMapping: Partial<GuardEvents> = {
   },
 }
 
+
 export const guardEventsHijacking = (
   events: GuardEvents,
   openEventsMapping?: boolean
@@ -63,6 +95,7 @@ export const guardEventsHijacking = (
   Object.keys(eventsMapping).forEach((eventsKey) => {
     // @ts-ignore
     newEvents[eventsKey] = (...props) => {
+      // 必须执行的
       // @ts-ignore
       openEventsMapping && eventsMapping[eventsKey](...props)
       // @ts-ignore

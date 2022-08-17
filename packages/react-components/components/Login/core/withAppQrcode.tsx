@@ -1,87 +1,85 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { ShieldSpin } from '../../ShieldSpin'
-import { useGuardAuthClient } from '../../Guard/authClient'
+import { QrCode } from '../../Qrcode'
+import React, { useRef } from 'react'
+import { CodeStatus } from '../../Qrcode/UiQrCode'
+import { QrCodeResponse } from '../../Qrcode/hooks/usePostQrCode'
 import { message } from 'antd'
-import { useGuardFinallyConfig, useGuardHttpClient } from '../../_utils/context'
-import { getGuardWindow } from '../../Guard/core/useAppendConfig'
+import { useGuardHttpClient } from '../../_utils/context'
+import { WorkQrCodeRef } from '../../Qrcode/WorkQrCode'
+import { useTranslation } from 'react-i18next'
+import { StoreInstance } from '../../Guard/core/hooks/useMultipleAccounts'
+import { LoginMethods } from '../..'
 
 interface LoginWithAppQrcodeProps {
   // onLogin: any
   onLoginSuccess: any
   canLoop: boolean
-  qrCodeScanOptions: any
+  // qrCodeScanOptions: any
+  multipleInstance?: StoreInstance
 }
 
 export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
-  const timerRef = useRef<any>()
-  const client = useGuardAuthClient()
-  const [loading, setLoading] = useState(true)
-  const appQrcodeClient = client.qrcode
+  const codeRef = useRef<WorkQrCodeRef>()
+
+  const { canLoop } = props
+
   const { responseIntercept } = useGuardHttpClient()
-  const config = useGuardFinallyConfig()
-  useEffect(() => {
-    const guardWindow = getGuardWindow()
 
-    if (!guardWindow) return
+  const { t } = useTranslation()
 
-    if (!!config?._qrCodeScanOptions) return
+  if (!canLoop) {
+    return null
+  }
 
-    const document = guardWindow.document
+  const descriptions = {
+    already: (referQrCode: () => void) => (
+      <span className="qrcode__again-scan" onClick={referQrCode}>
+        {t('login.scanAgain')}
+      </span>
+    ),
+    ready: t('login.appScanLogin'),
+    success: t('common.LoginSuccess'),
+    MFA: t('common.LoginSuccess'),
+  }
 
-    if (!props.canLoop) {
-      return () => clearInterval(timerRef.current)
-    }
-    setLoading(true)
-    appQrcodeClient.startScanning('authingGuardAppQrcode', {
-      currentDocument: document,
-      autoExchangeUserInfo: true,
-      ...props.qrCodeScanOptions,
-      onCodeShow() {
-        setLoading(false)
-      },
-      onStart(timer) {
-        timerRef.current = timer
-      },
-      onSuccess(user) {
-        // props.onLogin(200, user)
-        clearInterval(timerRef.current)
-        props.onLoginSuccess(user)
-      },
-      onError: (ms) => {
-        if (ms) {
-          message.error(ms)
+  /**
+   * Sever Status 发生变化
+   * @param status
+   * @param data
+   */
+  const onStatusChange = (status: CodeStatus, data: QrCodeResponse) => {
+    switch (status) {
+      case 'success':
+        props.multipleInstance &&
+          props.multipleInstance.setLoginWay('qrcode', LoginMethods.AppQr)
+        props.onLoginSuccess(data)
+        break
+      case 'error':
+        if (data.scannedResult) {
+          const { message: msg } = data.scannedResult
+          message.error(msg)
         }
-      },
-      onCodeLoadFailed: ({ message: mes }: any) => {
-        message.error(JSON.parse(mes).message)
-        setLoading(false)
-      },
-      onRetry: () => {
-        setLoading(true)
-      },
-      onAuthFlow: (scannedResult) => {
-        clearInterval(timerRef.current)
-        const { onGuardHandling } = responseIntercept(scannedResult)
-        onGuardHandling?.()
-      },
-    })
-    return () => clearInterval(timerRef.current)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [appQrcodeClient, props.canLoop])
+        break
+      case 'MFA':
+        if (data.scannedResult) {
+          const { onGuardHandling } = responseIntercept(data.scannedResult)
+          onGuardHandling?.()
+        }
+        break
+      default:
+        break
+    }
+  }
 
   return (
-    <div className="authing-g2-login-app-qrcode">
-      {config._qrCodeScanOptions ? (
-        <div className="qrcode">
-          <img src={config._qrCodeScanOptions.appQrcode.qrcode} alt="" />
-          <span>{props.qrCodeScanOptions.tips.title}</span>
-        </div>
-      ) : (
-        <>
-          {loading && <ShieldSpin />}
-          <div id="authingGuardAppQrcode"></div>
-        </>
-      )}
-    </div>
+    <QrCode
+      ref={codeRef}
+      scene="APP_AUTH"
+      descriptions={descriptions}
+      onStatusChange={onStatusChange}
+      imageStyle={{
+        height: '166px',
+        width: '166px',
+      }}
+    />
   )
 }

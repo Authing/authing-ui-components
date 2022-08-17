@@ -6,12 +6,19 @@ import { IconFont } from '../../../IconFont'
 import { i18n } from '../../../_utils/locales'
 
 export interface VirtualDropdownProps {
+  /**
+   * 回填的国际化区号
+   */
+  regionCode?: string
   value?: string
   onChange?: (value: string) => void
   style?: React.CSSProperties
 }
 export const VirtualDropdown: FC<VirtualDropdownProps> = (props) => {
   const { value, onChange } = props
+
+  // 只能单次遍历了
+
   // const [open, setOpen] = useState(false)
   const options = isoInfo.map((info: IsoType) => {
     return {
@@ -34,6 +41,8 @@ export const VirtualDropdown: FC<VirtualDropdownProps> = (props) => {
       region_en: info.regions_en,
     }
   })
+
+  // 现在需要回填国际化短信
 
   return (
     <Select
@@ -60,11 +69,13 @@ export const VirtualDropdown: FC<VirtualDropdownProps> = (props) => {
         // return option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
       }}
       suffixIcon={
-        <IconFont
-          className={'areacode-virtual-dropdown-icon'}
-          type={'authing-arrow-down-s-fill'}
-          style={{ width: 20, height: 20 }}
-        />
+        <>
+          <IconFont
+            className={'areacode-virtual-dropdown-icon'}
+            type={'authing-arrow-down-s-fill'}
+            style={{ width: 20, height: 20 }}
+          />
+        </>
       }
     />
   )

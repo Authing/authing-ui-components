@@ -1,9 +1,17 @@
-import { AuthenticationClient, CommonMessage } from 'authing-js-sdk'
-import { Lang } from 'authing-js-sdk/build/main/types'
-import { ApplicationConfig } from '../AuthingGuard/api'
-import { GuardMode } from '../AuthingGuard/types/GuardConfig'
+import { AuthenticationClient, CommonMessage, User } from 'authing-js-sdk'
 import { GuardModuleType } from '../Guard/module'
 import { FacePlugin } from '../_utils/facePlugin/interface'
+import { ApplicationConfig } from './application'
+export * from './application'
+
+export type { CommonMessage, User }
+
+export type Lang = 'zh-CN' | 'en-US' | 'zh-TW'
+
+export enum GuardMode {
+  Modal = 'modal',
+  Normal = 'normal',
+}
 
 export interface IG2FCProps extends IG2Events {
   appId?: string
@@ -31,8 +39,8 @@ export interface IG2FCViewProps extends IG2FCProps {
 export interface IG2Config {
   title?: string
   logo?: string
-  lang: string
-  langRange: string[]
+  lang?: string
+  langRange?: string[]
   host: string
   isHost?: boolean // 判断是否处于托管页面
   mode: GuardMode
@@ -47,8 +55,6 @@ export interface IG2Config {
 }
 
 const defaultG2Config: IG2Config = {
-  lang: 'zh-CN',
-  langRange: ['zh-CN', 'en-US'],
   escCloseable: true,
   clickCloseable: true,
   mode: GuardMode.Normal,
@@ -87,6 +93,7 @@ export enum GuardPageSene {
 export interface GuardPageConfig {
   [GuardPageSene.Global]: {
     showChangeLanguage: boolean
+    defaultLanguage: Lang | 'browser'
   }
 }
 

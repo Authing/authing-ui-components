@@ -1,14 +1,18 @@
 import { Form, Input, message } from 'antd'
+import { useForm } from 'antd/lib/form/Form'
 import { LoginMethods } from 'authing-js-sdk'
 import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Agreement } from '../../AuthingGuard/api'
+import {
+  BackFillMultipleState,
+  StoreInstance,
+} from '../../Guard/core/hooks/useMultipleAccounts'
 import { useGuardAuthClient } from '../../Guard/authClient'
-// import { useGuardAuthClient } from '../../Guard/authClient'
 import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
 import { Agreements } from '../../Register/components/Agreements'
 import SubmitButton from '../../SubmitButton'
+import { Agreement } from '../../Type/application'
 import version from '../../version/version'
 import { fieldRequiredRule } from '../../_utils'
 import {
@@ -21,6 +25,7 @@ import { useMediaSize } from '../../_utils/hooks'
 import { requestClient } from '../../_utils/http'
 import { i18n } from '../../_utils/locales'
 import { CodeAction } from '../../_utils/responseManagement/interface'
+// import { useLoginMultipleBackFill } from '../hooks/useLoginMultiple'
 
 interface LoginWithADProps {
   // configs
@@ -34,6 +39,14 @@ interface LoginWithADProps {
   onLoginFailed: any
   onBeforeLogin: any
   agreements: Agreement[]
+  /**
+   * 回填的数据
+   */
+  backfillData?: BackFillMultipleState
+  /**
+   * 根据输入的账号 & 返回获得对应的登录方法
+   */
+  multipleInstance?: StoreInstance
 }
 
 export const LoginWithAD = (props: LoginWithADProps) => {
@@ -58,6 +71,15 @@ export const LoginWithAD = (props: LoginWithADProps) => {
   let client = useGuardAuthClient()
 
   // const { post } = useGuardHttpClient()
+
+  const [form] = useForm()
+
+  // useLoginMultipleBackFill({
+  //   form,
+  //   way: 'ad',
+  //   formKey: 'account',
+  //   backfillData,
+  // })
 
   let submitButtonRef = useRef<any>(null)
 
@@ -84,7 +106,7 @@ export const LoginWithAD = (props: LoginWithADProps) => {
 
     // onLogin
     let username = values.account && values.account.trim()
-    let password = values.password && values.password.trim()
+    let password = values.password
 
     const encrypt = client.options.encryptFunction
 
@@ -111,6 +133,9 @@ export const LoginWithAD = (props: LoginWithADProps) => {
       const res = await fetchRes.json()
 
       const { code, data, onGuardHandling } = responseIntercept(res)
+
+      // // 更新本次登录方式
+      // data && multipleInstance && multipleInstance.setLoginWay('input', 'ad')
 
       submitButtonRef.current?.onSpin(false)
 
@@ -172,6 +197,7 @@ export const LoginWithAD = (props: LoginWithADProps) => {
   return (
     <div className="authing-g2-login-ad">
       <Form
+        form={form}
         name="adLogin"
         onFinish={onFinish}
         onFinishFailed={() => submitButtonRef.current.onError()}
@@ -233,7 +259,7 @@ export const LoginWithAD = (props: LoginWithADProps) => {
                 showError={validated}
               />
             )}
-            <Form.Item>
+            <Form.Item className="authing-g2-sumbit-form">
               <SubmitButton
                 // disabled={
                 //   !!agreements.find(

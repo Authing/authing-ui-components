@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Form, Input, Select, DatePicker, message } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
-import { UploadImage } from '../../AuthingGuard/Forms/UploadImage'
 import { i18n } from '../../_utils/locales'
 import {
   CompleteInfoBaseControls,
@@ -15,13 +14,14 @@ import SubmitButton from '../../SubmitButton'
 import { InputNumber } from '../../InputNumber'
 import { SceneType } from 'authing-js-sdk'
 import CustomFormItem from '../../ValidatorRules'
-import { fieldRequiredRule } from '../../_utils'
+import { fieldRequiredRule, getCurrentLng } from '../../_utils'
 import { SendCodeByEmail } from '../../SendCode/SendCodeByEmail'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
 import { useGuardPublicConfig } from '../../_utils/context'
 import { parsePhone } from '../../_utils/hooks'
 import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
 import { EmailScene } from '../../Type'
+import { UploadImage } from '../../UploadImage'
 export interface CompleteInfoProps {
   metaData: CompleteInfoMetaData[]
   businessRequest: (data: CompleteInfoRequest) => Promise<void>
@@ -225,7 +225,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           className="authing-g2-input-form"
           name="username"
           key={props.key}
-          label={i18n.t('common.username')}
+          label={props.label ?? i18n.t('common.username')}
           required={props.required}
           checkRepeat={true}
         >
@@ -239,7 +239,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           />
         </CustomFormItem.UserName>
       ),
-      phone: (props: { required?: boolean }) => (
+      phone: (props: { required?: boolean; label?: string }) => (
         <>
           <CustomFormItem.Phone
             validateFirst={true}
@@ -250,7 +250,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             }
             name="phone"
             key="internal-phone:phone"
-            label={i18n.t('common.phoneLabel')}
+            label={props.label ?? i18n.t('common.phoneLabel')}
             required={props.required}
             checkRepeat={true}
             areaCode={areaCode}
@@ -286,13 +286,13 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           </Form.Item>
         </>
       ),
-      email: (props: { required?: boolean }) => (
+      email: (props: { required?: boolean; label?: string }) => (
         <>
           <CustomFormItem.Email
             className="authing-g2-input-form"
             name="email"
             checkRepeat={true}
-            label={i18n.t('common.email')}
+            label={props.label ?? i18n.t('common.email')}
             required={props.required}
             key="internal email:email13"
             validateFirst={true}
@@ -336,14 +336,30 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
     [PhoneAccount, areaCode, form, isInternationSms, t, verifyCodeLength]
   )
 
+  const getMetaDateLabel = useCallback(
+    (metaData: CompleteInfoMetaData) => {
+      let label: string = ''
+
+      const fieldsI18n = config.extendsFieldsI18n?.[metaData.name]
+
+      const currentLng = getCurrentLng()
+
+      if (fieldsI18n?.[currentLng]?.enabled && fieldsI18n?.[currentLng].value) {
+        label = fieldsI18n?.[currentLng].value
+      } else {
+        label = metaData.label || metaData.name
+      }
+
+      return label
+    },
+    [config.extendsFieldsI18n]
+  )
+
   const generateRules = useCallback(
     (metaData: CompleteInfoMetaData) => {
       const formRules = []
 
-      const label =
-        i18n.language === 'zh-CN'
-          ? metaData.label || metaData.name
-          : metaData.name
+      const label = getMetaDateLabel(metaData)
 
       const rules = metaData.validateRules ?? []
 
@@ -353,7 +369,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         formRules.push({
           required: true,
           validateTrigger: 'onChange',
-          message: `${label} ${t('login.noEmpty')}`,
+          message: t('login.noEmpty', { label: label }),
         })
       }
 
@@ -380,7 +396,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       })
       return formRules
     },
-    [t]
+    [getMetaDateLabel, t]
   )
 
   const inputElement = useCallback(
@@ -389,8 +405,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       //   i18n.language === 'zh-CN'
       //     ? metaData.label || metaData.name
       //     : metaData.name
-
-      const label = metaData.label || metaData.name
+      const label = getMetaDateLabel(metaData)
 
       // 这部分的控件分两种 一个集成控件（手机号 + 验证码）一种是基础控件 分开处理
       if (
@@ -401,6 +416,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       ) {
         return internalControlMap[metaData.name]({
           required: metaData.required,
+          label: label,
         })
       } else {
         const userFormItem = (children: React.ReactNode) => (
@@ -437,7 +453,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         )
       }
     },
-    [baseControlMap, generateRules, internalControlMap]
+    [baseControlMap, generateRules, getMetaDateLabel, internalControlMap]
   )
 
   const formFieldsV2 = useMemo(() => {
@@ -559,7 +575,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
     >
       {formFieldsV2}
 
-      <Form.Item className="authing-g2-input-form">
+      <Form.Item className="authing-g2-sumbit-form">
         <SubmitButton
           text={t('common.problem.form.submit')}
           ref={submitButtonRef}

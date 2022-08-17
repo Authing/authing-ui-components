@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { GuardModuleType, User } from '..'
+import { GuardModuleType } from '..'
+import { User } from 'authing-js-sdk'
 import { BackCustom } from '../Back'
 import { useGuardAuthClient } from '../Guard/authClient'
 import { GuardMFAInitData, MFAType } from '../MFA/interface'
