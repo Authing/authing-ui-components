@@ -105,7 +105,7 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
     async (values: any) => {
       const needPassword =
         config.passwordLoginMethods?.includes('phone-password') &&
-        publicConfig?.enableCompletePassword
+        !publicConfig?.enableCompletePassword
 
       submitButtonRef.current?.onSpin(true)
 
@@ -293,7 +293,7 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
     async (values: any) => {
       const needPassword =
         config.passwordLoginMethods?.includes('email-password') &&
-        publicConfig?.enableCompletePassword
+        !publicConfig?.enableCompletePassword
       submitButtonRef.current.onSpin(true)
       values.email = values.identify
       if (onBeforeRegister) {

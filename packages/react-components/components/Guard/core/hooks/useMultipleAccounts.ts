@@ -769,7 +769,7 @@ const useMultipleAccounts = ({
     }
     const publicConfig = getPublicConfig(appId)
 
-    if (publicConfig?.enableLoginAccountSwitch) {
+    if (!publicConfig?.enableLoginAccountSwitch) {
       return
     }
     // 最终支持的登录方式 用于过滤有效登录方式
