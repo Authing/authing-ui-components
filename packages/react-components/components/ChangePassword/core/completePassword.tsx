@@ -30,7 +30,6 @@ export const CompletePassword: React.FC = () => {
   const authClient = useGuardAuthClient()
 
   const { post } = getGuardHttp()
-
   const {
     businessRequestName,
     content,

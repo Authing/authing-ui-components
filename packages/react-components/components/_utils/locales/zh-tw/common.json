@@ -166,5 +166,6 @@
   "yes": "是",
   "loginWithWechatmpQrcodeTipsTitle": "長按二維碼登入",
   "del": "移除",
-  "qrcode": "二維碼"
+  "qrcode": "二維碼",
+  "registerCompletePasswordDesc": "為了保障賬號安全，請設置您的密碼。"
 }

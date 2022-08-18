@@ -168,5 +168,6 @@
   "jobNumber": "工号首字母大写",
   "loginWithWechatmpQrcodeTipsTitle": "长按二维码登录",
   "del": "移除",
-  "qrcode": "二维码"
+  "qrcode": "二维码",
+  "registerCompletePasswordDesc": "为了保障账号安全，请设置你的密码。"
 }

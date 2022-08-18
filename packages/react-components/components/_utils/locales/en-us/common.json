@@ -168,5 +168,6 @@
   "passwordUnsafeTip": "Password strength has been updated, please refresh the page and try again",
   "loginWithWechatmpQrcodeTipsTitle": "Long press the QR code to login",
   "del": "Delete",
-  "qrcode": "QR Code"
+  "qrcode": "QR Code",
+  "registerCompletePasswordDesc": "To ensure account security, please set your password."
 }
