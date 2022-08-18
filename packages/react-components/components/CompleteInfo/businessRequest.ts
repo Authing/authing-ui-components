@@ -1,5 +1,4 @@
 import { User } from 'authing-js-sdk'
-import { getGuardAuthClient } from '../Guard/authClient'
 import { getGuardHttp } from '../_utils/guardHttp'
 import { CompleteInfoRequest, RegisterCompleteInfoInitData } from './interface'
 
@@ -24,8 +23,6 @@ const registerMethod = (
   content: any,
   profile: any
 ) => {
-  const authClient = getGuardAuthClient()
-
   const { post } = getGuardHttp()
 
   if (fnName === 'registerByEmail') {
@@ -33,50 +30,40 @@ const registerMethod = (
 
     delete profile.phoneToken
 
-    return authClient!.registerByEmail(
-      content.email,
-      content.password,
-      {
-        ...content.profile,
-        ...profile,
-      },
-      {
-        ...content.options,
-        phoneToken,
-      }
-    )
-  } else if (fnName === 'registerByPhoneCode') {
-    const emailToken = profile?.emailToken
-
-    delete profile?.emailToken
-
-    return authClient!.registerByPhoneCode(
-      content.phone,
-      content.code,
-      content.password,
-      {
-        ...content.profile,
-        ...profile,
-      },
-      {
-        ...content.options,
-        emailToken,
-      }
-    )
-  } else if (fnName === 'registerByEmailCode') {
-    const phoneToken = profile.phoneToken
-
-    delete profile.phoneToken
-    return post('/api/v2/register/email-code', {
-      email: content.email,
-      code: content.code,
-      password: content.password,
+    return post(`/api/v2/register-email`, {
+      ...content,
       profile: {
         ...content.profile,
         ...profile,
       },
-      ...content.options,
       phoneToken,
+      postUserInfoPipeline: true,
+    })
+  } else if (fnName === 'registerByPhoneCode') {
+    const emailToken = profile?.emailToken
+
+    delete profile?.emailToken
+    return post(`/api/v2/register-phone-code`, {
+      ...content,
+      profile: {
+        ...content.profile,
+        ...profile,
+      },
+      emailToken,
+      postUserInfoPipeline: true,
+    })
+  } else if (fnName === 'registerByEmailCode') {
+    const phoneToken = profile.phoneToken
+
+    delete profile.phoneToken
+    return post('/api/v2/register-email-code', {
+      ...content,
+      profile: {
+        ...content.profile,
+        ...profile,
+      },
+      phoneToken,
+      postUserInfoPipeline: true,
     }) as Promise<User>
   }
 }
@@ -85,42 +72,14 @@ export const registerSkipMethod = (
   fnName: RegisterCompleteInfoInitData['businessRequestName'],
   content: any
 ) => {
-  const authClient = getGuardAuthClient()
   const { post } = getGuardHttp()
 
   if (fnName === 'registerByEmail') {
-    return authClient!.registerByEmail(
-      content.email,
-      content.password,
-      {
-        ...content.profile,
-      },
-      {
-        ...content.options,
-      }
-    )
+    return post(`/api/v2/register-email`, content)
   } else if (fnName === 'registerByPhoneCode') {
-    return authClient!.registerByPhoneCode(
-      content.phone,
-      content.code,
-      content.password,
-      {
-        ...content.profile,
-      },
-      {
-        ...content.options,
-      }
-    )
+    return post(`/api/v2/register-phone-code`, content)
   } else if (fnName === 'registerByEmailCode') {
-    return post('/api/v2/register/email-code', {
-      email: content.email,
-      code: content.code,
-      password: content.password,
-      profile: {
-        ...content.profile,
-      },
-      ...content.options,
-    })
+    return post('/api/v2/register-email-code', content)
   }
 }
 
