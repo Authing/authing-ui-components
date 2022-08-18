@@ -108,9 +108,9 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
 
   const registerByPhoneCode = useCallback(
     async (values: any) => {
-      const needPassword = config.passwordLoginMethods?.includes(
-        'phone-password'
-      )
+      const needPassword =
+        config.passwordLoginMethods?.includes('phone-password') &&
+        publicConfig?.enableCompletePassword
 
       submitButtonRef.current?.onSpin(true)
 
@@ -307,14 +307,15 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
       isPhoneChangeComplete,
       onRegisterSuccess,
       onRegisterFailed,
+      publicConfig?.enableCompletePassword,
     ]
   )
 
   const registerByEmailCode = useCallback(
     async (values: any) => {
-      const needPassword = config.passwordLoginMethods?.includes(
-        'email-password'
-      )
+      const needPassword =
+        config.passwordLoginMethods?.includes('email-password') &&
+        publicConfig?.enableCompletePassword
       submitButtonRef.current.onSpin(true)
       values.email = values.identify
       if (onBeforeRegister) {
@@ -476,6 +477,7 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
       isEmailChangeComplete,
       onRegisterSuccess,
       onRegisterFailed,
+      publicConfig?.enableCompletePassword,
     ]
   )
 

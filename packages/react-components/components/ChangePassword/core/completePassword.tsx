@@ -28,7 +28,6 @@ export const CompletePassword: React.FC = () => {
   const { isPhoneMedia } = useMediaSize()
 
   const { post } = getGuardHttp()
-
   const {
     businessRequestName,
     content,
