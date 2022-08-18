@@ -56,7 +56,7 @@ const registerMethod = (
     const phoneToken = profile.phoneToken
 
     delete profile.phoneToken
-    return post('/api/v2/register/email-code', {
+    return post('/api/v2/register-email-code', {
       ...content,
       profile: {
         ...content.profile,
@@ -79,7 +79,7 @@ export const registerSkipMethod = (
   } else if (fnName === 'registerByPhoneCode') {
     return post(`/api/v2/register-phone-code`, content)
   } else if (fnName === 'registerByEmailCode') {
-    return post('/api/v2/register/email-code', content)
+    return post('/api/v2/register-email-code', content)
   }
 }
 

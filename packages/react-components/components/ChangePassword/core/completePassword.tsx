@@ -79,7 +79,7 @@ export const CompletePassword: React.FC = () => {
               data,
               onGuardHandling,
               message,
-            } = await post('/api/v2/register/email-code', {
+            } = await post('/api/v2/register-email-code', {
               ...content,
               password,
               postUserInfoPipeline: false,

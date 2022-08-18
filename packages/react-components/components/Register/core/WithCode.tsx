@@ -441,7 +441,7 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
             apiCode,
             onGuardHandling,
             message: registerMessage,
-          } = await post('/api/v2/register/email-code', {
+          } = await post('/api/v2/register-email-code', {
             ...registerContent,
             postUserInfoPipeline: false,
           })
