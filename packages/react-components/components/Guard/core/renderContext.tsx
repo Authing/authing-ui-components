@@ -32,8 +32,9 @@ import { useInitGuardAppendConfig } from './useAppendConfig'
 import { useInitAppId } from '../../_utils/initAppId'
 import { updateFlowHandle } from '../../_utils/flowHandleStorage'
 import { ApplicationConfig } from '../../Type/application'
-import { AuthenticationClient } from 'authing-js-sdk'
+import { AuthenticationClient, User } from 'authing-js-sdk'
 import { Lang } from '../../Type'
+import { Authing } from '@authing/browser'
 
 // hooks
 import useMultipleAccounts from './hooks/useMultipleAccounts'
@@ -159,18 +160,41 @@ export const RenderContext: React.FC<{
   // iconfont
   const iconfontLoaded = useGuardIconfont(cdnBase)
 
+  const getUserInfoInSafari = useCallback(async () => {
+    if (!appId) return
+    const publicConfig = getPublicConfig(appId)
+    const sdk = new Authing({
+      domain: 'https://' + publicConfig.requestHostname,
+      appId: appId,
+      redirectUri: publicConfig.redirectUris[0],
+    })
+    let state = await sdk.getLoginState()
+    if (state) {
+      let userInfo = await sdk.getUserInfo({
+        accessToken: state?.accessToken,
+      })
+      if (userInfo) {
+        events?.onLogin?.(userInfo as User, authClint!)
+      }
+    }
+  }, [events, appId, authClint])
+
   // SSO 登录
   useEffect(() => {
     if (!config?.isSSO || !authClint || !events || !httpClient) return
-
-    trackSession().then((sessionData) => {
-      // 这个接口没有 code, data, 直接返回了数据
-      let typedData = (sessionData as unknown) as SessionData
-      if (typedData.userInfo) {
-        events?.onLogin?.(typedData.userInfo, authClint!)
-      }
-    })
-  }, [appId, authClint, config?.isSSO, events, httpClient])
+    let ua = navigator.userAgent.toLowerCase()
+    if (/version\/([\d.]+).*safari/.test(ua)) {
+      getUserInfoInSafari()
+    } else {
+      trackSession().then((sessionData) => {
+        // 这个接口没有 code, data, 直接返回了数据
+        let typedData = (sessionData as unknown) as SessionData
+        if (typedData.userInfo) {
+          events?.onLogin?.(typedData.userInfo, authClint!)
+        }
+      })
+    }
+  }, [appId, authClint, config?.isSSO, events, httpClient, getUserInfoInSafari])
 
   useEffect(() => {
     if (httpClient && finallyConfig) {

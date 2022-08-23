@@ -27,5 +27,7 @@
     "shelljs": "0.8.4"
   },
   "npmClient": "yarn",
-  "dependencies": {}
+  "dependencies": {
+    "@authing/browser": "0.0.1-alpha3"
+  }
 }
