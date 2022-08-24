@@ -81,9 +81,8 @@ export const fieldValuesToRegisterProfile = (
   extendsFields: ApplicationConfig['extendsFields'],
   fieldValues?: CompleteInfoRequest['fieldValues']
 ) => {
-  const registerProfile: Record<string, any> = {
-    udf: [],
-  }
+  const udf: { key: string; value: string }[] = []
+  const registerProfile: Record<string, any> = {}
 
   fieldValues?.forEach(({ name, value, code }) => {
     const fieldType = extendsFields.find((item) => item.name === name)?.type
@@ -96,12 +95,12 @@ export const fieldValuesToRegisterProfile = (
 
       registerProfile[name] = value
     } else if (fieldType === 'user') {
-      registerProfile.udf.push({
+      udf.push({
         key: name,
         value,
       })
     }
   })
 
-  return registerProfile
+  return { registerProfile, udf }
 }

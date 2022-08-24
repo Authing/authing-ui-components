@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { ImagePro } from '../ImagePro'
 import { CompleteInfo } from './core/completeInfo'
 import {
+  CompleteInfoBaseControls,
   CompleteInfoInitData,
   CompleteInfoMetaData,
   CompleteInfoRequest,
@@ -13,11 +14,13 @@ import './styles.less'
 import { IconFont } from '../IconFont'
 import { useGuardAuthClient } from '../Guard/authClient'
 import {
+  useGuardAppId,
   useGuardButtonState,
   useGuardEvents,
   useGuardFinallyConfig,
   useGuardHttpClient,
   useGuardInitData,
+  useGuardModule,
   useGuardMultipleInstance,
   useGuardPublicConfig,
 } from '../_utils/context'
@@ -27,8 +30,10 @@ import {
   registerRequest,
 } from './businessRequest'
 import { extendsFieldsToMetaData, fieldValuesToRegisterProfile } from './utils'
+import { message } from 'antd'
+import { User } from 'authing-js-sdk'
 import { GuardButton } from '../GuardButton'
-
+import { GuardModuleType } from '../Guard'
 export const GuardCompleteInfo: React.FC<{
   metaData: CompleteInfoMetaData[]
   skipComplateFileds: boolean
@@ -146,6 +151,7 @@ export const GuardLoginCompleteInfoView: React.FC = () => {
 
 export const GuardRegisterCompleteInfoView: React.FC = () => {
   const initData = useGuardInitData<RegisterCompleteInfoInitData>()
+
   const publicConfig = useGuardPublicConfig()
 
   const { get } = useGuardHttpClient()
@@ -191,14 +197,22 @@ export const GuardRegisterCompleteInfoView: React.FC = () => {
     action: CompleteInfoAuthFlowAction,
     data?: CompleteInfoRequest
   ) => {
-    const registerProfile = fieldValuesToRegisterProfile(
+    const { registerProfile, udf } = fieldValuesToRegisterProfile(
       extendsFields,
       data?.fieldValues
     )
+    const content = {
+      ...initData.content,
+      params: JSON.stringify(
+        JSON.parse(
+          initData.content?.params ? initData.content?.params : '[]'
+        ).concat(udf)
+      ),
+    }
     const user: any = await registerRequest(
       action,
       initData.businessRequestName,
-      initData.content,
+      content,
       registerProfile
     )
     if (user.statusCode === 200) {
@@ -234,5 +248,94 @@ export const GuardRegisterCompleteInfoView: React.FC = () => {
         />
       )}
     </>
+  )
+}
+
+// 高教社限定版 进入用户合并专用的 信息补全
+export const GuardAccountMergeCompleteInfoView: React.FC = () => {
+  const { user } = useGuardInitData<{ user: User }>()
+
+  const events = useGuardEvents()
+
+  const authClient = useGuardAuthClient()
+
+  const { changeModule } = useGuardModule()
+
+  const { userPoolId } = useGuardPublicConfig()
+
+  const { get, post } = useGuardHttpClient()
+
+  const appId = useGuardAppId()
+
+  authClient.setCurrentUser(user)
+
+  const metaData: CompleteInfoMetaData[] = [
+    {
+      type: CompleteInfoBaseControls.PHONE,
+      label: '手机号',
+      name: 'phone',
+      required: true,
+      validateRules: [],
+      checkUnique: false,
+    },
+  ]
+
+  const businessRequest = async (_: any, data?: CompleteInfoRequest) => {
+    const phoneField = data?.fieldValues.find((i) => i.name === 'phone')
+
+    const { data: isUnique } = await get<boolean>('/api/v2/users/find', {
+      userPoolId: userPoolId,
+      key: phoneField?.value,
+      type: 'phone',
+    })
+
+    // 如果手机号已经存在 进入到 账号合并
+    if (Boolean(isUnique)) {
+      const { data: accountMergeInitData, code, onGuardHandling } = await post(
+        '/api/gjs/prepareAccountMerge',
+        {
+          appId,
+          phone: phoneField?.value,
+          code: phoneField?.code,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      )
+
+      if (code === 200) {
+        changeModule?.(GuardModuleType.ACCOUNT_MERGE, {
+          ...accountMergeInitData,
+        })
+      } else {
+        onGuardHandling?.()
+      }
+    }
+    // 手机号不存在 正常进行信息补全之后调用特定的方法 交由外部处理
+    else {
+      authClient.setCurrentUser(user)
+
+      const updatedUser = await authClient.updateProfile(
+        {
+          phone: phoneField?.value,
+        },
+        {
+          phoneToken: phoneField?.code,
+        }
+      )
+
+      // 交由外部处理
+      events.onAccountMergeCompleteInfo?.(updatedUser)
+    }
+  }
+
+  return (
+    <GuardCompleteInfo
+      metaData={metaData}
+      businessRequest={businessRequest}
+      skipComplateFileds={false}
+    />
   )
 }
