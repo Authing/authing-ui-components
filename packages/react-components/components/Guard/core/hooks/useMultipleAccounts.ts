@@ -568,7 +568,7 @@ class MultipleAccount {
       }
     }
     // 这里没有过滤
-    return result.sort((a, b) => b._updateTime - a._updateTime)
+    return result.sort((a, b) => b._updateTime - a._updateTime).slice(0, 3)
   }
 
   /**
