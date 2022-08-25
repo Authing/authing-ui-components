@@ -367,6 +367,10 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
 
       if (required) {
         formRules.push({
+          type:
+            metaData.type === CompleteInfoExtendsControls.DATE_TIME
+              ? ('object' as const)
+              : undefined,
           required: true,
           validateTrigger: 'onChange',
           message: t('login.noEmpty', { label: label }),
@@ -394,6 +398,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             break
         }
       })
+
       return formRules
     },
     [getMetaDateLabel, t]
