@@ -366,7 +366,12 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       const required = metaData.required ?? false
 
       if (required) {
+        console.log(metaData.type)
         formRules.push({
+          type:
+            metaData.type === CompleteInfoExtendsControls.DATE_TIME
+              ? ('object' as const)
+              : undefined,
           required: true,
           validateTrigger: 'onChange',
           message: t('login.noEmpty', { label: label }),
@@ -394,6 +399,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             break
         }
       })
+
       return formRules
     },
     [getMetaDateLabel, t]
@@ -579,6 +585,10 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         <SubmitButton
           text={t('common.problem.form.submit')}
           ref={submitButtonRef}
+          onClick={async () => {
+            const date = form.getFieldsValue()
+            console.log(date)
+          }}
           className="password g2-completeInfo-submit"
         />
       </Form.Item>

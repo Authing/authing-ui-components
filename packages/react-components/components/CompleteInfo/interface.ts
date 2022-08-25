@@ -90,7 +90,7 @@ export enum CompleteInfoExtendsControls {
   IMAGE = 'image',
   NUMBER = 'number',
   DATE = 'date',
-  DATE_TIME = 'dateTime',
+  DATE_TIME = 'datetime',
   SELECT = 'select',
   DROPDOWN = 'dropdown',
   BOOLEAN = 'boolean',
