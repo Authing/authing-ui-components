@@ -34,6 +34,7 @@ import { updateFlowHandle } from '../../_utils/flowHandleStorage'
 import { ApplicationConfig } from '../../Type/application'
 import { AuthenticationClient } from 'authing-js-sdk'
 import { Lang } from '../../Type'
+import i18n from 'i18next'
 
 // hooks
 import useMultipleAccounts from './hooks/useMultipleAccounts'
@@ -178,17 +179,6 @@ export const RenderContext: React.FC<{
     }
   }, [finallyConfig, httpClient])
 
-  // I18n
-  useEffect(() => {
-    if (guardPageConfig && publicConfig && defaultMergedConfig) {
-      const { defaultLanguage } = guardPageConfig.global
-
-      initGuardI18n({
-        defaultLanguage: (defaultMergedConfig?.lang as Lang) ?? defaultLanguage,
-      })
-    }
-  }, [defaultMergedConfig, guardPageConfig, publicConfig])
-
   useEffect(() => {
     if (!appId) return
 
@@ -200,6 +190,17 @@ export const RenderContext: React.FC<{
 
     setCdnBase(publicConfig.cdnBase)
   }, [appId, finallyConfig])
+
+  // I18n
+  useEffect(() => {
+    if (guardPageConfig && publicConfig && defaultMergedConfig) {
+      const { defaultLanguage } = guardPageConfig.global
+
+      initGuardI18n({
+        defaultLanguage: (defaultMergedConfig?.lang as Lang) ?? defaultLanguage,
+      })
+    }
+  }, [defaultMergedConfig, guardPageConfig, publicConfig])
 
   // AuthClient
   useEffect(() => {
@@ -271,6 +272,8 @@ export const RenderContext: React.FC<{
       iconfontLoaded,
       // 保证 store 加载完成
       multipleInstance,
+      // 保证 i18n 初始化完成
+      i18n.isInitialized,
     ]
 
     return !list.includes(undefined) && !list.includes(false)

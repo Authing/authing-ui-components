@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { IconFont } from '../IconFont'
 import { Lang } from '../Type'
 import { useGuardPageConfig } from '../_utils/context'
+import { fallbackLng } from '../_utils/locales'
 import './style.less'
 
 export const LngTextMapping: Record<
@@ -44,14 +45,13 @@ export const ChangeLanguage = (props: {
   const showChangeLng = useMemo(() => {
     return guardPageConfig.global?.showChangeLanguage
   }, [guardPageConfig])
-
   const currentLng = useMemo<Lang>(() => {
     if (Object.keys(LngTextMapping).includes(i18n.language)) {
       return i18n.language as Lang
     } else {
-      return (i18n.languages?.[i18n.languages?.length - 1] || 'en-US') as Lang
+      return (fallbackLng(i18n.language)[0] || 'en-US') as Lang
     }
-  }, [i18n.language, i18n.languages])
+  }, [i18n.language])
 
   const currentLngText = useMemo(() => {
     return (

@@ -17,6 +17,37 @@ export interface InitGuardI18nOptions {
   defaultLanguage?: Lang | 'browser'
 }
 
+// fackbackLang
+
+export const fallbackLng = (code = '') => {
+  if (!code || code === 'en') return ['en-US']
+
+  if (!code || code === 'zh') return ['zh-CN']
+
+  const fallbacks = []
+
+  if (code.startsWith('en-')) {
+    fallbacks.push(`en-US`)
+    return fallbacks
+  }
+
+  if (code.startsWith('zh-')) {
+    if (
+      ['zh-tw', 'zh-hk', 'zh-mo', 'zh-hant'].includes(code.toLocaleLowerCase())
+    ) {
+      fallbacks.push(`zh-TW`)
+    } else if (['zh-cn', 'zh-sg', 'zh-my'].includes(code.toLocaleLowerCase())) {
+      fallbacks.push(`zh-CN`)
+    } else {
+      fallbacks.push(`zh-CN`)
+    }
+
+    return fallbacks
+  }
+
+  return ['en-US']
+}
+
 export const initGuardI18n = (options: InitGuardI18nOptions) => {
   const { defaultLanguage } = options
 
@@ -45,45 +76,14 @@ export const initGuardI18n = (options: InitGuardI18nOptions) => {
   // 统一拼装一下 i18n 的 options
   const i18nOptions: InitOptions = {
     // 默认语言
-    lng: lng,
+    lng,
     detection: {
       order: detectionOrder,
       lookupLocalStorage: '_guard_i18nextLng', //与console主要业务i18n相关的key脱离
     },
     resources: LanguageResources,
     // 兜底语言
-    fallbackLng: (code = '') => {
-      if (!code || code === 'en') return ['en-US']
-
-      if (!code || code === 'zh') return ['zh-CN']
-
-      const fallbacks = []
-
-      if (code.startsWith('en-')) {
-        fallbacks.push(`en-US`)
-        return fallbacks
-      }
-
-      if (code.startsWith('zh-')) {
-        if (
-          ['zh-tw', 'zh-hk', 'zh-mo', 'zh-hant'].includes(
-            code.toLocaleLowerCase()
-          )
-        ) {
-          fallbacks.push(`zh-TW`)
-        } else if (
-          ['zh-cn', 'zh-sg', 'zh-my'].includes(code.toLocaleLowerCase())
-        ) {
-          fallbacks.push(`zh-CN`)
-        } else {
-          fallbacks.push(`zh-CN`)
-        }
-
-        return fallbacks
-      }
-
-      return ['en-US']
-    },
+    fallbackLng,
     debug: false,
     interpolation: {
       escapeValue: false,
