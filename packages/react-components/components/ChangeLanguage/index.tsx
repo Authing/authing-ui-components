@@ -31,7 +31,6 @@ export const ChangeLanguage = (props: {
 
   const { onLangChange } = props
   const { i18n } = useTranslation()
-
   const guardPageConfig = useGuardPageConfig()
 
   const onChangeLng = useCallback(
@@ -50,7 +49,7 @@ export const ChangeLanguage = (props: {
     if (Object.keys(LngTextMapping).includes(i18n.language)) {
       return i18n.language as Lang
     } else {
-      return i18n.languages[i18n.languages.length - 1] as Lang
+      return (i18n.languages?.[i18n.languages?.length - 1] || 'zh-CN') as Lang
     }
   }, [i18n.language, i18n.languages])
 
