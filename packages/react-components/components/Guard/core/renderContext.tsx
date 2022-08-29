@@ -168,13 +168,27 @@ export const RenderContext: React.FC<{
       appId: appId,
       redirectUri: publicConfig.redirectUris[0],
     })
-    let state = await sdk.getLoginState()
-    if (state) {
-      let userInfo = await sdk.getUserInfo({
-        accessToken: state?.accessToken,
+    if (sdk.isRedirectCallback()) {
+      sdk.handleRedirectCallback().then((res) => {
+        getLoginState(res)
+        window.location.replace(publicConfig.redirectUris[0])
       })
-      if (userInfo) {
-        events?.onLogin?.(userInfo as User, authClint!)
+    } else {
+      getLoginState()
+    }
+
+    async function getLoginState(state?: any) {
+      state = state ?? (await sdk.getLoginState())
+      if (state) {
+        let userInfo = await sdk.getUserInfo({
+          accessToken: state?.accessToken,
+        })
+        if (userInfo) {
+          console.log(123, userInfo)
+          events?.onLogin?.((userInfo as unknown) as User, authClint!)
+        }
+      } else {
+        sdk.loginWithRedirect()
       }
     }
   }, [events, appId, authClint])
