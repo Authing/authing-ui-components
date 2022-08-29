@@ -49,7 +49,7 @@ export const ChangeLanguage = (props: {
     if (Object.keys(LngTextMapping).includes(i18n.language)) {
       return i18n.language as Lang
     } else {
-      return (i18n.languages?.[i18n.languages?.length - 1] || 'zh-CN') as Lang
+      return (i18n.languages?.[i18n.languages?.length - 1] || 'en-US') as Lang
     }
   }, [i18n.language, i18n.languages])
 
