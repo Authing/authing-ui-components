@@ -42,6 +42,7 @@
     "prepare": "cd ../.. && husky install packages/react-components/.husky",
     "pub": "npm run build:lib && node ./scripts/publish.js",
     "start": "PORT=1221 node ./scripts/start.js",
+    "start:sso": "PORT=1222 node ./scripts/start.js",
     "vite": "vite",
     "generate-version": "node ./scripts/generate-version",
     "generate-examples": "node ./scripts/generate-examples.js",
