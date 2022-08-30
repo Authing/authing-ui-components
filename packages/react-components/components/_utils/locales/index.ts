@@ -48,7 +48,10 @@ export const fallbackLng = (code = '') => {
   return ['en-US']
 }
 
-export const initGuardI18n = async (options: InitGuardI18nOptions) => {
+export const initGuardI18n = async (
+  options: InitGuardI18nOptions,
+  callback: React.Dispatch<React.SetStateAction<boolean>>
+) => {
   const { defaultLanguage } = options
 
   const detectionOrder: string[] = []
@@ -92,6 +95,8 @@ export const initGuardI18n = async (options: InitGuardI18nOptions) => {
 
   // 开始初始化了嗷~
   await i18n.use(LanguageDetector).use(initReactI18next).init(i18nOptions)
+  // 告知外部i18n初始化完成
+  callback(true)
 }
 
 export { i18n }
