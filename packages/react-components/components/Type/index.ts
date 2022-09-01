@@ -6,7 +6,7 @@ export * from './application'
 
 export type { CommonMessage, User }
 
-export type Lang = 'zh-CN' | 'en-US' | 'zh-TW'
+export type Lang = 'zh-CN' | 'en-US' | 'zh-TW' | 'ja-JP'
 
 export enum GuardMode {
   Modal = 'modal',
@@ -76,7 +76,7 @@ export const LanguageMap: any = {
   'en-US': 'US',
   en: 'GB',
   'en-GB': 'GB',
-  ja: 'JP',
+  'ja-JP': 'JP',
   'de-DE': 'DE',
   'zh-CN': 'CN',
 }

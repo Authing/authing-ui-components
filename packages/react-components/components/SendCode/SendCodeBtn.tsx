@@ -3,6 +3,7 @@ import React, { FC, useState, useRef, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import './style.less'
 import { ButtonProps } from 'antd/lib/button'
+import { i18n } from '../_utils/locales'
 
 const TIME = 60
 export interface SendCodeProps extends ButtonProps {
@@ -80,9 +81,9 @@ export const SendCodeBtn: FC<SendCodeProps> = (props) => {
   return (
     <Button
       {...buttonProps}
-      className={
+      className={`${
         buttonProps.type ?? 'authing-g2-send-code-btn g2-loading-btn-center'
-      }
+      } ${i18n.language === 'ja-JP' ? 'send-code-btn-jp' : ''}`}
       disabled={disabled}
       loading={loading}
       onClick={onClick}

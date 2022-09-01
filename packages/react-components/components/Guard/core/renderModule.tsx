@@ -32,6 +32,7 @@ import {
 } from '../../_utils/context'
 import zhCN from 'antd/lib/locale/zh_CN'
 import enUS from 'antd/lib/locale/en_US'
+import jaJP from 'antd/lib/locale/ja_JP'
 import { i18n } from '../../_utils/locales'
 import { GuardMode } from '../..'
 import { IconFont } from '../../IconFont'
@@ -56,11 +57,13 @@ message.config({
 export enum LangMAP {
   zhCn = 'zh-CN',
   enUs = 'en-US',
+  jaJp = 'ja-JP',
 }
 
 const langMap = {
   [LangMAP.zhCn]: zhCN,
   [LangMAP.enUs]: enUS,
+  [LangMAP.jaJp]: jaJP,
 }
 
 export const RenderModule: React.FC<{
