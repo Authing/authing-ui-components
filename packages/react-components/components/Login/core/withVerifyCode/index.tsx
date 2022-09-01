@@ -3,14 +3,14 @@ import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import {
   fieldRequiredRule,
-  getUserRegisterParams,
+  getUserRegisterParam,
   validate,
 } from '../../../_utils'
 import SubmitButton from '../../../SubmitButton'
 import { IconFont } from '../../../IconFont'
 import { Agreements } from '../../../Register/components/Agreements'
-import { SceneType } from 'authing-js-sdk'
 import { SendCodeByPhone } from '../../../SendCode/SendCodeByPhone'
+import { SceneType } from '../../../_utils/types'
 import {
   useGuardFinallyConfig,
   useGuardHttpClient,
@@ -25,7 +25,7 @@ import { InputInternationPhone } from './InputInternationPhone'
 import { parsePhone, useMediaSize } from '../../../_utils/hooks'
 import { EmailScene, InputMethod } from '../../../Type'
 import { CodeAction } from '../../../_utils/responseManagement/interface'
-import { GuardLoginInitData } from '../../interface'
+import { ConnectionType, GuardLoginInitData } from '../../interface'
 import { LoginMethods } from '../../../Type/application'
 import { useLoginMultipleBackFill } from '../../hooks/useLoginMultiple'
 
@@ -206,60 +206,81 @@ const LoginWithVerifyCode = (props: any) => {
 
   const loginByPhoneCode = async (values: any) => {
     const reqContent: any = {
-      phone: values.phoneNumber,
-      code: values.code,
-      customData: config?.isHost
-        ? getUserRegisterParams(['login_page_context'])
-        : undefined,
-      autoRegister: autoRegister,
-      withCustomData: false,
+      connection: ConnectionType.PASSCODE,
+      passCodePayload: {
+        phone: values.phoneNumber,
+        passCode: values.code,
+      },
+      options: {
+        customData: config?.isHost
+          ? getUserRegisterParam('login_page_context')
+          : {},
+        autoRegister: autoRegister,
+        withCustomData: false,
+      },
     }
 
     if (publicConfig && publicConfig.internationalSmsConfig?.enabled)
-      reqContent.phoneCountryCode = values.phoneCountryCode
+      reqContent.passCodePayload.phoneCountryCode = values.phoneCountryCode
 
-    const { code, data, onGuardHandling } = await post(
-      '/api/v2/login/phone-code',
+    // TODO onGuardHandling
+    const { statusCode, data, onGuardHandling } = await post(
+      '/api/v3/signin',
       reqContent
     )
 
     submitButtonRef.current?.onSpin(false)
 
-    if (code === 200) {
+    if (statusCode === 200) {
       // props.onLogin(200, data)
       onLoginSuccess(data)
     } else {
       const handMode = onGuardHandling?.()
       // 向上层抛出错误
-      handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
+      handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(statusCode, data)
     }
   }
 
   // 邮箱验证码登录
   const loginByEmailCode = async (values: any) => {
-    const reqContent = {
-      email: values.identify,
-      code: values.code,
-      customData: config?.isHost
-        ? getUserRegisterParams(['login_page_context'])
-        : undefined,
-      autoRegister: autoRegister,
-      withCustomData: false,
+    // const reqContent = {
+    //   email: values.identify,
+    //   code: values.code,
+    //   customData: config?.isHost
+    //     ? getUserRegisterParam('login_page_context')
+    //     : undefined,
+    //   autoRegister: autoRegister,
+    //   withCustomData: false,
+    // }
+
+    const body = {
+      connection: ConnectionType.PASSCODE,
+      passCodePayload: {
+        email: values.identify,
+        passCode: values.code,
+      },
+      options: {
+        customData: config?.isHost
+          ? getUserRegisterParam('login_page_context')
+          : {},
+        autoRegister: autoRegister,
+        withCustomData: false,
+      },
     }
-    const { code, data, onGuardHandling } = await post(
-      '/api/v2/login/email-code',
-      reqContent
+    const { statusCode, data, onGuardHandling } = await post(
+      '/api/v3/signin',
+      body
     )
 
     submitButtonRef.current?.onSpin(false)
 
-    if (code === 200) {
+    if (statusCode === 200) {
       // props.onLogin(200, data)
       onLoginSuccess(data)
     } else {
       const handMode = onGuardHandling?.()
       // 向上层抛出错误
-      handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
+      handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(statusCode, data)
     }
   }
 

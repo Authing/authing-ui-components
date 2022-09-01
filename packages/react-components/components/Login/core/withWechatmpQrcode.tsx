@@ -82,7 +82,7 @@ export const LoginWithWechatmpQrcode = (
 
   return (
     <QrCode
-      scene="WECHATMP_AUTH"
+      scene="WECHAT_MINIPROGRAM"
       descriptions={descriptions}
       onStatusChange={onStatusChange}
       qrCodeScanOptions={qrCodeScanOptions}

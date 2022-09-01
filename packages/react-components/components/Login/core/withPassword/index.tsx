@@ -3,7 +3,7 @@ import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useGuardHttp } from '../../../_utils/guardHttp'
 import { useGuardAuthClient } from '../../../Guard/authClient'
-import { fieldRequiredRule, getUserRegisterParams } from '../../../_utils'
+import { fieldRequiredRule, getUserRegisterParam } from '../../../_utils'
 import { ErrorCode } from '../../../_utils/GuardErrorCode'
 import SubmitButton from '../../../SubmitButton'
 import { FormItemAccount } from './FormItemAccount'
@@ -18,9 +18,9 @@ import { useMediaSize } from '../../../_utils/hooks'
 import {
   useGuardFinallyConfig,
   useGuardInitData,
-  useGuardPublicConfig,
+  // useGuardPublicConfig,
 } from '../../../_utils/context'
-import { GuardLoginInitData } from '../../interface'
+import { ConnectionType, GuardLoginInitData } from '../../interface'
 import {
   Agreement,
   LoginMethods,
@@ -94,7 +94,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   let { post } = useGuardHttp()
   let client = useGuardAuthClient()
 
-  const publicConfig = useGuardPublicConfig()
+  // const publicConfig = useGuardPublicConfig()
   const config = useGuardFinallyConfig()
 
   let submitButtonRef = useRef<any>(null)
@@ -105,7 +105,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   const [accountLock, setAccountLock] = useState(false)
   const getCaptchaUrl = () => {
     const url = new URL(props.host!)
-    url.pathname = '/api/v2/security/captcha'
+    url.pathname = '/api/v3/captcha-code'
     url.search = `?r=${+new Date()}`
     return url.href
   }
@@ -121,25 +121,28 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
 
       // onLogin
       const { data: loginData } = loginInfo
-      let url = publicConfig?.mergeAdAndAccountPasswordLogin
-        ? '/api/v2/login/ad-all-in-one'
-        : '/api/v2/login/account'
+      const url = '/api/v3/signin'
       let account = loginData.identity && loginData.identity.trim()
       let password = loginData.password
       let captchaCode = loginData.captchaCode && loginData.captchaCode.trim()
 
       let body = {
-        account: account,
-        password: await encrypt!(password, props.publicKey),
-        captchaCode,
-        customData: config?.isHost
-          ? getUserRegisterParams(['login_page_context'])
-          : undefined,
-        autoRegister: props.autoRegister,
-        withCustomData: false,
+        connection: ConnectionType.PASSWORD,
+        passwordPayload: {
+          account: account,
+          password: await encrypt!(password, props.publicKey),
+        },
+        options: {
+          captchaCode,
+          customData: config?.isHost
+            ? getUserRegisterParam('login_page_context')
+            : {},
+          autoRegister: props.autoRegister,
+          withCustomData: false,
+          passwordEncryptType: 'rsa',
+        },
       }
       const res = await post(url, body)
-
       return res
     },
     [
@@ -147,7 +150,7 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
       encrypt,
       post,
       props,
-      publicConfig?.mergeAdAndAccountPasswordLogin,
+      // publicConfig?.mergeAdAndAccountPasswordLogin,
     ]
   )
 
@@ -183,14 +186,14 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
   }
 
   const onLoginRes = (res: AuthingGuardResponse, account: string) => {
-    const { code, apiCode, message: msg, data, onGuardHandling } = res
+    const { statusCode, apiCode, message: msg, data, onGuardHandling } = res
     submitButtonRef?.current?.onSpin(false)
     // 更新本次登录方式
     data &&
       multipleInstance &&
       multipleInstance.setLoginWayByHttpData(account, data)
 
-    if (code === 200) {
+    if (statusCode === 200) {
       onLoginSuccess(data, msg)
     } else {
       if (apiCode === ErrorCode.INPUT_CAPTCHACODE) {
@@ -223,7 +226,8 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
       if (handMode) {
       }
       // 向上层抛出错误
-      handMode === CodeAction.RENDER_MESSAGE && onLoginFailed?.(code, data, msg)
+      handMode === CodeAction.RENDER_MESSAGE &&
+        onLoginFailed?.(statusCode, data, msg)
     }
   }
 

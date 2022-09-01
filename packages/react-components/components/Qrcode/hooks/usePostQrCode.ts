@@ -13,7 +13,7 @@ export interface QrCodeResponse {
   /**
    * 返回的随机值
    */
-  random: number
+  qrcodeId: number
   /**
    * 返回的用户信息
    */
@@ -34,7 +34,7 @@ export interface QrCodeResponse {
 interface QrCodeRequest {
   genCodeRequest?: () => Promise<
     AuthingGuardResponse<{
-      random: string
+      qrcodeId: string
       url: string
     }>
   >
@@ -203,12 +203,12 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
     if (genCodeRequest) {
       const { data } = await genCodeRequest()
       if (data) {
-        const { url, random } = data
+        const { url, qrcodeId } = data
         dispatch({
           type: 'change',
           payload: {
             src: url,
-            random,
+            qrcodeId,
           },
         })
       }

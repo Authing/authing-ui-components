@@ -1,6 +1,5 @@
 import { message } from 'antd'
 import { Form } from 'antd'
-import { SceneType } from 'authing-js-sdk'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { VerifyCodeInput } from '../VerifyCodeInput'
@@ -17,6 +16,9 @@ import { useGuardPublicConfig } from '../../_utils/context'
 import { useMfaBusinessRequest, MfaBusinessAction } from '../businessRequest'
 import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
 import { parsePhone } from '../../_utils/hooks'
+import { SceneType } from '../../_utils/types'
+import { useGuardHttp } from '../../_utils/guardHttp'
+
 export interface BindMFASmsProps {
   mfaToken: string
   onBind: (phone: string) => void
@@ -147,6 +149,8 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
 
   const [sent, setSent] = useState<boolean>(false)
 
+  const { post } = useGuardHttp()
+
   const { phoneNumber, countryCode } = parsePhone(
     isInternationSms,
     phone,
@@ -196,11 +200,13 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
 
   const sendVerifyCode = async () => {
     try {
-      await authClient.sendSmsCode(
-        userPhone ? userPhone : phoneNumber,
-        phoneCountryCode ? phoneCountryCode : countryCode,
-        SceneType.SCENE_TYPE_MFA_VERIFY
-      )
+      // TODO authApi
+      const params = {
+        phoneNumber: userPhone ? userPhone : phoneNumber,
+        phoneCountryCode: phoneCountryCode ? phoneCountryCode : countryCode,
+        channel: SceneType.SCENE_TYPE_MFA_VERIFY,
+      }
+      await post('/api/v3/send-sms', params)
       return true
     } catch (e: any) {
       if (e.code === 'ECONNABORTED') {

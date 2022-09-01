@@ -213,6 +213,13 @@ export const getUserRegisterParams = (params?: string[]) => {
     .filter((item) => (params ? params.includes(item.key) : true))
 }
 
+export const getUserRegisterParam = (params: string) => {
+  const query = qs.parse(window.location.search, {
+    ignoreQueryPrefix: true,
+  })
+  return JSON.parse((query?.[params] as string) || '{}')
+}
+
 // 微信内置浏览器
 export const isWeChatBrowser = () => {
   if (typeof navigator === 'undefined') {

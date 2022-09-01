@@ -141,12 +141,33 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         return
       }
 
+      const params = {
+        connection: 'PASSWORD',
+        passwordPayload: {
+          email: email,
+          password: encryptPassword,
+        },
+        profile: {
+          browser:
+            typeof navigator !== 'undefined' ? navigator.userAgent : null,
+          device: getDeviceName(),
+        },
+        options: {
+          context,
+          // generateToken: true,
+          // 托管模式下注册携带query上自定义参数login_page_context
+          // params: config?.isHost
+          //   ? JSON.stringify(getUserRegisterParams(['login_page_context'])) // 特殊处理 resetful api
+          //   : undefined,
+        },
+      }
       const { statusCode, data, message: errorMessage, apiCode } = await post(
-        `/api/v2/register-email`,
-        {
-          ...registerContent,
-          postUserInfoPipeline: false,
-        }
+        '/api/v3/signup',
+        params
+        // {
+        //   ...registerContent,
+        //   postUserInfoPipeline: false,
+        // }
       )
 
       if (statusCode === 200) {

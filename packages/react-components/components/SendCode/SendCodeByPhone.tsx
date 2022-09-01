@@ -1,12 +1,14 @@
 import { message } from 'antd'
 import React, { FC } from 'react'
-import { SceneType } from 'authing-js-sdk'
+import { SceneType } from '../_utils/types'
 import './style.less'
 import { useTranslation } from 'react-i18next'
-import { useGuardAuthClient } from '../Guard/authClient'
+// import { useGuardAuthClient } from '../Guard/authClient'
 import { InputProps } from 'antd/lib/input'
 import { SendCode } from './index'
 import { parsePhone } from '../_utils/hooks'
+import { useGuardHttp } from '../_utils/guardHttp'
+
 export interface SendCodeByPhoneProps extends InputProps {
   data?: string
   form?: any
@@ -31,11 +33,18 @@ export const SendCodeByPhone: FC<SendCodeByPhoneProps> = (props) => {
   } = props
   const { t } = useTranslation()
 
-  const authClient = useGuardAuthClient()
+  // const authClient = useGuardAuthClient()
+  const { post } = useGuardHttp()
 
   const sendPhone = async (phone: string, countryCode?: string) => {
     try {
-      await authClient.sendSmsCode(phone, countryCode, scene)
+      // TODO authApi
+      const params = {
+        phoneNumber: phone,
+        phoneCountryCode: countryCode,
+        channel: scene,
+      }
+      await post('/api/v3/send-sms', params)
       return true
     } catch (error: any) {
       if (error.code === 'ECONNABORTED') {

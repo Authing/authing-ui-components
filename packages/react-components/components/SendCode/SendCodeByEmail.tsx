@@ -38,11 +38,11 @@ export const SendCodeByEmail: FC<SendCodeByEmailProps> = (props) => {
       return false
     }
     try {
-      const { code, message: tips, apiCode } = await post(
-        '/api/v2/email/send',
+      const { statusCode, message: tips, apiCode } = await post(
+        '/api/v3/send-email',
         {
           email,
-          scene,
+          channel: scene,
         }
       )
       if (apiCode === 2080) {
@@ -50,7 +50,7 @@ export const SendCodeByEmail: FC<SendCodeByEmailProps> = (props) => {
         message.error(tips)
         return false
       }
-      if (code === 200) {
+      if (statusCode === 200) {
         return true
       } else {
         message.error(t('login.sendCodeTimeout'))

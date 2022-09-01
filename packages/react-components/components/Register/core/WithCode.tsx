@@ -10,7 +10,7 @@ import {
 import { Agreements } from '../components/Agreements'
 import SubmitButton from '../../SubmitButton'
 import { IconFont } from '../../IconFont'
-import { SceneType } from 'authing-js-sdk'
+import { SceneType } from '../../_utils/types'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
 import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
 import { parsePhone, useMediaSize } from '../../_utils/hooks'
@@ -262,15 +262,39 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
             }
           }
 
+          const params = {
+            connection: 'PASSCODE',
+            passCodePayload: {
+              phone: phoneNumber,
+              passCode: code,
+              phoneCountryCode: isInternationSms ? phoneCountryCode : undefined,
+            },
+            profile: {
+              browser:
+                typeof navigator !== 'undefined' ? navigator.userAgent : null,
+              device: getDeviceName(),
+            },
+            options: {
+              // forceLogin: false,
+              // generateToken: true,
+              clientIp: undefined,
+              // params: config?.isHost
+              //   ? JSON.stringify(getUserRegisterParams(['login_page_context']))
+              //   : undefined,
+              context: context,
+              // emailToken: undefined,
+            },
+          }
           /**
            * 手机号注册接口
            */
           const { data, statusCode, apiCode, message: errMessage } = await post(
-            `/api/v2/register-phone-code`,
-            {
-              ...registerContent,
-              postUserInfoPipeline: false,
-            }
+            `/api/v3/signup`,
+            // {
+            //   ...registerContent,
+            //   postUserInfoPipeline: false,
+            // }
+            params
           )
           if (statusCode === 200) {
             submitButtonRef.current?.onSpin(false)
@@ -436,16 +460,40 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
             }
           }
           // 注册
+          const params = {
+            connection: 'PASSCODE',
+            passCodePayload: {
+              email: email,
+              passCode: code,
+            },
+            profile: {
+              browser:
+                typeof navigator !== 'undefined' ? navigator.userAgent : null,
+              device: getDeviceName(),
+            },
+            options: {
+              context,
+              // generateToken: true,
+              // 托管模式下注册携带query上自定义参数login_page_context
+              // params: config?.isHost
+              //   ? JSON.stringify(getUserRegisterParams(['login_page_context'])) // 特殊处理 resetful api
+              //   : undefined,
+            },
+          }
           const {
             statusCode,
             data,
             apiCode,
             onGuardHandling,
             message: registerMessage,
-          } = await post('/api/v2/register-email-code', {
-            ...registerContent,
-            postUserInfoPipeline: false,
-          })
+          } = await post(
+            '/api/v3/signup',
+            params
+            // {
+            //   ...registerContent,
+            //   postUserInfoPipeline: false,
+            // }
+          )
           submitButtonRef.current.onSpin(false)
           if (statusCode === 200) {
             onRegisterSuccessIntercept(data)
@@ -455,10 +503,10 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
           }
         }
       } catch (error: any) {
-        const { message: errorMessage, code, data } = error
+        const { message: errorMessage, code, apiCode, data } = error
         submitButtonRef.current.onError()
         message.error(errorMessage)
-        !needPassword && onRegisterFailed(code, data, message)
+        !needPassword && onRegisterFailed(code || apiCode, data, message)
       } finally {
         submitButtonRef.current?.onSpin(false)
       }

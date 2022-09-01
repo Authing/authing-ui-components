@@ -19,7 +19,7 @@ export type RootState = {
   /**
    * 二维码随机值
    */
-  random?: string
+  qrcodeId?: string
 }
 
 const reducer = (
@@ -58,7 +58,7 @@ const usePreQrCode = () => {
     status: 'loading',
     // description: '',
     src: undefined,
-    random: undefined,
+    qrcodeId: undefined,
   })
 
   return {

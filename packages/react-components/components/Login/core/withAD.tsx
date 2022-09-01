@@ -25,6 +25,8 @@ import { useMediaSize } from '../../_utils/hooks'
 import { requestClient } from '../../_utils/http'
 import { i18n } from '../../_utils/locales'
 import { CodeAction } from '../../_utils/responseManagement/interface'
+import { useGuardHttp } from '../../_utils/guardHttp'
+import { ConnectionType } from '../interface'
 // import { useLoginMultipleBackFill } from '../hooks/useLoginMultiple'
 
 interface LoginWithADProps {
@@ -73,6 +75,7 @@ export const LoginWithAD = (props: LoginWithADProps) => {
   // const { post } = useGuardHttpClient()
 
   const [form] = useForm()
+  let { post } = useGuardHttp()
 
   // useLoginMultipleBackFill({
   //   form,
@@ -114,37 +117,48 @@ export const LoginWithAD = (props: LoginWithADProps) => {
 
     // todo
     try {
-      const api = `${host}/api/v2/ad/verify-user`
+      // const api = `${host}/api/v2/ad/verify-user`
 
-      const fetchRes = await fetch(api, {
-        method: 'POST',
-        body: JSON.stringify({ username, password: encryptPassword }),
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          [requestClient.langHeader]: i18n.language,
-          'x-authing-userpool-id': publicConfig.userPoolId,
-          'x-authing-app-id': appId,
-          'x-authing-sdk-version': version,
-          'x-authing-request-from': `Guard@${version}`,
+      // const fetchRes = await fetch(api, {
+      //   method: 'POST',
+      //   body: JSON.stringify({ username, password: encryptPassword }),
+      //   credentials: 'include',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     [requestClient.langHeader]: i18n.language,
+      //     'x-authing-userpool-id': publicConfig.userPoolId,
+      //     'x-authing-app-id': appId,
+      //     'x-authing-sdk-version': version,
+      //     'x-authing-request-from': `Guard@${version}`,
+      //   },
+      // })
+
+      // TODO phone?
+      const params = {
+        connection: ConnectionType.AD,
+        adPayload: {
+          email: username,
+          passCode: encryptPassword,
         },
-      })
-
-      const res = await fetchRes.json()
-
-      const { code, data, onGuardHandling } = responseIntercept(res)
+      }
+      const { statusCode, data, onGuardHandling } = await post(
+        '/api/v3/signin',
+        params
+      )
+      // const res = await fetchRes.json()
 
       // // 更新本次登录方式
       // data && multipleInstance && multipleInstance.setLoginWay('input', 'ad')
 
       submitButtonRef.current?.onSpin(false)
 
-      if (code === 200) {
+      if (statusCode === 200) {
         onLoginSuccess(data)
       } else {
         const handMode = onGuardHandling?.()
         // 向上层抛出错误
-        handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
+        handMode === CodeAction.RENDER_MESSAGE &&
+          onLoginFailed(statusCode, data)
       }
     } catch (error: any) {
       submitButtonRef.current?.onSpin(false)

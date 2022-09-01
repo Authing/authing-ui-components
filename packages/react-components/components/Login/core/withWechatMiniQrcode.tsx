@@ -80,7 +80,7 @@ export const LoginWithWechatMiniQrcode = (
 
   return (
     <QrCode
-      scene="WXAPP_AUTH"
+      scene="WECHAT_OFFICIAL_ACCOUNT"
       descriptions={descriptions}
       onStatusChange={onStatusChange}
       qrCodeScanOptions={qrCodeScanOptions}

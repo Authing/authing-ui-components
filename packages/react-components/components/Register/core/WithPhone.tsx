@@ -7,7 +7,7 @@ import SubmitButton from '../../SubmitButton'
 import { InputNumber } from '../../InputNumber'
 import CustomFormItem from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
-import { SceneType } from 'authing-js-sdk'
+import { SceneType } from '../../_utils/types'
 import { SendCodeByPhone } from '../../SendCode/SendCodeByPhone'
 import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
 import { parsePhone, useMediaSize } from '../../_utils/hooks'
@@ -164,6 +164,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
             }
           }
 
+          // TODO authApi
           const user = await authClient.registerByPhoneCode(
             phoneNumber,
             code,

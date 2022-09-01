@@ -107,11 +107,12 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
 
   const sendVerifyCode = async () => {
     try {
-      const { code, message: tips, apiCode } = await post(
-        '/api/v2/email/send',
+      const { statusCode, message: tips, apiCode } = await post(
+        '/api/v3/send-email',
         {
           email,
-          scene: EmailScene.MFA_VERIFY_CODE,
+          // scene: EmailScene.MFA_VERIFY_CODE,
+          channel: EmailScene.MFA_VERIFY_CODE,
         }
       )
       if (apiCode === 2080) {
@@ -119,7 +120,7 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
         message.error(tips)
         return false
       }
-      if (code === 200) {
+      if (statusCode === 200) {
         setSent(true)
         return true
       } else {

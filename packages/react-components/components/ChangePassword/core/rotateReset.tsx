@@ -81,6 +81,7 @@ export const RotateReset = (props: RotateResetProps) => {
       }
     } else {
       try {
+        // TODO authApi
         let res = await authClient.resetPasswordByForceResetToken({
           token: initData.token,
           newPassword: password,

@@ -17,6 +17,13 @@ import {
   PasswordLoginMethods,
 } from '../Type/application'
 
+export enum ConnectionType {
+  PASSWORD = 'PASSWORD',
+  PASSCODE = 'PASSCODE',
+  LDAP = 'LDAP',
+  AD = 'AD',
+}
+
 export interface LoginConfig extends IG2Config {
   autoRegister?: boolean
   disableResetPwd?: boolean

@@ -73,7 +73,7 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
   return (
     <QrCode
       ref={codeRef}
-      scene="APP_AUTH"
+      scene="MOBILE_APP"
       descriptions={descriptions}
       onStatusChange={onStatusChange}
       imageStyle={{

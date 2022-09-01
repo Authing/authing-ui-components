@@ -17,6 +17,7 @@ import {
   StoreInstance,
 } from '../../Guard/core/hooks/useMultipleAccounts'
 import { useLoginMultipleBackFill } from '../hooks/useLoginMultiple'
+import { ConnectionType } from '../interface'
 
 interface LoginWithLDAPProps {
   // configs
@@ -71,7 +72,7 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
 
   const [showCaptcha, setShowCaptcha] = useState(false)
   const [verifyCodeUrl, setVerifyCodeUrl] = useState('')
-  const captchaUrl = `${props.host}/api/v2/security/captcha`
+  const captchaUrl = `${props.host}/api/v3/captcha-code`
   const getCaptchaUrl = () => `${captchaUrl}?r=${+new Date()}`
 
   const onFinish = async (values: any) => {
@@ -100,13 +101,17 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
     let username = values.account && values.account.trim()
     let password = values.password
 
+    const params = {
+      connection: ConnectionType.LDAP,
+      ldapPayload: {
+        sAMAccountName: username,
+        password,
+      },
+    }
     try {
-      const { code, data, onGuardHandling } = await post(
-        '/api/v2/ldap/verify-user',
-        {
-          username,
-          password,
-        }
+      const { statusCode, data, onGuardHandling } = await post(
+        '/api/v3/signin',
+        params
       )
 
       submitButtonRef.current.onSpin(false)
@@ -115,16 +120,17 @@ export const LoginWithLDAP = (props: LoginWithLDAPProps) => {
         multipleInstance &&
         multipleInstance.setLoginWayByLDAPData(username, data)
 
-      if (code === 200) {
+      if (statusCode === 200) {
         onLoginSuccess(data)
       } else {
-        if (code === ErrorCode.INPUT_CAPTCHACODE) {
+        if (statusCode === ErrorCode.INPUT_CAPTCHACODE) {
           setVerifyCodeUrl(getCaptchaUrl())
           setShowCaptcha(true)
         }
         const handMode = onGuardHandling?.()
         // 向上层抛出错误
-        handMode === CodeAction.RENDER_MESSAGE && onLoginFailed(code, data)
+        handMode === CodeAction.RENDER_MESSAGE &&
+          onLoginFailed(statusCode, data)
       }
     } catch (error: any) {
       submitButtonRef.current?.onSpin(false)

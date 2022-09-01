@@ -24,7 +24,7 @@ export type CodeStatusDescriptions = Partial<
 export interface WorkQrCodeRef {
   referQrCode: () => Promise<
     | {
-        random: string
+        qrcodeId: string
         url: string
       }
     | undefined
@@ -35,7 +35,7 @@ interface WorkQrCodeProps extends Omit<UiQrProps, 'description' | 'status'> {
   /**
    * 二维码场景
    */
-  scene: 'WXAPP_AUTH' | 'APP_AUTH' | 'WECHATMP_AUTH'
+  scene: 'WECHAT_OFFICIAL_ACCOUNT' | 'MOBILE_APP' | 'WECHAT_MINIPROGRAM'
   /**
    * 不同状态请求文字
    */
@@ -87,9 +87,9 @@ const WorkQrCodeComponent: ForwardRefRenderFunction<any, WorkQrCodeProps> = (
    */
   const genCodeRequest = useCallback(
     () =>
-      post<{ random: string; url: string }>(`/api/v2/qrcode/gene`, {
+      post<{ qrcodeId: string; url: string }>('/api/v3/gene-qrcode', {
+        type: scene,
         autoMergeQrCode: false,
-        scene,
         /**
          * 请求上下文，将会传递到 Pipeline 中
          */
@@ -116,8 +116,8 @@ const WorkQrCodeComponent: ForwardRefRenderFunction<any, WorkQrCodeProps> = (
    * 状态检查方法
    */
   const checkedRequest = useCallback(
-    async () => get(`/api/v2/qrcode/check?random=${state.random}`),
-    [state.random, get]
+    async () => get(`/api/v3/check-qrcode-status?qrcodeId=${state.qrcodeId}`),
+    [state.qrcodeId, get]
   )
 
   /**
@@ -125,7 +125,7 @@ const WorkQrCodeComponent: ForwardRefRenderFunction<any, WorkQrCodeProps> = (
    */
   const exchangeUserInfo = useCallback(
     async (ticket: string) =>
-      post(`/api/v2/qrcode/userinfo`, {
+      post(`/api/v3/exchange-tokenset-with-qrcode-ticket`, {
         ticket,
       }),
     [post]

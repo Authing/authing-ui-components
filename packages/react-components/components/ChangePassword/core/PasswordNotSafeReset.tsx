@@ -67,6 +67,7 @@ export const PasswordNotSafeReset: React.FC<PasswordNotSafeResetProps> = ({
       }
     } else {
       try {
+        // TODO authApi
         let res = await client.resetPasswordByFirstLoginToken({
           token: initData.token,
           password: newPassword,
