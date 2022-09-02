@@ -375,7 +375,11 @@ export const GuardLoginView = () => {
                   placement="leftTop"
                   visible={true}
                   content={switchText}
-                  overlayClassName="switch-text"
+                  overlayClassName={
+                    switchText === i18n.t('login.moreWays')
+                      ? 'long-switch-text'
+                      : 'switch-text'
+                  }
                   getPopupContainer={(node: any) => {
                     if (node) {
                       return node.parentElement
