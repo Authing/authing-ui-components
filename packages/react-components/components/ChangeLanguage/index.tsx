@@ -23,7 +23,7 @@ export const LngTextMapping: Record<
     label: 'English',
   },
   'ja-JP': {
-    label: 'Japanese',
+    label: '日本語',
   },
 }
 
