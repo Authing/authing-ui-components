@@ -51,6 +51,7 @@ export enum Protocol {
   SAML = 'saml',
   OAUTH = 'oauth',
   AZURE_AD = 'azure-ad',
+  AD_KERBEROS = 'ad-kerberos',
 }
 
 export interface IOAuthConnectionConfig {
