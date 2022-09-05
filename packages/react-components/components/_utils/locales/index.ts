@@ -4,12 +4,14 @@ import LanguageDetector from 'i18next-browser-languagedetector'
 import * as enUsTrans from './en-us'
 import * as zhCnTrans from './zh-cn'
 import * as zhTwTrans from './zh-tw'
+import * as jaJpTrans from './ja-jp'
 import { Lang } from '../../Type'
 
 const LanguageResources: Resource = {
   'en-US': { translation: enUsTrans },
   'zh-CN': { translation: zhCnTrans },
   'zh-TW': { translation: zhTwTrans },
+  'ja-JP': { translation: jaJpTrans },
 }
 
 export interface InitGuardI18nOptions {
@@ -24,10 +26,17 @@ export const fallbackLng = (code = '') => {
 
   if (!code || code === 'zh') return ['zh-CN']
 
+  if (!code || code === 'ja') return ['ja-JP']
+
   const fallbacks = []
 
   if (code.startsWith('en-')) {
     fallbacks.push(`en-US`)
+    return fallbacks
+  }
+
+  if (code.startsWith('ja-')) {
+    fallbacks.push(`ja-JP`)
     return fallbacks
   }
 

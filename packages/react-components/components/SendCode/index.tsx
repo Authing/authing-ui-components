@@ -3,6 +3,8 @@ import React, { FC } from 'react'
 
 import { SendCodeBtn } from './SendCodeBtn'
 
+import { i18n } from '../_utils/locales'
+
 import './style.less'
 import { useTranslation } from 'react-i18next'
 
@@ -28,7 +30,10 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
   return (
     <>
       <Row justify="space-between" align="middle">
-        <Col span={15} className="g2-send-code-input-col">
+        <Col
+          span={i18n.language === 'ja-JP' ? 10 : 15}
+          className="g2-send-code-input-col"
+        >
           <InputNumber
             value={value}
             onChange={(e) => {
@@ -42,7 +47,7 @@ export const SendCode: FC<SendPhoneCodeProps> = ({
             maxLength={maxLength}
           />
         </Col>
-        <Col offset={1} span={8}>
+        <Col offset={1} span={i18n.language === 'ja-JP' ? 13 : 8}>
           <SendCodeBtn
             beforeSend={beforeSend}
             sendDesc={t('common.sendVerifyCode')}

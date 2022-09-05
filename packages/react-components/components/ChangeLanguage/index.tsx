@@ -22,13 +22,16 @@ export const LngTextMapping: Record<
   'en-US': {
     label: 'English',
   },
+  'ja-JP': {
+    label: '日本語',
+  },
 }
 
 export const ChangeLanguage = (props: {
   onLangChange?: (lang: Lang) => void
   langRange?: string[]
 }) => {
-  const { langRange = ['zh-CN', 'zh-TW', 'en-US'] } = props
+  const { langRange = ['zh-CN', 'zh-TW', 'en-US', 'ja-JP'] } = props
 
   const { onLangChange } = props
   const { i18n } = useTranslation()
