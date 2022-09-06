@@ -58,7 +58,7 @@
   "useOtherAccount": "使用其他賬號",
   "wechatScanLogin": "使用微信掃碼登錄",
   "qrcodeRefer": "刷新",
-  "qrcodeNetWorkError": "網絡異常 點擊重試",
+  "qrcodeNetWorkError": "網路異常 點擊重試",
   "scanAgain": "重新掃碼",
   "scanSuccess": "掃碼成功"
 }

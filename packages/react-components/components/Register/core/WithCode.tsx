@@ -40,6 +40,11 @@ export interface RegisterWithCodeProps {
   methods: any[]
 }
 
+/**
+ * 手机 Code 注册
+ * @param param0
+ * @returns
+ */
 export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
   onRegisterSuccess,
   onRegisterFailed,
@@ -103,9 +108,9 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
 
   const registerByPhoneCode = useCallback(
     async (values: any) => {
-      const needPassword = config.passwordLoginMethods?.includes(
-        'phone-password'
-      )
+      const needPassword =
+        config.passwordLoginMethods?.includes('phone-password') &&
+        publicConfig?.enableCompletePassword
 
       submitButtonRef.current?.onSpin(true)
 
@@ -149,7 +154,7 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
           return
         }
 
-        const { phone, password = '', code } = values
+        const { phone, code } = values
 
         const context = registeContext ?? {}
 
@@ -160,29 +165,37 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
         )
 
         // 注册
-        const options: any = {
-          context,
-          generateToken: true,
-          // 托管模式下注册携带query上自定义参数login_page_context
-          params: config?.isHost
-            ? getUserRegisterParams(['login_page_context'])
-            : undefined,
-        }
+        // const options: any = {
+        //   context,
+        //   generateToken: true,
+        //   // 托管模式下注册携带query上自定义参数login_page_context
+        //   params: config?.isHost
+        //     ? getUserRegisterParams(['login_page_context'])
+        //     : undefined,
+        // }
 
-        if (isInternationSms) {
-          options.phoneCountryCode = phoneCountryCode
-        }
+        // if (isInternationSms) {
+        //   options.phoneCountryCode = phoneCountryCode
+        // }
 
         const registerContent = {
           phone: phoneNumber,
           code,
-          password,
+          phoneCountryCode: isInternationSms ? phoneCountryCode : undefined,
+          // password: undefined, // TODO: 手机号验证码不需要密码
           profile: {
             browser:
               typeof navigator !== 'undefined' ? navigator.userAgent : null,
             device: getDeviceName(),
           },
-          options,
+          forceLogin: false,
+          generateToken: true,
+          clientIp: undefined,
+          params: config?.isHost
+            ? JSON.stringify(getUserRegisterParams(['login_page_context']))
+            : undefined,
+          context: JSON.stringify(context),
+          emailToken: undefined,
         }
         // onRegisterSuccess 注册成功后需要回到对应的登录页面
         const onRegisterSuccessIntercept = (user: any) => {
@@ -206,7 +219,9 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
           if (checkCode === 200 && valid) {
             changeModule?.(GuardModuleType.REGISTER_PASSWORD, {
               businessRequestName: 'registerByPhoneCode',
-              content: registerContent,
+              content: {
+                ...registerContent,
+              },
               isChangeComplete: isPhoneChangeComplete,
               onRegisterSuccess: onRegisterSuccessIntercept,
               onRegisterFailed,
@@ -233,7 +248,9 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
             if (checkCode === 200 && valid) {
               changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
                 businessRequestName: 'registerByPhoneCode',
-                content: registerContent,
+                content: {
+                  ...registerContent,
+                },
                 onRegisterSuccess: onRegisterSuccessIntercept,
                 onRegisterFailed,
               })
@@ -245,22 +262,27 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
             }
           }
 
-          const user = await authClient.registerByPhoneCode(
-            phoneNumber,
-            code,
-            password,
+          /**
+           * 手机号注册接口
+           */
+          const { data, statusCode, apiCode, message: errMessage } = await post(
+            `/api/v2/register-phone-code`,
             {
-              browser:
-                typeof navigator !== 'undefined' ? navigator.userAgent : null,
-              device: getDeviceName(),
-            },
-            options
+              ...registerContent,
+              postUserInfoPipeline: false,
+            }
           )
-
-          submitButtonRef.current?.onSpin(false)
-          onRegisterSuccessIntercept(user)
+          if (statusCode === 200) {
+            submitButtonRef.current?.onSpin(false)
+            onRegisterSuccessIntercept(data)
+          } else {
+            submitButtonRef.current.onError()
+            message.error(errMessage)
+            !needPassword && onRegisterFailed(apiCode, data, errMessage)
+          }
         }
       } catch (error: any) {
+        // TODO 确认无误后 删除 catch
         const { message: errorMessage, code, data } = error
         submitButtonRef.current.onError()
         message.error(errorMessage)
@@ -285,14 +307,15 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
       isPhoneChangeComplete,
       onRegisterSuccess,
       onRegisterFailed,
+      publicConfig?.enableCompletePassword,
     ]
   )
 
   const registerByEmailCode = useCallback(
     async (values: any) => {
-      const needPassword = config.passwordLoginMethods?.includes(
-        'email-password'
-      )
+      const needPassword =
+        config.passwordLoginMethods?.includes('email-password') &&
+        publicConfig?.enableCompletePassword
       submitButtonRef.current.onSpin(true)
       values.email = values.identify
       if (onBeforeRegister) {
@@ -343,14 +366,12 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
               typeof navigator !== 'undefined' ? navigator.userAgent : null,
             device: getDeviceName(),
           },
-          options: {
-            context: JSON.stringify(context),
-            generateToken: true,
-            // 托管模式下注册携带query上自定义参数login_page_context
-            params: config?.isHost
-              ? JSON.stringify(getUserRegisterParams(['login_page_context'])) // 特殊处理 resetful api
-              : undefined,
-          },
+          context: JSON.stringify(context),
+          generateToken: true,
+          // 托管模式下注册携带query上自定义参数login_page_context
+          params: config?.isHost
+            ? JSON.stringify(getUserRegisterParams(['login_page_context'])) // 特殊处理 resetful api
+            : undefined,
         }
 
         // onRegisterSuccess 注册成功后需要回到对应的登录页面
@@ -374,7 +395,9 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
           if (checkCode === 200 && valid) {
             changeModule?.(GuardModuleType.REGISTER_PASSWORD, {
               businessRequestName: 'registerByEmailCode', //用于判断后续使用哪个注册api
-              content: registerContent,
+              content: {
+                ...registerContent,
+              },
               isChangeComplete: isEmailChangeComplete,
               onRegisterSuccess: onRegisterSuccessIntercept,
               onRegisterFailed,
@@ -399,7 +422,9 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
             if (checkCode === 200 && valid) {
               changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
                 businessRequestName: 'registerByEmailCode', //用于判断后续使用哪个注册api
-                content: registerContent,
+                content: {
+                  ...registerContent,
+                },
                 onRegisterSuccess: onRegisterSuccessIntercept,
                 onRegisterFailed,
               })
@@ -412,22 +437,21 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
           }
           // 注册
           const {
-            code: resCode,
+            statusCode,
             data,
+            apiCode,
             onGuardHandling,
             message: registerMessage,
-          } = await post('/api/v2/register/email-code', {
-            email: registerContent.email,
-            code: registerContent.code,
-            profile: registerContent.profile,
-            ...registerContent.options,
+          } = await post('/api/v2/register-email-code', {
+            ...registerContent,
+            postUserInfoPipeline: false,
           })
           submitButtonRef.current.onSpin(false)
-          if (resCode === 200) {
+          if (statusCode === 200) {
             onRegisterSuccessIntercept(data)
           } else {
             onGuardHandling?.()
-            onRegisterFailed(code, data, registerMessage)
+            onRegisterFailed(apiCode, data, registerMessage)
           }
         }
       } catch (error: any) {
@@ -453,6 +477,7 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
       isEmailChangeComplete,
       onRegisterSuccess,
       onRegisterFailed,
+      publicConfig?.enableCompletePassword,
     ]
   )
 

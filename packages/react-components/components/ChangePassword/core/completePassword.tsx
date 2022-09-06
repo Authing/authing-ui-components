@@ -1,5 +1,5 @@
 import React, { useRef, useCallback } from 'react'
-import { Form, message } from 'antd'
+import { Form } from 'antd'
 import CustomFormItem from '../../ValidatorRules'
 import { InputPassword } from '../../InputPassword'
 import { useMediaSize } from '../../_utils/hooks'
@@ -27,10 +27,7 @@ export const CompletePassword: React.FC = () => {
 
   const { isPhoneMedia } = useMediaSize()
 
-  const authClient = useGuardAuthClient()
-
   const { post } = getGuardHttp()
-
   const {
     businessRequestName,
     content,
@@ -55,10 +52,7 @@ export const CompletePassword: React.FC = () => {
   const onFinish = useCallback(
     async (values: any) => {
       // 密码加密处理（邮箱验证码是通过 post 直接发送需要加密 其他通过 sdk 在内部加密了 这一步无需加密）
-      const password =
-        businessRequestName === 'registerByEmailCode'
-          ? await encrypt!(values.password, publicKey)
-          : values.password
+      const password = await encrypt!(values.password, publicKey)
 
       submitButtonRef.current?.onSpin(true)
 
@@ -79,67 +73,81 @@ export const CompletePassword: React.FC = () => {
         try {
           if (businessRequestName === 'registerByEmailCode') {
             const {
-              code: resCode,
+              statusCode,
+              apiCode,
               data,
               onGuardHandling,
               message,
-            } = await post('/api/v2/register/email-code', {
-              email: content.email,
-              code: content.code,
+            } = await post('/api/v2/register-email-code', {
+              ...content,
               password,
-              profile: content.profile,
-              ...content.options,
+              postUserInfoPipeline: false,
             })
             submitButtonRef.current.onSpin(false)
-            if (resCode === 200) {
+            if (statusCode === 200) {
               onRegisterSuccess(data)
               // events?.onRegister?.(data, authClient)
               // changeModule?.(GuardModuleType.LOGIN)
             } else {
-              if (resCode === ApiCode.UNSAFE_PASSWORD_TIP) {
+              if (statusCode === ApiCode.UNSAFE_PASSWORD_TIP) {
                 setPasswordErrorTextShow(true)
               }
               onGuardHandling?.()
-              onRegisterFailed(resCode, data, message)
+              onRegisterFailed(apiCode, data, message)
               events?.onRegisterError?.({
-                code: resCode,
+                code: apiCode,
                 data,
                 message,
               })
             }
           } else if (businessRequestName === 'registerByPhoneCode') {
-            const user = await authClient.registerByPhoneCode(
-              content.phone,
-              content.code,
+            // TODO: 修改 Rustful
+            const {
+              data,
+              statusCode,
+              apiCode,
+              onGuardHandling,
+              message,
+            } = await post(`/api/v2/register-phone-code`, {
+              ...content,
               password,
-              content.profile,
-              content.options
-            )
-            submitButtonRef.current?.onSpin(false)
-            onRegisterSuccess(user)
-            // events?.onRegister?.(user, authClient)
-            // changeModule?.(GuardModuleType.LOGIN)
+              postUserInfoPipeline: false,
+            })
+            if (statusCode === 200) {
+              submitButtonRef.current?.onSpin(false)
+              onRegisterSuccess(data)
+            } else {
+              if (apiCode === ApiCode.UNSAFE_PASSWORD_TIP) {
+                setPasswordErrorTextShow(true)
+              }
+              onGuardHandling?.()
+              submitButtonRef.current?.onSpin(false)
+              onRegisterFailed(apiCode, data, message)
+              events?.onRegisterError?.({
+                apiCode,
+                data,
+                message,
+              })
+            }
           }
         } catch (error: any) {
-          const { code, message: errorMessage, data } = error
-          if (code === ApiCode.UNSAFE_PASSWORD_TIP) {
-            setPasswordErrorTextShow(true)
-          }
-          submitButtonRef.current.onError()
-          message.error(errorMessage)
-          onRegisterFailed(code, data, errorMessage)
+          submitButtonRef.current?.onSpin(false)
+          // const { code, message: errorMessage, data } = error
+          // if (code === ApiCode.UNSAFE_PASSWORD_TIP) {
+          //   setPasswordErrorTextShow(true)
+          // }
+          // submitButtonRef.current.onError()
+          // message.error(errorMessage)
+          // onRegisterFailed(code, data, errorMessage)
           // events?.onRegisterError?.({
           //   code,
           //   data,
           //   message,
           // })
-        } finally {
-          submitButtonRef.current?.onSpin(false)
         }
       }
     },
     [
-      authClient,
       businessRequestName,
       changeModule,
       content,

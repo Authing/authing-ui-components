@@ -44,7 +44,7 @@
   "faceVerification": "人臉識別驗證",
   "feedback": "幫助中心",
   "female": "女",
-  "fetchError": "網絡連接失敗，請稍後再試",
+  "fetchError": "網路連接失敗，請稍後再試",
   "fullCaptchaCode": "請填寫完整的{{name}}",
   "goToLogin": "直接登入",
   "hasLooseSaftyCode": "安全碼丟失？",
@@ -100,12 +100,12 @@
     "noAccountTip": {
       "tip": "如果帳號丟失，建議您進行以下操作：",
       "type1": "1. 檢查您的用戶名與密碼輸入是否正確",
-      "type2": "2. 檢查您的手機是否停機/無網絡"
+      "type2": "2. 檢查您的手機是否停機/無網路"
     },
     "noLogin": "無法登入",
     "noLoginTip": {
       "type1": "1. 檢查您的用戶名與密碼輸入是否正確",
-      "type2": "2. 檢查您的手機是否停機/無網絡"
+      "type2": "2. 檢查您的手機是否停機/無網路"
     },
     "noLoginTips": "如果無法登入，建議您進行以下操作：",
     "noRegister": "無法註冊",
@@ -118,13 +118,13 @@
     "noResetPass": "無法重設密碼",
     "noResetPassTip": {
       "tip": "如果無法重置密碼，建議您進行以下操作：",
-      "type1": "1. 檢查您的手機是否停機/無網絡",
+      "type1": "1. 檢查您的手機是否停機/無網路",
       "type2": "2. 檢查您的設置的密碼是否正確"
     },
     "noVerify": "無法收到驗證碼",
     "noVerifyTip": {
       "tip": "如果無法收到手機驗證碼，建議您進行以下操作：",
-      "type1": "1. 檢查您的手機服務是否停用/没有網絡",
+      "type1": "1. 檢查您的手機服務是否停用/没有網路",
       "type2": "2. 檢查您的手機號碼是否輸入正確",
       "type3": "3. 檢查您的驗證碼簡訊是否被阻擋"
     },
@@ -166,5 +166,6 @@
   "yes": "是",
   "loginWithWechatmpQrcodeTipsTitle": "長按二維碼登入",
   "del": "移除",
-  "qrcode": "二維碼"
+  "qrcode": "二維碼",
+  "registerCompletePasswordDesc": "為了保障賬號安全，請設置您的密碼。"
 }

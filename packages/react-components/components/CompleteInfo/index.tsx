@@ -27,9 +27,7 @@ import {
   registerRequest,
 } from './businessRequest'
 import { extendsFieldsToMetaData, fieldValuesToRegisterProfile } from './utils'
-import { message } from 'antd'
 import { GuardButton } from '../GuardButton'
-
 export const GuardCompleteInfo: React.FC<{
   metaData: CompleteInfoMetaData[]
   skipComplateFileds: boolean
@@ -193,44 +191,30 @@ export const GuardRegisterCompleteInfoView: React.FC = () => {
     action: CompleteInfoAuthFlowAction,
     data?: CompleteInfoRequest
   ) => {
-    const registerProfile = fieldValuesToRegisterProfile(
+    const { registerProfile, udf } = fieldValuesToRegisterProfile(
       extendsFields,
       data?.fieldValues
     )
-    try {
-      // sdk 直接 throw error 拿不到错误详细信息 不能手动给他执行我们的拦截
-      const user: any = await registerRequest(
-        action,
-        initData.businessRequestName,
-        initData.content,
-        registerProfile
-      )
-      // sdk 还没有这个接口 后续添加后 可以已 sdk 的逻辑执行
-      if (initData.businessRequestName === 'registerByEmailCode') {
-        if (user.code === 200) {
-          initData.onRegisterSuccess(user.data)
-          // events?.onRegister?.(user.data, authClient)
-          // changeModule?.(GuardModuleType.LOGIN)
-        } else {
-          user?.onGuardHandling?.()
-          const { code, message: errorMessage, data } = user
-          initData.onRegisterFailed(code, data, errorMessage)
-          // events?.onRegisterError?.({ code, data, message: errorMessage })
-          // TODO 后续sdk的验证码逻辑改完后
-        }
-        return
-      }
-      if (user) {
-        // events?.onRegister?.(user, authClient)
-        // changeModule?.(GuardModuleType.LOGIN)
-        initData.onRegisterSuccess(user.data)
-      }
-    } catch (error: any) {
-      // TODO 后续sdk的验证码逻辑改完后·
-      const { code, message: errorMessage, data } = error
-      message.error(errorMessage)
-      // events?.onRegisterError?.({ code, data, message: errorMessage })
-      initData.onRegisterFailed(code, data, errorMessage)
+    const content = {
+      ...initData.content,
+      params: JSON.stringify(
+        JSON.parse(
+          initData.content?.params ? initData.content?.params : '[]'
+        ).concat(udf)
+      ),
+    }
+    const user: any = await registerRequest(
+      action,
+      initData.businessRequestName,
+      content,
+      registerProfile
+    )
+    if (user.statusCode === 200) {
+      initData.onRegisterSuccess(user.data)
+    } else {
+      user?.onGuardHandling?.()
+      const { apiCode, message: errorMessage, data } = user
+      initData.onRegisterFailed(apiCode, data, errorMessage)
     }
   }
 

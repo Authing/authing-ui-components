@@ -16,6 +16,24 @@
     height: 100%;
   }
 }
+// 🤢 这部分完全是因为user-portal dom结构很难做到针对使用guard页面做样式优化
+.authing-guard-layout {
+  padding: 24px 0;
+}
+
+// pad 端 居中
+@media only screen and (max-width: 600px) {
+  body .authing-guard-layout {
+    align-items: center !important;
+  }
+}
+
+// 移动端去掉padding
+@media only screen and (max-width: 450px) {
+  .authing-guard-layout {
+    padding: 0;
+  }
+}
 
 // 侵入 core 的样式代码，guard view 皮肤
 .g2-view-container {

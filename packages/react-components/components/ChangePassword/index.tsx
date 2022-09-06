@@ -173,7 +173,7 @@ export const GuardRegisterCompletePasswordView: React.FC = () => {
   return (
     <GuardChangePassword
       title={`${t('common.welcome')} ${config.title}`}
-      explain={t('common.initPasswordText')}
+      explain={t('common.registerCompletePasswordDesc')}
     >
       <CompletePassword />
     </GuardChangePassword>

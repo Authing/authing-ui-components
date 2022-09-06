@@ -303,4 +303,12 @@ export interface ApplicationConfig {
   selfUnlockStrategy: 'captcha' | 'password-captcha'
 
   defaultLanguageConfig: Lang
+  /**
+   * 是否开启账号切换
+   */
+  enableLoginAccountSwitch: boolean
+  /**
+   * 是否开启注册密码补全
+   */
+  enableCompletePassword: boolean
 }

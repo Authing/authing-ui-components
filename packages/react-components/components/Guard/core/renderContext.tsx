@@ -58,7 +58,7 @@ export const RenderContext: React.FC<{
   const [cdnBase, setCdnBase] = useState<string>()
   const [error, setError] = useState()
   const [isAuthFlow, setIsAuthFlow] = useState(true)
-
+  const [i18nInit, setI18nInit] = useState(false)
   const appId = useInitAppId(guardProps.appId, guardProps.authClient, setError)
 
   useInitGuardAppendConfig(setForceUpdate, appId, guardProps.appendConfig)
@@ -178,17 +178,6 @@ export const RenderContext: React.FC<{
     }
   }, [finallyConfig, httpClient])
 
-  // I18n
-  useEffect(() => {
-    if (guardPageConfig && publicConfig && defaultMergedConfig) {
-      const { defaultLanguage } = guardPageConfig.global
-
-      initGuardI18n({
-        defaultLanguage: (defaultMergedConfig?.lang as Lang) ?? defaultLanguage,
-      })
-    }
-  }, [defaultMergedConfig, guardPageConfig, publicConfig])
-
   useEffect(() => {
     if (!appId) return
 
@@ -200,6 +189,20 @@ export const RenderContext: React.FC<{
 
     setCdnBase(publicConfig.cdnBase)
   }, [appId, finallyConfig])
+
+  // I18n
+  useEffect(() => {
+    if (guardPageConfig && publicConfig && defaultMergedConfig) {
+      const { defaultLanguage } = guardPageConfig.global
+      initGuardI18n(
+        {
+          defaultLanguage:
+            (defaultMergedConfig?.lang as Lang) ?? defaultLanguage,
+        },
+        setI18nInit
+      )
+    }
+  }, [defaultMergedConfig, guardPageConfig, publicConfig, setI18nInit])
 
   // AuthClient
   useEffect(() => {
@@ -271,12 +274,15 @@ export const RenderContext: React.FC<{
       iconfontLoaded,
       // 保证 store 加载完成
       multipleInstance,
+      // 保证 i18n 初始化完成
+      i18nInit,
     ]
 
     return !list.includes(undefined) && !list.includes(false)
   }, [
     appId,
     events,
+    i18nInit,
     defaultMergedConfig,
     finallyConfig,
     httpClient,

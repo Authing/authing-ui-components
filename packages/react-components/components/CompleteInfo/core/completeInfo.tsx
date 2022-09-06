@@ -225,7 +225,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           className="authing-g2-input-form"
           name="username"
           key={props.key}
-          label={i18n.t('common.username')}
+          label={props.label ?? i18n.t('common.username')}
           required={props.required}
           checkRepeat={true}
         >
@@ -239,7 +239,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           />
         </CustomFormItem.UserName>
       ),
-      phone: (props: { required?: boolean }) => (
+      phone: (props: { required?: boolean; label?: string }) => (
         <>
           <CustomFormItem.Phone
             validateFirst={true}
@@ -250,7 +250,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             }
             name="phone"
             key="internal-phone:phone"
-            label={i18n.t('common.phoneLabel')}
+            label={props.label ?? i18n.t('common.phoneLabel')}
             required={props.required}
             checkRepeat={true}
             areaCode={areaCode}
@@ -286,13 +286,13 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
           </Form.Item>
         </>
       ),
-      email: (props: { required?: boolean }) => (
+      email: (props: { required?: boolean; label?: string }) => (
         <>
           <CustomFormItem.Email
             className="authing-g2-input-form"
             name="email"
             checkRepeat={true}
-            label={i18n.t('common.email')}
+            label={props.label ?? i18n.t('common.email')}
             required={props.required}
             key="internal email:email13"
             validateFirst={true}
@@ -367,6 +367,10 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
 
       if (required) {
         formRules.push({
+          type:
+            metaData.type === CompleteInfoExtendsControls.DATE_TIME
+              ? ('object' as const)
+              : undefined,
           required: true,
           validateTrigger: 'onChange',
           message: t('login.noEmpty', { label: label }),
@@ -394,6 +398,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
             break
         }
       })
+
       return formRules
     },
     [getMetaDateLabel, t]
@@ -416,6 +421,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
       ) {
         return internalControlMap[metaData.name]({
           required: metaData.required,
+          label: label,
         })
       } else {
         const userFormItem = (children: React.ReactNode) => (

@@ -11,7 +11,11 @@ import CustomFormItem from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
 import { InputPassword } from '../../InputPassword'
 import { useIsChangeComplete } from '../utils'
-import { useGuardFinallyConfig, useGuardModule } from '../../_utils/context'
+import {
+  useGuardFinallyConfig,
+  useGuardHttpClient,
+  useGuardModule,
+} from '../../_utils/context'
 import { GuardModuleType } from '../../Guard'
 import { useMediaSize } from '../../_utils/hooks'
 import { ApiCode } from '../../_utils/responseManagement/interface'
@@ -43,6 +47,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
   const config = useGuardFinallyConfig()
   const isChangeComplete = useIsChangeComplete('email')
   const { changeModule } = useGuardModule()
+  const { post } = useGuardHttpClient()
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
   const [validated, setValidated] = useState(false)
@@ -82,76 +87,77 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         }
       }
 
-      try {
-        await form.validateFields()
-        setValidated(true)
+      await form.validateFields()
+      setValidated(true)
 
-        if (agreements?.length && !acceptedAgreements) {
-          submitButtonRef.current.onError()
-          return
-        }
-        const { email, password } = values
+      if (agreements?.length && !acceptedAgreements) {
+        submitButtonRef.current.onError()
+        return
+      }
+      const { email, password } = values
 
-        const context = registeContext ?? {}
+      // 加密密码
+      const encrypt = authClient.options.encryptFunction
+      const encryptPassword = await encrypt!(password, config.publicKey!)
 
-        // 注册使用的详情信息
-        const registerContent = {
-          email,
-          password,
-          profile: {
-            browser:
-              typeof navigator !== 'undefined' ? navigator.userAgent : null,
-            device: getDeviceName(),
+      const context = registeContext ?? {}
+
+      // 注册使用的详情信息
+      const registerContent = {
+        email,
+        password: encryptPassword,
+        profile: {
+          browser:
+            typeof navigator !== 'undefined' ? navigator.userAgent : null,
+          device: getDeviceName(),
+        },
+        forceLogin: false,
+        generateToken: true,
+        clientIp: undefined,
+        params: config?.isHost
+          ? JSON.stringify(getUserRegisterParams(['login_page_context']))
+          : undefined,
+        context: JSON.stringify(context),
+        phoneToken: undefined,
+      }
+
+      // onRegisterSuccess 注册成功后需要回到对应的登录页面
+      const onRegisterSuccessIntercept = (user: any) => {
+        onRegisterSuccess(user, {
+          registerFrom: RegisterMethods.Email,
+          account: email,
+        })
+      }
+      if (isChangeComplete) {
+        changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
+          businessRequestName: 'registerByEmail',
+          content: {
+            ...registerContent,
           },
-          options: {
-            context,
-            generateToken: true,
-            // 托管模式下注册携带query上自定义参数login_page_context
-            params: config?.isHost
-              ? getUserRegisterParams(['login_page_context'])
-              : undefined,
-          },
+          onRegisterSuccess: onRegisterSuccessIntercept,
+          onRegisterFailed,
+        })
+
+        return
+      }
+
+      const { statusCode, data, message: errorMessage, apiCode } = await post(
+        `/api/v2/register-email`,
+        {
+          ...registerContent,
+          postUserInfoPipeline: false,
         }
+      )
 
-        // onRegisterSuccess 注册成功后需要回到对应的登录页面
-        const onRegisterSuccessIntercept = (user: any) => {
-          onRegisterSuccess(user, {
-            registerFrom: RegisterMethods.Email,
-            account: email,
-          })
-        }
-        // 看看是否要跳转到 信息补全
-        if (isChangeComplete) {
-          changeModule?.(GuardModuleType.REGISTER_COMPLETE_INFO, {
-            businessRequestName: 'registerByEmail',
-            content: registerContent,
-            onRegisterSuccess: onRegisterSuccessIntercept,
-            onRegisterFailed,
-          })
-
-          return
-        }
-
-        // 注册
-        const user = await authClient.registerByEmail(
-          registerContent.email,
-          registerContent.password,
-          registerContent.profile,
-          registerContent.options
-        )
-
-        submitButtonRef.current?.onSpin(false)
-        onRegisterSuccessIntercept(user)
-      } catch (error: any) {
-        const { message: errorMessage, code, data } = error
-        if (code === ApiCode.UNSAFE_PASSWORD_TIP) {
+      if (statusCode === 200) {
+        onRegisterSuccessIntercept(data)
+      } else {
+        if (apiCode === ApiCode.UNSAFE_PASSWORD_TIP) {
           setPasswordErrorTextShow(true)
         }
         submitButtonRef.current.onError()
+        onRegisterFailed(apiCode, data, errorMessage)
         message.error(errorMessage)
-        onRegisterFailed(code, data, errorMessage)
-      } finally {
-        submitButtonRef.current?.onSpin(false)
       }
     },
     [form, acceptedAgreements],
