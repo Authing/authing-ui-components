@@ -1,31 +1,33 @@
 import { Avatar, message } from 'antd'
-import { Protocol } from 'authing-js-sdk'
 import qs from 'qs'
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getGuardWindow } from '../../../Guard/core/useAppendConfig'
 import { GuardButton } from '../../../GuardButton'
 import { IconFont } from '../../../IconFont'
+import { Protocol } from '../../../Type/application'
 import version from '../../../version/version'
 import { isSpecialBrowser, popupCenter } from '../../../_utils'
 import { useGuardTenantId } from '../../../_utils/context'
 import { SocialConnectionEvent } from '../../../_utils/hooks'
 import { i18n } from '../../../_utils/locales'
 
-const baseLoginPathMapping: Record<Protocol, string | null> = {
+const baseLoginPathMapping: Partial<Record<Protocol, string | null>> = {
   [Protocol.OIDC]: '/connections/oidc/init',
   [Protocol.SAML]: '/connections/saml/init',
   [Protocol.CAS]: '/connections/cas/init',
   [Protocol.OAUTH]: '/connections/oauth2/init',
   [Protocol.AZURE_AD]: '/connections/azure-ad/init',
+  [Protocol.AD_KERBEROS]: '/connections/ad-kerberos/init',
 }
 
-const loginUrlFieldMapping: Record<Protocol, string> = {
+const loginUrlFieldMapping: Partial<Record<Protocol, string>> = {
   [Protocol.OIDC]: 'oidcConnectionLoginUrl',
   [Protocol.SAML]: 'samlRequest',
   [Protocol.CAS]: 'casConnectionLoginUrl',
   [Protocol.OAUTH]: 'authUrl',
   [Protocol.AZURE_AD]: 'authorizationUrl',
+  [Protocol.AD_KERBEROS]: 'authorizationUrl',
 }
 
 export const IdpButton = (props: any) => {
