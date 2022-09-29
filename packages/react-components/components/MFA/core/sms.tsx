@@ -62,6 +62,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
               setAreaCode(value)
               form.getFieldValue(['phone']) && form.validateFields(['phone'])
             }}
+            maxLength={20}
           />
         )
       } else {
@@ -78,6 +79,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
                 style={{ color: '#878A95' }}
               />
             }
+            maxLength={20}
           />
         )
       }

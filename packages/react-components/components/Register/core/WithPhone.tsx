@@ -218,6 +218,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
               setAreaCode(value)
               form.getFieldValue(['phone']) && form.validateFields(['phone'])
             }}
+            maxLength={20}
           />
         )
       } else {

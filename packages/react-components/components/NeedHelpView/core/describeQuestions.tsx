@@ -177,6 +177,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
                 style={{ color: '#878A95' }}
               />
             }
+            maxLength={20}
           />
         </Form.Item>
         <Form.Item

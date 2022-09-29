@@ -98,6 +98,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
               form.getFieldValue(['internal phone:phone']) &&
                 form.validateFields(['internal phone:phone'])
             }}
+            maxLength={20}
           />
         )
       } else {

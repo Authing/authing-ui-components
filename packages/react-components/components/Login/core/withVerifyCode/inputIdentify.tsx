@@ -63,6 +63,7 @@ export const InputIdentify: React.FC<InputIdentifyProps> = (props) => {
 
     return (
       <Input
+        maxLength={20}
         placeholder={placeholder}
         {...inputProps}
         prefix={
