@@ -7,15 +7,6 @@ import { ShieldSpin } from '../ShieldSpin'
 
 export interface GuardComponentConfig extends Partial<GuardLocalConfig> {}
 
-export enum QrCodeScanType {
-  appQrcode = 'appQrcode',
-  wechatMiniQrcode = 'wechatMiniQrcode',
-  wechatmpQrcode = 'wechatmpQrcode',
-}
-export interface QrCodeScanOptions {
-  qrcode: string
-}
-
 export interface GuardLocalConfig extends RegisterConfig, LoginConfig {
   isSSO?: boolean
   defaultScenes?: GuardModuleType
@@ -26,7 +17,6 @@ export interface GuardLocalConfig extends RegisterConfig, LoginConfig {
    * @description 是否调用 eventsMapping 中的事件
    */
   openEventsMapping?: boolean
-  _qrCodeScanOptions?: Record<QrCodeScanType, QrCodeScanOptions>
 }
 
 let defaultConfig: GuardLocalConfig = {
@@ -36,6 +26,7 @@ let defaultConfig: GuardLocalConfig = {
   defaultInitData: {},
   showLoading: true,
   openEventsMapping: true,
+  _closeLoopCheckQrcode: false,
   loadingComponent: (
     <div className="g2-init-setting-loading">
       <ShieldSpin size={100} />
