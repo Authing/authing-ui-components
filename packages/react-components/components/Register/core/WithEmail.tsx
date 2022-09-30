@@ -192,6 +192,7 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
           required={true}
         >
           <Input
+            maxLength={50} // 手机号限长 20 字符，多种组合是 50 字符
             autoFocus={!isPhoneMedia}
             className="authing-g2-input"
             autoComplete="off"

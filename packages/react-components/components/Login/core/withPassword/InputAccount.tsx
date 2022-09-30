@@ -57,7 +57,8 @@ export const InputAccount: React.FC<InputAccountProps> = (props) => {
         <InputNumber maxLength={20} placeholder={placeholder} {...inputProps} />
       )
 
-    return <Input maxLength={20} placeholder={placeholder} {...inputProps} />
+    // 手机号限长 20 字符，多种组合是 50 字符
+    return <Input maxLength={50} placeholder={placeholder} {...inputProps} />
   }, [inputProps, methods, placeholder])
 
   return <>{runderInput}</>

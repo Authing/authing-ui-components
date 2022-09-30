@@ -177,7 +177,7 @@ export const DescribeQuestions = (props: describeQuestionsProps) => {
                 style={{ color: '#878A95' }}
               />
             }
-            maxLength={20}
+            maxLength={50} // 手机号限长 20 字符，多种组合是 50 字符
           />
         </Form.Item>
         <Form.Item

@@ -63,7 +63,7 @@ export const InputIdentify: React.FC<InputIdentifyProps> = (props) => {
 
     return (
       <Input
-        maxLength={20}
+        maxLength={50} // 手机号限长 20 字符，多种组合是 50 字符
         placeholder={placeholder}
         {...inputProps}
         prefix={
