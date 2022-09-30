@@ -457,6 +457,12 @@ export const getPasswordValidate = (
     if (i18n.language === 'ja-JP' && customPasswordStrength?.jaMessageOpen) {
       return customPasswordStrength?.jaMessage
     }
+    if (i18n.language === 'ja-JP' && customPasswordStrength?.jpMessageOpen) {
+      return customPasswordStrength?.jpMessage
+    }
+    if (i18n.language === 'zh-TW' && customPasswordStrength?.twMessageOpen) {
+      return customPasswordStrength?.twMessage
+    }
     return customPasswordStrength?.message
   }
   const validateMap: Record<PasswordStrength, Rule[]> = {
