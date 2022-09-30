@@ -98,6 +98,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
               form.getFieldValue(['internal phone:phone']) &&
                 form.validateFields(['internal phone:phone'])
             }}
+            maxLength={20}
           />
         )
       } else {
@@ -302,6 +303,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
               autoComplete="email"
               size="large"
               placeholder={t('login.inputEmail')}
+              maxLength={50} // 手机号限长 20 字符，多种组合是 50 字符
             />
           </CustomFormItem.Email>
           <Form.Item
