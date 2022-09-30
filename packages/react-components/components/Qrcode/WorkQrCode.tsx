@@ -72,7 +72,6 @@ const WorkQrCodeComponent: ForwardRefRenderFunction<any, WorkQrCodeProps> = (
     ...rest
   } = props
 
-  // const { qrCodeScanOptions = {} } = useGuardFinallyConfig()
   const {
     context,
     customData,
@@ -139,11 +138,12 @@ const WorkQrCodeComponent: ForwardRefRenderFunction<any, WorkQrCodeProps> = (
       descriptions,
       onStatusChange,
     },
+
     {
-      readyCheckedRequest: checkedRequest,
-      alreadyCheckedRequest: checkedRequest,
       genCodeRequest,
       exchangeUserInfo,
+      readyCheckedRequest: checkedRequest,
+      alreadyCheckedRequest: checkedRequest,
     }
   )
 

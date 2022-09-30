@@ -31,6 +31,10 @@ export interface LoginConfig extends IG2Config {
   publicKey?: string
   agreementEnabled?: boolean
   agreements?: Agreement[]
+  /**
+   * 关闭二维码状态check轮询(console上使用)
+   */
+  _closeLoopCheckQrcode?: boolean
 }
 
 export interface LoginEvents extends IG2Events {

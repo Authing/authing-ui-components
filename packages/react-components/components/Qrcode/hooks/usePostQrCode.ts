@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from 'react'
 import { sleep } from '../../_utils'
+import { useGuardFinallyConfig } from '../../_utils/context'
 import { AuthingGuardResponse, AuthingResponse } from '../../_utils/http'
 import { CodeStatus } from '../UiQrCode'
 import { CodeStatusDescriptions } from '../WorkQrCode'
@@ -59,6 +60,9 @@ interface QrCodeOptions {
     payload: Partial<RootState>
   }>
   descriptions: CodeStatusDescriptions
+  /**
+   * check 轮询间隔时间
+   */
   sleepTime?: number
   /**
    * 状态改变时触发事件，仅在 Server 返回的二维码状态改变时进行触发
@@ -76,6 +80,8 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
   let destroy = false
 
   const { state, dispatch, sleepTime, onStatusChange } = options
+
+  const finallyConfig = useGuardFinallyConfig()
 
   const {
     readyCheckedRequest,
@@ -105,7 +111,11 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
 
   // 根据响应
   const processReady = async () => {
-    if (state.status === 'ready' && readyCheckedRequest) {
+    if (
+      state.status === 'ready' &&
+      readyCheckedRequest &&
+      !finallyConfig?._closeLoopCheckQrcode
+    ) {
       sleepTime && (await sleep(sleepTime))
       // 再次发起请求
       uniteRequestHandler(readyCheckedRequest)
@@ -114,7 +124,11 @@ export const useQrCode = (options: QrCodeOptions, request: QrCodeRequest) => {
 
   // already 待确认状态的请求方法
   const processAReady = async () => {
-    if (state.status === 'already' && alreadyCheckedRequest) {
+    if (
+      state.status === 'already' &&
+      alreadyCheckedRequest &&
+      !finallyConfig?._closeLoopCheckQrcode
+    ) {
       sleepTime && (await sleep(sleepTime))
       uniteRequestHandler(alreadyCheckedRequest)
     }
