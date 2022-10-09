@@ -51,6 +51,7 @@ export const InputInternationPhone: React.FC<InputInternationPhoneProps> = (
         prefix={
           <VirtualDropdown value={areaCode} onChange={onAreaCodeChange} />
         }
+        maxLength={20}
       />
     </>
   )
