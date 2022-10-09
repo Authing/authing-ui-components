@@ -232,66 +232,6 @@ export const useMethod: (params: {
       }
       return true
     })
-  //   // 特殊浏览器登录方式
-  //   .filter((item) =>
-  //     isWeChatBrowser()
-  //       ? item.provider === SocialConnectionProvider.WECHATMP
-  //       : item.provider !== SocialConnectionProvider.WECHATMP
-  //   )
-  //   .filter((item) =>
-  //     isDingtalkBrowser()
-  //       ? item.provider !== SocialConnectionProvider.WECHATPC
-  //       : true
-  //   )
-  //   .filter((item) => {
-  //     if (isLarkBrowser()) {
-  //       return (
-  //         item.provider === SocialConnectionProvider.LARK_INTERNAL ||
-  //         item.provider === SocialConnectionProvider.LARK_PUBLIC
-  //       )
-  //     } else {
-  //       return true
-  //     }
-  //   })
-  //   .filter((item) => {
-  //     if (isDingtalkBrowser()) {
-  //       return ![
-  //         SocialConnectionProvider.APPLE,
-  //         SocialConnectionProvider.APPLE_WEB,
-  //         SocialConnectionProvider.ALIPAY,
-  //         SocialConnectionProvider.GOOGLE,
-  //       ].includes(item.provider)
-  //     } else {
-  //       return true
-  //     }
-  //   })
-  //   .filter((item) => {
-  //     if (isQQBrowser()) {
-  //       return (
-  //         ![
-  //           SocialConnectionProvider.APPLE,
-  //           SocialConnectionProvider.APPLE_WEB,
-  //           SocialConnectionProvider.GOOGLE,
-  //         ].includes(item.provider) && !item.provider.includes('wechat')
-  //       )
-  //     } else {
-  //       return true
-  //     }
-  //   })
-  //   .filter((item) => {
-  //     if (isQQBuiltInBrowser()) {
-  //       return ![SocialConnectionProvider.ALIPAY].includes(item.provider)
-  //     } else {
-  //       return true
-  //     }
-  //   })
-  //   .filter((item) => {
-  //     if (isWeWorkBuiltInBrowser()) {
-  //       return ![SocialConnectionProvider.WECHATMP].includes(item.provider)
-  //     } else {
-  //       return true
-  //     }
-  //   })
 
   // 在所有身份源下都要隐藏
   const hiddenSocialConnection = [
