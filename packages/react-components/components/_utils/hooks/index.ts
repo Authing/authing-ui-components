@@ -2,7 +2,6 @@ import { useRef, useCallback, useEffect } from 'react'
 import { useMediaQuery } from 'react-responsive'
 import phone from 'phone'
 // import { LanguageMap } from '../../Type'
-import { SocialConnectionProvider } from 'authing-js-sdk'
 import {
   isDingtalkBrowser,
   isLarkBrowser,
@@ -14,7 +13,11 @@ import {
 } from '..'
 import { GuardLocalConfig } from '../../Guard'
 import { getGuardWindow } from '../../Guard/core/useAppendConfig'
-import { ApplicationConfig, SocialConnectionItem } from '../../Type/application'
+import {
+  ApplicationConfig,
+  SocialConnectionItem,
+  SocialConnectionProvider,
+} from '../../Type/application'
 export interface PhoneValidResult {
   isValid: boolean
   phoneNumber: string

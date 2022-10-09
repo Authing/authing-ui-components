@@ -5,16 +5,13 @@ import {
   IG2FCProps,
   IG2FCViewProps,
 } from '../Type'
-import {
-  AuthenticationClient,
-  SocialConnectionProvider,
-  User,
-} from 'authing-js-sdk'
+import { AuthenticationClient, User } from 'authing-js-sdk'
 import { QrCodeAuthenticationClient } from 'authing-js-sdk/build/main/lib/authentication/QrCodeAuthenticationClient'
 import {
   Agreement,
   LoginMethods,
   PasswordLoginMethods,
+  SocialConnectionProvider,
 } from '../Type/application'
 
 export interface LoginConfig extends IG2Config {
