@@ -25,8 +25,8 @@ export enum InputMethodMap {
 interface ResetPasswordProps {
   onReset: any
   publicConfig: any
-  onSend: (type: 'email' | 'phone') => void
-  onSendError: (type: 'email' | 'phone', error: any) => void
+  // onSend: (type: 'email' | 'phone') => void
+  // onSendError: (type: 'email' | 'phone', error: any) => void
 }
 export const ResetPassword = (props: ResetPasswordProps) => {
   const { t } = useTranslation()
@@ -88,12 +88,12 @@ export const ResetPassword = (props: ResetPasswordProps) => {
         if (code === ApiCode.UNSAFE_PASSWORD_TIP) {
           setPasswordErrorTextShow(true)
         }
-        props.onSend(codeMethod)
+        // props.onSend(codeMethod)
         props.onReset(r)
       })
       .catch((e) => {
         submitButtonRef.current.onError()
-        props.onSendError(codeMethod, e)
+        // props.onSendError(codeMethod, e)
         props.onReset(e)
       })
   }

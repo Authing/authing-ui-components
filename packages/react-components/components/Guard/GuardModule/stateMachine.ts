@@ -1,4 +1,4 @@
-import { GuardComponentConfig, GuardLocalConfig } from '../config'
+import { GuardLocalConfig } from '../config'
 import { GuardModuleType } from '../module'
 import isEqual from 'lodash/isEqual'
 import { getGuardWindow } from '../core/useAppendConfig'
@@ -32,7 +32,7 @@ export class GuardStateMachine {
   private order: number = 0
 
   // 总体的配置信息
-  private config: GuardComponentConfig = {}
+  private config: Partial<GuardLocalConfig> = {}
 
   // 历史记录
   private moduleStateHistory: ModuleState[] = []
@@ -137,7 +137,7 @@ export class GuardStateMachine {
     }
   }
 
-  setConfig = (config: GuardLocalConfig) => {
+  setConfig = (config: Partial<GuardLocalConfig>) => {
     this.config = config
   }
 

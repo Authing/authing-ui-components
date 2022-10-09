@@ -1,16 +1,24 @@
-import { AuthenticationClient, CommonMessage } from 'authing-js-sdk'
-import { IG2Config, IG2Events, IG2FCProps, IG2FCViewProps } from '../Type'
+import { AuthenticationClient, CommonMessage, SceneType } from 'authing-js-sdk'
+import {
+  EmailScene,
+  IG2Config,
+  IG2Events,
+  IG2FCProps,
+  IG2FCViewProps,
+} from '../Type'
 
 export interface ForgetPasswordEvents extends IG2Events {
-  onPwdEmailSend?: (authClient: AuthenticationClient) => void
-  onPwdEmailSendError?: (
+  onEmailSend?: (authClient: AuthenticationClient, sence?: EmailScene) => void
+  onEmailSendError?: (
     error: CommonMessage,
-    authClient: AuthenticationClient
+    authClient: AuthenticationClient,
+    sence?: EmailScene
   ) => void
-  onPwdPhoneSend?: (authClient: AuthenticationClient) => void
-  onPwdPhoneSendError?: (
+  onPhoneSend?: (authClient: AuthenticationClient, sence?: SceneType) => void
+  onPhoneSendError?: (
     error: CommonMessage,
-    authClient: AuthenticationClient
+    authClient: AuthenticationClient,
+    sence?: SceneType
   ) => void
   onPwdReset?: (authClient: AuthenticationClient) => void
   onPwdResetError?: (

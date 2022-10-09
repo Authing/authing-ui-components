@@ -148,6 +148,10 @@ export const GuardRegisterCompleteInfoView: React.FC = () => {
 
   const publicConfig = useGuardPublicConfig()
 
+  const events = useGuardEvents()
+
+  const authClient = useGuardAuthClient()
+
   const { get } = useGuardHttpClient()
 
   const config = useGuardFinallyConfig()
@@ -211,10 +215,19 @@ export const GuardRegisterCompleteInfoView: React.FC = () => {
     )
     if (user.statusCode === 200) {
       initData.onRegisterSuccess(user.data)
+      events?.onRegisterInfoCompleted?.(user.data, content, authClient)
     } else {
       user?.onGuardHandling?.()
       const { apiCode, message: errorMessage, data } = user
       initData.onRegisterFailed(apiCode, data, errorMessage)
+      events?.onRegisterInfoCompletedError?.(
+        {
+          code: apiCode,
+          message: errorMessage,
+        },
+        content,
+        authClient
+      )
     }
   }
 

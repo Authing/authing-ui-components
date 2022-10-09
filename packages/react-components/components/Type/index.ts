@@ -63,7 +63,7 @@ const defaultG2Config: IG2Config = {
 
 export interface IG2Events {
   onLoad?: (authClient: AuthenticationClient) => void
-  onLoadError?: (error: CommonMessage) => void
+  onLoadError?: (error: any) => void
   onClose?: () => void
   onLangChange?: (lang: Lang) => void
   // __codePaser?: (code: number) => Function

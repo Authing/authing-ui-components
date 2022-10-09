@@ -16,7 +16,7 @@ export interface CompleteInfoEvents extends IG2Events {
   onRegisterInfoCompleted?: (
     user: User,
     udfs: {
-      definition: any
+      key: any
       value: any
     }[],
     authClient: AuthenticationClient
@@ -24,7 +24,7 @@ export interface CompleteInfoEvents extends IG2Events {
   onRegisterInfoCompletedError?: (
     error: CommonMessage,
     udfs: {
-      definition: any
+      key: any
       value: any
     }[],
     authClient: AuthenticationClient

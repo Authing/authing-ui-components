@@ -1,6 +1,6 @@
 import { LoginMethods } from 'authing-js-sdk'
 import { assembledRequestHost as utilAssembledRequestHost } from '..'
-import { GuardComponentConfig, GuardLocalConfig } from '../../Guard/config'
+import { GuardLocalConfig } from '../../Guard/config'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { AuthingResponse } from '../http'
 import { GuardHttp } from '../guardHttp'
@@ -16,6 +16,13 @@ export const getPublicConfig = (appId: string) => publicConfigMap?.[appId]
 export const setPublicConfig = (appId: string, config: ApplicationConfig) => {
   return (publicConfigMap[appId] = config)
 }
+
+let pageConfigMap: Record<string, GuardPageConfig> = {}
+
+export const getPageConfig = (appId: string) => pageConfigMap?.[appId]
+
+export const setPageConfig = (appId: string, config: GuardPageConfig) =>
+  (pageConfigMap[appId] = config)
 
 const requestPublicConfig = async (
   appId: string,
@@ -48,9 +55,36 @@ const requestPublicConfig = async (
   return getPublicConfig(appId)
 }
 
+const requestGuardPageConfig = async (
+  appId: string,
+  httpClient: GuardHttp
+): Promise<GuardPageConfig> => {
+  let res: AuthingResponse<GuardPageConfig>
+
+  const { get } = httpClient
+
+  try {
+    res = await get<GuardPageConfig>(
+      `/api/v2/applications/${appId}/components-public-config/guard`
+    )
+  } catch (error) {
+    Logger.error('Please check your config or network')
+    throw new Error('Please check your config or network')
+  }
+
+  if (res.code !== 200 || !res.data) {
+    Logger.error(res?.message ?? 'Please check your config')
+    throw new Error(res?.message ?? 'Please check your config')
+  }
+
+  setPageConfig(appId, res.data)
+
+  return getPageConfig(appId)
+}
+
 export const useMergeDefaultConfig = (
   defaultConfig: GuardLocalConfig,
-  config?: GuardComponentConfig
+  config?: Partial<GuardLocalConfig>
 ): GuardLocalConfig | undefined => {
   const [mergedConfig, setMergedConfig] = useState<GuardLocalConfig>()
 
@@ -127,7 +161,15 @@ const assembledRequestHost = (
   return host
 }
 
-export const useMergePublicConfig = (
+/**
+ * 请求服务console关于guard的配置
+ * @param forceUpdate
+ * @param appId
+ * @param config
+ * @param httpClient
+ * @param setError
+ */
+export const useFetchConsoleConfig = (
   forceUpdate: number,
   appId?: string,
   config?: GuardLocalConfig,
@@ -135,18 +177,21 @@ export const useMergePublicConfig = (
   setError?: any
 ) => {
   const [publicConfig, setPublicConfig] = useState<ApplicationConfig>()
-
+  const [pageConfig, setPageConfig] = useState<GuardPageConfig>()
   const initPublicConfig = useCallback(async () => {
     if (httpClient && appId) {
       if (!getPublicConfig(appId)) {
         try {
-          await requestPublicConfig(appId, httpClient)
+          await Promise.all([
+            await requestPublicConfig(appId, httpClient),
+            await requestGuardPageConfig(appId, httpClient),
+          ])
         } catch (error) {
           setError(error)
         }
       }
-
       setPublicConfig(getPublicConfig(appId))
+      setPageConfig(getPageConfig(appId))
     }
   }, [appId, httpClient, setError])
 
@@ -155,76 +200,19 @@ export const useMergePublicConfig = (
   }, [initPublicConfig, forceUpdate])
 
   return useMemo(() => {
-    if (publicConfig && config) {
+    if (publicConfig && config && pageConfig) {
       return {
-        ...mergedPublicConfig(config, publicConfig),
-        host: assembledRequestHost(config, publicConfig),
+        finallyConfig: {
+          ...mergedPublicConfig(config, publicConfig),
+          host: assembledRequestHost(config, publicConfig),
+        },
+        guardPageConfig: pageConfig,
+      }
+    } else {
+      return {
+        finallyConfig: undefined,
+        guardPageConfig: undefined,
       }
     }
-  }, [config, publicConfig])
-}
-
-let pageConfigMap: Record<string, GuardPageConfig> = {}
-
-export const getPageConfig = (appId: string) => pageConfigMap?.[appId]
-
-export const setPageConfig = (appId: string, config: GuardPageConfig) =>
-  (pageConfigMap[appId] = config)
-
-export const requestGuardPageConfig = async (
-  appId: string,
-  httpClient: GuardHttp
-): Promise<GuardPageConfig> => {
-  let res: AuthingResponse<GuardPageConfig>
-
-  const { get } = httpClient
-
-  try {
-    res = await get<GuardPageConfig>(
-      `/api/v2/applications/${appId}/components-public-config/guard`
-    )
-  } catch (error) {
-    Logger.error('Please check your config or network')
-    throw new Error('Please check your config or network')
-  }
-
-  if (res.code !== 200 || !res.data) {
-    Logger.error(res?.message ?? 'Please check your config')
-    throw new Error(res?.message ?? 'Please check your config')
-  }
-
-  setPageConfig(appId, res.data)
-
-  return getPageConfig(appId)
-}
-
-export const useGuardPageConfig = (
-  forceUpdate: number,
-  appId?: string,
-  httpClient?: GuardHttp,
-  serError?: any
-) => {
-  const [pageConfig, setPageConfig] = useState<GuardPageConfig>()
-
-  const initPublicConfig = useCallback(async () => {
-    if (httpClient && appId) {
-      if (!getPageConfig(appId)) {
-        try {
-          await requestGuardPageConfig(appId, httpClient)
-        } catch (error) {
-          serError(error)
-        }
-      }
-
-      setPageConfig(getPageConfig(appId))
-    }
-  }, [appId, httpClient, serError])
-
-  useEffect(() => {
-    initPublicConfig()
-  }, [initPublicConfig, forceUpdate])
-
-  if (pageConfig) {
-    return pageConfig
-  }
+  }, [config, pageConfig, publicConfig])
 }

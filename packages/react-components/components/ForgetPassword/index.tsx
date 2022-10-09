@@ -13,7 +13,6 @@ import {
   useGuardModule,
   useGuardPublicConfig,
 } from '../_utils/context'
-import { CommonMessage } from 'authing-js-sdk'
 
 export const GuardForgetPassword: React.FC = () => {
   const { t } = useTranslation()
@@ -46,16 +45,16 @@ export const GuardForgetPassword: React.FC = () => {
     })
   }
 
-  const onSend = (type: 'phone' | 'email') => {
-    if (type === 'phone') events?.onPwdPhoneSend?.(authClient)
-    if (type === 'email') events?.onPwdEmailSend?.(authClient)
-  }
-  const onSendError = (type: 'phone' | 'email', error: any) => {
-    if (type === 'phone')
-      events?.onPwdPhoneSendError?.(error as CommonMessage, authClient)
-    if (type === 'email')
-      events?.onPwdEmailSendError?.(error as CommonMessage, authClient)
-  }
+  // const onSend = (type: 'phone' | 'email') => {
+  //   if (type === 'phone') events?.onPwdPhoneSend?.(authClient)
+  //   if (type === 'email') events?.onPwdEmailSend?.(authClient)
+  // }
+  // const onSendError = (type: 'phone' | 'email', error: any) => {
+  //   if (type === 'phone')
+  //     events?.onPwdPhoneSendError?.(error as CommonMessage, authClient)
+  //   if (type === 'email')
+  //     events?.onPwdEmailSendError?.(error as CommonMessage, authClient)
+  // }
 
   return (
     <div className="g2-view-container g2-forget-password">
@@ -71,12 +70,7 @@ export const GuardForgetPassword: React.FC = () => {
         <div className="title-explain">{t('user.resetpasswordText1')}</div>
       </div>
       <div className="g2-view-tabs">
-        <ResetPassword
-          onReset={onReset}
-          publicConfig={publicConfig}
-          onSend={onSend}
-          onSendError={onSendError}
-        />
+        <ResetPassword onReset={onReset} publicConfig={publicConfig} />
       </div>
       <div className="g2-tips-line">
         <div

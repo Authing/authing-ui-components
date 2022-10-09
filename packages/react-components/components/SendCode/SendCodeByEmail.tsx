@@ -7,6 +7,8 @@ import { InputProps } from 'antd/lib/input'
 import { SendCode } from './index'
 import { getGuardHttp } from '../_utils/guardHttp'
 import { EmailScene } from '../Type'
+import { useGuardEvents } from '../_utils/context'
+import { useGuardAuthClient } from '../Guard/authClient'
 export interface SendCodeByEmailProps extends InputProps {
   data?: string
   form?: any
@@ -26,16 +28,29 @@ export const SendCodeByEmail: FC<SendCodeByEmailProps> = (props) => {
     ...remainProps
   } = props
   const { t } = useTranslation()
-
+  const events = useGuardEvents()
+  const authClient = useGuardAuthClient()
   const { post } = getGuardHttp()
   const sendEmail = async (email: string) => {
     if (!email) {
       message.error(t('login.inputEmail'))
-      return false
+      return {
+        status: false,
+        error: {
+          code: 400,
+          message: t('login.inputEmail'),
+        },
+      }
     }
     if (!validate('email', email)) {
       message.error(t('common.emailFormatError'))
-      return false
+      return {
+        status: false,
+        error: {
+          code: 400,
+          message: t('common.emailFormatError'),
+        },
+      }
     }
     try {
       const { code, message: tips, apiCode } = await post(
@@ -48,19 +63,33 @@ export const SendCodeByEmail: FC<SendCodeByEmailProps> = (props) => {
       if (apiCode === 2080) {
         // 一分钟只能发一次邮箱验证码的提示信息，特殊处理
         message.error(tips)
-        return false
+        return {
+          status: false,
+          error: {
+            code: apiCode,
+            message: tips,
+          },
+        }
       }
       if (code === 200) {
-        return true
+        return {
+          status: true,
+        }
       } else {
         message.error(t('login.sendCodeTimeout'))
-        return false
+        return {
+          status: false,
+          error: {
+            code,
+            message: t('login.sendCodeTimeout'),
+          },
+        }
       }
       // await await authClient.sendEmail(email, scene)
       // onSend?.()
     } catch (error) {
       // onError?.(error)
-      return false
+      return { status: false, error }
     }
   }
 
@@ -70,9 +99,16 @@ export const SendCodeByEmail: FC<SendCodeByEmailProps> = (props) => {
         return onSendCodeBefore()
           .then(async (b: any) => {
             let email = form ? form.getFieldValue(fieldName || 'email') : data
-            return await sendEmail(email)
+            const { status, error } = await sendEmail(email)
+            if (status) {
+              events?.onEmailSend?.(authClient, scene)
+            } else {
+              events?.onEmailSendError?.(error, authClient, scene)
+            }
+            return status
           })
           .catch((e: any) => {
+            events?.onEmailSendError?.(e, authClient, scene)
             return false
           })
       }}

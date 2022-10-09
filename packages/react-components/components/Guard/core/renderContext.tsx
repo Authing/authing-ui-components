@@ -21,8 +21,7 @@ import { SessionData, trackSession } from '../sso'
 import {
   getPublicConfig,
   useMergeDefaultConfig,
-  useMergePublicConfig,
-  useGuardPageConfig,
+  useFetchConsoleConfig,
 } from '../../_utils/config'
 import { GuardHttp, initGuardHttp } from '../../_utils/guardHttp'
 import { initGuardI18n } from '../../_utils/locales'
@@ -127,7 +126,10 @@ export const RenderContext: React.FC<{
     setHttpClient(httpClient)
   }, [appId, defaultMergedConfig, tenantId])
 
-  const finallyConfig = useMergePublicConfig(
+  /**
+   *
+   */
+  const { finallyConfig, guardPageConfig } = useFetchConsoleConfig(
     forceUpdate,
     appId,
     defaultMergedConfig,
@@ -140,13 +142,14 @@ export const RenderContext: React.FC<{
     finallyConfig,
   })
 
-  // guardPageConfig
-  const guardPageConfig = useGuardPageConfig(
-    forceUpdate,
-    appId,
-    httpClient,
-    setError
-  )
+  // // guardPageConfig
+  // const guardPageConfig = useGuardPageConfig(
+  //   forceUpdate,
+  //   error,
+  //   appId,
+  //   httpClient,
+  //   setError
+  // )
 
   const sdkClient = useInitGuardAuthClient({
     config: finallyConfig,
@@ -282,7 +285,6 @@ export const RenderContext: React.FC<{
   }, [
     appId,
     events,
-    i18nInit,
     defaultMergedConfig,
     finallyConfig,
     httpClient,
@@ -292,14 +294,15 @@ export const RenderContext: React.FC<{
     guardPageConfig,
     iconfontLoaded,
     multipleInstance,
+    i18nInit,
   ])
 
   // TODO 触发 onLoad 事件
   useEffect(() => {
-    if (!contextLoaded) return
+    if (!contextLoaded || error) return
 
     events?.onLoad?.(authClint!)
-  }, [authClint, contextLoaded, events])
+  }, [authClint, contextLoaded, error, events])
 
   const contextValues = useMemo(
     () =>
@@ -343,11 +346,11 @@ export const RenderContext: React.FC<{
 
   const renderContext = useMemo(() => {
     if (!contextValues) return null
-
     return <Provider value={contextValues}>{children}</Provider>
   }, [Provider, children, contextValues])
 
-  const renderErrorContext = useMemo(() => {
+  const RenderErrorContext = useCallback(() => {
+    events?.onLoadError?.(error)
     return (
       <Provider
         value={{
@@ -367,10 +370,10 @@ export const RenderContext: React.FC<{
         {children}
       </Provider>
     )
-  }, [Provider, children, defaultMergedConfig, error])
+  }, [Provider, children, defaultMergedConfig, error, events])
 
   const render = useMemo(() => {
-    if (error) return renderErrorContext
+    if (error) return <RenderErrorContext />
 
     if (contextLoaded || Boolean(defaultMergedConfig)) return renderContext
 
@@ -380,7 +383,7 @@ export const RenderContext: React.FC<{
     defaultMergedConfig,
     error,
     renderContext,
-    renderErrorContext,
+    RenderErrorContext,
   ])
 
   return render

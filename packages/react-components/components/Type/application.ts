@@ -15,7 +15,7 @@ export enum OIDCConnectionMode {
   BACK_CHANNEL = 'BACK_CHANNEL',
 }
 
-export declare enum SocialConnectionProvider {
+export enum SocialConnectionProvider {
   ALIPAY = 'alipay',
   GOOGLE = 'google',
   WECHATPC = 'wechat:pc',

@@ -12,11 +12,11 @@ import { StoreInstance } from './core/hooks/useMultipleAccounts'
 
 export interface GuardEvents
   extends LoginEvents,
-  RegisterEvents,
-  CompleteInfoEvents,
-  ForgetPasswordEvents,
-  IdentityBindingEvents,
-  IdentityBindingAskEvents {
+    RegisterEvents,
+    CompleteInfoEvents,
+    ForgetPasswordEvents,
+    IdentityBindingEvents,
+    IdentityBindingAskEvents {
   onBeforeChangeModule?: (
     key: GuardModuleType,
     initData?: any
@@ -30,10 +30,16 @@ export interface GuardEvents
  * @param events 事件列表
  * @param callback 事件触发时前置函数
  */
-const wrapperEvents = <N extends keyof GuardEvents, T extends (Required<GuardEvents>)[N] = (Required<GuardEvents>)[N]>(eventName: N, events: GuardEvents, callback:
-  (oldEvent: any, ...props: Parameters<T>) => ReturnType<T>) => {
+const wrapperEvents = <
+  N extends keyof GuardEvents,
+  T extends Required<GuardEvents>[N] = Required<GuardEvents>[N]
+>(
+  eventName: N,
+  events: GuardEvents,
+  callback: (oldEvent: any, ...props: Parameters<T>) => ReturnType<T>
+) => {
   // 对于特殊event进行处理
-  const oldEvents = events[eventName];
+  const oldEvents = events[eventName]
   // @ts-ignore TODO: 后续类型处理
   events[eventName] = (...props: Parameters<T>) => {
     callback(oldEvents, ...props)
@@ -86,7 +92,6 @@ const eventsMapping: Partial<GuardEvents> = {
   },
 }
 
-
 export const guardEventsHijacking = (
   events: GuardEvents,
   openEventsMapping?: boolean
@@ -118,10 +123,10 @@ export const GuardEventsCamelToKebabMapping = {
   onRegister: 'register',
   onBeforeRegister: 'before-register',
   onRegisterError: 'register-error',
-  onPwdEmailSend: 'pwd-email-send',
-  onPwdEmailSendError: 'pwd-email-send-error',
-  onPwdPhoneSend: 'pwd-phone-send',
-  onPwdPhoneSendError: 'pwd-phone-send-error',
+  onEmailSend: 'email-send',
+  onEmailSendError: 'email-send-error',
+  onPhoneSend: 'phone-send',
+  onPhoneSendError: 'phone-send-error',
   onPwdReset: 'pwd-reset',
   onPwdResetError: 'pwd-reset-error',
   onClose: 'close',
@@ -130,6 +135,7 @@ export const GuardEventsCamelToKebabMapping = {
   onRegisterInfoCompleted: 'register-info-completed',
   onRegisterInfoCompletedError: 'register-info-completed-error',
   onLangChange: 'lang-change',
+  onBeforeChangeModule: 'before-change-module',
 } as const
 
 export interface GuardEventsKebabToCamelType {
@@ -149,14 +155,14 @@ export interface GuardEventsKebabToCamelType {
   register: GuardEvents['onRegister']
   // 注册失败
   'register-error': GuardEvents['onRegisterError']
-  // 忘记密码邮件发送成功
-  'pwd-email-send': GuardEvents['onPwdEmailSend']
-  // 忘记密码邮件发送失败
-  'pwd-email-send-error': GuardEvents['onPwdEmailSendError']
-  // 忘记密码手机验证码发送成功
-  'pwd-phone-send': GuardEvents['onPwdPhoneSend']
-  // 忘记密码手机验证码发送失败
-  'pwd-phone-send-error': GuardEvents['onPwdPhoneSendError']
+  // 邮件发送成功
+  'email-send': GuardEvents['onEmailSend']
+  // 邮件发送失败
+  'email-send-error': GuardEvents['onEmailSendError']
+  // 手机验证码发送成功
+  'phone-send': GuardEvents['onPhoneSend']
+  // 手机验证码发送失败
+  'phone-send-error': GuardEvents['onPhoneSendError']
   // 重置密码成功
   'pwd-reset': GuardEvents['onPwdReset']
   // 重置密码失败
@@ -173,4 +179,6 @@ export interface GuardEventsKebabToCamelType {
   'register-info-completed-error': GuardEvents['onRegisterInfoCompletedError']
   // 语言切换
   'lang-change': GuardEvents['onLangChange']
+  // 切换模块前
+  'before-change-module': GuardEvents['onBeforeChangeModule']
 }
