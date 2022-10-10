@@ -380,7 +380,7 @@ export const assembledRequestHost = (
   }`
 }
 
-export enum PasswordStrength {
+export const enum PasswordStrength {
   NoCheck,
   Low,
   Middle,

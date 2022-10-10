@@ -1,6 +1,6 @@
 import { GuardModuleType } from '../../Guard'
 
-export enum CodeAction {
+export const enum CodeAction {
   // 切换 Module
   CHANGE_MODULE = 'changeModule',
   // 渲染 错误信息
@@ -9,7 +9,7 @@ export enum CodeAction {
   FLOW_END = 'flowEnd',
 }
 
-export enum ApiCode {
+export const enum ApiCode {
   IDENTITY_BINDING_ASK = 1641,
 
   IDENTITY_BINDING = 1640,

@@ -1,6 +1,6 @@
 import { getGuardHttp } from '../_utils/guardHttp'
 
-export enum TotpRecoveryCodeBusinessAction {
+export const enum TotpRecoveryCodeBusinessAction {
   RecoveryTotp = 'recovery-totp',
   ConfirmTotpRecoveryCode = 'confirm-totp-recovery-code',
 }

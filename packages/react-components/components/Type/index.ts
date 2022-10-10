@@ -8,7 +8,7 @@ export type { CommonMessage, User }
 
 export type Lang = 'zh-CN' | 'en-US' | 'zh-TW' | 'ja-JP'
 
-export enum GuardMode {
+export const enum GuardMode {
   Modal = 'modal',
   Normal = 'normal',
 }
@@ -81,12 +81,12 @@ export const LanguageMap: any = {
   'zh-CN': 'CN',
 }
 
-export enum InputMethod {
+export const enum InputMethod {
   EmailCode = 'email-code',
   PhoneCode = 'phone-code',
 }
 
-export enum GuardPageSene {
+export const enum GuardPageSene {
   Global = 'global',
 }
 
@@ -97,7 +97,7 @@ export interface GuardPageConfig {
   }
 }
 
-export enum EmailScene {
+export const enum EmailScene {
   // 通知模版
   // - 欢迎邮件 WELCOME
   WELCOME_EMAIL = 'WELCOME_EMAIL',

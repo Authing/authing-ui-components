@@ -1,4 +1,3 @@
-import { LoginMethods } from 'authing-js-sdk'
 import { assembledRequestHost as utilAssembledRequestHost } from '..'
 import { GuardLocalConfig } from '../../Guard/config'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -7,7 +6,11 @@ import { GuardHttp } from '../guardHttp'
 import { corsVerification } from '../corsVerification'
 import { Logger } from '../logger'
 import { GuardPageConfig } from '../../Type'
-import { ApplicationConfig, RegisterMethods } from '../../Type/application'
+import {
+  ApplicationConfig,
+  LoginMethods,
+  RegisterMethods,
+} from '../../Type/application'
 
 let publicConfigMap: Record<string, ApplicationConfig> = {}
 

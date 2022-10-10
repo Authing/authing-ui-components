@@ -1,7 +1,7 @@
 import { Lang } from '..'
 import { PasswordStrength } from '../_utils'
 
-export enum LoginMethods {
+export const enum LoginMethods {
   LDAP = 'ldap',
   AppQr = 'app-qrcode',
   Password = 'password',
@@ -10,12 +10,12 @@ export enum LoginMethods {
   AD = 'ad', // 对应企业身份源的 Windows AD 登录
   WechatMpQrcode = 'wechatmp-qrcode', // 微信扫码关注登录
 }
-export enum OIDCConnectionMode {
+export const enum OIDCConnectionMode {
   FRONT_CHANNEL = 'FRONT_CHANNEL',
   BACK_CHANNEL = 'BACK_CHANNEL',
 }
 
-export enum SocialConnectionProvider {
+export const enum SocialConnectionProvider {
   ALIPAY = 'alipay',
   GOOGLE = 'google',
   WECHATPC = 'wechat:pc',
@@ -43,7 +43,7 @@ export enum SocialConnectionProvider {
   FACEBOOK = 'facebook',
 }
 
-export enum Protocol {
+export const enum Protocol {
   AD = 'ad',
   CAS = 'cas',
   LDAP = 'ldap',
@@ -120,7 +120,7 @@ export interface SocialConnectionItem {
   tooltip: Record<Lang, string>
 }
 
-export enum RegisterMethods {
+export const enum RegisterMethods {
   Email = 'email',
   Phone = 'phone',
   EmailCode = 'emailCode',

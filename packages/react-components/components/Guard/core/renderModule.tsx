@@ -54,7 +54,7 @@ message.config({
   prefixCls: `${PREFIX_CLS}-message`,
 })
 
-export enum LangMAP {
+export const enum LangMAP {
   zhCn = 'zh-CN',
   enUs = 'en-US',
   jaJp = 'ja-JP',

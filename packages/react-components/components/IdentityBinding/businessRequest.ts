@@ -1,5 +1,5 @@
 import { getGuardHttp, useGuardHttp } from '../_utils/guardHttp'
-export enum IdentityBindingBusinessAction {
+export const enum IdentityBindingBusinessAction {
   PhoneCode = 'phone-code',
   EmailCode = 'emial-code',
   Password = 'password',
@@ -19,7 +19,7 @@ export interface PasswordParams {
   captchaCode: string
 }
 
-export enum IdentityBindingAction {
+export const enum IdentityBindingAction {
   CreateUser = 'create-federation-account',
   BindByPassword = 'bind-identity-by-password',
   BindByPhoneCode = 'bind-identity-by-phone-code',

@@ -2,7 +2,7 @@ import { User } from 'authing-js-sdk'
 import { getGuardHttp } from '../_utils/guardHttp'
 import { CompleteInfoRequest, RegisterCompleteInfoInitData } from './interface'
 
-export enum CompleteInfoAuthFlowAction {
+export const enum CompleteInfoAuthFlowAction {
   Complete = 'complete-completion',
   Skip = 'skip-completion',
 }

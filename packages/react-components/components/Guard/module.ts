@@ -1,4 +1,4 @@
-export enum GuardModuleType {
+export const enum GuardModuleType {
   ERROR = 'error',
   LOGIN = 'login',
   REGISTER = 'register',

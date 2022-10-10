@@ -1,6 +1,6 @@
 import { getGuardHttp } from '../_utils/guardHttp'
 
-export enum ChangePasswordBusinessAction {
+export const enum ChangePasswordBusinessAction {
   ResetPassword = 'reset-password-first-time',
   FirstLoginReset = 'reset-password-forced',
   ResetPasswordStrengthDetection = 'reset-password-strength-detection',

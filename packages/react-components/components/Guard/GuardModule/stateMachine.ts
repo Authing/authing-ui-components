@@ -8,7 +8,7 @@ export interface ModuleState {
   initData?: any
 }
 
-export enum ActionType {
+export const enum ActionType {
   ChangeModule = 'ChangeModule',
   Back = 'Back',
   Init = 'Init',

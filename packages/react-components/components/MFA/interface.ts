@@ -19,7 +19,7 @@ export interface MFAEvents extends IG2Events {
   onLogin?: (user: User, authClient: AuthenticationClient) => void
 }
 
-export enum MFAType {
+export const enum MFAType {
   SMS = 'SMS',
   EMAIL = 'EMAIL',
   TOTP = 'OTP',

@@ -1,6 +1,6 @@
 import { getGuardHttp } from '../_utils/guardHttp'
 
-export enum BindTotpBusinessAction {
+export const enum BindTotpBusinessAction {
   VerifyTotpFirstTime = 'verify-totp-first-time',
   ConfirmTotpRecoveryCode = 'confirm-totp-recovery-code',
 }

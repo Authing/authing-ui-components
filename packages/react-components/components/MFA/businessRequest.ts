@@ -1,7 +1,7 @@
 import { useGuardIsAuthFlow } from '../_utils/context'
 import { getGuardHttp } from '../_utils/guardHttp'
 
-export enum MfaBusinessAction {
+export const enum MfaBusinessAction {
   VerifyEmail = 'verify-email',
   VerifySms = 'verify-sms',
   VerifyTotp = 'verify-totp',
