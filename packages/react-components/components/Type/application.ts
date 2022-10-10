@@ -10,6 +10,7 @@ export const enum LoginMethods {
   AD = 'ad', // 对应企业身份源的 Windows AD 登录
   WechatMpQrcode = 'wechatmp-qrcode', // 微信扫码关注登录
 }
+
 export const enum OIDCConnectionMode {
   FRONT_CHANNEL = 'FRONT_CHANNEL',
   BACK_CHANNEL = 'BACK_CHANNEL',

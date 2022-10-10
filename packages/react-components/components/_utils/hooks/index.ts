@@ -179,7 +179,7 @@ export const parsePhone = (
   return { countryCode, phoneNumber }
 }
 
-export enum SocialConnectionEvent {
+export const enum SocialConnectionEvent {
   Message = 'message',
   Auth = 'auth',
 }
