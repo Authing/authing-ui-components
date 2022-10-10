@@ -7,7 +7,7 @@ import { GuardModuleType } from '../Guard/module'
 import { RegisterWithEmail } from './core/WithEmail'
 import { RegisterWithCode } from './core/WithCode'
 import { getLoginTypePipe, tabSort } from '../_utils'
-import { i18n } from '../_utils/locales'
+import { fallbackLng, i18n } from '../_utils/locales'
 import {
   useGuardEvents,
   useGuardFinallyConfig,
@@ -85,7 +85,10 @@ export const GuardRegisterView: React.FC = () => {
       //availableAt 0或者null-注册时，1-登录时，2-注册和登录时
       agreements: agreementEnabled
         ? config?.agreements?.filter(
-            (agree) => agree.lang === i18n.language && agree?.availableAt !== 1
+            (agree) =>
+              fallbackLng(i18n.language).find((lng) =>
+                lng.includes(agree.lang)
+              ) && agree?.availableAt !== 1
           ) ?? []
         : [],
       publicConfig: publicConfig,

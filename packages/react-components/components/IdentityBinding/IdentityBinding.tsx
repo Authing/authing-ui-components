@@ -15,7 +15,7 @@ import {
   useGuardModule,
   useGuardPublicConfig,
 } from '../_utils/context'
-import { i18n } from '../_utils/locales'
+import { fallbackLng, i18n } from '../_utils/locales'
 import {
   IdentityBindingBusinessAction,
   useIdentityBindingBusinessRequest,
@@ -137,7 +137,10 @@ export const GuardIdentityBindingView: React.FC = () => {
     () =>
       agreementEnabled
         ? config?.agreements?.filter(
-            (agree) => agree.lang === i18n.language && !!agree?.availableAt
+            (agree) =>
+              fallbackLng(i18n.language).find((lng) =>
+                lng.includes(agree.lang)
+              ) && !!agree?.availableAt
           ) ?? []
         : [],
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -22,7 +22,7 @@ import { MultipleAccounts } from './multipleAccounts'
 import { GuardModuleType } from '../Guard/module'
 import { IconFont } from '../IconFont'
 import { ChangeLanguage } from '../ChangeLanguage'
-import { i18n } from '../_utils/locales'
+import { fallbackLng, i18n } from '../_utils/locales'
 
 import './styles.less'
 import {
@@ -269,7 +269,9 @@ export const GuardLoginView = () => {
       agreementEnabled
         ? config?.agreements?.filter(
             (agree) =>
-              agree.lang === i18n.language &&
+              fallbackLng(i18n.language).find((lng) =>
+                lng.includes(agree.lang)
+              ) &&
               (config?.autoRegister || !!agree?.availableAt)
           ) ?? []
         : [],
