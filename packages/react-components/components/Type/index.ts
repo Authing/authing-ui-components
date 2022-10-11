@@ -3,7 +3,6 @@ import { GuardModuleType } from '../Guard/module'
 import { FacePlugin } from '../_utils/facePlugin/interface'
 import { ApplicationConfig } from './application'
 export * from './application'
-
 export type { CommonMessage, User }
 
 export type Lang = 'zh-CN' | 'en-US' | 'zh-TW' | 'ja-JP'

@@ -1,5 +1,6 @@
 import { Lang } from '..'
 import { PasswordStrength } from '../_utils'
+export * from 'authing-js-sdk'
 
 export const enum LoginMethods {
   LDAP = 'ldap',
