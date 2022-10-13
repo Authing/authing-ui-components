@@ -1,5 +1,5 @@
 import React from 'react'
-import { useGuardHttpClient } from '../../_utils/context'
+import { useGuardEvents, useGuardHttpClient } from '../../_utils/context'
 import { message } from 'antd'
 import { QrCode } from '../../Qrcode'
 import { CodeStatus } from '../../Qrcode/UiQrCode'
@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { StoreInstance } from '../../Guard/core/hooks/useMultipleAccounts'
 import { LoginMethods } from '../..'
 import { isWeChatBrowser } from '../../_utils'
+import { useGuardAuthClient } from '../../Guard/authClient'
 interface LoginWithWechatmpQrcodeProps {
   // onLogin: any
   onLoginSuccess: any
@@ -29,6 +30,10 @@ export const LoginWithWechatmpQrcode = (
   const { t } = useTranslation()
 
   const { responseIntercept } = useGuardHttpClient()
+
+  const events = useGuardEvents()
+
+  const authClient = useGuardAuthClient()
 
   if (!canLoop) {
     return null
@@ -52,9 +57,18 @@ export const LoginWithWechatmpQrcode = (
    * @param status
    * @param data
    */
-  const onStatusChange = (status: CodeStatus, data: QrCodeResponse) => {
+  const onStatusChange = async (status: CodeStatus, data: QrCodeResponse) => {
     switch (status) {
       case 'success':
+        if (events?.onBeforeLogin) {
+          const isContinue = await events?.onBeforeLogin(
+            { type: LoginMethods.WechatMpQrcode, data },
+            authClient
+          )
+          if (!isContinue) {
+            break
+          }
+        }
         props.multipleInstance &&
           props.multipleInstance.setLoginWay(
             'qrcode',

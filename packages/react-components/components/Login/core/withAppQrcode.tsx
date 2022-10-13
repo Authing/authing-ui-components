@@ -3,11 +3,12 @@ import React, { useRef } from 'react'
 import { CodeStatus } from '../../Qrcode/UiQrCode'
 import { QrCodeResponse } from '../../Qrcode/hooks/usePostQrCode'
 import { message } from 'antd'
-import { useGuardHttpClient } from '../../_utils/context'
+import { useGuardEvents, useGuardHttpClient } from '../../_utils/context'
 import { WorkQrCodeRef } from '../../Qrcode/WorkQrCode'
 import { useTranslation } from 'react-i18next'
 import { StoreInstance } from '../../Guard/core/hooks/useMultipleAccounts'
 import { LoginMethods } from '../..'
+import { useGuardAuthClient } from '../../Guard/authClient'
 
 interface LoginWithAppQrcodeProps {
   // onLogin: any
@@ -23,6 +24,10 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
   const { canLoop } = props
 
   const { responseIntercept } = useGuardHttpClient()
+
+  const events = useGuardEvents()
+
+  const authClient = useGuardAuthClient()
 
   const { t } = useTranslation()
 
@@ -46,9 +51,18 @@ export const LoginWithAppQrcode = (props: LoginWithAppQrcodeProps) => {
    * @param status
    * @param data
    */
-  const onStatusChange = (status: CodeStatus, data: QrCodeResponse) => {
+  const onStatusChange = async (status: CodeStatus, data: QrCodeResponse) => {
     switch (status) {
       case 'success':
+        if (events?.onBeforeLogin) {
+          const isContinue = await events?.onBeforeLogin(
+            { type: LoginMethods.AppQr, data },
+            authClient
+          )
+          if (!isContinue) {
+            break
+          }
+        }
         props.multipleInstance &&
           props.multipleInstance.setLoginWay('qrcode', LoginMethods.AppQr)
         props.onLoginSuccess(data)

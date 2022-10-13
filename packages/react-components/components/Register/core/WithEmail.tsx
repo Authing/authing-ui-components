@@ -63,9 +63,9 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         try {
           const canRegister = await onBeforeRegister(
             {
-              type: RegisterMethods.Phone,
+              type: RegisterMethods.Email,
               data: {
-                phone: values.phone,
+                identity: values.email,
                 password: values.password,
                 code: values.code,
               },

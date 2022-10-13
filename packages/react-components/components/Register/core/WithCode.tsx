@@ -121,7 +121,7 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
             {
               type: RegisterMethods.Phone,
               data: {
-                phone: values.phone,
+                identity: values.phone,
                 password: values.password,
                 code: values.code,
               },
@@ -322,9 +322,9 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
         try {
           const canRegister = await onBeforeRegister(
             {
-              type: RegisterMethods.Phone,
+              type: RegisterMethods.EmailCode,
               data: {
-                phone: values.phone,
+                identity: values.email,
                 password: values.password,
                 code: values.code,
               },

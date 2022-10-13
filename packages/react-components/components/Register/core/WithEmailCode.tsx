@@ -7,7 +7,6 @@ import { Agreements } from '../components/Agreements'
 import SubmitButton from '../../SubmitButton'
 import CustomFormItem from '../../ValidatorRules'
 import { IconFont } from '../../IconFont'
-import { RegisterMethods } from 'authing-js-sdk'
 import { useIsChangeComplete } from '../utils'
 import { useGuardFinallyConfig, useGuardModule } from '../../_utils/context'
 import { GuardModuleType } from '../../Guard'
@@ -19,6 +18,7 @@ import {
   Agreement,
   ApplicationConfig,
   LoginMethods,
+  RegisterMethods,
 } from '../../Type/application'
 // ! 废弃 🚒
 export interface RegisterWithEmailCodeProps {
@@ -73,9 +73,9 @@ export const RegisterWithEmailCode: React.FC<RegisterWithEmailCodeProps> = ({
         try {
           const canRegister = await onBeforeRegister(
             {
-              type: RegisterMethods.Phone,
+              type: RegisterMethods.EmailCode,
               data: {
-                phone: values.phone,
+                identity: values.email,
                 password: values.password,
                 code: values.code,
               },
