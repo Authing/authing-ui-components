@@ -32,7 +32,7 @@ export const ChangeLanguage = (props: {
   langRange?: string[]
 }) => {
   const { langRange = ['zh-CN', 'zh-TW', 'en-US', 'ja-JP'] } = props
-
+  console.log(langRange)
   const { onLangChange } = props
   const { i18n } = useTranslation()
   const guardPageConfig = useGuardPageConfig()
@@ -70,18 +70,12 @@ export const ChangeLanguage = (props: {
       label: string
     }[] = []
 
-    if (langRange) {
-      menuItem = Object.keys(LngTextMapping)
-        .filter((lng) => langRange.includes(lng as Lang))
-        .map((lng) => ({
-          key: lng,
-          label: LngTextMapping[lng as Lang].label,
-        }))
-    }
-    menuItem = Object.keys(LngTextMapping).map((lng) => ({
-      key: lng,
-      label: LngTextMapping[lng as Lang].label,
-    }))
+    menuItem = Object.keys(LngTextMapping)
+      .filter((lng) => langRange.includes(lng as Lang))
+      .map((lng) => ({
+        key: lng,
+        label: LngTextMapping[lng as Lang].label,
+      }))
 
     return (
       <Menu>
