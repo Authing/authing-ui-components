@@ -270,7 +270,9 @@ export const useMethod: (params: {
       ]
 
       // 各个浏览器下特殊的身份源隐藏规则
-      const hiddenSocialConnectionInWeChatBrowser: string[] = []
+      const hiddenSocialConnectionInWeChatBrowser: string[] = [
+        SocialConnectionProvider.WECHATPC,
+      ]
 
       socialConnectionObjs = socialConnectionObjs
         .filter(
