@@ -39,7 +39,7 @@ export interface IG2Config {
   title?: string
   logo?: string
   lang?: string
-  langRange?: string[]
+  langRange?: Lang[]
   host: string
   isHost?: boolean // 判断是否处于托管页面
   mode: GuardMode

@@ -29,10 +29,9 @@ export const LngTextMapping: Record<
 
 export const ChangeLanguage = (props: {
   onLangChange?: (lang: Lang) => void
-  langRange?: string[]
+  langRange?: Lang[]
 }) => {
   const { langRange = ['zh-CN', 'zh-TW', 'en-US', 'ja-JP'] } = props
-  console.log(langRange)
   const { onLangChange } = props
   const { i18n } = useTranslation()
   const guardPageConfig = useGuardPageConfig()
