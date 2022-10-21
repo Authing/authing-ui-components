@@ -35,7 +35,7 @@
     "registry": "https://registry.npmjs.org"
   },
   "dependencies": {
-    "@authing/native-js-ui-components": "4.0.0"
+    "@authing/native-js-ui-components": "4.0.0-alpha.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
