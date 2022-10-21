@@ -16,18 +16,17 @@ export class AppComponent {
   visible = true;
   appId = '5f6265c67ff6fdae64ec516e';
   config = {
-    target: '#authing_guard_container',
-    mode: 'normal',
-
+    // target: '#authing_guard_container',
+    mode: 'modal',
     // apiHost: 'https://lb68p7-demo.authing.cn',
     // loginMethods: Object.values(LoginMethods),
-    logo:
-      'https://files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png',
-    title: 'Authing',
+    // logo:
+    //   'https://files.authing.co/user-contents/photos/0a4c99ff-b8ce-4030-aaaf-584c807cb21c.png',
+    // title: 'Authing',
     // defaultLoginMethod: LoginMethods.LDAP,
     // registerMethods: Object.values(RegisterMethods),
     // defaultRegisterMethod: RegisterMethods.Email,
-    defaultScenes: GuardModuleType.LOGIN,
+    // defaultScenes: GuardModuleType.LOGIN,
     // socialConnections: Object.values(SocialConnections),
     // enterpriseConnections: ["oidc1"],
     // autoRegister: true,
