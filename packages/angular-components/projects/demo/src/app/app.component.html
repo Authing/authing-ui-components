@@ -6,16 +6,17 @@
 <!-- * * * * * * * * * Delete the template below * * * * * * * * * * -->
 <!-- * * * * * * * to get started with your project! * * * * * * * * -->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
-<guard
-  [appId]="appId"
-  [config]="config"
-  [visible]="visible"
-  (onLoginError)="onLoginError($event)"
-  (onLoad)="onLoad($event)"
-  (onClose)="onClose()"
-  (onLogin)="onLogin($event)"
-></guard>
+<div id="authing_guard_container">
+  <guard
+    [appId]="appId"
+    [config]="config"
+    [visible]="visible"
+    (onLoginError)="onLoginError($event)"
+    (onLoad)="onLoad($event)"
+    (onClose)="onClose()"
+    (onLogin)="onLogin($event)"
+  ></guard>
+</div>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * -->

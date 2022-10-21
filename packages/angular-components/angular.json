@@ -41,9 +41,7 @@
               "projects/ng-ui-components/tsconfig.lib.json",
               "projects/ng-ui-components/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -72,7 +70,8 @@
               "projects/demo/src/favicon.ico",
               "projects/demo/src/assets"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": ["@authing/react-ui-components"]
           },
           "configurations": {
             "production": {
@@ -144,9 +143,7 @@
               "projects/demo/tsconfig.spec.json",
               "projects/demo/e2e/tsconfig.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {

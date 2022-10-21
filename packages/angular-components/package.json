@@ -1,9 +1,9 @@
 {
   "name": "angular-components",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --port=1024",
     "build": "ng build",
     "build:lib": "ng build NgUIComponent --prod",
     "test": "ng test",
@@ -20,7 +20,7 @@
     "@angular/platform-browser": "~10.2.0",
     "@angular/platform-browser-dynamic": "~10.2.0",
     "@angular/router": "~10.2.0",
-    "@authing/native-js-ui-components": "4.0.0",
+    "@authing/native-js-ui-components": "4.0.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
