@@ -3,26 +3,9 @@
 </template>
 
 <script>
-import {
-  getAuthClient,
-  initAuthClient,
-  GuardMode,
-  GuardScenes,
-  LoginMethods,
-  RegisterMethods,
-  Guard as NativeGuard,
-  GuardEventsCamelToKebabMapping,
-} from "@authing/native-js-ui-components";
+import { Guard as NativeGuard } from "@authing/native-js-ui-components";
 import "@authing/native-js-ui-components/lib/index.min.css";
-
-export {
-  getAuthClient,
-  initAuthClient,
-  GuardMode,
-  GuardScenes,
-  LoginMethods,
-  RegisterMethods,
-};
+export * from "@authing/native-js-ui-components";
 
 const callbackEvent = ["before-login", "before-register"];
 
@@ -133,9 +116,7 @@ export default {
     });
 
     const evts = Object.values(GuardEventsCamelToKebabMapping);
-    const kebabToCamelMap = Object.entries(
-      GuardEventsCamelToKebabMapping
-    ).reduce((acc, [camel, kebab]) => {
+    const kebabToCamelMap = Object.entries(GuardEventsCamelToKebabMapping).reduce((acc, [camel, kebab]) => {
       return Object.assign({}, acc, {
         [kebab]: camel,
       });
@@ -161,9 +142,7 @@ export default {
       });
     }, {});
 
-    evts.forEach((evtName) =>
-      this.guardInstance.on(evtName, listeners[evtName])
-    );
+    evts.forEach((evtName) => this.guardInstance.on(evtName, listeners[evtName]));
 
     if (this.localVisible) {
       this.guardInstance.show();

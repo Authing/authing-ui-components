@@ -47,17 +47,17 @@ export class GuardComponent implements OnInit, OnChanges {
   @Output() onRegisterError = new EventEmitter<
     Parameters<GuardEvents['onRegisterError']>
   >();
-  @Output() onPwdEmailSend = new EventEmitter<
-    Parameters<GuardEvents['onPwdEmailSend']>
+  @Output() onEmailSend = new EventEmitter<
+    Parameters<GuardEvents['onEmailSend']>
   >();
-  @Output() onPwdEmailSendError = new EventEmitter<
-    Parameters<GuardEvents['onPwdEmailSendError']>
+  @Output() onEmailSendError = new EventEmitter<
+    Parameters<GuardEvents['onEmailSendError']>
   >();
-  @Output() onPwdPhoneSend = new EventEmitter<
-    Parameters<GuardEvents['onPwdPhoneSend']>
+  @Output() onPhoneSend = new EventEmitter<
+    Parameters<GuardEvents['onPhoneSend']>
   >();
-  @Output() onPwdPhoneSendError = new EventEmitter<
-    Parameters<GuardEvents['onPwdPhoneSendError']>
+  @Output() onPhoneSendError = new EventEmitter<
+    Parameters<GuardEvents['onPhoneSendError']>
   >();
   @Output() onPwdReset = new EventEmitter<
     Parameters<GuardEvents['onPwdReset']>
@@ -70,7 +70,6 @@ export class GuardComponent implements OnInit, OnChanges {
   @Output() onLangChange = new EventEmitter<
     Parameters<GuardEvents['onLangChange']>
   >();
-
   ngAfterViewInit() {
     // @ts-ignore
 

@@ -2,43 +2,24 @@
  * Public API Surface of authing-guard
  */
 
-import {
-  User,
-  GuardMode,
-  GuardScenes,
-  LoginMethods,
-  getAuthClient,
-  CommonMessage,
-  initAuthClient,
-  RegisterMethods,
-  AuthenticationClient,
-  GuardEventsHandlerKebab,
-  UserConfig,
-  GuardEventsHandler,
-} from '@authing/native-js-ui-components';
+// import {
+//   GuardMode,
+//   GuardScenes,
+//   LoginMethods,
+//   CommonMessage,
+//   RegisterMethods,
+//   AuthenticationClient,
+// } from '@authing/native-js-ui-components';
 
-export * from './lib/AuthingGuard/authing-guard.service';
-export * from './lib/AuthingGuard/authing-guard.component';
-export * from './lib/AuthingGuard/authing-guard.module';
+// export * from './lib/AuthingGuard/authing-guard.service';
+// export * from './lib/AuthingGuard/authing-guard.component';
+// export * from './lib/AuthingGuard/authing-guard.module';
 
 export * from './lib/Guard/guard.service';
 export * from './lib/Guard/guard.component';
 export * from './lib/Guard/guard.module';
+export * from '@authing/native-js-ui-components/components/index';
 
-export type {
-  User,
-  UserConfig,
-  CommonMessage,
-  GuardEventsHandler,
-  AuthenticationClient,
-  GuardEventsHandlerKebab,
-};
+// export type { CommonMessage, AuthenticationClient };
 
-export {
-  GuardMode,
-  GuardScenes,
-  LoginMethods,
-  getAuthClient,
-  initAuthClient,
-  RegisterMethods,
-};
+// export { GuardMode, GuardScenes, LoginMethods, RegisterMethods };

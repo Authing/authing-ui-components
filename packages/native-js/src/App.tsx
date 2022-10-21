@@ -4,7 +4,6 @@ import { Guard, GuardEventsCamelToKebabMapping, GuardMode } from "./components";
 
 function App() {
   console.log(GuardEventsCamelToKebabMapping);
-
   useEffect(() => {
     const guard = new Guard("62cd66dc014378042b55154f", {
       target: ".App",
