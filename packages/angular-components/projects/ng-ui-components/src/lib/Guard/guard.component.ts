@@ -25,50 +25,55 @@ import {
 export class GuardComponent implements OnInit, OnChanges {
   constructor() {}
 
-  guard: NativeGuard;
-
+  @Input() guard!: NativeGuard;
   @Input() appId?: string;
   @Input() visible?: boolean;
   @Input() tenantId?: string;
   @Input() authClient?: AuthenticationClient;
   @Input() config?: Partial<GuardLocalConfig>;
 
-  @Output() onLoad = new EventEmitter<Parameters<GuardEvents['onLoad']>>();
-  @Output() onLoadError = new EventEmitter<
-    Parameters<GuardEvents['onLoadError']>
+  @Output() onLoad = new EventEmitter<
+    Parameters<Required<GuardEvents>['onLoad']>
   >();
-  @Output() onLogin = new EventEmitter<Parameters<GuardEvents['onLogin']>>();
+  @Output() onLoadError = new EventEmitter<
+    Parameters<Required<GuardEvents>['onLoadError']>
+  >();
+  @Output() onLogin = new EventEmitter<
+    Parameters<Required<GuardEvents>['onLogin']>
+  >();
   @Output() onLoginError = new EventEmitter<
-    Parameters<GuardEvents['onLoginError']>
+    Parameters<Required<GuardEvents>['onLoginError']>
   >();
   @Output() onRegister = new EventEmitter<
-    Parameters<GuardEvents['onRegister']>
+    Parameters<Required<GuardEvents>['onRegister']>
   >();
   @Output() onRegisterError = new EventEmitter<
-    Parameters<GuardEvents['onRegisterError']>
+    Parameters<Required<GuardEvents>['onRegisterError']>
   >();
   @Output() onEmailSend = new EventEmitter<
-    Parameters<GuardEvents['onEmailSend']>
+    Parameters<Required<GuardEvents>['onEmailSend']>
   >();
   @Output() onEmailSendError = new EventEmitter<
-    Parameters<GuardEvents['onEmailSendError']>
+    Parameters<Required<GuardEvents>['onEmailSendError']>
   >();
   @Output() onPhoneSend = new EventEmitter<
-    Parameters<GuardEvents['onPhoneSend']>
+    Parameters<Required<GuardEvents>['onPhoneSend']>
   >();
   @Output() onPhoneSendError = new EventEmitter<
-    Parameters<GuardEvents['onPhoneSendError']>
+    Parameters<Required<GuardEvents>['onPhoneSendError']>
   >();
   @Output() onPwdReset = new EventEmitter<
-    Parameters<GuardEvents['onPwdReset']>
+    Parameters<Required<GuardEvents>['onPwdReset']>
   >();
   @Output() onPwdResetError = new EventEmitter<
-    Parameters<GuardEvents['onPwdResetError']>
+    Parameters<Required<GuardEvents>['onPwdResetError']>
   >();
-  @Output() onClose = new EventEmitter<Parameters<GuardEvents['onClose']>>();
+  @Output() onClose = new EventEmitter<
+    Parameters<Required<GuardEvents>['onClose']>
+  >();
 
   @Output() onLangChange = new EventEmitter<
-    Parameters<GuardEvents['onLangChange']>
+    Parameters<Required<GuardEvents>['onLangChange']>
   >();
   ngAfterViewInit() {
     // @ts-ignore
@@ -98,7 +103,7 @@ export class GuardComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {}
 
-  ngOnChanges(v) {
+  ngOnChanges() {
     if (this.visible !== undefined && this.guard) {
       if (this.visible) {
         this.guard?.show();

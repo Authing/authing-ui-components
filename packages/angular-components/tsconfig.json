@@ -10,6 +10,7 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "skipLibCheck": true,
+    "strictPropertyInitialization": false,
     "target": "es2015",
     "module": "es2020",
     "lib": ["esnext", "dom"],

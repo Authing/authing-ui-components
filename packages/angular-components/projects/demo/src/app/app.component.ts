@@ -1,9 +1,5 @@
 import { Component } from '@angular/core';
-import {
-  CommonMessage,
-  AuthenticationClient,
-  GuardModuleType,
-} from 'ng-ui-components';
+import { CommonMessage, AuthenticationClient } from 'ng-ui-components';
 import { User } from '@authing/native-js-ui-components';
 
 @Component({
