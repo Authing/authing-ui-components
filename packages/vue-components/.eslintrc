@@ -1,9 +1,6 @@
 {
   "root": true,
-  "extends": [
-    "plugin:vue/essential",
-    "@vue/standard"
-  ],
+  "extends": ["eslint:recommended", "plugin:vue/recommended"],
   "rules": {
     "comma-dangle": ["error", "always-multiline"]
   }

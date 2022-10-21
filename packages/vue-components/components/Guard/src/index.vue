@@ -1,11 +1,10 @@
 <template>
-  <div id="authing_guard_container"></div>
+  <div id="authing_guard_container" />
 </template>
 
 <script>
-import { Guard as NativeGuard } from "@authing/native-js-ui-components";
+import { Guard as NativeGuard, GuardEventsCamelToKebabMapping } from "@authing/native-js-ui-components";
 import "@authing/native-js-ui-components/lib/index.min.css";
-export * from "@authing/native-js-ui-components";
 
 const callbackEvent = ["before-login", "before-register"];
 
@@ -71,6 +70,19 @@ export default {
       guarConfig: {},
     };
   },
+  computed: {
+    mergeConfig: function () {
+      return {
+        ...this.config,
+        appId: this.appId,
+        mode: this.mode ?? this.config?.mode,
+        autoRegister: this.autoRegister ?? this.config?.autoRegister,
+        isSSO: this.isSSO ?? this.config?.isSSO,
+        clickCloseable: this.clickCloseable ?? this.config?.clickCloseable,
+        escCloseable: this.escCloseable ?? this.config?.escCloseable,
+      };
+    },
+  },
   watch: {
     visible: {
       immediate: true,
@@ -92,19 +104,6 @@ export default {
           this.hide();
         }
       },
-    },
-  },
-  computed: {
-    mergeConfig: function () {
-      return {
-        ...this.config,
-        appId: this.appId,
-        mode: this.mode ?? this.config?.mode,
-        autoRegister: this.autoRegister ?? this.config?.autoRegister,
-        isSSO: this.isSSO ?? this.config?.isSSO,
-        clickCloseable: this.clickCloseable ?? this.config?.clickCloseable,
-        escCloseable: this.escCloseable ?? this.config?.escCloseable,
-      };
     },
   },
   mounted() {
@@ -148,6 +147,13 @@ export default {
       this.guardInstance.show();
     }
   },
+
+  beforeUnmount() {
+    this.guardInstance.unmountComponent();
+  },
+  beforeDestroy() {
+    this.guardInstance.unmountComponent();
+  },
   methods: {
     show() {
       this.guardInstance.show();
@@ -155,13 +161,6 @@ export default {
     hide() {
       this.guardInstance.hide();
     },
-  },
-
-  beforeUnmount() {
-    this.guardInstance.unmountComponent();
-  },
-  beforeDestroy() {
-    this.guardInstance.unmountComponent();
   },
 };
 </script>

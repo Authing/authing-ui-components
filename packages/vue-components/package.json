@@ -5,7 +5,7 @@
     "lib",
     "components"
   ],
-  "version": "4.0.0",
+  "version": "4.0.1",
   "keywords": [
     "vue",
     "vuejs",
@@ -18,7 +18,7 @@
     "demo:serve": "vue-cli-service serve",
     "demo:build": "vue-cli-service build",
     "demo:lint": "vue-cli-service lint",
-    "lint": "eslint --ext .js,.vue src/",
+    "lint": "eslint --ext .js,.vue components/",
     "dev": "nodemon --exec 'npm run build:es' --watch src -e js,vue,styl",
     "build:lib": "npm run clean && rollup -c config/rollup.config.js --environment NODE_ENV:production",
     "build:browser": "rollup --config configs/rollup.config.browser.js",

@@ -4,7 +4,7 @@ import '@authing/native-js-ui-components/lib/index.min.css'
 
 const components = [
 	// AuthingGuard,
-	Guard
+	Guard,
 ]
 // 全局注册
 const install = (app) => {
@@ -19,7 +19,8 @@ export {
 	Guard,
 	// AuthingGuard
 }
-
 export default {
-	install
+	install,
 }
+
+export * from "@authing/native-js-ui-components";

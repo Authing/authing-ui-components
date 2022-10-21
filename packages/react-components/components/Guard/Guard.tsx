@@ -1,5 +1,4 @@
 import { memo, useEffect, useRef, useState } from 'react'
-
 import { GuardEvents } from './event'
 import { GuardAppendConfig, IG2FCProps } from '../Type'
 import { GuardLocalConfig } from './config'
