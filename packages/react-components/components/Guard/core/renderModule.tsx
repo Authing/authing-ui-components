@@ -258,6 +258,7 @@ export const RenderModule: React.FC<{
           closeIcon={
             <IconFont type="authing-close-line" className="g2-modal-close" />
           }
+          closable={defaultMergedConfig.clickCloseable ?? true}
           visible={visible}
           onCancel={guardProps?.onClose}
           keyboard={defaultMergedConfig.escCloseable}
