@@ -41,13 +41,16 @@ export const SendCodeByPhone: FC<SendCodeByPhoneProps> = (props) => {
   const sendPhone = async (phone: string, countryCode?: string) => {
     try {
       // await authClient.sendSmsCode(phone, countryCode, scene)
-      const { statusCode, message: msg } = await post('/api/v2/sms/send', {
-        phone,
-        phoneCountryCode: countryCode,
-        scene,
-      })
+      const { code, statusCode, message: msg } = await post(
+        '/api/v2/sms/send',
+        {
+          phone,
+          phoneCountryCode: countryCode,
+          scene,
+        }
+      )
 
-      if (statusCode === 200) {
+      if (statusCode === 200 || code === 200) {
         return { status: true }
       } else {
         message.error(msg)
