@@ -49,11 +49,12 @@ export const SendCodeByPhone: FC<SendCodeByPhoneProps> = (props) => {
           scene,
         }
       )
-
       if (statusCode === 200 || code === 200) {
         return { status: true }
       } else {
-        message.error(msg)
+        if (!(code === -1 || code === -2)) {
+          message.error(msg)
+        }
         return { status: false, error: msg }
       }
       // return { status: true }
