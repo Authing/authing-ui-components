@@ -8,6 +8,7 @@ import { InputProps } from 'antd/lib/input'
 import { SendCode } from './index'
 import { parsePhone } from '../_utils/hooks'
 import { useGuardEvents } from '../_utils/context'
+import { useGuardHttp } from '../_utils/guardHttp'
 export interface SendCodeByPhoneProps extends InputProps {
   data?: string
   form?: any
@@ -35,11 +36,24 @@ export const SendCodeByPhone: FC<SendCodeByPhoneProps> = (props) => {
   const authClient = useGuardAuthClient()
 
   const events = useGuardEvents()
+  const { post } = useGuardHttp()
 
   const sendPhone = async (phone: string, countryCode?: string) => {
     try {
-      await authClient.sendSmsCode(phone, countryCode, scene)
-      return { status: true }
+      // await authClient.sendSmsCode(phone, countryCode, scene)
+      const { statusCode, message: msg } = await post('/api/v2/sms/send', {
+        phone,
+        phoneCountryCode: countryCode,
+        scene,
+      })
+
+      if (statusCode === 200) {
+        return { status: true }
+      } else {
+        message.error(msg)
+        return { status: false, error: msg }
+      }
+      // return { status: true }
     } catch (error: any) {
       if (error.code === 'ECONNABORTED') {
         message.error(t('login.sendCodeTimeout'))
