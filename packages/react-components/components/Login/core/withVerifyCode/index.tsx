@@ -79,6 +79,17 @@ const LoginWithVerifyCode = (props: any) => {
 
   let [form] = Form.useForm()
 
+  const changeCurrentMethod = (v: string) => {
+    setIdentify(v)
+    if (methods.length === 1) return
+    if (validate('email', v)) {
+      setCurrentMethod(InputMethod.EmailCode)
+    } else {
+      // 放开手机号校验 方便同时开启邮箱和短信国际化手机号通过
+      setCurrentMethod(InputMethod.PhoneCode)
+    }
+  }
+
   useLoginMultipleBackFill({
     form,
     way: LoginMethods.PhoneCode,
@@ -87,6 +98,7 @@ const LoginWithVerifyCode = (props: any) => {
     isOnlyInternationSms,
     setAreaCode,
     cancelBackfill: specifyDefaultLoginMethod === LoginMethods.PhoneCode,
+    changeCurrentMethod,
   })
 
   let submitButtonRef = useRef<any>(null)
@@ -403,14 +415,7 @@ const LoginWithVerifyCode = (props: any) => {
               methods={methods}
               onChange={(e) => {
                 let v = e.target.value
-                setIdentify(v)
-                if (methods.length === 1) return
-                if (validate('email', v)) {
-                  setCurrentMethod(InputMethod.EmailCode)
-                } else {
-                  // 放开手机号校验 方便同时开启邮箱和短信国际化手机号通过
-                  setCurrentMethod(InputMethod.PhoneCode)
-                }
+                changeCurrentMethod(v)
               }}
               prefix={
                 <IconFont

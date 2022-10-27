@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { FormInstance } from 'antd/lib/form'
-import { useEffect, useCallback, useRef, useLayoutEffect, } from 'react'
+import { useEffect, useCallback, useRef, useLayoutEffect } from 'react'
 import {
   BackFillMultipleState,
   LoginWay,
@@ -12,25 +12,33 @@ import { useGuardMultipleInstance } from '../../_utils/context'
  * TODO: HOOK 参数有时间整理成为对象，开始没有想到有这么多
  * 调用地方 core 中需要回填的两个登录方式
  */
-function useLoginMultipleBackFill(
-  options: {
-    form: FormInstance<any>,
-    way: LoginWay,
-    formKey: string,
-    backfillData?: BackFillMultipleState,
-    isOnlyInternationSms?: boolean,
-    setAreaCode?: React.Dispatch<React.SetStateAction<string>>,
-    cancelBackfill?: boolean
-  }
-) {
-  const { form, way, formKey, backfillData, isOnlyInternationSms, setAreaCode, cancelBackfill } = options
+function useLoginMultipleBackFill(options: {
+  form: FormInstance<any>
+  way: LoginWay
+  formKey: string
+  backfillData?: BackFillMultipleState
+  isOnlyInternationSms?: boolean
+  setAreaCode?: React.Dispatch<React.SetStateAction<string>>
+  cancelBackfill?: boolean
+  changeCurrentMethod?: (account: string) => void
+}) {
+  const {
+    form,
+    way,
+    formKey,
+    backfillData,
+    isOnlyInternationSms,
+    setAreaCode,
+    cancelBackfill,
+    changeCurrentMethod,
+  } = options
   // 获得格式化后的回填 account，如果是国际化选择框，还需要改变对应选项
   const parseFillData = useCallback(() => {
     const prefix = isOnlyInternationSms
       ? ''
       : backfillData?.phoneCountryCode
-        ? backfillData?.phoneCountryCode + ` `
-        : ''
+      ? backfillData?.phoneCountryCode + ` `
+      : ''
 
     const content = backfillData?.account || ''
 
@@ -38,7 +46,7 @@ function useLoginMultipleBackFill(
 
     return {
       account,
-      areaCode: backfillData?.areaCode
+      areaCode: backfillData?.areaCode,
     }
   }, [isOnlyInternationSms, backfillData])
 
@@ -46,14 +54,23 @@ function useLoginMultipleBackFill(
   useEffect(() => {
     const matchLoginWay = backfillData?.way === way
     if (backfillData && matchLoginWay && !cancelBackfill) {
-
       const { account, areaCode } = parseFillData()
       areaCode && setAreaCode?.(areaCode)
+      changeCurrentMethod?.(account)
       form.setFieldsValue({
         [formKey]: account,
       })
     }
-  }, [backfillData, cancelBackfill, form, formKey, way, setAreaCode, parseFillData])
+  }, [
+    backfillData,
+    cancelBackfill,
+    form,
+    formKey,
+    way,
+    setAreaCode,
+    parseFillData,
+    changeCurrentMethod,
+  ])
 }
 
 /**
