@@ -17,6 +17,8 @@ const App = () => {
   const appId = "";
 
   const config = {
+    // 自建应用的【认证地址】
+    // 如果是开启了单点登录，则应填写单点登录的【应用面板地址】
     host: "",
     isSSO: true,
   };
