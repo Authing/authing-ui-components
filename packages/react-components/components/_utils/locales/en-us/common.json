@@ -169,5 +169,8 @@
   "loginWithWechatmpQrcodeTipsTitle": "Long press the QR code to login",
   "del": "Delete",
   "qrcode": "QR Code",
-  "registerCompletePasswordDesc": "To ensure account security, please set your password."
+  "registerCompletePasswordDesc": "To ensure account security, please set your password.",
+  "mfaCertification": "Confirm your identity with multi-factor authentication",
+  "emailMfaCheck": "Please enter email verification code",
+  "SmsMfaCheck": "Please enter SMS verification code"
 }

@@ -26,7 +26,7 @@ export const BindMFATotp: React.FC<BindMFATotpProps> = ({
   const next = () => changeModule(GuardModuleType.BIND_TOTP, initData)
   return (
     <>
-      <p className="authing-g2-mfa-title">{t('common.bindTotp')}</p>
+      <p className="authing-g2-mfa-title">{t('common.mfaCertification')}</p>
       <p className="authing-g2-mfa-tips">{t('common.otpText1')}</p>
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -89,7 +89,7 @@ export const VerifyMFATotp: React.FC<VerifyMFATotpProps> = ({
 
   return (
     <>
-      <p className="authing-g2-mfa-title">{t('login.accPwdLoginVerify')}</p>
+      <p className="authing-g2-mfa-title">{t('common.mfaCertification')}</p>
       <p className="authing-g2-mfa-tips">{t('login.inputSixCode')}</p>
       <Form
         form={form}

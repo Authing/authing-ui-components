@@ -7,7 +7,7 @@
   "inputCaptchaCode": "図形認証コードを入力してください",
   "captchaCode": "グラフィックス認証コード",
   "accPwdLoginVerify": "アカウント登録検証",
-  "inputSixCode": "取得した 6 桁の数字セキュリティコードを入力してログインを確認してください",
+  "inputSixCode": "バインドされた 6 桁のセキュリティ コードを入力してください",
   "inputLoginPwd": "パスワードをご入力ください",
   "inputPhone": "携帯番号を入力してください",
   "inputEmail": "メールアドレスをご入力ください",
@@ -60,5 +60,9 @@
   "socialConnectionMessage": "{{provider}}を使用したログインはサポートされていません。他の方法でログインするか、他のブラウザで再試行してください。",
   "inputNewPwd": "新しいパスワードをご入力ください",
   "selectLoginAccount": "ログインアカウントを選択する",
-  "useOtherAccount": "別のアカウントを使う"
+  "useOtherAccount": "別のアカウントを使う",
+  "AuthorizationCamera": "最初に認証を有効にしてください",
+  "checkPreferences": "設定を確認してください",
+  "requireError": "要求エラーを満たすことができません",
+  "hardwareSupport": "ハードウェアはサポートされていません"
 }

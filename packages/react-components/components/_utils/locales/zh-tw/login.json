@@ -24,7 +24,7 @@
   "inputPwd": "請輸入密碼",
   "inputPwdAgain": "再輸入一次密碼",
   "inputRecoverCode": "請輸入恢復代碼",
-  "inputSixCode": "請輸入獲取的 6 位數字安全碼驗證登入",
+  "inputSixCode": "請輸入綁定的 6 位數字安全碼",
   "inputUsername": "請輸入用戶名",
   "ldapLogin": "LDAP 登入",
   "login": {
@@ -60,5 +60,9 @@
   "qrcodeRefer": "刷新",
   "qrcodeNetWorkError": "網路異常 點擊重試",
   "scanAgain": "重新掃碼",
-  "scanSuccess": "掃碼成功"
+  "scanSuccess": "掃碼成功",
+  "AuthorizationCamera": "請先開啟授權",
+  "checkPreferences": "請檢查偏好設置",
+  "requireError": "無法滿足要求錯誤",
+  "hardwareSupport": "硬件不支持"
 }

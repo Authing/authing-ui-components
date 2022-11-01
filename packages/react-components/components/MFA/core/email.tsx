@@ -44,7 +44,7 @@ export const BindMFAEmail: React.FC<BindMFAEmailProps> = ({
   }
   return (
     <>
-      <p className="authing-g2-mfa-title">{t('common.bindEmail')}</p>
+      <p className="authing-g2-mfa-title">{t('common.mfaCertification')}</p>
       <p className="authing-g2-mfa-tips">{t('common.bindEmailDoc')}</p>
       <Form
         form={form}
@@ -166,11 +166,11 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
 
   return (
     <>
-      <p className="authing-g2-mfa-title">{t('login.inputEmailCode')}</p>
+      <p className="authing-g2-mfa-title">{t('common.mfaCertification')}</p>
       <p className="authing-g2-mfa-tips">
         {sent
           ? `${t('login.verifyCodeSended')} ${mailDesensitization(email)}`
-          : ''}
+          : t('common.emailMfaCheck')}
       </p>
       <Form
         form={form}

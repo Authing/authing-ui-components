@@ -88,7 +88,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
   )
   return (
     <>
-      <h3 className="authing-g2-mfa-title">{t('common.bindPhone')}</h3>
+      <h3 className="authing-g2-mfa-title">{t('common.mfaCertification')}</h3>
       <p className="authing-g2-mfa-tips">{t('login.bindPhoneInfo')}</p>
       <Form
         form={form}
@@ -192,7 +192,7 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
                 : countryCode
               : ''
           } ${phoneDesensitization(phone)}`
-        : '',
+        : t('common.SmsMfaCheck'),
     [countryCode, isInternationSms, phone, phoneCountryCode, sent, t]
   )
 
@@ -217,7 +217,7 @@ export const VerifyMFASms: React.FC<VerifyMFASmsProps> = ({
 
   return (
     <>
-      <h3 className="authing-g2-mfa-title">{t('login.inputPhoneCode')}</h3>
+      <h3 className="authing-g2-mfa-title">{t('common.mfaCertification')}</h3>
       <p className="authing-g2-mfa-tips">{tips}</p>
       <Form
         form={form}

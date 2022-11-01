@@ -60,5 +60,9 @@
   "qrcodeRefer": "Refresh",
   "qrcodeNetWorkError": "Retry",
   "scanAgain": "Scan the code again",
-  "scanSuccess": "Scan Success"
+  "scanSuccess": "Scan Success",
+  "AuthorizationCamera": "Please enable authorization first",
+  "checkPreferences": "Please check preferences",
+  "requireError": "Unable to satisfy request error",
+  "hardwareSupport": "Hardware not supported"
 }

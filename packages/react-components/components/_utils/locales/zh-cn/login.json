@@ -7,7 +7,7 @@
   "inputCaptchaCode": "请输入图形验证码",
   "captchaCode": "图形验证码",
   "accPwdLoginVerify": "账号登录验证",
-  "inputSixCode": "请输入获取的 6 位数字安全码验证登录",
+  "inputSixCode": "请输入绑定的 6 位数字安全码",
   "inputLoginPwd": "请输入登录密码",
   "inputPhone": "请输入手机号",
   "inputEmail": "请输入邮箱",
@@ -60,5 +60,9 @@
   "socialConnectionMessage": "不支持使用{{provider}}登录,请选择其他方式登录，或在其它浏览器中重试",
   "inputNewPwd": "请输入新密码",
   "selectLoginAccount": "选择登录账号",
-  "useOtherAccount": "使用其他账号"
+  "useOtherAccount": "使用其他账号",
+  "AuthorizationCamera": "请先开启授权",
+  "checkPreferences": "请检查偏好设置",
+  "requireError": "无法满足要求错误",
+  "hardwareSupport": "硬件不支持"
 }
