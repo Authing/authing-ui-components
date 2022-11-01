@@ -1,0 +1,40 @@
+.g2-base-image-background-animation {
+  // .backgroundAnimation {
+  background: linear-gradient(60deg, #888888, #cecece, #dfdfdf, #f0f0f0);
+  animation: gradientBG 3s ease infinite;
+  background-size: 400% 400%;
+}
+
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.g2-base-imagepro-container {
+  border-radius: 4px;
+  display: inline-block;
+  user-select: none;
+  &.loaded {
+    background: none;
+    .imagePro {
+      opacity: 1;
+    }
+  }
+  &.unload {
+    .imagePro {
+      opacity: 0;
+    }
+  }
+}
+.g2-base-imagepro {
+  // 先屏蔽这个动画，怪怪的
+  // transition: 0.2s all;
+  object-fit: cover;
+}

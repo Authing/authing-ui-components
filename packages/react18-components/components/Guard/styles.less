@@ -1,0 +1,771 @@
+@import '~antd/lib/style/mixins/index.less';
+@import '~antd/lib/style/themes/default.less';
+
+*[class*='authing-'] {
+  @import '~antd/lib/style/core/global.less';
+}
+
+@media only screen and (max-width: 450px) {
+  .authing-g2-render-module {
+    width: 100%;
+  }
+  .authing-g2-render-module-modal {
+    width: 100%;
+  }
+  .g2-view-container {
+    box-shadow: none !important;
+    height: 100%;
+  }
+}
+// 🤢 这部分完全是因为user-portal dom结构很难做到针对使用guard页面做样式优化
+.authing-guard-layout {
+  padding: 24px 0;
+}
+
+// pad 端 居中
+@media only screen and (max-width: 600px) {
+  body .authing-guard-layout {
+    align-items: center !important;
+  }
+}
+
+// 移动端去掉padding
+@media only screen and (max-width: 450px) {
+  .authing-guard-layout {
+    padding: 0;
+  }
+}
+
+// 侵入 core 的样式代码，guard view 皮肤
+.g2-view-container {
+  font-family: sans-serif;
+  box-shadow: 0px 0px 60px rgba(84, 89, 104, 0.05);
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  width: 456px;
+  @media only screen and (max-width: 450px) {
+    width: 100%;
+  }
+  min-height: 540px;
+  box-sizing: border-box;
+  padding: 16px;
+  border-radius: 8px;
+  position: relative;
+
+  &.g2-view-register {
+    justify-content: space-between;
+  }
+
+  &.g2-view-login {
+    justify-content: space-between;
+  }
+
+  .none {
+    display: none;
+  }
+  .g2-mfa-content,
+  .g2-mfa-method {
+    margin: 0;
+    padding: 0 38px;
+    @media only screen and (max-width: 450px) {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+  }
+  .no-login-methods-view {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .g2-view-login-mobile-inner {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .no-login-methods-view {
+      display: flex;
+      flex: 0;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+  .g2-view-header {
+    user-select: none;
+    padding: 24px 38px 0;
+    margin-bottom: 16px;
+    @media only screen and (max-width: 450px) {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    &.g2-view-header-mobile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      // padding-top: 100px;
+      margin-bottom: 62px;
+    }
+    .icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 4px;
+      margin-bottom: 4px;
+    }
+    .title {
+      color: #282d3c;
+      font-weight: 600;
+      font-size: 24px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .title-description,
+    .title-explain {
+      font-weight: 400;
+      font-size: 14px;
+      color: #545968;
+    }
+  }
+
+  .g2-view-tabs {
+    padding: 0 38px;
+    @media only screen and (max-width: 450px) {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+    &.hidden {
+      .authing-ant-tabs-nav-wrap {
+        display: none;
+      }
+      .authing-ant-tabs-content-holder {
+        min-height: 240px;
+        display: flex;
+        .authing-ant-tabs-content {
+          flex: 1;
+          align-items: center;
+        }
+      }
+
+      .authing-ant-tabs-nav::before {
+        display: none;
+      }
+    }
+    .authing-ant-tabs-tab {
+      user-select: none;
+      color: #878a95;
+      &:hover {
+        color: #282d3c;
+      }
+    }
+  }
+
+  .authing-g2-submit-button {
+    &[disabled] {
+      background: #618eff;
+      border-color: #618eff;
+      color: #fff;
+    }
+    box-shadow: none;
+    width: calc(100% - 4px);
+    border-radius: 4px;
+    height: 42px;
+    margin: 0 2px;
+    &.shaking {
+      animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+    @keyframes shake {
+      10%,
+      90% {
+        transform: translate3d(-1px, 0, 0);
+      }
+
+      20%,
+      80% {
+        transform: translate3d(2px, 0, 0);
+      }
+
+      30%,
+      50%,
+      70% {
+        transform: translate3d(-4px, 0, 0);
+      }
+
+      40%,
+      60% {
+        transform: translate3d(4px, 0, 0);
+      }
+    }
+  }
+}
+
+.authing-g2-button-group {
+  background: #eff2f6;
+  border-radius: 8px;
+  padding: 4px 2px;
+  margin-bottom: 16px;
+  width: fit-content;
+
+  .authing-ant-radio-button-wrapper {
+    margin: 0 2px;
+    border-radius: 8px;
+    color: #545968;
+    cursor: pointer;
+    border: none;
+    background: none;
+    height: auto;
+    &.authing-ant-radio-button-wrapper-checked {
+      color: #215ae5;
+      background: #ffffff;
+    }
+    &:not(:first-child)::before {
+      display: none;
+    }
+  }
+}
+
+.authing-g2-input-form {
+  padding: 0 2px;
+  margin-bottom: 16px;
+  // &.submit-form {
+  //   margin-top: 32px;
+  // }
+  .label-title {
+    padding: 0 0 8px;
+  }
+  // .authing-ant-form-item-explain {
+  //   // display: none;
+  //   transition: 0.2s all;
+  //   position: absolute;
+  //   user-select: none;
+  //   background: white;
+  //   left: 10px;
+  //   top: -15px;
+  //   z-index: 100;
+  //   padding: 4px 8px;
+  //   border-radius: 4px;
+  //   box-shadow: #eeeff1;
+  // }
+}
+.authing-g2-input-form {
+  .authing-g2-select {
+    &:hover {
+      border-color: #eeeff1;
+      background: #eeeff1;
+    }
+    border: 1px solid #f5f6f7;
+    border-radius: 4px;
+    .authing-ant-select-selector {
+      outline: 0;
+      border-color: #f5f6f7;
+      height: 100%;
+      background-color: #f5f6f7;
+      &:hover {
+        border-color: #eeeff1 !important;
+        background: #eeeff1;
+      }
+    }
+    // focus
+    &.authing-ant-select-focused {
+      // border-color: #618eff;
+      border-right-width: 1px;
+      outline: 0;
+      box-shadow: 0 0 0 2px rgba(57, 106, 255, 0.2);
+      .authing-ant-select-selector {
+        background: #fff;
+      }
+    }
+  }
+
+  // .authing-ant-select:not(.authing-ant-select-customize-input)
+  //   .authing-ant-select-selector {
+  //   border-color: #f5f6f7;
+  // }
+  &.authing-ant-form-item-has-error {
+    .authing-g2-select {
+      // &:hover {
+      //   border-color: #eeeff1 !important;
+      //   background: #eeeff1;
+      // }
+      // focus
+      &.authing-ant-select-focused {
+        // .authing-ant-select-selector {
+        //   border-color: #eeeff1 !important;
+        // }
+        // border-color: #ff7875;
+        border-right-width: 1px;
+        outline: 0;
+        box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
+        .authing-ant-select-selector {
+          background: #fff;
+        }
+      }
+    }
+  }
+}
+.authing-g2-sumbit-form {
+  margin-bottom: 12px;
+}
+@keyframes authingShake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-3px, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(3px, 0, 0);
+  }
+}
+.authing-agreements-error {
+  .authing-agreements-item {
+    &.shaking {
+      animation: authingShake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+  }
+}
+.authing-ant-form-item-has-error {
+  .authing-g2-input {
+    &.shaking {
+      animation: authingShake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+    // animation-iteration-count: infinite;
+  }
+  .authing-g2-code-input {
+    &.shaking {
+      animation: authingShake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+    // animation-iteration-count: infinite;
+  }
+  .g2-mfa-bindTotp-secretSave {
+    color: #ff4d4f;
+    &.shaking {
+      animation: authingShake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+  }
+}
+.authing-g2-input {
+  border: 1px solid #f5f6f7;
+  // height: 46px;
+  border-radius: 4px;
+  background: #f5f6f7;
+
+  &:hover {
+    background-color: #eeeff1;
+  }
+  &:focus {
+    background: #ffffff;
+    border-color: #618eff;
+  }
+
+  input {
+    // 通过这个方式 hack 浏览器自动填充：
+    // 自动填充的浏览器可以说罪恶滔天，钉死在 mdn 的耻辱柱上：https://developer.mozilla.org/en-US/docs/Web/CSS/:autofill
+    // 下方的 focused 同样需要这样处理
+    font-size: 14px;
+    height: 0;
+    background-color: #f5f6f7;
+    padding: 1em 0.5em !important;
+    background-clip: content-box !important;
+    &::placeholder,
+    &::-webkit-input-placeholder {
+      // color: #a7a7a7;
+      color: #c8c9cc;
+    }
+  }
+
+  // affix-wrapper 特殊处理 hover
+  &.authing-ant-input-affix-wrapper:hover {
+    border-color: #eeeff1;
+    background: #eeeff1;
+    // border-color: #618eff;
+    .authing-ant-input {
+      background: #eeeff1;
+    }
+  }
+
+  // focus
+  &.authing-ant-input-affix-wrapper-focused {
+    background: #ffffff !important;
+    border-color: #618eff;
+    input {
+      background: #ffffff !important;
+      padding: 1em 0.5em !important;
+      background-clip: content-box !important;
+      &::placeholder,
+      &::-webkit-input-placeholder {
+        color: #a7a7a7;
+      }
+    }
+  }
+
+  // 适配图形验证码
+  &.add-after {
+    border: none;
+    .authing-ant-input-group {
+      .authing-ant-input,
+      .authing-ant-input-group-addon {
+        border-radius: 4px;
+        height: 46px;
+      }
+    }
+  }
+
+  // 适配数字输入框
+  &.authing-ant-input-number {
+    width: 100%;
+    input {
+      padding: 1.4em 0.5em !important;
+    }
+    .authing-ant-input-number-handler-wrap {
+      display: none;
+    }
+  }
+  .g2-captcha-code-image {
+    min-width: 100px;
+  }
+}
+
+.g2-graphic-verify-code {
+  display: flex;
+  justify-content: space-between;
+
+  .authing-ant-input {
+    width: 55%;
+  }
+
+  .g2-captcha-code-image {
+    min-width: 100px;
+    border-radius: 4px;
+    border: 1px solid #eff2f6;
+  }
+}
+
+// input error 的情况
+.authing-ant-form-item-has-error {
+  .authing-ant-input-affix-wrapper:hover {
+    border-color: #ff4d4f !important;
+  }
+
+  // focus
+  .authing-ant-input-affix-wrapper-focused {
+    border-color: #ff4d4f !important;
+  }
+}
+
+.authing-g2-send-code {
+  color: #215ae5;
+  cursor: pointer;
+  &.sending {
+    cursor: not-allowed;
+    filter: opacity(0.5);
+  }
+}
+
+.g2-tips-line {
+  user-select: none;
+  display: flex;
+  font-size: 14px;
+  padding: 0 38px;
+  @media only screen and (max-width: 450px) {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+  height: 22px;
+  .link-like {
+    color: #215ae5;
+    padding: 0px;
+    height: auto;
+    cursor: pointer;
+    transition: all 0.3s;
+    &:hover {
+      color: #557fff;
+    }
+    &:active {
+      color: #254cd9;
+    }
+  }
+  .gray {
+    color: #999;
+  }
+  .go-to-register {
+    margin-left: auto;
+  }
+  .back-to-login {
+    margin-left: auto;
+  }
+  .touch-tip {
+    color: #d4d6dc;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    &:hover {
+      color: #215ae5;
+    }
+  }
+}
+.g2-init-setting-loading {
+  width: 456px;
+  background: #fff;
+
+  @media only screen and (max-width: 450px) {
+    width: 100%;
+  }
+  min-height: 540px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 0px 60px rgba(84, 89, 104, 0.05);
+}
+
+.g2-questions {
+  .authing-ant-upload-list-picture-card-container {
+    height: 56px;
+    width: 56px;
+    .authing-ant-upload-list-item-list-type-picture-card {
+      padding: 4px;
+    }
+  }
+  // authing-ant-upload authing-ant-upload-select
+  .authing-ant-upload-select-picture-card {
+    border-radius: 4px;
+    height: 56px;
+    width: 56px;
+    border: none;
+    background: #f5f6f7;
+    transition: 0.2s all;
+    margin: unset;
+    &:hover {
+      background: #eeeff1;
+    }
+  }
+  .authing-g2-questions-upload-self {
+    .anticon-plus {
+      font-size: 18px;
+      color: #545968;
+    }
+  }
+}
+
+.g2-questions-send-success-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 540px;
+  .plate {
+    margin-bottom: 14px;
+  }
+  .title {
+    color: #282d3c;
+    font-weight: 500;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  .message {
+    font-size: 14px;
+    color: #545968;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+  .timer-tip {
+    font-size: 14px;
+    color: #545968;
+    margin-top: 12px;
+  }
+}
+
+.no-login-methods-view .g2-change-language-container {
+  margin: unset;
+}
+.g2-change-language-container {
+  margin: 8px 0 0 0;
+  text-align: center;
+  .g2-change-language-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    font-size: 14px;
+    color: #878a95;
+    cursor: pointer;
+    margin: auto;
+    transition: 0.2s all;
+    &:hover {
+      color: #282d3c;
+    }
+    .g2-change-language-text {
+      margin-left: 5px;
+    }
+  }
+}
+.authing-g2-render-module-modal {
+  width: 456px;
+  @media only screen and (max-width: 450px) {
+    width: 100%;
+  }
+  .authing-ant-modal-content {
+    width: 456px;
+    @media only screen and (max-width: 450px) {
+      width: 100%;
+    }
+    border-radius: 8px;
+    margin: auto;
+  }
+  .authing-ant-modal-body {
+    padding: 0;
+  }
+  .authing-ant-modal-close {
+    left: 0;
+    border-radius: 4px;
+    transform: scale(0.5);
+    color: #d4d6dc;
+    transition: 0.2s all;
+    width: 56px;
+    height: 56px;
+    &:hover {
+      background: #eeeff1;
+      color: #878a95;
+    }
+
+    .g2-modal-close {
+      font-size: 36px;
+      margin-top: 10px;
+    }
+  }
+  .authing-ant-modal-footer {
+    display: none;
+  }
+}
+
+.g2-send-code-input-col {
+  /* Chrome, Safari, Edge, Opera */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
+}
+
+*[class*='authing-'].authing-ant-input-prefix {
+  margin-right: 0px;
+}
+
+// form 必填 icon 后置
+.authing-g2-form-required-item-icon-after {
+  label.authing-ant-form-item-required:not(.authing-ant-form-item-required-mark-optional)::before {
+    display: none;
+  }
+
+  label.authing-ant-form-item-required:not(.authing-ant-form-item-required-mark-optional)::after {
+    display: inline-block;
+    margin-right: 4px;
+    margin-top: 4px;
+    color: #ff4d4f;
+    font-size: 14px;
+    font-family: SimSun, sans-serif;
+    line-height: 1;
+    content: '*';
+  }
+}
+.authing-ant-tabs {
+  overflow: visible;
+}
+
+.authing-ant-tabs {
+  overflow: visible;
+}
+
+.authing-ant-tabs-tab.authing-ant-tabs-tab-active .authing-ant-tabs-tab-btn {
+  font-weight: 400;
+}
+
+.authing-g2-questions-textarea {
+  > textarea {
+    resize: none;
+    background: #f5f6f7;
+    border: 1px solid #f5f6f7;
+    &:hover {
+      border-color: #eeeff1;
+      background-color: #eeeff1;
+    }
+    &:focus {
+      background: #fff;
+    }
+    // &:focus{
+
+    // }
+  }
+}
+
+.authing-g2-question-option {
+  background: none;
+  &.authing-g2-question-option-active {
+    color: #215ae5;
+  }
+  &:hover {
+    background: #f5f6f7;
+  }
+}
+// strong {
+//   font-weight: normal !important;
+// }
+
+.authing-g2-completeInfo-form {
+  .authing-ant-form-item-has-error {
+    input:hover {
+      border-color: #ff4d4f;
+    }
+  }
+  input:hover {
+    border-color: #eeeff1;
+  }
+  .authing-g2-input {
+    &:hover {
+      border-color: #eeeff1;
+    }
+    &.authing-ant-picker-focused {
+      background: #fff;
+    }
+  }
+}
+
+.authing-g2-input-form .authing-g2-select .authing-ant-select-selector {
+  padding: 3px 11px;
+  .authing-ant-select-selection-item {
+    line-height: 30px;
+  }
+  .authing-ant-select-selection-search {
+    display: flex;
+    align-items: center;
+  }
+}
+input:-internal-autofill-selected {
+  box-shadow: unset !important;
+}
+
+.authing-g2-input.authing-ant-input-lg,
+input {
+  font-size: 14px;
+  line-height: 27px;
+}
