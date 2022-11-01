@@ -2,7 +2,7 @@
   "name": "@authing/react18-ui-components",
   "version": "4.0.9",
   "private": false,
-  "main": "lib/index.min.js",
+  "main": "components/index.ts",
   "files": [
     "dist",
     "lib",
