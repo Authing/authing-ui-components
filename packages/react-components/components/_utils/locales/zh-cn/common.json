@@ -104,9 +104,9 @@
   "pleaseRecordKey": "请记录密钥",
   "totpText1": "请妥善保存恢复代码",
   "totpText2": "如果你的 MFA 丢失时，你将需要一个恢复代码",
-  "otpText1": "为了保障访问安全，请前往 OTP 绑定页面",
+  "otpText1": "请前往 OTP 绑定页面进行绑定",
   "faceText1": "绑定人脸识别",
-  "faceText2": "请保持摄像头已打开并无遮挡",
+  "faceText2": "请打开摄像头识别人脸进行绑定",
   "faceText3": "开始验证",
   "faceText4": "重试一次",
   "checkPasswordHasSpace": "不能包含空格",
@@ -172,5 +172,6 @@
   "registerCompletePasswordDesc": "为了保障账号安全，请设置你的密码。",
   "mfaCertification": "通过多因素认证确认你的身份",
   "emailMfaCheck": "请输入电子邮箱验证码",
-  "SmsMfaCheck": "请输入短信验证码"
+  "SmsMfaCheck": "请输入短信验证码",
+  "faceCheck": "请保持摄像头已打开并无遮挡"
 }

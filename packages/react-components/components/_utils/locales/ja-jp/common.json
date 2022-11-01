@@ -104,9 +104,9 @@
   "pleaseRecordKey": "鍵を記録してください",
   "totpText1": "回復コードを適切に保存してください",
   "totpText2": "MFA が紛失した場合復旧コードが必要になります",
-  "otpText1": "アクセスセキュリティのためにOTPバインディングページへ",
+  "otpText1": "バインドするには OTP バインド ページに移動してください",
   "faceText1": "顔認証を結びつける",
-  "faceText2": "カメラは開いたままにしてください",
+  "faceText2": "バインドする顔を認識するためにカメラをオンにしてください",
   "faceText3": "検証を開始する",
   "faceText4": "もう一度やってみる",
   "checkPasswordHasSpace": "フレームを含まない",
@@ -172,5 +172,6 @@
   "registerCompletePasswordDesc": "アカウントを安全に保つために、パスワードを設定してください。",
   "mfaCertification": "多要素認証で本人確認",
   "emailMfaCheck": "メール認証コードを入力してください",
-  "SmsMfaCheck": "SMS認証コードを入力してください"
+  "SmsMfaCheck": "SMS認証コードを入力してください",
+  "faceCheck": "カメラの電源を入れ、遮るものがない状態にしてください"
 }

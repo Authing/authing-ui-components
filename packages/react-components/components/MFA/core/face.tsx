@@ -273,9 +273,9 @@ export const MFAFace = (props: any) => {
   return (
     <div>
       <h3 className="authing-g2-mfa-title">{t('common.mfaCertification')}</h3>
-      <p className="authing-g2-mfa-tips">{t('common.faceText2')}</p>
-      {(faceState === 'ready' || mfaBackContext?.mfaBackState === 'login') && (
+      {faceState === 'ready' || mfaBackContext?.mfaBackState === 'login' ? (
         <>
+          <p className="authing-g2-mfa-tips">{t('common.faceText2')}</p>
           <ImagePro
             className="g2-mfa-face-image"
             width={247}
@@ -301,7 +301,10 @@ export const MFAFace = (props: any) => {
             className="mfa-face"
           />
         </>
+      ) : (
+        <p className="authing-g2-mfa-tips">{t('common.faceCheck')}</p>
       )}
+
       <div
         className="g2-mfa-face-identifying"
         style={{

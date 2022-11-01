@@ -100,9 +100,9 @@
   "checkEmail": "The email already exists",
   "checkPhone": "The phone number already exists",
   "loginFailCheck": "Reminder: Your password is wrong, you can try {{number}} times",
-  "otpText1": "To ensure access security, please go to the OTP binding page",
+  "otpText1": "Please go to the OTP binding page to bind",
   "faceText1": "Bind facial recognition",
-  "faceText2": "Hold your camera properly",
+  "faceText2": "Please turn on the camera to recognize the face for binding",
   "faceText3": "Start",
   "faceText4": "Try again",
   "checkPasswordHasSpace": "No spaces",
@@ -172,5 +172,6 @@
   "registerCompletePasswordDesc": "To ensure account security, please set your password.",
   "mfaCertification": "Confirm your identity with multi-factor authentication",
   "emailMfaCheck": "Please enter email verification code",
-  "SmsMfaCheck": "Please enter SMS verification code"
+  "SmsMfaCheck": "Please enter SMS verification code",
+  "faceCheck": "Please keep the camera turned on and unobstructed"
 }

@@ -38,7 +38,7 @@
   "emailLabel": "電子郵件",
   "emailVerifyCode": "電子郵件驗證碼",
   "faceText1": "綁定人臉識別",
-  "faceText2": "請保持攝像頭已打開並無遮擋",
+  "faceText2": "請打開攝像頭識別人臉進行綁定",
   "faceText3": "開始驗證",
   "faceText4": "重試一次",
   "faceVerification": "人臉識別驗證",
@@ -72,7 +72,7 @@
   "noFindUsername": "找不到該用戶名賬號",
   "noQuestions": "沒有問題，",
   "noValidator": "沒有驗證器請",
-  "otpText1": "為了保障訪問安全，請前往 OTP 綁定頁面",
+  "otpText1": "請前往 OTP 綁定頁面進行綁定",
   "pToLogin": "秒後返回",
   "password": "密碼",
   "passwordAgain": "請確認密碼",
@@ -170,5 +170,6 @@
   "registerCompletePasswordDesc": "為了保障賬號安全，請設置您的密碼。",
   "mfaCertification": "通過多因素認證確認你的身份",
   "emailMfaCheck": "請輸入電子郵箱驗證碼",
-  "SmsMfaCheck": "請輸入短信驗證碼"
+  "SmsMfaCheck": "請輸入短信驗證碼",
+  "faceCheck": "請保持攝像頭已打開並無遮擋"
 }
