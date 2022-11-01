@@ -1,0 +1,8 @@
+# /node_modules/* and /bower_components/* ignored by default
+
+# Ignore built files except build/index.js
+build/*
+lib/*
+iconfont.js
+node_modules/*
+components/version/version.tsx
