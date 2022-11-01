@@ -16,10 +16,10 @@ export const CopyAbleText: FC<CopyTextProps> = ({ children, className }) => {
   const startTimer = useCallback(() => {
     setCopied(true)
     clearTimeout(timer.current)
-    timer.current = (setTimeout(
+    timer.current = setTimeout(
       () => setCopied(false),
       3000
-    ) as unknown) as number
+    ) as unknown as number
   }, [timer])
 
   useEffect(() => {

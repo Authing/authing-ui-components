@@ -265,13 +265,15 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
           /**
            * 手机号注册接口
            */
-          const { data, statusCode, apiCode, message: errMessage } = await post(
-            `/api/v2/register-phone-code`,
-            {
-              ...registerContent,
-              postUserInfoPipeline: false,
-            }
-          )
+          const {
+            data,
+            statusCode,
+            apiCode,
+            message: errMessage,
+          } = await post(`/api/v2/register-phone-code`, {
+            ...registerContent,
+            postUserInfoPipeline: false,
+          })
           if (statusCode === 200) {
             submitButtonRef.current?.onSpin(false)
             onRegisterSuccessIntercept(data)
@@ -482,7 +484,7 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
   )
 
   const onFinish = useCallback(
-    async (values) => {
+    async (values: any) => {
       if (currentMethod === InputMethod.EmailCode) {
         await registerByEmailCode(values)
       } else if (currentMethod === InputMethod.PhoneCode) {
@@ -590,7 +592,7 @@ export const RegisterWithCode: React.FC<RegisterWithCodeProps> = ({
 
   // 为了 refresh input
   const AreaCodePhoneAccount = useCallback(
-    (props) => {
+    (props: any) => {
       return (
         <InputInternationPhone
           {...props}

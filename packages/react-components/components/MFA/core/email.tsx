@@ -107,13 +107,14 @@ export const VerifyMFAEmail: React.FC<VerifyMFAEmailProps> = ({
 
   const sendVerifyCode = async () => {
     try {
-      const { code, message: tips, apiCode } = await post(
-        '/api/v2/email/send',
-        {
-          email,
-          scene: EmailScene.MFA_VERIFY_CODE,
-        }
-      )
+      const {
+        code,
+        message: tips,
+        apiCode,
+      } = await post('/api/v2/email/send', {
+        email,
+        scene: EmailScene.MFA_VERIFY_CODE,
+      })
       if (apiCode === 2080) {
         // 一分钟只能发一次邮箱验证码的提示信息，特殊处理
         message.error(tips)

@@ -42,10 +42,8 @@ export const ResetPassword = (props: ResetPasswordProps) => {
   // 是否开启了国际化短信功能
   const isInternationSms =
     props.publicConfig.internationalSmsConfig?.enabled || false
-  const {
-    getPassWordUnsafeText,
-    setPasswordErrorTextShow,
-  } = usePasswordErrorText()
+  const { getPassWordUnsafeText, setPasswordErrorTextShow } =
+    usePasswordErrorText()
   const onFinish = async (values: any) => {
     let identify = values.identify
     let code = values.code

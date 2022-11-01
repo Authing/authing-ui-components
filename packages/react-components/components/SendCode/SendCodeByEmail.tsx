@@ -19,14 +19,8 @@ export interface SendCodeByEmailProps extends InputProps {
 }
 
 export const SendCodeByEmail: FC<SendCodeByEmailProps> = (props) => {
-  const {
-    scene,
-    data,
-    form,
-    onSendCodeBefore,
-    fieldName,
-    ...remainProps
-  } = props
+  const { scene, data, form, onSendCodeBefore, fieldName, ...remainProps } =
+    props
   const { t } = useTranslation()
   const events = useGuardEvents()
   const authClient = useGuardAuthClient()
@@ -53,13 +47,14 @@ export const SendCodeByEmail: FC<SendCodeByEmailProps> = (props) => {
       }
     }
     try {
-      const { code, message: tips, apiCode } = await post(
-        '/api/v2/email/send',
-        {
-          email,
-          scene,
-        }
-      )
+      const {
+        code,
+        message: tips,
+        apiCode,
+      } = await post('/api/v2/email/send', {
+        email,
+        scene,
+      })
       if (apiCode === 2080) {
         // 一分钟只能发一次邮箱验证码的提示信息，特殊处理
         message.error(tips)
@@ -89,7 +84,13 @@ export const SendCodeByEmail: FC<SendCodeByEmailProps> = (props) => {
       // onSend?.()
     } catch (error) {
       // onError?.(error)
-      return { status: false, error }
+      return {
+        status: false,
+        error: {
+          message: JSON.stringify(error),
+          code: 401,
+        },
+      }
     }
   }
 

@@ -1,7 +1,11 @@
-import React, { useContext } from 'react'
+import React, { ReactNode, useContext } from 'react'
 import { AuthClientContext, AuthClientContextProps } from './context'
 
-export const AuthClientProvider: React.FC<AuthClientContextProps> = (props) => {
+export const AuthClientProvider: React.FC<
+  AuthClientContextProps & {
+    children: ReactNode
+  }
+> = (props) => {
   const { children, client } = props
 
   const Provider = AuthClientContext.Provider

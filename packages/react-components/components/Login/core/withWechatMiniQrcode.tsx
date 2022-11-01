@@ -37,7 +37,7 @@ export const LoginWithWechatMiniQrcode = (
     return null
   }
 
-  const descriptions = {
+  const descriptions: any = {
     already: (referQrCode: () => void) => (
       <span className="qrcode__again-scan" onClick={referQrCode}>
         {t('login.scanAgain')}

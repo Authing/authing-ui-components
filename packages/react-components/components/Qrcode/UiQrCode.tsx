@@ -18,7 +18,7 @@ export type CodeStatus =
   | 'cancel'
   | 'MFA'
 
-export const prefix = 'refactor'
+export const prefix: string = 'refactor'
 
 export interface UiQrProps {
   /**
@@ -83,8 +83,8 @@ const QrCode: React.FC<UiQrProps> = (props) => {
   const [baseUrl] = useImage(src, {
     onLoad,
   })
-
-  const classes = className(`${prefix}-qrcode`, statusCls)
+  const classPrefix: any = `${prefix}-qrcode`
+  const classes = className(classPrefix, statusCls)
 
   const Loading = useMemo(() => {
     return loadingComponent || <ShieldSpin />

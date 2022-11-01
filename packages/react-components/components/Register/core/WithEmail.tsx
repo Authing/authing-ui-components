@@ -51,10 +51,8 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
 
   const [acceptedAgreements, setAcceptedAgreements] = useState(false)
   const [validated, setValidated] = useState(false)
-  const {
-    getPassWordUnsafeText,
-    setPasswordErrorTextShow,
-  } = usePasswordErrorText()
+  const { getPassWordUnsafeText, setPasswordErrorTextShow } =
+    usePasswordErrorText()
   const [, onFinish] = useAsyncFn(
     async (values: any) => {
       submitButtonRef.current?.onSpin(true)
@@ -141,13 +139,15 @@ export const RegisterWithEmail: React.FC<RegisterWithEmailProps> = ({
         return
       }
 
-      const { statusCode, data, message: errorMessage, apiCode } = await post(
-        `/api/v2/register-email`,
-        {
-          ...registerContent,
-          postUserInfoPipeline: false,
-        }
-      )
+      const {
+        statusCode,
+        data,
+        message: errorMessage,
+        apiCode,
+      } = await post(`/api/v2/register-email`, {
+        ...registerContent,
+        postUserInfoPipeline: false,
+      })
 
       if (statusCode === 200) {
         onRegisterSuccessIntercept(data)

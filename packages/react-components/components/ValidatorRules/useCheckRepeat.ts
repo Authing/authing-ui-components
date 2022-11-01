@@ -10,7 +10,7 @@ export const useCheckRepeat = (
   const [timer, setTimer] = useState<NodeJS.Timeout>()
 
   const checkRepeat = useCallback(
-    async (_, value) => {
+    async (_: any, value: any) => {
       if (timer) {
         clearTimeout(timer)
       }

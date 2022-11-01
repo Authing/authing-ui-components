@@ -38,17 +38,19 @@ export const PasswordNotSafeReset: React.FC<PasswordNotSafeResetProps> = ({
   const { isPhoneMedia } = useMediaSize()
 
   let submitButtonRef = useRef<any>(null)
-  const {
-    getPassWordUnsafeText,
-    setPasswordErrorTextShow,
-  } = usePasswordErrorText()
+  const { getPassWordUnsafeText, setPasswordErrorTextShow } =
+    usePasswordErrorText()
   const onFinish = async (values: any) => {
     let newPassword = values.password
     submitButtonRef.current?.onSpin(true)
 
     if (isAuthFlow) {
       // 重置密码成功不会返回 UserInfo
-      const { apiCode, onGuardHandling, message: msg } = await authFlow(
+      const {
+        apiCode,
+        onGuardHandling,
+        message: msg,
+      } = await authFlow(
         ChangePasswordBusinessAction.ResetPasswordStrengthDetection,
         {
           password: await encrypt!(newPassword, publicKey),

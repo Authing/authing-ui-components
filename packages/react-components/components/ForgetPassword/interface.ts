@@ -10,8 +10,8 @@ import {
 export interface ForgetPasswordEvents extends IG2Events {
   onEmailSend?: (authClient: AuthenticationClient, sence?: EmailScene) => void
   onEmailSendError?: (
-    error: CommonMessage,
-    authClient: AuthenticationClient,
+    error?: CommonMessage,
+    authClient?: AuthenticationClient,
     sence?: EmailScene
   ) => void
   onPhoneSend?: (authClient: AuthenticationClient, sence?: SceneType) => void

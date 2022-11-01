@@ -44,15 +44,12 @@ export const GuardIdentityBindingView: React.FC = () => {
     publicConfig?.internationalSmsConfig?.enabled || false
 
   const authClient = useGuardAuthClient()
-  const phoneCodeRequest = useIdentityBindingBusinessRequest()[
-    IdentityBindingBusinessAction.PhoneCode
-  ]
-  const emailCodeRequest = useIdentityBindingBusinessRequest()[
-    IdentityBindingBusinessAction.EmailCode
-  ]
-  const PasswordRequest = useIdentityBindingBusinessRequest()[
-    IdentityBindingBusinessAction.Password
-  ]
+  const phoneCodeRequest =
+    useIdentityBindingBusinessRequest()[IdentityBindingBusinessAction.PhoneCode]
+  const emailCodeRequest =
+    useIdentityBindingBusinessRequest()[IdentityBindingBusinessAction.EmailCode]
+  const PasswordRequest =
+    useIdentityBindingBusinessRequest()[IdentityBindingBusinessAction.Password]
 
   const bindMethodsMap = {
     'phone-code': async (data: any) => {

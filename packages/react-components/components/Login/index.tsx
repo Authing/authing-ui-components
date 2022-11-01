@@ -286,11 +286,8 @@ export const GuardLoginView = () => {
     [publicConfig?.verifyCodeTabConfig?.enabledLoginMethods]
   )
 
-  const [
-    socialConnectionObjs,
-    enterpriseConnectionObjs,
-    isNoMethod,
-  ] = useMethod({ config, publicConfig })
+  const [socialConnectionObjs, enterpriseConnectionObjs, isNoMethod] =
+    useMethod({ config, publicConfig })
 
   const noLoginMethods = !config?.loginMethods?.length
 
@@ -302,9 +299,8 @@ export const GuardLoginView = () => {
       // 无表单登录方式，且不是手机端
       const document = getGuardDocument()
       // pc 下
-      const containerDOM = document.getElementsByClassName(
-        'g2-view-container'
-      )?.[0]
+      const containerDOM =
+        document.getElementsByClassName('g2-view-container')?.[0]
 
       if (containerDOM) {
         // @ts-ignore

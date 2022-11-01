@@ -353,7 +353,7 @@ const LoginWithVerifyCode = (props: any) => {
   }, [autoRegister, submitButText, t])
   // 为了 refresh input
   const AreaCodePhoneAccount = useCallback(
-    (props) => {
+    (props: any) => {
       return (
         <InputInternationPhone
           {...props}

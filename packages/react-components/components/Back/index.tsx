@@ -17,9 +17,10 @@ export const BackLogin: React.FC<BackProps> = (props) => {
 
   const { t } = useTranslation()
 
-  const onBack = useCallback(() => changeModule?.(GuardModuleType.LOGIN), [
-    changeModule,
-  ])
+  const onBack = useCallback(
+    () => changeModule?.(GuardModuleType.LOGIN),
+    [changeModule]
+  )
 
   const { isRender = true } = props
 
@@ -56,7 +57,11 @@ export interface BackCustomProps extends BackProps {
   onBack?: () => void
 }
 
-export const BackCustom: React.FC<BackCustomProps> = (props) => {
+export const BackCustom: React.FC<
+  BackCustomProps & {
+    children: any
+  }
+> = (props) => {
   const { changeModule } = useGuardModule()
 
   const { t } = useTranslation()

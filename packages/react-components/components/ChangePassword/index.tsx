@@ -1,5 +1,5 @@
 import { message } from 'antd'
-import React, { useMemo } from 'react'
+import React, { ReactNode, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { GuardModuleType } from '../Guard/module'
 import { ImagePro } from '../ImagePro'
@@ -18,6 +18,7 @@ import { PasswordNotSafeReset } from './core/PasswordNotSafeReset'
 export const GuardChangePassword: React.FC<{
   title: string
   explain: string
+  children: ReactNode
 }> = (props) => {
   const { title, explain, children } = props
 

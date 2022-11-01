@@ -50,7 +50,7 @@ export const BindMFASms: React.FC<BindMFASmsProps> = ({
   }
 
   const PhoneAccount = useCallback(
-    (props) => {
+    (props: any) => {
       if (isInternationSms) {
         return (
           <InputInternationPhone

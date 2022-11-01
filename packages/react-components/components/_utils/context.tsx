@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react'
+import React, { ReactNode, useContext, useMemo } from 'react'
 import {
   GuardEvents,
   GuardLocalConfig,
@@ -112,10 +112,10 @@ export const createGuardXContext = () => {
   const Provider = GuardXContext.Provider
   const Consumer = GuardXContext.Consumer
 
-  const guardXProvider: React.FC<{ value: Partial<IGuardContext> }> = ({
-    value,
-    children,
-  }) => {
+  const guardXProvider: React.FC<{
+    value: Partial<IGuardContext>
+    children: ReactNode
+  }> = ({ value, children }) => {
     return (
       <Provider
         value={{
@@ -139,10 +139,10 @@ export const useGuardXContext = () => {
     const Provider = GuardXContext.Provider
     const Consumer = GuardXContext.Consumer
 
-    const guardXProvider: React.FC<{ value: Partial<IGuardContext> }> = ({
-      value,
-      children,
-    }) => {
+    const guardXProvider: React.FC<{
+      value: Partial<IGuardContext>
+      children: ReactNode
+    }> = ({ value, children }) => {
       return (
         <Provider
           value={{
@@ -175,7 +175,9 @@ const GuardButtonContext = React.createContext<IGuardContextProvider>({
 export const useGuardButtonContext = () => {
   const Provider = GuardButtonContext.Provider
 
-  const GuardButtonProvider: React.FC = ({ children }) => {
+  const GuardButtonProvider: React.FC<{ children: ReactNode }> = ({
+    children,
+  }) => {
     const [spin, setSpin] = React.useState(false)
 
     return (

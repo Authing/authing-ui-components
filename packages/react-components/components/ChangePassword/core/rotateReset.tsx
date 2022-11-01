@@ -42,10 +42,8 @@ export const RotateReset = (props: RotateResetProps) => {
   let submitButtonRef = useRef<any>(null)
 
   const initData = useGuardInitData<{ token: string }>()
-  const {
-    getPassWordUnsafeText,
-    setPasswordErrorTextShow,
-  } = usePasswordErrorText()
+  const { getPassWordUnsafeText, setPasswordErrorTextShow } =
+    usePasswordErrorText()
   const onFinish = async (values: any) => {
     if (onFinishCallBack instanceof Function) {
       const data = await onFinishCallBack(values)
@@ -59,13 +57,14 @@ export const RotateReset = (props: RotateResetProps) => {
     submitButtonRef?.current?.onSpin(true)
 
     if (isAuthFlow) {
-      const { apiCode, onGuardHandling, message: msg } = await authFlow(
-        ChangePasswordBusinessAction.ResetPassword,
-        {
-          password: await encrypt!(password, publicKey),
-          oldPassword: await encrypt!(oldPassword, publicKey),
-        }
-      )
+      const {
+        apiCode,
+        onGuardHandling,
+        message: msg,
+      } = await authFlow(ChangePasswordBusinessAction.ResetPassword, {
+        password: await encrypt!(password, publicKey),
+        oldPassword: await encrypt!(oldPassword, publicKey),
+      })
 
       submitButtonRef?.current?.onSpin(false)
 

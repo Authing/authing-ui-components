@@ -206,7 +206,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   )
 
   const PhoenAccount = useCallback(
-    (props) => {
+    (props: any) => {
       if (publicConfig && publicConfig.internationalSmsConfig?.enabled) {
         return (
           <InputInternationPhone
@@ -243,7 +243,7 @@ export const RegisterWithPhone: React.FC<RegisterWithPhoneProps> = ({
   )
 
   const SendCode = useCallback(
-    (props) => {
+    (props: any) => {
       if (isInternationSms) {
         return (
           <SendCodeByPhone

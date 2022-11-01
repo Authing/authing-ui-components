@@ -10,7 +10,7 @@
     "types"
   ],
   "dependencies": {
-    "antd": "^4.8.0",
+    "antd": "^4.23.6",
     "authing-js-sdk": "4.23.36-alpha.1",
     "classnames": "^2.3.1",
     "fastclick": "^1.0.6",
@@ -45,7 +45,8 @@
     "vite": "vite",
     "generate-version": "node ./scripts/generate-version",
     "generate-examples": "node ./scripts/generate-examples.js",
-    "test": "node ./scripts/dev/pre-build.js"
+    "test": "node ./scripts/dev/pre-build.js",
+    "lint:fix": "eslint --fix --ext .ts,.tsx,.js ./components"
   },
   "publishConfig": {
     "access": "public",
@@ -145,8 +146,8 @@
     "@types/lodash": "^4.14.175",
     "@types/node": "^12.0.0",
     "@types/qs": "^6.9.5",
-    "@types/react": "^16.9.53",
-    "@types/react-dom": "^16.9.8",
+    "@types/react": "18.0.24",
+    "@types/react-dom": "18.0.8",
     "@types/shortid": "^0.0.29",
     "@types/ua-parser-js": "^0.7.36",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
@@ -208,10 +209,10 @@
     "pretty-quick": "^3.0.0",
     "query-string": "^7.0.0",
     "raw-loader": "^4.0.2",
-    "react": "16.14.0",
+    "react": "18.2.0",
     "react-app-polyfill": "^2.0.0",
     "react-dev-utils": "^11.0.0",
-    "react-dom": "16.14.0",
+    "react-dom": "18.2.0",
     "react-frame-component": "^5.2.1",
     "react-i18next": "^11.8.12",
     "react-refresh": "^0.8.3",

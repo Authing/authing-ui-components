@@ -22,6 +22,8 @@ import { parsePhone } from '../../_utils/hooks'
 import { InputInternationPhone } from '../../Login/core/withVerifyCode/InputInternationPhone'
 import { EmailScene } from '../../Type'
 import { UploadImage } from '../../UploadImage'
+
+const MomentPicker: any = DatePicker
 export interface CompleteInfoProps {
   metaData: CompleteInfoMetaData[]
   businessRequest: (data: CompleteInfoRequest) => Promise<void>
@@ -85,7 +87,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
   }, [loadInitCountryList, metaData])
 
   const PhoneAccount = useCallback(
-    (props) => {
+    (props: any) => {
       if (isInternationSms) {
         return (
           <InputInternationPhone
@@ -151,7 +153,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         />
       ),
       date: (props) => (
-        <DatePicker
+        <MomentPicker
           key={props.key}
           className="authing-g2-input"
           style={{ width: '100%' }}
@@ -159,7 +161,7 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
         />
       ),
       datetime: (props) => (
-        <DatePicker
+        <MomentPicker
           key={props.key}
           className="authing-g2-input"
           style={{ width: '100%' }}
@@ -416,10 +418,12 @@ export const CompleteInfo: React.FC<CompleteInfoProps> = (props) => {
 
       // 这部分的控件分两种 一个集成控件（手机号 + 验证码）一种是基础控件 分开处理
       if (
-        (Object.values(CompleteInfoBaseControls) as (
-          | CompleteInfoBaseControls
-          | CompleteInfoExtendsControls
-        )[]).includes(metaData.type)
+        (
+          Object.values(CompleteInfoBaseControls) as (
+            | CompleteInfoBaseControls
+            | CompleteInfoExtendsControls
+          )[]
+        ).includes(metaData.type)
       ) {
         return internalControlMap[metaData.name]({
           required: metaData.required,

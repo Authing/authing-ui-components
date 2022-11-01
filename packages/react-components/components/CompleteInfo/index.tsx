@@ -110,10 +110,11 @@ export const GuardLoginCompleteInfoView: React.FC = () => {
     action: CompleteInfoAuthFlowAction,
     data?: CompleteInfoRequest
   ) => {
-    const { isFlowEnd, data: resData, onGuardHandling } = await authFlow(
-      action,
-      data
-    )
+    const {
+      isFlowEnd,
+      data: resData,
+      onGuardHandling,
+    } = await authFlow(action, data)
 
     // 第一次登录的信息 TODO: 脏逻辑 没时间
     const originAccount = multipleInstance?.getOriginAccount()

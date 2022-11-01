@@ -73,10 +73,8 @@ export const LoginWithPassword = (props: LoginWithPasswordProps) => {
 
   const [form] = useForm()
 
-  const {
-    _firstItemInitialValue = '',
-    specifyDefaultLoginMethod,
-  } = useGuardInitData<GuardLoginInitData>()
+  const { _firstItemInitialValue = '', specifyDefaultLoginMethod } =
+    useGuardInitData<GuardLoginInitData>()
 
   useLoginMultipleBackFill({
     form,

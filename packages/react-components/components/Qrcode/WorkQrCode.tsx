@@ -72,12 +72,8 @@ const WorkQrCodeComponent: ForwardRefRenderFunction<any, WorkQrCodeProps> = (
     ...rest
   } = props
 
-  const {
-    context,
-    customData,
-    withCustomData,
-    extIdpConnId,
-  } = qrCodeScanOptions
+  const { context, customData, withCustomData, extIdpConnId } =
+    qrCodeScanOptions
 
   const { get, post } = useGuardHttpClient()
 

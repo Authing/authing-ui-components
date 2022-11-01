@@ -1,5 +1,6 @@
 import { GuardProps } from '..'
 import React, {
+  ReactNode,
   useCallback,
   useEffect,
   useMemo,
@@ -45,6 +46,7 @@ interface IBaseAction<T = string, P = any> {
 export const RenderContext: React.FC<{
   guardProps: GuardProps
   initState: ModuleState
+  children: ReactNode
 }> = ({ guardProps, initState, children }) => {
   const { tenantId, config } = guardProps
   // 强制刷新
@@ -63,10 +65,8 @@ export const RenderContext: React.FC<{
   useInitGuardAppendConfig(setForceUpdate, appId, guardProps.appendConfig)
 
   // 状态机
-  const [
-    guardStateMachine,
-    setGuardStateMachine,
-  ] = useState<GuardStateMachine>()
+  const [guardStateMachine, setGuardStateMachine] =
+    useState<GuardStateMachine>()
 
   const { Provider } = useGuardXContext()
 
@@ -168,7 +168,7 @@ export const RenderContext: React.FC<{
 
     trackSession().then((sessionData) => {
       // 这个接口没有 code, data, 直接返回了数据
-      let typedData = (sessionData as unknown) as SessionData
+      let typedData = sessionData as unknown as SessionData
       if (typedData.userInfo) {
         events?.onLogin?.(typedData.userInfo, authClint!)
       }
