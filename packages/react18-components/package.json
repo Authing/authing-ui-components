@@ -1,6 +1,6 @@
 {
   "name": "@authing/react18-components",
-  "version": "4.0.9",
+  "version": "4.1.0-alpha.0",
   "private": false,
   "main": "lib/index.min.js",
   "typings": "types/index.d.ts",
